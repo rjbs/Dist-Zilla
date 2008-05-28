@@ -3,6 +3,8 @@ use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::FileWriter';
 
+use Dist::Zilla::File::InMemory;
+
 use Text::Template;
 
 my $template = <<'END_MAKEFILE';
@@ -26,8 +28,12 @@ sub write_files {
     DELIMITERS => [ qw(  {{  }}  ) ],
   );
 
-  $self->write_content_to($content, $arg->{build_root}->file('Makefile.PL'));
-  $arg->{manifest}->push('Makefile.PL');
+  my $file = Dist::Zilla::File::InMemory->new({
+    name    => 'Makefile.PL',
+    content => $content,
+  });
+
+  return [ $file ];
 }
 
 1;

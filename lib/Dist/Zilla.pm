@@ -9,6 +9,7 @@ use Path::Class ();
 
 use Dist::Zilla::Config;
 
+use Dist::Zilla::File::OnDisk;
 use Dist::Zilla::Role::Plugin;
 
 # XXX: should come from config!
@@ -77,40 +78,40 @@ sub build_dist {
   my $dist_root = $self->root;
   my $manifest  = $self->manifest;
 
-  for my $file (map { $dist_root->file($_) } $manifest->flatten) {
-    my $to_dir = $build_root->subdir( $file->dir );
-    $to_dir->mkpath unless -e $to_dir;
-    die "not a directory: $to_dir" unless -d $to_dir;
-
-    my $content = do {
-      open my $in_fh, '<', "$file" or die "couldn't open $file to read: $!";
-      local $/;
-      <$in_fh>;
-    };
-
-    my $to = $to_dir->file( $file->basename );
-    my $arg = { to => $to, content => $content };
-    $_->munge_file($arg) for $self->plugins_with(-FileMunger)->flatten;
-    $to = $arg->{to};
-  
-    open my $out_fh, '>', "$to" or die "couldn't open $to to write: $!";
-    print { $out_fh } $arg->{content};
-    close $out_fh or die "error closing $to: $!";
-  }
+  my $files = $manifest->map(sub {
+    Dist::Zilla::File::OnDisk->new({ name => $_ });
+  });
 
   for ($self->plugins_with(-FileWriter)->flatten) {
-    $_->write_files({
+    my $file = $_->write_files({
       build_root => $build_root,
       dist       => $self,
       manifest   => $manifest,
     });
+
+    $files->push($files->flatten);
+  }
+
+  for my $file ($files->flatten) {
+    $_->munge_file($file) for $self->plugins_with(-FileMunger)->flatten;
+
+    my $_file = Path::Class::file($file->name);
+
+    my $to_dir = $build_root->subdir( $_file->dir );
+    my $to = $to_dir->file( $_file->basename );
+    $to_dir->mkpath unless -e $to_dir;
+    die "not a directory: $to_dir" unless -d $to_dir;
+  
+    open my $out_fh, '>', "$to" or die "couldn't open $to to write: $!";
+    print { $out_fh } $file->content;
+    close $out_fh or die "error closing $to: $!";
   }
 
   for ($self->plugins_with(-AfterBuild)->flatten) {
     $_->after_build({
       build_root => $build_root,
       dist       => $self,
-      manifest   => $manifest,
+      files      => $files,
     });
   }
 }

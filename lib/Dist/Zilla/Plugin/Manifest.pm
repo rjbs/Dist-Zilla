@@ -9,7 +9,10 @@ sub after_build {
   my $file = $arg->{build_root}->file('MANIFEST');
   open my $fh, '>', $file or die "can't open $file for writing: $!";
 
-  print { $fh } "$_\n" for sort ($arg->{manifest}->flatten, 'MANIFEST');
+  print { $fh } "$_\n" for sort 
+    $arg->{files}->map(sub { $_->name })->flatten,
+    'MANIFEST',
+  ;
 
   close $fh or die "can't close $file: $!";
 }
