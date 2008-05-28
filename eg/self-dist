@@ -1,0 +1,30 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+use lib 'lib';
+use lib 't/lib';
+
+use Dist::Zilla;
+use Dist::Zilla::Plugin::ManifestSkip;
+use Dist::Zilla::Plugin::Manifest;
+use Dist::Zilla::Plugin::MakeMaker;
+use Dist::Zilla::Plugin::CreditTaker;
+
+use File::Temp qw(tempdir);
+use Moose::Autobox;
+
+my $root   = $ARGV[0] || '.';
+my $target = $ARGV[1] || tempdir(DIR => '.');
+
+my $dist = Dist::Zilla->new({
+  plugins => [
+    Dist::Zilla::Plugin::ManifestSkip->new,
+    Dist::Zilla::Plugin::Manifest->new,
+    Dist::Zilla::Plugin::MakeMaker->new,
+    Dist::Zilla::Plugin::CreditTaker->new,
+  ],
+  root => Path::Class::dir($root),
+});
+
+$dist->build_dist($target);
