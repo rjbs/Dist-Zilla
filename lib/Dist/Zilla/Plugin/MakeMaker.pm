@@ -14,7 +14,7 @@ use warnings;
 use ExtUtils::MakeMaker;
 
 WriteMakefile(
-  NAME => {{ $dist->name }},
+  NAME => '{{ $dist->name }}',
   VERSION_FROM => "{{ (grep { /.pm$/ } @{$dist->files})[0] }}",
 );
 END_MAKEFILE

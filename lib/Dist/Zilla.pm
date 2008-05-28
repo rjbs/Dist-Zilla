@@ -13,14 +13,24 @@ use Dist::Zilla::File::OnDisk;
 use Dist::Zilla::Role::Plugin;
 
 # XXX: should come from config!
-sub name { 'Dist::Zilla' }
-
-has config => (
+has name => (
   is   => 'ro',
-  isa  => 'HashRef',
-  lazy => 1,
-  default => sub { Dist::Zilla::Config->read_file('dist.ini') },
+  isa  => 'Str',
+  required => 1,
 );
+
+sub from_dir {
+  my ($class, $root) = @_;
+
+  my $config_file = $root->file('dist.ini');
+
+  my $config = Dist::Zilla::Config->read_file($config_file);
+
+  my $self = $class->new({
+    %{ $config->{_} },
+    root => $root,
+  });
+}
 
 has plugins => (
   is   => 'ro',
@@ -83,13 +93,13 @@ sub build_dist {
   });
 
   for ($self->plugins_with(-FileWriter)->flatten) {
-    my $file = $_->write_files({
+    my $new_files = $_->write_files({
       build_root => $build_root,
       dist       => $self,
       manifest   => $manifest,
     });
 
-    $files->push($files->flatten);
+    $files->push($new_files->flatten);
   }
 
   for my $file ($files->flatten) {

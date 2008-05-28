@@ -1,1 +1,2 @@
 MANIFEST.SKIP
+^.git/
