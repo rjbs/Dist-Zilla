@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 package Dist::Zilla::Config;
-use base 'Config::INI::Reader';
+use base 'Config::INI::MVP::Reader';
 
 # This should steal liberally from App::Addex::Config, namely the "some
 # multipart values" stuff and the ability to load and instantiate plugins based

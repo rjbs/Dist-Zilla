@@ -24,12 +24,23 @@ sub from_dir {
 
   my $config_file = $root->file('dist.ini');
 
-  my $config = Dist::Zilla::Config->read_file($config_file);
+  my $ini = Dist::Zilla::Config->read_file($config_file);
 
-  my $self = $class->new({
-    %{ $config->{_} },
-    root => $root,
-  });
+  my $config = $ini->[0]{name} eq '=name' ? shift @$ini : {};
+
+  my $self = $class->new({ %$config, root => $root )};
+
+  my @plugins;
+  for my $plugin (@$config) {
+    my $name  = delete $plugin->{'=name'};
+    my $class = delete $plugin->{'=package'};
+
+    eval "require $class; 1" or die;
+
+    $self->plugins->push( $class->new($plugin) );
+  }
+
+  return $self;
 }
 
 has plugins => (
