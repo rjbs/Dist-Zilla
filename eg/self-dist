@@ -6,10 +6,6 @@ use lib 'lib';
 use lib 't/lib';
 
 use Dist::Zilla;
-use Dist::Zilla::Plugin::ManifestSkip;
-use Dist::Zilla::Plugin::Manifest;
-use Dist::Zilla::Plugin::MakeMaker;
-use Dist::Zilla::Plugin::CreditTaker;
 
 use Path::Class;
 
@@ -20,12 +16,5 @@ my $root   = $ARGV[0] || '.';
 my $target = $ARGV[1] || tempdir(DIR => '.');
 
 my $dist = Dist::Zilla->from_dir( dir($root) );
-
-$dist->plugins->push(
-  Dist::Zilla::Plugin::ManifestSkip->new,
-  Dist::Zilla::Plugin::Manifest->new,
-  Dist::Zilla::Plugin::MakeMaker->new,
-  Dist::Zilla::Plugin::CreditTaker->new,
-);
 
 $dist->build_dist($target);

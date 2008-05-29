@@ -26,12 +26,12 @@ sub from_dir {
 
   my $ini = Dist::Zilla::Config->read_file($config_file);
 
-  my $config = $ini->[0]{name} eq '=name' ? shift @$ini : {};
+  my $config = $ini->[0]{'=name'} eq '_' ? shift @$ini : {};
 
-  my $self = $class->new({ %$config, root => $root )};
+  my $self = $class->new({ %$config, root => $root });
 
   my @plugins;
-  for my $plugin (@$config) {
+  for my $plugin (@$ini) {
     my $name  = delete $plugin->{'=name'};
     my $class = delete $plugin->{'=package'};
 
