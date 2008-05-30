@@ -1,0 +1,18 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+use lib 'lib';
+use lib 't/lib';
+
+use Dist::Zilla;
+use Path::Class;
+
+my $root   = dir($ARGV[0] || '.');
+my $target = dir($ARGV[1] || './dist');
+
+$target->rmtree if -d $target;
+
+my $dist = Dist::Zilla->from_dir($root);
+
+$dist->build_dist($target);

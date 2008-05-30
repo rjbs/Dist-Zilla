@@ -1,6 +1,7 @@
 package Dist::Zilla;
 use Moose;
 use Moose::Autobox;
+use MooseX::Types::Path::Class qw(Dir File);
 
 our $VERSION = '0.001';
 
@@ -21,6 +22,8 @@ has name => (
 
 sub from_dir {
   my ($class, $root) = @_;
+
+  $root = Path::Class::dir($root) unless ref $root;
 
   my $config_file = $root->file('dist.ini');
 
@@ -76,7 +79,8 @@ sub plugins_with {
 
 has root => (
   is   => 'ro',
-  isa  => 'Path::Class::Dir',
+  isa  => Dir,
+  coerce   => 1,
   required => 1,
 );
 
