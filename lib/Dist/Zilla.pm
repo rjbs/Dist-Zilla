@@ -127,6 +127,8 @@ sub build_dist {
     $to_dir->mkpath unless -e $to_dir;
     die "not a directory: $to_dir" unless -d $to_dir;
   
+    Carp::croak("attempted to write $to multiple times") if -e $to;
+
     open my $out_fh, '>', "$to" or die "couldn't open $to to write: $!";
     print { $out_fh } $file->content;
     close $out_fh or die "error closing $to: $!";
