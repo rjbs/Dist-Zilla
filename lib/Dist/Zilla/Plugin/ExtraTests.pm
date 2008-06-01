@@ -1,12 +1,12 @@
-package Dist::Zilla::Plugin::SmokeTests;
+package Dist::Zilla::Plugin::ExtraTests;
 use Moose;
 with 'Dist::Zilla::Role::FileMunger';
 
 sub munge_file {
   my ($self, $file) = @_;
 
-  warn "NAME: >> " . $file->name . "\n";
   return unless $file->name =~ m{\Axt/(smoke|author|release)/.+\.t\z};
+  warn "NAME: >> " . $file->name . "\n";
 
   my $method = "_rewrite_$1\_test";
 
