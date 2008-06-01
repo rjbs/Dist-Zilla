@@ -11,8 +11,8 @@ sub run {
   require Dist::Zilla;
   require File::Temp;
   require Path::Class;
-  require IPC::System::Simple;
-  my $run = \&IPC::System::Simple::run;
+  require IPC::Run3;
+  my $run = \&IPC::Run3::run3;
 
   my $target = Path::Class::dir( File::Temp::tempdir() );
   print "> building test distribution under $target\n";
@@ -21,14 +21,15 @@ sub run {
   $dist->build_dist($target);
 
   chdir($target);
-  my $output = eval {
-    $run->($^X => 'Makefile.PL') . $run->('make') . $run->('make test');
-  };
+  eval {
+    system($^X => 'Makefile.PL') and die "> error with Makefile.PL\n";
+    system('make') and die "> error running make\n";
+    system('make test') and die "> error running make test\n";
+  }
 
   if ($@) {
-    print "> error testing new distribution\n";
+    print $@;
     print "> left dist in place\n";
-    print $output;
   } else {
     $target->rmtree;
   }
