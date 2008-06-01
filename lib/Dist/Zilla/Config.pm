@@ -3,21 +3,32 @@ use warnings;
 package Dist::Zilla::Config;
 use base 'Config::INI::MVP::Reader';
 
-# This should steal liberally from App::Addex::Config, namely the "some
-# multipart values" stuff and the ability to load and instantiate plugins based
-# on the section names.
-#
-# I will almost certainly want the ability to have multiple instances of one
-# class plugin, though, so there will need to be some kind of indirection,
-# like:
-#
-# plugin = fooo
-# plugin = feee
-# [fooo]
-# class = Meta::Maga::Foo
-# ...
-# [feee]
-# class = Meta::Maga::Foo
-# ...
+sub multivalue_args { qw(author) }
+
+sub finalize {
+  my ($self) = @_;
+  $self->SUPER::finalize;
+
+  my $data = $self->{data};
+
+  my $root_config = $data->[0]{'=name'} eq '_' ? shift @$data : {};
+
+  $root_config->{authors} = delete $root_config->{author};
+
+  my @plugins;
+  for my $plugin (@$data) {
+    my $class = delete $plugin->{'=package'};
+    
+    Carp::croak "'name' is never a valid plugin configuration option"
+      if exists $plugin->{plugin_name};
+
+    $plugin->{plugin_name} = delete $plugin->{'=name'};
+
+    push @plugins, [ $class => $plugin ];
+  }
+
+  $root_config->{plugins} = \@plugins;
+  $self->{data} = $root_config;
+}
 
 1;

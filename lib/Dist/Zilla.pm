@@ -2,6 +2,7 @@ package Dist::Zilla;
 use Moose;
 use Moose::Autobox;
 use MooseX::Types::Path::Class qw(Dir File);
+use Moose::Util::TypeConstraints;
 
 our $VERSION = '0.001';
 
@@ -13,10 +14,22 @@ use Dist::Zilla::Config;
 use Dist::Zilla::File::OnDisk;
 use Dist::Zilla::Role::Plugin;
 
-# XXX: should come from config!
 has name => (
   is   => 'ro',
   isa  => 'Str',
+  required => 1,
+);
+
+has license => (
+  is   => 'ro',
+  isa  => 'Software::License',
+  lazy => 1,
+  default => sub { die },
+);
+
+has authors => (
+  is   => 'ro',
+  isa  => 'ArrayRef[Str]',
   required => 1,
 );
 
@@ -26,21 +39,17 @@ sub from_dir {
   $root = Path::Class::dir($root) unless ref $root;
 
   my $config_file = $root->file('dist.ini');
+  my $config = Dist::Zilla::Config->read_file($config_file);
 
-  my $ini = Dist::Zilla::Config->read_file($config_file);
+  my $plugins = delete $config->{plugins};
 
-  my $config = $ini->[0]{'=name'} eq '_' ? shift @$ini : {};
+  my $self = $class->new($config->merge({ root => $root }));
 
-  my $self = $class->new({ %$config, root => $root });
-
-  my @plugins;
-  for my $plugin (@$ini) {
-    my $name  = delete $plugin->{'=name'};
-    my $class = delete $plugin->{'=package'};
-
-    eval "require $class; 1" or die;
-
-    $self->plugins->push( $class->new($plugin) );
+  for my $plugin (@$plugins) {
+    my ($plugin_class, $arg) = @$plugin;
+    $self->plugins->push(
+      $plugin_class->new( $arg->merge({ zilla => $self }) )
+    );
   }
 
   return $self;

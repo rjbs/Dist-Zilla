@@ -14,7 +14,8 @@ use warnings;
 use ExtUtils::MakeMaker;
 
 WriteMakefile(
-  NAME => '{{ $dist->name }}',
+  NAME         => '{{ $dist->name }}',
+  AUTHOR       => '{{ $author_str }}',
   VERSION_FROM => "{{ (grep { /.pm$/ } @{$dist->files})[0] }}",
 );
 END_MAKEFILE
@@ -24,7 +25,10 @@ sub write_files {
 
   my $content = Text::Template::fill_in_string(
     $template,
-    HASH       => { dist => \$arg->{dist} },
+    HASH       => {
+      dist       => \$arg->{dist},
+      author_str => \quotemeta($arg->{dist}->authors->join(q{, })),
+    },
     DELIMITERS => [ qw(  {{  }}  ) ],
   );
 
