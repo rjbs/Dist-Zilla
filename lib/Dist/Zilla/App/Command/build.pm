@@ -11,12 +11,11 @@ sub run {
   require Dist::Zilla;
   require Path::Class;
 
-  my $root   = Path::Class::dir($arg->[0] || '.');
-  my $target = Path::Class::dir($arg->[1] || './dist');
+  my $target = Path::Class::dir($arg->[0] || './dist');
 
   $target->rmtree if -d $target;
 
-  my $dist = Dist::Zilla->from_dir($root);
+  my $dist = Dist::Zilla->from_dir('.');
 
   $dist->build_dist($target);
 }
