@@ -11,8 +11,6 @@ sub run {
   require Dist::Zilla;
   require File::Temp;
   require Path::Class;
-  require IPC::Run3;
-  my $run = \&IPC::Run3::run3;
 
   my $target = Path::Class::dir( File::Temp::tempdir() );
   print "> building test distribution under $target\n";
