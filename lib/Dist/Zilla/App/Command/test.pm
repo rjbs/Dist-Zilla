@@ -11,19 +11,27 @@ sub run {
   require Dist::Zilla;
   require File::Temp;
   require Path::Class;
+  require IPC::System::Simple;
+  my $run = \&IPC::System::Simple::run;
 
-  my $target = Path::Class::dir( File::Temp::tempdir );
+  my $target = Path::Class::dir( File::Temp::tempdir() );
   print "> building test distribution under $target\n";
 
   my $dist = Dist::Zilla->from_dir('.');
   $dist->build_dist($target);
 
   chdir($target);
-  print `$^X Makefile.PL`;
-  print `make`;
-  print `make test`;
+  my $output = eval {
+    $run->($^X => 'Makefile.PL') . $run->('make') . $run->('make test');
+  };
 
-  $target->rmtree;
+  if ($@) {
+    print "> error testing new distribution\n";
+    print "> left dist in place\n";
+    print $output;
+  } else {
+    $target->rmtree;
+  }
 }
 
 1;
