@@ -23,7 +23,7 @@ sub run {
     system($^X => 'Makefile.PL') and die "> error with Makefile.PL\n";
     system('make') and die "> error running make\n";
     system('make test') and die "> error running make test\n";
-  }
+  };
 
   if ($@) {
     print $@;
