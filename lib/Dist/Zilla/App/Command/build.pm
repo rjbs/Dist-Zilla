@@ -23,6 +23,8 @@ sub run {
 
   $dist->build_dist($target);
 
+  return unless $opt->{tgz};
+
   my $archive = Archive::Tar->new;
   $archive->add_files( File::Find::Rule->file->in($target) );
   $archive->write("$default_name.tar.gz", 9);

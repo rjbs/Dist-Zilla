@@ -15,7 +15,7 @@ has delim => (
 sub fill_in_string {
   my ($self, $string, $stash, $arg) = @_;
 
-  return Text::Template->fill_in_string(
+  return Text::Template::fill_in_string(
     $string,
     HASH       => $stash,
     DELIMITERS => $self->delim,
