@@ -8,6 +8,7 @@ our $VERSION = '0.001';
 
 use File::Find::Rule;
 use Path::Class ();
+use Software::License;
 
 use Dist::Zilla::Config;
 
@@ -20,11 +21,21 @@ has name => (
   required => 1,
 );
 
+has copyright_holder => (
+  is   => 'ro',
+  isa  => 'Str',
+  required => 1,
+);
+
+has copyright_year => (
+  is   => 'ro',
+  isa  => 'Int',
+  default => (localtime)[5] + 1900,
+);
+
 has license => (
   is   => 'ro',
   isa  => 'Software::License',
-  lazy => 1,
-  default => sub { die },
 );
 
 has authors => (
@@ -50,7 +61,20 @@ sub from_dir {
 
   my $plugins = delete $config->{plugins};
 
+  my $license_name  = delete $config->{license};
+  my $license_class = "Software::License::$license_name";
+
+  eval "require $license_class; 1" or die;
+
   my $self = $class->new($config->merge({ root => $root }));
+
+  my $license = $license_class->new({
+    holder => $self->copyright_holder,
+    year   => $self->copyright_year,
+  });
+
+  # XXX: fix this -- rjbs, 2008-06-01
+  $self->{license} = $license;
 
   for my $plugin (@$plugins) {
     my ($plugin_class, $arg) = @$plugin;

@@ -19,11 +19,6 @@ sub finalize {
   for my $plugin (@$data) {
     my $class = delete $plugin->{'=package'};
     
-    Carp::croak "'name' is never a valid plugin configuration option"
-      if exists $plugin->{plugin_name};
-
-    $plugin->{plugin_name} = delete $plugin->{'=name'};
-
     push @plugins, [ $class => $plugin ];
   }
 

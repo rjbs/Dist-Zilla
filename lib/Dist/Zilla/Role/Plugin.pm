@@ -5,6 +5,7 @@ has plugin_name => (
   is  => 'ro',
   isa => 'Str',
   required => 1,
+  init_arg => '=name',
 );
 
 has zilla => (
