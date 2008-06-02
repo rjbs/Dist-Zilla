@@ -163,6 +163,13 @@ sub build_dist {
     Dist::Zilla::File::OnDisk->new({ name => $_ });
   });
 
+  for ($self->plugins_with(-BeforeBuild)->flatten) {
+    $_->before_build({
+      build_root => $build_root,
+      files      => $files,
+    });
+  }
+
   for ($self->plugins_with(-FileWriter)->flatten) {
     my $new_files = $_->write_files({
       build_root => $build_root,
@@ -193,7 +200,6 @@ sub build_dist {
   for ($self->plugins_with(-AfterBuild)->flatten) {
     $_->after_build({
       build_root => $build_root,
-      dist       => $self,
       files      => $files,
     });
   }
