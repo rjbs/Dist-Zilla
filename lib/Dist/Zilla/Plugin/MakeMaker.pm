@@ -2,10 +2,9 @@ package Dist::Zilla::Plugin::MakeMaker;
 use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::FileWriter';
+with 'Dist::Zilla::Role::TextTemplate';
 
 use Dist::Zilla::File::InMemory;
-
-use Text::Template;
 
 my $template = <<'END_MAKEFILE';
 use strict;
@@ -32,13 +31,12 @@ END_MAKEFILE
 sub write_files {
   my ($self, $arg) = @_;
 
-  my $content = Text::Template::fill_in_string(
+  my $content = $self->fill_in_string(
     $template,
-    HASH       => {
+    {
       dist       => \$arg->{dist},
       author_str => \quotemeta($arg->{dist}->authors->join(q{, })),
     },
-    DELIMITERS => [ qw(  {{  }}  ) ],
   );
 
   my $file = Dist::Zilla::File::InMemory->new({
