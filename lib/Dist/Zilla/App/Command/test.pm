@@ -32,7 +32,7 @@ sub run {
     $self->log($@);
     $self->log("> left failed dist in place at $target");
   } else {
-    $self->log("> all's well; removing $target);
+    $self->log("> all's well; removing $target");
     $target->rmtree;
   }
 }
