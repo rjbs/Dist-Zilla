@@ -12,10 +12,14 @@ sub run {
   require File::Temp;
   require Path::Class;
 
-  my $target = Path::Class::dir( File::Temp::tempdir() );
+  my $dist = Dist::Zilla->from_dir('.');
+
+  my $build_root = $dist->build_root;
+  $build_root->mkpath unless -d $build_root;
+
+  my $target = Path::Class::dir( File::Temp::tempdir(DIR => $build_root) );
   print "> building test distribution under $target\n";
 
-  my $dist = Dist::Zilla->from_dir('.');
   $dist->build_dist($target);
 
   chdir($target);
@@ -27,7 +31,7 @@ sub run {
 
   if ($@) {
     print $@;
-    print "> left dist in place\n";
+    print "> left failed dist in place at $target\n";
   } else {
     $target->rmtree;
   }

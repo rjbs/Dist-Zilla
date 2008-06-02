@@ -33,6 +33,13 @@ has authors => (
   required => 1,
 );
 
+has build_root => (
+  is   => 'ro',
+  isa  => Dir,
+  lazy    => 1,
+  default => sub { Path::Class::dir('build') },
+);
+
 sub from_dir {
   my ($class, $root) = @_;
 
