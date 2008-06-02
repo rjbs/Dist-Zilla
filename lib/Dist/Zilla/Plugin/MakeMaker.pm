@@ -23,6 +23,7 @@ WriteMakefile(
       my $prereq = $dist->prereq;
       $OUT .= qq{    "$_" => '$prereq->{$_}',\n} for keys %$prereq;
       chomp $OUT;
+      return '';
 }}
   },
 );
