@@ -9,6 +9,7 @@ sub run {
   my ($self, $opt, $arg) = @_;
 
   require Dist::Zilla;
+  require File::chdir;
   require File::Temp;
   require Path::Class;
 
@@ -22,8 +23,8 @@ sub run {
 
   $dist->build_dist($target);
 
-  chdir($target);
   eval {
+    local $File::chdir::CWD = $target;
     system($^X => 'Makefile.PL') and die "> error with Makefile.PL\n";
     system('make') and die "> error running make\n";
     system('make test') and die "> error running make test\n";
@@ -33,6 +34,7 @@ sub run {
     print $@;
     print "> left failed dist in place at $target\n";
   } else {
+    print "> all's well; removing $target\n";
     $target->rmtree;
   }
 }
