@@ -23,7 +23,9 @@ sub munge_perl {
   my $version = $self->zilla->version;
   Carp::croak("invalid characters in version") if $version !~ /\A[.0-9_]+\z/;
 
-  $content =~ s/^(package \S+;)$/$1\nour \$VERSION = '$version';\n/mg;
+  # That \x20 is my OH SO CLEVER way of thwarting the \s* above.
+  # -- rjbs, 2008-06-02
+  $content =~ s/^(package \S+;)$/$1\nour \$VERSION\x20= '$version';\n/mg;
   $file->content($content);
 }
 
