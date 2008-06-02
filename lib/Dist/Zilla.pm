@@ -159,6 +159,11 @@ sub build_dist {
   }
 }
 
+# XXX: yeah, uh, do something more awesome -- rjbs, 2008-06-01
+sub log {
+  my ($self, $msg) = @_;
+  print "$msg\n";
+}
 
 no Moose;
 1;
