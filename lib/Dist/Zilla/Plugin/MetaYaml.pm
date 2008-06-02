@@ -18,7 +18,7 @@ sub write_files {
     abstract => '...', # XXX figure this out -- rjbs, 2008-06-01
     author   => $self->zilla->authors,
     license  => $self->zilla->license->meta_yml_name,
-    requires => { $self->zilla->prereq },
+    requires => $self->zilla->prereq,
     generated_by => (ref $self) . ' version ' . $self->VERSION,
   };
 
