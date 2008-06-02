@@ -23,6 +23,7 @@ sub run {
 
   eval {
     local $File::chdir::CWD = $target;
+    local $ENV{AUTHOR_TESTING} = 1;
     system($^X => 'Makefile.PL') and die "> error with Makefile.PL\n";
     system('make') and die "> error running make\n";
     system('make test') and die "> error running make test\n";
