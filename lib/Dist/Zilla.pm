@@ -4,8 +4,6 @@ use Moose::Autobox;
 use MooseX::Types::Path::Class qw(Dir File);
 use Moose::Util::TypeConstraints;
 
-our $VERSION = '0.001';
-
 use File::Find::Rule;
 use Path::Class ();
 use Software::License;

@@ -3,8 +3,6 @@ use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::FileWriter';
 
-our $VERSION = '0.001';
-
 use Dist::Zilla::File::InMemory;
 
 use YAML::Syck ();
