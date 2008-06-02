@@ -6,9 +6,10 @@ sub munge_file {
   my ($self, $file) = @_;
 
   return unless $file->name =~ m{\Axt/(smoke|author|release)/.+\.t\z};
-  warn "NAME: >> " . $file->name . "\n";
-
   my $method = "_rewrite_$1\_test";
+
+  $self->log("rewriting $1 test " . $file->name);
+
 
   $self->$method($file);
 }
