@@ -22,6 +22,7 @@ sub run {
   my $archive = Archive::Tar->new;
   $archive->add_files( File::Find::Rule->file->in($target) );
   $archive->write("$default_name.tar.gz", 9);
+  $target->rmtree;
 }
 
 1;
