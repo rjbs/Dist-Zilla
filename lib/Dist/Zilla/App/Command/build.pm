@@ -11,7 +11,8 @@ sub run {
   require Dist::Zilla;
   require Path::Class;
 
-  my $target = Path::Class::dir($arg->[0] || './dist');
+  my $default_name = $self->zilla->name . '-' . $self->zilla->version;
+  my $target = Path::Class::dir($arg->[0] || "./$default_name");
 
   $target->rmtree if -d $target;
 

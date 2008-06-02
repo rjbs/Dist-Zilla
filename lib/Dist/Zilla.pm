@@ -21,6 +21,13 @@ has name => (
   required => 1,
 );
 
+# XXX: *clearly* this needs to be really much smarter -- rjbs, 2008-06-01
+has version => (
+  is   => 'rw',
+  isa  => 'Str',
+  required => 1,
+);
+
 has copyright_holder => (
   is   => 'ro',
   isa  => 'Str',
@@ -132,6 +139,17 @@ sub manifest {
   $_->prune_files($files) for $self->plugins_with(-FilePruner)->flatten;
 
   return $files;
+}
+
+sub prereq {
+  my ($self) = @_;
+
+  # XXX: This needs to always include the highest version. -- rjbs, 2008-06-01
+  my $prereq = {};
+  $prereq = $prereq->merge( $_->prereq )
+    for $self->plugins_with(-FixedPrereqs)->flatten;
+
+  return $prereq;
 }
 
 sub build_dist {
