@@ -15,6 +15,7 @@ use ExtUtils::MakeMaker;
 WriteMakefile(
   NAME         => '{{ $dist->name }}',
   AUTHOR       => '{{ $author_str }}',
+  ABSTRACT     => '{{ $dist->abstract }}',
   VERSION_FROM => "{{ (grep { /.pm$/ } @{$dist->files})[0] }}",
   (eval { ExtUtils::MakeMaker->VERSION(6.21) } ? (LICENSE => '{{ $dist->license->meta_yml_name }}') : ()),
   PREREQ_PM    => {

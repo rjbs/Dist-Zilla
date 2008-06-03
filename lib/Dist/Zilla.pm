@@ -13,6 +13,12 @@ use Dist::Zilla::Config;
 use Dist::Zilla::File::OnDisk;
 use Dist::Zilla::Role::Plugin;
 
+=head1 NAME
+
+Dist::Zilla - distribution builder; installer not included!
+
+=cut
+
 has name => (
   is   => 'ro',
   isa  => 'Str',
@@ -33,10 +39,48 @@ has abstract => (
   required => 1,
   default  => sub {
     my ($self) = @_;
-    # my ($primary
-    '...', # XXX figure this out -- rjbs, 2008-06-01
+    my $file = $self->files
+             ->map (sub {$_->name})
+             ->grep(sub {/\.pm$/})
+             ->sort(sub{length $_[0] <=> length $_[1]})
+             ->head;
+
+    Carp::confess("couldn't find source for abstract file") unless $file;
+
+    $self->_extract_abstract($file);
   }
 );
+
+# stolen from App::Cmd::Command, which stole from ExtUtils::MakeMaker
+sub _extract_abstract {
+  my ($self, $pm_file) = @_;
+
+  my $result;
+  open my $fh, "<", $pm_file or return "(unknown)";
+
+  local $/ = "\n";
+  my $inpod;
+
+  my $class;
+  while (local $_ = <$fh>) {
+    # =cut toggles, it doesn 't end :-/
+    $inpod = /^=cut/ ? !$inpod : $inpod || /^=(?!cut)/;
+
+    if (!$inpod) {
+      /^\s*package (\S+)?;/;
+      $class = $1 if $1;
+      next;
+    }
+
+    chomp;
+    next unless $class and /^(?:$class\s-\s)(.*)/;
+    $result = $1;
+    last;
+  }
+
+  return $result || die "could not extract abstract from $pm_file";
+}
+
 
 has copyright_holder => (
   is   => 'ro',
@@ -210,10 +254,7 @@ sub build_dist {
   }
 
   for ($self->plugins_with(-AfterBuild)->flatten) {
-    $_->after_build({
-      build_root => $build_root,
-      files      => $self->files,
-    });
+    $_->after_build({ build_root => $build_root });
   }
 
   return unless $arg->{build_tarball};

@@ -9,8 +9,8 @@ sub after_build {
   my $file = $arg->{build_root}->file('MANIFEST');
   open my $fh, '>', $file or die "can't open $file for writing: $!";
 
-  my $files = [ $arg->{files}->map(sub{$_->name})->flatten, 'MANIFEST' ]->sort;
-  print { $fh } "$_\n" for $files->flatten;
+  print { $fh } "$_\n" for
+    $self->zilla->files->map(sub{$_->name})->push('MANIFEST')->sort->flatten;
 
   close $fh or die "can't close $file: $!";
 }
