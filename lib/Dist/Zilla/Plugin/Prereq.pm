@@ -1,6 +1,6 @@
 package Dist::Zilla::Plugin::Prereq;
 use Moose;
-with 'Dist::Zilla::Role::Prereq';
+with 'Dist::Zilla::Role::FixedPrereqs';
 
 has _prereq => (
   is   => 'ro',

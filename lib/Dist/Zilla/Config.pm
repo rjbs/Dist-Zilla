@@ -30,7 +30,7 @@ sub finalize {
     my $class = delete $plugin->{'=package'};
     
     if ($class->does('Dist::Zilla::Role::PluginBundle')) {
-      push @plugins, $class->bundle_config;
+      push @plugins, $class->bundle_config($plugin);
     } else {
       push @plugins, [ $class => $plugin ];
     }
