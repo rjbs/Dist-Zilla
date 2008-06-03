@@ -163,20 +163,24 @@ sub prereq {
 }
 
 sub build_dist {
-  my ($self, $root) = @_;
+  my ($self, $arg) = @_;
+  $arg ||= {};
 
-  my $build_root = Path::Class::dir($root);
+  $_->before_build for $self->plugins_with(-BeforeBuild)->flatten;
+
+  my $build_root = Path::Class::dir(
+    $arg->{build_root} || ($self->name . '-' . $self->version)
+  );
+
   $build_root->mkpath unless -d $build_root;
 
   my $dist_root = $self->root;
   my $manifest  = $self->manifest;
 
-  for ($self->plugins_with(-BeforeBuild)->flatten) {
-    $_->before_build({
-      build_root => $build_root,
-      files      => $self->files,
-    });
-  }
+  my $dist_name = $self->zilla->name . '-' . $self->zilla->version;
+  # my $target = $build_root->subdir($dist_name);
+  # $target->rmtree if -d $target;
+  $build_root->rmtree if -d $build_root;
 
   for ($self->plugins_with(-FileWriter)->flatten) {
     my $new_files = $_->write_files({
@@ -211,6 +215,18 @@ sub build_dist {
       files      => $self->files,
     });
   }
+
+  return unless $arg->{build_tarball};
+
+  require Archive::Tar;
+  my $archive = Archive::Tar->new;
+  $archive->add_files( File::Find::Rule->file->in($build_root) );
+  $archive->write(
+    $self->name . '-' . $self->version . '.tar.gz',
+    9,
+  );
+
+  $build_root->rmtree;
 }
 
 # XXX: yeah, uh, do something more awesome -- rjbs, 2008-06-01
