@@ -13,13 +13,13 @@ sub run {
   require File::Temp;
   require Path::Class;
 
-  my $build_root = $self->zilla->build_root;
+  my $build_root = Path::Class::dir('.build');
   $build_root->mkpath unless -d $build_root;
 
   my $target = Path::Class::dir( File::Temp::tempdir(DIR => $build_root) );
   $self->log("> building test distribution under $target");
 
-  $self->zilla->build_dist($target);
+  $self->zilla->build_dist({ build_root => $target });
 
   eval {
     local $File::chdir::CWD = $target;
