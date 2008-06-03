@@ -211,5 +211,6 @@ sub log {
   print "$msg\n";
 }
 
+__PACKAGE__->meta->make_immutable;
 no Moose;
 1;

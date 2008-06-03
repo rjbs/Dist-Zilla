@@ -50,4 +50,6 @@ END_SKIPPER
   $file->content(join "\n", @lines);
 }
 
+__PACKAGE__->meta->make_immutable;
+no Moose;
 1;

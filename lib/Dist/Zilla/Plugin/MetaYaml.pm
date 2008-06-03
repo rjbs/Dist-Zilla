@@ -28,4 +28,6 @@ sub write_files {
   return [ $file ];
 }
 
+no Moose;
+__PACKAGE__->meta->make_immutable;
 1;

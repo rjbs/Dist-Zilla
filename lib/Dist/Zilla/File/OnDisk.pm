@@ -28,5 +28,6 @@ sub _read_file {
   my $content = do { local $/; <$fh> };
 }
 
+__PACKAGE__->meta->make_immutable;
 no Moose;
 1;

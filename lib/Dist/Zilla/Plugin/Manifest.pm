@@ -15,5 +15,6 @@ sub after_build {
   close $fh or die "can't close $file: $!";
 }
 
+__PACKAGE__->meta->make_immutable;
 no Moose;
 1;
