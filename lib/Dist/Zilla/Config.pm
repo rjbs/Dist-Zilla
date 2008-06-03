@@ -19,7 +19,11 @@ sub finalize {
   for my $plugin (@$data) {
     my $class = delete $plugin->{'=package'};
     
-    push @plugins, [ $class => $plugin ];
+    if ($class->does('Dist::Zilla::Role::PluginBundle')) {
+      push @plugins, $class->bundle_config;
+    } else {
+      push @plugins, [ $class => $plugin ];
+    }
   }
 
   $root_config->{plugins} = \@plugins;
