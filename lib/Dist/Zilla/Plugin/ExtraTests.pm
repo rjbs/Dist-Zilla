@@ -32,7 +32,7 @@ sub _rewrite_release_test {
 sub _rewrite {
   my ($self, $file, $env, $msg) = @_;
 
-  (my $name = $file->name) =~ s{^xt/smoke/}{t/smoke-};
+  (my $name = $file->name) =~ s{^xt/([^/]+)/}{t/$1-};
 
   $file->name($name);
 
