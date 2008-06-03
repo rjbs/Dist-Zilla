@@ -13,10 +13,11 @@ use warnings;
 use ExtUtils::MakeMaker;
 
 WriteMakefile(
-  NAME         => '{{ $dist->name }}',
-  AUTHOR       => '{{ $author_str }}',
-  ABSTRACT     => '{{ $dist->abstract }}',
-  VERSION_FROM => "{{ (grep { /.pm$/ } @{$dist->files})[0] }}",
+  DISTNAME => '{{ $dist->name     }}',
+  NAME     => '{{ $module_name    }}',
+  AUTHOR   => '{{ $author_str     }}',
+  ABSTRACT => '{{ $dist->abstract }}',
+  VERSION  => "{{ $dist->version  }}',
   (eval { ExtUtils::MakeMaker->VERSION(6.21) } ? (LICENSE => '{{ $dist->license->meta_yml_name }}') : ()),
   PREREQ_PM    => {
 {{
@@ -32,11 +33,14 @@ END_MAKEFILE
 sub write_files {
   my ($self, $arg) = @_;
 
+  (my $name = $self->zilla->name) =~ s/-/::/g;
+
   my $content = $self->fill_in_string(
     $template,
     {
-      dist       => \$arg->{dist},
-      author_str => \quotemeta($arg->{dist}->authors->join(q{, })),
+      module_name => $name,
+      dist        => \$self->zilla,
+      author_str  => \quotemeta($self->zilla->authors->join(q{, })),
     },
   );
 

@@ -229,7 +229,6 @@ sub build_dist {
   for ($self->plugins_with(-FileWriter)->flatten) {
     my $new_files = $_->write_files({
       build_root => $build_root,
-      dist       => $self,
       manifest   => $manifest,
     });
 
