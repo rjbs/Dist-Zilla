@@ -229,13 +229,12 @@ sub build_dist {
   for ($self->plugins_with(-FileWriter)->flatten) {
     my $new_files = $_->write_files({
       build_root => $build_root,
-      manifest   => $manifest,
     });
 
-    $self->files->push($new_files->flatten);
+    $manifest->push($new_files->flatten);
   }
 
-  for my $file ($self->files->flatten) {
+  for my $file ($manifest->flatten) {
     $_->munge_file($file) for $self->plugins_with(-FileMunger)->flatten;
 
     my $file_path = Path::Class::file($file->name);

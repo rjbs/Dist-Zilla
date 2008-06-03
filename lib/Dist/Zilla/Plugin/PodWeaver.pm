@@ -24,8 +24,6 @@ sub munge_pod {
 
   my $end = do {
     my $end_elem = $doc->find('PPI::Statement::End');
-    use Data::Dumper;
-    warn Dumper($end_elem);
     join '', @{ $end_elem || [] };
   };
 

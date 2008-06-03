@@ -13,7 +13,9 @@ sub prune_files {
   # Randy Kobes has accepted a patch to make maniskip non-private. -- rjbs,
   # 2008-06-02
   my $skip = ExtUtils::Manifest::_maniskip;
-  @$files = grep { ! $skip->($_) } @$files;
+
+  @$files = grep { ! $skip->($_->name) } @$files;
+
   return;
 }
 
