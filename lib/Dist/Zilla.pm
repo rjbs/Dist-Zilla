@@ -26,6 +26,18 @@ has version => (
   required => 1,
 );
 
+has abstract => (
+  is   => 'rw',
+  isa  => 'Str',
+  lazy => 1,
+  required => 1,
+  default  => sub {
+    my ($self) = @_;
+    # my ($primary
+    '...', # XXX figure this out -- rjbs, 2008-06-01
+  }
+);
+
 has copyright_holder => (
   is   => 'ro',
   isa  => 'Str',
@@ -99,7 +111,7 @@ has plugins => (
 
 has files => (
   is   => 'ro',
-  isa  => 'ArrayRef',
+  isa  => 'ArrayRef[Dist::Zilla::Role::File]',
   lazy => 1,
   default => sub {
     my ($self) = @_;
@@ -109,7 +121,7 @@ has files => (
               ->file
               ->in($root);
 
-    return \@files;
+    return @files->map(sub { Dist::Zilla::File::OnDisk->new({ name => $_ }) });
   },
 );
 
@@ -159,14 +171,10 @@ sub build_dist {
   my $dist_root = $self->root;
   my $manifest  = $self->manifest;
 
-  my $files = $manifest->map(sub {
-    Dist::Zilla::File::OnDisk->new({ name => $_ });
-  });
-
   for ($self->plugins_with(-BeforeBuild)->flatten) {
     $_->before_build({
       build_root => $build_root,
-      files      => $files,
+      files      => $self->files,
     });
   }
 
@@ -177,10 +185,10 @@ sub build_dist {
       manifest   => $manifest,
     });
 
-    $files->push($new_files->flatten);
+    $self->files->push($new_files->flatten);
   }
 
-  for my $file ($files->flatten) {
+  for my $file ($self->files->flatten) {
     $_->munge_file($file) for $self->plugins_with(-FileMunger)->flatten;
 
     my $_file = Path::Class::file($file->name);
@@ -200,7 +208,7 @@ sub build_dist {
   for ($self->plugins_with(-AfterBuild)->flatten) {
     $_->after_build({
       build_root => $build_root,
-      files      => $files,
+      files      => $self->files,
     });
   }
 }

@@ -3,17 +3,16 @@ use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::FileWriter';
 
-use Dist::Zilla::File::InMemory;
-
-use YAML::Syck ();
-
 sub write_files {
   my ($self, $arg) = @_;
+
+  require Dist::Zilla::File::InMemory;
+  require YAML::Syck;
 
   my $meta = {
     name     => $self->zilla->name,
     version  => $self->zilla->version,
-    abstract => '...', # XXX figure this out -- rjbs, 2008-06-01
+    abstract => $self->zilla->abstract,
     author   => $self->zilla->authors,
     license  => $self->zilla->license->meta_yml_name,
     requires => $self->zilla->prereq,
