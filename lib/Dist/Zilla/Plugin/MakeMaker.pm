@@ -17,7 +17,7 @@ WriteMakefile(
   NAME     => '{{ $module_name    }}',
   AUTHOR   => '{{ $author_str     }}',
   ABSTRACT => '{{ $dist->abstract }}',
-  VERSION  => "{{ $dist->version  }}',
+  VERSION  => '{{ $dist->version  }}',
   (eval { ExtUtils::MakeMaker->VERSION(6.21) } ? (LICENSE => '{{ $dist->license->meta_yml_name }}') : ()),
   PREREQ_PM    => {
 {{
