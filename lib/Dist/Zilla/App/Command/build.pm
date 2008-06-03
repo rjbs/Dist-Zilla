@@ -12,10 +12,7 @@ sub opt_spec {
 sub run {
   my ($self, $opt, $arg) = @_;
 
-
-  my $dist = Dist::Zilla->from_dir('.');
-
-  $dist->build_dist({
+  $self->zilla->build_dist({
     build_tarball => $opt->{tgz},
   });
 }

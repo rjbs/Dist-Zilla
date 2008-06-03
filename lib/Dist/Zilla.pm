@@ -177,7 +177,7 @@ sub build_dist {
   my $dist_root = $self->root;
   my $manifest  = $self->manifest;
 
-  my $dist_name = $self->zilla->name . '-' . $self->zilla->version;
+  # my $dist_name = $self->name . '-' . $self->version;
   # my $target = $build_root->subdir($dist_name);
   # $target->rmtree if -d $target;
   $build_root->rmtree if -d $build_root;
