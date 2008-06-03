@@ -195,10 +195,10 @@ sub build_dist {
   for my $file ($self->files->flatten) {
     $_->munge_file($file) for $self->plugins_with(-FileMunger)->flatten;
 
-    my $_file = Path::Class::file($file->name);
+    my $file_path = Path::Class::file($file->name);
 
-    my $to_dir = $build_root->subdir( $_file->dir );
-    my $to = $to_dir->file( $_file->basename );
+    my $to_dir = $build_root->subdir( $file_path->dir );
+    my $to = $to_dir->file( $file_path->basename );
     $to_dir->mkpath unless -e $to_dir;
     die "not a directory: $to_dir" unless -d $to_dir;
   
