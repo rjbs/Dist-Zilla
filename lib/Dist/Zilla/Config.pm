@@ -5,6 +5,16 @@ use base 'Config::INI::MVP::Reader';
 
 sub multivalue_args { qw(author) }
 
+sub _expand_package {
+  my ($self, $package) = @_;
+
+  return $package if $package =~ /^Dist::Zilla::/;
+
+  return $package if $package =~ s/^=//;
+  return $package if $package =~ s/^@/Dist::Zilla::PluginBundle::/;
+  return $package if $package =~ s/^/Dist::Zilla::Plugin::/; # always succeeds
+}
+
 sub finalize {
   my ($self) = @_;
   $self->SUPER::finalize;
