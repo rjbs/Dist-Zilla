@@ -78,7 +78,6 @@ sub _extract_abstract {
   return $result || "could not extract abstract from $pm_file";
 }
 
-
 has copyright_holder => (
   is   => 'ro',
   isa  => 'Str',
@@ -109,10 +108,19 @@ has build_root => (
   default => sub { Path::Class::dir('build') },
 );
 
-sub from_dir {
-  my ($class, $root) = @_;
+=method from_config
 
-  $root = Path::Class::dir($root) unless ref $root;
+  my $zilla = Dist::Zilla->from_config;
+
+This routine returns a new Zilla from the configuration in the current working
+directory.
+
+=cut
+
+sub from_config {
+  my ($class) = @_;
+
+  my $root = Path::Class::dir('.');
 
   my $config_file = $root->file('dist.ini');
   my $config = Dist::Zilla::Config->read_file($config_file);
@@ -276,3 +284,4 @@ authors, and is meant to be run on a repository checkout rather than on
 published, released code, it can do much more than those tools, and is free to
 make much more ludicrous demands in terms of prerequisites.
 
+For more information, see L<Dist::Zilla::Tutorial>.

@@ -7,7 +7,7 @@ sub zilla {
   my ($self) = @_;
 
   require Dist::Zilla;
-  return $self->{__PACKAGE__}{zilla} ||= Dist::Zilla->from_dir('.');
+  return $self->{__PACKAGE__}{zilla} ||= Dist::Zilla->from_config;
 }
 
 sub log { shift->zilla->log(@_) } ## no critic
