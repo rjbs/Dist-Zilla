@@ -182,16 +182,6 @@ has root => (
   required => 1,
 );
 
-sub manifest {
-  my ($self) = @_;
-  
-  my $files = [ $self->files->flatten ];
-
-  $_->prune_files($files) for $self->plugins_with(-FilePruner)->flatten;
-
-  return $files;
-}
-
 sub prereq {
   my ($self) = @_;
 
@@ -216,7 +206,8 @@ sub build_dist {
   $build_root->mkpath unless -d $build_root;
 
   my $dist_root = $self->root;
-  my $manifest  = $self->manifest;
+  
+  $_->prune_files for $self->plugins_with(-FilePruner)->flatten;
 
   # my $dist_name = $self->name . '-' . $self->version;
   # my $target = $build_root->subdir($dist_name);
@@ -228,10 +219,10 @@ sub build_dist {
       build_root => $build_root,
     });
 
-    $manifest->push($new_files->flatten);
+    $self->files->push($new_files->flatten);
   }
 
-  for my $file ($manifest->flatten) {
+  for my $file ($self->files->flatten) {
     $_->munge_file($file) for $self->plugins_with(-FileMunger)->flatten;
 
     my $file_path = Path::Class::file($file->name);
