@@ -1,4 +1,5 @@
 package Dist::Zilla;
+# ABSTRACT: distribution builder; installer not included!
 use Moose;
 use Moose::Autobox;
 use MooseX::Types::Path::Class qw(Dir File);
@@ -12,12 +13,6 @@ use Dist::Zilla::Config;
 
 use Dist::Zilla::File::OnDisk;
 use Dist::Zilla::Role::Plugin;
-
-=head1 NAME
-
-Dist::Zilla - distribution builder; installer not included!
-
-=cut
 
 has name => (
   is   => 'ro',
@@ -63,6 +58,9 @@ sub _extract_abstract {
 
   my $class;
   while (local $_ = <$fh>) {
+    chomp;
+    # if (my ($x) = /^\s*#+\s*ABSTRACT:\s*(.+)$/) { $result = '1'; last };
+
     # =cut toggles, it doesn 't end :-/
     $inpod = /^=cut/ ? !$inpod : $inpod || /^=(?!cut)/;
 
@@ -72,13 +70,12 @@ sub _extract_abstract {
       next;
     }
 
-    chomp;
     next unless $class and /^(?:$class\s-\s)(.*)/;
     $result = $1;
     last;
   }
 
-  return $result || die "could not extract abstract from $pm_file";
+  return $result || "could not extract abstract from $pm_file";
 }
 
 

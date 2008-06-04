@@ -2,4 +2,5 @@
 use strict;
 use warnings;
 use lib qw(lib t/lib);
-use Dist::Zilla::App -run;
+use Dist::Zilla::App;
+Dist::Zilla::App->run;
