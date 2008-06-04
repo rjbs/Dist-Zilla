@@ -1,4 +1,5 @@
 package Dist::Zilla::Plugin::MetaYaml;
+# ABSTRACT: produce a META.yml
 use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::FileWriter';

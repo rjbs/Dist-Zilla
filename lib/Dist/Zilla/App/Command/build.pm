@@ -1,6 +1,7 @@
 use strict;
 use warnings;
 package Dist::Zilla::App::Command::build;
+# ABSTRACT: build your dist
 use Dist::Zilla::App -command;
 
 sub abstract { 'build your dist' }

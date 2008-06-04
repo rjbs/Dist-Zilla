@@ -1,4 +1,5 @@
 package Dist::Zilla::Plugin::BumpVersion;
+# ABSTRACT: bump the configured version number by one before building
 use Moose;
 with 'Dist::Zilla::Role::BeforeBuild';
 

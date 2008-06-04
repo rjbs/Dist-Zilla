@@ -1,4 +1,5 @@
 package Dist::Zilla::Plugin::MakeMaker;
+# ABSTRACT: build a Makefile.PL that uses ExtUtils::MakeMaker
 use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::FileWriter';

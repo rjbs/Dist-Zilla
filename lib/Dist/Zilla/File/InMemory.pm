@@ -1,4 +1,5 @@
 package Dist::Zilla::File::InMemory;
+# ABSTRACT: a file that you build entirely in memory
 use Moose;
 with 'Dist::Zilla::Role::File';
 

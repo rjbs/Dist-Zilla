@@ -1,4 +1,5 @@
 package Dist::Zilla::Plugin::PodVersion;
+# ABSTRACT: add a VERSION head1 to each Perl document
 use Moose;
 with 'Dist::Zilla::Role::FileMunger';
 

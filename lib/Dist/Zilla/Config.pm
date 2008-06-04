@@ -1,7 +1,9 @@
 use strict;
 use warnings;
 package Dist::Zilla::Config;
-use base 'Config::INI::MVP::Reader';
+# ABSTRACT: read in a dist.ini file
+use Config::INI::MVP::Reader;
+BEGIN { @ISA = 'Config::INI::MVP::Reader' }
 
 sub multivalue_args { qw(author) }
 

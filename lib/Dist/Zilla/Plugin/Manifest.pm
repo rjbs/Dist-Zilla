@@ -1,4 +1,5 @@
 package Dist::Zilla::Plugin::Manifest;
+# ABSTRACT: build a MANIFEST file
 use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::AfterBuild';

@@ -1,4 +1,5 @@
 package Dist::Zilla::File::OnDisk;
+# ABSTRACT: a file that comes from your filesystem
 use Moose;
 with 'Dist::Zilla::Role::File';
 

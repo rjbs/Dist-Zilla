@@ -1,4 +1,5 @@
 package Dist::Zilla::PluginBundle::Classic;
+# ABSTRACT: build something more or less like a "classic" CPAN dist
 use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::PluginBundle';

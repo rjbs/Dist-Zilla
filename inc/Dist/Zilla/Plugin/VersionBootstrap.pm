@@ -1,4 +1,5 @@
 package inc::Dist::Zilla::Plugin::VersionBootstrap;
+# ABSTRACT: set Dist::Zilla::* $VERSION during Dist-Zilla dzilling
 use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::BeforeBuild';

@@ -1,4 +1,5 @@
 package Dist::Zilla::Role::TextTemplate;
+# ABSTRACT: something that renders a Text::Template template string
 use Moose::Role;
 
 use Text::Template;

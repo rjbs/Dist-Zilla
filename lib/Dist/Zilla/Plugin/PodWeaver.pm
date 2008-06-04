@@ -1,8 +1,20 @@
 package Dist::Zilla::Plugin::PodWeaver;
+# ABSTRACT: do horrible things to POD, producing better docs
 use Moose;
 use Moose::Autobox;
 use List::MoreUtils qw(any);
 with 'Dist::Zilla::Role::FileMunger';
+
+=head1 WARNING
+
+This code is really, really awful.  It's crude and brutal and will probably
+break whatever it is you were trying to do.
+
+Eventually, this code will be really awesome.  I hope.  It will probably
+provide an interface to something more cool and sophisticated.  Until then,
+don't expect it to do anything but bring sorrow to you and your people.
+
+=cut
 
 sub munge_file {
   my ($self, $file) = @_;
