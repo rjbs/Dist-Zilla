@@ -59,7 +59,7 @@ sub _extract_abstract {
   my $class;
   while (local $_ = <$fh>) {
     chomp;
-    # if (my ($x) = /^\s*#+\s*ABSTRACT:\s*(.+)$/) { $result = '1'; last };
+    return $1 if /^\s*#+\s*ABSTRACT:\s*(.+)$/;
 
     # =cut toggles, it doesn 't end :-/
     $inpod = /^=cut/ ? !$inpod : $inpod || /^=(?!cut)/;
