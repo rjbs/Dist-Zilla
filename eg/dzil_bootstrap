@@ -1,0 +1,49 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+use CPAN;
+use CPAN::Version;
+
+sub _uptodate {
+  my ($mod, $modname, $modver) = @_;
+
+  return unless $mod;
+  return CPAN::Version->vge($mod->inst_version, $modver);
+}
+
+sub _install {
+  for (@_) {
+    my ($modname, $modver);
+    if (ref $_ eq 'ARRAY') {
+      ($modname, $modver) = @$_;
+    } else {
+      $modname = $_;
+      $modver = 0;
+    }
+    print "Looking for $modname $modver\n";
+    my $mod = CPAN::Shell->expand(Module => $modname);
+    next if _uptodate($mod, $modname, $modver);
+    CPAN::Shell->install($modname);
+    $mod = CPAN::Shell->expand(Module => $modname);
+    die "$modname had failures, aborting"
+      unless _uptodate($mod, $modname, $modver);
+  }
+}
+
+unless (-e "dist.ini") {
+  die "No 'dist.ini' file; is this really a Dist::Zilla distribution?\n"
+}
+
+unless (eval "require Config::INI::Reader; 1") {
+   _install('Config::INI::Reader');
+  require Config::INI::Reader;
+}
+
+my $data = Config::INI::Reader->read_file('dist.ini');
+
+_install(
+  map { [ $_ => $data->{Prereq}->{$_} ] }
+  keys %{ $data->{Prereq} }
+);
