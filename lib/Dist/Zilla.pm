@@ -265,3 +265,14 @@ sub log { ## no critic
 __PACKAGE__->meta->make_immutable;
 no Moose;
 1;
+__END__
+=head1 DESCRIPTION
+
+Dist::Zilla builds distributions of code to be uploaded to the CPAN.  In this
+respect, it is like L<ExtUtils::MakeMaker>, L<Module::Build>, or
+L<Module::Install>.  Unlike those tools, however, it is not also a system for
+installing code that has been downloaded from the CPAN.  Since it's only run by
+authors, and is meant to be run on a repository checkout rather than on
+published, released code, it can do much more than those tools, and is free to
+make much more ludicrous demands in terms of prerequisites.
+
