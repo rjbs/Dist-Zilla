@@ -22,6 +22,7 @@ sub run {
   $self->zilla->build_dist({ build_root => $target });
 
   eval {
+    ## no critic Punctuation
     local $File::chdir::CWD = $target;
     local $ENV{AUTHOR_TESTING} = 1;
     local $ENV{RELEASE_TESTING} = 1;

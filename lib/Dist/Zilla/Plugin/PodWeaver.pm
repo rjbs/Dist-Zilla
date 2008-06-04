@@ -24,7 +24,7 @@ sub munge_pod {
 
   my $end = do {
     my $end_elem = $doc->find('PPI::Statement::End');
-    join '', @{ $end_elem || [] };
+    join q{}, @{ $end_elem || [] };
   };
 
   $doc->prune('PPI::Statement::End');

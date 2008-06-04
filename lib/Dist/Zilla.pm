@@ -262,14 +262,14 @@ sub build_dist {
   $archive->add_files( File::Find::Rule->file->in($build_root) );
   $archive->write(
     $self->name . '-' . $self->version . '.tar.gz',
-    9,
+    9, ## no critic
   );
 
   $build_root->rmtree;
 }
 
 # XXX: yeah, uh, do something more awesome -- rjbs, 2008-06-01
-sub log {
+sub log { ## no critic
   my ($self, $msg) = @_;
   print "$msg\n";
 }

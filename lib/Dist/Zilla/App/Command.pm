@@ -10,6 +10,6 @@ sub zilla {
   return $self->{__PACKAGE__}{zilla} ||= Dist::Zilla->from_dir('.');
 }
 
-sub log { shift->zilla->log(@_) }
+sub log { shift->zilla->log(@_) } ## no critic
 
 1;

@@ -19,6 +19,7 @@ sub finalize {
   my ($self) = @_;
   $self->SUPER::finalize;
 
+  ## no critic
   my $data = $self->{data};
 
   my $root_config = $data->[0]{'=name'} eq '_' ? shift @$data : {};

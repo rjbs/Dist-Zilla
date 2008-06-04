@@ -19,7 +19,7 @@ sub bundle_config {
     Dist::Zilla::Plugin::Manifest
   );
 
-  eval "require $_; 1" or die for @classes;
+  eval "require $_; 1" or die for @classes; ## no critic Carp
 
   return @classes->map(sub { [ $_ => { '=name' => "$self/$_" } ] })->flatten;
 }

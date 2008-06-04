@@ -22,7 +22,8 @@ sub munge_pod {
 
   my @content = split /\n/, $file->content;
   
-  if (grep { /^=head1 VERSION\b/ } @content) {
+  require List::MoreUtils;
+  if (List::MoreUtils::any { /^=head1 VERSION\b/ } @content) {
     $self->log($file->name . ' already has a VERSION section in POD');
     return;
   }
@@ -37,10 +38,10 @@ sub munge_pod {
     $_++ while $content[$_] =~ /^\s*$/;
 
     splice @content, $_ - 1, 0, (
-      "",
+      q{},
       "=head1 VERSION",
-      "",
-      "version " . $self->zilla->version . "",
+      q{},
+      "version " . $self->zilla->version . q{},
     );
 
     $file->content(join "\n", @content);
