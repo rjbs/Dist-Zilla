@@ -1,16 +1,28 @@
 package Dist::Zilla::Plugin::PodWeaver;
 use Moose;
 use Moose::Autobox;
+use List::MoreUtils qw(any);
 with 'Dist::Zilla::Role::FileMunger';
 
 sub munge_file {
   my ($self, $file) = @_;
 
   return $self->munge_pod($file)
-    if $file->name =~ /\.pm$/i
+    if $file->name =~ /\.(?:pm|pod)$/i
     and ($file->name !~ m{/} or $file->name =~ m{^lib/});
 
   return;
+}
+
+sub _filter(&\@) {
+  my ($code, $array) = @_;
+
+  my @result;
+  for my $i (reverse 0 .. $#$array) {
+    local $_ = $array->[$i];
+    push @result, splice @$array, $i, 1 if $code->();
+  }
+  return @result;
 }
 
 sub munge_pod {
@@ -21,36 +33,49 @@ sub munge_pod {
   my @pod = map {"$_"} @{ $doc->find('PPI::Token::Pod') || [] };
   $doc->prune('PPI::Token::Pod');
 
-  my $newpod = q{} . (@pod ? PPI::Document->new( \( join "\n", @pod ) ) : q{});
-
-  unless ($newpod =~ /^=head1 VERSION$/m) {
-    $newpod = sprintf "\n=head1 VERSION\n\nversion %s\n\n%s",
-      $self->zilla->version, $newpod;
+  unless (any { /^=head1 VERSION$/m } @pod) {
+    unshift @pod, sprintf "\n=head1 VERSION\n\nversion %s\n\n",
+      $self->zilla->version;
   }
 
-  unless ($newpod =~ /^=head1 NAME$/m) {
+  unless (any { /^=head1 NAME$/m } @pod) {
     Carp::croak "couldn't find package declaration in " . $file->name
       unless my $pkg_node = $doc->find_first('PPI::Statement::Package');
-
     my $package = $pkg_node->namespace;
-    $newpod = sprintf "\n=head1 NAME\n\n%s - %s\n\n%s",
-      $package, $self->zilla->abstract, $newpod;
+
+    $self->log("couldn't find abstract in " . $file->name)
+      unless my ($abstract) = $doc =~ /^\s*#+\s*ABSTRACT:\s*(.+)$/m;
+
+    my $name = $package;
+    $name .= " - $abstract" if $abstract;
+    unshift @pod, sprintf "\n=head1 NAME\n\n%s\n\n", $name;
   }
 
-  unless ($newpod =~ /^=head1 AUTHORS?$/m) {
+  if (my @methods = _filter { /^=method / } @pod) {
+    unless (any { /^=head1 METHODS$/m } @pod) {
+      push @pod, "\n=head1 METHODS\n\n";
+    }
+
+    push @pod, map { s/^=method /=head2 /gm; $_ } @methods;
+  }
+
+  unless (any { /^=head1 AUTHORS?$/m } @pod) {
     my @authors = $self->zilla->authors->flatten;
     my $name = @authors > 1 ? 'AUTHORS' : 'AUTHOR';
-    $newpod .= "\n=head1 $name\n\n";
-    $newpod .= "  $_\n" for @authors;
-    $newpod .= "\n\n";
+
+    push @pod, "\n=head1 $name\n\n"
+            . join("\n", map { "  $_" } @authors)
+            . "\n\n";
   }
 
-  unless ($newpod =~ /^=head1 (COPYRIGHT|LICENSE)/m) {
-    $newpod .= "\n=head1 COPYRIGHT AND LICENSE\n\n"
-            .  $self->zilla->license->notice;
-    $newpod .= "\n\n";
+  unless (any { /^=head1 (?:COPYRIGHT|LICENSE)$/m } @pod) {
+    push @pod, ("\n=head1 COPYRIGHT AND LICENSE\n\n"
+               . $self->zilla->license->notice
+               . "\n\n");
   }
 
+
+  my $newpod = join qq{\n}, @pod;
   $newpod .= "\n=cut" unless $newpod =~ /=cut\n+/ms;
 
   my $end = do {
