@@ -37,12 +37,53 @@ sub _filter(&\@) {
   return @result;
 }
 
+{
+  package Dist::Zilla::Plugin::PodWeaver::Eventual;
+  our @ISA = 'Pod::Eventual';
+  sub new {
+    my ($class) = @_;
+    require Pod::Eventual;
+    bless [] => $class;
+  }
+
+  sub handle_event { push @{$_[0]}, $_[1] }
+  sub events { @{ $_[0] } }
+  sub read_string { my $self = shift; $self->SUPER::read_string(@_); $self }
+
+  sub write_string {
+    my ($self, $events) = @_;
+    my $str = "\n=pod\n\n";
+
+    EVENT: for my $event (@$events) {
+      if ($event->{type} eq 'verbatim') {
+        $event->{content} =~ s/^/  /mg;
+        $event->{type} = 'text';
+      }
+
+      if ($event->{type} eq 'text') {
+        $str .= "$event->{content}\n";
+        next EVENT;
+      }
+
+      $str .= "=$event->{command} $event->{content}\n";
+    }
+
+    return $str;
+  }
+}
+
+sub _h1 {
+  my $name = shift;
+  any { $_->{type} eq 'command' and $_->{content} =~ /^\Q$name$/m } @_;
+}
+
 sub munge_pod {
   my ($self, $file) = @_;
+
   require PPI;
   my $content = $file->content;
   my $doc = PPI::Document->new(\$content);
-  my @pod = map {"$_"} @{ $doc->find('PPI::Token::Pod') || [] };
+  my @pod_tokens = map {"$_"} @{ $doc->find('PPI::Token::Pod') || [] };
   $doc->prune('PPI::Token::Pod');
 
   if (@{ $doc->find('PPI::Token::HereDoc') || [] }) {
@@ -53,12 +94,28 @@ sub munge_pod {
     return;
   }
 
-  unless (any { /^=head1 VERSION$/m } @pod) {
-    unshift @pod, sprintf "\n=head1 VERSION\n\nversion %s\n\n",
-      $self->zilla->version;
+  my $pe = 'Dist::Zilla::Plugin::PodWeaver::Eventual';
+
+  if ($pe->new->read_string("$doc")->events) {
+    $self->log(
+      sprintf "can't invoke %s on %s: there is POD inside string literals",
+        $self->plugin_name, $file->name
+    );
+    return;
   }
 
-  unless (any { /^=head1 NAME$/m } @pod) {
+  my @pod = $pe->new->read_string(join "\n", @pod_tokens)->events;
+  # _filter { $_->{type} eq 'command' and $_->{command} eq 'cut' } @pod;
+
+  unless (_h1(VERSION => @pod)) {
+    unshift @pod, (
+      { type => 'command', command => 'head1', content => "VERSION\n"  },
+      { type => 'text',   
+        content => sprintf "version %s\n", $self->zilla->version }
+    );
+  }
+
+  unless (_h1(NAME => @pod)) {
     Carp::croak "couldn't find package declaration in " . $file->name
       unless my $pkg_node = $doc->find_first('PPI::Statement::Package');
     my $package = $pkg_node->namespace;
@@ -68,35 +125,71 @@ sub munge_pod {
 
     my $name = $package;
     $name .= " - $abstract" if $abstract;
-    unshift @pod, sprintf "\n=head1 NAME\n\n%s\n\n", $name;
+
+    unshift @pod, (
+      { type => 'command', command => 'head1', content => "NAME\n"  },
+      { type => 'text',                        content => "$name\n" },
+    );
   }
 
-  if (my @methods = _filter { /^=method / } @pod) {
-    unless (any { /^=head1 METHODS$/m } @pod) {
-      push @pod, "\n=head1 METHODS\n\n";
+  my (@methods, $in_method);
+
+  EVENT: for (my $i = 0; $i < @pod; $i++) {
+    my $event = $pod[$i];
+
+    if ($event->{type} eq 'command' and $event->{command} eq 'method') {
+      $in_method = 1;
+      push @methods, splice @pod, $i--, 1;
+      next EVENT;
     }
 
-    push @pod, map { s/^=method /=head2 /gm; $_ } @methods;
+    if (
+      $event->{type} eq 'command'
+      and $event->{command} =~ /^(?:cut|function|head1)$/
+    ) {
+      $in_method = 0;
+      next EVENT;
+    }
+
+    push @methods, splice @pod, $i--, 1 if $in_method;
+  }
+      
+  if (@methods) {
+    unless (_h1(METHODS => @pod)) {
+      push @pod, {
+        type    => 'command',
+        command => 'head1',
+        content => "METHODS\n",
+      };
+    }
+
+    $_->{command} = 'head2'
+      for grep { ($_->{command}||'') eq 'method' } @methods;
+
+    push @pod, @methods;
   }
 
-  unless (any { /^=head1 AUTHORS?$/m } @pod) {
+  unless (_h1(AUTHOR => @pod) or _h1(AUTHORS => @pod)) {
     my @authors = $self->zilla->authors->flatten;
     my $name = @authors > 1 ? 'AUTHORS' : 'AUTHOR';
 
-    push @pod, "\n=head1 $name\n\n"
-            . join("\n", map { "  $_" } @authors)
-            . "\n\n";
+    push @pod, (
+      { type => 'command',  command => 'head1', content => "$name\n" },
+      { type => 'verbatim',
+        content => join("\n", @authors) . "\n"
+      }
+    );
   }
 
-  unless (any { /^=head1 (?:COPYRIGHT|LICENSE)$/m } @pod) {
-    push @pod, ("\n=head1 COPYRIGHT AND LICENSE\n\n"
-               . $self->zilla->license->notice
-               . "\n\n");
+  unless (_h1(COPYRIGHT => @pod) or _h1(LICENSE => @pod)) {
+    push @pod, (
+      { type => 'command', command => 'head1',
+        content => "COPYRIGHT AND LICENSE\n" },
+      { type => 'text', content => $self->zilla->license->notice . "\n" }
+    );
   }
 
-
-  my $newpod = join qq{\n}, @pod;
-  $newpod .= "\n=cut" unless $newpod =~ /=cut\n+/ms;
+  my $newpod = $pe->write_string(\@pod);
 
   my $end = do {
     my $end_elem = $doc->find('PPI::Statement::End');
