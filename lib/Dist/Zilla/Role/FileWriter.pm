@@ -1,4 +1,5 @@
 package Dist::Zilla::Role::FileWriter;
+# ABSTRACT: something that writes new files into the distribution
 use Moose::Role;
 
 with 'Dist::Zilla::Role::Plugin';
