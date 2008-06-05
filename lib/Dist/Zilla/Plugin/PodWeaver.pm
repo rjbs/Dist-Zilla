@@ -45,6 +45,14 @@ sub munge_pod {
   my @pod = map {"$_"} @{ $doc->find('PPI::Token::Pod') || [] };
   $doc->prune('PPI::Token::Pod');
 
+  if (@{ $doc->find('PPI::Token::HereDoc') || [] }) {
+    $self->log(
+      sprintf "can't invoke %s on %s: PPI can't munge code with here-docs",
+        $self->plugin_name, $file->name
+    );
+    return;
+  }
+
   unless (any { /^=head1 VERSION$/m } @pod) {
     unshift @pod, sprintf "\n=head1 VERSION\n\nversion %s\n\n",
       $self->zilla->version;

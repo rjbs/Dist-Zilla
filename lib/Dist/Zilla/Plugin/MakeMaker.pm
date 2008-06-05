@@ -7,7 +7,7 @@ with 'Dist::Zilla::Role::TextTemplate';
 
 use Dist::Zilla::File::InMemory;
 
-my $template = <<'END_MAKEFILE';
+my $template = q|
 use strict;
 use warnings;
 
@@ -29,7 +29,7 @@ WriteMakefile(
 }}
   },
 );
-END_MAKEFILE
+|;
 
 sub write_files {
   my ($self, $arg) = @_;

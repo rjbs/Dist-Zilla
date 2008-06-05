@@ -39,14 +39,14 @@ sub _rewrite {
 
   my @lines = split /\n/, $file->content;
   my $after = $lines[0] =~ /\A#!/ ? 1 : 0;
-  splice @lines, $after, 0, <<"END_SKIPPER";
+  splice @lines, $after, 0, qq|
 BEGIN {
   unless (\$ENV{$env}) {
     require Test::More;
     Test::More::plan(skip_all => 'these tests are for $msg');
   }
 }
-END_SKIPPER
+|;
 
   $file->content(join "\n", @lines);
 }
