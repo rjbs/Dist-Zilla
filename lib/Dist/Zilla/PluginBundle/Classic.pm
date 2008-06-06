@@ -14,6 +14,7 @@ sub bundle_config {
     Dist::Zilla::Plugin::MakeMaker
     Dist::Zilla::Plugin::MetaYaml
     Dist::Zilla::Plugin::License
+    Dist::Zilla::Plugin::Readme
     Dist::Zilla::Plugin::PkgVersion
     Dist::Zilla::Plugin::PodVersion
     Dist::Zilla::Plugin::ExtraTests
