@@ -7,7 +7,7 @@ with 'Dist::Zilla::Role::TextTemplate';
 has format => (
   is  => 'ro',
   isa => 'Str', # should be more validated Later -- rjbs, 2008-06-05
-  default => '%-10v %{%Y-%M-%d %T}',
+  default => '%-9v %{yyyy-MM-dd HH:mm:ss VVVV}d',
 );
 
 has filename => (
@@ -30,7 +30,7 @@ sub section_header {
     $string,
     (
       v => $self->zilla->version,
-      d => sub { $now->strftime($_[0]) }, 
+      d => sub { $now->format_cldr($_[0]) }, 
     ),
   );
 }
@@ -48,6 +48,8 @@ sub munge_file {
       NEXT    => \($self->section_header),
     },
   );
+
+  $file->content($content);
 }
 
 __PACKAGE__->meta->make_immutable;
