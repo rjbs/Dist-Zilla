@@ -9,6 +9,7 @@ sub bundle_config {
   my $class = ref $self;
 
   my @classes = qw(
+    Dist::Zilla::Plugin::AllFiles
     Dist::Zilla::Plugin::BumpVersion
     Dist::Zilla::Plugin::ManifestSkip
     Dist::Zilla::Plugin::MakeMaker

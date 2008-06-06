@@ -162,16 +162,8 @@ has files => (
   is   => 'ro',
   isa  => 'ArrayRef[Dist::Zilla::Role::File]',
   lazy => 1,
-  default => sub {
-    my ($self) = @_;
-    my $root = $self->root;
-    my @files = File::Find::Rule
-              ->not( File::Find::Rule->name(qr/^\./) )
-              ->file
-              ->in($root);
-
-    return @files->map(sub { Dist::Zilla::File::OnDisk->new({ name => $_ }) });
-  },
+  init_arg => undef,
+  default  => sub { [] },
 );
 
 sub plugins_with {
@@ -214,21 +206,21 @@ sub build_dist {
   $build_root->mkpath unless -d $build_root;
 
   my $dist_root = $self->root;
-  
-  $_->prune_files for $self->plugins_with(-FilePruner)->flatten;
 
   # my $dist_name = $self->name . '-' . $self->version;
   # my $target = $build_root->subdir($dist_name);
   # $target->rmtree if -d $target;
   $build_root->rmtree if -d $build_root;
 
-  for ($self->plugins_with(-FileWriter)->flatten) {
-    my $new_files = $_->write_files({
+  for ($self->plugins_with(-FileGatherer)->flatten) {
+    my $new_files = $_->gather_files({
       build_root => $build_root,
     });
 
     $self->files->push($new_files->flatten);
   }
+  
+  $_->prune_files for $self->plugins_with(-FilePruner)->flatten;
 
   for my $file ($self->files->flatten) {
     $_->munge_file($file) for $self->plugins_with(-FileMunger)->flatten;
