@@ -9,7 +9,7 @@ use CPAN::Version;
 sub _uptodate {
   my ($mod, $modname, $modver) = @_;
 
-  return unless $mod;
+  return unless $mod and defined $mod->inst_version;
   return CPAN::Version->vge($mod->inst_version, $modver);
 }
 
