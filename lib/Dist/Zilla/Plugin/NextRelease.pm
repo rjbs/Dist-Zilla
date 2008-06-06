@@ -4,7 +4,8 @@ use Moose;
 with 'Dist::Zilla::Role::FileMunger';
 with 'Dist::Zilla::Role::TextTemplate';
 
-with 'Dist::Zilla::Role::AfterBuild';
+# XXX: this will be AfterRelease
+# with 'Dist::Zilla::Role::AfterBuild';
 
 has format => (
   is  => 'ro',
@@ -54,7 +55,7 @@ sub munge_file {
   $file->content($content);
 }
 
-sub after_build {
+sub after_release {
   my ($self) = @_;
 
   my $filename = $self->filename;
@@ -70,7 +71,7 @@ sub after_build {
   my $header = $self->section_header;
 
   $content =~ s{ (\Q$delim->[0]\E \s*) \$NEXT (\s* \Q$delim->[1]\E) }
-               { $1 $header $2 }xs;
+               {$1\$NEXT$2\n\n$header}xs;
 
   open my $out_fh, '>', $filename
     or Carp::croak("can't open $filename for writing: $!");
