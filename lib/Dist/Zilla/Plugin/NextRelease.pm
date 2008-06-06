@@ -4,6 +4,8 @@ use Moose;
 with 'Dist::Zilla::Role::FileMunger';
 with 'Dist::Zilla::Role::TextTemplate';
 
+with 'Dist::Zilla::Role::AfterBuild';
+
 has format => (
   is  => 'ro',
   isa => 'Str', # should be more validated Later -- rjbs, 2008-06-05
@@ -24,7 +26,7 @@ sub section_header {
 
   # XXX: if possible, get the time zone from Wherever -- rjbs, 2008-06-05
   require DateTime;
-  my $now = DateTime->now;
+  my $now = DateTime->from_epoch(epoch => $^T);
 
   String::Format::stringf(
     $string,
@@ -50,6 +52,31 @@ sub munge_file {
   );
 
   $file->content($content);
+}
+
+sub after_build {
+  my ($self) = @_;
+
+  my $filename = $self->filename;
+
+  my $content = do {
+    local $/;
+    open my $in_fh, '<', $filename
+      or Carp::croak("can't open $filename for reading: $!");
+    <$in_fh>
+  };
+
+  my $delim  = $self->delim;
+  my $header = $self->section_header;
+
+  $content =~ s{ (\Q$delim->[0]\E \s*) \$NEXT (\s* \Q$delim->[1]\E) }
+               { $1 $header $2 }xs;
+
+  open my $out_fh, '>', $filename
+    or Carp::croak("can't open $filename for writing: $!");
+
+  print $out_fh $content or Carp::croak("error writing to $filename: $!");
+  close $out_fh or Carp::croak("error closing $filename: $!");
 }
 
 __PACKAGE__->meta->make_immutable;
