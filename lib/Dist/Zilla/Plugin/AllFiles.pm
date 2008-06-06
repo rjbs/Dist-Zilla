@@ -1,13 +1,14 @@
 package Dist::Zilla::Plugin::AllFiles;
+# ABSTRACT: gather all the files in your dist's root
 use Moose;
-use Moose;:Autobox;
+use Moose::Autobox;
 with 'Dist::Zilla::Role::FileGatherer';
 
 use File::Find::Rule;
 
 sub gather_files {
   my ($self) = @_;
-  my $root = $self->root;
+  my $root = $self->zilla->root;
 
   my @files = File::Find::Rule
             ->not( File::Find::Rule->name(qr/^\./) )

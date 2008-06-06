@@ -139,8 +139,7 @@ sub from_config {
     year   => $self->copyright_year,
   });
 
-  # XXX: fix this -- rjbs, 2008-06-01
-  $self->{license} = $license;
+  $self->meta->get_attribute('license')->set_value($self, $license);
 
   for my $plugin (@$plugins) {
     my ($plugin_class, $arg) = @$plugin;
