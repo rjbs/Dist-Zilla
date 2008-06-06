@@ -8,6 +8,10 @@ has name => (
   required => 1,
 );
 
+has added_by => (
+  is => 'ro',
+);
+
 # requires 'content';
 
 no Moose::Role;

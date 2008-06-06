@@ -25,7 +25,8 @@ sub gather_files {
     content => YAML::Syck::Dump($meta),
   });
 
-  return [ $file ];
+  $self->add_file($file);
+  return;
 }
 
 no Moose;

@@ -13,7 +13,8 @@ sub gather_files {
     content => $self->zilla->license->fulltext,
   });
 
-  return [ $file ];
+  $self->add_file($file);
+  return;
 }
 
 __PACKAGE__->meta->make_immutable;

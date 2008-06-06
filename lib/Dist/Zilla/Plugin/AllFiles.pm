@@ -15,7 +15,8 @@ sub gather_files {
             ->file
             ->in($root);
 
-  return @files->map(sub { Dist::Zilla::File::OnDisk->new({ name => $_ }) });
+  $self->add_file(Dist::Zilla::File::OnDisk->new({ name => $_ })) for @files;
+  return;
 }
 
 __PACKAGE__->meta->make_immutable;

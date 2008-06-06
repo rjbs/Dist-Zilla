@@ -50,7 +50,8 @@ sub gather_files {
     content => $content,
   });
 
-  return [ $file ];
+  $self->add_file($file);
+  return;
 }
 
 __PACKAGE__->meta->make_immutable;
