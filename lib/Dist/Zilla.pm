@@ -211,13 +211,7 @@ sub build_dist {
   # $target->rmtree if -d $target;
   $build_root->rmtree if -d $build_root;
 
-  for ($self->plugins_with(-FileGatherer)->flatten) {
-    my $new_files = $_->gather_files({
-      build_root => $build_root,
-    });
-
-    $self->files->push($new_files->flatten);
-  }
+  $_->gather_files for $self->plugins_with(-FileGatherer)->flatten;
   
   $_->prune_files for $self->plugins_with(-FilePruner)->flatten;
 
