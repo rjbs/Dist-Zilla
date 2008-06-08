@@ -2,10 +2,10 @@ package Dist::Zilla::Plugin::Readme;
 # ABSTRACT: build a README file
 use Moose;
 use Moose::Autobox;
-with 'Dist::Zilla::Role::FileWriter';
+with 'Dist::Zilla::Role::FileGatherer';
 with 'Dist::Zilla::Role::TextTemplate';
 
-sub write_files {
+sub gather_files {
   my ($self, $arg) = @_;
 
   require Dist::Zilla::File::InMemory;
@@ -30,7 +30,8 @@ This archive contains the distribution {{ $dist->name }}, version
     name    => 'README',
   });
 
-  return [ $file ];
+  $self->add_file($file);
+  return;
 }
 
 __PACKAGE__->meta->make_immutable;

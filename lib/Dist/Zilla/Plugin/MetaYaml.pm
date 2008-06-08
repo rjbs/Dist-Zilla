@@ -2,9 +2,9 @@ package Dist::Zilla::Plugin::MetaYaml;
 # ABSTRACT: produce a META.yml
 use Moose;
 use Moose::Autobox;
-with 'Dist::Zilla::Role::FileWriter';
+with 'Dist::Zilla::Role::FileGatherer';
 
-sub write_files {
+sub gather_files {
   my ($self, $arg) = @_;
 
   require Dist::Zilla::File::InMemory;
@@ -25,7 +25,8 @@ sub write_files {
     content => YAML::Syck::Dump($meta),
   });
 
-  return [ $file ];
+  $self->add_file($file);
+  return;
 }
 
 no Moose;
