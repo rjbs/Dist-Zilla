@@ -192,11 +192,12 @@ sub munge_pod {
   my $newpod = $pe->write_string(\@pod);
 
   my $end = do {
-    my $end_elem = $doc->find('PPI::Statement::End');
+    my $end_elem = $doc->find('PPI::Statement::Data') || $doc->find('PPI::Statement::End');
     join q{}, @{ $end_elem || [] };
   };
 
   $doc->prune('PPI::Statement::End');
+  $doc->prune('PPI::Statement::Data');
 
   $content = $end ? "$doc\n\n$newpod\n\n$end" : "$doc\n__END__\n$newpod\n";
 
