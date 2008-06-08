@@ -229,7 +229,7 @@ sub _prep_build_root {
   my ($self, $build_root) = @_;
 
   my $default_name = $self->name . q{-} . $self->version;
-  $build_root = Path::Class::dir("$build_root" || $default_name);
+  $build_root = Path::Class::dir($build_root || $default_name);
 
   $build_root->mkpath unless -d $build_root;
 
