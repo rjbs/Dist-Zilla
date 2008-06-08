@@ -198,55 +198,63 @@ sub build_dist {
 
   $_->before_build for $self->plugins_with(-BeforeBuild)->flatten;
 
-  my $build_root = Path::Class::dir(
-    $arg->{build_root} || ($self->name . '-' . $self->version)
-  );
-
-  $build_root->mkpath unless -d $build_root;
-
-  my $dist_root = $self->root;
-
-  # my $dist_name = $self->name . '-' . $self->version;
-  # my $target = $build_root->subdir($dist_name);
-  # $target->rmtree if -d $target;
-  $build_root->rmtree if -d $build_root;
+  my $build_root = $self->_prep_build_root($arg->{build_root});
 
   $_->gather_files for $self->plugins_with(-FileGatherer)->flatten;
-  
-  $_->prune_files for $self->plugins_with(-FilePruner)->flatten;
+
+  $_->prune_files  for $self->plugins_with(-FilePruner)->flatten;
+
+  $_->munge_files  for $self->plugins_with(-FileMunger)->flatten;
 
   for my $file ($self->files->flatten) {
-    $_->munge_file($file) for $self->plugins_with(-FileMunger)->flatten;
-
-    my $file_path = Path::Class::file($file->name);
-
-    my $to_dir = $build_root->subdir( $file_path->dir );
-    my $to = $to_dir->file( $file_path->basename );
-    $to_dir->mkpath unless -e $to_dir;
-    die "not a directory: $to_dir" unless -d $to_dir;
-  
-    Carp::croak("attempted to write $to multiple times") if -e $to;
-
-    open my $out_fh, '>', "$to" or die "couldn't open $to to write: $!";
-    print { $out_fh } $file->content;
-    close $out_fh or die "error closing $to: $!";
+    $self->_write_out_file($file, $build_root);
   }
 
-  for ($self->plugins_with(-AfterBuild)->flatten) {
-    $_->after_build({ build_root => $build_root });
-  }
+  $_->after_build({ build_root => $build_root })
+    for $self->plugins_with(-AfterBuild)->flatten;
 
   return unless $arg->{build_tarball};
 
   require Archive::Tar;
   my $archive = Archive::Tar->new;
   $archive->add_files( File::Find::Rule->file->in($build_root) );
-  $archive->write(
-    $self->name . '-' . $self->version . '.tar.gz',
-    9, ## no critic
-  );
+
+  ## no critic
+  $archive->write($self->name . q{-} . $self->version . '.tar.gz', 9);
 
   $build_root->rmtree;
+}
+
+sub _prep_build_root {
+  my ($self, $build_root) = @_;
+
+  my $default_name = $self->name . q{-} . $self->version;
+  $build_root = Path::Class::dir("$build_root" || $default_name);
+
+  $build_root->mkpath unless -d $build_root;
+
+  my $dist_root = $self->root;
+
+  $build_root->rmtree if -d $build_root;
+
+  return $build_root;
+}
+
+sub _write_out_file {
+  my ($self, $file, $build_root) = @_;
+
+  my $file_path = Path::Class::file($file->name);
+
+  my $to_dir = $build_root->subdir( $file_path->dir );
+  my $to = $to_dir->file( $file_path->basename );
+  $to_dir->mkpath unless -e $to_dir;
+  die "not a directory: $to_dir" unless -d $to_dir;
+
+  Carp::croak("attempted to write $to multiple times") if -e $to;
+
+  open my $out_fh, '>', "$to" or die "couldn't open $to to write: $!";
+  print { $out_fh } $file->content;
+  close $out_fh or die "error closing $to: $!";
 }
 
 # XXX: yeah, uh, do something more awesome -- rjbs, 2008-06-01

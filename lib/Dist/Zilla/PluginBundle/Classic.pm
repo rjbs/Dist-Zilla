@@ -18,6 +18,7 @@ sub bundle_config {
     Dist::Zilla::Plugin::Readme
     Dist::Zilla::Plugin::PkgVersion
     Dist::Zilla::Plugin::PodVersion
+    Dist::Zilla::Plugin::PodTests
     Dist::Zilla::Plugin::ExtraTests
     Dist::Zilla::Plugin::Manifest
   );
