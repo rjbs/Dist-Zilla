@@ -212,7 +212,7 @@ sub build_dist {
   $build_root->rmtree if -d $build_root;
 
   $_->gather_files for $self->plugins_with(-FileGatherer)->flatten;
-  
+
   $_->prune_files for $self->plugins_with(-FilePruner)->flatten;
 
   for my $file ($self->files->flatten) {
@@ -224,7 +224,7 @@ sub build_dist {
     my $to = $to_dir->file( $file_path->basename );
     $to_dir->mkpath unless -e $to_dir;
     die "not a directory: $to_dir" unless -d $to_dir;
-  
+
     Carp::croak("attempted to write $to multiple times") if -e $to;
 
     open my $out_fh, '>', "$to" or die "couldn't open $to to write: $!";
