@@ -17,7 +17,7 @@ sub gather_files {
     $self->add_file(
       Dist::Zilla::File::InMemory->new({
         name    => $name,
-        content => $data->{name},
+        content => ${ $data->{$name} },
       }),
     );
   }
