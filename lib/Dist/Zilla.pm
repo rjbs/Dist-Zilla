@@ -198,15 +198,7 @@ sub build_dist {
 
   $_->before_build for $self->plugins_with(-BeforeBuild)->flatten;
 
-  my $default_name = $self->name . q{-} . $self->version;
-
-  my $build_root = Path::Class::dir($arg->{build_root} || $default_name);
-
-  $build_root->mkpath unless -d $build_root;
-
-  my $dist_root = $self->root;
-
-  $build_root->rmtree if -d $build_root;
+  my $build_root = $self->_prep_build_root($arg->{build_root});
 
   $_->gather_files for $self->plugins_with(-FileGatherer)->flatten;
 
@@ -226,9 +218,26 @@ sub build_dist {
   require Archive::Tar;
   my $archive = Archive::Tar->new;
   $archive->add_files( File::Find::Rule->file->in($build_root) );
-  $archive->write("$default_name.tar.gz", 9); ## no critic
+
+  ## no critic
+  $archive->write($self->name . q{-} . $self->version . '.tar.gz', 9);
 
   $build_root->rmtree;
+}
+
+sub _prep_build_root {
+  my ($self, $build_root) = @_;
+
+  my $default_name = $self->name . q{-} . $self->version;
+  $build_root = Path::Class::dir("$build_root" || $default_name);
+
+  $build_root->mkpath unless -d $build_root;
+
+  my $dist_root = $self->root;
+
+  $build_root->rmtree if -d $build_root;
+
+  return $build_root;
 }
 
 sub _write_out_file {
