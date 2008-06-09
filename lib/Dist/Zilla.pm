@@ -247,8 +247,10 @@ C<$root> (or the default root, if no root is given), no exception is raised.
 sub ensure_built_in {
   my ($self, $root) = @_;
 
-  $root ||= $self->name . q{-} . $self->version;
-  return if $self->built_in and $self->built_in eq $root;
+  # $root ||= $self->name . q{-} . $self->version;
+  return if $self->built_in and 
+    (!$root or ($self->built_in eq $root));
+
   Carp::croak("dist is already built, but not in $root") if $self->built_in;
   $self->build_in($root);
 }
