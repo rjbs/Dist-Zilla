@@ -13,9 +13,7 @@ sub opt_spec {
 sub run {
   my ($self, $opt, $arg) = @_;
 
-  $self->zilla->build_dist({
-    build_tarball => $opt->{tgz},
-  });
+  $self->zilla->build_archive;
 }
 
 1;

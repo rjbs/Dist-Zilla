@@ -101,11 +101,11 @@ has authors => (
   required => 1,
 );
 
-has build_root => (
-  is   => 'ro',
+has built_in => (
+  is   => 'rw',
   isa  => Dir,
-  lazy    => 1,
-  default => sub { Path::Class::dir('build') },
+  init_arg  => undef,
+  # default => sub { Path::Class::dir('build') },
 );
 
 =method from_config
@@ -192,20 +192,19 @@ sub prereq {
   return $prereq;
 }
 
-sub build_dist {
-  my ($self, $arg) = @_;
-  $arg ||= {};
+sub build_in {
+  my ($self, $root) = @_;
+
+  Carp::confess("attempted to build " . $self->name . " a second time")
+    if $self->built_in;
 
   $_->before_build for $self->plugins_with(-BeforeBuild)->flatten;
 
-  my $build_root = $self->_prep_build_root($arg->{build_root});
+  my $build_root = $self->_prep_build_root($root);
 
-  $_->gather_files for $self->plugins_with(-FileGatherer)->flatten;
-
-  $_->prune_files  for $self->plugins_with(-FilePruner)->flatten;
-
-  $_->munge_files  for $self->plugins_with(-FileMunger)->flatten;
-
+  $_->gather_files    for $self->plugins_with(-FileGatherer)->flatten;
+  $_->prune_files     for $self->plugins_with(-FilePruner)->flatten;
+  $_->munge_files     for $self->plugins_with(-FileMunger)->flatten;
   $_->setup_installer for $self->plugins_with(-InstallTool)->flatten;
 
   $self->_check_dupe_files;
@@ -217,16 +216,30 @@ sub build_dist {
   $_->after_build({ build_root => $build_root })
     for $self->plugins_with(-AfterBuild)->flatten;
 
-  return unless $arg->{build_tarball};
+  $self->built_in($build_root);
+}
+
+sub ensure_built_in {
+  my ($self, $root) = @_;
+
+  return if $self->built_in and $self->built_in eq $root;
+  Carp::croak("dist is already built, but not in $root") if $self->built_in;
+  $self->build_in($root);
+}
+
+sub build_archive {
+  my ($self, $root) = @_;
+  
+  $self->ensure_built_in($root);
 
   require Archive::Tar;
   my $archive = Archive::Tar->new;
-  $archive->add_files( File::Find::Rule->file->in($build_root) );
+  $archive->add_files( File::Find::Rule->file->in($self->built_in) );
 
   ## no critic
   $archive->write($self->name . q{-} . $self->version . '.tar.gz', 9);
 
-  $build_root->rmtree;
+  # $self->built_in->rmtree;
 }
 
 sub _check_dupe_files {
