@@ -2,7 +2,7 @@ package Dist::Zilla::Plugin::MakeMaker;
 # ABSTRACT: build a Makefile.PL that uses ExtUtils::MakeMaker
 use Moose;
 use Moose::Autobox;
-with 'Dist::Zilla::Role::FileGatherer';
+with 'Dist::Zilla::Role::InstallTool';
 with 'Dist::Zilla::Role::TextTemplate';
 
 use Dist::Zilla::File::InMemory;
@@ -31,7 +31,7 @@ WriteMakefile(
 );
 |;
 
-sub gather_files {
+sub setup_installer {
   my ($self, $arg) = @_;
 
   (my $name = $self->zilla->name) =~ s/-/::/g;

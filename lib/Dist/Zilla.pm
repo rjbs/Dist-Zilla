@@ -206,6 +206,8 @@ sub build_dist {
 
   $_->munge_files  for $self->plugins_with(-FileMunger)->flatten;
 
+  $_->setup_installer for $self->plugins_with(-InstallTool)->flatten;
+
   for my $file ($self->files->flatten) {
     $self->_write_out_file($file, $build_root);
   }

@@ -2,18 +2,18 @@ package Dist::Zilla::Plugin::Manifest;
 # ABSTRACT: build a MANIFEST file
 use Moose;
 use Moose::Autobox;
-with 'Dist::Zilla::Role::AfterBuild';
+with 'Dist::Zilla::Role::InstallTool';
 
-sub after_build {
+sub setup_installer {
   my ($self, $arg) = @_;
 
-  my $file = $arg->{build_root}->file('MANIFEST');
-  open my $fh, '>', $file or die "can't open $file for writing: $!";
+  my $file = Dist::Zilla::File::InMemory->new({
+    name    => 'MANIFEST',
+    content => $self->zilla->files->map(sub{$_->name})->push('MANIFEST')
+               ->sort->flatten->join("\n"),
+  });
 
-  print { $fh } "$_\n" for
-    $self->zilla->files->map(sub{$_->name})->push('MANIFEST')->sort->flatten;
-
-  close $fh or die "can't close $file: $!";
+  $self->add_file($file);
 }
 
 __PACKAGE__->meta->make_immutable;
