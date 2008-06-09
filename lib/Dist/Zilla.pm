@@ -27,21 +27,6 @@ has version => (
   required => 1,
 );
 
-has main_module => (
-  is   => 'ro',
-  isa  => 'Str',
-  lazy => 1,
-  required => 1,
-  default  => sub {
-    my ($self) = @_;
-
-    my $file = $self->files
-             ->grep(sub { $_->name =~ /\.pm$/})
-             ->sort(sub { length $_[0]->name <=> length $_[1]->name })
-             ->head->name;
-  },
-);
-
 has abstract => (
   is   => 'rw',
   isa  => 'Str',
@@ -51,8 +36,23 @@ has abstract => (
     my ($self) = @_;
 
     require Dist::Zilla::Util;
-    Dist::Zilla::Util->_abstract_from_file($self->main_module);
+    Dist::Zilla::Util->_abstract_from_file($self->main_module->name);
   }
+);
+
+has main_module => (
+  is   => 'ro',
+  isa  => 'Dist::Zilla::Role::File',
+  lazy => 1,
+  required => 1,
+  default  => sub {
+    my ($self) = @_;
+
+    my $file = $self->files
+             ->grep(sub { $_->name =~ /\.pm$/})
+             ->sort(sub { length $_[0]->name <=> length $_[1]->name })
+             ->head;
+  },
 );
 
 has copyright_holder => (
@@ -67,9 +67,32 @@ has copyright_year => (
   default => (localtime)[5] + 1900,
 );
 
+has _license_class => (is => 'rw');
+
 has license => (
   is   => 'ro',
   isa  => 'Software::License',
+  lazy => 1,
+  required => 1,
+  default  => sub {
+    my ($self) = @_;
+    my $license_class = $self->_license_class;
+
+    unless ($license_class) {
+      require Software::LicenseUtils;
+      my @guess = Software::LicenseUtils->guess_license_from_pod(
+        $self->main_module->content
+      );
+
+      Carp::confess("couldn't make a good guess at license") if @guess != 1;
+      $license_class = $guess[0];
+    }
+
+    my $license = $license_class->new({
+      holder => $self->copyright_holder,
+      year   => $self->copyright_year,
+    });
+  },
 );
 
 has authors => (
@@ -105,6 +128,18 @@ has root => (
   required => 1,
 );
 
+sub prereq {
+  my ($self) = @_;
+
+  # XXX: This needs to always include the highest version. -- rjbs, 2008-06-01
+  my $prereq = {};
+  $prereq = $prereq->merge( $_->prereq )
+    for $self->plugins_with(-FixedPrereqs)->flatten;
+
+  return $prereq;
+}
+
+
 =method from_config
 
   my $zilla = Dist::Zilla->from_config;
@@ -125,18 +160,14 @@ sub from_config {
   my $plugins = delete $config->{plugins};
 
   my $license_name  = delete $config->{license};
-  my $license_class = "Software::License::$license_name";
-
-  eval "require $license_class; 1" or die;
 
   my $self = $class->new($config->merge({ root => $root }));
 
-  my $license = $license_class->new({
-    holder => $self->copyright_holder,
-    year   => $self->copyright_year,
-  });
-
-  $self->meta->get_attribute('license')->set_value($self, $license);
+  if ($license_name) {
+    my $license_class = "Software::License::$license_name";
+    eval "require $license_class; 1" or die;
+    $self->_license_class($license_class);
+  }
 
   for my $plugin (@$plugins) {
     my ($plugin_class, $arg) = @$plugin;
@@ -148,6 +179,16 @@ sub from_config {
   return $self;
 }
 
+=method plugins_with
+
+  my $roles = $zilla->plugins_with( -SomeRole );
+
+This method returns an arrayref containing all the Dist::Zilla object's plugins
+that perform a the named role.  If the given role name begins with a dash, the
+dash is replaced with "Dist::Zilla::Role::"
+
+=cut
+
 sub plugins_with {
   my ($self, $role) = @_;
 
@@ -157,16 +198,15 @@ sub plugins_with {
   return $plugins;
 }
 
-sub prereq {
-  my ($self) = @_;
+=method build_in
 
-  # XXX: This needs to always include the highest version. -- rjbs, 2008-06-01
-  my $prereq = {};
-  $prereq = $prereq->merge( $_->prereq )
-    for $self->plugins_with(-FixedPrereqs)->flatten;
+  $zilla->build_in($root);
 
-  return $prereq;
-}
+This method builds the distribution in the given directory.  If no directory
+name is given, it defaults to DistName-Version.  If the distribution has
+already been built, an exception will be thrown.
+
+=cut
 
 sub build_in {
   my ($self, $root) = @_;
@@ -195,13 +235,32 @@ sub build_in {
   $self->built_in($build_root);
 }
 
+=method ensure_built_in
+
+  $zilla->ensure_built_in($root);
+
+This method behaves like C<L</build_in>>, but if the dist is already built in
+C<$root> (or the default root, if no root is given), no exception is raised.
+
+=cut
+
 sub ensure_built_in {
   my ($self, $root) = @_;
 
+  $root ||= $self->name . q{-} . $self->version;
   return if $self->built_in and $self->built_in eq $root;
   Carp::croak("dist is already built, but not in $root") if $self->built_in;
   $self->build_in($root);
 }
+
+=method build_archive
+
+  $dist->build_archive($root);
+
+This method will ensure that the dist has been built in the given root, and
+will then build a tarball of that directory in the current directory.
+
+=cut
 
 sub build_archive {
   my ($self, $root) = @_;
@@ -215,8 +274,6 @@ sub build_archive {
 
   ## no critic
   $archive->write($self->name . q{-} . $self->version . '.tar.gz', 9);
-
-  # $self->built_in->rmtree;
 }
 
 sub _check_dupe_files {
@@ -269,6 +326,16 @@ sub _write_out_file {
   print { $out_fh } $file->content;
   close $out_fh or die "error closing $to: $!";
 }
+
+=method log
+
+  $zilla->log($message);
+
+This method logs the given message.  In the future it will be a more useful and
+expressive method.  For now, it just prints the string after tacking on a
+newline.
+
+=cut
 
 # XXX: yeah, uh, do something more awesome -- rjbs, 2008-06-01
 sub log { ## no critic
