@@ -234,7 +234,8 @@ sub build_archive {
 
   require Archive::Tar;
   my $archive = Archive::Tar->new;
-  $archive->add_files( File::Find::Rule->file->in($self->built_in) );
+  my $built_in = $self->built_in;
+  $archive->add_files( $built_in->file( $_->name ) ) for $self->files->flatten;
 
   ## no critic
   $archive->write($self->name . q{-} . $self->version . '.tar.gz', 9);
