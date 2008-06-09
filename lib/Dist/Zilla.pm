@@ -208,6 +208,8 @@ sub build_dist {
 
   $_->setup_installer for $self->plugins_with(-InstallTool)->flatten;
 
+  $self->_check_dupe_files;
+
   for my $file ($self->files->flatten) {
     $self->_write_out_file($file, $build_root);
   }
@@ -225,6 +227,25 @@ sub build_dist {
   $archive->write($self->name . q{-} . $self->version . '.tar.gz', 9);
 
   $build_root->rmtree;
+}
+
+sub _check_dupe_files {
+  my ($self) = @_;
+
+  my %files_named;
+  for my $file ($self->files->flatten) {
+    ($files_named{ $file->name} ||= [])->push($file);
+  }
+
+  return unless
+    my @dupes = grep { $files_named{$_}->length > 1 } keys %files_named;
+
+  for my $name (@dupes) {
+    warn "attempt to add $name multiple times; added by: "
+       . join('; ', map { $_->added_by } @{ $files_named{ $name } }) . "\n";
+  }
+
+  Carp::croak("aborting; duplicate files would be produced");
 }
 
 sub _prep_build_root {

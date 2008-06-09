@@ -12,6 +12,10 @@ has added_by => (
   is => 'ro',
 );
 
+has install_type => (
+  is => 'rw',
+);
+
 # requires 'content';
 
 no Moose::Role;
