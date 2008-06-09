@@ -134,40 +134,8 @@ sub munge_pod {
 
   my (@methods, $in_method);
 
-  EVENT: for (my $i = 0; $i < @pod; $i++) {
-    my $event = $pod[$i];
-
-    if ($event->{type} eq 'command' and $event->{command} eq 'method') {
-      $in_method = 1;
-      push @methods, splice @pod, $i--, 1;
-      next EVENT;
-    }
-
-    if (
-      $event->{type} eq 'command'
-      and $event->{command} =~ /^(?:cut|function|head1)$/
-    ) {
-      $in_method = 0;
-      next EVENT;
-    }
-
-    push @methods, splice @pod, $i--, 1 if $in_method;
-  }
-      
-  if (@methods) {
-    unless (_h1(METHODS => @pod)) {
-      push @pod, {
-        type    => 'command',
-        command => 'head1',
-        content => "METHODS\n",
-      };
-    }
-
-    $_->{command} = 'head2'
-      for grep { ($_->{command}||'') eq 'method' } @methods;
-
-    push @pod, @methods;
-  }
+  $self->_regroup($_->[0] => $_->[1] => \@pod)
+    for ( [ attr => 'ATTRIBUTES' ], [ method => 'METHODS' ] );
 
   unless (_h1(AUTHOR => @pod) or _h1(AUTHORS => @pod)) {
     my @authors = $self->zilla->authors->flatten;
@@ -185,16 +153,18 @@ sub munge_pod {
     push @pod, (
       { type => 'command', command => 'head1',
         content => "COPYRIGHT AND LICENSE\n" },
-      { type => 'text', content => $self->zilla->license->notice . "\n" }
+      { type => 'text', content => $self->zilla->license->notice }
     );
   }
 
   @pod = grep { $_->{type} ne 'command' or $_->{command} ne 'cut' } @pod;
+  push @pod, { type => 'command', command => 'cut', content => "\n" };
 
   my $newpod = $pe->write_string(\@pod);
 
   my $end = do {
-    my $end_elem = $doc->find('PPI::Statement::Data') || $doc->find('PPI::Statement::End');
+    my $end_elem = $doc->find('PPI::Statement::Data')
+                || $doc->find('PPI::Statement::End');
     join q{}, @{ $end_elem || [] };
   };
 
@@ -204,6 +174,48 @@ sub munge_pod {
   $content = $end ? "$doc\n\n$newpod\n\n$end" : "$doc\n__END__\n$newpod\n";
 
   $file->content($content);
+}
+
+sub _regroup {
+  my ($self, $cmd, $header, $pod) = @_;
+
+  my @items;
+  my $in_item;
+
+  EVENT: for (my $i = 0; $i < @$pod; $i++) {
+    my $event = $pod->[$i];
+
+    if ($event->{type} eq 'command' and $event->{command} eq $cmd) {
+      $in_item = 1;
+      push @items, splice @$pod, $i--, 1;
+      next EVENT;
+    }
+
+    if (
+      $event->{type} eq 'command'
+      and $event->{command} !~ /^(?:over|item|back|head[3456])$/
+    ) {
+      $in_item = 0;
+      next EVENT;
+    }
+
+    push @items, splice @$pod, $i--, 1 if $in_item;
+  }
+      
+  if (@items) {
+    unless (_h1($header => @$pod)) {
+      push @$pod, {
+        type    => 'command',
+        command => 'head1',
+        content => "$header\n",
+      };
+    }
+
+    $_->{command} = 'head2'
+      for grep { ($_->{command}||'') eq $cmd } @items;
+
+    push @$pod, @items;
+  }
 }
 
 __PACKAGE__->meta->make_immutable;

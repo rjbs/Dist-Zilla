@@ -14,6 +14,14 @@ use Dist::Zilla::Config;
 use Dist::Zilla::File::OnDisk;
 use Dist::Zilla::Role::Plugin;
 
+=attr name
+
+The name attribute (which is required) gives the name of the distribution to be
+built.  This is usually the name of the distribution's main module, with the
+double colons (C<::>) replaced with dashes.  For example: C<Dist-Zilla>.
+
+=cut
+
 has name => (
   is   => 'ro',
   isa  => 'Str',
