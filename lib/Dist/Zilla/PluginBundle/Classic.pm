@@ -12,7 +12,6 @@ sub bundle_config {
     Dist::Zilla::Plugin::AllFiles
     Dist::Zilla::Plugin::BumpVersion
     Dist::Zilla::Plugin::ManifestSkip
-    Dist::Zilla::Plugin::MakeMaker
     Dist::Zilla::Plugin::MetaYaml
     Dist::Zilla::Plugin::License
     Dist::Zilla::Plugin::Readme
@@ -20,6 +19,9 @@ sub bundle_config {
     Dist::Zilla::Plugin::PodVersion
     Dist::Zilla::Plugin::PodTests
     Dist::Zilla::Plugin::ExtraTests
+    Dist::Zilla::Plugin::InstallDirs
+
+    Dist::Zilla::Plugin::MakeMaker
     Dist::Zilla::Plugin::Manifest
   );
 

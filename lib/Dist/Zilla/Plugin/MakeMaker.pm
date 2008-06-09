@@ -14,11 +14,12 @@ use warnings;
 use ExtUtils::MakeMaker;
 
 WriteMakefile(
-  DISTNAME => '{{ $dist->name     }}',
-  NAME     => '{{ $module_name    }}',
-  AUTHOR   => '{{ $author_str     }}',
-  ABSTRACT => '{{ $dist->abstract }}',
-  VERSION  => '{{ $dist->version  }}',
+  DISTNAME  => '{{ $dist->name     }}',
+  NAME      => '{{ $module_name    }}',
+  AUTHOR    => '{{ $author_str     }}',
+  ABSTRACT  => '{{ $dist->abstract }}',
+  VERSION   => '{{ $dist->version  }}',
+  EXE_FILES => [ qw({{ $exe_files }}) ],
   (eval { ExtUtils::MakeMaker->VERSION(6.21) } ? (LICENSE => '{{ $dist->license->meta_yml_name }}') : ()),
   PREREQ_PM    => {
 {{
@@ -36,11 +37,17 @@ sub setup_installer {
 
   (my $name = $self->zilla->name) =~ s/-/::/g;
 
+  my $exe_files = $self->zilla->files
+                ->grep(sub { ($_->install_type||'') eq 'bin' })
+                ->map(sub { $_->name })
+                ->join(' ');
+
   my $content = $self->fill_in_string(
     $template,
     {
       module_name => $name,
       dist        => \$self->zilla,
+      exe_files   => \$exe_files,
       author_str  => \quotemeta($self->zilla->authors->join(q{, })),
     },
   );
