@@ -7,7 +7,7 @@ with 'Dist::Zilla::Role::FileMunger';
 
 =head1 WARNING
 
-This code is really, really awful.  It's crude and brutal and will probably
+This code is really, really sketchy.  It's crude and brutal and will probably
 break whatever it is you were trying to do.
 
 Eventually, this code will be really awesome.  I hope.  It will probably
@@ -188,6 +188,8 @@ sub munge_pod {
       { type => 'text', content => $self->zilla->license->notice . "\n" }
     );
   }
+
+  @pod = grep { $_->{type} ne 'command' or $_->{command} ne 'cut' } @pod;
 
   my $newpod = $pe->write_string(\@pod);
 
