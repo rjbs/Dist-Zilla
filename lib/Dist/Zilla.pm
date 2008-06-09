@@ -27,6 +27,21 @@ has version => (
   required => 1,
 );
 
+has main_module => (
+  is   => 'ro',
+  isa  => 'Str',
+  lazy => 1,
+  required => 1,
+  default  => sub {
+    my ($self) = @_;
+
+    my $file = $self->files
+             ->grep(sub { $_->name =~ /\.pm$/})
+             ->sort(sub { length $_[0]->name <=> length $_[1]->name })
+             ->head->name;
+  },
+);
+
 has abstract => (
   is   => 'rw',
   isa  => 'Str',
@@ -34,49 +49,11 @@ has abstract => (
   required => 1,
   default  => sub {
     my ($self) = @_;
-    my $file = $self->files
-             ->map (sub {$_->name})
-             ->grep(sub {/\.pm$/})
-             ->sort(sub{length $_[0] <=> length $_[1]})
-             ->head;
 
-    Carp::confess("couldn't find source for abstract file") unless $file;
-
-    $self->_extract_abstract($file);
+    require Dist::Zilla::Util;
+    Dist::Zilla::Util->_abstract_from_file($self->main_module);
   }
 );
-
-# stolen from App::Cmd::Command, which stole from ExtUtils::MakeMaker
-sub _extract_abstract {
-  my ($self, $pm_file) = @_;
-
-  my $result;
-  open my $fh, "<", $pm_file or return "(unknown)";
-
-  local $/ = "\n";
-  my $inpod;
-
-  my $class;
-  while (local $_ = <$fh>) {
-    chomp;
-    return $1 if /^\s*#+\s*ABSTRACT:\s*(.+)$/;
-
-    # =cut toggles, it doesn 't end :-/
-    $inpod = /^=cut/ ? !$inpod : $inpod || /^=(?!cut)/;
-
-    if (!$inpod) {
-      /^\s*package (\S+)?;/;
-      $class = $1 if $1;
-      next;
-    }
-
-    next unless $class and /^(?:$class\s-\s)(.*)/;
-    $result = $1;
-    last;
-  }
-
-  return $result || "could not extract abstract from $pm_file";
-}
 
 has copyright_holder => (
   is   => 'ro',
@@ -105,7 +82,27 @@ has built_in => (
   is   => 'rw',
   isa  => Dir,
   init_arg  => undef,
-  # default => sub { Path::Class::dir('build') },
+);
+
+has plugins => (
+  is   => 'ro',
+  isa  => 'ArrayRef[Dist::Zilla::Role::Plugin]',
+  default => sub { [ ] },
+);
+
+has files => (
+  is   => 'ro',
+  isa  => 'ArrayRef[Dist::Zilla::Role::File]',
+  lazy => 1,
+  init_arg => undef,
+  default  => sub { [] },
+);
+
+has root => (
+  is   => 'ro',
+  isa  => Dir,
+  coerce   => 1,
+  required => 1,
 );
 
 =method from_config
@@ -151,20 +148,6 @@ sub from_config {
   return $self;
 }
 
-has plugins => (
-  is   => 'ro',
-  isa  => 'ArrayRef[Dist::Zilla::Role::Plugin]',
-  default => sub { [ ] },
-);
-
-has files => (
-  is   => 'ro',
-  isa  => 'ArrayRef[Dist::Zilla::Role::File]',
-  lazy => 1,
-  init_arg => undef,
-  default  => sub { [] },
-);
-
 sub plugins_with {
   my ($self, $role) = @_;
 
@@ -173,13 +156,6 @@ sub plugins_with {
 
   return $plugins;
 }
-
-has root => (
-  is   => 'ro',
-  isa  => Dir,
-  coerce   => 1,
-  required => 1,
-);
 
 sub prereq {
   my ($self) = @_;
