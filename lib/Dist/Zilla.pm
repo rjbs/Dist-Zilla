@@ -167,7 +167,7 @@ sub from_config {
 
   my $plugins = delete $config->{plugins};
 
-  my $license_name  = delete $config->{license};
+  my $license_name = delete $config->{license} unless ref $config->{license};
 
   my $self = $class->new($config->merge({ root => $root }));
 

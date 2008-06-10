@@ -33,3 +33,44 @@ sub bundle_config {
 __PACKAGE__->meta->make_immutable;
 no Moose;
 1;
+__END__
+
+=head1 DESCRIPTION
+
+This bundle is meant to do just about everything needed for building a plain
+ol' CPAN distribution in the manner of our forefathers.
+
+It includes the following plugins with their default configuration:
+
+=over
+
+=item * L<Dist::Zilla::Plugin::AllFiles>
+
+=item * L<Dist::Zilla::Plugin::BumpVersion>
+
+=item * L<Dist::Zilla::Plugin::ManifestSkip>
+
+=item * L<Dist::Zilla::Plugin::MetaYaml>
+
+=item * L<Dist::Zilla::Plugin::License>
+
+=item * L<Dist::Zilla::Plugin::Readme>
+
+=item * L<Dist::Zilla::Plugin::PkgVersion>
+
+=item * L<Dist::Zilla::Plugin::PodVersion>
+
+=item * L<Dist::Zilla::Plugin::PodTests>
+
+=item * L<Dist::Zilla::Plugin::ExtraTests>
+
+=item * L<Dist::Zilla::Plugin::InstallDirs>
+
+=item * L<Dist::Zilla::Plugin::MakeMaker>
+
+=item * L<Dist::Zilla::Plugin::Manifest>
+
+=back
+
+=cut
+

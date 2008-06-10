@@ -10,10 +10,7 @@ has skipfile => (is => 'ro', required => 1, default => 'MANIFEST.SKIP');
 sub prune_files {
   my ($self) = @_;
 
-  # XXX: Totally evil.  Just mucking about. -- rjbs, 2008-05-27
-  # Randy Kobes has accepted a patch to make maniskip non-private. -- rjbs,
-  # 2008-06-02
-  my $skip = ExtUtils::Manifest::_maniskip;
+  my $skip = ExtUtils::Manifest::maniskip($self->skipfile);
 
   my $files = $self->zilla->files;
   @$files = grep { ! $skip->($_->name) } @$files;
