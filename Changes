@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
-{{$NEXT}}
+0.004     2008-06-10 18:34:00 EDT
+          fairly complete documentation
 
 0.003     2008-06-06 02:10:02 UTC
-          first public release
+          going to use this to build a bunch of stuff!
