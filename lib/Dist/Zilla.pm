@@ -28,12 +28,25 @@ has name => (
   required => 1,
 );
 
+=attr version
+
+This is the version of the distribution to be created.
+
+=cut
+
 # XXX: *clearly* this needs to be really much smarter -- rjbs, 2008-06-01
 has version => (
   is   => 'rw',
   isa  => 'Str',
   required => 1,
 );
+
+=attr abstract
+
+This is a one-line summary of the distribution.  If none is given, one will be
+looked for in the L</main_module> of the dist.
+
+=cut
 
 has abstract => (
   is   => 'rw',
@@ -47,6 +60,14 @@ has abstract => (
     Dist::Zilla::Util->_abstract_from_file($self->main_module->name);
   }
 );
+
+=attr main_module
+
+This is the module where Dist::Zilla might look for various defaults, like
+the distribution abstract.  By default, it's the shorted-named module in the
+distribution.  This is likely to change!
+
+=cut
 
 has main_module => (
   is   => 'ro',
@@ -63,17 +84,42 @@ has main_module => (
   },
 );
 
+=attr copyright_holder
+
+This is the name of the legal entity who holds the copyright on this code.
+This is a required attribute with no default!
+
+=cut
+
 has copyright_holder => (
   is   => 'ro',
   isa  => 'Str',
   required => 1,
 );
 
+=attr copyright_year
+
+This is the year of copyright for the dist.  By default, it's this year.
+
+=cut
+
 has copyright_year => (
   is   => 'ro',
   isa  => 'Int',
   default => (localtime)[5] + 1900,
 );
+
+=attr license
+
+This is the L<Software::License|Software::License> object for this dist's
+license.  It will be created automatically, if possible, with the
+C<copyright_holder> and C<copyright_year> attributes.  If necessary, it will
+try to guess the license from the POD of the dist's main module.
+
+A better option is to set the C<license> name in the dist's config to something
+understandable, like C<Perl_5>.
+
+=cut
 
 has _license_class => (is => 'rw');
 
@@ -103,23 +149,31 @@ has license => (
   },
 );
 
+=attr authors
+
+This is an arrayref of author strings, like this:
+
+  [
+    'Ricardo Signes <rjbs@cpan.org>',
+    'X. Ample, Jr <example@example.biz>',
+  ]
+
+This is likely to change at some point in the near future.
+
+=cut
+
 has authors => (
   is   => 'ro',
   isa  => 'ArrayRef[Str]',
   required => 1,
 );
 
-has built_in => (
-  is   => 'rw',
-  isa  => Dir,
-  init_arg  => undef,
-);
+=attr files
 
-has plugins => (
-  is   => 'ro',
-  isa  => 'ArrayRef[Dist::Zilla::Role::Plugin]',
-  default => sub { [ ] },
-);
+This is an arrayref of objects implementing L<Dist::Zilla::Role::File> that
+will, if left in this arrayref, be built into the dist.
+
+=cut
 
 has files => (
   is   => 'ro',
@@ -129,12 +183,51 @@ has files => (
   default  => sub { [] },
 );
 
+=attr root
+
+This is the root directory of the dist, as a L<Path::Class::Dir>.  It will
+nearly always be the current working directory in which C<dzil> was run.
+
+=cut
+
 has root => (
   is   => 'ro',
   isa  => Dir,
   coerce   => 1,
   required => 1,
 );
+
+=attr plugins
+
+This is an arrayref of plugins that have been plugged into this Dist::Zilla
+object.
+
+=cut
+
+has plugins => (
+  is   => 'ro',
+  isa  => 'ArrayRef[Dist::Zilla::Role::Plugin]',
+  default => sub { [ ] },
+);
+
+=attr built_in
+
+This is the L<Path::Class::Dir>, if any, in which the dist has been built.
+
+=cut
+
+has built_in => (
+  is   => 'rw',
+  isa  => Dir,
+  init_arg  => undef,
+);
+
+=attr prereq
+
+This is a hashref of module prerequisites.  This attribute is likely to get
+greatly overhauled.
+
+=cut
 
 sub prereq {
   my ($self) = @_;
@@ -146,7 +239,6 @@ sub prereq {
 
   return $prereq;
 }
-
 
 =method from_config
 
