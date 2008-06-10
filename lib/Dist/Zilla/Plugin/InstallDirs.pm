@@ -4,6 +4,29 @@ use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::FileMunger';
 
+=head1 SYNOPSIS
+
+In your F<dist.ini>:
+
+  [InstallDirs]
+  bin = scripts
+  bin = extra_scripts
+
+=head1 DESCRIPTION
+
+This plugin marks the contents of certain directories as files to be installed
+under special locations.
+
+The only implemented attribute is C<bin>, which indicates directories that
+contain executable files to install.  If no value is given, the directory
+C<bin> will be considered.
+
+=head1 TODO
+
+Add support for ShareDir-style C<dist_dir> files.
+
+=cut
+
 # XXX: implement share
 sub multivalue_args { qw(bin share) }
 

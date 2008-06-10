@@ -3,6 +3,14 @@ package Dist::Zilla::Plugin::License;
 use Moose;
 with 'Dist::Zilla::Role::FileGatherer';
 
+=head1 DESCRIPTION
+
+This plugin adds a F<LICENSE> file containing the full text of the
+distribution's license, as produced by the C<fulltext> method of the
+dist's L<Software::License> object.
+
+=cut
+
 use Dist::Zilla::File::InMemory;
 
 sub gather_files {

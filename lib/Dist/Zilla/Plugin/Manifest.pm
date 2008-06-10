@@ -4,6 +4,14 @@ use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::InstallTool';
 
+=head1 DESCRIPTION
+
+If included, this plugin will produce a F<MANIFEST> file for the distribution,
+listing all of the files it contains.  For obvious reasons, it should be
+included as close to last as possible.
+
+=cut
+
 sub setup_installer {
   my ($self, $arg) = @_;
 

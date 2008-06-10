@@ -57,7 +57,7 @@ has abstract => (
     my ($self) = @_;
 
     require Dist::Zilla::Util;
-    Dist::Zilla::Util->_abstract_from_file($self->main_module->name);
+    Dist::Zilla::Util->abstract_from_file($self->main_module->name);
   }
 );
 

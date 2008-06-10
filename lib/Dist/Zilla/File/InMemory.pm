@@ -3,6 +3,13 @@ package Dist::Zilla::File::InMemory;
 use Moose;
 with 'Dist::Zilla::Role::File';
 
+=head1 DESCRIPTION
+
+This represents a file created in memory -- it's not much more than a glorified
+string.
+
+=cut
+
 has content => (
   is  => 'rw',
   isa => 'Str',

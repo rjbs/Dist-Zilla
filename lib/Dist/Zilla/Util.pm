@@ -38,7 +38,15 @@ package Dist::Zilla::Util;
   }
 }
 
-sub _abstract_from_file {
+=method abstract_from_file
+
+This method, I<which is likely to change or go away>, tries to guess the
+abstract of a given file, assuming that it's Perl code.  It looks for a POD
+C<=head1> section called "NAME" or a comment beginning with C<ABSTRACT:>.
+
+=cut
+
+sub abstract_from_file {
   my ($self, $filename) = @_;
   my $e = Dist::Zilla::Util::PEA->_new;
   $e->read_file($filename);

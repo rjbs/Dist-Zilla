@@ -3,6 +3,20 @@ package Dist::Zilla::Plugin::ExtraTests;
 use Moose;
 with 'Dist::Zilla::Role::FileMunger';
 
+=head1 DESCRIPTION
+
+This plugin rewrites tests found in the following directories:
+
+  ./xt/author  - tests for author testing (env AUTHOR_TESTING is true)
+  ./xt/release - tests for pre-release testers (env RELEASE_TESTING is true)
+  ./xt/smoke   - tests for automated testers (env AUTOMATED_TESTING is true)
+
+The tests are renamed and moved to F<./t>, and they are rewritten to include
+some simple Perl code to skip all included tests if the correct env vars are
+not set.
+
+=cut
+
 sub munge_file {
   my ($self, $file) = @_;
 

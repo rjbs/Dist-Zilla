@@ -5,6 +5,14 @@ use Moose::Autobox;
 with 'Dist::Zilla::Role::InstallTool';
 with 'Dist::Zilla::Role::TextTemplate';
 
+=head1 DESCRIPTION
+
+This plugin will produce an L<ExtUtils::MakeMaker>-powered F<Makefile.PL> for
+the distribution.  It loaded, the L<Manifest|Dist::Zilla::Plugin::Manifest>
+plugin should also be loaded.
+
+=cut
+
 use Dist::Zilla::File::InMemory;
 
 my $template = q|

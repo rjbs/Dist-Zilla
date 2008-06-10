@@ -5,6 +5,15 @@ use Moose::Autobox;
 use MooseX::Types::Path::Class qw(Dir File);
 with 'Dist::Zilla::Role::FileGatherer';
 
+=head1 DESCRIPTION
+
+This is a very, very simple L<FileGatherer|Dist::Zilla::FileGatherer> plugin.
+It looks in the directory named in the L</root> attribute and adds all the
+files it finds there.  If the root begins with a tilde, the tilde is replaced
+with the current user's home directory according to L<File::HomeDir>.
+
+=cut
+
 use File::Find::Rule;
 use File::HomeDir;
 
