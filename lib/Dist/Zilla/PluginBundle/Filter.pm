@@ -4,6 +4,23 @@ use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::PluginBundle';
 
+=head1 SYNOPSIS
+
+In your F<dist.ini>:
+
+  [@Filter]
+  bundle = @Classic
+  remove = PodVersion
+  remove = Manifest
+
+=head1 DESCRIPTION
+
+This plugin bundle actually wraps and modified another plugin bundle.  It
+includes all the configuration for the bundle named in the C<bundle> attribute,
+but removes all the entries whose package is given in the C<remove> attributes.
+
+=cut
+
 sub multivalue_args { return qw(remove) }
 
 sub bundle_config {

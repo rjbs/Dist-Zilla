@@ -4,6 +4,14 @@ use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::FileGatherer';
 
+=head1 DESCRIPTION
+
+This plugin exists only to be extended, and gathers all files contained in its
+data section and those of its ancestors.  For more information, see
+L<Data::Section|Data::Section>.
+
+=cut
+
 use Data::Section -setup;
 use Dist::Zilla::File::InMemory;
 
