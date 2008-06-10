@@ -3,6 +3,15 @@ package Dist::Zilla::Plugin::PodVersion;
 use Moose;
 with 'Dist::Zilla::Role::FileMunger';
 
+=head1 DESCRIPTION
+
+This plugin adds a C<=head1 VERSION> section to most perl files in the
+distribution, indicating the version of the dist being build (and, thus, the
+version of the module, assuming L<PkgVersion|Dist::Zilla::Plugin::PkgVersion>
+is also loaded.
+
+=cut
+
 sub munge_file {
   my ($self, $file) = @_;
 

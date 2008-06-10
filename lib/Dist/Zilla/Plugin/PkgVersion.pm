@@ -3,6 +3,15 @@ package Dist::Zilla::Plugin::PkgVersion;
 use Moose;
 with 'Dist::Zilla::Role::FileMunger';
 
+=head1 DESCRIPTION
+
+This plugin will add a line like the following to each package in each Perl
+module or program (more or less) within the distribution:
+
+  our $VERSION = 0.001; # where 0.001 is the version of the dist
+
+=cut
+
 sub munge_file {
   my ($self, $file) = @_;
 

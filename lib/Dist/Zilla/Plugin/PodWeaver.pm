@@ -14,6 +14,11 @@ Eventually, this code will be really awesome.  I hope.  It will probably
 provide an interface to something more cool and sophisticated.  Until then,
 don't expect it to do anything but bring sorrow to you and your people.
 
+=head1 DESCRIPTION
+
+PodWeaver is a work in progress, which rips apart your kinda-POD and
+reconstructs it as boring old real POD.
+
 =cut
 
 sub munge_file {

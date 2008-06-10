@@ -5,6 +5,14 @@ use Moose::Autobox;
 with 'Dist::Zilla::Role::FileGatherer';
 with 'Dist::Zilla::Role::TextTemplate';
 
+=head1 DESCRIPTION
+
+This plugin adds a very simple F<README> file to the distribution, citing the
+dist's name, version, abstract, and license.  It may be more useful or
+informative in the future.
+
+=cut
+
 sub gather_files {
   my ($self, $arg) = @_;
 

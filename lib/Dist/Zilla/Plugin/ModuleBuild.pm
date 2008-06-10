@@ -7,6 +7,13 @@ with 'Dist::Zilla::Role::TextTemplate';
 
 use Dist::Zilla::File::InMemory;
 
+=head1 DESCRIPTION
+
+This plugin will create a F<Build.PL> for installing the dist using
+L<Module::Build>.
+
+=cut
+
 my $template = q|
 use strict;
 use warnings;
