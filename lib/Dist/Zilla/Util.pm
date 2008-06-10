@@ -5,6 +5,16 @@ package Dist::Zilla::Util;
 
 {
   package
+    Dist::Zilla::Util::Nonpod;
+  use base 'Pod::Eventual';
+  sub _new  { bless { nonpod => '' } => shift; }
+  sub handle_nonpod { $_[0]->{nonpod} .= $_[1] }
+  sub handle_event {}
+  sub _nonpod { $_[0]->{nonpod} }
+}
+
+{
+  package
     Dist::Zilla::Util::PEA;
   use base 'Pod::Eventual';
   sub _new  { bless {} => shift; }

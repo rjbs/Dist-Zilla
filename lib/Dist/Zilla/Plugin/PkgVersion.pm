@@ -25,7 +25,12 @@ sub munge_perl {
 
   my $content = $file->content;
 
-  if ($content =~ /\$VERSION\s*=/) {
+  require Dist::Zilla::Util;
+  my $p = Dist::Zilla::Util::Nonpod->_new;
+  $p->read_string($content);
+  my $nonpod = $p->_nonpod;
+
+  if ($nonpod =~ /\$VERSION\s*=/) {
     $self->log(sprintf('skipping %s: assigns to $VERSION', $file->name));
     return;
   }
