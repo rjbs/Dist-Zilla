@@ -3,6 +3,16 @@ package Dist::Zilla::Plugin::PodTests;
 use Moose;
 extends 'Dist::Zilla::Plugin::InlineFiles';
 
+=head1 DESCRIPTION
+
+This is an extension of L<Dist::Zilla::Plugin::InlineFiles>, providing the
+following files:
+
+  xt/release/pod-coverage.t - a standard Test::Pod::Coverage test
+  xt/release/pod-syntax.t   - a standard Test::Pod test
+
+=cut
+
 __PACKAGE__->meta->make_immutable;
 no Moose;
 1;
