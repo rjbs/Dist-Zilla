@@ -13,7 +13,8 @@ sub opt_spec {
 sub run {
   my ($self, $opt, $arg) = @_;
 
-  $self->zilla->build_archive;
+  my $method = $opt->{tgz} ? 'build_archive' : 'build_in';
+  $self->zilla->$method;
 }
 
 1;
