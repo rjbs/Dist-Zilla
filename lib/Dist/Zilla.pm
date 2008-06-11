@@ -429,6 +429,29 @@ sub _write_out_file {
   close $out_fh or die "error closing $to: $!";
 }
 
+=method test
+
+  $zilla->test;
+
+This method builds a new copy of the distribution and tests it.  If the tests
+appear to pass, it returns true.  If something goes wrong, it returns false.
+
+=cut
+
+sub test { die '...' }
+
+=method release
+
+  $zilla->release;
+
+This method releases the distribution, probably by uploading it to the CPAN.
+The actual effects of this method (as with most of the methods) is determined
+by the loaded plugins.
+
+=cut
+
+sub release { die '...' }
+
 =method log
 
   $zilla->log($message);
