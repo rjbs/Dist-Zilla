@@ -23,6 +23,7 @@ sub add_file {
   my ($pkg, undef, $line) = caller;
 
   $file->meta->get_attribute('added_by')->set_value($file, "$pkg line $line");
+  # $self->log($file->name . " added by $pkg");
   $self->zilla->files->push($file);
 }
 
