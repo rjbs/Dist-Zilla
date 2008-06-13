@@ -57,7 +57,9 @@ has abstract => (
     my ($self) = @_;
 
     require Dist::Zilla::Util;
-    Dist::Zilla::Util->abstract_from_file($self->main_module->name);
+    my $filename = $self->main_module->name;
+    $self->log("extracting distribution abstract from $filename");
+    Dist::Zilla::Util->abstract_from_file($filename);
   }
 );
 
@@ -81,6 +83,10 @@ has main_module => (
              ->grep(sub { $_->name =~ /\.pm$/})
              ->sort(sub { length $_[0]->name <=> length $_[1]->name })
              ->head;
+
+    $self->log("guessing dist's main_module is " . $file->name);
+
+    return $file;
   },
 );
 
@@ -106,6 +112,13 @@ This is the year of copyright for the dist.  By default, it's this year.
 has copyright_year => (
   is   => 'ro',
   isa  => 'Int',
+
+  # Oh man.  This is a terrible idea!  I mean, what if by the code gets run
+  # around like Dec 31, 23:59:59.9 and by the time the default gets called it's
+  # the next year but the default was already set up?  Oh man.  That could ruin
+  # lives!  I guess we could make this a sub to defer the guess, but think of
+  # the performance hit!  I guess we'll have to suffer through this until we
+  # can optimize the code to not take .1s to run, right? -- rjbs, 2008-06-13
   default => (localtime)[5] + 1900,
 );
 
@@ -139,7 +152,10 @@ has license => (
       );
 
       Carp::confess("couldn't make a good guess at license") if @guess != 1;
+
+      my $filename = $self->main_module->name;
       $license_class = $guess[0];
+      $self->log("based on POD in $filename, guessing license is $guess[0]");
     }
 
     my $license = $license_class->new({
@@ -225,7 +241,8 @@ has built_in => (
 =attr prereq
 
 This is a hashref of module prerequisites.  This attribute is likely to get
-greatly overhauled.
+greatly overhauled, or possibly replaced with a method based on other
+(private?) attributes.
 
 =cut
 
@@ -255,6 +272,7 @@ sub from_config {
   my $root = Path::Class::dir('.');
 
   my $config_file = $root->file('dist.ini');
+  $class->log("reading configuration from $config_file");
   my $config = Dist::Zilla::Config->read_file($config_file);
 
   my $plugins = delete $config->{plugins};
@@ -271,6 +289,7 @@ sub from_config {
 
   for my $plugin (@$plugins) {
     my ($plugin_class, $arg) = @$plugin;
+    $self->log("initializing plugin $arg->{'=name'} ($plugin_class)");
     $self->plugins->push(
       $plugin_class->new( $arg->merge({ zilla => $self }) )
     );
@@ -317,6 +336,8 @@ sub build_in {
   $_->before_build for $self->plugins_with(-BeforeBuild)->flatten;
 
   my $build_root = $self->_prep_build_root($root);
+
+  $self->log("beginning to build " . $self->name . " in $build_root");
 
   $_->gather_files    for $self->plugins_with(-FileGatherer)->flatten;
   $_->prune_files     for $self->plugins_with(-FilePruner)->flatten;
@@ -375,7 +396,9 @@ sub build_archive {
   $archive->add_files( $built_in->file( $_->name ) ) for $self->files->flatten;
 
   ## no critic
-  $archive->write($self->name . q{-} . $self->version . '.tar.gz', 9);
+  my $filename = $self->name . q{-} . $self->version . '.tar.gz';
+  $self->log("writing archive to $filename");
+  $archive->write($filename, 9);
 }
 
 sub _check_dupe_files {
@@ -414,6 +437,9 @@ sub _prep_build_root {
 
 sub _write_out_file {
   my ($self, $file, $build_root) = @_;
+
+  # Okay, this is a bit much, until we have ->debug. -- rjbs, 2008-06-13
+  # $self->log("writing out " . $file->name);
 
   my $file_path = Path::Class::file($file->name);
 
