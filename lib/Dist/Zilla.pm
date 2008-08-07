@@ -393,7 +393,14 @@ sub build_archive {
   require Archive::Tar;
   my $archive = Archive::Tar->new;
   my $built_in = $self->built_in;
-  $archive->add_files( $built_in->file( $_->name ) ) for $self->files->flatten;
+
+  my %seen_dir;
+
+  for my $file ($self->files->flatten) {
+    my $in = Path::Class::file($file->name)->dir;
+    $archive->add_files( $built_in->subdir($in) ) unless $seen_dir{ $in }++;
+    $archive->add_files( $built_in->file( $file->name ) );
+  }
 
   ## no critic
   my $filename = $self->name . q{-} . $self->version . '.tar.gz';
