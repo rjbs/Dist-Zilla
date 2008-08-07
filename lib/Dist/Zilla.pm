@@ -80,7 +80,7 @@ has main_module => (
     my ($self) = @_;
 
     my $file = $self->files
-             ->grep(sub { $_->name =~ /\.pm$/})
+             ->grep(sub { $_->name !~ m{^t/} and $_->name =~ /\.pm$/})
              ->sort(sub { length $_[0]->name <=> length $_[1]->name })
              ->head;
 
