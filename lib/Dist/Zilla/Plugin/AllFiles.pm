@@ -16,6 +16,7 @@ with the current user's home directory according to L<File::HomeDir>.
 
 use File::Find::Rule;
 use File::HomeDir;
+use File::Spec;
 
 has root => (
   is   => 'ro',
@@ -24,6 +25,12 @@ has root => (
   coerce   => 1,
   required => 1,
   default  => sub { shift->zilla->root },
+);
+
+has prefix => (
+  is  => 'ro',
+  isa => 'Str',
+  default => '',
 );
 
 sub gather_files {
@@ -42,6 +49,8 @@ sub gather_files {
 
   for my $file (@files) {
     (my $newname = $file->name) =~ s{\A\Q$root\E[\\/]}{}g;
+    $newname = File::Spec->catdir($self->prefix, $newname) if $self->prefix;
+
     $file->name($newname);
     $self->add_file($file);
   }

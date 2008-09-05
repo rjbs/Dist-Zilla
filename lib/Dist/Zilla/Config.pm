@@ -5,6 +5,8 @@ package Dist::Zilla::Config;
 use Config::INI::MVP::Reader;
 BEGIN { our @ISA = 'Config::INI::MVP::Reader' }
 
+use String::RewritePrefix;
+
 =head1 DESCRIPTION
 
 Dist::Zilla::Config reads in the F<dist.ini> file for a distribution.  It uses
@@ -26,11 +28,16 @@ sub multivalue_args { qw(author) }
 sub _expand_package {
   my ($self, $package) = @_;
 
-  return $package if $package =~ /^Dist::Zilla::/;
+  my $str = String::RewritePrefix->rewrite(
+    {
+      '=' => '',
+      '@' => 'Dist::Zilla::PluginBundle::',
+      ''  => 'Dist::Zilla::Plugin::',
+    },
+    $package,
+  );
 
-  return $package if $package =~ s/^=//;
-  return $package if $package =~ s/^@/Dist::Zilla::PluginBundle::/;
-  return $package if $package =~ s/^/Dist::Zilla::Plugin::/; # always succeeds
+  return $str;
 }
 
 sub finalize {
