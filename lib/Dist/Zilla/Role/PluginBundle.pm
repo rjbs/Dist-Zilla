@@ -4,9 +4,9 @@ use Moose::Role;
 
 =head1 DESCRIPTION
 
-When loading configuration, if L<Dist::Zilla::Config> encounters a
-PluginBundle, it will replace its place in the plugin list with the result of
-calling its C<bundle_config> method.
+When loading configuration, if the config reader encounters a PluginBundle, it
+will replace its place in the plugin list with the result of calling its
+C<bundle_config> method.
 
 =cut
 

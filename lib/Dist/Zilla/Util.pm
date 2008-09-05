@@ -5,6 +5,28 @@ package Dist::Zilla::Util;
 
 {
   package
+    Dist::Zilla::Util::Config;
+
+  use String::RewritePrefix;
+
+  sub _expand_config_package_name {
+    my ($self, $package) = @_;
+
+    my $str = String::RewritePrefix->rewrite(
+      {
+        '=' => '',
+        '@' => 'Dist::Zilla::PluginBundle::',
+        ''  => 'Dist::Zilla::Plugin::',
+      },
+      $package,
+    );
+
+    return $str;
+  }
+}
+
+{
+  package
     Dist::Zilla::Util::Nonpod;
   use base 'Pod::Eventual';
   sub _new  { bless { nonpod => '' } => shift; }

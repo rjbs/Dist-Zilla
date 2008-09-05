@@ -9,8 +9,6 @@ use File::Find::Rule;
 use Path::Class ();
 use Software::License;
 
-use Dist::Zilla::Config;
-
 use Dist::Zilla::File::OnDisk;
 use Dist::Zilla::Role::Plugin;
 
@@ -267,13 +265,19 @@ directory.
 =cut
 
 sub from_config {
-  my ($class) = @_;
+  my ($class, $arg) = @_;
+  $arg ||= {};
+
+  my $config_class = $arg->{config_class} || 'Dist::Zilla::Config';
+  unless (eval "require $config_class; 1") {
+    die "couldn't load $config_class: $@"; ## no critic Carp
+  }
 
   my $root = Path::Class::dir('.');
 
-  my $config_file = $root->file('dist.ini');
-  $class->log("reading configuration from $config_file");
-  my $config = Dist::Zilla::Config->read_file($config_file);
+  my $config_file = $root->file( $config_class->default_filename );
+  $class->log("reading configuration from $config_file using $config_class");
+  my $config = $config_class->read_file($config_file);
 
   my $plugins = delete $config->{plugins};
 
@@ -503,6 +507,7 @@ sub log { ## no critic
 
 __PACKAGE__->meta->make_immutable;
 no Moose;
+no MooseX::ClassAttribute;
 1;
 __END__
 =head1 DESCRIPTION

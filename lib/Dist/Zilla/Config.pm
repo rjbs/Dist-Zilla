@@ -5,7 +5,7 @@ package Dist::Zilla::Config;
 use Config::INI::MVP::Reader;
 BEGIN { our @ISA = 'Config::INI::MVP::Reader' }
 
-use String::RewritePrefix;
+use Dist::Zilla::Util;
 
 =head1 DESCRIPTION
 
@@ -25,18 +25,10 @@ like this:
 
 sub multivalue_args { qw(author) }
 
+sub default_filename { 'dist.ini' }
+
 sub _expand_package {
-  my ($self, $package) = @_;
-
-  my $str = String::RewritePrefix->rewrite(
-    {
-      '=' => '',
-      '@' => 'Dist::Zilla::PluginBundle::',
-      ''  => 'Dist::Zilla::Plugin::',
-    },
-    $package,
-  );
-
+  my $str = Dist::Zilla::Util::Config->_expand_config_package_name($_[1]);
   return $str;
 }
 
