@@ -31,17 +31,6 @@ sub munge_file {
   return;
 }
 
-sub _filter(&\@) {
-  my ($code, $array) = @_;
-
-  my @result;
-  for my $i (reverse 0 .. $#$array) {
-    local $_ = $array->[$i];
-    push @result, splice @$array, $i, 1 if $code->();
-  }
-  return @result;
-}
-
 {
   package Dist::Zilla::Plugin::PodWeaver::Eventual;
   our @ISA = 'Pod::Eventual';
@@ -110,7 +99,6 @@ sub munge_pod {
   }
 
   my @pod = $pe->new->read_string(join "\n", @pod_tokens)->events;
-  # _filter { $_->{type} eq 'command' and $_->{command} eq 'cut' } @pod;
 
   unless (_h1(VERSION => @pod)) {
     unshift @pod, (
