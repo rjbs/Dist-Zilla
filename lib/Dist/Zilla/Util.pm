@@ -3,27 +3,7 @@ use warnings;
 package Dist::Zilla::Util;
 # ABSTRACT: random snippets of code that Dist::Zilla wants
 
-{
-  package
-    Dist::Zilla::Util::Config;
-
-  use String::RewritePrefix;
-
-  sub _expand_config_package_name {
-    my ($self, $package) = @_;
-
-    my $str = String::RewritePrefix->rewrite(
-      {
-        '=' => '',
-        '@' => 'Dist::Zilla::PluginBundle::',
-        ''  => 'Dist::Zilla::Plugin::',
-      },
-      $package,
-    );
-
-    return $str;
-  }
-}
+use String::RewritePrefix;
 
 {
   package
@@ -83,6 +63,31 @@ sub abstract_from_file {
   my $e = Dist::Zilla::Util::PEA->_new;
   $e->read_file($filename);
   return $e->{abstract};
+}
+
+=method expand_config_package_name 
+
+  my $pkg_name = Util->expand_config_package_name($string);
+
+This method, I<which is likely to change or go away>, rewrites the given string
+into a package name.  Consult L<Dist::Zilla::Config|Dist::Zilla::Config> for
+more information.
+
+=cut
+
+sub expand_config_package_name {
+  my ($self, $package) = @_;
+
+  my $str = String::RewritePrefix->rewrite(
+    {
+      '=' => '',
+      '@' => 'Dist::Zilla::PluginBundle::',
+      ''  => 'Dist::Zilla::Plugin::',
+    },
+    $package,
+  );
+
+  return $str;
 }
 
 1;

@@ -28,7 +28,7 @@ sub multivalue_args { qw(author) }
 sub default_filename { 'dist.ini' }
 
 sub _expand_package {
-  my $str = Dist::Zilla::Util::Config->_expand_config_package_name($_[1]);
+  my $str = Dist::Zilla::Util->expand_config_package_name($_[1]);
   return $str;
 }
 
