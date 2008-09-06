@@ -279,7 +279,7 @@ sub from_config {
     die "couldn't load $config_class: $@"; ## no critic Carp
   }
 
-  my $root = Path::Class::dir('.');
+  my $root = Path::Class::dir($arg->{dist_root} || '.');
 
   my $config_file = $root->file( $config_class->default_filename );
   $class->log("reading configuration from $config_file using $config_class");
