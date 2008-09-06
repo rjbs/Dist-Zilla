@@ -268,7 +268,7 @@ sub from_config {
   my ($class, $arg) = @_;
   $arg ||= {};
 
-  my $config_class = $arg->{config_class} || 'Dist::Zilla::Config';
+  my $config_class = $arg->{config_class} || 'Dist::Zilla::Config::INI';
   unless (eval "require $config_class; 1") {
     die "couldn't load $config_class: $@"; ## no critic Carp
   }
@@ -277,7 +277,8 @@ sub from_config {
 
   my $config_file = $root->file( $config_class->default_filename );
   $class->log("reading configuration from $config_file using $config_class");
-  my $config = $config_class->read_file($config_file);
+
+  my $config = $config_class->new->read_file($config_file);
 
   my $plugins = delete $config->{plugins};
 
