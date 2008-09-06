@@ -8,6 +8,7 @@ use Moose::Util::TypeConstraints;
 use File::Find::Rule;
 use Path::Class ();
 use Software::License;
+use String::RewritePrefix;
 
 use Dist::Zilla::File::OnDisk;
 use Dist::Zilla::Role::Plugin;
@@ -257,10 +258,15 @@ sub prereq {
 
 =method from_config
 
-  my $zilla = Dist::Zilla->from_config;
+  my $zilla = Dist::Zilla->from_config(\%arg);
 
 This routine returns a new Zilla from the configuration in the current working
 directory.
+
+Valid arguments are:
+
+  config_class - the class to use to read the config
+                 default: Dist::Zilla::Config::INI
 
 =cut
 
@@ -287,7 +293,14 @@ sub from_config {
   my $self = $class->new($config->merge({ root => $root }));
 
   if ($license_name) {
-    my $license_class = "Software::License::$license_name";
+    my $license_class = String::RewritePrefix->rewrite(
+      {
+        '=' => '',
+        ''  => 'Software::License::'
+      },
+      $license_name,
+    );
+
     eval "require $license_class; 1" or die;
     $self->_license_class($license_class);
   }
