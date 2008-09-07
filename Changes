@@ -1,5 +1,10 @@
 Revision history for {{$dist->name}}
 
+0.005     ?
+          allow alternate configuration readers
+          begin the long, hateful process of testing LOTS of existing code
+          some changes to AllFiles to allow more rewriting; for Data-Rx
+
 0.004     2008-06-10 18:34:00 EDT
           fairly complete documentation
 
