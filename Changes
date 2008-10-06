@@ -1,12 +1,16 @@
 Revision history for {{$dist->name}}
 
+1.000     2008-10-06
+          alright, let's just release this thing, even if it's only half baked.
+          well... maybe more like unbaked
+
 0.005     ?
           allow alternate configuration readers
           begin the long, hateful process of testing LOTS of existing code
           some changes to AllFiles to allow more rewriting; for Data-Rx
 
-0.004     2008-06-10 18:34:00 EDT
+0.004     2008-06-10
           fairly complete documentation
 
-0.003     2008-06-06 02:10:02 UTC
+0.003     2008-06-06
           going to use this to build a bunch of stuff!
