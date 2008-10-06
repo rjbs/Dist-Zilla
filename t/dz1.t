@@ -7,4 +7,4 @@ my $dzil = Dist::Zilla->from_config({
   dist_root => 'eg/DZ1',
 });
 
-
+ok(1);

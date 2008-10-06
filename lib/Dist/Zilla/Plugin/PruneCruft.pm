@@ -34,7 +34,7 @@ sub exclude_file {
 sub prune_files {
   my ($self) = @_;
 
-  my @files = $self->zilla->files->flatten;
+  my $files = $self->zilla->files;
   my $any = $self->filenames->any;
 
   @$files = $files->grep(sub { ! $self->exclude_file($_) })->flatten;
