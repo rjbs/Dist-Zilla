@@ -20,6 +20,7 @@ sub bundle_config {
     Dist::Zilla::Plugin::PodTests
     Dist::Zilla::Plugin::ExtraTests
     Dist::Zilla::Plugin::InstallDirs
+    Dist::Zilla::Plugin::PruneCruft
 
     Dist::Zilla::Plugin::MakeMaker
     Dist::Zilla::Plugin::Manifest
@@ -65,6 +66,8 @@ It includes the following plugins with their default configuration:
 =item * L<Dist::Zilla::Plugin::ExtraTests>
 
 =item * L<Dist::Zilla::Plugin::InstallDirs>
+
+=item * L<Dist::Zilla::Plugin::PruneCruft>
 
 =item * L<Dist::Zilla::Plugin::MakeMaker>
 
