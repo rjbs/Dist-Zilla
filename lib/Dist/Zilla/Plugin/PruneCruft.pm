@@ -25,6 +25,7 @@ sub exclude_file {
   my ($self, $file) = @_;
 
   return 1 if index($file->name, $self->zilla->name . '-') == 0;
+  return 1 if $file->name eq 'dist.ini';
   return 1 if $file->name =~ /\A(?:Build|Makefile)\z/;
   return;
 }
