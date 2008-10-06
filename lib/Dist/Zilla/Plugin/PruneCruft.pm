@@ -1,4 +1,4 @@
-package Dist::Zilla::Plugin::ExcludeCruft;
+package Dist::Zilla::Plugin::PruneCruft;
 # ABSTRACT: prune stuff that you probably don't mean to include
 use Moose;
 use Moose::Autobox;
@@ -12,7 +12,7 @@ up.
 
 In your F<dist.ini>:
 
-  [ExcludeCruft]
+  [PruneCruft]
 
 That's it!  Maybe some day there will be a mechanism for excluding exclusions,
 but for now that exclusion exclusion mechanism has been excluded.
