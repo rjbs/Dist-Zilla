@@ -10,6 +10,7 @@ sub bundle_config {
 
   my @classes = qw(
     Dist::Zilla::Plugin::AllFiles
+    Dist::Zilla::Plugin::PruneCruft
     Dist::Zilla::Plugin::BumpVersion
     Dist::Zilla::Plugin::ManifestSkip
     Dist::Zilla::Plugin::MetaYaml
@@ -20,7 +21,6 @@ sub bundle_config {
     Dist::Zilla::Plugin::PodTests
     Dist::Zilla::Plugin::ExtraTests
     Dist::Zilla::Plugin::InstallDirs
-    Dist::Zilla::Plugin::PruneCruft
 
     Dist::Zilla::Plugin::MakeMaker
     Dist::Zilla::Plugin::Manifest
@@ -47,6 +47,8 @@ It includes the following plugins with their default configuration:
 
 =item * L<Dist::Zilla::Plugin::AllFiles>
 
+=item * L<Dist::Zilla::Plugin::PruneCruft>
+
 =item * L<Dist::Zilla::Plugin::BumpVersion>
 
 =item * L<Dist::Zilla::Plugin::ManifestSkip>
@@ -66,8 +68,6 @@ It includes the following plugins with their default configuration:
 =item * L<Dist::Zilla::Plugin::ExtraTests>
 
 =item * L<Dist::Zilla::Plugin::InstallDirs>
-
-=item * L<Dist::Zilla::Plugin::PruneCruft>
 
 =item * L<Dist::Zilla::Plugin::MakeMaker>
 
