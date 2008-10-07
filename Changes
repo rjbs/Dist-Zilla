@@ -1,5 +1,8 @@
 Revision history for {{$dist->name}}
 
+1.001     2008-10-07
+          add missing prereqs
+
 1.000     2008-10-06
           alright, let's just release this thing, even if it's only half baked.
           well... maybe more like unbaked
