@@ -1,5 +1,8 @@
 Revision history for {{$dist->name}}
 
+1.002     2008-10-07
+          add missing prereqs
+
 1.001     2008-10-07
           add missing prereqs
 
