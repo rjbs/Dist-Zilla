@@ -11,7 +11,6 @@ sub bundle_config {
   my @classes = qw(
     Dist::Zilla::Plugin::AllFiles
     Dist::Zilla::Plugin::PruneCruft
-    Dist::Zilla::Plugin::BumpVersion
     Dist::Zilla::Plugin::ManifestSkip
     Dist::Zilla::Plugin::MetaYaml
     Dist::Zilla::Plugin::License
@@ -48,8 +47,6 @@ It includes the following plugins with their default configuration:
 =item * L<Dist::Zilla::Plugin::AllFiles>
 
 =item * L<Dist::Zilla::Plugin::PruneCruft>
-
-=item * L<Dist::Zilla::Plugin::BumpVersion>
 
 =item * L<Dist::Zilla::Plugin::ManifestSkip>
 
