@@ -9,13 +9,9 @@ sub abstract { 'test your dist' }
 sub run {
   my ($self, $opt, $arg) = @_;
   
-  require CPAN::Uploader;
-  my $user = $self->config->{pauseid};
-  my $pass = $self->config->{password};
-
   my $tgz = $self->zilla->build_archive;
 
-  CPAN::Uploader->upload_file($tgz, { user => $user, password => $pass }); 
+  $_->release($tgz) for $self->plugins_with(-Release)->flatten;
 }
 
 1;

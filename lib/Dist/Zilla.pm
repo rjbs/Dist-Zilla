@@ -13,6 +13,19 @@ use String::RewritePrefix;
 use Dist::Zilla::File::OnDisk;
 use Dist::Zilla::Role::Plugin;
 
+=attr dzil_app
+
+This attribute (which is optional) will provide the Dist::Zilla::App object if
+the Dist::Zilla object is being used in the context of the F<dzil> command (or
+anything else using it through Dist::Zilla::App).
+
+=cut
+
+has 'dzil_app' => (
+  is  => 'rw',
+  isa => 'Dist::Zilla::App',
+);
+
 =attr name
 
 The name attribute (which is required) gives the name of the distribution to be
