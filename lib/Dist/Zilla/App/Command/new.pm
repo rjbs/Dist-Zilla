@@ -64,9 +64,7 @@ sub run {
     open my $fh, '>', $file or die "can't open $file for output: $!";
     my @pw = getpwuid $>;
 
-    my $config = $self->config;
-    use Data::Dumper;
-    warn Dumper($config);
+    my $config = { $self->config->flatten };
 
     $config->{author} ||= [ $pw[6] ];
 
