@@ -516,6 +516,7 @@ newline.
 # XXX: yeah, uh, do something more awesome -- rjbs, 2008-06-01
 sub log { ## no critic
   my ($self, $msg) = @_;
+
   print "$msg\n";
 }
 

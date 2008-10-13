@@ -4,17 +4,17 @@ package Dist::Zilla::App::Command::new;
 # ABSTRACT: start a new dist
 use Dist::Zilla::App -command;
 
-use File::chdir;
-
 # I wouldn't need this if I properly moosified my commands. -- rjbs, 2008-10-12
 use Mixin::ExtraFields -fields => {
   driver  => 'HashGuts',
   id      => undef,
 };
-
+use Moose::Autobox;
 use Path::Class;
 
 sub abstract { 'start a new dist' }
+
+sub multivalue_args { qw(author) }
 
 sub validate_args {
   my ($self, $opt, $args) = @_;
@@ -38,7 +38,7 @@ sub validate_args {
 
   $self->set_extra(dist => $name);
 
-  $self->zilla->log([
+  $self->log([
     'will create new dist %s in %s',
     $self->get_extra('dist'),
     $self->get_extra('dir'),
@@ -64,12 +64,19 @@ sub run {
     open my $fh, '>', $file or die "can't open $file for output: $!";
     my @pw = getpwuid $>;
 
-    print $fh "dist    = $dist\n";
-    print $fh "version = 1.000\n";
-    print $fh "author  = $pw[6]\n";
-    print $fh "license = Perl_5\n";
-    print $fh "copyright_holder = $pw[6]\n";
-    print $fh "[\@Classic]\n";
+    my $config = $self->config;
+    use Data::Dumper;
+    warn Dumper($config);
+
+    $config->{author} ||= [ $pw[6] ];
+
+    printf $fh "dist    = $dist\n";
+    printf $fh "version = %s\n", ($config->{initial_version} || '1.000');
+    printf $fh "author  = %s\n", $_ for $config->{author}->flatten;
+    printf $fh "license = %s\n", ($config->{default_license} || 'Perl_5');
+    printf $fh "copyright_holder = %s\n", $config->{author}->[0];
+    printf $fh "\n";
+    printf $fh "[\@Classic]\n";
 
     close $fh or die "error closing $file: $!";
   }

@@ -19,7 +19,7 @@ sub struct_to_config {
   for my $plugin (map { $struct->[ $_ ] } ($i .. $#$struct)) {
     my $class = delete $plugin->{'=package'};
     
-    if ($class->does('Dist::Zilla::Role::PluginBundle')) {
+    if (eval { $class->does('Dist::Zilla::Role::PluginBundle') }) {
       push @plugins, $class->bundle_config($plugin);
     } else {
       push @plugins, [ $class => $plugin ];

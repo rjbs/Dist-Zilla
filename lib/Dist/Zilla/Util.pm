@@ -82,6 +82,7 @@ sub expand_config_package_name {
     {
       '=' => '',
       '@' => 'Dist::Zilla::PluginBundle::',
+      '!' => 'Dist::Zilla::App::Command::',
       ''  => 'Dist::Zilla::Plugin::',
     },
     $package,
