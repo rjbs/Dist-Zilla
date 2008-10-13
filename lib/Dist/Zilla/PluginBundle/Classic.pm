@@ -23,6 +23,8 @@ sub bundle_config {
 
     Dist::Zilla::Plugin::MakeMaker
     Dist::Zilla::Plugin::Manifest
+
+    Dist::Zilla::Plugin::UploadToCPAN
   );
 
   eval "require $_; 1" or die for @classes; ## no critic Carp
