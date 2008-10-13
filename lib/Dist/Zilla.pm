@@ -421,9 +421,12 @@ sub build_archive {
   }
 
   ## no critic
-  my $filename = $self->name . q{-} . $self->version . '.tar.gz';
-  $self->log("writing archive to $filename");
-  $archive->write($filename, 9);
+  my $file = Path::Class::file($self->name . '-' . $self->version . '.tar.gz');
+
+  $self->log("writing archive to $file");
+  $archive->write("$file", 9);
+
+  return $file;
 }
 
 sub _check_dupe_files {
