@@ -1,5 +1,8 @@
 Revision history for {{$dist->name}}
 
+1.003     2008-10-12
+          add "dzil new" to create a new dist.ini, etc         
+
 1.002     2008-10-07
           add missing prereqs
 
