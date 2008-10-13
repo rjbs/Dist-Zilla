@@ -7,6 +7,7 @@ use App::Cmd::Setup -app;
 use Carp ();
 use Dist::Zilla::Config::INI;
 use File::HomeDir ();
+use Moose::Autobox;
 use Path::Class;
 
 sub config {
@@ -24,6 +25,16 @@ sub config {
   return {} unless -f $file;
 
   Dist::Zilla::Config::INI->new->read_file($file);
+}
+
+sub config_for {
+  my ($self, $plugin_class) = @_;
+
+  for my $plugin ($self->config->{plugins}->flatten) {
+    return $plugin->[1] if $plugin->[0] eq $plugin_class;
+  }
+
+  return {};
 }
 
 1;

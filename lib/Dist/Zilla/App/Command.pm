@@ -32,18 +32,7 @@ This method returns the configuration for the current command.
 
 sub config {
   my ($self) = @_;
-  return $self->{__PACKAGE__}{config} ||= do {
-    my $config = {};
-
-    for my $plugin ($self->app->config->{plugins}->flatten) {
-      if ($plugin->[0] eq ref $self) {
-        $config = $plugin->[1];
-        last;
-      }
-    }
-
-    $config;
-  };
+  return $self->{__PACKAGE__}{config} ||= $self->app->config_for(ref $self);
 }
 
 =method log

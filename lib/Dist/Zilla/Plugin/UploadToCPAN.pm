@@ -1,4 +1,4 @@
-package Dist::Zilla::Plugin::BumpVersion;
+package Dist::Zilla::Plugin::UploadToCPAN;
 # ABSTRACT: bump the configured version number by one before building
 use Moose;
 with 'Dist::Zilla::Role::Releaser';
@@ -17,8 +17,9 @@ has user => (
   lazy => 1,
   required => 1,
   default  => sub {
-    return unless $self->dzil_app;
-    $self->dzil_app->config->{user};
+    my ($self) = @_;
+    return unless my $app = $self->zilla->dzil_app;
+    $app->config_for('Dist::Zilla::App::Command::release')->{user};
   },
 );
 
@@ -28,8 +29,9 @@ has password => (
   lazy => 1,
   required => 1,
   default  => sub {
-    return unless $self->dzil_app;
-    $self->dzil_app->config->{password};
+    my ($self) = @_;
+    return unless my $app = $self->zilla->dzil_app;
+    $app->config_for('Dist::Zilla::App::Command::release')->{password};
   },
 );
 
@@ -40,7 +42,7 @@ sub release {
   my $password = $self->password;
 
   CPAN::Uploader->upload_file(
-    $archive,
+    "$archive",
     {
       user     => $user,
       password => $password,
