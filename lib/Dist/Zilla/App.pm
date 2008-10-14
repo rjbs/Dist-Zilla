@@ -30,6 +30,8 @@ sub config {
 sub config_for {
   my ($self, $plugin_class) = @_;
 
+  return {} unless $self->config->{plugins};
+
   for my $plugin ($self->config->{plugins}->flatten) {
     return $plugin->[1] if $plugin->[0] eq $plugin_class;
   }

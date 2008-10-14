@@ -1,5 +1,8 @@
 Revision history for {{$dist->name}}
 
+1.004     2008-10-14
+          do not barf if there's no dzil config (thanks, ILMARI)
+
 1.003     2008-10-13
           add "dzil new" to create a new dist.ini, etc         
           add "dzil release" to upload to the CPAN
