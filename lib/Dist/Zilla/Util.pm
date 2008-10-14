@@ -91,4 +91,8 @@ sub expand_config_package_name {
   return $str;
 }
 
+sub _log {
+  print "$_[1]\n";
+}
+
 1;

@@ -3,7 +3,6 @@ use warnings;
 package Dist::Zilla::App::Command;
 # ABSTRACT: base class for dzil commands
 use App::Cmd::Setup -command;
-
 use Moose::Autobox;
 
 =method zilla
@@ -42,7 +41,9 @@ object.
 
 =cut
 
-sub log { shift; print "@{$_[0]}\n"; }
-# sub log { shift->zilla->log(@_) } ## no critic
+sub log {
+  require Dist::Zilla::Util;
+  shift; Dist::Zilla::Util->_log($_[0]);
+}
 
 1;
