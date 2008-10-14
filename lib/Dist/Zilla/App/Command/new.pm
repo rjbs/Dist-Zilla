@@ -68,7 +68,7 @@ sub run {
 
     $config->{author} ||= [ $pw[6] ];
 
-    printf $fh "dist    = $dist\n";
+    printf $fh "name    = $dist\n";
     printf $fh "version = %s\n", ($config->{initial_version} || '1.000');
     printf $fh "author  = %s\n", $_ for $config->{author}->flatten;
     printf $fh "license = %s\n", ($config->{default_license} || 'Perl_5');
