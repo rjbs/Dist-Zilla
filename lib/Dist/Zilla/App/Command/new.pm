@@ -66,7 +66,7 @@ sub run {
 
     my $config = { $self->config->flatten };
 
-    $config->{author} ||= [ $pw[6] ];
+    $config->{author} ||= [ (split /,/, $pw[6])[0] ];
 
     printf $fh "name    = $dist\n";
     printf $fh "version = %s\n", ($config->{initial_version} || '1.000');
