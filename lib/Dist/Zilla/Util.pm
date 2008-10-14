@@ -3,6 +3,7 @@ use warnings;
 package Dist::Zilla::Util;
 # ABSTRACT: random snippets of code that Dist::Zilla wants
 
+use String::Flogger;
 use String::RewritePrefix;
 
 {
@@ -92,7 +93,9 @@ sub expand_config_package_name {
 }
 
 sub _log {
-  print "$_[1]\n";
+  my $input  = $_[1];
+  my $output = String::Flogger->flog($input);
+  print "$input\n";
 }
 
 1;
