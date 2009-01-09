@@ -25,7 +25,7 @@ sub before_build {
   my $method = $a > 0     ? 'inc_alpha'
              : defined $s ? 'inc_subversion'
              : defined $v ? 'inc_version'
-             :              'inc_reversion';
+             :              'inc_revision';
 
   $version->$method;
 
