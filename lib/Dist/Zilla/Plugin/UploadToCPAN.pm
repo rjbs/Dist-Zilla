@@ -1,5 +1,5 @@
 package Dist::Zilla::Plugin::UploadToCPAN;
-# ABSTRACT: bump the configured version number by one before building
+# ABSTRACT: upload the dist to CPAN
 use Moose;
 with 'Dist::Zilla::Role::Releaser';
 
