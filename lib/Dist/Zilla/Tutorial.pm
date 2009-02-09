@@ -33,10 +33,10 @@ entries it expects:
 
   name    - (required) the name of the dist being built
   version - (required) the version of the dist
-  author  - (required) the dist author (you may have multiple entries for this)
+  author  - (optional) the dist author (you may have multiple entries for this)
   license - (required) the dist license; must be a Software::License::* name
 
-  copyright_holder - the name of the entity holding copyright on the dist
+  copyright_holder - (required) the entity holding copyright on the dist
 
 Named sections load plugins, with the following rules:
 
