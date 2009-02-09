@@ -199,7 +199,9 @@ This is likely to change at some point in the near future.
 has authors => (
   is   => 'ro',
   isa  => 'ArrayRef[Str]',
+  lazy => 1,
   required => 1,
+  default  => sub { [ $_[0]->copyright_holder ] },
 );
 
 =attr files
