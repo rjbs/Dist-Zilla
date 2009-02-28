@@ -87,7 +87,7 @@ tasks.
 The build root (where the dist is being built) is made.
 
 The L<FileGatherer|Dist::Zilla::Role::FileGatherer>s gather and inject files
-into the distribution, then the L<FilePrinter|Dist::Zilla::Role::FilePrinter>s
+into the distribution, then the L<FilePruner|Dist::Zilla::Role::FilePruner>s
 remove some of them.
 
 All the L<FileMunger|Dist::Zilla::Role::FileMunger>s get a chance to muck about
