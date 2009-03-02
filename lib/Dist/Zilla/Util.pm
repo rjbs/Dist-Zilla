@@ -24,7 +24,7 @@ use String::RewritePrefix;
   sub handle_nonpod {
     my ($self, $str) = @_;
     return if $self->{abstract};
-    return $self->{abstract} = $1 if $str =~ /^#+ ABSTRACT:\s+(.+)$/;
+    return $self->{abstract} = $1 if $str =~ /^\s*#+ ABSTRACT:\s+(.+)$/;
     return;
   }
   sub handle_event {
