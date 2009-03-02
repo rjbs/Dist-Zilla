@@ -77,7 +77,15 @@ has abstract => (
     require Dist::Zilla::Util;
     my $filename = $self->main_module->name;
     $self->log("extracting distribution abstract from $filename");
-    Dist::Zilla::Util->abstract_from_file($filename);
+    my $abstract = Dist::Zilla::Util->abstract_from_file($filename);
+
+    if (!defined($abstract)) {
+        die "Unable to extract an abstract from $filename. Please add the following comment to the file with your abstract:
+    # ABSTRACT: turns baubles into trinkets
+";
+    }
+
+    return $abstract;
   }
 );
 
