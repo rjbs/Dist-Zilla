@@ -25,9 +25,7 @@ sub run {
   eval {
     ## no critic Punctuation
     local $File::chdir::CWD = $target;
-    system($^X => 'Makefile.PL') and die "error with Makefile.PL\n";
-    system('make') and die "error running make\n";
-    system('make install') and die "error running make install\n";
+    system('cpan', '.') and die "There was a problem installing the dist\n";
   };
 
   if ($@) {
