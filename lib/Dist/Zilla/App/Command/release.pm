@@ -6,7 +6,7 @@ use Dist::Zilla::App -command;
 
 use Moose::Autobox;
 
-sub abstract { 'test your dist' }
+sub abstract { 'release your dist' }
 
 sub run {
   my ($self, $opt, $arg) = @_;
