@@ -13,6 +13,11 @@ L<http://module-build.sourceforge.net/META-spec-v1.3.html>.
 
 =cut
 
+has repository => (
+  is => 'ro',
+  isa => 'Str',
+);
+
 sub gather_files {
   my ($self, $arg) = @_;
 
@@ -28,6 +33,10 @@ sub gather_files {
     requires => $self->zilla->prereq,
     generated_by => (ref $self) . ' version ' . $self->VERSION,
   };
+
+  if ($self->repository) {
+    $meta->{resources}{repository} = $self->repository;
+  }
 
   my $file = Dist::Zilla::File::InMemory->new({
     name    => 'META.yml',
