@@ -65,12 +65,12 @@ sub run {
 
     my $config = { $self->config->flatten };
 
-    # for those 'The getpwuid function is unimplemented'
+    # for those 'The getpwuid function is unimplemented
     eval {
         my @pw = getpwuid $>;
         $config->{author} ||= [ (split /,/, $pw[6])[0] ];
     };
-    $config->{author} ||= [ 'YourNameHere' ] if $@;
+    $config->{author} ||= [ getlogin || 'YourNameHere' ] if $@;
 
     printf $fh "name    = $dist\n";
     printf $fh "version = %s\n", ($config->{initial_version} || '1.000');
