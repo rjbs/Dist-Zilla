@@ -28,7 +28,7 @@ sub run {
     local $File::chdir::CWD = $target;
     my @cmd = $opt->{install_command};
     unless (@cmd) { @cmd = ($^X => '-MCPAN' => '-einstall "."') };
-    system(@cmd) && die "error with 'cpan .'\n";
+    system(@cmd) && die "error with '@cmd'\n";
   };
 
   if ($@) {
