@@ -25,6 +25,7 @@ sub run {
   $self->zilla->ensure_built_in($target);
 
   eval {
+    ## no critic Punctuation
     local $File::chdir::CWD = $target;
     my @cmd = $opt->{install_command};
     unless (@cmd) { @cmd = ($^X => '-MCPAN' => '-einstall "."') };
