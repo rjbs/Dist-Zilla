@@ -65,7 +65,7 @@ sub run {
 
     my $config = { $self->config->flatten };
 
-    # for those 'The getpwuid function is unimplemented
+    # for those 'The getpwuid function is unimplemented'
     eval {
         my @pw = getpwuid $>;
         $config->{author} ||= [ (split /,/, $pw[6])[0] ];
