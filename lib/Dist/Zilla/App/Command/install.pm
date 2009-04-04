@@ -6,10 +6,13 @@ use Dist::Zilla::App -command;
 
 sub abstract { 'install your dist' }
 
+sub opt_spec {
+  [ 'install-command=s', 'command to run to install (e.g. "cpan .")' ],
+}
+
 sub run {
   my ($self, $opt, $arg) = @_;
 
-  require Dist::Zilla;
   require File::chdir;
   require File::Temp;
   require Path::Class;
@@ -18,14 +21,14 @@ sub run {
   $build_root->mkpath unless -d $build_root;
 
   my $target = Path::Class::dir( File::Temp::tempdir(DIR => $build_root) );
-  $self->log("building distribution under $target");
-
+  $self->log("building distribution under $target for installation");
   $self->zilla->ensure_built_in($target);
 
   eval {
-    ## no critic Punctuation
     local $File::chdir::CWD = $target;
-    system('cpan', '.') and die "There was a problem installing the dist\n";
+    my @cmd = $opt->{install_command};
+    unless (@cmd) { @cmd = ($^X => '-MCPAN' => '-einstall "."') };
+    system(@cmd) && die "error with 'cpan .'\n";
   };
 
   if ($@) {
