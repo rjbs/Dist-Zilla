@@ -7,6 +7,14 @@ with 'Dist::Zilla::Role::Releaser';
 
 If loaded, this plugin will allow the F<release> command to upload to the CPAN.
 
+=head1 DESCRIPTION
+
+This plugin requires configuration in your C<dist.ini> or C<~/.dzil/config>:
+
+  [=Dist::Zilla::App::Command::release]
+  user     = YOUR-PAUSE-ID
+  password = YOUR-PAUSE-PASSWORD
+
 =cut
 
 use CPAN::Uploader;
