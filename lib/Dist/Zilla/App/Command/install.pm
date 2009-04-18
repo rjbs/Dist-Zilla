@@ -27,8 +27,10 @@ sub run {
   eval {
     ## no critic Punctuation
     local $File::chdir::CWD = $target;
-    my @cmd = $opt->{install_command};
-    unless (@cmd) { @cmd = ($^X => '-MCPAN' => '-einstall "."') };
+    my @cmd = $opt->{install_command}
+            ? $opt->{install_command}
+            : ($^X => '-MCPAN' => '-einstall "."');
+
     system(@cmd) && die "error with '@cmd'\n";
   };
 

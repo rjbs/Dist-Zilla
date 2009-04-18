@@ -1,5 +1,8 @@
 Revision history for {{$dist->name}}
 
+1.006     2009-04-18
+          fix a small context error that broke 'dzil install' in some cases
+
 1.005     2009-04-18
           numerous documentation fixes and minor bug fixes
           added 'dzil install'
