@@ -62,11 +62,15 @@ sub run {
   {
     my $file = $dir->file('dist.ini');
     open my $fh, '>', $file or die "can't open $file for output: $!";
-    my @pw = getpwuid $>;
 
     my $config = { $self->config->flatten };
 
-    $config->{author} ||= [ (split /,/, $pw[6])[0] ];
+    # for those 'The getpwuid function is unimplemented'
+    eval {
+        my @pw = getpwuid $>;
+        $config->{author} ||= [ (split /,/, $pw[6])[0] ];
+    };
+    $config->{author} ||= [ getlogin || 'YourNameHere' ] if $@;
 
     printf $fh "name    = $dist\n";
     printf $fh "version = %s\n", ($config->{initial_version} || '1.000');
