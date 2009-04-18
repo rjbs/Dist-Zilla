@@ -1,5 +1,11 @@
 Revision history for {{$dist->name}}
 
+1.005     2009-04-18
+          numerous documentation fixes and minor bug fixes
+          added 'dzil install'
+          thanks to: hdp, sartak, Florian Ragwitz, alexv, obra
+          TODO: proper credits file
+
 1.004     2008-10-14
           do not barf if there's no dzil config (thanks, ILMARI)
 
