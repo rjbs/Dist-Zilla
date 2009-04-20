@@ -17,6 +17,22 @@ has repository => (
   is => 'ro',
   isa => 'Str',
 );
+has homepage => (
+  is => 'ro',
+  isa => 'Str',
+);
+has license => (
+  is => 'ro',
+  isa => 'Str',
+);
+has bugtracker => (
+  is => 'ro',
+  isa => 'Str',
+);
+has MailingList => (
+  is => 'ro',
+  isa => 'Str',
+);
 
 sub gather_files {
   my ($self, $arg) = @_;
@@ -34,8 +50,8 @@ sub gather_files {
     generated_by => (ref $self) . ' version ' . $self->VERSION,
   };
 
-  if ($self->repository) {
-    $meta->{resources}{repository} = $self->repository;
+  foreach ('homepage', 'license', 'repository', 'bugtracker', 'MailingList') {
+    $meta->{resources}{$_} = $self->{$_} if $self->{$_};
   }
 
   my $file = Dist::Zilla::File::InMemory->new({
