@@ -32,7 +32,7 @@ sub gather_files {
   };
 
   $meta = Hash::Merge::Simple::merge($meta, $_->metadata)
-    for $self->plugins_with(-MetaProvider)->flatten;
+    for $self->zilla->plugins_with(-MetaProvider)->flatten;
 
   my $file = Dist::Zilla::File::InMemory->new({
     name    => 'META.yml',

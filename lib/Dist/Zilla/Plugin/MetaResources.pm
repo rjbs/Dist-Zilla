@@ -13,6 +13,7 @@ This plugin adds resources entries to the distribution's metadata.
 =cut
 
 has resources => (
+  is       => 'ro',
   isa      => 'HashRef',
   required => 1,
 );
