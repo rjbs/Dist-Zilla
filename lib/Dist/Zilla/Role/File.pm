@@ -42,7 +42,8 @@ has install_type => (
   is => 'rw',
 );
 
-requires 'content';
+# Why didn't this work with 0.65? :( -- rjbs, 2009-04-20
+# requires 'content';
 
 no Moose::Role;
 1;
