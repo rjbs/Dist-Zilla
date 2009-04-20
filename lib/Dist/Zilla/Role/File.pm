@@ -1,7 +1,6 @@
 package Dist::Zilla::Role::File;
 # ABSTRACT: something that can act like a file
 use Moose::Role;
-with 'Dist::Zilla::Role::Plugin';
 
 =head1 DESCRIPTION
 
