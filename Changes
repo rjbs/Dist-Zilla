@@ -1,5 +1,9 @@
 Revision history for {{$dist->name}}
 
+1.007     2009-04-21
+          add MetaProvider role and MetaResources plugin
+            inspired by the work of Fayland Lam
+
 1.006     2009-04-18
           fix a small context error that broke 'dzil install' in some cases
 
