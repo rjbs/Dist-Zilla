@@ -4,7 +4,7 @@ use Moose::Role;
 
 =head1 DESCRIPTION
 
-Plugins implementing this role have thier C<after_build> method called once all
+Plugins implementing this role have their C<after_build> method called once all
 the files have been written out.  It is passed a hashref with the following
 data:
 

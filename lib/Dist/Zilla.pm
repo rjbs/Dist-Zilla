@@ -56,7 +56,9 @@ This is the version of the distribution to be created.
 has version => (
   is   => 'rw',
   isa  => 'Str',
-  required => 1,
+  lazy => 1,
+  predicate => 'has_version',
+  required  => 1,
 );
 
 =attr abstract
@@ -265,6 +267,26 @@ has built_in => (
   isa  => Dir,
   init_arg  => undef,
 );
+
+sub BUILD {
+  my ($self) = @_;
+
+  # Fix up version.
+  my $has_version = $self->has_version;
+  my $version;
+
+  for my $plugin ($self->plugins_with(-VersionProvider)->flatten) {
+    next unless defined(my $this_version = $plugin->provide_version);
+
+    confess('attempted to set version twice') if $has_version;
+
+    $version = $this_version;
+    $has_version = 1;
+  }
+
+  $self->version($version) if defined $version;
+  confess('no version was ever set') unless $self->has_version;
+}
 
 =attr prereq
 
