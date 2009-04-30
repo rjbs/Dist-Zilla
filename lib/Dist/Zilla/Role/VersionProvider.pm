@@ -9,7 +9,7 @@ will be called when setting the dist's version.
 
 If a VersionProvider offers a version but one has already been set, an
 exception will be raised.  If C<provides_version> returns undef, it will be
-ignored., 
+ignored. 
 
 =cut
 
