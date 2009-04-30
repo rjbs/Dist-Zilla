@@ -1,15 +1,27 @@
 package Dist::Zilla::Plugin::AutoVersion;
 # ABSTRACT: take care of numbering versions so you don't have to
 use Moose;
-with 'Dist::Zilla::Role::VersionProvider';
+with(
+  'Dist::Zilla::Role::VersionProvider',
+  'Dist::Zilla::Role::TextTemplate',
+);
 
 use DateTime ();
 
 =head1 DESCRIPTION
 
-Right now, you get one format:  x.yyyymmddhhmm
+This plugin automatically produces a version string, generally based on the
+current time.  By default, it will be in the format: 1.yyyymmddhhmm
 
-In the future, this will be more tweakable.
+=cut
+
+=attr major
+
+The C<major> attribute is just an integer that is meant to store the major
+version number.  If no value is specified in configuration, it will default to
+1.
+
+This attribute's value can be referred to in the autoversion format template.
 
 =cut
 
@@ -20,14 +32,34 @@ has major => (
   default  => 1,
 );
 
+=attr format
+
+The format is a L<Text::Template> string that will be rendered to form the
+version.  It is meant to access to one variable, C<$major>, and one subroutine,
+C<cldr>, which will format the current time (in GMT) using CLDR patterns (for
+which consult the L<DateTime> documentation).
+
+=cut
+
+has format => (
+  is       => 'ro',
+  isa      => 'Str',
+  required => 1,
+  default  => q[{{ $major }}.{{ cldr('yyyyMMddHHmm') }}],
+);
+
 sub provide_version {
   my ($self) = @_;
 
   my $now = DateTime->now(time_zone => 'GMT');
 
-  return sprintf '%s.%s',
-    $self->major,
-    $now->format_cldr('yyyyMMddHHmm');
+  my $version = $self->fill_in_string(
+    $self->format,
+    {
+      major => \( $self->major ),
+      cldr  => sub { $now->format_cldr($_[0]) },
+    },
+  );
 }
 
 __PACKAGE__->meta->make_immutable;
