@@ -3,6 +3,8 @@ package Dist::Zilla::Plugin::AutoVersion;
 use Moose;
 with 'Dist::Zilla::Role::VersionProvider';
 
+use DateTime ();
+
 =head1 DESCRIPTION
 
 Right now, you get one format:  x.yyyymmddhhmm

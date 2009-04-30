@@ -59,7 +59,28 @@ has version => (
   lazy => 1,
   predicate => 'has_version',
   required  => 1,
+  default   => sub { die('this should never be reached') },
 );
+
+sub __initialize_version {
+  my ($self) = @_;
+
+  # Fix up version.
+  my $has_version = $self->has_version;
+  my $version;
+
+  for my $plugin ($self->plugins_with(-VersionProvider)->flatten) {
+    next unless defined(my $this_version = $plugin->provide_version);
+
+    confess('attempted to set version twice') if $has_version;
+
+    $version = $this_version;
+    $has_version = 1;
+  }
+
+  $self->version($version) if defined $version;
+  confess('no version was ever set') unless $self->has_version;
+}
 
 =attr abstract
 
@@ -268,26 +289,6 @@ has built_in => (
   init_arg  => undef,
 );
 
-sub BUILD {
-  my ($self) = @_;
-
-  # Fix up version.
-  my $has_version = $self->has_version;
-  my $version;
-
-  for my $plugin ($self->plugins_with(-VersionProvider)->flatten) {
-    next unless defined(my $this_version = $plugin->provide_version);
-
-    confess('attempted to set version twice') if $has_version;
-
-    $version = $this_version;
-    $has_version = 1;
-  }
-
-  $self->version($version) if defined $version;
-  confess('no version was ever set') unless $self->has_version;
-}
-
 =attr prereq
 
 This is a hashref of module prerequisites.  This attribute is likely to get
@@ -363,6 +364,8 @@ sub from_config {
       $plugin_class->new( $arg->merge({ zilla => $self }) )
     );
   }
+
+  $self->__initialize_version;
 
   return $self;
 }
