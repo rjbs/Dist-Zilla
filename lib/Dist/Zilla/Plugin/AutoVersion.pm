@@ -39,6 +39,10 @@ version.  It is meant to access to one variable, C<$major>, and one subroutine,
 C<cldr>, which will format the current time (in GMT) using CLDR patterns (for
 which consult the L<DateTime> documentation).
 
+The default value is:
+
+  {{ $major }}.{{ cldr('yyyyMMddHHmm') }}
+
 =cut
 
 has format => (
