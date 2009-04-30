@@ -31,12 +31,23 @@ F<dist.ini>:
 The topmost section configures Dist::Zilla itself.  Here are some of the
 entries it expects:
 
-  name    - (required) the name of the dist being built
-  version - (required) the version of the dist
-  author  - (optional) the dist author (you may have multiple entries for this)
-  license - (required) the dist license; must be a Software::License::* name
+  name     - (required) the name of the dist being built
+  version  - (required) the version of the dist
+  abstract - (required) a short description of the dist
+  author   - (optional) the dist author (you may have multiple entries for this)
+  license  - (required) the dist license; must be a Software::License::* name
 
   copyright_holder - (required) the entity holding copyright on the dist
+
+Some of the required values above may actually be provided by means other than
+the top-level section of the config.  For example, VersionProvider plugins can
+set the version, and a line like this in the "main module" of the dist will set
+the abstract:
+
+  # ABSTRACT: a totally cool way to do totally great stuff
+
+The main modules is the module that shares the same name as the dist, in
+general.
 
 Named sections load plugins, with the following rules:
 
