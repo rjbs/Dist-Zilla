@@ -41,7 +41,7 @@ which consult the L<DateTime> documentation).
 
 The default value is:
 
-  {{ $major }}.{{ cldr('yyyyMMddHHmm') }}
+  {{ $major }}.{{ cldr('yyDDD') }}0
 
 =cut
 
@@ -49,7 +49,7 @@ has format => (
   is       => 'ro',
   isa      => 'Str',
   required => 1,
-  default  => q[{{ $major }}.{{ cldr('yyyyMMddHHmm') }}],
+  default  => q[{{ $major }}.{{ cldr('yyDDD') }}0],
 );
 
 sub provide_version {
