@@ -23,7 +23,6 @@ sub munge_files {
 
   $self->munge_file($_) for $self->zilla->files->flatten;
 }
-    
 
 no Moose::Role;
 1;

@@ -80,6 +80,9 @@ sub __initialize_version {
 
   $self->version($version) if defined $version;
   confess('no version was ever set') unless $self->has_version;
+
+  $self->log("warning: version number does not look like a number")
+    unless $self->version =~ m{\A\d+(?:\.\d+)\z};
 }
 
 =attr abstract
