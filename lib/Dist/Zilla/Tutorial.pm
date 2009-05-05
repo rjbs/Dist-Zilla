@@ -60,8 +60,9 @@ The values inside a section are given as configuration to the plugin.  Consult
 each plugin's documentation for more information.
 
 The "Classic" bundle, seen above, builds a fairly normal distribution.  It
-bumps up the version number, rewrites tests from F<./xt>, adds some information
-to POD, and builds a F<Makefile.PL>
+rewrites tests from F<./xt>, adds some information to POD, and builds a
+F<Makefile.PL>.  For more information, you can look at the docs for
+L<Dist::Zilla::PluginBundle::Classic> and see the plugins it includes.
 
 =head1 BUILDING YOUR DIST
 
