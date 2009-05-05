@@ -1,5 +1,10 @@
 Revision history for {{$dist->name}}
 
+1.091250  2009-05-05
+          add AutoVersion plugin
+          avoid some warnings when making immutable
+          improved some documentation
+
 1.007     2009-04-21
           add MetaProvider role and MetaResources plugin
             inspired by the work of Fayland Lam
