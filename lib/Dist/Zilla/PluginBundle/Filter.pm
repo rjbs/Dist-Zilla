@@ -4,6 +4,8 @@ use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::PluginBundle';
 
+use Dist::Zilla::Util;
+
 =head1 SYNOPSIS
 
 In your F<dist.ini>:
@@ -25,7 +27,7 @@ sub multivalue_args { return qw(remove) }
 
 sub bundle_config {
   my ($self, $config) = @_;
-  my $class = ref $self;
+  my $class = (ref $self) || $self;
 
   Carp::croak("no bundle given for bundle filter")
     unless my $bundle = $config->{bundle};
