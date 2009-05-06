@@ -6,7 +6,7 @@ with 'Dist::Zilla::Role::PluginBundle';
 
 sub bundle_config {
   my ($self) = @_;
-  my $class = ref $self;
+  my $class = (ref $self) || $self;
 
   my @classes = qw(
     Dist::Zilla::Plugin::AllFiles
