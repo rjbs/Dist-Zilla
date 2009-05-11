@@ -8,9 +8,12 @@ require Dist::Zilla::App::Command::test;
 sub abstract { 'smoke your dist' }
 
 sub run {
+  my $self = shift;
+
   local $ENV{AUTOMATED_TESTING} = 1;
-  
-  return Dist::Zilla::App::Command::test::run(@_);
+  local @ARGV = qw(test);
+
+  return $self->app->run;
 }
 
 1;
