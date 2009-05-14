@@ -95,7 +95,7 @@ sub expand_config_package_name {
 sub _log {
   my $input  = $_[1];
   my $output = String::Flogger->flog($input);
-  print "$input\n";
+  print "$output\n";
 }
 
 1;
