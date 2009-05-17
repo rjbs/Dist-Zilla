@@ -12,7 +12,7 @@ sub bundle_config {
     Dist::Zilla::Plugin::AllFiles
     Dist::Zilla::Plugin::PruneCruft
     Dist::Zilla::Plugin::ManifestSkip
-    Dist::Zilla::Plugin::MetaYaml
+    Dist::Zilla::Plugin::MetaYAML
     Dist::Zilla::Plugin::License
     Dist::Zilla::Plugin::Readme
     Dist::Zilla::Plugin::PkgVersion
@@ -52,7 +52,7 @@ It includes the following plugins with their default configuration:
 
 =item * L<Dist::Zilla::Plugin::ManifestSkip>
 
-=item * L<Dist::Zilla::Plugin::MetaYaml>
+=item * L<Dist::Zilla::Plugin::MetaYAML>
 
 =item * L<Dist::Zilla::Plugin::License>
 
