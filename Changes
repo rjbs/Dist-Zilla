@@ -1,5 +1,14 @@
 Revision history for {{$dist->name}}
 
+{{$NEXT}}
+
+1.091370  2009-05-17
+          MetaJSON added
+          MetaYaml is now MetaYAML
+
+1.091260  2009-05-06
+          correct naming of plugins brought in by @Classic
+
 1.091250  2009-05-05
           add AutoVersion plugin
           avoid some warnings when making immutable
