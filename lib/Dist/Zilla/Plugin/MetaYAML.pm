@@ -22,6 +22,10 @@ sub gather_files {
   require YAML::XS;
 
   my $meta = {
+    'meta-spec' => {
+      version => 1.4,
+      url     => 'http://module-build.sourceforge.net/META-spec-v1.4.html',
+    },
     name     => $self->zilla->name,
     version  => $self->zilla->version,
     abstract => $self->zilla->abstract,
