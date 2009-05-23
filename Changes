@@ -2,6 +2,7 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
           add meta-spec entry to metafiles (thanks, doy)
+          generate MetaYAML with YAML::Tiny
 
 1.091370  2009-05-17
           MetaJSON added

@@ -19,7 +19,7 @@ sub gather_files {
   my ($self, $arg) = @_;
 
   require Dist::Zilla::File::InMemory;
-  require YAML::XS;
+  require YAML::Tiny;
 
   my $meta = {
     'meta-spec' => {
@@ -40,7 +40,7 @@ sub gather_files {
 
   my $file = Dist::Zilla::File::InMemory->new({
     name    => 'META.yml',
-    content => YAML::XS::Dump($meta),
+    content => YAML::Tiny::Dump($meta),
   });
 
   $self->add_file($file);
