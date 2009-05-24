@@ -577,7 +577,6 @@ sub log { ## no critic
 
 __PACKAGE__->meta->make_immutable;
 no Moose;
-no MooseX::ClassAttribute;
 1;
 __END__
 =head1 DESCRIPTION
