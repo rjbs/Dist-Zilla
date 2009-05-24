@@ -1,6 +1,12 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          more quotemeta in generated code
+          add namespace::autoclean (Florian Ragwitz)
+          remove unnecessary dep on MX::ClassAttribute (Florian Ragwitz)
+          break type declarations into their own library (Florian Ragwitz)
+
+1.091430  2009-05-23 01:48:20 UTC
           add meta-spec entry to metafiles (thanks, doy)
           generate MetaYAML with YAML::Tiny
 
