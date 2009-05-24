@@ -2,8 +2,8 @@ package Dist::Zilla;
 # ABSTRACT: distribution builder; installer not included!
 use Moose;
 use Moose::Autobox;
+use Dist::Zilla::Types qw(DistName);
 use MooseX::Types::Path::Class qw(Dir File);
-use MooseX::Types -declare => [qw(DistName)];
 use Moose::Util::TypeConstraints;
 
 use File::Find::Rule;
@@ -34,11 +34,6 @@ built.  This is usually the name of the distribution's main module, with the
 double colons (C<::>) replaced with dashes.  For example: C<Dist-Zilla>.
 
 =cut
-
-subtype DistName,
-  as "Str",
-  where { !/::/ },
-  message { "$_ looks like a module name, not a dist name" };
 
 has name => (
   is   => 'ro',
