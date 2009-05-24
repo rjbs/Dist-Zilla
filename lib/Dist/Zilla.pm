@@ -14,6 +14,8 @@ use String::RewritePrefix;
 use Dist::Zilla::File::OnDisk;
 use Dist::Zilla::Role::Plugin;
 
+use namespace::autoclean;
+
 =attr dzil_app
 
 This attribute (which is optional) will provide the Dist::Zilla::App object if
@@ -576,7 +578,6 @@ sub log { ## no critic
 }
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
 1;
 __END__
 =head1 DESCRIPTION
