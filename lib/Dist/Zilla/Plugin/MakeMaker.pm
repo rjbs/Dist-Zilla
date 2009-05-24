@@ -25,7 +25,7 @@ WriteMakefile(
   DISTNAME  => '{{ $dist->name     }}',
   NAME      => '{{ $module_name    }}',
   AUTHOR    => '{{ $author_str     }}',
-  ABSTRACT  => '{{ $dist->abstract }}',
+  ABSTRACT  => '{{ quotemeta($dist->abstract) }}',
   VERSION   => '{{ $dist->version  }}',
   EXE_FILES => [ qw({{ $exe_files }}) ],
   (eval { ExtUtils::MakeMaker->VERSION(6.21) } ? (LICENSE => '{{ $dist->license->meta_yml_name }}') : ()),
