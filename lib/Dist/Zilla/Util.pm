@@ -11,7 +11,7 @@ use String::RewritePrefix;
     Dist::Zilla::Util::Nonpod;
   use base 'Pod::Eventual';
   sub _new  { bless { nonpod => '' } => shift; }
-  sub handle_nonpod { $_[0]->{nonpod} .= $_[1] }
+  sub handle_nonpod { $_[0]->{nonpod} .= $_[1]->{content} }
   sub handle_event {}
   sub _nonpod { $_[0]->{nonpod} }
 }
@@ -22,9 +22,10 @@ use String::RewritePrefix;
   use base 'Pod::Eventual';
   sub _new  { bless {} => shift; }
   sub handle_nonpod {
-    my ($self, $str) = @_;
+    my ($self, $event) = @_;
     return if $self->{abstract};
-    return $self->{abstract} = $1 if $str =~ /^\s*#+ ABSTRACT:\s+(.+)$/;
+    return $self->{abstract} = $1
+      if $event->{content}=~ /^\s*#+ ABSTRACT:\s+(.+)$/m;
     return;
   }
   sub handle_event {
