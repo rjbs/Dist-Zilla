@@ -1,6 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          fix abstract-guessing to work with new Pod::Eventual
+
+1.091440  2009-05-24 18:01:51 UTC
           more quotemeta in generated code
           add namespace::autoclean (Florian Ragwitz)
           remove unnecessary dep on MX::ClassAttribute (Florian Ragwitz)
