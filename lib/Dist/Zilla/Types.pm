@@ -1,4 +1,5 @@
 package Dist::Zilla::Types;
+# ABSTRACT: dzil-specific type library
 
 use MooseX::Types -declare => [qw(DistName)];
 use MooseX::Types::Moose qw(Str);
