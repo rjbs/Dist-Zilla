@@ -16,7 +16,7 @@ sub munge_file {
   my ($self, $file) = @_;
 
   return $self->munge_perl($file) if $file->name    =~ /\.(?:pm|pl)$/i;
-  return $self->munge_perl($file) if $file->content =~ /^#!perl(?:$|\s)/;
+  return $self->munge_perl($file) if $file->content =~ /^#!(?:.*)perl(?:$|\s)/;
   return;
 }
 

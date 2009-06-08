@@ -18,7 +18,7 @@ sub munge_file {
   return $self->munge_pod($file)
     if $file->name =~ /\.pm$/i and $file->name !~ m{^t/};
 
-  return unless $file->content =~ /^#!perl(?:$|\s)/;
+  return unless $file->content =~ /^#!(?:.*)perl(?:$|\s)/;
 
   return if $file->name eq 'Makefile.PL';
   return if $file->name eq 'Build.PL';
