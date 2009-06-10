@@ -1,6 +1,10 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          up the required Pod::Eventual
+          tweak detection of Perl files by content (Jérôme Quelin)
+
+1.091480  2009-05-28 13:59:35 UTC
           fix abstract-guessing to work with new Pod::Eventual
 
 1.091440  2009-05-24 18:01:51 UTC
