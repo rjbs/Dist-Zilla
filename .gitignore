@@ -1,0 +1,33 @@
+# avoid version control files.
+.git
+
+# avoid Makemaker generated and utility files.
+Makefile
+blib
+MakeMaker-*
+pm_to_blib
+blibdirs
+
+# avoid Module::Build generated and utility files.
+Build
+Build.bat
+_build
+
+# avoid dist::zilla generated and utility files
+.build
+
+# avoid Devel::Cover generated files
+cover_db
+
+# avoid temp and backup files.
+*~
+*#
+*.bak
+*.old
+*.rej
+*.swp
+*.tmp
+
+# avoid archives of this distribution
+Dist-Zilla-Plugin-AutoPrereq-*
+
