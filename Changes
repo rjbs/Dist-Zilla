@@ -1,0 +1,14 @@
+Revision history for Dist::Zilla::Plugin::AutoPrereq
+
+High-level changelog
+====================
+
+0.1.x    initial release
+
+
+Low-level changelog
+===================
+
+0.1.0 Mon Jun 29 18:43:13 2009
+ - original release
+ - find basic prereqs
