@@ -97,6 +97,10 @@ has abstract => (
   default  => sub {
     my ($self) = @_;
 
+    unless ($self->main_module) {
+      die "no abstract given and no main_module found; make sure your main module is in ./lib\n";
+    }
+
     require Dist::Zilla::Util;
     my $filename = $self->main_module->name;
     $self->log("extracting distribution abstract from $filename");
