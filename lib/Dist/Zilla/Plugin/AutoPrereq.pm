@@ -4,6 +4,7 @@ package Dist::Zilla::Plugin::AutoPrereq;
 use strict;
 use warnings;
 
+use Dist::Zilla::Util;
 use Moose;
 use version;
 
@@ -68,10 +69,14 @@ sub _prereqs_in_file {
 
     my %prereqs;
 
+    my $p = Dist::Zilla::Util::Nonpod->_new;
+    $p->read_string( $file->content );
+    my $nonpod = $p->_nonpod;
+
     # quick analysis: find only plain use and require
     my @use_lines =
         grep { /^(?:use|require)\s+/ }
-        split /\n/, $file->content;
+        split /\n/, $nonpod;
 
     foreach my $line ( @use_lines ) {
         $line =~ s/;$//; # trim end of statement
