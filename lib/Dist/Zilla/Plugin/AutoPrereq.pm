@@ -79,7 +79,7 @@ sub _prereqs_in_file {
         split /\n/, $nonpod;
 
     foreach my $line ( @use_lines ) {
-        $line =~ s/;$//; # trim end of statement
+        $line =~ s/;.*$//; # trim end of statement
         my (undef, $module, $version) = split /\s+/, $line;
 
         # trim common pragmata

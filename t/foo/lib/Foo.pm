@@ -1,6 +1,6 @@
 package Foo;
 use 5.008;
-use Moose 0.50;
+use Moose 0.50; # comment
 require File::Spec::Functions;
 __END__
 =head1 FOO
