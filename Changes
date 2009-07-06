@@ -9,6 +9,9 @@ High-level changelog
 Low-level changelog
 ===================
 
+0.1.2 Mon Jul  6 16:39:40 2009
+ - making sure comments don't pollute extraction
+
 0.1.1 Tue Jun 30 16:16:02 2009
  - don't extract prereqs from pod
  - functional tests added
