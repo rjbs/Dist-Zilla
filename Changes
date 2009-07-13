@@ -1,6 +1,10 @@
 Revision history for {{$dist->name}}
 
-{{$NEXT}}
+1.091940  2009-07-12
+          fix version number of EUMM required to use LICENSE param
+          ( https://rt.cpan.org/Public/Bug/Display.html?id=47817 )
+
+1.091610  2009-06-09
           up the required Pod::Eventual
           tweak detection of Perl files by content (Jérôme Quelin)
 

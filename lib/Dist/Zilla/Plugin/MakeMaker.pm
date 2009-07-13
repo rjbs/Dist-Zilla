@@ -28,7 +28,7 @@ WriteMakefile(
   ABSTRACT  => '{{ quotemeta($dist->abstract) }}',
   VERSION   => '{{ $dist->version  }}',
   EXE_FILES => [ qw({{ $exe_files }}) ],
-  (eval { ExtUtils::MakeMaker->VERSION(6.21) } ? (LICENSE => '{{ $dist->license->meta_yml_name }}') : ()),
+  (eval { ExtUtils::MakeMaker->VERSION(6.31) } ? (LICENSE => '{{ $dist->license->meta_yml_name }}') : ()),
   PREREQ_PM    => {
 {{
       my $prereq = $dist->prereq;
