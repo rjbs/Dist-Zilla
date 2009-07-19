@@ -122,26 +122,44 @@ This is the module where Dist::Zilla might look for various defaults, like
 the distribution abstract.  By default, it's the shorted-named module in the
 distribution.  This is likely to change!
 
+You can override the default found one by specifying the file path explicitly,
+ie:
+    main_module = lib/Foo/Bar.pm
+
 =cut
 
-has main_module => (
-  is   => 'ro',
-  isa  => 'Dist::Zilla::Role::File',
-  lazy => 1,
-  required => 1,
-  default  => sub {
-    my ($self) = @_;
+{
 
-    my $file = $self->files
-             ->grep(sub { $_->name =~ m{\.pm\z} and $_->name =~ m{\Alib/} })
-             ->sort(sub { length $_[0]->name <=> length $_[1]->name })
-             ->head;
+  # Hackish way to coerce to a thing that does the role.
+  use MooseX::Types;
+  use MooseX::Types::Moose qw( Str );
+  my $type = role_type ('Dist::Zilla::Role::File');
+  coerce $type, from Str, via {
+    use Dist::Zilla::File::OnDisk;
+    Dist::Zilla::File::OnDisk->new( name => $_ );
+  };
 
-    $self->log("guessing dist's main_module is " . $file->name);
+  has main_module => (
+    is   => 'ro',
+    isa  => $type,
+    lazy => 1,
+    coerce => 1,
+    required => 1,
+    default  => sub {
+      my ($self) = @_;
 
-    return $file;
-  },
-);
+      my $file = $self->files
+               ->grep(sub { $_->name =~ m{\.pm\z} and $_->name =~ m{\Alib/} })
+               ->sort(sub { length $_[0]->name <=> length $_[1]->name })
+               ->head;
+
+      $self->log("guessing dist's main_module is " . $file->name);
+
+      return $file;
+    },
+  );
+
+}
 
 =attr copyright_holder
 
