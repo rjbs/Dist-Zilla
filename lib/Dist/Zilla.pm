@@ -142,12 +142,12 @@ ie:
   has main_module => (
     is   => 'ro',
     isa  => 'Dist::Zilla::Role::File',
-#    lazy => 1,
+    lazy => 1,
 #    coerce => 1,
     initializer => sub {
         my ( $self, $value, $set ) = @_;
         if( is_Str($value) ){
-            $set->( $self->files->grep(sub { $_->name eq $value })->head );
+            $set->( $self->files->grep(sub{ $_->name eq $value })->head );
             return;
         }
         $set->( $value );
