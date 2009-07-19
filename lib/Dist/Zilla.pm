@@ -131,19 +131,27 @@ ie:
 {
 
   # Hackish way to coerce to a thing that does the role.
-  use MooseX::Types;
+#  use MooseX::Types;
   use MooseX::Types::Moose qw( Str );
-  my $type = role_type ('Dist::Zilla::Role::File');
-  coerce $type, from Str, via {
-    use Dist::Zilla::File::OnDisk;
-    Dist::Zilla::File::OnDisk->new( name => $_ );
-  };
+# my $type = role_type ('Dist::Zilla::Role::File');
+#  coerce $type, from Str, via {
+#    use Dist::Zilla::File::OnDisk;
+#    Dist::Zilla::File::OnDisk->new( name => $_ );
+#  };
 
   has main_module => (
     is   => 'ro',
-    isa  => $type,
-    lazy => 1,
-    coerce => 1,
+    isa  => 'Dist::Zilla::Role::File',
+#    lazy => 1,
+#    coerce => 1,
+    initializer => sub {
+        my ( $self, $value, $set ) = @_;
+        if( is_Str($value) ){
+            $set->( $self->files->grep(sub { $_->name eq $value })->head );
+            return;
+        }
+        $set->( $value );
+    },
     required => 1,
     default  => sub {
       my ($self) = @_;
