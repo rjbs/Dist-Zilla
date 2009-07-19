@@ -128,46 +128,43 @@ ie:
 
 =cut
 
-{
+has main_module_override => (
+  isa => 'Str',
+  is  => 'ro' ,
+  init_arg => 'main_module',
+  predicate => 'has_main_module_override',
+);
 
-  # Hackish way to coerce to a thing that does the role.
-#  use MooseX::Types;
-  use MooseX::Types::Moose qw( Str );
-# my $type = role_type ('Dist::Zilla::Role::File');
-#  coerce $type, from Str, via {
-#    use Dist::Zilla::File::OnDisk;
-#    Dist::Zilla::File::OnDisk->new( name => $_ );
-#  };
+has main_module => (
+  is   => 'ro',
+  isa  => 'Dist::Zilla::Role::File',
+  lazy => 1,
+  init_arg => undef,
+  required => 1,
+  default  => sub {
 
-  has main_module => (
-    is   => 'ro',
-    isa  => 'Dist::Zilla::Role::File',
-    lazy => 1,
-#    coerce => 1,
-    initializer => sub {
-        my ( $self, $value, $set ) = @_;
-        if( is_Str($value) ){
-            $set->( $self->files->grep(sub{ $_->name eq $value })->head );
-            return;
-        }
-        $set->( $value );
-    },
-    required => 1,
-    default  => sub {
-      my ($self) = @_;
+    my ($self) = @_;
 
-      my $file = $self->files
-               ->grep(sub { $_->name =~ m{\.pm\z} and $_->name =~ m{\Alib/} })
-               ->sort(sub { length $_[0]->name <=> length $_[1]->name })
-               ->head;
+    my $file;
 
-      $self->log("guessing dist's main_module is " . $file->name);
+    if ( $self->has_main_module_override ) {
 
-      return $file;
-    },
-  );
+       $file = $self->files->grep(sub{ $_->name eq $self->main_module_override })->head;
 
-}
+    } else {
+
+       $file = $self->files
+             ->grep(sub { $_->name =~ m{\.pm\z} and $_->name =~ m{\Alib/} })
+             ->sort(sub { length $_[0]->name <=> length $_[1]->name })
+             ->head;
+    }
+
+    $self->log("guessing dist's main_module is " . $file->name);
+
+    return $file;
+  },
+);
+
 
 =attr copyright_holder
 
