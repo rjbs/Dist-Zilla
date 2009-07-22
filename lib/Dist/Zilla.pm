@@ -240,12 +240,6 @@ sub _initialize_license {
   $self->_set_license($license);
 }
 
-sub BUILD {
-  my ($self, $arg) = @_;
-
-  $self->_initialize_license($arg->{license});
-}
-
 =attr authors
 
 This is an arrayref of author strings, like this:
