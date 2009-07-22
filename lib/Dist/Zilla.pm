@@ -2,7 +2,7 @@ package Dist::Zilla;
 # ABSTRACT: distribution builder; installer not included!
 use Moose;
 use Moose::Autobox;
-use Dist::Zilla::Types qw(DistName);
+use Dist::Zilla::Types qw(DistName License);
 use MooseX::Types::Path::Class qw(Dir File);
 use Moose::Util::TypeConstraints;
 
@@ -187,18 +187,34 @@ understandable, like C<Perl_5>.
 
 =cut
 
-has _license_class => (is => 'rw');
-
 has license => (
-  is   => 'ro',
-  isa  => 'Software::License',
-  lazy => 1,
-  required => 1,
-  default  => sub {
-    my ($self) = @_;
-    my $license_class = $self->_license_class;
+  reader => 'license',
+  writer => '_set_license',
+  isa    => License,
+  init_arg    => undef,
+);
 
-    unless ($license_class) {
+sub _initialize_license {
+  my ($self, $value) = @_;
+
+  my $license;
+
+  # If it's an object (weird!) we're being handed a pre-created license and
+  # we should probably just trust it. -- rjbs, 2009-07-21
+  $license = $value if blessed $value;
+
+  unless ($license) {
+    my $license_class = $value;
+
+    if ($license_class) {
+      $license_class = String::RewritePrefix->rewrite(
+        {
+          '=' => '',
+          ''  => 'Software::License::'
+        },
+        $license_class,
+      );
+    } else {
       require Software::LicenseUtils;
       my @guess = Software::LicenseUtils->guess_license_from_pod(
         $self->main_module->content
@@ -211,12 +227,24 @@ has license => (
       $self->log("based on POD in $filename, guessing license is $guess[0]");
     }
 
-    my $license = $license_class->new({
+    eval "require $license_class; 1" or die;
+
+    $license = $license_class->new({
       holder => $self->copyright_holder,
       year   => $self->copyright_year,
     });
-  },
-);
+  }
+
+  confess "$value is not a valid license" if ! License->check($license);
+
+  $self->_set_license($license);
+}
+
+sub BUILD {
+  my ($self, $arg) = @_;
+
+  $self->_initialize_license($arg->{license});
+}
 
 =attr authors
 
@@ -344,22 +372,7 @@ sub from_config {
 
   my $plugins = delete $config->{plugins};
 
-  my $license_name = delete $config->{license} unless ref $config->{license};
-
   my $self = $class->new($config->merge({ root => $root }));
-
-  if ($license_name) {
-    my $license_class = String::RewritePrefix->rewrite(
-      {
-        '=' => '',
-        ''  => 'Software::License::'
-      },
-      $license_name,
-    );
-
-    eval "require $license_class; 1" or die;
-    $self->_license_class($license_class);
-  }
 
   for my $plugin (@$plugins) {
     my ($plugin_class, $arg) = @$plugin;
