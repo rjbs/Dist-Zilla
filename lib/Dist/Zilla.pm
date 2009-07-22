@@ -354,14 +354,14 @@ sub from_config {
 
   my $root = Path::Class::dir($arg->{dist_root} || '.');
 
-  my $config = $self->_load_config(
+  my ($core_config, $plugin_config) = $class->_load_config(
     $arg->{config_class},
     $root,
   );
 
-  my $self = $class->new($config->merge({ root => $root }));
+  my $self = $class->new($core_config->merge({ root => $root }));
 
-  for my $plugin (@$plugins) {
+  for my $plugin (@$plugin_config) {
     my ($plugin_class, $arg) = @$plugin;
     $self->log("initializing plugin $arg->{'=name'} ($plugin_class)");
     $self->plugins->push(
@@ -375,13 +375,15 @@ sub from_config {
 }
 
 sub _load_config {
-  my $config_class = $arg->{config_class} || 'Dist::Zilla::Config::INI';
+  my ($self, $config_class, $root) = @_;
+
+  $config_class ||= 'Dist::Zilla::Config::INI';
   unless (eval "require $config_class; 1") {
     die "couldn't load $config_class: $@"; ## no critic Carp
   }
 
   my $config_file = $root->file( $config_class->default_filename );
-  $class->log("reading configuration from $config_file using $config_class");
+  $self->log("reading configuration from $config_file using $config_class");
 
   my $config = $config_class->new->read_file($config_file);
 
