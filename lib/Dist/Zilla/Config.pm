@@ -2,8 +2,7 @@ package Dist::Zilla::Config;
 use Moose::Role;
 # ABSTRACT: stored configuration loader role
 
-requires 'default_filename';
-requires 'read_file';
+requires 'read_config';
 
 sub struct_to_config {
   my ($self, $struct) = @_;
@@ -26,9 +25,7 @@ sub struct_to_config {
     }
   }
 
-  $root_config->{plugins} = \@plugins;
-
-  return $root_config;
+  return ($root_config, \@plugins);
 }
 
 no Moose::Role;

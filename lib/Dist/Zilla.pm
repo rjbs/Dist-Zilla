@@ -383,14 +383,9 @@ sub _load_config {
     die "couldn't load $config_class: $@"; ## no critic Carp
   }
 
-  my $config_file = $root->file( $config_class->default_filename );
-  $self->log("reading configuration from $config_file using $config_class");
+  $self->log("reading configuration using $config_class");
 
-  my $config = $config_class->new->read_file($config_file);
-
-  my $plugins = delete $config->{plugins};
-
-  return ($config, $plugins);
+  my ($config, $plugins) = $config_class->new->read_config({ root => $root });
 }
 
 =method plugins_with

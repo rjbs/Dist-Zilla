@@ -31,9 +31,10 @@ has 'reader' => (
   default  => sub { Dist::Zilla::Config::INI::Reader->new },
 );
 
-sub read_file {
-  my ($self, $filename) = @_;
-  my $data = $self->reader->read_file($filename);
+sub read_config {
+  my ($self, $arg) = @_;
+  my $config_file = $arg->{root}->file( $self->default_filename );
+  my $data = $self->reader->read_file($config_file);
   $self->struct_to_config($data);
 }
 
