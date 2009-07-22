@@ -240,6 +240,12 @@ sub _initialize_license {
   $self->_set_license($license);
 }
 
+sub BUILD {
+  my ($self, $arg) = @_;
+
+  $self->_initialize_license($arg->{license});
+}
+
 =attr authors
 
 This is an arrayref of author strings, like this:
@@ -362,6 +368,7 @@ sub from_config {
   my $self = $class->new($core_config->merge({ root => $root }));
 
   for my $plugin (@$plugin_config) {
+
     my ($plugin_class, $arg) = @$plugin;
     $self->log("initializing plugin $arg->{'=name'} ($plugin_class)");
     $self->plugins->push(
