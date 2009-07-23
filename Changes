@@ -1,7 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
-          Documented Commands: new, clean, build, install, release
+          Documented Commands: new, clean, build, install, release,
+            smoke, (KENTNL)
 
 1.092070  2009-07-27
           *** MIGHT VERY WELL BREAK YOUR BUNDLES ***
