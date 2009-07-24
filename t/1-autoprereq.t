@@ -21,11 +21,11 @@ my %prereqs = map { eval $_ } @lines;
 close $fh;
 
 my %wanted = (
-    'File::Spec::Functions' => 0,
-    'Moose'                 => '0.50',
-    'Moose::Role'           => 0,
-    'Test::More'            => 0,
-    perl                    => 5.008,
+    'DZPA::Bar'   => 0,
+    'DZPA::Foo'   => '0.50',
+    'DZPA::Fubar' => 0,
+    'DZPA::Role'  => 0,
+    perl          => 5.008,
 );
 is_deeply( \%prereqs, \%wanted, '')
 

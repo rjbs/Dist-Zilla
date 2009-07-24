@@ -1,9 +1,9 @@
 package Foo;
 use 5.008;
-use Moose 0.50; # comment
-with 'Moose::Role';
-use AutoPrereq::Foo::Bar;
-require File::Spec::Functions;
+use DZPA::Foo 0.50; # comment
+with 'DZPA::Role';
+use DZPA::Skip::Blah;
+require DZPA::Bar;
 __END__
 =head1 FOO
 

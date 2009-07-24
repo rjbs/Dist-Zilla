@@ -1,2 +1,3 @@
 #!/usr/bin/perl
-use Test::More;
+use DZPA::Fubar;
+require DZPA::Skip::Foo;
