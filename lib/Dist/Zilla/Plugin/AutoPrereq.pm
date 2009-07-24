@@ -172,6 +172,9 @@ modules and scripts.
 
 =back
 
+If some prereqs are not found, you can still add them manually with the
+L<Dist::Zilla::Plugin::Prereq> plugin.
+
 It will trim the following pragamata: C<strict>, C<warnings> and C<lib>.
 It will also trim the modules under your dist namespace (eg: for
 C<Dist-Zilla>, it will trim all C<Dist::Zilla::*> prereqs found.
