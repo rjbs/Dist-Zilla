@@ -1,13 +1,10 @@
 Revision history for Dist::Zilla::Plugin::AutoPrereq
 
-High-level changelog
-====================
+0.2.0 Fri Jul 24 14:18:54 2009
+ - allowing skip list for found prereqs
+ - extracting moose roles
 
-0.1.x    initial release
-
-
-Low-level changelog
-===================
+**
 
 0.1.2 Mon Jul  6 16:39:40 2009
  - making sure comments don't pollute extraction
