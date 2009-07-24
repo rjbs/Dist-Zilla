@@ -10,6 +10,11 @@ use version;
 
 with 'Dist::Zilla::Role::FixedPrereqs';
 
+# -- attributes
+
+# skiplist - a regex
+has skip => ( is=>'ro', predicate=>'has_skip' );
+
 
 # -- public methods
 
@@ -52,6 +57,18 @@ sub prereq {
         }
     }
 
+    # remove prereqs from skiplist
+    if ( $self->has_skip && $self->skip ) {
+        my $skip = $self->skip;
+        my $re   = qr/$skip/;
+        my @deletes;
+        foreach my $k ( keys %prereqs ) {
+            push @deletes, $k if $k =~ $re;
+        }
+        delete @prereqs{ @deletes };
+    }
+
+    # we're done, return what we've found
     return \%prereqs;
 }
 
@@ -135,6 +152,8 @@ prereq
 In your F<dist.ini>:
 
     [AutoPrereq]
+    skip = ^Foo|Bar$
+
 
 =head1 DESCRIPTION
 
@@ -157,7 +176,14 @@ It will trim the following pragamata: C<strict>, C<warnings> and C<lib>.
 It will also trim the modules under your dist namespace (eg: for C<Dist-
 Zilla>, it will trim all C<Dist::Zilla::*> prereqs found.
 
-The module does not accept any option (yet).
+The module accept the following options:
+
+=over 4
+
+=item * skip: a regex that will remove any matching modules found
+from prereqs.
+
+=back
 
 
 =head1 BUGS
