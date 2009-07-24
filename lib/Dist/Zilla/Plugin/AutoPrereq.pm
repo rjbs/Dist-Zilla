@@ -71,13 +71,12 @@ sub _prereqs_in_file {
 
     my $p = Dist::Zilla::Util::Nonpod->_new;
     $p->read_string( $file->content );
-    my $nonpod = $p->_nonpod;
+    my @lines = split /\n/, $p->_nonpod;
 
     # quick analysis: find only plain use and require
     my @use_lines =
         grep { /^(?:use|require)\s+/ }
-        split /\n/, $nonpod;
-
+        @lines;
     foreach my $line ( @use_lines ) {
         $line =~ s/;.*$//; # trim end of statement
         my (undef, $module, $version) = split /\s+/, $line;
@@ -92,6 +91,12 @@ sub _prereqs_in_file {
             $prereqs{ $module } = _looks_like_version($version) ? $version : 0;
         }
     }
+
+    # add moose specifics
+    my @roles =
+        map { /^(?:with)\s+['"]([\w:]+)['"]/ ? ($1) : () }
+        @lines;
+    @prereqs{ @roles } = (0) x @roles;
 
     return %prereqs;
 }
@@ -136,11 +141,21 @@ In your F<dist.ini>:
 This plugin will extract loosely your distribution prerequisites from
 your files.
 
-The extraction may not be perfect, since it will only find the plain
-lines beginning with C<use> or C<require> in your perl modules and
-scripts. It will trim the following pragamata: C<strict>, C<warnings>
-and C<lib>. It will also trim the modules under your dist namespace (eg:
-for C<Dist-Zilla>, it will trim all C<Dist::Zilla::*> prereqs found.
+The extraction may not be perfect, since it will only find the
+following prereqs:
+
+=over 4
+
+=item * plain lines beginning with C<use> or C<require> in your perl
+modules and scripts.
+
+=item * L<Moose> roles included with the C<with> keyword.
+
+=back
+
+It will trim the following pragamata: C<strict>, C<warnings> and C<lib>.
+It will also trim the modules under your dist namespace (eg: for C<Dist-
+Zilla>, it will trim all C<Dist::Zilla::*> prereqs found.
 
 The module does not accept any option (yet).
 

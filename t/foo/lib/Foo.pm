@@ -9,3 +9,4 @@ __END__
 this pod should not be taken in to account, with:
 use fake
 require blah
+with 'fubar'
