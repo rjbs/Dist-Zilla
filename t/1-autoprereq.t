@@ -23,6 +23,7 @@ close $fh;
 my %wanted = (
     'File::Spec::Functions' => 0,
     'Moose'                 => '0.50',
+    'Moose::Role'           => 0,
     'Test::More'            => 0,
     perl                    => 5.008,
 );
