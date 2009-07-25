@@ -2,14 +2,14 @@ package Dist::Zilla::Role::ConfigMVP;
 use Moose::Role;
 # ABSTRACT: something that converts Config::MVP sequences to config structs
 
-use Dist::Zilla::Config::MVPAssembler;
+use Dist::Zilla::Util::MVPAssembler;
 
 has assembler => (
   is   => 'ro',
-  isa  => 'Dist::Zilla::Config::MVPAssembler',
+  isa  => 'Dist::Zilla::Util::MVPAssembler',
   lazy => 1,
   default => sub {
-    my $assembler = Dist::Zilla::Config::MVPAssembler->new;
+    my $assembler = Dist::Zilla::Util::MVPAssembler->new;
 
     my $root = $assembler->section_class->new({
       name => '_',
