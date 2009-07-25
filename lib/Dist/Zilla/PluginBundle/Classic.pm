@@ -29,7 +29,7 @@ sub bundle_config {
 
   eval "require $_; 1" or die for @classes; ## no critic Carp
 
-  return @classes->map(sub { [ $_ => { '=name' => "$class/$_" } ] })->flatten;
+  return @classes->map(sub { [ $_ => { plugin_name => "$class/$_" } ] })->flatten;
 }
 
 __PACKAGE__->meta->make_immutable;

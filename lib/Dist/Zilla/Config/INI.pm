@@ -1,9 +1,10 @@
 package Dist::Zilla::Config::INI;
 use Moose;
-with 'Dist::Zilla::Config';
+with qw(Dist::Zilla::Config Dist::Zilla::Role::ConfigMVP);
 # ABSTRACT: read in a dist.ini file
 
 use Dist::Zilla::Util;
+  use Config::INI::MVP::Reader;
 
 =head1 DESCRIPTION
 
@@ -21,34 +22,31 @@ like this:
 
 =cut
 
-sub default_filename { 'dist.ini' }
-
 has 'reader' => (
   is   => 'ro',
-  isa  => 'Config::INI::Reader',
+  isa  => 'Config::INI::MVP::Reader',
   init_arg => undef,
   required => 1,
-  default  => sub { Dist::Zilla::Config::INI::Reader->new },
+  default  => sub {
+    Config::INI::MVP::Reader->new({
+      assembler => $_[0]->assembler,
+    });
+  },
 );
+
+sub default_filename { 'dist.ini' }
 
 sub read_config {
   my ($self, $arg) = @_;
   my $config_file = $arg->{root}->file( $self->default_filename );
-  my $data = $self->reader->read_file($config_file);
-  $self->struct_to_config($data);
-}
+  my $x = $self->reader->read_file($config_file);
 
-BEGIN {
-  package
-    Dist::Zilla::Config::INI::Reader;
-  use base 'Config::INI::MVP::Reader';
+  warn Data::Dumper::Dumper({
+    data_rv   => $x,
+    assembler => $self->reader->assembler,
+  });
 
-  sub multivalue_args { qw(author) }
-
-  sub _expand_package {
-    my $str = Dist::Zilla::Util->expand_config_package_name($_[1]);
-    return $str;
-  }
+  $self->config_from_mvp;
 }
 
 no Moose;

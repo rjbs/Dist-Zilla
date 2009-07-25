@@ -359,12 +359,11 @@ sub from_config {
     $root,
   );
 
-  my $self = $class->new($core_config->merge({ root => $root }));
+  my $self = $class->new($core_config);
 
   for my $plugin (@$plugin_config) {
-
     my ($plugin_class, $arg) = @$plugin;
-    $self->log("initializing plugin $arg->{'=name'} ($plugin_class)");
+    $self->log("initializing plugin $arg->{plugin_name} ($plugin_class)");
     $self->plugins->push(
       $plugin_class->new( $arg->merge({ zilla => $self }) )
     );
@@ -386,6 +385,14 @@ sub _load_config {
   $self->log("reading configuration using $config_class");
 
   my ($config, $plugins) = $config_class->new->read_config({ root => $root });
+
+  use Data::Dumper;
+  warn ">> " . Dumper($config);
+  warn ">> " . Dumper($plugins);
+
+  $config = $config->merge({ root => $root });
+
+  return ($config, $plugins);
 }
 
 =method plugins_with

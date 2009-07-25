@@ -27,8 +27,8 @@ Add support for ShareDir-style C<dist_dir> files.
 
 =cut
 
-# XXX: implement share
-sub multivalue_args { qw(bin share) }
+# XXX: implement share -- rjbs, 2008-06-08
+sub mvp_multivalue_args { qw(bin share) }
 
 has mark_as_bin => (
   is   => 'ro',

@@ -14,7 +14,8 @@ use Path::Class;
 
 sub abstract { 'start a new dist' }
 
-sub multivalue_args { qw(author) }
+sub mvp_aliases         { { author => 'authors' } }
+sub mvp_multivalue_args { qw(authors) }
 
 sub validate_args {
   my ($self, $opt, $args) = @_;

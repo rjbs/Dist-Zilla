@@ -17,7 +17,7 @@ In your F<dist.ini>:
 
 =cut
 
-sub multivalue_args { qw(file) }
+sub mvp_multivalue_args { qw(file) }
 
 =attr filenames
 

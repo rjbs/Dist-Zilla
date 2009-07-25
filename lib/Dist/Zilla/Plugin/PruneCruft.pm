@@ -19,7 +19,7 @@ but for now that exclusion exclusion mechanism has been excluded.
 
 =cut
 
-# sub multivalue_args { qw(file) }
+# sub mvp_multivalue_args { qw(file) }
 
 sub exclude_file {
   my ($self, $file) = @_;

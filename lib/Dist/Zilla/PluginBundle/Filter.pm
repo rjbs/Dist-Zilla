@@ -23,7 +23,7 @@ but removes all the entries whose package is given in the C<remove> attributes.
 
 =cut
 
-sub multivalue_args { return qw(remove) }
+sub mvp_multivalue_args { qw(remove) }
 
 sub bundle_config {
   my ($self, $config) = @_;
