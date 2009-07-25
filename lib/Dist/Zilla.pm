@@ -386,10 +386,6 @@ sub _load_config {
 
   my ($config, $plugins) = $config_class->new->read_config({ root => $root });
 
-  use Data::Dumper;
-  warn ">> " . Dumper($config);
-  warn ">> " . Dumper($plugins);
-
   $config = $config->merge({ root => $root });
 
   return ($config, $plugins);
@@ -520,8 +516,9 @@ sub _check_dupe_files {
     my @dupes = grep { $files_named{$_}->length > 1 } keys %files_named;
 
   for my $name (@dupes) {
-    warn "attempt to add $name multiple times; added by: "
-       . join('; ', map { $_->added_by } @{ $files_named{ $name } }) . "\n";
+    $self->log("attempt to add $name multiple times; added by: "
+       . join('; ', map { $_->added_by } @{ $files_named{ $name } })
+    );
   }
 
   Carp::croak("aborting; duplicate files would be produced");

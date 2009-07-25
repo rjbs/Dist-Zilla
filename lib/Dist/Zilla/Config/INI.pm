@@ -41,11 +41,6 @@ sub read_config {
   my $config_file = $arg->{root}->file( $self->default_filename );
   my $x = $self->reader->read_file($config_file);
 
-  warn Data::Dumper::Dumper({
-    data_rv   => $x,
-    assembler => $self->reader->assembler,
-  });
-
   $self->config_from_mvp;
 }
 
