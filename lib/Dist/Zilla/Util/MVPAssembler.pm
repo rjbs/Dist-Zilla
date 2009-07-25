@@ -1,4 +1,4 @@
-package Dist::Zilla::Config::MVPAssembler;
+package Dist::Zilla::Util::MVPAssembler;
 use Moose;
 extends 'Config::MVP::Assembler';
 
