@@ -7,7 +7,6 @@ with qw(
 );
 # ABSTRACT: the reader for dist.ini files
 
-use Dist::Zilla::Util;
 use Config::INI::MVP::Reader;
 
 =head1 DESCRIPTION
