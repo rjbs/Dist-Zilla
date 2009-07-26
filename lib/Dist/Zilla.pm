@@ -362,10 +362,20 @@ sub from_config {
   my $self = $class->new($core_config);
 
   for my $plugin (@$plugin_config) {
-    my ($plugin_class, $arg) = @$plugin;
-    $self->log("initializing plugin $arg->{plugin_name} ($plugin_class)");
+    my ($name, $plugin_class, $arg) = @$plugin;
+    $self->log("initializing plugin $name ($plugin_class)");
+
+    confess "arguments attempted to override plugin name"
+      if defined $arg->{plugin_name};
+
+    confess "arguments attempted to override plugin name"
+      if defined $arg->{zilla};
+
     $self->plugins->push(
-      $plugin_class->new( $arg->merge({ zilla => $self }) )
+      $plugin_class->new( $arg->merge({
+        plugin_name => $name,
+        zilla       => $self,
+      }) )
     );
   }
 
@@ -377,14 +387,16 @@ sub from_config {
 sub _load_config {
   my ($self, $config_class, $root) = @_;
 
-  $config_class ||= 'Dist::Zilla::Config::INI';
+  $config_class ||= 'Dist::Zilla::Config::Finder';
   unless (eval "require $config_class; 1") {
     die "couldn't load $config_class: $@"; ## no critic Carp
   }
 
   $self->log("reading configuration using $config_class");
 
-  my ($config, $plugins) = $config_class->new->read_config({ root => $root });
+  my ($config, $plugins) = $config_class->new->read_expanded_config({
+    root => $root
+  });
 
   $config = $config->merge({ root => $root });
 
