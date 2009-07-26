@@ -43,7 +43,7 @@ sub bundle_config {
   require List::MoreUtils;
   for my $i (reverse 0 .. $#plugins) {
     splice @plugins, $i, 1 if List::MoreUtils::any(sub {
-      $plugins[$i][0] eq Dist::Zilla::Util->expand_config_package_name($_)
+      $plugins[$i][1] eq Dist::Zilla::Util->expand_config_package_name($_)
     }, @$remove);
   }
 
