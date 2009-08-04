@@ -13,11 +13,6 @@ following files:
 
 =cut
 
-override 'gather_files' => sub {
-  my ($self) = @_;
-  super();
-};
-
 __PACKAGE__->meta->make_immutable;
 no Moose;
 1;
