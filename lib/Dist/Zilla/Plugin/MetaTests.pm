@@ -18,7 +18,7 @@ no Moose;
 
 __DATA__
 ___[ xt/release/meta-yaml.t ]___
-#!perl -T
+#!perl
 
 use Test::More;
 

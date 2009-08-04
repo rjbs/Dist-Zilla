@@ -19,7 +19,7 @@ no Moose;
 
 __DATA__
 ___[ xt/release/pod-coverage.t ]___
-#!perl -T
+#!perl
 
 use Test::More;
 
@@ -34,7 +34,7 @@ plan skip_all => "Pod::Coverage::TrustPod required for testing POD coverage"
 all_pod_coverage_ok({ coverage_class => 'Pod::Coverage::TrustPod' });
 
 ___[ xt/release/pod-syntax.t ]___
-#!perl -T
+#!perl
 use Test::More;
 
 eval "use Test::Pod 1.00";
