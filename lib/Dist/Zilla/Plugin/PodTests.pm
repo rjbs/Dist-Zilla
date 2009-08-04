@@ -11,14 +11,10 @@ following files:
   xt/release/pod-coverage.t - a standard Test::Pod::Coverage test
   xt/release/pod-syntax.t   - a standard Test::Pod test
 
-This files are only gathered if the environment variable C<RELEASE_TESTING> is
-true, which is the case when running C<dzil test>.
-
 =cut
 
 override 'gather_files' => sub {
   my ($self) = @_;
-  return unless $ENV{RELEASE_TESTING};
   super();
 };
 
