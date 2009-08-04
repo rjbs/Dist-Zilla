@@ -1,0 +1,23 @@
+# dzil(1) completion
+#
+
+_dzil_actions()
+{
+   COMPREPLY=( $( compgen -W 'build clean install new release smoke test help' \
+        -- $cur ) )
+}
+
+_dzil()
+{
+    local cur
+
+    COMPREPLY=()
+    cur=${COMP_WORDS[COMP_CWORD]}
+
+    if [[ $COMP_CWORD -eq 1 ]] ; then
+        _dzil_actions
+    else
+        return 0
+    fi
+}
+complete -F _dzil dzil 
