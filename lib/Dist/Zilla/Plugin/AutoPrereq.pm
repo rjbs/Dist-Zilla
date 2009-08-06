@@ -111,7 +111,7 @@ sub _prereqs_in_file {
 
     # add moose specifics
     my @roles =
-        map { /^(?:with)\s+['"]([\w:]+)['"]/ ? ($1) : () }
+        map { /^(?:with|extends)\s+['"]([\w:]+)['"]/ ? ($1) : () }
         @lines;
     @prereqs{ @roles } = (0) x @roles;
 
@@ -167,6 +167,9 @@ following prereqs:
 
 =item * plain lines beginning with C<use> or C<require> in your perl
 modules and scripts.
+
+=item * L<Moose> inheritance declared with the C<extends> keyword
+(warning: only the first one is currently extracted).
 
 =item * L<Moose> roles included with the C<with> keyword.
 

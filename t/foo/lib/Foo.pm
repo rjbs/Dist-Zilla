@@ -2,6 +2,7 @@ package Foo;
 use 5.008;
 use DZPA::Foo 0.50; # comment
 with 'DZPA::Role';
+extends 'DZPA::Base';
 use DZPA::Skip::Blah;
 require DZPA::Bar;
 __END__

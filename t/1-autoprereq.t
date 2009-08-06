@@ -22,6 +22,7 @@ close $fh;
 
 my %wanted = (
     'DZPA::Bar'   => 0,
+    'DZPA::Base'  => 0,
     'DZPA::Foo'   => '0.50',
     'DZPA::Fubar' => 0,
     'DZPA::Role'  => 0,
