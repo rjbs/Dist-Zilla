@@ -1,5 +1,10 @@
 Revision history for Dist::Zilla::Plugin::AutoPrereq
 
+0.3.0 Thu Aug  6 14:41:05 2009
+ - extracting moose extends (only the first one by now)
+
+**
+
 0.2.0 Fri Jul 24 14:18:54 2009
  - allowing skip list for found prereqs
  - extracting moose roles
