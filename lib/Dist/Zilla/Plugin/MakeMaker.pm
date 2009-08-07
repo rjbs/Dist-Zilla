@@ -15,6 +15,16 @@ plugin should also be loaded.
 
 use Dist::Zilla::File::InMemory;
 
+use File::Find;
+
+my %test_dir = ('t');
+sub _wanted_t {
+	/\.t$/ and -f $_ and $test_dir{$File::Find::dir} = 1;
+}
+File::Find::find( \&_wanted_t, 't' );
+my $test_dirs =  join ' ', map { "$_/*.t" } sort keys %test_dir;
+
+
 my $template = q|
 use strict;
 use warnings;
@@ -37,7 +47,9 @@ WriteMakefile(
       return '';
 }}
   },
+  test => {TESTS => '| . $test_dirs . q|'}
 );
+
 |;
 
 sub setup_installer {
