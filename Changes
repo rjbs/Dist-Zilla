@@ -1,5 +1,8 @@
 Revision history for {{$dist->name}}
 
+1.092200  2009-08-07
+          include ./xt files in shipped dist
+
 1.092070  2009-07-27
           *** MIGHT VERY WELL BREAK YOUR BUNDLES ***
           major revamp of configuration subsystem, including pluggable config
