@@ -1,5 +1,8 @@
 Revision history for {{$dist->name}}
 
+...
+          documentation for the 'dzil' commands (Kent Fredric)
+
 1.092200  2009-08-07
           include ./xt files in shipped dist
 
