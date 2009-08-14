@@ -1,4 +1,5 @@
 package Dist::Zilla::Plugin::MakeMaker;
+
 # ABSTRACT: build a Makefile.PL that uses ExtUtils::MakeMaker
 use Moose;
 use Moose::Autobox;
@@ -14,16 +15,6 @@ plugin should also be loaded.
 =cut
 
 use Dist::Zilla::File::InMemory;
-
-use File::Find;
-
-my %test_dir = ('t');
-sub _wanted_t {
-	/\.t$/ and -f $_ and $test_dir{$File::Find::dir} = 1;
-}
-File::Find::find( \&_wanted_t, 't' );
-my $test_dirs =  join ' ', map { "$_/*.t" } sort keys %test_dir;
-
 
 my $template = q|
 use strict;
@@ -47,38 +38,43 @@ WriteMakefile(
       return '';
 }}
   },
-  test => {TESTS => '| . $test_dirs . q|'}
+  test => {TESTS => '{{ $test_dirs }}'}
 );
 
 |;
 
 sub setup_installer {
-  my ($self, $arg) = @_;
+    my ( $self, $arg ) = @_;
 
-  (my $name = $self->zilla->name) =~ s/-/::/g;
+    ( my $name = $self->zilla->name ) =~ s/-/::/g;
 
-  my $exe_files = $self->zilla->files
-                ->grep(sub { ($_->install_type||'') eq 'bin' })
-                ->map(sub { $_->name })
-                ->join(' ');
+    my $exe_files =
+      $self->zilla->files->grep( sub { ( $_->install_type || '' ) eq 'bin' } )
+      ->map( sub { $_->name } )->join(' ');
 
-  my $content = $self->fill_in_string(
-    $template,
-    {
-      module_name => $name,
-      dist        => \$self->zilla,
-      exe_files   => \$exe_files,
-      author_str  => \quotemeta($self->zilla->authors->join(q{, })),
-    },
-  );
+    my %test_dirs;
+    $self->zilla->files->grep( sub { $_->name =~ /\.t$/ && $_->name =~ /^(.*\/).*?$/ && ($test_dirs{$1}++) } );
+    
+    my $content = $self->fill_in_string(
+        $template,
+        {
+            module_name => $name,
+            dist        => \$self->zilla,
+            exe_files   => \$exe_files,
+            author_str  => \quotemeta( $self->zilla->authors->join(q{, }) ),
+            test_dirs   => join (' ', sort keys %test_dirs),
+        },
+    );
 
-  my $file = Dist::Zilla::File::InMemory->new({
-    name    => 'Makefile.PL',
-    content => $content,
-  });
+    my $file = Dist::Zilla::File::InMemory->new(
+        {
+            name    => 'Makefile.PL',
+            content => $content,
+        }
+    );
 
-  $self->add_file($file);
-  return;
+    $self->add_file($file);
+    return;
 }
 
 __PACKAGE__->meta->make_immutable;
