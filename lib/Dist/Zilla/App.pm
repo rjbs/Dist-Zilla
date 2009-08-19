@@ -20,15 +20,14 @@ sub config {
   return {} unless -e $file;
 
   if (-d $file) {
-    $file = dir($homedir)->subdir('.dzil')->file('config');
     return Dist::Zilla::Config::Finder->new->read_expanded_config({
-      root     => $file,
+      root     =>  dir($homedir)->subdir('.dzil'),
       basename => 'config',
     });
   } else {
-    $file = dir($homedir)->subdir('.dzil')->file('config');
     return Dist::Zilla::Config::Finder->new->read_expanded_config({
-      filename => "$file",
+      root     => dir($homedir),
+      filename => '.dzil',
     });
   }
 }
@@ -36,10 +35,10 @@ sub config {
 sub config_for {
   my ($self, $plugin_class) = @_;
 
-  return {} unless $self->config->{plugins};
+  return {} unless $self->config;
 
-  for my $plugin ($self->config->{plugins}->flatten) {
-    return $plugin->[1] if $plugin->[0] eq $plugin_class;
+  for my $plugin ($self->config->flatten) {
+    return $plugin->[2] if $plugin->[1] eq $plugin_class;
   }
 
   return {};

@@ -16,17 +16,20 @@ sub filename_from_args {
   my ($self, $arg) = @_;
 
   # XXX: maybe we should detect conflicting cases -- rjbs, 2009-08-18
-  return $arg->{filename} if $arg->{filename};
-  
-  my $basename = $arg->{basename};
-  confess "no filename or basename supplied"
-    unless defined $arg->{basename} and length $arg->{basename};
+  my $filename;
+  if ($arg->{filename}) {
+    $filename = $arg->{filename}
+  } else {
+    my $basename = $arg->{basename};
+    confess "no filename or basename supplied"
+      unless defined $arg->{basename} and length $arg->{basename};
 
-  my $extension = $self->default_extension;
-  my $filename = $basename;
-  $filename .= ".$extension" if defined $extension;
+    my $extension = $self->default_extension;
+    $filename = $basename;
+    $filename .= ".$extension" if defined $extension;
+  }
 
-  return $filename;
+  return $arg->{root}->file($filename);
 }
 
 no Moose::Role;
