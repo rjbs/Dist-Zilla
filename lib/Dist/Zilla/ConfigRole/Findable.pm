@@ -8,7 +8,7 @@ requires 'default_extension';
 sub can_be_found {
   my ($self, $arg) = @_;
 
-  my $config_file = $arg->{root}->file( $self->filename_from_args($arg) );
+  my $config_file = $self->filename_from_args($arg);
   return -r "$config_file" and -f _;
 }
 

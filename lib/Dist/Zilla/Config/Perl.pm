@@ -19,7 +19,7 @@ sub default_extension { 'pl' }
 
 sub read_config {
   my ($self, $arg) = @_;
-  my $config_file = $arg->{root}->file( $self->filename_from_args($arg) );
+  my $config_file = $self->filename_from_args($arg);
 
   my $asm = $self->assembler;
 
