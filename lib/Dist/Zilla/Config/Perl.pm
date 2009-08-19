@@ -15,21 +15,11 @@ set up in L<Dist::Zilla::Role::ConfigMVP>.
 
 =cut
 
-# Clearly this should be an attribute with a builder blah blah blah. -- rjbs,
-# 2009-07-25
-sub default_filename { 'dist.pl' }
-sub filename         { $_[0]->default_filename }
-
-sub can_be_found {
-  my ($self, $arg) = @_;
-
-  my $config_file = $arg->{root}->file( $self->filename );
-  return -r "$config_file" and -f _;
-}
+sub default_extension { 'pl' }
 
 sub read_config {
   my ($self, $arg) = @_;
-  my $config_file = $arg->{root}->file( $self->filename );
+  my $config_file = $arg->{root}->file( $self->filename_from_args($arg) );
 
   my $asm = $self->assembler;
 

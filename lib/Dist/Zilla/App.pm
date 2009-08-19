@@ -5,7 +5,7 @@ package Dist::Zilla::App;
 use App::Cmd::Setup -app;
 
 use Carp ();
-use Dist::Zilla::Config::INI;
+use Dist::Zilla::Config::Findable;
 use File::HomeDir ();
 use Moose::Autobox;
 use Path::Class;
@@ -17,14 +17,20 @@ sub config {
     or Carp::croak("couldn't determine home directory");
 
   my $file = dir($homedir)->file('.dzil');
+  return {} unless -e $file;
 
   if (-d $file) {
     $file = dir($homedir)->subdir('.dzil')->file('config');
+    return Dist::Zilla::Config::Findable->new->read_expanded_config({
+      root     => $file,
+      basename => 'config',
+    });
+  } else {
+    $file = dir($homedir)->subdir('.dzil')->file('config');
+    return Dist::Zilla::Config::Findable->new->read_expanded_config({
+      filename => "$file",
+    });
   }
-
-  return {} unless -f $file;
-
-  Dist::Zilla::Config::INI->new->read_file($file);
 }
 
 sub config_for {

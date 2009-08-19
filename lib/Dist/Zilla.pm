@@ -418,7 +418,8 @@ sub _load_config {
   $self->log("reading configuration using $config_class");
 
   my ($config, $plugins) = $config_class->new->read_expanded_config({
-    root => $root
+    root     => $root,
+    basename => 'dist',
   });
 
   $config = $config->merge({ root => $root });
