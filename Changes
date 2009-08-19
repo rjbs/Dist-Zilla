@@ -1,7 +1,8 @@
 Revision history for {{$dist->name}}
 
-...
+1.092310  2009-08-18
           documentation for the 'dzil' commands (Kent Fredric)
+          restore the workingness of ~/.dzil and ~/.dzil/config
 
 1.092200  2009-08-07
           include ./xt files in shipped dist
