@@ -28,7 +28,7 @@ sub read_config {
   my $ini = Config::INI::MVP::Reader->new({ assembler => $self->assembler });
   $ini->read_file($config_file);
 
-  return $self->config_struct;
+  return $self->assembler->sequence;
 }
 
 no Moose;

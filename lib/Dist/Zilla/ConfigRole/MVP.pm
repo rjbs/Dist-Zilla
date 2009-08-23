@@ -39,21 +39,5 @@ has assembler => (
   }
 );
 
-sub config_struct {
-  my ($self) = @_;
-
-  my @sections = $self->assembler->sequence->sections;
-
-  my $root_config = (shift @sections)->payload;
-
-  my @plugins;
-  for my $section (@sections) {
-    my $config = { %{ $section->payload } };
-    push @plugins, [ $section->name => $section->package => $config ];
-  }
-
-  return ($root_config, \@plugins);
-}
-
 no Moose::Role;
 1;

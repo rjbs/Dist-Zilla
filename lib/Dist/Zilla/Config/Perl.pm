@@ -47,7 +47,7 @@ sub read_config {
     }
   }
 
-  return $self->config_struct;
+  return $self->assembler->sequence;
 }
 
 no Moose;
