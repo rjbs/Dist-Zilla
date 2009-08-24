@@ -377,15 +377,24 @@ sub from_config {
 
   my $root = Path::Class::dir($arg->{dist_root} || '.');
 
-  my ($core_config, $plugin_config) = $class->_load_config(
+  my ($seq) = $class->_load_config(
     $arg->{config_class},
     $root,
   );
 
+  my $core_config = $seq->section_named('_')->payload;
+
   my $self = $class->new($core_config);
 
-  for my $plugin (@$plugin_config) {
-    my ($name, $plugin_class, $arg) = @$plugin;
+  for my $section ($seq->sections) {
+    next if $section->name eq '_';
+
+    my ($name, $plugin_class, $arg) = (
+      $section->name,
+      $section->package,
+      $section->payload,
+    );
+
     $self->log("initializing plugin $name ($plugin_class)");
 
     confess "arguments attempted to override plugin name"
@@ -417,14 +426,16 @@ sub _load_config {
 
   $self->log("reading configuration using $config_class");
 
-  my ($config, $plugins) = $config_class->new->read_expanded_config({
+  my ($sequence) = $config_class->new->read_config({
     root     => $root,
     basename => 'dist',
   });
 
-  $config = $config->merge({ root => $root });
+  # I wonder if the root should be named '' or something, but that's probably
+  # sort of a ridiculous thing to worry about. -- rjbs, 2009-08-24
+  $sequence->section_named('_')->add_value(root => $root);
 
-  return ($config, $plugins);
+  return $sequence;
 }
 
 =method plugins_with

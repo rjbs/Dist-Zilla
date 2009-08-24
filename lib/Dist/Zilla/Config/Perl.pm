@@ -3,7 +3,6 @@ use Moose;
 with qw(
   Dist::Zilla::Config
   Dist::Zilla::ConfigRole::Findable
-  Dist::Zilla::ConfigRole::MVP
 );
 # ABSTRACT: the reader for dist.pl files
 
@@ -11,7 +10,7 @@ with qw(
 
 Dist::Zilla::Config reads in the F<dist.pl> file for a distribution.  It uses
 L<Config::MVP::Assembler> to do most of the heavy lifting, using the helpers
-set up in L<Dist::Zilla::Role::ConfigMVP>.
+set up in L<Dist::Zilla::Config>.
 
 =cut
 
@@ -47,7 +46,10 @@ sub read_config {
     }
   }
 
-  return $self->config_struct;
+  # should be done ... elsewhere? -- rjbs, 2009-08-24
+  $self->assembler->end_section if $self->assembler->current_section;
+
+  return $self->assembler->sequence;
 }
 
 no Moose;
