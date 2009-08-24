@@ -1,5 +1,9 @@
 Revision history for {{$dist->name}}
 
+1.092360  2009-08-24
+          all config readers must now produce MVP sequences
+          the AutoVersion plugin now allows you to specify a time zone
+
 1.092310  2009-08-18
           documentation for the 'dzil' commands (Kent Fredric)
           restore the workingness of ~/.dzil and ~/.dzil/config
