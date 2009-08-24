@@ -19,7 +19,7 @@ after end_section => sub {
 
   $seq->delete_section($last->name);
 
-  my @bundle_config, $last->package->bundle_config({
+  my @bundle_config = $last->package->bundle_config({
     plugin_name => $last->name,
     %{ $last->payload },
   });

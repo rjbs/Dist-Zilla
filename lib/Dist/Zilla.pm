@@ -431,7 +431,9 @@ sub _load_config {
     basename => 'dist',
   });
 
-  $sequence->section_named('_')->payload->{root} = $root;
+  # I wonder if the root should be named '' or something, but that's probably
+  # sort of a ridiculous thing to worry about. -- rjbs, 2009-08-24
+  $sequence->section_named('_')->add_value(root => $root);
 
   return $sequence;
 }
