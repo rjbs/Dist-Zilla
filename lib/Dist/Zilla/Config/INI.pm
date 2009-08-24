@@ -3,7 +3,6 @@ use Moose;
 with qw(
   Dist::Zilla::Config
   Dist::Zilla::ConfigRole::Findable
-  Dist::Zilla::ConfigRole::MVP
 );
 # ABSTRACT: the reader for dist.ini files
 
@@ -13,7 +12,7 @@ use Config::INI::MVP::Reader;
 
 Dist::Zilla::Config reads in the F<dist.ini> file for a distribution.  It uses
 L<Config::INI::MVP::Reader> to do most of the heavy lifting, using the helpers
-set up in L<Dist::Zilla::Role::ConfigMVP>.
+set up in L<Dist::Zilla::Config>.
 
 =cut
 
