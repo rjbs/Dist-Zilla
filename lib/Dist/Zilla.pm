@@ -426,7 +426,7 @@ sub _load_config {
 
   $self->log("reading configuration using $config_class");
 
-  my ($sequence) = $config_class->new->read_expanded_config({
+  my ($sequence) = $config_class->new->read_config({
     root     => $root,
     basename => 'dist',
   });

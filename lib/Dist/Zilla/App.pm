@@ -20,12 +20,12 @@ sub config {
   return {} unless -e $file;
 
   if (-d $file) {
-    return Dist::Zilla::Config::Finder->new->read_expanded_config({
+    return Dist::Zilla::Config::Finder->new->read_config({
       root     =>  dir($homedir)->subdir('.dzil'),
       basename => 'config',
     });
   } else {
-    return Dist::Zilla::Config::Finder->new->read_expanded_config({
+    return Dist::Zilla::Config::Finder->new->read_config({
       root     => dir($homedir),
       filename => '.dzil',
     });

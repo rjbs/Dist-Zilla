@@ -46,6 +46,9 @@ sub read_config {
     }
   }
 
+  # should be done ... elsewhere? -- rjbs, 2009-08-24
+  $self->assembler->end_section if $self->assembler->current_section;
+
   return $self->assembler->sequence;
 }
 

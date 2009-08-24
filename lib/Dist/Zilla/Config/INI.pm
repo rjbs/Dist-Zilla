@@ -27,6 +27,9 @@ sub read_config {
   my $ini = Config::INI::MVP::Reader->new({ assembler => $self->assembler });
   $ini->read_file($config_file);
 
+  # should be done in CIMR!! -- rjbs, 2009-08-24
+  $self->assembler->end_section if $self->assembler->current_section;
+
   return $self->assembler->sequence;
 }
 
