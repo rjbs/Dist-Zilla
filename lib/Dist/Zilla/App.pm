@@ -37,11 +37,12 @@ sub config_for {
 
   return {} unless $self->config;
 
-  for my $plugin ($self->config->flatten) {
-    return $plugin->[2] if $plugin->[1] eq $plugin_class;
-  }
+  my ($section) = grep { ($_->package||'') eq $plugin_class }
+                  $self->config->sections;
 
-  return {};
+  return {} unless $section;
+
+  return $section->payload;
 }
 
 1;
