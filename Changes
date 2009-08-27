@@ -1,5 +1,8 @@
 Revision history for {{$dist->name}}
 
+1.092390  2009-08-27
+          do not break on config sections for non-moosey (app) plugins
+
 1.092360  2009-08-24
           all config readers must now produce MVP sequences
           the AutoVersion plugin now allows you to specify a time zone
