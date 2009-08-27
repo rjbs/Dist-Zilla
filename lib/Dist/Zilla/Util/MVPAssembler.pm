@@ -15,7 +15,13 @@ after end_section => sub {
 
   my ($last) = ($seq->sections)[-1];
   return unless $last->package;
-  return unless $last->package->does('Dist::Zilla::Role::PluginBundle');
+
+  {
+    local $@;
+    return unless eval {
+      $last->package->does('Dist::Zilla::Role::PluginBundle');
+    };
+  }
 
   $seq->delete_section($last->name);
 
