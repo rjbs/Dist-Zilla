@@ -39,7 +39,7 @@ If not specified, calls
 =cut
 
 
-sub run {
+sub execute {
   my ($self, $opt, $arg) = @_;
 
   require File::chdir;

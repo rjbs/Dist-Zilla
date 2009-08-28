@@ -25,7 +25,7 @@ ie:
 
 sub abstract { 'clean up after build, test, or install' }
 
-sub run {
+sub execute {
   my ($self, $opt, $arg) = @_;
 
   require File::Path;

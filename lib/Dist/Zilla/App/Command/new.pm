@@ -130,7 +130,8 @@ This is loaded from your L<configuration/CONFIGURATION>, or attempted to be dete
 This is loaded from your L<configuration/CONFIGURATION>, or set to "Perl_5" if not configured.
 
 =cut
-sub run {
+
+sub execute {
   my ($self, $opt, $arg) = @_;
 
   my $dist = $self->get_extra('dist');

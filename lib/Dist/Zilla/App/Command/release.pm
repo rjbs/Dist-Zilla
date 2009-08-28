@@ -12,13 +12,14 @@ Use ReleasePlugin(s) to release your distribution in many ways.
 
     dzil release
 
-Put some plugins in your F<dist.ini> that perform L<Dist::Zilla::Role::Releaser>, such as L<Dist::Zilla::Plugin::UploadToCPAN>
+Put some plugins in your F<dist.ini> that perform
+L<Dist::Zilla::Role::Releaser>, such as L<Dist::Zilla::Plugin::UploadToCPAN>
 
 =cut
 
 sub abstract { 'release your dist' }
 
-sub run {
+sub execute {
   my ($self, $opt, $arg) = @_;
 
   Carp::croak("you can't release without any Releaser plugins")
