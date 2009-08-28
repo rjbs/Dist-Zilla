@@ -1,5 +1,9 @@
 Revision history for {{$dist->name}}
 
+1.092400  2009-08-28
+          require App::Cmd 0.300 (currently in dev)
+          fix prereq for Config::MVP
+
 1.092390  2009-08-27
           do not break on config sections for non-moosey (app) plugins
 
