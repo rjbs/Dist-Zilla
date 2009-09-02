@@ -1,5 +1,8 @@
 Revision history for {{$dist->name}}
 
+1.092450  2009-09-02
+          fix a bug in config loading for 'dzil' command (melo)
+
 1.092400  2009-08-28
           require App::Cmd 0.300 (currently in dev)
           fix prereq for Config::MVP
