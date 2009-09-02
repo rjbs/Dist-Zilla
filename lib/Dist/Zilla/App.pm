@@ -9,6 +9,7 @@ use Dist::Zilla::Config::Finder;
 use File::HomeDir ();
 use Moose::Autobox;
 use Path::Class;
+use Scalar::Util qw( blessed );
 
 sub config {
   my ($self) = @_;
@@ -35,7 +36,7 @@ sub config {
 sub config_for {
   my ($self, $plugin_class) = @_;
 
-  return {} unless $self->config;
+  return {} unless blessed($self->config);
 
   my ($section) = grep { ($_->package||'') eq $plugin_class }
                   $self->config->sections;
