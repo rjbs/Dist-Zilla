@@ -9,7 +9,6 @@ use Dist::Zilla::Config::Finder;
 use File::HomeDir ();
 use Moose::Autobox;
 use Path::Class;
-use Scalar::Util qw( blessed );
 
 sub config {
   my ($self) = @_;
@@ -18,7 +17,7 @@ sub config {
     or Carp::croak("couldn't determine home directory");
 
   my $file = dir($homedir)->file('.dzil');
-  return {} unless -e $file;
+  return unless -e $file;
 
   if (-d $file) {
     return Dist::Zilla::Config::Finder->new->read_config({
@@ -36,7 +35,7 @@ sub config {
 sub config_for {
   my ($self, $plugin_class) = @_;
 
-  return {} unless blessed($self->config);
+  return {} unless $self->config;
 
   my ($section) = grep { ($_->package||'') eq $plugin_class }
                   $self->config->sections;
