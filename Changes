@@ -1,5 +1,10 @@
 Revision history for {{$dist->name}}
 
+{{$NEXT}}
+          Split Test into plugins and have a pluggable test system.
+            Existing dists will likely want to add [MakeMaker::Test]
+            do their dist.ini. ( Kent Fredric )
+
 1.093000  2009-10-26
           require a newer Moose to avoid a few composition errors in older
           Moose versions
@@ -26,7 +31,7 @@ Revision history for {{$dist->name}}
           recognize more kinds of version declaration (Nicholas Perez)
           fix documentation refering to ~/.dzil/config,
             now in ~/.dzil/config.ini ( Kent Fredric )
-          
+
 1.092450  2009-09-02
           fix a bug in config loading for 'dzil' command (melo)
 
