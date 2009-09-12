@@ -169,7 +169,7 @@ sub execute {
 
 =head1 CONFIGURATION
 
-In C<~/.dzil> or C<~/.dzil/config>
+In C<~/.dzil> or C<~/.dzil/config.ini>
 
     [=Dist::Zilla::App::Command::new]
     author = authorname  # used for copyright owner

@@ -1,5 +1,9 @@
 Revision history for {{$dist->name}}
 
+...
+          fix documentation refering to ~/.dzil/config,
+            now in ~/.dzil/config.ini ( Kent Fredric )
+          
 1.092450  2009-09-02
           fix a bug in config loading for 'dzil' command (melo)
 
