@@ -122,26 +122,49 @@ This is the module where Dist::Zilla might look for various defaults, like
 the distribution abstract.  By default, it's the shorted-named module in the
 distribution.  This is likely to change!
 
+You can override the default found one by specifying the file path explicitly,
+ie:
+    main_module = lib/Foo/Bar.pm
+
 =cut
+
+has main_module_override => (
+  isa => 'Str',
+  is  => 'ro' ,
+  init_arg => 'main_module',
+  predicate => 'has_main_module_override',
+);
 
 has main_module => (
   is   => 'ro',
   isa  => 'Dist::Zilla::Role::File',
   lazy => 1,
+  init_arg => undef,
   required => 1,
   default  => sub {
+
     my ($self) = @_;
 
-    my $file = $self->files
+    my $file;
+
+    if ( $self->has_main_module_override ) {
+
+       $file = $self->files->grep(sub{ $_->name eq $self->main_module_override })->head;
+
+    } else {
+
+       $file = $self->files
              ->grep(sub { $_->name =~ m{\.pm\z} and $_->name =~ m{\Alib/} })
              ->sort(sub { length $_[0]->name <=> length $_[1]->name })
              ->head;
+    }
 
     $self->log("guessing dist's main_module is " . $file->name);
 
     return $file;
   },
 );
+
 
 =attr copyright_holder
 
@@ -354,15 +377,24 @@ sub from_config {
 
   my $root = Path::Class::dir($arg->{dist_root} || '.');
 
-  my ($core_config, $plugin_config) = $class->_load_config(
+  my ($seq) = $class->_load_config(
     $arg->{config_class},
     $root,
   );
 
+  my $core_config = $seq->section_named('_')->payload;
+
   my $self = $class->new($core_config);
 
-  for my $plugin (@$plugin_config) {
-    my ($name, $plugin_class, $arg) = @$plugin;
+  for my $section ($seq->sections) {
+    next if $section->name eq '_';
+
+    my ($name, $plugin_class, $arg) = (
+      $section->name,
+      $section->package,
+      $section->payload,
+    );
+
     $self->log("initializing plugin $name ($plugin_class)");
 
     confess "arguments attempted to override plugin name"
@@ -394,13 +426,16 @@ sub _load_config {
 
   $self->log("reading configuration using $config_class");
 
-  my ($config, $plugins) = $config_class->new->read_expanded_config({
-    root => $root
+  my ($sequence) = $config_class->new->read_config({
+    root     => $root,
+    basename => 'dist',
   });
 
-  $config = $config->merge({ root => $root });
+  # I wonder if the root should be named '' or something, but that's probably
+  # sort of a ridiculous thing to worry about. -- rjbs, 2009-08-24
+  $sequence->section_named('_')->add_value(root => $root);
 
-  return ($config, $plugins);
+  return $sequence;
 }
 
 =method plugins_with

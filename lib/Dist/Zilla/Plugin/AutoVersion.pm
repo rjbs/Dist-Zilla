@@ -45,6 +45,13 @@ The default value is:
 
 =cut
 
+has time_zone => (
+  is       => 'ro',
+  isa      => 'Str',
+  required => 1,
+  default  => 'GMT',
+);
+
 has format => (
   is       => 'ro',
   isa      => 'Str',
@@ -55,7 +62,7 @@ has format => (
 sub provide_version {
   my ($self) = @_;
 
-  my $now = DateTime->now(time_zone => 'GMT');
+  my $now = DateTime->now(time_zone => $self->time_zone);
 
   my $version = $self->fill_in_string(
     $self->format,

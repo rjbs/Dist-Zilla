@@ -5,7 +5,7 @@ package Dist::Zilla::App;
 use App::Cmd::Setup -app;
 
 use Carp ();
-use Dist::Zilla::Config::INI;
+use Dist::Zilla::Config::Finder;
 use File::HomeDir ();
 use Moose::Autobox;
 use Path::Class;
@@ -17,26 +17,32 @@ sub config {
     or Carp::croak("couldn't determine home directory");
 
   my $file = dir($homedir)->file('.dzil');
+  return unless -e $file;
 
   if (-d $file) {
-    $file = dir($homedir)->subdir('.dzil')->file('config');
+    return Dist::Zilla::Config::Finder->new->read_config({
+      root     =>  dir($homedir)->subdir('.dzil'),
+      basename => 'config',
+    });
+  } else {
+    return Dist::Zilla::Config::Finder->new->read_config({
+      root     => dir($homedir),
+      filename => '.dzil',
+    });
   }
-
-  return {} unless -f $file;
-
-  Dist::Zilla::Config::INI->new->read_file($file);
 }
 
 sub config_for {
   my ($self, $plugin_class) = @_;
 
-  return {} unless $self->config->{plugins};
+  return {} unless $self->config;
 
-  for my $plugin ($self->config->{plugins}->flatten) {
-    return $plugin->[1] if $plugin->[0] eq $plugin_class;
-  }
+  my ($section) = grep { ($_->package||'') eq $plugin_class }
+                  $self->config->sections;
 
-  return {};
+  return {} unless $section;
+
+  return $section->payload;
 }
 
 1;

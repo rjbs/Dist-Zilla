@@ -9,7 +9,7 @@ If loaded, this plugin will allow the F<release> command to upload to the CPAN.
 
 =head1 DESCRIPTION
 
-This plugin requires configuration in your C<dist.ini> or C<~/.dzil/config>:
+This plugin requires configuration in your C<dist.ini> or C<~/.dzil/config.ini>:
 
   [=Dist::Zilla::App::Command::release]
   user     = YOUR-PAUSE-ID

@@ -3,7 +3,6 @@ use Moose;
 with qw(
   Dist::Zilla::Config
   Dist::Zilla::ConfigRole::Findable
-  Dist::Zilla::ConfigRole::MVP
 );
 # ABSTRACT: the reader for dist.ini files
 
@@ -13,30 +12,25 @@ use Config::INI::MVP::Reader;
 
 Dist::Zilla::Config reads in the F<dist.ini> file for a distribution.  It uses
 L<Config::INI::MVP::Reader> to do most of the heavy lifting, using the helpers
-set up in L<Dist::Zilla::Role::ConfigMVP>.
+set up in L<Dist::Zilla::Config>.
 
 =cut
 
 # Clearly this should be an attribute with a builder blah blah blah. -- rjbs,
 # 2009-07-25
-sub default_filename { 'dist.ini' }
-sub filename         { $_[0]->default_filename }
-
-sub can_be_found {
-  my ($self, $arg) = @_;
-
-  my $config_file = $arg->{root}->file( $self->filename );
-  return -r "$config_file" and -f _;
-}
+sub default_extension { 'ini' }
 
 sub read_config {
   my ($self, $arg) = @_;
-  my $config_file = $arg->{root}->file( $self->filename );
+  my $config_file = $self->filename_from_args($arg);
 
   my $ini = Config::INI::MVP::Reader->new({ assembler => $self->assembler });
   $ini->read_file($config_file);
 
-  return $self->config_struct;
+  # should be done in CIMR!! -- rjbs, 2009-08-24
+  $self->assembler->end_section if $self->assembler->current_section;
+
+  return $self->assembler->sequence;
 }
 
 no Moose;
