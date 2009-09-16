@@ -56,22 +56,20 @@ sub setup_installer {
   $self->zilla->files->grep( sub { $_->name =~ /\.t$/ && $_->name =~ /^(.*\/).*?$/ && ($test_dirs{$1 . '*.t'}++) } );
   
   my $content = $self->fill_in_string(
-      $template,
-      {
-          module_name => $name,
-          dist        => \$self->zilla,
-          exe_files   => \$exe_files,
-          author_str  => \quotemeta( $self->zilla->authors->join(q{, }) ),
-          test_dirs   => join (' ', sort keys %test_dirs),
-      },
+    $template,
+    {
+      module_name => $name,
+      dist        => \$self->zilla,
+      exe_files   => \$exe_files,
+      author_str  => \quotemeta( $self->zilla->authors->join(q{, }) ),
+      test_dirs   => join (' ', sort keys %test_dirs),
+    },
   );
 
-  my $file = Dist::Zilla::File::InMemory->new(
-      {
-          name    => 'Makefile.PL',
-          content => $content,
-      }
-  );
+  my $file = Dist::Zilla::File::InMemory->new({
+    name    => 'Makefile.PL',
+    content => $content,
+  });
 
   $self->add_file($file);
   return;
