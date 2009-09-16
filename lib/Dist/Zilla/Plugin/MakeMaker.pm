@@ -44,16 +44,21 @@ WriteMakefile(
 |;
 
 sub setup_installer {
-  my ( $self, $arg ) = @_;
+  my ($self, $arg) = @_;
 
-  ( my $name = $self->zilla->name ) =~ s/-/::/g;
+  (my $name = $self->zilla->name) =~ s/-/::/g;
 
-  my $exe_files =
-    $self->zilla->files->grep( sub { ( $_->install_type || '' ) eq 'bin' } )
-    ->map( sub { $_->name } )->join(' ');
+  my $exe_files = $self->zilla->files
+    ->grep( sub { ( $_->install_type || '' ) eq 'bin' } )
+    ->map(  sub { $_->name } )
+    ->join(q{ });
 
   my %test_dirs;
-  $self->zilla->files->grep( sub { $_->name =~ /\.t$/ && $_->name =~ /^(.*\/).*?$/ && ($test_dirs{$1 . '*.t'}++) } );
+  $self->zilla->files->grep( sub {
+    $_->name =~ /\.t$/
+    && $_->name =~ /^(.*\/).*?$/
+    && ($test_dirs{$1 . '*.t'}++)
+  });
   
   my $content = $self->fill_in_string(
     $template,
@@ -62,7 +67,7 @@ sub setup_installer {
       dist        => \$self->zilla,
       exe_files   => \$exe_files,
       author_str  => \quotemeta( $self->zilla->authors->join(q{, }) ),
-      test_dirs   => join (' ', sort keys %test_dirs),
+      test_dirs   => join (q{ }, sort keys %test_dirs),
     },
   );
 
