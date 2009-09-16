@@ -44,37 +44,37 @@ WriteMakefile(
 |;
 
 sub setup_installer {
-    my ( $self, $arg ) = @_;
+  my ( $self, $arg ) = @_;
 
-    ( my $name = $self->zilla->name ) =~ s/-/::/g;
+  ( my $name = $self->zilla->name ) =~ s/-/::/g;
 
-    my $exe_files =
-      $self->zilla->files->grep( sub { ( $_->install_type || '' ) eq 'bin' } )
-      ->map( sub { $_->name } )->join(' ');
+  my $exe_files =
+    $self->zilla->files->grep( sub { ( $_->install_type || '' ) eq 'bin' } )
+    ->map( sub { $_->name } )->join(' ');
 
-    my %test_dirs;
-    $self->zilla->files->grep( sub { $_->name =~ /\.t$/ && $_->name =~ /^(.*\/).*?$/ && ($test_dirs{$1}++) } );
-    
-    my $content = $self->fill_in_string(
-        $template,
-        {
-            module_name => $name,
-            dist        => \$self->zilla,
-            exe_files   => \$exe_files,
-            author_str  => \quotemeta( $self->zilla->authors->join(q{, }) ),
-            test_dirs   => join (' ', sort keys %test_dirs),
-        },
-    );
+  my %test_dirs;
+  $self->zilla->files->grep( sub { $_->name =~ /\.t$/ && $_->name =~ /^(.*\/).*?$/ && ($test_dirs{$1 . '*.t'}++) } );
+  
+  my $content = $self->fill_in_string(
+      $template,
+      {
+          module_name => $name,
+          dist        => \$self->zilla,
+          exe_files   => \$exe_files,
+          author_str  => \quotemeta( $self->zilla->authors->join(q{, }) ),
+          test_dirs   => join (' ', sort keys %test_dirs),
+      },
+  );
 
-    my $file = Dist::Zilla::File::InMemory->new(
-        {
-            name    => 'Makefile.PL',
-            content => $content,
-        }
-    );
+  my $file = Dist::Zilla::File::InMemory->new(
+      {
+          name    => 'Makefile.PL',
+          content => $content,
+      }
+  );
 
-    $self->add_file($file);
-    return;
+  $self->add_file($file);
+  return;
 }
 
 __PACKAGE__->meta->make_immutable;
