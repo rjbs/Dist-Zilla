@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 ...
+          improve error when main_module isn't found (madsen @ github)
           fix documentation refering to ~/.dzil/config,
             now in ~/.dzil/config.ini ( Kent Fredric )
           
