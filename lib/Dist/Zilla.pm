@@ -54,33 +54,28 @@ has version => (
   is   => 'rw',
   isa  => 'Str',
   lazy => 1,
-  predicate => 'has_version',
   required  => 1,
-  default   => sub { die('this should never be reached') },
+  default   => sub {
+    my ($self) = @_;
+
+    my $version;
+
+    for my $plugin ($self->plugins_with(-VersionProvider)->flatten) {
+      next unless defined(my $this_version = $plugin->provide_version);
+
+      confess('attempted to set version twice') if defined $version;
+
+      $version = $this_version;
+    }
+
+    confess('no version was ever set') unless defined $version;
+
+    $self->log("warning: version number does not look like a number")
+      unless $version =~ m{\A\d+(?:\.\d+)\z};
+
+    $version;
+  } # end default value for version
 );
-
-sub __initialize_version {
-  my ($self) = @_;
-
-  # Fix up version.
-  my $has_version = $self->has_version;
-  my $version;
-
-  for my $plugin ($self->plugins_with(-VersionProvider)->flatten) {
-    next unless defined(my $this_version = $plugin->provide_version);
-
-    confess('attempted to set version twice') if $has_version;
-
-    $version = $this_version;
-    $has_version = 1;
-  }
-
-  $self->version($version) if defined $version;
-  confess('no version was ever set') unless $self->has_version;
-
-  $self->log("warning: version number does not look like a number")
-    unless $self->version =~ m{\A\d+(?:\.\d+)\z};
-}
 
 =attr abstract
 
@@ -413,8 +408,6 @@ sub from_config {
     );
   }
 
-  $self->__initialize_version;
-
   return $self;
 }
 
@@ -477,9 +470,7 @@ sub build_in {
 
   $_->before_build for $self->plugins_with(-BeforeBuild)->flatten;
 
-  my $build_root = $self->_prep_build_root($root);
-
-  $self->log("beginning to build " . $self->name . " in $build_root");
+  $self->log("beginning to build " . $self->name);
 
   $_->gather_files    for $self->plugins_with(-FileGatherer)->flatten;
   $_->prune_files     for $self->plugins_with(-FilePruner)->flatten;
@@ -487,6 +478,10 @@ sub build_in {
   $_->setup_installer for $self->plugins_with(-InstallTool)->flatten;
 
   $self->_check_dupe_files;
+
+  my $build_root = $self->_prep_build_root($root);
+
+  $self->log("writing " . $self->name . " in $build_root");
 
   for my $file ($self->files->flatten) {
     $self->_write_out_file($file, $build_root);
