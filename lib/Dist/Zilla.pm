@@ -57,7 +57,7 @@ has version_override => (
 
 # XXX: *clearly* this needs to be really much smarter -- rjbs, 2008-06-01
 has version => (
-  is   => 'rw',
+  is   => 'ro',
   isa  => 'Str',
   lazy => 1,
   init_arg  => undef,
