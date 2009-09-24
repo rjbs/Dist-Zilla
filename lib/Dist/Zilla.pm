@@ -159,6 +159,8 @@ has main_module => (
              ->head;
     }
 
+    die "Unable to find main_module in dist\n" unless $file;
+
     $self->log("guessing dist's main_module is " . $file->name);
 
     return $file;
