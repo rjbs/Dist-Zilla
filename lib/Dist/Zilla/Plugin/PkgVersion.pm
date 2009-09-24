@@ -40,7 +40,7 @@ sub munge_perl {
 
   # That \x20 is my OH SO CLEVER way of thwarting the \s* above.
   # -- rjbs, 2008-06-02
-  $content =~ s/^(package \S+;)$/$1\nour \$VERSION\x20= '$version';\n/mg;
+  $content =~ s/^([A-Za-z0-9{\t ]*)(package \S+;)([A-Za-z0-9{\t ]*)$/$1$2\nour \$VERSION\x20= '$version';$3\n/mg;
   $file->content($content);
 }
 
