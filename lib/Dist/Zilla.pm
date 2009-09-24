@@ -49,16 +49,23 @@ This is the version of the distribution to be created.
 
 =cut
 
+has version_override => (
+  isa => 'Str',
+  is  => 'ro' ,
+  init_arg => 'version',
+);
+
 # XXX: *clearly* this needs to be really much smarter -- rjbs, 2008-06-01
 has version => (
   is   => 'rw',
   isa  => 'Str',
   lazy => 1,
+  init_arg  => undef,
   required  => 1,
   default   => sub {
     my ($self) = @_;
 
-    my $version;
+    my $version = $self->version_override;
 
     for my $plugin ($self->plugins_with(-VersionProvider)->flatten) {
       next unless defined(my $this_version = $plugin->provide_version);
