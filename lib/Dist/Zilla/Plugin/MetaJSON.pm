@@ -22,26 +22,9 @@ sub gather_files {
   require Dist::Zilla::File::InMemory;
   require JSON;
 
-  my $meta = {
-    'meta-spec' => {
-      version => 1.4,
-      url     => 'http://module-build.sourceforge.net/META-spec-v1.4.html',
-    },
-    name     => $self->zilla->name,
-    version  => $self->zilla->version,
-    abstract => $self->zilla->abstract,
-    author   => $self->zilla->authors,
-    license  => $self->zilla->license->meta_yml_name,
-    requires => $self->zilla->prereq,
-    generated_by => (ref $self) . ' version ' . $self->VERSION,
-  };
-
-  $meta = Hash::Merge::Simple::merge($meta, $_->metadata)
-    for $self->zilla->plugins_with(-MetaProvider)->flatten;
-
   my $file = Dist::Zilla::File::InMemory->new({
     name    => 'META.json',
-    content => JSON->new->ascii(1)->pretty->encode($meta) . "\n",
+    content => JSON->new->ascii(1)->pretty->encode($self->zilla->distmeta) . "\n",
   });
 
   $self->add_file($file);
