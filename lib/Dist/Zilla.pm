@@ -710,3 +710,17 @@ published, released code, it can do much more than those tools, and is free to
 make much more ludicrous demands in terms of prerequisites.
 
 For more information, see L<Dist::Zilla::Tutorial>.
+
+=head1 SUPPORT
+
+There are usually people on C<irc.perl.org> in C<#distzilla>, even if they're
+idling.
+
+There is a mailing list to discuss Dist::Zilla, which you can join here:
+
+L<http://www.listbox.com/subscribe/?list_id=139292>
+
+The archive is available here:
+
+L<http://listbox.com/member/archive/139292>
+
