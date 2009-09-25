@@ -7,6 +7,7 @@ use MooseX::Types::Path::Class qw(Dir File);
 use Moose::Util::TypeConstraints;
 
 use File::Find::Rule;
+use Hash::Merge::Simple ();
 use Path::Class ();
 use Software::License;
 use String::RewritePrefix;
@@ -340,6 +341,43 @@ has built_in => (
   is   => 'rw',
   isa  => Dir,
   init_arg  => undef,
+);
+
+=attr distmeta
+
+This is a hashref containing the metadata about this distribution that
+will be stored in META.yml or META.json.  You should not alter the
+metadata in this hash; use a MetaProvider plugin instead.
+
+=cut
+
+has distmeta => (
+  is   => 'ro',
+  isa  => 'HashRef',
+  init_arg  => undef,
+  lazy      => 1,
+  default => sub {
+    my ($self) = @_;
+
+    my $meta = {
+      'meta-spec' => {
+        version => 1.4,
+        url     => 'http://module-build.sourceforge.net/META-spec-v1.4.html',
+      },
+      name     => $self->name,
+      version  => $self->version,
+      abstract => $self->abstract,
+      author   => $self->authors,
+      license  => $self->license->meta_yml_name,
+      requires => $self->prereq,
+      generated_by => (ref $self) . ' version ' . $self->VERSION,
+    };
+
+    $meta = Hash::Merge::Simple::merge($meta, $_->metadata)
+      for $self->plugins_with(-MetaProvider)->flatten;
+
+    $meta;
+  } # end default for distmeta
 );
 
 =attr prereq
