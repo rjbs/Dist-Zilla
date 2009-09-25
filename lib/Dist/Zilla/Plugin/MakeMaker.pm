@@ -1,4 +1,5 @@
 package Dist::Zilla::Plugin::MakeMaker;
+
 # ABSTRACT: build a Makefile.PL that uses ExtUtils::MakeMaker
 use Moose;
 use Moose::Autobox;
@@ -37,7 +38,9 @@ WriteMakefile(
       return '';
 }}
   },
+  test => {TESTS => '{{ $test_dirs }}'}
 );
+
 |;
 
 sub setup_installer {
@@ -46,17 +49,25 @@ sub setup_installer {
   (my $name = $self->zilla->name) =~ s/-/::/g;
 
   my $exe_files = $self->zilla->files
-                ->grep(sub { ($_->install_type||'') eq 'bin' })
-                ->map(sub { $_->name })
-                ->join(' ');
+    ->grep( sub { ( $_->install_type || '' ) eq 'bin' } )
+    ->map(  sub { $_->name } )
+    ->join(q{ });
 
+  my %test_dirs;
+  $self->zilla->files->grep( sub {
+    $_->name =~ /\.t$/
+    && $_->name =~ /^(.*\/).*?$/
+    && ($test_dirs{$1 . '*.t'}++)
+  });
+  
   my $content = $self->fill_in_string(
     $template,
     {
       module_name => $name,
       dist        => \$self->zilla,
       exe_files   => \$exe_files,
-      author_str  => \quotemeta($self->zilla->authors->join(q{, })),
+      author_str  => \quotemeta( $self->zilla->authors->join(q{, }) ),
+      test_dirs   => join (q{ }, sort keys %test_dirs),
     },
   );
 

@@ -1,6 +1,10 @@
 Revision history for {{$dist->name}}
 
-...
+1.092680  2009-09-25
+          improve error when main_module isn't found (Christopher J. Madsen)
+          rework version generation to be as lazy as possible (C. Madsen)
+          add a ->distmeta attribute in which metadata is collected (C. Madsen)
+          recognize more kinds of version declaration (Nicholas Perez)
           fix documentation refering to ~/.dzil/config,
             now in ~/.dzil/config.ini ( Kent Fredric )
           

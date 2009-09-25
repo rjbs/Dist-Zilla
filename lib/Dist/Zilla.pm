@@ -63,27 +63,29 @@ has version => (
   lazy => 1,
   init_arg  => undef,
   required  => 1,
-  default   => sub {
-    my ($self) = @_;
-
-    my $version = $self->version_override;
-
-    for my $plugin ($self->plugins_with(-VersionProvider)->flatten) {
-      next unless defined(my $this_version = $plugin->provide_version);
-
-      confess('attempted to set version twice') if defined $version;
-
-      $version = $this_version;
-    }
-
-    confess('no version was ever set') unless defined $version;
-
-    $self->log("warning: version number does not look like a number")
-      unless $version =~ m{\A\d+(?:\.\d+)\z};
-
-    $version;
-  } # end default value for version
+  builder   => '_build_version',
 );
+
+sub _build_version {
+  my ($self) = @_;
+
+  my $version = $self->version_override;
+
+  for my $plugin ($self->plugins_with(-VersionProvider)->flatten) {
+    next unless defined(my $this_version = $plugin->provide_version);
+
+    confess('attempted to set version twice') if defined $version;
+
+    $version = $this_version;
+  }
+
+  confess('no version was ever set') unless defined $version;
+
+  $self->log("warning: version number does not look like a number")
+    unless $version =~ m{\A\d+(?:\.\d+)\z};
+
+  $version;
+}
 
 =attr abstract
 
@@ -551,7 +553,7 @@ sub ensure_built_in {
   my ($self, $root) = @_;
 
   # $root ||= $self->name . q{-} . $self->version;
-  return if $self->built_in and 
+  return if $self->built_in and
     (!$root or ($self->built_in eq $root));
 
   Carp::croak("dist is already built, but not in $root") if $self->built_in;
@@ -569,7 +571,7 @@ will then build a tarball of that directory in the current directory.
 
 sub build_archive {
   my ($self, $root) = @_;
-  
+
   $self->ensure_built_in($root);
 
   require Archive::Tar;
