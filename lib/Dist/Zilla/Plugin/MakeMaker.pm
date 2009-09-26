@@ -25,8 +25,8 @@ use ExtUtils::MakeMaker;
 WriteMakefile(
   DISTNAME  => '{{ $dist->name     }}',
   NAME      => '{{ $module_name    }}',
-  AUTHOR    => '{{ $author_str     }}',
-  ABSTRACT  => '{{ quotemeta($dist->abstract) }}',
+  AUTHOR    => "{{ $author_str     }}",
+  ABSTRACT  => "{{ quotemeta($dist->abstract) }}",
   VERSION   => '{{ $dist->version  }}',
   EXE_FILES => [ qw({{ $exe_files }}) ],
   (eval { ExtUtils::MakeMaker->VERSION(6.31) } ? (LICENSE => '{{ $dist->license->meta_yml_name }}') : ()),
@@ -59,7 +59,7 @@ sub setup_installer {
     && $_->name =~ /^(.*\/).*?$/
     && ($test_dirs{$1 . '*.t'}++)
   });
-  
+
   my $content = $self->fill_in_string(
     $template,
     {
