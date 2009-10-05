@@ -124,10 +124,12 @@ has abstract => (
 =attr main_module
 
 This is the module where Dist::Zilla might look for various defaults, like
-the distribution abstract.  By default, it's the shorted-named module in the
-distribution.  This is likely to change!
+the distribution abstract.  By default, it's derived from the distribution
+name.  If your distribution is Foo-Bar, and F<lib/Foo/Bar.pm> exists,
+that's the main_module.  Otherwise, it's the shortest-named module in the
+distribution.  This may change!
 
-You can override the default found one by specifying the file path explicitly,
+You can override the default by specifying the file path explicitly,
 ie:
     main_module = lib/Foo/Bar.pm
 
@@ -151,14 +153,20 @@ has main_module => (
     my ($self) = @_;
 
     my $file;
+    my $guessing = q{};
 
     if ( $self->has_main_module_override ) {
 
        $file = $self->files->grep(sub{ $_->name eq $self->main_module_override })->head;
 
     } else {
+       $guessing = 'guessing '; # We're having to guess
 
-       $file = $self->files
+       (my $guess = $self->name) =~ s{-}{/}g;
+       $guess = "lib/$guess.pm";
+
+       $file = $self->files->grep(sub{ $_->name eq $guess })->head
+           ||  $self->files
              ->grep(sub { $_->name =~ m{\.pm\z} and $_->name =~ m{\Alib/} })
              ->sort(sub { length $_[0]->name <=> length $_[1]->name })
              ->head;
@@ -166,7 +174,7 @@ has main_module => (
 
     die "Unable to find main_module in dist\n" unless $file;
 
-    $self->log("guessing dist's main_module is " . $file->name);
+    $self->log("${guessing}dist's main_module is " . $file->name);
 
     return $file;
   },
