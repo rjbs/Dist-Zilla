@@ -1,5 +1,10 @@
 Revision history for {{$dist->name}}
 
+1.092850  2009-10-11
+          correct logic that finds tests to run
+          improve detection and use of main_module name (C. Madsen)
+          stop adding versions to test files (doy)
+
 1.092680  2009-09-25
           improve error when main_module isn't found (Christopher J. Madsen)
           rework version generation to be as lazy as possible (C. Madsen)
