@@ -54,11 +54,12 @@ sub setup_installer {
     ->join(q{ });
 
   my %test_dirs;
-  $self->zilla->files->grep( sub {
-    $_->name =~ /\.t$/
-    && $_->name =~ /^(.*\/).*?$/
-    && ($test_dirs{$1 . '*.t'}++)
-  });
+  for my $file ($self->zilla->files->flatten) {
+    next unless $file->name =~ m{\At/.+\.t\z};
+    (my $dir = $file->name) =~ s{/[^/]+\.t\z}{/*.t}g;
+
+    $test_dirs{ $dir } = 1;
+  }
 
   my $content = $self->fill_in_string(
     $template,
