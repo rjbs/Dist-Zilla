@@ -1,5 +1,8 @@
 Revision history for {{$dist->name}}
 
+1.092930  2009-10-20
+          rebuild documentation with new PodPurler
+
 1.092850  2009-10-11
           correct logic that finds tests to run
           improve detection and use of main_module name (C. Madsen)
