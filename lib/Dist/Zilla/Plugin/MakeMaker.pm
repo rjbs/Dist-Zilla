@@ -34,7 +34,7 @@ WriteMakefile(
   PREREQ_PM    => {
 {{
       my $prereq = $dist->prereq;
-      $OUT .= qq{    "$_" => '$prereq->{$_}',\n} for keys %$prereq;
+      $OUT .= qq{    "$_" => '$prereq->{$_}',\n} for grep { $_ ne 'perl' } keys %$prereq;
       chomp $OUT;
       return '';
 }}
