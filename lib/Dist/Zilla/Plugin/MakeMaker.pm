@@ -21,6 +21,13 @@ my $template = q|
 use strict;
 use warnings;
 
+{{
+  my $prereq = $dist->prereq;
+  exists $prereq->{perl}
+    ? qq{ BEGIN { require $prereq->{perl}; } }
+    : '';
+}}
+
 use ExtUtils::MakeMaker;
 
 WriteMakefile(
