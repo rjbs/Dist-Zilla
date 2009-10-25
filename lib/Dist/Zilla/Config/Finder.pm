@@ -1,41 +1,28 @@
 package Dist::Zilla::Config::Finder;
 use Moose;
-with qw(Dist::Zilla::Config);
+with 'Config::MVP::Reader::Finder';
 # ABSTRACT: the reader for dist.ini files
 
-use Module::Pluggable::Object;
+use Dist::Zilla::Util::MVPAssembler;
 
-has module_pluggable_object => (
-  is => 'ro',
-  init_arg => undef,
-  default  => sub {
-    Module::Pluggable::Object->new(
-      search_path => [ qw(Dist::Zilla::Config) ],
-      inner       => 0,
-      require     => 1,
-    );
-  },
+has '+assembler' => (
+  default => sub {
+    my $assembler = Dist::Zilla::Util::MVPAssembler->new;
+
+    my $root = $assembler->section_class->new({
+      name => '_',
+      aliases => { author => 'authors' },
+      multivalue_args => [ qw(authors) ],
+    });
+
+    $assembler->sequence->add_section($root);
+
+    return $assembler;
+  }
 );
 
-sub _which_plugin {
-  my ($self, $arg) = @_;
-
-  my @plugins = grep { $_->can_be_found($arg) }
-                grep { $_->does('Dist::Zilla::ConfigRole::Findable') }
-                $self->module_pluggable_object->plugins;
-
-  confess "no viable configuration could be found" unless @plugins;
-  confess "multiple possible config plugins found: @plugins" if @plugins > 1;
-
-  return $plugins[0];
-}
-
-sub read_config {
-  my ($self, $arg) = @_;
-
-  my $plugin = $self->_which_plugin($arg);
-
-  return $plugin->new->read_config($arg);
+sub default_search {
+  return qw(Dist::Zilla::Config Config::MVP::Reader);
 }
 
 no Moose;

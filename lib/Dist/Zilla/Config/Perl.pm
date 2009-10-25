@@ -1,16 +1,12 @@
 package Dist::Zilla::Config::Perl;
 use Moose;
-with qw(
-  Dist::Zilla::Config
-  Dist::Zilla::ConfigRole::Findable
-);
+with qw(Config::MVP::Reader::Findable);
+with qw(Dist::Zilla::Config);
 # ABSTRACT: the reader for dist.pl files
 
 =head1 DESCRIPTION
 
-Dist::Zilla::Config reads in the F<dist.pl> file for a distribution.  It uses
-L<Config::MVP::Assembler> to do most of the heavy lifting, using the helpers
-set up in L<Dist::Zilla::Config>.
+Dist::Zilla::Config reads in the F<dist.pl> file for a distribution.
 
 =cut
 

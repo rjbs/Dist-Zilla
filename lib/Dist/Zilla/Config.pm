@@ -2,6 +2,8 @@ package Dist::Zilla::Config;
 use Moose::Role;
 # ABSTRACT: stored configuration loader role
 
+with qw(Config::MVP::Reader);
+
 use Dist::Zilla::Util::MVPAssembler;
 
 =head1 DESCRIPTION
@@ -37,8 +39,6 @@ has assembler => (
     return $assembler;
   }
 );
-
-requires 'read_config';
 
 no Moose::Role;
 1;
