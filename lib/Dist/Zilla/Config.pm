@@ -21,24 +21,19 @@ multivalue argument.
 
 =cut
 
-has assembler => (
-  is   => 'ro',
-  isa  => 'Config::MVP::Assembler',
-  lazy => 1,
-  default => sub {
-    my $assembler = Dist::Zilla::Util::MVPAssembler->new;
+sub build_assembler {
+  my $assembler = Dist::Zilla::Util::MVPAssembler->new;
 
-    my $root = $assembler->section_class->new({
-      name => '_',
-      aliases => { author => 'authors' },
-      multivalue_args => [ qw(authors) ],
-    });
+  my $root = $assembler->section_class->new({
+    name    => '_',
+    aliases => { author => 'authors' },
+    multivalue_args => [ qw(authors) ],
+  });
 
-    $assembler->sequence->add_section($root);
+  $assembler->sequence->add_section($root);
 
-    return $assembler;
-  }
-);
+  return $assembler;
+}
 
 no Moose::Role;
 1;

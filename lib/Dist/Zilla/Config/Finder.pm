@@ -1,27 +1,12 @@
 package Dist::Zilla::Config::Finder;
 use Moose;
-with 'Config::MVP::Reader::Finder';
+extends 'Config::MVP::Reader::Finder';
+with 'Dist::Zilla::Config';
 # ABSTRACT: the reader for dist.ini files
 
 use Dist::Zilla::Util::MVPAssembler;
 
-has '+assembler' => (
-  default => sub {
-    my $assembler = Dist::Zilla::Util::MVPAssembler->new;
-
-    my $root = $assembler->section_class->new({
-      name => '_',
-      aliases => { author => 'authors' },
-      multivalue_args => [ qw(authors) ],
-    });
-
-    $assembler->sequence->add_section($root);
-
-    return $assembler;
-  }
-);
-
-sub default_search {
+sub default_search_path {
   return qw(Dist::Zilla::Config Config::MVP::Reader);
 }
 
