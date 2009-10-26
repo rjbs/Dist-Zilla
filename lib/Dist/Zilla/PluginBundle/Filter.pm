@@ -29,7 +29,7 @@ sub bundle_config {
   my ($self, $section) = @_;
   my $class = (ref $self) || $self;
 
-  my $config = $section->payload;
+  my $config = $section->{payload};
 
   Carp::croak("no bundle given for bundle filter")
     unless my $bundle = $config->{bundle};

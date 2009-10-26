@@ -11,7 +11,8 @@ sub expand_package {
 
 sub package_bundle_method {
   my ($self, $pkg) = @_;
-  return unless $pkg->does('Dist::Zilla::Role::PluginBundle');
+  return unless $pkg->isa('Moose::Object')
+         and    $pkg->does('Dist::Zilla::Role::PluginBundle');
   return 'bundle_config';
 }
 
