@@ -431,7 +431,7 @@ directory.
 Valid arguments are:
 
   config_class - the class to use to read the config
-                 default: Dist::Zilla::Config::INI
+                 default: Dist::Zilla::Config::Finder
 
 =cut
 

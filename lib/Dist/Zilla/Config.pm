@@ -2,7 +2,7 @@ package Dist::Zilla::Config;
 use Moose::Role;
 # ABSTRACT: stored configuration loader role
 
-with qw(Config::MVP::Reader);
+with q(Config::MVP::Reader) => { -excludes => 'build_assembler' };
 
 use Dist::Zilla::Util::MVPAssembler;
 
