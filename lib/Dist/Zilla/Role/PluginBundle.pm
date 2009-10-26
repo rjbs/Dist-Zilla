@@ -6,7 +6,8 @@ use Moose::Role;
 
 When loading configuration, if the config reader encounters a PluginBundle, it
 will replace its place in the plugin list with the result of calling its
-C<bundle_config> method.
+C<bundle_config> method, which will be passed a Config::MVP::Section to
+configure the bundle.
 
 =cut
 

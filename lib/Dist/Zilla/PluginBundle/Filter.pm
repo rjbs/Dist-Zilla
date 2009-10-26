@@ -26,8 +26,10 @@ but removes all the entries whose package is given in the C<remove> attributes.
 sub mvp_multivalue_args { qw(remove) }
 
 sub bundle_config {
-  my ($self, $config) = @_;
+  my ($self, $section) = @_;
   my $class = (ref $self) || $self;
+
+  my $config = $section->{payload};
 
   Carp::croak("no bundle given for bundle filter")
     unless my $bundle = $config->{bundle};
