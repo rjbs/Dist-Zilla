@@ -1,10 +1,10 @@
-package Foo;
+package DZPA::Main;
 
 # perl minimum version
 use 5.008;
 
-# under Foo::, but not shipped by the dist
-use Foo::Bar;
+# under DZPA::, but not shipped by the dist
+use DZPA::Blah;
 
 # minimum version + comment after the semicolon.
 use DZPA::Foo 0.50; # comment
