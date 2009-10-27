@@ -1,5 +1,6 @@
 package Foo;
 use 5.008;
+use Foo::Bar;
 use DZPA::Foo 0.50; # comment
 with 'DZPA::Role';
 extends 'DZPA::Base';

@@ -26,6 +26,7 @@ my %wanted = (
     'DZPA::Foo'   => '0.50',
     'DZPA::Fubar' => 0,
     'DZPA::Role'  => 0,
+    'Foo::Bar'    => 0,
     perl          => 5.008,
 );
 is_deeply( \%prereqs, \%wanted, '')
