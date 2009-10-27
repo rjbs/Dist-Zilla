@@ -1,6 +1,6 @@
 Revision history for {{$dist->name}}
 
-1.092991  2009-10-26
+1.093000  2009-10-26
           require a newer Moose to avoid a few composition errors in older
           Moose versions
 
