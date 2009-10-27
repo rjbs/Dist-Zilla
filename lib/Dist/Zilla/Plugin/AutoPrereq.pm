@@ -1,8 +1,8 @@
-package Dist::Zilla::Plugin::AutoPrereq;
-# ABSTRACT: automatically extract prereqs from your modules
-
 use strict;
 use warnings;
+
+package Dist::Zilla::Plugin::AutoPrereq;
+# ABSTRACT: automatically extract prereqs from your modules
 
 use Dist::Zilla::Util;
 use Moose;
