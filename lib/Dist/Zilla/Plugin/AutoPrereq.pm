@@ -22,20 +22,23 @@ sub prereq {
     my $self = shift;
     my $files = $self->zilla->files;
 
-    # don't count modules under the dist namespace
-    my $dist  = $self->zilla->name;
-    $dist =~ s/-/::/g;
-
     my %prereqs;
+    my @modules;
     foreach my $file ( @$files ) {
         # parse only perl files
         next unless $file->name    =~ /\.(?:pm|pl|t)$/i
             || $file->content =~ /^#!(?:.*)perl(?:$|\s)/;
 
+        # store module name, to trim it from require list later on
+        my $module = $file->name;
+        $module =~ s{^lib/}{};
+        $module =~ s{\.pm$}{};
+        $module =~ s{/}{::}g;
+        push @modules, $module;
+
         # parse a file, and merge with existing prereqs
         my %fprereqs = $self->_prereqs_in_file($file);
         foreach my $module ( keys %fprereqs ) {
-            next if $module =~ /^$dist/;
             my $version = $fprereqs{$module};
 
             if ( exists $prereqs{$module} ) {
@@ -56,6 +59,9 @@ sub prereq {
             }
         }
     }
+
+    # remove prereqs shipped with current dist
+    delete @prereqs{ @modules };
 
     # remove prereqs from skiplist
     if ( $self->has_skip && $self->skip ) {
