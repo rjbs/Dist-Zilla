@@ -1,4 +1,10 @@
 #!/usr/bin/perl
+
+# require in a script
 use DZPA::Fubar;
+
+# module shipped by dist
 use Foo;
+
+# DZPA::Skip should be trimmed
 require DZPA::Skip::Foo;
