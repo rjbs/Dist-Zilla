@@ -1,5 +1,16 @@
 Revision history for {{$dist->name}}
 
+1.092991  2009-10-26
+          require a newer Moose to avoid a few composition errors in older
+          Moose versions
+
+1.092990  2009-10-26
+          most of Dist::Zilla::Config has been moved to Config::MVP::Reader
+
+          THIS WILL BREAK BUNDLES:  bundles are now passed a hashref describing
+          the contents of the Config::MVP::Sequence configuring them, not just
+          the payload
+
 1.092930  2009-10-20
           rebuild documentation with new PodPurler
 
