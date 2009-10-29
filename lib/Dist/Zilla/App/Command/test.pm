@@ -29,7 +29,7 @@ A Build that fails tests will be left behind for analysis, but otherwise cleaned
 
 sub abstract { 'test your dist' }
 
-sub run {
+sub execute {
   my ($self, $opt, $arg) = @_;
 
   require Dist::Zilla;
