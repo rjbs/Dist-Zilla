@@ -21,13 +21,15 @@ my %prereqs = map { eval $_ } @lines;
 close $fh;
 
 my %wanted = (
-    'DZPA::Bar'   => 0,
-    'DZPA::Base'  => 0,
-    'DZPA::Blah'  => 0,
-    'DZPA::Foo'   => '0.50',
-    'DZPA::Fubar' => 0,
-    'DZPA::Role'  => 0,
-    'perl'        => 5.008,
+    'DZPA::Bar'             => 0,
+    'DZPA::Base'            => 0,
+    'DZPA::Blah'            => 0,
+    'DZPA::Foo'             => '0.50',
+    'DZPA::Fubar'           => 0,
+    'DZPA::Role'            => 0,
+    'DZPA::IndentedRequire' => '3.45',
+    'DZPA::IndentedUse'     => '0.13',
+    'perl'                  => 5.008,
 );
 is_deeply( \%prereqs, \%wanted, '')
 

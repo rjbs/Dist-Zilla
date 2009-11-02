@@ -19,6 +19,11 @@ use DZPA::Skip::Blah;
 # require in a module
 require DZPA::Bar;
 
+# indented
+{
+    use DZPA::IndentedUse 0.13;
+    require DZPA::IndentedRequire 3.45;
+}
 __END__
 =head1 FOO
 
