@@ -1,6 +1,7 @@
 Revision history for Dist::Zilla::Plugin::AutoPrereq
 
 {{$NEXT}}
+ - extracts indented require / use statements
 
 1.093000 Tue Oct 27 12:02:29 2009
  - trim all modules shipped by dist from prereqs, not only modules under dist
