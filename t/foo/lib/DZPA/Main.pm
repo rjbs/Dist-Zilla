@@ -4,10 +4,10 @@ package DZPA::Main;
 use 5.008;
 
 # under DZPA::, but not shipped by the dist
-use DZPA::Blah;
+use DZPA::NotInDist;
 
 # minimum version + comment after the semicolon.
-use DZPA::Foo 0.50; # comment
+use DZPA::MinVerComment 0.50; # comment
 
 # Moose features
 with 'DZPA::Role';
@@ -17,7 +17,7 @@ extends 'DZPA::Base';
 use DZPA::Skip::Blah;
 
 # require in a module
-require DZPA::Bar;
+require DZPA::ModRequire;
 
 # indented
 {

@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 # require in a script
-use DZPA::Fubar;
+use DZPA::ScriptUse;
 
 # module shipped by dist
 use DZPA::Main;
