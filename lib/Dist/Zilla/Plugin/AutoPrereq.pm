@@ -98,9 +98,10 @@ sub _prereqs_in_file {
 
     # quick analysis: find only plain use and require
     my @use_lines =
-        grep { /^(?:use|require)\s+/ }
+        grep { /^\s*(?:use|require)\s+/ }
         @lines;
     foreach my $line ( @use_lines ) {
+        $line =~ s/^\s+//; # trim beginning whitespaces
         $line =~ s/;.*$//; # trim end of statement
         my (undef, $module, $version) = split /\s+/, $line;
 
