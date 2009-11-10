@@ -4,6 +4,8 @@ package Dist::Zilla::App::Command::test;
 # ABSTRACT: test your dist
 use Dist::Zilla::App -command;
 
+use Moose::Autobox;
+
 =head1 SYNOPSIS
 
 Test your distribution.
@@ -29,10 +31,19 @@ directory will be removed and dzil will exit with status 0.
 
 =cut
 
+=head1 SEE ALSO
+
+The heavy lifting of this module is now done by L<Dist::Zilla::Role::TestRunner> plugins.
+
+=cut
+
 sub abstract { 'test your dist' }
 
 sub execute {
   my ($self, $opt, $arg) = @_;
+
+  Carp::croak("you can't release without any TestRunner plugins")
+    unless my @testers = $self->zilla->plugins_with(-TestRunner)->flatten;
 
   require Dist::Zilla;
   require File::chdir;
@@ -50,22 +61,27 @@ sub execute {
 
   $self->zilla->ensure_built_in($target);
 
-  eval {
-    ## no critic Punctuation
-    local $File::chdir::CWD = $target;
-    system($^X => 'Makefile.PL') and die "error with Makefile.PL\n";
-    system('make') and die "error running make\n";
-    system('make test') and die "error running make test\n";
-  };
+  my $error;
 
-  if ($@) {
-    $self->log($@);
+  for my $tester ( @testers ) {
+    eval {
+      local $File::chdir::CWD = $target;
+      $tester->test( $target );
+    } or do {
+      $error = $@;
+      last;
+    };
+  }
+
+  if ( $error ) {
+    $self->log($error);
     $self->log("left failed dist in place at $target");
     exit 1;                     # Indicate test failure
   } else {
     $self->log("all's well; removing $target");
     $target->rmtree;
   }
+
 }
 
 1;

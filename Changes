@@ -1,8 +1,12 @@
 Revision history for {{$dist->name}}
 
-1.x       2009-xx-xx
+
+1.093140  2009-11-10
           add the FileFinder role
           "dzil test" will exit non-zero if tests fail
+
+          Split Test into plugins and have a pluggable test system.
+            ( Kent Fredric )
 
 1.093000  2009-10-26
           require a newer Moose to avoid a few composition errors in older
@@ -30,7 +34,7 @@ Revision history for {{$dist->name}}
           recognize more kinds of version declaration (Nicholas Perez)
           fix documentation refering to ~/.dzil/config,
             now in ~/.dzil/config.ini ( Kent Fredric )
-          
+
 1.092450  2009-09-02
           fix a bug in config loading for 'dzil' command (melo)
 
