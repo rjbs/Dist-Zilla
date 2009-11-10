@@ -519,6 +519,28 @@ sub plugins_with {
   return $plugins;
 }
 
+=method find_files
+
+  my $files = $zilla->find_files( $finder_name );
+
+This method will look for a
+L<FileFinder|Dist::Zilla::Role::FileFinder>-performing plugin with the given
+name and return the result of calling C<find_files> on it.  If no plugin can be
+found, an exception will be raised.
+
+=cut
+
+sub find_files {
+  my ($self, $finder_name) = @_;
+
+  my $plugin = $self->plugins_with(-FileFinder)
+             ->grep(sub { $_->plugin_name eq $finder_name })->head;
+
+  confess("no FileFinder named $finder_name found") unless $plugin;
+
+  $plugin->find_files;
+}
+
 =method build_in
 
   $zilla->build_in($root);
