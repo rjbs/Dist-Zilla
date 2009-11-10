@@ -1,5 +1,9 @@
 Revision history for {{$dist->name}}
 
+1.x       2009-xx-xx
+          add the FileFinder role
+          "dzil test" will exit non-zero if tests fail
+
 1.093000  2009-10-26
           require a newer Moose to avoid a few composition errors in older
           Moose versions
