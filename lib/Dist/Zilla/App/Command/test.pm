@@ -21,15 +21,17 @@ This runs with AUTHOR_TESTING and RELEASE_TESTING environment variables turned o
     make
     make test
 
-Except for the fact its built directly in a subdir of .build ( such as .build/ASDF123 );
+Except for the fact it's built directly in a subdir of .build ( such as .build/ASDF123 );
 
-A Build that fails tests will be left behind for analysis, but otherwise cleaned up on success.
+A Build that fails tests will be left behind for analysis, and dzil
+will exit with status 1.  If the tests are successful, the build
+directory will be removed and dzil will exit with status 0.
 
 =cut
 
 sub abstract { 'test your dist' }
 
-sub run {
+sub execute {
   my ($self, $opt, $arg) = @_;
 
   require Dist::Zilla;
@@ -59,6 +61,7 @@ sub run {
   if ($@) {
     $self->log($@);
     $self->log("left failed dist in place at $target");
+    exit 1;                     # Indicate test failure
   } else {
     $self->log("all's well; removing $target");
     $target->rmtree;

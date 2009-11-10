@@ -21,7 +21,7 @@ See L<Dist::Zilla::App::Command::test> for more.
 
 sub abstract { 'smoke your dist' }
 
-sub run {
+sub execute {
   my $self = shift;
 
   local $ENV{AUTOMATED_TESTING} = 1;
