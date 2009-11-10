@@ -5,6 +5,7 @@ use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::InstallTool';
 with 'Dist::Zilla::Role::TextTemplate';
+with 'Dist::Zilla::Role::TestRunner';
 
 =head1 DESCRIPTION
 
@@ -79,6 +80,17 @@ sub setup_installer {
 
   $self->add_file($file);
   return;
+}
+
+sub test {
+  my ( $self, $target ) = @_;
+  eval {
+    ## no critic Punctuation
+    system($^X => 'Makefile.PL') and die "error with Makefile.PL\n";
+    system('make') and die "error running make\n";
+    system('make test') and die "error running make test\n";
+    1;
+  } or return $@;
 }
 
 __PACKAGE__->meta->make_immutable;
