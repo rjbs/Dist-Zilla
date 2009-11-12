@@ -1,5 +1,8 @@
 Revision history for {{$dist->name}}
 
+1.093160  2009-11-12
+          make TextTemplate use fill_this_in to avoid
+            https://rt.cpan.org/Ticket/Display.html?id=51473
 
 1.093140  2009-11-10
           add the FileFinder role

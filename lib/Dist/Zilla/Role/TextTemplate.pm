@@ -44,7 +44,7 @@ C<fill_in_string> routine.
 sub fill_in_string {
   my ($self, $string, $stash, $arg) = @_;
 
-  return Text::Template::fill_in_string(
+  return Text::Template->fill_this_in(
     $string,
     HASH       => $stash,
     DELIMITERS => $self->delim,
