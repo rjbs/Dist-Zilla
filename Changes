@@ -1,5 +1,9 @@
 Revision history for {{$dist->name}}
 
+          Module::Build now injects version deps in build_requires and
+          configure_requires, hopefully solving issues with version-upgrades.
+
+
 1.093160  2009-11-12
           make TextTemplate use fill_this_in to avoid
             https://rt.cpan.org/Ticket/Display.html?id=51473
