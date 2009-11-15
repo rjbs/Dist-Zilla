@@ -2,6 +2,12 @@ Revision history for Dist::Zilla::Plugin::AutoPrereq
 
 {{$NEXT}}
 
+1.093190 Sun Nov 15 12:49:43 2009
+ - test don't use hack on makefile.pl anymore, but rely on meta.yml
+ - requiring perl 5.8.x (that was already the case, but this time it's explicit)
+ - sweetening code with moosex::has::sugar
+ - pod update
+
 1.093060 Mon Nov  2 14:04:25 2009
  - extracts indented require / use statements
 
