@@ -200,11 +200,36 @@ from prereqs.
 =back
 
 
-=head1 BUGS
 
-Please report any bugs or feature request to
-C<< <bug-dist-zilla-plugin-autoprereq@rt.cpan.org> >>, or through the web interface
-at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Dist-Zilla-Plugin-AutoPrereq>.
+=head1 SEE ALSO
 
+You can look for information on this module at:
 
+=over 4
+
+=item * Search CPAN
+
+L<http://search.cpan.org/dist/Dist-Zilla-Plugin-AutoPrereq>
+
+=item * See open / report bugs
+
+L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Dist-Zilla-Plugin-AutoPrereq>
+
+=item * Mailing-list (same as L<Dist::Zilla>)
+
+L<http://www.listbox.com/subscribe/?list_id=139292>
+
+=item * Git repository
+
+L<http://github.com/jquelin/dist-zilla-plugin-autoprereq.git>
+
+=item * AnnoCPAN: Annotated CPAN documentation
+
+L<http://annocpan.org/dist/Dist-Zilla-Plugin-AutoPrereq>
+
+=item * CPAN Ratings
+
+L<http://cpanratings.perl.org/d/Dist-Zilla-Plugin-AutoPrereq>
+
+=back
 
