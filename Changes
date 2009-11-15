@@ -1,6 +1,8 @@
 Revision history for Dist::Zilla::Plugin::AutoPrereq
 
 {{$NEXT}}
+
+1.093060 Mon Nov  2 14:04:25 2009
  - extracts indented require / use statements
 
 1.093000 Tue Oct 27 12:02:29 2009
