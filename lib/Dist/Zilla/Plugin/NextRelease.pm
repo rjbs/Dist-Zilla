@@ -81,3 +81,54 @@ sub after_release {
 __PACKAGE__->meta->make_immutable;
 no Moose;
 1;
+__END__
+
+=head1 SYNOPSIS
+
+In your F<dist.ini>:
+
+  [NextRelease]
+
+In your F<Changes> file:
+
+  {{$NEXT}}
+
+
+=head1 DESCRIPTION
+
+Tired of having to update your F<Changes> file by hand with the new
+version and release date / time each time you release your distribution?
+Well, this plugin is for you.
+
+Add this plugin to your F<dist.ini>, and the following to your
+F<Changes> file:
+
+  {{$NEXT}}
+
+
+The C<NextRelease> plugin will then do 2 things:
+
+=over 4
+
+=item * At build time, this special marker will be replaced with the
+version and the build date, to form a standard changelog header. This
+will be done to the in-memory file - the original F<Changes> file won't
+be updated.
+
+=item * After release (when running C<dzil release>), since the version
+and build date are now part of your dist's history, the real F<Changes>
+file (not the in-memory one) will be updated with this piece of
+information.
+
+=back
+
+
+The module accepts the following options in its F<dist.ini> section:
+
+=over 4
+
+=item * filename - the name of your changelog file. defaults to F<Changes>.
+
+=item * format - the date format. defaults to C<%-9v %{yyyy-MM-dd HH:mm:ss VVVV}d>.
+
+=back
