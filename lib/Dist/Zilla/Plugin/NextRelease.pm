@@ -3,9 +3,7 @@ package Dist::Zilla::Plugin::NextRelease;
 use Moose;
 with 'Dist::Zilla::Role::FileMunger';
 with 'Dist::Zilla::Role::TextTemplate';
-
-# XXX: this will be AfterRelease
-# with 'Dist::Zilla::Role::AfterBuild';
+with 'Dist::Zilla::Role::AfterRelease';
 
 has format => (
   is  => 'ro',
