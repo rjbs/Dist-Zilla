@@ -28,4 +28,4 @@ my %wanted = (
     'DZPA::ScriptUse'       => 0,
     'perl'                  => 5.008,
 );
-is_deeply( $meta->{requires}, \%wanted, '' );
+is_deeply( $meta->{requires}, \%wanted, 'all requires found, but no more' );
