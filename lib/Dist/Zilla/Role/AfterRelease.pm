@@ -1,3 +1,6 @@
+use strict;
+use warnings;
+
 package Dist::Zilla::Role::AfterRelease;
 # ABSTRACT: something that runs after release is mostly complete
 
