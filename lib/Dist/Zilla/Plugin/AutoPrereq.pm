@@ -7,6 +7,7 @@ package Dist::Zilla::Plugin::AutoPrereq;
 
 use Dist::Zilla::Util;
 use Moose;
+use MooseX::Has::Sugar;
 use version;
 
 with 'Dist::Zilla::Role::FixedPrereqs';
@@ -14,7 +15,7 @@ with 'Dist::Zilla::Role::FixedPrereqs';
 # -- attributes
 
 # skiplist - a regex
-has skip => ( is=>'ro', predicate=>'has_skip' );
+has skip => ( ro, predicate=>'has_skip' );
 
 
 # -- public methods
