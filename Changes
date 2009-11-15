@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
-          new role AfterRelease (Jérôme Quelin)
+          new role BeforeRelease (Jérôme Quelin)
+          new role AfterRelease  (Jérôme Quelin)
 
 1.093160  2009-11-12
           make TextTemplate use fill_this_in to avoid
