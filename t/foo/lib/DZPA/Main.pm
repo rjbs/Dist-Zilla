@@ -1,4 +1,5 @@
 package DZPA::Main;
+# ABSTRACT: dumb module to test DZPA
 
 # perl minimum version
 use 5.008;
