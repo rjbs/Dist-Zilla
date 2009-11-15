@@ -24,9 +24,8 @@ sub section_header {
   require String::Format;
   my $string = $self->format;
 
-  # XXX: if possible, get the time zone from Wherever -- rjbs, 2008-06-05
   require DateTime;
-  my $now = DateTime->from_epoch(epoch => $^T);
+  my $now = DateTime->from_epoch(epoch => $^T, time_zone=>'local');
 
   String::Format::stringf(
     $string,
