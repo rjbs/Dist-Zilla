@@ -1,5 +1,6 @@
 package Dist::Zilla::Plugin::NextRelease;
 # ABSTRACT: update the next release number in your changelog
+
 use Moose;
 with 'Dist::Zilla::Role::FileMunger';
 with 'Dist::Zilla::Role::TextTemplate';
@@ -53,11 +54,12 @@ sub munge_file {
   $file->content($content);
 }
 
+# new release is part of distribution history, let's record that.
 sub after_release {
   my ($self) = @_;
-
   my $filename = $self->filename;
 
+  # read original changelog
   my $content = do {
     local $/;
     open my $in_fh, '<', $filename
@@ -65,15 +67,15 @@ sub after_release {
     <$in_fh>
   };
 
+  # add the version and date to file content
   my $delim  = $self->delim;
   my $header = $self->section_header;
-
   $content =~ s{ (\Q$delim->[0]\E \s*) \$NEXT (\s* \Q$delim->[1]\E) }
                {$1\$NEXT$2\n\n$header}xs;
 
+  # and finally rewrite the changelog on disk
   open my $out_fh, '>', $filename
     or Carp::croak("can't open $filename for writing: $!");
-
   print $out_fh $content or Carp::croak("error writing to $filename: $!");
   close $out_fh or Carp::croak("error closing $filename: $!");
 }
