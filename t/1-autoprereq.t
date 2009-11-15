@@ -5,7 +5,9 @@ use warnings;
 
 use Dist::Zilla;
 use File::Spec::Functions qw{ catdir catfile };
-use Test::More tests => 1;
+use Test::More            tests => 1;
+use YAML                  qw{ LoadFile };
+
 
 # build fake dist
 chdir( catdir('t', 'foo') );
@@ -14,12 +16,7 @@ $zilla->build_in;
 my $dir = 'Foo-1.23';
 
 # check found prereqs
-open my $fh, '<', catfile($dir, 'Makefile.PL') or die $!;
-my @lines = grep { /PREREQ_PM/ .. /\}/ } <$fh>;
-shift @lines; pop @lines;
-my %prereqs = map { eval $_ } @lines;
-close $fh;
-
+my $meta = LoadFile( catfile($dir, 'META.yml') );
 my %wanted = (
     'DZPA::Base'            => 0,
     'DZPA::IndentedRequire' => '3.45',
@@ -31,5 +28,4 @@ my %wanted = (
     'DZPA::ScriptUse'       => 0,
     'perl'                  => 5.008,
 );
-is_deeply( \%prereqs, \%wanted, '')
-
+is_deeply( $meta->{requires}, \%wanted, '' );
