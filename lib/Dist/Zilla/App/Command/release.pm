@@ -28,6 +28,9 @@ sub execute {
   my $tgz = $self->zilla->build_archive;
 
   $_->release($tgz) for @releasers;
+
+  # call all plugins implementing AfterRelease role
+  $_->after_release() for $self->plugins_with(-AfterRelease)->flatten;
 }
 
 1;
