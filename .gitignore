@@ -1,3 +1,11 @@
 Dist-Zilla-*
 .build
+
+# avoid temp and backup files
+*~
+*#
+*.bak
+*.old
+*.rej
 *.swp
+*.tmp
