@@ -10,7 +10,6 @@ Creates a new Dist-Zilla based distribution in the current directory.
 
     dzil new NAME
 
-
 =head1 EXAMPLE
 
     $ dzil new My::Module::Name
@@ -18,9 +17,9 @@ Creates a new Dist-Zilla based distribution in the current directory.
 
 =head1 ARGUMENTS
 
-    NAME = PACKAGE | DOTDIR
-    DOTDIR  = "."
-    PACKAGE = "Your-Package-Name" | "Your::Module::Name"
+  NAME = PACKAGE | DOTDIR
+  DOTDIR  = "."
+  PACKAGE = "Your-Package-Name" | "Your::Module::Name"
 
 =head2 NAME
 
@@ -28,15 +27,13 @@ Can be either the value '.' , or a main-module name ( ie: C<Foo::Bar> )
 
 =head3 DOTDIR
 
-If the name given for the C<name> is C<< . >> it will assume the parent directory is the module name, ie:
+If the name given for the C<name> is C<< . >> it will assume the parent
+directory is the module name, ie:
 
-    $ cd /tmp/foo-bar/
-    $ dist new .
+  $ cd /tmp/foo-bar/
+  $ dist new .
 
-This will create
-
-    $ /tmp/foo-bar/dist.ini
-
+This will create F</tmp/foo-bar/dist.ini>
 
 =head3 PACKAGE
 
@@ -44,12 +41,12 @@ C<::> tokens will be replaced with '-''s and a respective directory created.
 
 ie:
 
-    $ cd /tmp
-    $ dist new Foo::Bar
+  $ cd /tmp
+  $ dist new Foo::Bar
 
 creates
 
-    $ /tmp/Foo-Bar/dist.ini
+  $ /tmp/Foo-Bar/dist.ini
 
 =cut
 
@@ -147,19 +144,26 @@ sub execute {
     open my $fh, '>', $file or die "can't open $file for output: $!";
 
     my $config = { $self->config->flatten };
+    use Data::Dumper;  warn Dumper($config);
 
     # for those 'The getpwuid function is unimplemented'
-    eval {
-        my @pw = getpwuid $>;
-        $config->{author} ||= [ (split /,/, $pw[6])[0] ];
-    };
-    $config->{author} ||= [ getlogin || 'YourNameHere' ] if $@;
+    unless ($config->{authors} and @{ $config->{authors} }) {
+      local $@;
+      eval {
+          my @pw = getpwuid $>;
+          $config->{authors} ||= [ (split /,/, $pw[6])[0] ];
+      };
+    }
+
+    Carp::croak("no 'author' set in config and cannot be determined by OS")
+      unless $config->{authors} and @{ $config->{authors} };
 
     printf $fh "name    = $dist\n";
     printf $fh "version = %s\n", ($config->{initial_version} || '1.000');
-    printf $fh "author  = %s\n", $_ for $config->{author}->flatten;
+    printf $fh "author  = %s\n", $_ for $config->{authors}->flatten;
     printf $fh "license = %s\n", ($config->{default_license} || 'Perl_5');
-    printf $fh "copyright_holder = %s\n", $config->{author}->[0];
+    printf $fh "copyright_holder = %s\n",
+      $config->{copyright_holder} || $config->{authors}->[0];
     printf $fh "\n";
     printf $fh "[\@Classic]\n";
 
@@ -171,11 +175,12 @@ sub execute {
 
 In C<~/.dzil> or C<~/.dzil/config.ini>
 
-    [=Dist::Zilla::App::Command::new]
-    author = authorname  # used for copyright owner
-    author = author2name
-    initial_version = 3.1415
-    default_license = BSD
+  [=Dist::Zilla::App::Command::new]
+  author = authorname  # used for copyright owner
+  author = author2name
+  initial_version = 3.1415
+  default_license = BSD
 
 =cut
+
 1;
