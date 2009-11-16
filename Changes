@@ -2,6 +2,9 @@ Revision history for {{$dist->name}}
 
           new role BeforeRelease (Jérôme Quelin)
           new role AfterRelease  (Jérôme Quelin)
+          default format for AutoVersion plugin changed (Jérôme Quelin)
+          NextRelease plugin updates changelog after release
+          new plugin FakeRelease (Jérôme Quelin)
 
 1.093160  2009-11-12
           make TextTemplate use fill_this_in to avoid
