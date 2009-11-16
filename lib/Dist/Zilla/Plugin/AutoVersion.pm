@@ -11,7 +11,7 @@ use DateTime ();
 =head1 DESCRIPTION
 
 This plugin automatically produces a version string, generally based on the
-current time.  By default, it will be in the format: 1.yyyymmddhhmm
+current time.  By default, it will be in the format: 1.yyDDDn
 
 =cut
 
@@ -41,7 +41,7 @@ which consult the L<DateTime> documentation).
 
 The default value is:
 
-  {{ $major }}.{{ cldr('yyDDD') }}0
+  {{ $major }}.{{ cldr('yyDDD') }}{{ sprintf '%01u', ($ENV{N} || 0) }}
 
 =cut
 
@@ -56,7 +56,7 @@ has format => (
   is       => 'ro',
   isa      => 'Str',
   required => 1,
-  default  => q[{{ $major }}.{{ cldr('yyDDD') }}0],
+  default  => q[{{ $major }}.{{ cldr('yyDDD') }}{{ sprintf '%01u', ($ENV{N} || 0) }}],
 );
 
 sub provide_version {
