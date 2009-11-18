@@ -5,6 +5,7 @@ use Moose::Autobox;
 with 'Dist::Zilla::Role::InstallTool';
 with 'Dist::Zilla::Role::TextTemplate';
 with 'Dist::Zilla::Role::TestRunner';
+with 'Dist::Zilla::Role::MetaProvider';
 
 use Dist::Zilla::File::InMemory;
 
@@ -14,6 +15,20 @@ This plugin will create a F<Build.PL> for installing the dist using
 L<Module::Build>.
 
 =cut
+
+=attr mb_version
+
+B<Optional:> Specify the minimum version of L<Module::Build> to depend on.
+
+Defaults to 0.35.
+
+=cut
+
+has 'mb_version' => (
+  isa => 'Str',
+  is  => 'rw',
+  default => '0.35',
+);
 
 my $template = q|
 use strict;
@@ -51,6 +66,14 @@ $build->create_build_script;
 #    (sort {length $a <=> length $b}
 #     grep { m{^lib/.+\.pm$} } @{$dist->files})[0]
 #  ) }}",
+
+sub metadata {
+  my $self = shift;
+  return {
+    configure_requires => { 'Module::Build' => $self->mb_version },
+    build_requires     => { 'Module::Build' => $self->mb_version },
+  };
+}
 
 sub setup_installer {
   my ($self, $arg) = @_;
