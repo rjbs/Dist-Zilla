@@ -2,6 +2,9 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+1.093250  2009-11-21 14:14:20 America/New_York
+          refactor !release
+
 1.093220  2009-11-18 08:15:20 America/New_York
           Module::Build now injects version deps in build_requires and
           configure_requires, hopefully solving issues with version-upgrades.
