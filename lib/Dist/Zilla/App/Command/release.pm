@@ -4,8 +4,6 @@ package Dist::Zilla::App::Command::release;
 # ABSTRACT: release your dist to the CPAN
 use Dist::Zilla::App -command;
 
-use Moose::Autobox;
-
 =head1 SYNOPSIS
 
 Use ReleasePlugin(s) to release your distribution in many ways.
@@ -21,20 +19,7 @@ sub abstract { 'release your dist' }
 
 sub execute {
   my ($self, $opt, $arg) = @_;
-
-  Carp::croak("you can't release without any Releaser plugins")
-    unless my @releasers = $self->zilla->plugins_with(-Releaser)->flatten;
-
-  my $tgz = $self->zilla->build_archive;
-
-  # call all plugins implementing BeforeRelease role
-  $_->before_release() for $self->zilla->plugins_with(-BeforeRelease)->flatten;
-
-  # do the actual release
-  $_->release($tgz) for @releasers;
-
-  # call all plugins implementing AfterRelease role
-  $_->after_release() for $self->zilla->plugins_with(-AfterRelease)->flatten;
+  $self->zilla->release;
 }
 
 1;

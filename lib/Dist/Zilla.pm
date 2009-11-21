@@ -713,7 +713,23 @@ by the loaded plugins.
 
 =cut
 
-sub release { die '...' }
+sub release {
+  my $self = shift;
+
+  Carp::croak("you can't release without any Releaser plugins")
+    unless my @releasers = $self->plugins_with(-Releaser)->flatten;
+
+  my $tgz = $self->build_archive;
+
+  # call all plugins implementing BeforeRelease role
+  $_->before_release() for $self->plugins_with(-BeforeRelease)->flatten;
+
+  # do the actual release
+  $_->release($tgz) for @releasers;
+
+  # call all plugins implementing AfterRelease role
+  $_->after_release() for $self->plugins_with(-AfterRelease)->flatten;
+}
 
 =method log
 
