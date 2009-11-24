@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+1.093280  2009-11-24 11:24:52 America/New_York
           include META.yml again for now
           look at ~/.pause for upload config if it isn't in ~/.dzil/config
 
