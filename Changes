@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          include META.yml again for now
+          look at ~/.pause for upload config if it isn't in ~/.dzil/config
 
 1.093250  2009-11-21 14:14:20 America/New_York
           refactor !release
