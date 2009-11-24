@@ -6,6 +6,21 @@ with 'Dist::Zilla::Role::FileMunger';
 with 'Dist::Zilla::Role::TextTemplate';
 with 'Dist::Zilla::Role::AfterRelease';
 
+use DateTime;
+use String::Formatter stringf => {
+  -as => '_format_version',
+
+  input_processor => 'require_single_input',
+  string_replacer => 'method_replace',
+  codes => {
+    v => sub { $_[0]->version },
+    d => sub {
+      DateTime->from_epoch(epoch => $^T, time_zone => 'local')
+              ->format_cldr($_[1]),
+    }
+  },
+};
+
 has format => (
   is  => 'ro',
   isa => 'Str', # should be more validated Later -- rjbs, 2008-06-05
@@ -21,19 +36,7 @@ has filename => (
 sub section_header {
   my ($self) = @_;
 
-  require String::Format;
-  my $string = $self->format;
-
-  require DateTime;
-  my $now = DateTime->from_epoch(epoch => $^T, time_zone=>'local');
-
-  String::Format::stringf(
-    $string,
-    (
-      v => $self->zilla->version,
-      d => sub { $now->format_cldr($_[0]) }, 
-    ),
-  );
+  return _format_version($self->format, $self->zilla);
 }
 
 sub munge_file {
