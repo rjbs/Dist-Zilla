@@ -91,13 +91,11 @@ sub setup_installer {
 
 sub test {
   my ( $self, $target ) = @_;
-  eval {
-    ## no critic Punctuation
-    system($^X => 'Makefile.PL') and die "error with Makefile.PL\n";
-    system('make') and die "error running make\n";
-    system('make test') and die "error running make test\n";
-    1;
-  } or return $@;
+  ## no critic Punctuation
+  system($^X => 'Makefile.PL') and die "error with Makefile.PL\n";
+  system('make') and die "error running make\n";
+  system('make test') and die "error running make test\n";
+  return;
 }
 
 __PACKAGE__->meta->make_immutable;

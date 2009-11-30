@@ -27,13 +27,11 @@ Is more or less what this plugin does.
 
 sub test {
   my ( $self, $target ) = @_;
-  eval {
-    ## no critic Punctuation
-    system($^X => 'Build.PL') and die "error with Makefile.PL\n";
-    system('./Build') and die "error running make\n";
-    system('./Build test') and die "error running make test\n";
-    1;
-  } or return $@;
+  ## no critic Punctuation
+  system($^X => 'Build.PL') and die "error with Makefile.PL\n";
+  system('./Build') and die "error running make\n";
+  system('./Build test') and die "error running make test\n";
+  return;
 }
 
 1;

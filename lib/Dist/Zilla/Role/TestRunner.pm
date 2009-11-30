@@ -19,6 +19,22 @@ with 'Dist::Zilla::Role::Plugin';
 
   ->test( $build_dir )
 
+This method should return C<undef> on success.
+
+Any other value is interpreted as an error message, and no more tests are run.
+
+Calling "die" inside test also will be caught.
+
+The following 2 subs should behave(mostly) the same:
+
+    sub test {
+        die "Failed";
+    }
+
+    sub test {
+        return "Failed";
+    }
+
 =cut
 
 requires 'test';

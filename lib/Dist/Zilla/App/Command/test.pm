@@ -64,13 +64,15 @@ sub execute {
   my $error;
 
   for my $tester ( @testers ) {
+    undef $error;
     eval {
       local $File::chdir::CWD = $target;
-      $tester->test( $target );
+      $error = $tester->test( $target );
+      1;
     } or do {
       $error = $@;
-      last;
     };
+    last if $error;
   }
 
   if ( $error ) {
