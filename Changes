@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          Fix regression where failing tests still cleaned up the build dir.
+            ( Kent Fredric )
 
 1.093290  2009-11-25 14:45:45 America/New_York
           switch from String::Format to String::Formatter
