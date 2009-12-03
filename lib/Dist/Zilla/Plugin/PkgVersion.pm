@@ -49,7 +49,7 @@ sub munge_perl {
   return unless my $package_stmts = $document->find('PPI::Statement::Package');
 
   # $hack is here so that when we scan *this* document we
-  my $version_doc = PPI::Document->new(\qq{our \$VERSION = '$version';\n});
+  my $version_doc = PPI::Document->new(\"our \$VERSION\x20=\x20'$version';\n");
   my @children = $version_doc->schildren;
 
   for my $stmt (@$package_stmts) {
