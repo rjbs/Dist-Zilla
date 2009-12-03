@@ -18,7 +18,7 @@ In your F<dist.ini>:
 =cut
 
 sub mvp_multivalue_args { qw(filenames) }
-sub mvp_aliases { return { filename => 'filenames' } }
+# sub mvp_aliases {  warn "..."; return { filename => 'filenames' } }
 
 =attr filenames
 
@@ -29,17 +29,19 @@ This is an arrayref of filenames to be pruned from the distribution.
 has filenames => (
   is   => 'ro',
   isa  => 'ArrayRef',
-  lazy => 1,
-  default  => sub { [] },
+  required => 1,
 );
 
 sub prune_files {
   my ($self) = @_;
 
   my $files = $self->zilla->files;
-  my $any = $self->filenames->any;
 
-  @$files = $files->grep(sub { $_->name ne $any })->flatten;
+  for my $filename ($self->filenames->flatten) {
+    @$files = $files->grep(sub {
+      ($_->name ne $filename) && ($_->name !~ m{\A\Q$filename\E/})
+    })->flatten;
+  }
 
   return;
 }
