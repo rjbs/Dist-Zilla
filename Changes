@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+1.093370  2009-12-03 18:17:16 America/New_York
           PruneFiles now works; the documented args for PruneFiles were wrong
           PkgVersion now uses PPI to insert $VERSION; avoids many false inserts
           Fix regression where failing tests still cleaned up the build dir.
