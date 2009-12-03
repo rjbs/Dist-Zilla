@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          PruneFiles now works... for real; only "filenames" works
 
 1.093370  2009-12-03 18:17:16 America/New_York
           PruneFiles now works; the documented args for PruneFiles were wrong

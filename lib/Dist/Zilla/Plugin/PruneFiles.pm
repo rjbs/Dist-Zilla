@@ -13,7 +13,7 @@ bunch of files, and you only want a subset of them.
 In your F<dist.ini>:
 
   [PruneFiles]
-  filename = xt/release/pod-coverage.t ; pod coverage tests are for jerks
+  filenames = xt/release/pod-coverage.t ; pod coverage tests are for jerks
 
 =cut
 
