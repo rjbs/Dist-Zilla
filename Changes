@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          declare dependency on PPI introduced by 1.093370
 
 1.093371  2009-12-03 18:45:11 America/New_York
 
