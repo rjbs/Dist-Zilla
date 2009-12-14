@@ -144,7 +144,6 @@ sub execute {
     open my $fh, '>', $file or die "can't open $file for output: $!";
 
     my $config = { $self->config->flatten };
-    use Data::Dumper;  warn Dumper($config);
 
     # for those 'The getpwuid function is unimplemented'
     unless ($config->{authors} and @{ $config->{authors} }) {
