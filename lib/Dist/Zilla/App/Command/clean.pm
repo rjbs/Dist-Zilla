@@ -4,6 +4,8 @@ package Dist::Zilla::App::Command::clean;
 # ABSTRACT: clean up after build, test, or install
 use Dist::Zilla::App -command;
 
+use File::Find::Rule;
+
 =head1 SYNOPSIS
 
 Removes some files that are created during build, test, and install.
@@ -33,6 +35,14 @@ sub execute {
     $self->log("clean: removing $x");
     File::Path::rmtree($x);
   };
+
+  # removing leftovers
+  my @temps =
+    File::Find::Rule
+    ->file
+    ->name( qr/~$/ )
+    ->in('.');
+  unlink @temps;
 }
 
 1;
