@@ -1,7 +1,6 @@
 package Dist::Zilla::File::OnDisk;
 # ABSTRACT: a file that comes from your filesystem
 use Moose;
-with 'Dist::Zilla::Role::File';
 
 =head1 DESCRIPTION
 
@@ -36,6 +35,8 @@ sub _read_file {
   open my $fh, '<', $fname or die "can't open $fname for reading: $!";
   my $content = do { local $/; <$fh> };
 }
+
+with 'Dist::Zilla::Role::File';
 
 __PACKAGE__->meta->make_immutable;
 no Moose;

@@ -1,7 +1,6 @@
 package Dist::Zilla::File::InMemory;
 # ABSTRACT: a file that you build entirely in memory
 use Moose;
-with 'Dist::Zilla::Role::File';
 
 =head1 DESCRIPTION
 
@@ -16,6 +15,7 @@ has content => (
   required => 1,
 );
 
+with 'Dist::Zilla::Role::File';
 __PACKAGE__->meta->make_immutable;
 no Moose;
 1;

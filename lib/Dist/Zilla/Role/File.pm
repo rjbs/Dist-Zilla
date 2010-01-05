@@ -2,6 +2,8 @@ package Dist::Zilla::Role::File;
 # ABSTRACT: something that can act like a file
 use Moose::Role;
 
+requires 'content';
+
 =head1 DESCRIPTION
 
 This role describes a file that may be written into the shipped distribution.
@@ -29,20 +31,6 @@ L<FileInjector|Dist::Zilla::Role::FileInjector> role.
 has added_by => (
   is => 'ro',
 );
-
-=attr install_type
-
-This attribute may be set to something indicating where the file will be
-installed.  For now, its meaning is pretty up in the air.
-
-=cut
-
-has install_type => (
-  is => 'rw',
-);
-
-# Why didn't this work with 0.65? :( -- rjbs, 2009-04-20
-# requires 'content';
 
 no Moose::Role;
 1;
