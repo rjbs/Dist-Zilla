@@ -2,6 +2,7 @@ package Dist::Zilla::Plugin::ModuleBuild;
 # ABSTRACT: build a Build.PL that uses Module::Build
 use Moose;
 use Moose::Autobox;
+with 'Dist::Zilla::Role::BuildRunner';
 with 'Dist::Zilla::Role::InstallTool';
 with 'Dist::Zilla::Role::TextTemplate';
 with 'Dist::Zilla::Role::TestRunner';
@@ -123,12 +124,18 @@ sub setup_installer {
   return;
 }
 
+sub build {
+  my $self = shift;
+  system($^X => 'Build.PL') and die "error with Build.PL\n";
+  system('./Build')         and die "error running ./Build\n";
+  return;
+}
+
 sub test {
   my ( $self, $target ) = @_;
   ## no critic Punctuation
-  system($^X => 'Build.PL') and die "error with Makefile.PL\n";
-  system('./Build') and die "error running make\n";
-  system('./Build test') and die "error running make test\n";
+  $self->build;
+  system('./Build test') and die "error running ./Build test\n";
   return;
 }
 

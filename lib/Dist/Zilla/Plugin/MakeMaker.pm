@@ -3,6 +3,7 @@ package Dist::Zilla::Plugin::MakeMaker;
 # ABSTRACT: build a Makefile.PL that uses ExtUtils::MakeMaker
 use Moose;
 use Moose::Autobox;
+with 'Dist::Zilla::Role::BuildRunner';
 with 'Dist::Zilla::Role::InstallTool';
 with 'Dist::Zilla::Role::TextTemplate';
 with 'Dist::Zilla::Role::TestRunner';
@@ -108,11 +109,17 @@ sub setup_installer {
   return;
 }
 
+sub build {
+  my $self = shift;
+  system($^X => 'Makefile.PL') and die "error with Makefile.PL\n";
+  system('make')               and die "error running make\n";
+  return;
+}
+
 sub test {
   my ( $self, $target ) = @_;
   ## no critic Punctuation
-  system($^X => 'Makefile.PL') and die "error with Makefile.PL\n";
-  system('make') and die "error running make\n";
+  $self->build;
   system('make test') and die "error running make test\n";
   return;
 }
