@@ -20,8 +20,8 @@ C<bin> indicates directories that contain executable files to install.  If no
 value is given, the directory C<bin> will be used.
 
 C<share> indicates directories that contain shared content to install for use
-with L<File::ShareDir>.  If no value is given, the directory C<share> will be
-used.
+with L<File::ShareDir>.  If no value is given, it will try to guess whether or
+not F<./share> should be used.
 
 =cut
 
@@ -30,13 +30,22 @@ sub mvp_multivalue_args { qw(bin share) }
 has bin => (
   is   => 'ro',
   isa  => 'ArrayRef[Str]',
-  default  => sub { [ qw(bin) ] },
+  lazy => 1,
+  default => sub { [ qw(bin) ] },
 );
 
 has share => (
   is   => 'ro',
   isa  => 'ArrayRef[Str]',
-  default  => sub { [ qw(share) ] },
+  lazy => 1,
+  default => sub {
+    my ($self) = @_;
+    if ($self->zilla->files->grep(sub { $_->name =~ m{\Ashare/} })->length) {
+      return [ qw(share) ];
+    } else {
+      return [];
+    }
+  },
 );
 
 __PACKAGE__->meta->make_immutable;

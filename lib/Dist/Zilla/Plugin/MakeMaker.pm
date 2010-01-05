@@ -7,6 +7,7 @@ with 'Dist::Zilla::Role::BuildRunner';
 with 'Dist::Zilla::Role::InstallTool';
 with 'Dist::Zilla::Role::TextTemplate';
 with 'Dist::Zilla::Role::TestRunner';
+with 'Dist::Zilla::Role::FixedPrereq';
 
 =head1 DESCRIPTION
 
@@ -56,6 +57,9 @@ WriteMakefile(
   },
   test => {TESTS => '{{ $test_dirs }}'}
 );
+
+package MY;
+use File::ShareDir::Install qw(postamble);
 
 |;
 
@@ -126,6 +130,20 @@ sub test {
   $self->build;
   system('make test') and die "error running make test\n";
   return;
+}
+
+sub prereq {
+  my ($self) = @_;
+
+  my $has_share = $self->zilla->plugins
+    ->grep(sub { $_->isa('Dist::Zilla::Plugins::InstallDirs') })
+    ->grep(sub { $_->share->length > 0 })
+    ->length;
+
+  return {
+    'ExtUtils::MakeMaker'     => $self->eumm_version,
+    ($has_share ? ('File::ShareDir::Install' => 0.03) : ()),
+  };
 }
 
 __PACKAGE__->meta->make_immutable;
