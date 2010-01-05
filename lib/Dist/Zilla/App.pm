@@ -46,11 +46,11 @@ sub config_for {
 }
 
 sub global_opt_spec {
-    [ "inc|I=s", "additional \@INC dirs", {
-        callbacks => {
-            'always fine' => sub { unshift @INC, $_[0]; }
-        }
+  return (
+    [ "inc|I=s@", "additional \@INC dirs", {
+        callbacks => { 'always fine' => sub { unshift @INC, @{$_[0]}; } }
     } ]
+  );
 }
 
 

@@ -7,16 +7,16 @@ package Dist::Zilla::App::Command::run;
 use Dist::Zilla::App -command;
 use Moose::Autobox;
 
+sub abstract { 'run stuff in a dir where your dist is built' }
+
 sub execute {
   my ($self, $opts, $args) = @_;
 
-  my @builders =
-    reverse sort                                         # preferring mb over eumm
-    grep { ! $_->isa('Dist::Zilla::Plugin::Manifest') }  # not a real install tool
-    $self->zilla->plugins_with(-InstallTool)->flatten;
-    print ">>$_<<\n" for @builders;
+  # The sort below is a cheap hack to get ModuleBuild ahead of
+  # ExtUtils::MakeMaker. -- rjbs, 2010-01-05
   Carp::croak("you can't release without any InstallTool plugins")
-    unless @builders;
+    unless my @builders =
+    $self->zilla->plugins_with(-BuildRunner)->sort->reverse->flatten;
 
   require File::chdir;
   require File::Temp;
@@ -32,25 +32,22 @@ sub execute {
   $self->zilla->ensure_built_in($target);
 
   # building the dist for real
-  my $error;
-  eval {
+  my $ok = eval {
     local $File::chdir::CWD = $target;
-    $error = $builders[0]->build;
-    system( @$args ) and die "error while running: @$args";
+    $builders[0]->build;
+    system(@$args) and die "error while running: @$args";
     1;
-  } or do {
-    $error = $@;
   };
 
-  if ( $error ) {
-    $self->log($error);
-    $self->log("left failed dist in place at $target");
-    exit 1;                     # Indicate test failure
-  } else {
+  if ($ok) {
     $self->log("all's well; removing $target");
     $target->rmtree;
+  } else {
+    my $error = $@ || '(unknown error)';
+    $self->log($error);
+    $self->log("left failed dist in place at $target");
+    exit 1;
   }
-
 }
 
 1;
