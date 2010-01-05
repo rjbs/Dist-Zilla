@@ -10,7 +10,7 @@ with 'Dist::Zilla::Role::TestRunner';
 with 'Dist::Zilla::Role::MetaProvider';
 
 use Dist::Zilla::File::InMemory;
-
+use List::MoreUtils qw(any uniq);
 =head1 DESCRIPTION
 
 This plugin will create a F<Build.PL> for installing the dist using
@@ -59,7 +59,7 @@ my $build = Module::Build->new(
 }}
   },
   script_files => [ qw({{ $exe_files }}) ],
-  share_dir    => {{ $share_dir }},
+  share_dir    => '{{ $share_dir }}',
 );
 
 $build->create_build_script;
