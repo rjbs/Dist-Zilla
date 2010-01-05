@@ -1,5 +1,6 @@
 package Dist::Zilla::Plugin::ModuleBuild;
 # ABSTRACT: build a Build.PL that uses Module::Build
+use List::MoreUtils qw{ any uniq };
 use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::BuildRunner';
