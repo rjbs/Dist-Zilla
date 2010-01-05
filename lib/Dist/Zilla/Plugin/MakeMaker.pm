@@ -15,6 +15,10 @@ plugin should also be loaded.
 
 =cut
 
+use List::MoreUtils qw(any uniq);
+
+use namespace::autoclean;
+
 use Dist::Zilla::File::InMemory;
 
 my $template = q|
@@ -36,7 +40,7 @@ WriteMakefile(
   AUTHOR    => "{{ $author_str     }}",
   ABSTRACT  => "{{ quotemeta($dist->abstract) }}",
   VERSION   => '{{ $dist->version  }}',
-  EXE_FILES => [ qw({{ $exe_files }}) ],
+  EXE_FILES => [ {{ $exe_files }} ],
   (eval { ExtUtils::MakeMaker->VERSION(6.31) } ? (LICENSE => '{{ $dist->license->meta_yml_name }}') : ()),
   PREREQ_PM    => {
 {{
@@ -56,10 +60,25 @@ sub setup_installer {
 
   (my $name = $self->zilla->name) =~ s/-/::/g;
 
-  my $exe_files = $self->zilla->files
-    ->grep( sub { ( $_->install_type || '' ) eq 'bin' } )
-    ->map(  sub { $_->name } )
-    ->join(q{ });
+  # XXX: SHAMELESSLY COPIED AND PASTED INTO ModuleBuild -- rjbs, 2010-01-05
+  my @dir_plugins = $self->zilla->plugins
+    ->grep( sub { $_->isa('Dist::Zilla::Plugin::InstallDirs') })
+    ->flatten;
+
+  my @bin_dirs    = uniq map {; $_->bin->flatten   } @dir_plugins;
+  my @share_dirs  = uniq map {; $_->share->flatten } @dir_plugins;
+
+  confess "can't install more than one ShareDir" if @share_dirs > 1;
+
+  my @exe_files = $self->zilla->files
+    ->grep(sub { my $f = $_; any { $f->name =~ qr{^\Q$_\E[\\/]} } @bin_dirs; })
+    ->map( sub { $_->name })
+    ->flatten;
+
+  confess "can't install files with whitespace in their names"
+    if grep { /\s/ } @exe_files;
+
+  my $exe_files = join q{, }, map { q{"} . quotemeta($_) . q{"} } @exe_files;
 
   my %test_dirs;
   for my $file ($self->zilla->files->flatten) {

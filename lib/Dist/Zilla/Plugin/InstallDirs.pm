@@ -2,7 +2,6 @@ package Dist::Zilla::Plugin::InstallDirs;
 # ABSTRACT: mark directory contents for installation
 use Moose;
 use Moose::Autobox;
-with 'Dist::Zilla::Role::FileMunger';
 
 =head1 SYNOPSIS
 
@@ -17,34 +16,28 @@ In your F<dist.ini>:
 This plugin marks the contents of certain directories as files to be installed
 under special locations.
 
-The only implemented attribute is C<bin>, which indicates directories that
-contain executable files to install.  If no value is given, the directory
-C<bin> will be considered.
+C<bin> indicates directories that contain executable files to install.  If no
+value is given, the directory C<bin> will be used.
 
-=head1 TODO
-
-Add support for ShareDir-style C<dist_dir> files.
+C<share> indicates directories that contain shared content to install for use
+with L<File::ShareDir>.  If no value is given, the directory C<share> will be
+used.
 
 =cut
 
-# XXX: implement share -- rjbs, 2008-06-08
 sub mvp_multivalue_args { qw(bin share) }
 
-has mark_as_bin => (
+has bin => (
   is   => 'ro',
   isa  => 'ArrayRef[Str]',
   default  => sub { [ qw(bin) ] },
-  init_arg => 'bin'
 );
 
-sub munge_file {
-  my ($self, $file) = @_;
-
-  for my $dir ($self->mark_as_bin->flatten) {
-    next unless $file->name =~ qr{^\Q$dir\E[\\/]};
-    $file->install_type('bin');
-  }
-}
+has share => (
+  is   => 'ro',
+  isa  => 'ArrayRef[Str]',
+  default  => sub { [ qw(share) ] },
+);
 
 __PACKAGE__->meta->make_immutable;
 no Moose;

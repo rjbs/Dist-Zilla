@@ -20,21 +20,21 @@ L<Module::Build>.
 
 B<Optional:> Specify the minimum version of L<Module::Build> to depend on.
 
-Defaults to 0.35.
+Defaults to 0.3601
 
 =cut
 
 has 'mb_version' => (
   isa => 'Str',
   is  => 'rw',
-  default => '0.35',
+  default => '0.3601',
 );
 
 my $template = q|
 use strict;
 use warnings;
 
-use Module::Build;
+use Module::Build 0.3601;
 
 my $build = Module::Build->new(
   module_name   => '{{ $module_name }}',
@@ -57,6 +57,7 @@ my $build = Module::Build->new(
 }}
   },
   script_files => [ qw({{ $exe_files }}) ],
+  share_dir    => {{ $share_dir }},
 );
 
 $build->create_build_script;
@@ -83,10 +84,25 @@ sub setup_installer {
 
   (my $name = $self->zilla->name) =~ s/-/::/g;
 
-  my $exe_files = $self->zilla->files
-                ->grep(sub { ($_->install_type||'') eq 'bin' })
-                ->map(sub { $_->name })
-                ->join(' ');
+  # XXX: SHAMELESSLY COPIED AND PASTED FROM MakeMaker -- rjbs, 2010-01-05
+  my @dir_plugins = $self->zilla->plugins
+    ->grep( sub { $_->isa('Dist::Zilla::Plugin::InstallDirs') })
+    ->flatten;
+
+  my @bin_dirs    = uniq map {; $_->bin->flatten   } @dir_plugins;
+  my @share_dirs  = uniq map {; $_->share->flatten } @dir_plugins;
+
+  confess "can't install more than one ShareDir" if @share_dirs > 1;
+
+  my @exe_files = $self->zilla->files
+    ->grep(sub { my $f = $_; any { $f->name =~ qr{^\Q$_\E[\\/]} } @bin_dirs; })
+    ->map( sub { $_->name })
+    ->flatten;
+
+  confess "can't install files with whitespace in their names"
+    if grep { /\s/ } @exe_files;
+
+  my $exe_files = join q{, }, map { q{"} . quotemeta($_) . q{"} } @exe_files;
 
   my $content = $self->fill_in_string(
     $template,
@@ -94,6 +110,7 @@ sub setup_installer {
       module_name => $name,
       dist        => \$self->zilla,
       exe_files   => \$exe_files,
+      share_dir   => \$share_dirs[0],
     },
   );
 
