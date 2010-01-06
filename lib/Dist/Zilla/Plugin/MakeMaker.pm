@@ -7,7 +7,7 @@ with 'Dist::Zilla::Role::BuildRunner';
 with 'Dist::Zilla::Role::InstallTool';
 with 'Dist::Zilla::Role::TextTemplate';
 with 'Dist::Zilla::Role::TestRunner';
-with 'Dist::Zilla::Role::FixedPrereq';
+with 'Dist::Zilla::Role::FixedPrereqs';
 
 =head1 DESCRIPTION
 
@@ -34,10 +34,9 @@ use warnings;
     : '';
 }}
 
-use ExtUtils::MakeMaker;
-use File::ShareDir::Install;
+use ExtUtils::MakeMaker 6.11;
 
-install_share '{{ $share_dir }}';
+{{ $share_dir_block[0] }}
 
 WriteMakefile(
   DISTNAME  => '{{ $dist->name     }}',
@@ -58,8 +57,7 @@ WriteMakefile(
   test => {TESTS => '{{ $test_dirs }}'}
 );
 
-package MY;
-use File::ShareDir::Install qw(postamble);
+{{ $share_dir_block[1] }}
 
 |;
 
@@ -96,6 +94,16 @@ sub setup_installer {
     $test_dirs{ $dir } = 1;
   }
 
+  my @share_dir_block = (q{}, q{});
+
+  if ($share_dirs[0]) {
+    my $share_dir = quotemeta $share_dirs[0];
+    @share_dir_block = (
+      qq{use File::ShareDir::Install;\ninstall_share "$share_dir";\n},
+      qq{package MY;\nuse File::ShareDir::Install qw(postamble);\n},
+    );
+  }
+
   my $content = $self->fill_in_string(
     $template,
     {
@@ -104,7 +112,7 @@ sub setup_installer {
       exe_files   => \$exe_files,
       author_str  => \quotemeta( $self->zilla->authors->join(q{, }) ),
       test_dirs   => join (q{ }, sort keys %test_dirs),
-      share_dir   => \$share_dirs[0],
+      share_dir_block => \@share_dir_block,
     },
   );
 
@@ -145,6 +153,12 @@ sub prereq {
     ($has_share ? ('File::ShareDir::Install' => 0.03) : ()),
   };
 }
+
+has 'eumm_version' => (
+  isa => 'Str',
+  is  => 'rw',
+  default => '6.11',
+);
 
 __PACKAGE__->meta->make_immutable;
 no Moose;

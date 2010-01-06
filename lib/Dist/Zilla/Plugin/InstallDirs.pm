@@ -1,6 +1,7 @@
 package Dist::Zilla::Plugin::InstallDirs;
 # ABSTRACT: mark directory contents for installation
 use Moose;
+with 'Dist::Zilla::Role::Plugin';
 use Moose::Autobox;
 
 =head1 SYNOPSIS
