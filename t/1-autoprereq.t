@@ -4,19 +4,19 @@ use strict;
 use warnings;
 
 use Dist::Zilla;
-use File::Spec::Functions qw{ catdir catfile };
-use Test::More            tests => 1;
-use YAML                  qw{ LoadFile };
+use Path::Class;
+use Test::More tests => 1;
+use YAML       qw{ LoadFile };
 
 
 # build fake dist
-chdir( catdir('t', 'foo') );
+chdir( dir('t', 'foo') );
 my $zilla = Dist::Zilla->from_config;
 $zilla->build_in;
-my $dir = 'Foo-1.23';
+my $dir = dir('Foo-1.23');
 
 # check found prereqs
-my $meta = LoadFile( catfile($dir, 'META.yml') );
+my $meta = LoadFile( $dir->file('META.yml') );
 my %wanted = (
     'DZPA::Base'            => 0,
     'DZPA::IndentedRequire' => '3.45',
