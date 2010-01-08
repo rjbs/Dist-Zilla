@@ -29,3 +29,6 @@ my %wanted = (
     'perl'                  => 5.008,
 );
 is_deeply( $meta->{requires}, \%wanted, 'all requires found, but no more' );
+
+# clean after ourselves
+$dir->rmtree;
