@@ -2,6 +2,10 @@ Revision history for Dist::Zilla::Plugin::AutoPrereq
 
 {{$NEXT}}
 
+1.100080  2010-01-08 18:19:45 Europe/Paris
+ - don't ship makefile.pl anymore, only build.pl
+ - clean directories after tests
+
 1.093190 Sun Nov 15 12:49:43 2009
  - test don't use hack on makefile.pl anymore, but rely on meta.yml
  - requiring perl 5.8.x (that was already the case, but this time it's explicit)
