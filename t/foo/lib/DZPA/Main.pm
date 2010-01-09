@@ -25,6 +25,13 @@ require DZPA::ModRequire;
     use DZPA::IndentedUse 0.13;
     require DZPA::IndentedRequire 3.45;
 }
+
+use DZPA::IgnoreAPI
+    require => 1; # module pluggable has such an api
+print qw{
+    use !!
+};
+
 __END__
 =head1 FOO
 

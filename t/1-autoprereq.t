@@ -19,6 +19,7 @@ my $dir = dir('Foo-1.23');
 my $meta = LoadFile( $dir->file('META.yml') );
 my %wanted = (
     'DZPA::Base'            => 0,
+    'DZPA::IgnoreAPI'       => 0,
     'DZPA::IndentedRequire' => '3.45',
     'DZPA::IndentedUse'     => '0.13',
     'DZPA::MinVerComment'   => '0.50',
