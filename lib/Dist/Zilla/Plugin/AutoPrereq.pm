@@ -109,6 +109,7 @@ sub _prereqs_in_file {
 
         # trim common pragmata
         next if $module =~ /^(lib|strict|warnings)$/;
+        next if $module =~ /[^\.:\w]/;
 
         if ( _looks_like_version($module) ) {
             # perl minimum version is a bit special
