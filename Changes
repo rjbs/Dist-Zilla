@@ -2,6 +2,9 @@ Revision history for Dist::Zilla::Plugin::AutoPrereq
 
 {{$NEXT}}
 
+1.100090  2010-01-09 12:12:30 Europe/Paris
+ - don't extract modules with non-alphanumeric chars
+
 1.100080  2010-01-08 18:19:45 Europe/Paris
  - don't ship makefile.pl anymore, only build.pl
  - clean directories after tests
