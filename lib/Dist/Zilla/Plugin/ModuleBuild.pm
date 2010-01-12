@@ -59,7 +59,11 @@ my $build = Module::Build->new(
 }}
   },
   script_files => [ qw({{ $exe_files }}) ],
-  share_dir    => '{{ $share_dir }}',
+{{
+    return defined($share_dir)
+      ? qq{  share_dir    => '$share_dir',}
+      : '';
+}}
 );
 
 $build->create_build_script;
