@@ -18,6 +18,7 @@ sub execute {
     unless my @builders =
     $self->zilla->plugins_with(-BuildRunner)->sort->reverse->flatten;
 
+  require Config;
   require File::chdir;
   require File::Temp;
   require Path::Class;
@@ -26,7 +27,8 @@ sub execute {
   my $build_root = Path::Class::dir('.build');
   $build_root->mkpath unless -d $build_root;
 
-  my $target = Path::Class::dir( File::Temp::tempdir(DIR => $build_root) );
+  my $target    = Path::Class::dir( File::Temp::tempdir(DIR => $build_root) );
+  my $abstarget = $target->absolute;
   $self->log("building test distribution under $target");
 
   $self->zilla->ensure_built_in($target);
@@ -35,6 +37,9 @@ sub execute {
   my $ok = eval {
     local $File::chdir::CWD = $target;
     $builders[0]->build;
+    local $ENV{PERL5LIB} =
+      join $Config::Config{path_sep},
+      map { $abstarget->subdir('blib', $_) } qw{ arch lib };
     system(@$args) and die "error while running: @$args";
     1;
   };
@@ -71,6 +76,7 @@ doing this:
     cd .build
     perl Makefile.PL            # or perl Build.PL
     make                        # or ./Build        
+    export PERL5LIB=$PWD/blib/lib:$PWD/blib/arch
     <your command as defined by rest of params>
 
 Except for the fact it's built directly in a subdir of .build (like
