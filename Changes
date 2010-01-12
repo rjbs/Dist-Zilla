@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+1.100120  2010-01-12 18:40:00 America/New_York
           add 'dzil run' and BuildRunner (Jérôme Quelin)
           improve behavior of 'dzil clean' with backup files (Jérôme Quelin)
           dzil takes an -I option (Jérôme Quelin)
