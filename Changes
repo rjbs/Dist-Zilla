@@ -1,6 +1,13 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          add 'dzil run' and BuildRunner (Jérôme Quelin)
+          improve behavior of 'dzil clean' with backup files (Jérôme Quelin)
+          dzil takes an -I option (Jérôme Quelin)
+          InstallDirs can now provide File::ShareDir-style installs (rjbs,
+            Jérôme Quelin, nperez)
+          Role::File now requires a content method (rjbs)
+          eliminate stupid noise spewed during 'dzil new' (rjbs)
 
 1.093400  2009-12-06 13:56:09 America/New_York
           declare dependency on PPI introduced by 1.093370
