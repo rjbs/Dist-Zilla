@@ -56,8 +56,8 @@ __END__
 =head1 SYNOPSIS
 
     $ dzil run ./bin/myscript
-    $ dzil run prove -lv t/mytest.t
-    $ dzil run ls
+    $ dzil run prove -bv t/mytest.t
+    $ dzil run bash
 
 
 =head1 DESCRIPTION
