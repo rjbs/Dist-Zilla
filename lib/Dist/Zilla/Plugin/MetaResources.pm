@@ -8,7 +8,7 @@ with 'Dist::Zilla::Role::MetaProvider';
 This plugin adds resources entries to the distribution's metadata.
 
   [MetaResources]
-  homepage: http://example.com/~dude/project.asp
+  homepage = http://example.com/~dude/project.asp
 
 =cut
 
