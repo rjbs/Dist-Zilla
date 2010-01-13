@@ -19,6 +19,7 @@ my $dir = dir('Foo-1.23');
 # check found prereqs
 my $meta = LoadFile( $dir->file('META.yml') );
 my %wanted = (
+    # DZPA::Main should not be extracted
     'DZPA::Base::Moose1'    => 0,
     'DZPA::Base::Moose2'    => 0,
     'DZPA::Base::base1'     => 0,
