@@ -157,6 +157,20 @@ sub _prereqs_in_file {
 }
 
 
+# -- private subs
+
+#
+# my $bool = _looks_like_version( $string );
+#
+# return true if $string somehow looks like a perl version.
+#
+sub _looks_like_version {
+    my $version = shift;
+    return defined $version &&
+        $version =~ /\Av?\d+(?:\.[\d_]+)?\z/;
+}
+
+
 no Moose;
 __PACKAGE__->meta->make_immutable;
 1;
