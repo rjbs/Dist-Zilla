@@ -17,6 +17,7 @@ plugin should also be loaded.
 
 =cut
 
+use Data::Dumper ();
 use List::MoreUtils qw(any uniq);
 
 use namespace::autoclean;
@@ -27,35 +28,18 @@ my $template = q|
 use strict;
 use warnings;
 
-{{
-  my $prereq = $dist->prereq;
-  exists $prereq->{perl}
-    ? qq{ BEGIN { require $prereq->{perl}; } }
-    : '';
-}}
+{{ $perl_prereq ? qq{ BEGIN { require $perl_prereq; } } : ''; }}
 
 use ExtUtils::MakeMaker 6.11;
 
 {{ $share_dir_block[0] }}
 
-WriteMakefile(
-  DISTNAME  => '{{ $dist->name     }}',
-  NAME      => '{{ $module_name    }}',
-  AUTHOR    => "{{ $author_str     }}",
-  ABSTRACT  => "{{ quotemeta($dist->abstract) }}",
-  VERSION   => '{{ $dist->version  }}',
-  EXE_FILES => [ {{ $exe_files }} ],
-  (eval { ExtUtils::MakeMaker->VERSION(6.31) } ? (LICENSE => '{{ $dist->license->meta_yml_name }}') : ()),
-  PREREQ_PM    => {
-{{
-      my $prereq = $dist->prereq;
-      $OUT .= qq{    "$_" => '$prereq->{$_}',\n} for grep { $_ ne 'perl' } keys %$prereq;
-      chomp $OUT;
-      return '';
-}}
-  },
-  test => {TESTS => '{{ $test_dirs }}'}
-);
+my {{ $WriteMakefileArgs }}
+
+delete $WriteMakefileArgs{LICENSE}
+  unless eval { ExtUtils::MakeMaker->VERSION(6.31) };
+
+WriteMakefile(%WriteMakefileArgs);
 
 {{ $share_dir_block[1] }}
 
@@ -84,8 +68,6 @@ sub setup_installer {
   confess "can't install files with whitespace in their names"
     if grep { /\s/ } @exe_files;
 
-  my $exe_files = join q{, }, map { q{"} . quotemeta($_) . q{"} } @exe_files;
-
   my %test_dirs;
   for my $file ($self->zilla->files->flatten) {
     next unless $file->name =~ m{\At/.+\.t\z};
@@ -104,15 +86,33 @@ sub setup_installer {
     );
   }
 
+  my $prereq = $self->zilla->prereq;
+
+  my %write_makefile_args = (
+    DISTNAME  => $self->zilla->name,
+    NAME      => $name,
+    AUTHOR    => $self->zilla->authors->join(q{, }),
+    ABSTRACT  => $self->zilla->abstract,
+    VERSION   => $self->zilla->version,
+    LICENSE   => $self->zilla->license->meta_yml_name,
+    EXE_FILES => [ @exe_files ],
+    PREREQ_PM    => {
+      map {; $_ => $prereq->{$_} } grep { $_ ne 'perl' } keys %$prereq
+    },
+    test => { TESTS => join q{ }, sort keys %test_dirs },
+  );
+
+  my $makefile_args_dumper = Data::Dumper->new(
+    [ \%write_makefile_args ],
+    [ '*WriteMakefileArgs' ],
+  );
+
   my $content = $self->fill_in_string(
     $template,
     {
-      module_name => $name,
-      dist        => \$self->zilla,
-      exe_files   => \$exe_files,
-      author_str  => \quotemeta( $self->zilla->authors->join(q{, }) ),
-      test_dirs   => join (q{ }, sort keys %test_dirs),
-      share_dir_block => \@share_dir_block,
+      perl_prereq => \($self->prereq->{perl}),
+      share_dir_block   => \@share_dir_block,
+      WriteMakefileArgs => \($makefile_args_dumper->Dump),
     },
   );
 
