@@ -12,7 +12,7 @@ use DZPA::MinVerComment 0.50; # comment
 
 # Moose features
 with 'DZPA::Role';
-extends 'DZPA::Base';
+extends 'DZPA::Base::Moose1', 'DZPA::Base::Moose2';
 
 # DZPA::Skip should be trimmed
 use DZPA::Skip::Blah;
