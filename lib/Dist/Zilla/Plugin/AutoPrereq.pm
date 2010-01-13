@@ -133,6 +133,7 @@ sub _prereqs_in_file {
 
     # for moose specifics, let's fetch top-level statements
     my @statements =
+        grep { $_->child(0)->isa('PPI::Token::Word') }
         grep { ref($_) eq 'PPI::Statement' } # no ->isa()
         $doc->children;
 
