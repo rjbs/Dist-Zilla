@@ -5,6 +5,7 @@ use warnings;
 
 use Dist::Zilla;
 use Path::Class;
+use Test::Deep;
 use Test::More tests => 1;
 use YAML       qw{ LoadFile };
 
@@ -29,7 +30,7 @@ my %wanted = (
     'DZPA::ScriptUse'       => 0,
     'perl'                  => 5.008,
 );
-is_deeply( $meta->{requires}, \%wanted, 'all requires found, but no more' );
+cmp_deeply( $meta->{requires}, \%wanted, 'all requires found, but no more' );
 
 # clean after ourselves
 $dir->rmtree;
