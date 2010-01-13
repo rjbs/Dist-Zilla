@@ -2,6 +2,11 @@ Revision history for Dist::Zilla::Plugin::AutoPrereq
 
 {{$NEXT}}
 
+1.100130  2010-01-13 19:03:41 Europe/Paris
+ - warning, requiring perl 5.10 now
+ - using ppi to parse the file
+ - extracting prereqs from use base and use parent
+
 1.100090  2010-01-09 12:12:30 Europe/Paris
  - don't extract modules with non-alphanumeric chars
 
