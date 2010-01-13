@@ -1,4 +1,4 @@
-use 5.008;
+use 5.010;
 use strict;
 use warnings;
 
@@ -107,6 +107,7 @@ sub _prereqs_in_file {
             $prereqs{perl} = $node->version;
             next;
         }
+        next if $node->module ~~ [ qw{ strict warnings lib } ];
         my $version = $node->module_version
             ? $node->module_version->content
             : 0;

@@ -1,5 +1,9 @@
 #!/usr/bin/perl
 
+use strict;
+use warnings;
+use lib 'mylib';
+
 # require in a script
 use DZPA::ScriptUse;
 
