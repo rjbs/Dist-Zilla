@@ -103,11 +103,28 @@ sub _prereqs_in_file {
     # regular use and require
     my $includes = $doc->find('Statement::Include');
     foreach my $node ( @$includes ) {
+        # minimum perl version
         if ( $node->version ) {
             $prereqs{perl} = $node->version;
             next;
         }
+
+        # skipping pragamata
         next if $node->module ~~ [ qw{ strict warnings lib } ];
+
+        if ( $node->module ~~ [ qw{ base parent } ] ) {
+            # the content is in the 5th token
+            my $meat = $node->child(4);
+            my @parents = $meat->isa('PPI::Token::QuoteLike::Words')
+                ? ( $meat->literal )
+                : ( $meat->string  );
+            @prereqs{ @parents } = (0) x @parents;
+
+            # base is in perl core, parent isn't
+            next if $node->module eq 'base';
+        }
+
+        # regular modules
         my $version = $node->module_version
             ? $node->module_version->content
             : 0;
