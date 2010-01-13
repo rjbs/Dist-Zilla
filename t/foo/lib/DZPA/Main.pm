@@ -14,6 +14,12 @@ use DZPA::MinVerComment 0.50; # comment
 with 'DZPA::Role';
 extends 'DZPA::Base::Moose1', 'DZPA::Base::Moose2';
 
+# inheritance
+use base "DZPA::Base::base1";
+use base qw{ DZPA::Base::base2 DZPA::Base::base3 };
+use parent "DZPA::Base::parent1";
+use parent qw{ DZPA::Base::parent2 DZPA::Base::parent3 };
+
 # DZPA::Skip should be trimmed
 use DZPA::Skip::Blah;
 

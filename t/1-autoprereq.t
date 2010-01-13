@@ -21,6 +21,12 @@ my $meta = LoadFile( $dir->file('META.yml') );
 my %wanted = (
     'DZPA::Base::Moose1'    => 0,
     'DZPA::Base::Moose2'    => 0,
+    'DZPA::Base::base1'     => 0,
+    'DZPA::Base::base2'     => 0,
+    'DZPA::Base::base3'     => 0,
+    'DZPA::Base::parent1'   => 0,
+    'DZPA::Base::parent2'   => 0,
+    'DZPA::Base::parent3'   => 0,
     'DZPA::IgnoreAPI'       => 0,
     'DZPA::IndentedRequire' => '3.45',
     'DZPA::IndentedUse'     => '0.13',
@@ -29,6 +35,7 @@ my %wanted = (
     'DZPA::NotInDist'       => 0,
     'DZPA::Role'            => 0,
     'DZPA::ScriptUse'       => 0,
+    'parent'                => 0,
     'perl'                  => 5.008,
 );
 cmp_deeply( $meta->{requires}, \%wanted, 'all requires found, but no more' );
