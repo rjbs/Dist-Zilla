@@ -196,16 +196,18 @@ In your F<dist.ini>:
 This plugin will extract loosely your distribution prerequisites from
 your files.
 
-The extraction may not be perfect, since it will only find the
-following prereqs:
+The extraction may not be perfect but tries to do its best. It will
+currently find the following prereqs:
 
 =over 4
 
 =item * plain lines beginning with C<use> or C<require> in your perl
-modules and scripts.
+modules and scripts. This includes minimum perl version.
 
-=item * L<Moose> inheritance declared with the C<extends> keyword
-(warning: only the first one is currently extracted).
+=item * regular inheritance declated with the C<base> and C<parent>
+pragamata.
+
+=item * L<Moose> inheritance declared with the C<extends> keyword.
 
 =item * L<Moose> roles included with the C<with> keyword.
 
@@ -214,10 +216,10 @@ modules and scripts.
 If some prereqs are not found, you can still add them manually with the
 L<Dist::Zilla::Plugin::Prereq> plugin.
 
-It will trim the following pragamata: C<strict>, C<warnings> and C<lib>.
-It will also trim the modules under your dist namespace (eg: for
-C<Dist-Zilla>, it will trim all C<Dist::Zilla::*> prereqs found.
+It will trim the following pragamata: C<strict>, C<warnings>, C<base>
+and C<lib>. However, C<parent> is kept, since it's not in a core module.
 
+It will also trim the modules shipped within your dist.
 
 The module accept the following options:
 
