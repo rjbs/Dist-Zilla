@@ -8,6 +8,7 @@ package Dist::Zilla::Plugin::AutoPrereq;
 use Dist::Zilla::Util;
 use Moose;
 use MooseX::Has::Sugar;
+use PPI;
 use version;
 
 with 'Dist::Zilla::Role::FixedPrereqs';
@@ -96,53 +97,45 @@ sub _prereqs_in_file {
 
     my $p = Dist::Zilla::Util::Nonpod->_new;
     $p->read_string( $file->content );
-    my @lines = split /\n/, $p->_nonpod;
+    my $content = $p->_nonpod;
+    my $doc = PPI::Document->new( \$content );
 
-    # quick analysis: find only plain use and require
-    my @use_lines =
-        grep { /^\s*(?:use|require)\s+/ }
-        @lines;
-    foreach my $line ( @use_lines ) {
-        $line =~ s/^\s+//; # trim beginning whitespaces
-        $line =~ s/;.*$//; # trim end of statement
-        my (undef, $module, $version) = split /\s+/, $line;
-
-        # trim common pragmata
-        next if $module =~ /^(lib|strict|warnings)$/;
-        next if $module =~ /[^\.:\w]/;
-
-        if ( _looks_like_version($module) ) {
-            # perl minimum version is a bit special
-            $prereqs{perl} = $module;
-        } else {
-            $prereqs{ $module } = _looks_like_version($version) ? $version : 0;
+    # regular use and require
+    my $includes = $doc->find('Statement::Include');
+    foreach my $node ( @$includes ) {
+        if ( $node->version ) {
+            $prereqs{perl} = $node->version;
+            next;
         }
+        my $version = $node->module_version
+            ? $node->module_version->content
+            : 0;
+        $prereqs{ $node->module } = $version;
     }
 
-    # add moose specifics
+    # for moose specifics, let's fetch top-level statements
+    my @statements =
+        grep { ref($_) eq 'PPI::Statement' } # no ->isa()
+        $doc->children;
+
+    # roles: with ...
     my @roles =
-        map { /^(?:with|extends)\s+['"]([\w:]+)['"]/ ? ($1) : () }
-        @lines;
+        map  { $_->child(2)->string }
+        grep { $_->child(0)->literal eq 'with' }
+        @statements;
     @prereqs{ @roles } = (0) x @roles;
+
+    # inheritance: extends ...
+    my @bases =
+        map  { $_->string }
+        grep { $_->isa('PPI::Token::Quote') }
+        map  { $_->children }
+        grep { $_->child(0)->literal eq 'extends' }
+        @statements;
+    @prereqs{ @bases } = (0) x @bases;
 
     return %prereqs;
 }
-
-
-
-# -- private subs
-
-#
-# my $bool = _looks_like_version( $string );
-#
-# return true if $string somehow looks like a perl version.
-#
-sub _looks_like_version {
-    my $version = shift;
-    return defined $version &&
-        $version =~ /\Av?\d+(?:\.[\d_]+)?\z/;
-}
-
 
 
 no Moose;
