@@ -45,11 +45,6 @@ my $build = Module::Build->new(%module_build_args);
 $build->create_build_script;
 |;
 
-#  module_name   => "{{ quotemeta(
-#    (sort {length $a <=> length $b}
-#     grep { m{^lib/.+\.pm$} } @{$dist->files})[0]
-#  ) }}",
-
 sub metadata {
   my $self = shift;
   return {
@@ -83,8 +78,6 @@ sub setup_installer {
 
   confess "can't install files with whitespace in their names"
     if grep { /\s/ } @exe_files;
-
-  my $exe_files = join q{, }, map { q{"} . quotemeta($_) . q{"} } @exe_files;
 
   my %module_build_args = (
     module_name   => $name,
