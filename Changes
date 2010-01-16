@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+1.100160  2010-01-16 15:37:29 America/New_York
           require File::Install::ShareDir if needed for Makefile.PL share
 
 1.100130  2010-01-13 08:18:29 America/New_York
