@@ -4,10 +4,11 @@ package Dist::Zilla::Plugin::MakeMaker;
 use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::BuildRunner';
-with 'Dist::Zilla::Role::InstallTool';
-with 'Dist::Zilla::Role::TextTemplate';
-with 'Dist::Zilla::Role::TestRunner';
 with 'Dist::Zilla::Role::FixedPrereqs';
+with 'Dist::Zilla::Role::InstallTool';
+with 'Dist::Zilla::Role::MetaProvider';
+with 'Dist::Zilla::Role::TestRunner';
+with 'Dist::Zilla::Role::TextTemplate';
 
 =head1 DESCRIPTION
 
@@ -44,6 +45,20 @@ WriteMakefile(%WriteMakefileArgs);
 {{ $share_dir_block[1] }}
 
 |;
+
+sub metadata {
+  my ($self) = @_;
+
+  my @dir_plugins = $self->zilla->plugins
+    ->grep( sub { $_->isa('Dist::Zilla::Plugin::InstallDirs') })
+    ->flatten;
+
+  return {} unless uniq map {; $_->share->flatten } @dir_plugins;
+
+  return {
+    configure_requires => { 'File::ShareDir::Install' => 0 },
+  };
+}
 
 sub setup_installer {
   my ($self, $arg) = @_;

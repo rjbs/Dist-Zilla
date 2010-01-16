@@ -46,7 +46,7 @@ $build->create_build_script;
 |;
 
 sub metadata {
-  my $self = shift;
+  my ($self) = @_;
   return {
     configure_requires => { 'Module::Build' => $self->mb_version },
     build_requires     => { 'Module::Build' => $self->mb_version },
