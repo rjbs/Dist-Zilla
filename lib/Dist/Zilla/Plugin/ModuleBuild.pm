@@ -84,6 +84,7 @@ sub setup_installer {
     license       => $self->zilla->license->meta_yml_name,
     dist_abstract => $self->zilla->abstract,
     dist_name     => $self->zilla->name,
+    dist_version  => $self->zilla->version,
     dist_author   => [ $self->zilla->authors->flatten ],
     requires      => $self->zilla->prereq,
     script_files  => \@exe_files,
