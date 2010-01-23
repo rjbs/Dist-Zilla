@@ -6,7 +6,6 @@ use Moose::Autobox;
 with 'Dist::Zilla::Role::BuildRunner';
 with 'Dist::Zilla::Role::FixedPrereqs';
 with 'Dist::Zilla::Role::InstallTool';
-with 'Dist::Zilla::Role::MetaProvider';
 with 'Dist::Zilla::Role::TestRunner';
 with 'Dist::Zilla::Role::TextTemplate';
 
@@ -46,8 +45,13 @@ WriteMakefile(%WriteMakefileArgs);
 
 |;
 
-sub metadata {
+sub prereq {
   my ($self) = @_;
+
+  $self->zilla->register_prereqs(
+    { phase => 'configure' },
+    'ExtUtils::MakeMaker' => $self->eumm_version,
+  );
 
   my @dir_plugins = $self->zilla->plugins
     ->grep( sub { $_->isa('Dist::Zilla::Plugin::InstallDirs') })
@@ -55,9 +59,12 @@ sub metadata {
 
   return {} unless uniq map {; $_->share->flatten } @dir_plugins;
 
-  return {
-    configure_requires => { 'File::ShareDir::Install' => 0 },
-  };
+  $self->zilla->register_prereqs(
+    { phase => 'configure' },
+    'File::ShareDir::Install' => 0.03,
+  );
+    
+  return {};
 }
 
 sub setup_installer {
@@ -153,20 +160,6 @@ sub test {
   $self->build;
   system('make test') and die "error running make test\n";
   return;
-}
-
-sub prereq {
-  my ($self) = @_;
-
-  my $has_share = $self->zilla->plugins
-    ->grep(sub { $_->isa('Dist::Zilla::Plugins::InstallDirs') })
-    ->grep(sub { $_->share->length > 0 })
-    ->length;
-
-  return {
-    'ExtUtils::MakeMaker'     => $self->eumm_version,
-    ($has_share ? ('File::ShareDir::Install' => 0.03) : ()),
-  };
 }
 
 has 'eumm_version' => (

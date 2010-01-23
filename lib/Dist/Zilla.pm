@@ -3,6 +3,7 @@ package Dist::Zilla;
 use Moose;
 use Moose::Autobox;
 use Dist::Zilla::Types qw(DistName License);
+use MooseX::Types::Moose qw(Bool HashRef);
 use MooseX::Types::Path::Class qw(Dir File);
 use Moose::Util::TypeConstraints;
 
@@ -11,7 +12,9 @@ use Hash::Merge::Simple ();
 use Path::Class ();
 use Software::License;
 use String::RewritePrefix;
+use version 0.79 ();
 
+use Dist::Zilla::Prereqs;
 use Dist::Zilla::File::OnDisk;
 use Dist::Zilla::Logger::Global;
 use Dist::Zilla::Role::Plugin;
@@ -379,29 +382,32 @@ has distmeta => (
   isa  => 'HashRef',
   init_arg  => undef,
   lazy      => 1,
-  default => sub {
-    my ($self) = @_;
-
-    my $meta = {
-      'meta-spec' => {
-        version => 1.4,
-        url     => 'http://module-build.sourceforge.net/META-spec-v1.4.html',
-      },
-      name     => $self->name,
-      version  => $self->version,
-      abstract => $self->abstract,
-      author   => $self->authors,
-      license  => $self->license->meta_yml_name,
-      requires => $self->prereq,
-      generated_by => (ref $self) . ' version ' . $self->VERSION,
-    };
-
-    $meta = Hash::Merge::Simple::merge($meta, $_->metadata)
-      for $self->plugins_with(-MetaProvider)->flatten;
-
-    $meta;
-  } # end default for distmeta
+  builder   => '_build_distmeta',
 );
+
+sub _build_distmeta {
+  my ($self) = @_;
+
+  my $meta = {
+    'meta-spec' => {
+      version => 1.4,
+      url     => 'http://module-build.sourceforge.net/META-spec-v1.4.html',
+    },
+    name     => $self->name,
+    version  => $self->version,
+    abstract => $self->abstract,
+    author   => $self->authors,
+    license  => $self->license->meta_yml_name,
+    generated_by => (ref $self) . ' version ' . $self->VERSION,
+
+    $self->prereq->as_distmeta->flatten,
+  };
+
+  $meta = Hash::Merge::Simple::merge($meta, $_->metadata)
+    for $self->plugins_with(-MetaProvider)->flatten;
+
+  return $meta;
+}
 
 =attr prereq
 
@@ -409,18 +415,17 @@ This is a hashref of module prerequisites.  This attribute is likely to get
 greatly overhauled, or possibly replaced with a method based on other
 (private?) attributes.
 
+I<Actually>, it is more likely that this attribute will contain an object in
+the future.
+
 =cut
 
-sub prereq {
-  my ($self) = @_;
-
-  # XXX: This needs to always include the highest version. -- rjbs, 2008-06-01
-  my $prereq = {};
-  $prereq = $prereq->merge( $_->prereq )
-    for $self->plugins_with(-FixedPrereqs)->flatten;
-
-  return $prereq;
-}
+has prereq => (
+  is   => 'ro',
+  isa  => 'Dist::Zilla::Prereqs',
+  default => sub { Dist::Zilla::Prereqs->new },
+  handles => [ qw(register_prereqs) ],
+);
 
 =method from_config
 
@@ -567,6 +572,12 @@ sub build_in {
   $_->gather_files    for $self->plugins_with(-FileGatherer)->flatten;
   $_->prune_files     for $self->plugins_with(-FilePruner)->flatten;
   $_->munge_files     for $self->plugins_with(-FileMunger)->flatten;
+
+  for my $plugin ($self->plugins_with(-FixedPrereqs)->flatten) {
+    my $prereq = $self->prereq;
+    $self->register_prereqs($_ => $prereq->{$_}) for keys %$prereq;
+  }
+
   $_->setup_installer for $self->plugins_with(-InstallTool)->flatten;
 
   $self->_check_dupe_files;
