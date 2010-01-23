@@ -88,9 +88,12 @@ sub setup_installer {
     dist_name     => $self->zilla->name,
     dist_version  => $self->zilla->version,
     dist_author   => [ $self->zilla->authors->flatten ],
-    requires      => $self->zilla->prereq,
     script_files  => \@exe_files,
     (defined $share_dirs[0] ? (share_dir => $share_dirs[0]) : ()),
+
+    # I believe it is a happy coincidence, for the moment, that this happens to
+    # return just the same thing that is needed here. -- rjbs, 2010-01-22
+    $self->zilla->prereq->as_distmeta->flatten,
   );
 
   my $module_build_dumper = Data::Dumper->new(

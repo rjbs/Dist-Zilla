@@ -19,12 +19,15 @@ L<http://module-build.sourceforge.net/META-spec-v1.3.html>.
 sub gather_files {
   my ($self, $arg) = @_;
 
-  require Dist::Zilla::File::InMemory;
+  require Dist::Zilla::File::FromCode;
   require JSON;
 
-  my $file = Dist::Zilla::File::InMemory->new({
-    name    => 'META.json',
-    content => JSON->new->ascii(1)->pretty->encode($self->zilla->distmeta) . "\n",
+  my $zilla = $self->zilla;
+  my $file  = Dist::Zilla::File::FromCode->new({
+    name => 'META.json',
+    code => sub {
+      JSON->new->ascii(1)->pretty->encode($zilla->distmeta) . "\n";
+    },
   });
 
   $self->add_file($file);

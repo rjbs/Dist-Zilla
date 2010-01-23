@@ -399,8 +399,6 @@ sub _build_distmeta {
     author   => $self->authors,
     license  => $self->license->meta_yml_name,
     generated_by => (ref $self) . ' version ' . $self->VERSION,
-
-    $self->prereq->as_distmeta->flatten,
   };
 
   $meta = Hash::Merge::Simple::merge($meta, $_->metadata)
@@ -574,9 +572,15 @@ sub build_in {
   $_->munge_files     for $self->plugins_with(-FileMunger)->flatten;
 
   for my $plugin ($self->plugins_with(-FixedPrereqs)->flatten) {
-    my $prereq = $self->prereq;
+    my $prereq = $plugin->prereq;
     $self->register_prereqs($_ => $prereq->{$_}) for keys %$prereq;
   }
+
+  $self->prereq->finalize;
+
+  my $meta   = $self->distmeta;
+  my $prereq = $self->prereq->as_distmeta;
+  $meta->{ $_ } = $prereq->{ $_ } for keys %$prereq;
 
   $_->setup_installer for $self->plugins_with(-InstallTool)->flatten;
 

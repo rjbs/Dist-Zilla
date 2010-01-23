@@ -18,12 +18,15 @@ L<http://module-build.sourceforge.net/META-spec-v1.3.html>.
 sub gather_files {
   my ($self, $arg) = @_;
 
-  require Dist::Zilla::File::InMemory;
+  require Dist::Zilla::File::FromCode;
   require YAML::Tiny;
 
-  my $file = Dist::Zilla::File::InMemory->new({
-    name    => 'META.yml',
-    content => YAML::Tiny::Dump($self->zilla->distmeta),
+  my $zilla = $self->zilla;
+  my $file  = Dist::Zilla::File::FromCode->new({
+    name => 'META.yml',
+    code => sub {
+      YAML::Tiny::Dump($zilla->distmeta);
+    },
   });
 
   $self->add_file($file);

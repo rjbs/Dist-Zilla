@@ -132,7 +132,8 @@ sub setup_installer {
   my $content = $self->fill_in_string(
     $template,
     {
-      perl_prereq       => \($self->zilla->prereq->{perl}),
+      # XXX: will re-enable... later -- rjbs, 2010-01-22
+      perl_prereq => \undef, # \($self->zilla->prereq->{perl}),
       share_dir_block   => \@share_dir_block,
       WriteMakefileArgs => \($makefile_args_dumper->Dump),
     },
