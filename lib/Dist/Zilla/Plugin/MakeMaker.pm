@@ -108,7 +108,8 @@ sub setup_installer {
     );
   }
 
-  my $prereq = $self->zilla->prereq;
+  my $meta_prereq = $self->zilla->prereq->as_distmeta;
+  my $perl_prereq = delete $meta_prereq->{requires}{perl};
 
   my %write_makefile_args = (
     DISTNAME  => $self->zilla->name,
@@ -118,9 +119,11 @@ sub setup_installer {
     VERSION   => $self->zilla->version,
     LICENSE   => $self->zilla->license->meta_yml_name,
     EXE_FILES => [ @exe_files ],
-    PREREQ_PM    => {
-      map {; $_ => $prereq->{$_} } grep { $_ ne 'perl' } keys %$prereq
-    },
+
+    CONFIGURE_REQUIRES => delete $meta_prereq->{configure_requires},
+    BUILD_REQUIRES     => delete $meta_prereq->{build_requires},
+    PREREQ_PM          => delete $meta_prereq->{requires},
+
     test => { TESTS => join q{ }, sort keys %test_dirs },
   );
 
@@ -133,7 +136,7 @@ sub setup_installer {
     $template,
     {
       # XXX: will re-enable... later -- rjbs, 2010-01-22
-      perl_prereq => \undef, # \($self->zilla->prereq->{perl}),
+      perl_prereq       => \$perl_prereq,
       share_dir_block   => \@share_dir_block,
       WriteMakefileArgs => \($makefile_args_dumper->Dump),
     },
