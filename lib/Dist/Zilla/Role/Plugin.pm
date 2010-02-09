@@ -32,15 +32,25 @@ has zilla => (
   isa => 'Dist::Zilla',
   required => 1,
   weak_ref => 1,
-  handles  => [ qw(log) ],
 );
 
 =method log
 
 The plugin's C<log> method delegates to the Dist::Zilla object's
-L<Dist::Zilla/log> method.
+L<Dist::Zilla/log> method after including a bit of argument-munging.
 
 =cut
+
+sub log {
+  my ($self, $arg) = @_;
+
+  if (ref($arg)) {
+    my ($fmt, @arg) = @$arg;
+    return $self->zilla->log([ "[%s] $fmt", $self->plugin_name, @arg ]);
+  } else {
+    return $self->zilla->log(sprintf '[%s] %s', $self->plugin_name, $arg);
+  }
+}
 
 no Moose::Role;
 1;

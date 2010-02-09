@@ -17,7 +17,8 @@ has logger => (
   handles => [ qw(log log_debug) ],
   default => sub {
     return Log::Dispatchouli->new({
-      ident => $_[0]->ident,
+      ident     => $_[0]->ident,
+      to_stdout => 1,
     });
   },
 );

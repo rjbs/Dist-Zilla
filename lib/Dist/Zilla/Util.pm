@@ -93,10 +93,4 @@ sub expand_config_package_name {
   return $str;
 }
 
-sub _log {
-  my $input  = $_[1];
-  my $output = String::Flogger->flog($input);
-  print "$output\n";
-}
-
 1;
