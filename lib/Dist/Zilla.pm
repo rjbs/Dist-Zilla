@@ -13,7 +13,9 @@ use Software::License;
 use String::RewritePrefix;
 
 use Dist::Zilla::File::OnDisk;
+use Dist::Zilla::Logger::Global;
 use Dist::Zilla::Role::Plugin;
+use Dist::Zilla::Util;
 
 use namespace::autoclean;
 
@@ -118,7 +120,6 @@ has abstract => (
       die "no abstract given and no main_module found; make sure your main module is in ./lib\n";
     }
 
-    require Dist::Zilla::Util;
     my $filename = $self->main_module->name;
     $self->log("extracting distribution abstract from $filename");
     my $abstract = Dist::Zilla::Util->abstract_from_file($filename);
@@ -486,7 +487,9 @@ sub _load_config {
     die "couldn't load $config_class: $@"; ## no critic Carp
   }
 
-  $self->log("reading configuration using $config_class");
+  Dist::Zilla::Logger::Global->instance->log(
+    "reading configuration using $config_class"
+  );
 
   my ($sequence) = $config_class->new->read_config({
     root     => $root,
@@ -743,11 +746,12 @@ newline.
 =cut
 
 # XXX: yeah, uh, do something more awesome -- rjbs, 2008-06-01
-sub log { ## no critic
-  my ($self, $msg) = @_;
-  require Dist::Zilla::Util;
-  Dist::Zilla::Util->_log($msg);
-}
+has logger => (
+  is  => 'ro',
+  isa => 'Dist::Zilla::Logger::Global',
+  handles => [ qw(log log_debug) ],
+  default => sub { Dist::Zilla::Logger::Global->instance }
+);
 
 sub BUILD {
   my ($self, $arg) = @_;

@@ -42,8 +42,7 @@ object.
 =cut
 
 sub log {
-  require Dist::Zilla::Util;
-  shift; Dist::Zilla::Util->_log($_[0]);
+  $_[0]->zilla->log($_[1]);
 }
 
 1;
