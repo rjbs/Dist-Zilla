@@ -1,7 +1,7 @@
 package Dist::Zilla::Logger::Global;
 use MooseX::Singleton;
 
-use Log::Dispatchouli;
+use Log::Dispatchouli 0.004;
 
 use namespace::autoclean;
 
@@ -19,6 +19,7 @@ has logger => (
     return Log::Dispatchouli->new({
       ident     => $_[0]->ident,
       to_stdout => 1,
+      log_pid   => 0,
     });
   },
 );

@@ -745,13 +745,18 @@ newline.
 
 =cut
 
-# XXX: yeah, uh, do something more awesome -- rjbs, 2008-06-01
 has logger => (
   is  => 'ro',
   isa => 'Dist::Zilla::Logger::Global',
-  handles => [ qw(log log_debug) ],
   default => sub { Dist::Zilla::Logger::Global->instance }
 );
+
+for my $method (qw(log log_debug log_fatal)) {
+  Sub::Install::install_sub({
+    code => sub { shift()->logger->$method('[DZ]', @_); },
+    as   => $method,
+  });
+}
 
 sub BUILD {
   my ($self, $arg) = @_;

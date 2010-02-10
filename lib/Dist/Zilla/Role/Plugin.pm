@@ -41,15 +41,14 @@ L<Dist::Zilla/log> method after including a bit of argument-munging.
 
 =cut
 
-sub log {
-  my ($self, $arg) = @_;
-
-  if (ref($arg)) {
-    my ($fmt, @arg) = @$arg;
-    return $self->zilla->log([ "[%s] $fmt", $self->plugin_name, @arg ]);
-  } else {
-    return $self->zilla->log(sprintf '[%s] %s', $self->plugin_name, $arg);
-  }
+for my $method (qw(log log_debug log_fatal)) {
+  Sub::Install::install_sub({
+    code => sub {
+      my $self = shift;
+      $self->zilla->$method($self->plugin_name, @_);
+    },
+    as   => $method,
+  });
 }
 
 no Moose::Role;
