@@ -101,7 +101,7 @@ sub _prereqs_in_file {
     my $doc = PPI::Document->new( \$content );
 
     # regular use and require
-    my $includes = $doc->find('Statement::Include');
+    my $includes = $doc->find('Statement::Include') || [];
     foreach my $node ( @$includes ) {
         # minimum perl version
         if ( $node->version ) {
