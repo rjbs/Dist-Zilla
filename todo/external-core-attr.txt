@@ -1,0 +1,25 @@
+
+# EXTERNALIZE CORE ATTRIBUTES
+
+Right now you can't initialize a Zilla without a few attributes like name,
+author, etc.  These should be autodetectable, meaning they should be able to
+wait until plugin initialization is complete -- or at least underway.  (...but
+probably until it's complete.  It should be possible, for example, to defer
+decision on name and version until FileGather-ing is done.)
+
+## STRATEGY?
+
+I think what I want is some simple attribute traits:
+
+  has name => (
+    ...
+    traits => [ qw(WORM Demanded) ],
+  );
+
+WORM is what it sounds like.  Once set, the value cannot be changed.  The
+writer throws if the predicate returns true.
+
+Demanded means that the accessor is fatal if the predicate is false.
+
+Together, it means you *must initialize* the value before reading it, and you
+*must not* try to change it once initialized.
