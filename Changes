@@ -2,6 +2,9 @@ Revision history for Dist::Zilla::Plugin::AutoPrereq
 
 {{$NEXT}}
 
+1.100460  2010-02-15 17:03:32 Europe/Paris
+ - avoid a fatal error if no includes are found (ricardo signes)
+
 1.100130  2010-01-13 19:03:41 Europe/Paris
  - warning, requiring perl 5.10 now
  - using ppi to parse the file
