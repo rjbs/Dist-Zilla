@@ -1,0 +1,5 @@
+
+# TURN `DZIL NEW` INTO EVENTS
+
+I have no idea what these will be yet.  That means the first course of business
+is making a list of use cases.

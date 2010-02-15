@@ -1,0 +1,11 @@
+
+# PROVIDE TOOLS FOR TESTING
+
+Something like:
+
+  my $result = $tester->build_given_input($config, $root_dir);
+
+...then $result will need to provide a way to inspect the files on disk and the
+log output.
+
+

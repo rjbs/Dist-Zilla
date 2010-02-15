@@ -1,0 +1,22 @@
+
+# CONFIG ARG PREFIX RESERVATIONS
+
+All config arg names that start with [a-z] are reserved for the plugin.
+
+All config arg names that start with - are reserved for the plugin.
+
+All config arg names that start with : are reserved for Dist::Zilla.
+
+This will let us say:
+
+  [Plugin]
+  :version = 1.23
+
+...which will then assert:  Plugin->VERSION(1.23)
+
+## TODO
+
+Think about applying the same rules to plugin names.  For example, in the
+future virtual plugins could be created with names like :Blorgle that do...
+stuff.
+

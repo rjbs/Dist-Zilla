@@ -1,0 +1,26 @@
+
+# REGISTER PLUGINS ON THE FLY
+
+Plugins should be registered with the Dist::Zilla object as soon as possible.
+
+Once the config section for the plugin is finalized, it should be registered.
+
+This means the MVP Assembler needs to have a reference to the zilla object.  I
+don't think that's crazy.  The whole _load_config method is a relic and should
+be streamlined.  Almost all construction of Dist::Zilla objects will be through
+from_config, so it should really make sense.  ->new is unlikely for any normal
+person to call.
+
+The zilla object should also have reference back to its assembler, at least as
+long as the assembler is assembling.  This will allow something insane like
+this:
+
+  [ExtraExpander]
+  Glug:: = Glug::Dist::Zilla::Plugin::
+
+ExtraExpander will, upon plugin registration, find the Assembler and apply a
+trait with a method modifier to alter the String::RewritePrefix usage to add a
+new rewrite.
+
+Applying traits via plugins at registration time should be a very powerful, if
+dangerous, ability.

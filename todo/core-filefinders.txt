@@ -1,0 +1,11 @@
+
+# CORE FILEFINDERS
+
+For example, PodWeaver will want to run on the union of PerlFiles and PodFiles
+or something.
+
+## TODO
+
+* Go through plugins, decide which would use what gatherer
+* Make a means for "weak" finders that exist unless overridden
+* consider :-prefixed finders for *exact* core behavior

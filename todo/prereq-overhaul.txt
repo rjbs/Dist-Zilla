@@ -1,0 +1,13 @@
+
+# PREREQ OVERHAUL
+
+Allow all META 2.0 phases and relationship types.
+
+...but not optional features, which are an abomination.
+
+...and maybe not "conflicts."
+
+## TODO
+
+* add a means to say "my installed version"
+

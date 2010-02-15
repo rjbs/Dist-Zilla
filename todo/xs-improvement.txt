@@ -1,0 +1,5 @@
+
+# XS AUTHORING
+
+First order of business: ask the XS authors what would help beyond the
+now-released `dzil run`.
