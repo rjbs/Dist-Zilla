@@ -1,0 +1,17 @@
+
+# DELAY CORE ATTRIBUTE INIT
+
+We might want something like $zilla->name to come from some plugin that
+converts from main_module, or yadda yadda.  This will allow
+register-on-the-fly of plugins because we can construct the Zilla before we
+know all its required attribute values.
+
+We'll probably mark those values as LazyRequired and SetOnce.
+
+## LIKE ATTRIBUTES TO FIX
+
+* name
+* version - it's unique and should be simplified
+* copyright_{holder,year} - should come from a plugin somehow, too
+* license?
+* authors
