@@ -11,6 +11,8 @@ with 'Dist::Zilla::Role::MetaProvider';
 
 use Dist::Zilla::File::InMemory;
 use List::MoreUtils qw(any uniq);
+use Data::Dumper;
+
 =head1 DESCRIPTION
 
 This plugin will create a F<Build.PL> for installing the dist using
