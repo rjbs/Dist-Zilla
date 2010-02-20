@@ -7,6 +7,7 @@ use MooseX::Types::Moose qw(Bool HashRef);
 use Hash::Merge::Simple ();
 use Path::Class ();
 use String::RewritePrefix;
+use Version::Requirements;
 use version 0.79 ();
 
 use namespace::autoclean;
@@ -32,16 +33,16 @@ sub as_distmeta {
   my ($self) = @_;
 
   my $distmeta = {
-    requires           => { %{ $self->_guts->{runtime}{requires}   || {} } },
-    build_requires     => { %{ $self->_guts->{build}{requires}     || {} } },
-    configure_requires => { %{ $self->_guts->{configure}{requires} || {} } },
+    requires           =>
+      ($self->_guts->{runtime}{requires} || Version::Requirements->new)
+      ->as_string_hash,
+    build_requires     =>
+      ($self->_guts->{build}{requires} || Version::Requirements->new)
+      ->as_string_hash,
+    configure_requires =>
+      ($self->_guts->{configure}{requires} || Version::Requirements->new)
+      ->as_string_hash,
   };
-
-  for my $set (values %$distmeta) {
-    for my $key (keys %$set) {
-      $set->{ $key } = $set->{ $key }->stringify;
-    }
-  }
 
   return $distmeta;
 }
@@ -58,14 +59,10 @@ sub register_prereqs {
 
   $phase = 'build' if $phase eq 'test';
 
-  my $prereq = ($self->_guts->{ $phase }{ $type } ||= {});
+  my $prereq = ($self->_guts->{$phase}{$type} ||= Version::Requirements->new);
 
   while (my ($package, $version) = each %prereq) {
-    $version = blessed($version) ? $version : version->parse($version);
-
-    my $slot = \$prereq->{ $package };
-    $$slot ||= $version;
-    $$slot = $version if $version > $$slot;
+    $prereq->add_minimum($package, $version);
   }
 
   return;
