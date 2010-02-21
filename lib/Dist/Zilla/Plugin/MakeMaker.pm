@@ -97,7 +97,7 @@ sub setup_installer {
     my $share_dir = quotemeta $share_dirs[0];
     @share_dir_block = (
       qq{use File::ShareDir::Install;\ninstall_share "$share_dir";\n},
-      qq{package MY;\nuse File::ShareDir::Install qw(postamble);\n},
+      qq{package\nMY;\nuse File::ShareDir::Install qw(postamble);\n},
     );
   }
 

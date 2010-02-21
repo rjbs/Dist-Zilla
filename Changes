@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+1.100520  2010-02-21 15:53:39 America/New_York
           MakeMaker plugin correctly requires the right version of perl again
 
 1.100160  2010-01-16 15:37:29 America/New_York
