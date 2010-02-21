@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          MakeMaker plugin correctly requires the right version of perl again
 
 1.100160  2010-01-16 15:37:29 America/New_York
           require File::Install::ShareDir if needed for Makefile.PL share

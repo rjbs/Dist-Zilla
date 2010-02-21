@@ -125,7 +125,7 @@ sub setup_installer {
   my $content = $self->fill_in_string(
     $template,
     {
-      perl_prereq => \($self->prereq->{perl}),
+      perl_prereq       => \($self->zilla->prereq->{perl}),
       share_dir_block   => \@share_dir_block,
       WriteMakefileArgs => \($makefile_args_dumper->Dump),
     },
