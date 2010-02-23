@@ -1,11 +1,11 @@
 
 # CONFIG ARG PREFIX RESERVATIONS
 
-All config arg names that start with [a-z] are reserved for the plugin.
+1. All config arg names that start with [a-z] are reserved for the plugin.
 
-All config arg names that start with - are reserved for the plugin.
+2. All config arg names that start with - are reserved for the plugin.
 
-All config arg names that start with : are reserved for Dist::Zilla.
+3. All config arg names that start with : are reserved for Dist::Zilla.
 
 This will let us say:
 
@@ -13,6 +13,16 @@ This will let us say:
   :version = 1.23
 
 ...which will then assert:  Plugin->VERSION(1.23)
+
+The first two rules are already more or less in place for things like the
+Prereq plugin.  It might be cool to make it easy for plugin authors to get at
+the two sets of args (-x and x) in their BUILDARGS or something.  Possibly a
+Plugin-role-provided method to partition the args.
+
+We should also try to set aside the :-args as early as possible, so they're
+never available during plugin init without really digging.  This would be
+similar to the way in which -args are not provided to generators in
+Sub::Exporter.
 
 ## TODO
 
