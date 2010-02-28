@@ -765,6 +765,9 @@ sub build_archive {
 
   my $archive = Archive::Tar->new;
 
+  # call all plugins implementing BeforeArchive role
+  $_->before_archive({ build_root => $built_in }) for $self->plugins_with(-BeforeArchive)->flatten;
+
   my %seen_dir;
   for my $file ($self->files->flatten) {
     my $in = Path::Class::file($file->name)->dir;
