@@ -40,12 +40,14 @@ sub gather_files {
   $root =~ s{^~([\\/])}{File::HomeDir->my_home . $1}e;
   $root = Path::Class::dir($root);
 
-  my @files =
-    map { Dist::Zilla::File::OnDisk->new({ name => $_ }) }
-    File::Find::Rule
-    ->not( File::Find::Rule->name(qr/^\./) )
-    ->file
-    ->in($root);
+  my @files;
+  for my $filename (File::Find::Rule->file->in($root)) {
+    next if $filename =~ qr/^\./;
+    push @files, Dist::Zilla::File::OnDisk->new({
+      name => $filename,
+      mode => (stat $filename)[2],
+    });
+  }
 
   for my $file (@files) {
     (my $newname = $file->name) =~ s{\A\Q$root\E[\\/]}{}g;

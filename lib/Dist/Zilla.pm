@@ -690,6 +690,7 @@ sub _write_out_file {
   open my $out_fh, '>', "$to" or die "couldn't open $to to write: $!";
   print { $out_fh } $file->content;
   close $out_fh or die "error closing $to: $!";
+  chmod $file->mode, "$to" or die "couldn't chmod $to: $!";
 }
 
 =method test

@@ -2,6 +2,10 @@ package Dist::Zilla::Role::File;
 # ABSTRACT: something that can act like a file
 use Moose::Role;
 
+use Moose::Util::TypeConstraints;
+
+use namespace::autoclean;
+
 requires 'content';
 
 =head1 DESCRIPTION
@@ -30,6 +34,25 @@ L<FileInjector|Dist::Zilla::Role::FileInjector> role.
 
 has added_by => (
   is => 'ro',
+);
+
+=attr mode
+
+This is the mode with which the file should be written out.  It's an integer
+with the usual C<chmod> semantics.  It defaults to 0644.
+
+=cut
+
+my $safe_file_mode = subtype(
+  as 'Int',
+  where   { not( $_ & 0002) },
+  message { "file mode would be world-writeable" }
+);
+
+has mode => (
+  is      => 'rw',
+  isa     => $safe_file_mode,
+  default => 0644,
 );
 
 no Moose::Role;
