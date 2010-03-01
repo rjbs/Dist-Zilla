@@ -45,7 +45,7 @@ sub gather_files {
     next if $filename =~ qr/^\./;
     push @files, Dist::Zilla::File::OnDisk->new({
       name => $filename,
-      mode => (stat $filename)[2],
+      mode => (stat $filename)[2] & 0755, # kill world-writeability
     });
   }
 
