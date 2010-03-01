@@ -1,6 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          the File role provides a mode attribute; files are chmodded on write
+          the mode attribute may not be world-writeable
+          files gathered by AllFiles will have their on-disk mode &= 0755
 
 1.100520  2010-02-21 15:53:39 America/New_York
           MakeMaker plugin correctly requires the right version of perl again
