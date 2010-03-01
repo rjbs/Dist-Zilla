@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+1.100600  2010-03-01 08:19:06 America/New_York
           the File role provides a mode attribute; files are chmodded on write
           the mode attribute may not be world-writeable
           files gathered by AllFiles will have their on-disk mode &= 0755
