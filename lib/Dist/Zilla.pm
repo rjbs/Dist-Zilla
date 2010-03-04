@@ -761,8 +761,8 @@ newline.
 =cut
 
 has logger => (
-  is  => 'ro',
-  isa => 'Dist::Zilla::Logger::Global',
+  is   => 'ro',
+  does => 'Dist::Zilla::Role::Logger',
   default => sub { Dist::Zilla::Logger::Global->instance }
 );
 

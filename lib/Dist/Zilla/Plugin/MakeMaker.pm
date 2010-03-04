@@ -63,7 +63,7 @@ sub prereq {
     { phase => 'configure' },
     'File::ShareDir::Install' => 0.03,
   );
-    
+
   return {};
 }
 

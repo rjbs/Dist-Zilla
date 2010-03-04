@@ -1,6 +1,12 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          the log method now uses a pluggable logger, defaulting to
+            Log::Dispatchouli
+          plugins now log with a useful prefix to indicate what is logging
+
+          prerequisites are now managed by Dist::Zilla::Prereq
+          complex prereqs (a la Version::Requirement) are possible
 
 1.100600  2010-03-01 08:19:06 America/New_York
           the File role provides a mode attribute; files are chmodded on write
