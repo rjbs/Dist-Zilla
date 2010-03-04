@@ -38,7 +38,7 @@ my $template = q|
 use strict;
 use warnings;
 
-use Module::Build 0.3601;
+use Module::Build {{ $plugin->mb_version }};
 
 my {{ $module_build_args }}
 
@@ -104,6 +104,7 @@ sub setup_installer {
   my $content = $self->fill_in_string(
     $template,
     {
+      plugin            => \$self,
       module_build_args => \($module_build_dumper->Dump),
     },
   );

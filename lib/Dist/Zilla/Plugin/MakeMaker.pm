@@ -135,7 +135,6 @@ sub setup_installer {
   my $content = $self->fill_in_string(
     $template,
     {
-      # XXX: will re-enable... later -- rjbs, 2010-01-22
       perl_prereq       => \$perl_prereq,
       share_dir_block   => \@share_dir_block,
       WriteMakefileArgs => \($makefile_args_dumper->Dump),
