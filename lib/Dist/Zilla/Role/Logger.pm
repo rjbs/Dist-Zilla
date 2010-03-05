@@ -1,6 +1,7 @@
 package Dist::Zilla::Role::Logger;
 use Moose::Role;
 use namespace::autoclean;
+# ABSTRACT: something that logs activity
 
 requires 'log';
 requires 'log_debug';
