@@ -9,10 +9,8 @@ though, and a few of them are nearly as poorly tested as Dist::Zilla itself.
 Not all of these are known to be problems.  They just need to be
 double-checked.  Basically, it's all the code RJBS wrote while writing DZ.
 
-* Config::MVP
 * Config::INI::MVP::Reader
 * Mixin::Linewise
-* String::Flogger
 * CPAN::Uploader
 
 
