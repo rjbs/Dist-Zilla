@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          improve how plugin and pluginbundle names are generated and rerpoted
 
 1.100650  2010-03-06 11:46:23 America/New_York
           add some missing prereqs
