@@ -38,7 +38,11 @@ sub bundle_config {
 
   eval "require $bundle; 1" or die;
 
-  my @plugins = $bundle->bundle_config;
+  my @plugins = $bundle->bundle_config({
+    name    => $section->{name}, # not 100% sure about this -- rjbs, 2010-03-06
+    package => $bundle,
+    payload => {},
+  });
 
   return @plugins unless my $remove = $config->{remove};
 

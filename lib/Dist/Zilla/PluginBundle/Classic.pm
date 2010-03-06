@@ -5,31 +5,36 @@ use Moose::Autobox;
 with 'Dist::Zilla::Role::PluginBundle';
 
 sub bundle_config {
-  my ($self) = @_;
-  my $class = (ref $self) || $self;
+  my ($self, $arg) = @_;
 
-  my @classes = qw(
-    Dist::Zilla::Plugin::AllFiles
-    Dist::Zilla::Plugin::PruneCruft
-    Dist::Zilla::Plugin::ManifestSkip
-    Dist::Zilla::Plugin::MetaYAML
-    Dist::Zilla::Plugin::License
-    Dist::Zilla::Plugin::Readme
-    Dist::Zilla::Plugin::PkgVersion
-    Dist::Zilla::Plugin::PodVersion
-    Dist::Zilla::Plugin::PodTests
-    Dist::Zilla::Plugin::ExtraTests
-    Dist::Zilla::Plugin::InstallDirs
+  my @plugins = qw(
+    AllFiles
+    PruneCruft
+    ManifestSkip
+    MetaYAML
+    License
+    Readme
+    PkgVersion
+    PodVersion
+    PodTests
+    ExtraTests
+    InstallDirs
 
-    Dist::Zilla::Plugin::MakeMaker
-    Dist::Zilla::Plugin::Manifest
+    MakeMaker
+    Manifest
 
-    Dist::Zilla::Plugin::UploadToCPAN
+    UploadToCPAN
   );
 
-  eval "require $_; 1" or die for @classes; ## no critic Carp
+  my @config;
+  for (@plugins) {
+    my $class = "Dist::Zilla::Plugin::$_";
+    Class::MOP::load_class($class);
 
-  return @classes->map(sub { [ "$class/$_" => $_ => {} ] })->flatten;
+    push @config, [ "$arg->{name}/$_" => $class => {} ];
+  }
+
+  return @config;
 }
 
 __PACKAGE__->meta->make_immutable;
