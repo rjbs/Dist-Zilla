@@ -15,7 +15,7 @@ has logger => (
   is   => 'ro',
   isa  => 'Log::Dispatchouli',
   lazy => 1,
-  handles => [ qw(log log_debug) ],
+  handles => [ qw(log log_debug log_fatal) ],
   default => sub {
     return Log::Dispatchouli->new({
       ident     => $_[0]->ident,
