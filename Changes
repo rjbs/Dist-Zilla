@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+1.100660  2010-03-07 07:56:30 America/New_York
           Global logger handles log_fatal correctly
 
 1.100651  2010-03-06 23:18:54 America/New_York
