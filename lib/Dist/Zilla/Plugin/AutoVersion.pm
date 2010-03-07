@@ -41,7 +41,9 @@ which consult the L<DateTime> documentation).
 
 The default value is:
 
-  {{ $major }}.{{ cldr('yyDDD') }}{{ sprintf '%01u', ($ENV{N} || 0) }}
+  {{ $major }}.{{ cldr('yyDDD') }}
+  {{ sprintf('%01u', ($ENV{N} || 0)) }}
+  {{$ENV{DEV} ? (sprintf '_%03u', $ENV{DEV}) : ''}}
 
 =cut
 
@@ -56,7 +58,9 @@ has format => (
   is       => 'ro',
   isa      => 'Str',
   required => 1,
-  default  => q[{{ $major }}.{{ cldr('yyDDD') }}{{ sprintf '%01u', ($ENV{N} || 0) }}],
+  default  => q<{{ $major }}.{{ cldr('yyDDD') }}>
+            . q<{{ sprintf('%01u', ($ENV{N} || 0)) }}>
+            . q<{{$ENV{DEV} ? (sprintf '_%03u', $ENV{DEV}) : ''}}>
 );
 
 sub provide_version {
