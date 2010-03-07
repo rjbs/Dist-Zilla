@@ -45,7 +45,10 @@ for my $method (qw(log log_debug log_fatal)) {
   Sub::Install::install_sub({
     code => sub {
       my $self = shift;
-      $self->zilla->$method($self->plugin_name, @_);
+      $self->zilla->logger->$method(
+        '[' . $self->plugin_name . ']',
+        @_,
+      );
     },
     as   => $method,
   });

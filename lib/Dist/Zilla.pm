@@ -478,7 +478,7 @@ sub from_config {
 
     my $version = $plugin->VERSION || 0;
 
-    $plugin->log([ 'initialized! (%s v%s)', $plugin->meta->name, $version ]);
+    $plugin->log([ 'online, %s v%s', $plugin->meta->name, $version ]);
 
     $self->plugins->push($plugin);
   }
