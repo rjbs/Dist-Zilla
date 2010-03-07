@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          UploadToCPAN now logs via the standard logger
 
 1.100660  2010-03-07 07:56:30 America/New_York
           Global logger handles log_fatal correctly

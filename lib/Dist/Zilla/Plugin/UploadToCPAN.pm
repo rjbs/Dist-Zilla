@@ -3,8 +3,12 @@ package Dist::Zilla::Plugin::UploadToCPAN;
 use Moose;
 with 'Dist::Zilla::Role::Releaser';
 
+use CPAN::Uploader 0.100660; # log method
 use File::HomeDir;
 use File::Spec;
+use Scalar::Util qw(weaken);
+
+use namespace::autoclean;
 
 =head1 SYNOPSIS
 
@@ -27,7 +31,15 @@ C<~/.pause>, in the same format that L<cpan-upload> requires:
 
 =cut
 
-use CPAN::Uploader;
+{
+  package
+    Dist::Zilla::Plugin::UploadToCPAN::_Uploader;
+  use base 'CPAN::Uploader';
+  sub log {
+    my $self = shift;
+    $self->{'Dist::Zilla'}{plugin}->log(@_);
+  }
+}
 
 has user => (
   is   => 'ro',
@@ -86,19 +98,32 @@ has pause_cfg => (
   },
 );
 
+has uploader => (
+  is   => 'ro',
+  isa  => 'CPAN::Uploader',
+  lazy => 1,
+  default => sub {
+    my ($self) = @_;
+
+    my $user     = $self->user;
+    my $password = $self->password;
+
+    my $uploader = Dist::Zilla::Plugin::UploadToCPAN::_Uploader->new({
+      user     => $user,
+      password => $password,
+    });
+
+    $uploader->{'Dist::Zilla'}{plugin} = $self;
+    weaken $uploader->{'Dist::Zilla'}{plugin};
+
+    return $uploader;
+  }
+);
+
 sub release {
   my ($self, $archive) = @_;
 
-  my $user     = $self->user;
-  my $password = $self->password;
-
-  CPAN::Uploader->upload_file(
-    "$archive",
-    {
-      user     => $user,
-      password => $password,
-    },
-  );
+  $self->uploader->upload_file("$archive");
 }
 
 __PACKAGE__->meta->make_immutable;
