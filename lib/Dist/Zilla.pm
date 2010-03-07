@@ -494,8 +494,8 @@ sub _load_config {
     die "couldn't load $config_class: $@"; ## no critic Carp
   }
 
-  Dist::Zilla::Logger::Global->instance->log(
-    "reading configuration using $config_class"
+  Dist::Zilla::Logger::Global->instance->log_debug(
+    "[DZ] reading configuration using $config_class"
   );
 
   my ($sequence) = $config_class->new->read_config({

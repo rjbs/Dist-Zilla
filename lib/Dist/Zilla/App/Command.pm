@@ -16,13 +16,17 @@ sub zilla {
   my ($self) = @_;
 
   require Dist::Zilla;
+  require Dist::Zilla::Logger::Global;
+  
   return $self->{__PACKAGE__}{zilla} ||= do {
+    my $verbose = $self->app->global_options->verbose;
+
+    Dist::Zilla::Logger::Global->instance->set_debug($verbose);
+
     my $zilla = Dist::Zilla->from_config;
     $zilla->dzil_app($self->app);
 
-    $zilla->logger->logger->set_debug(
-      $self->app->global_options->verbose
-    );
+    $zilla->logger->set_debug($verbose);
 
     $zilla;
   }
