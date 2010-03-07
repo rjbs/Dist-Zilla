@@ -47,11 +47,11 @@ sub config_for {
 
 sub global_opt_spec {
   return (
-    [ "inc|I=s@", "additional \@INC dirs", {
+    [ "verbose|v", "log additional output" ],
+    [ "inc|I=s@",  "additional \@INC dirs", {
         callbacks => { 'always fine' => sub { unshift @INC, @{$_[0]}; } }
     } ]
   );
 }
-
 
 1;

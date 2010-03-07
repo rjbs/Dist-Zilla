@@ -19,6 +19,11 @@ sub zilla {
   return $self->{__PACKAGE__}{zilla} ||= do {
     my $zilla = Dist::Zilla->from_config;
     $zilla->dzil_app($self->app);
+
+    $zilla->logger->logger->set_debug(
+      $self->app->global_options->verbose
+    );
+
     $zilla;
   }
 }
