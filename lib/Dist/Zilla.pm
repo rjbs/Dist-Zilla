@@ -398,7 +398,9 @@ sub _build_distmeta {
     abstract => $self->abstract,
     author   => $self->authors,
     license  => $self->license->meta_yml_name,
-    generated_by => (ref $self) . ' version ' . $self->VERSION,
+    generated_by => (ref $self)
+                  . ' version '
+                  . (defined $self->VERSION ? $self->VERSION : '(undef)')
   };
 
   $meta = Hash::Merge::Simple::merge($meta, $_->metadata)
@@ -691,7 +693,7 @@ sub _prep_build_root {
 
   $build_root->rmtree if -d $build_root;
 
-  return $build_root;
+  return $build_root->absolute;
 }
 
 sub _write_out_file {
