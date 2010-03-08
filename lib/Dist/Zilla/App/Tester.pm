@@ -3,8 +3,11 @@ use base 'App::Cmd::Tester';
 use App::Cmd::Tester 0.306 (); # result_class, ->app
 
 use Dist::Zilla::App;
+use File::Copy::Recursive qw(dircopy);
 use File::chdir;
 use File::Spec;
+use File::Temp;
+use Path::Class;
 
 use Sub::Exporter::Util ();
 use Sub::Exporter -setup => {
@@ -15,17 +18,33 @@ use Sub::Exporter -setup => {
 sub result_class { 'Dist::Zilla::App::Tester::Result' }
 
 sub test_dzil {
-  my ($self, $root, $argv) = @_;
+  my ($self, $source, $argv, $arg) = @_;
+  $arg ||= {};
 
   local @INC = map {; File::Spec->rel2abs($_) } @INC;
+
+  my $tmpdir = $arg->{tempdir} || File::Temp::tempdir(CLEANUP => 1);
+  my $root   = dir($tmpdir)->subdir('source');
+  $root->mkpath;
+
+  dircopy($source, $root);
+
   local $CWD = $root;
 
-  return $self->test_app('Dist::Zilla::App' => $argv);
+  my $result = $self->test_app('Dist::Zilla::App' => $argv);
+  $result->{tempdir} = $tempdir;
+
+  return $result;
 }
 
 {
   package Dist::Zilla::App::Tester::Result;
   BEGIN { our @ISA = qw(App::Cmd::Tester::Result); }
+
+  sub tempdir {
+    my ($self) = @_;
+    return $self->{tempdir};
+  }
 
   sub zilla {
     my ($self) = @_;
