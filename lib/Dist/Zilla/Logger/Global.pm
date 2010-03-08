@@ -2,7 +2,7 @@ package Dist::Zilla::Logger::Global;
 use MooseX::Singleton;
 # ABSTRACT: the generic, global logger for use pre-configuration-phase
 
-use Log::Dispatchouli 0.004;
+use Log::Dispatchouli 1.100660; # clear_events
 
 use namespace::autoclean;
 
