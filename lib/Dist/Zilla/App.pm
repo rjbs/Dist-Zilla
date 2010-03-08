@@ -70,9 +70,10 @@ sub zilla {
   return $self->{__PACKAGE__}{zilla} ||= do {
     my $verbose = $self->global_options->verbose;
 
-    Dist::Zilla::Logger::Global->instance->set_debug($verbose);
+    my $logger = Dist::Zilla->default_logger;
+    $logger->set_debug($verbose);
 
-    my $zilla = Dist::Zilla->from_config;
+    my $zilla = Dist::Zilla->from_config({ logger => $logger });
     $zilla->dzil_app($self);
 
     $zilla->logger->set_debug($verbose);

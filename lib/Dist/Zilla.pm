@@ -16,7 +16,6 @@ use version 0.79 ();
 
 use Dist::Zilla::Prereqs;
 use Dist::Zilla::File::OnDisk;
-use Dist::Zilla::Logger::Global;
 use Dist::Zilla::Role::Plugin;
 use Dist::Zilla::Util;
 
@@ -447,10 +446,13 @@ sub from_config {
 
   my $root = Path::Class::dir($arg->{dist_root} || '.');
 
-  my ($seq) = $class->_load_config(
-    $arg->{config_class},
-    $root,
-  );
+  my $logger = $arg->{logger} || $class->default_logger;
+
+  my ($seq) = $class->_load_config({
+    root   => $root,
+    logger => $logger,
+    config_class => $arg->{config_class},
+  });
 
   my $core_config = $seq->section_named('_')->payload;
 
@@ -489,17 +491,19 @@ sub from_config {
 }
 
 sub _load_config {
-  my ($self, $config_class, $root) = @_;
+  my ($self, $arg) = @_;
+  $arg ||= {};
 
-  $config_class ||= 'Dist::Zilla::Config::Finder';
+  my $config_class = $arg->{config_class} ||= 'Dist::Zilla::Config::Finder';
   unless (eval "require $config_class; 1") {
     die "couldn't load $config_class: $@"; ## no critic Carp
   }
 
-  Dist::Zilla::Logger::Global->instance->log_debug(
+  $arg->{logger}->log_debug(
     "[DZ] reading configuration using $config_class"
   );
 
+  my $root = $arg->{root};
   my ($sequence) = $config_class->new->read_config({
     root     => $root,
     basename => 'dist',
@@ -760,17 +764,23 @@ sub release {
 
   $zilla->log($message);
 
-This method logs the given message.  In the future it will be a more useful and
-expressive method.  For now, it just prints the string after tacking on a
-newline.
+This method logs the given message.
 
 =cut
 
 has logger => (
   is   => 'ro',
-  does => 'Dist::Zilla::Role::Logger',
-  default => sub { Dist::Zilla::Logger::Global->instance }
+  isa  => 'Log::Dispatchouli', # could be duck typed, I guess
+  builder => 'default_logger',
 );
+
+sub default_logger {
+  return Log::Dispatchouli->new({
+    ident     => 'Dist::Zilla',
+    to_stdout => 1,
+    log_pid   => 0,
+  });
+}
 
 for my $method (qw(log log_debug log_fatal)) {
   Sub::Install::install_sub({

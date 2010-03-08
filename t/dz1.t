@@ -16,4 +16,10 @@ my $tester = Dist::Zilla::Tester->from_config({ dist_root => 't/eg/DZ1' });
 
 $tester->build_in;
 
+use YAML::Tiny;
+my $yaml = YAML::Tiny->read($tester->built_in->file('META.yml'));
+my $meta = $yaml->[0];
+
+like($meta->{generated_by}, qr{Dist::Zilla}, "powered by... ROBOT DINOSAUR");
+
 done_testing;

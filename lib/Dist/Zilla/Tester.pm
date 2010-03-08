@@ -51,6 +51,11 @@ around build_in => sub {
   return $self->$orig($target);
 };
 
+# This needs to be something else. -- rjbs, 2010-03-08
+sub default_logger {
+  Dist::Zilla::Logger::Global->instance
+}
+
 has tempdir => (
   is   => 'ro',
   writer   => '_set_tempdir',
