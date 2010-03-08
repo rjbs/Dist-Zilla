@@ -16,6 +16,11 @@ my $tester = Dist::Zilla::Tester->from_config({ dist_root => 't/eg/DZ1' });
 
 $tester->build_in;
 
+ok(
+  (grep { $_->{message} =~ m<^\[DZ\]\s> } @{ $tester->logger->events }),
+  "we have at least some expected log content",
+);
+
 use YAML::Tiny;
 my $yaml = YAML::Tiny->read($tester->built_in->file('META.yml'));
 my $meta = $yaml->[0];
