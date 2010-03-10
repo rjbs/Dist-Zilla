@@ -14,7 +14,7 @@ sub release {
     $self->log_fatal("$env set, aborting") if $ENV{$env};
   }
 
-  $self->log('Fake realase happening (nothing was really done)');
+  $self->log('Fake release happening (nothing was really done)');
 }
 
 no Moose;
