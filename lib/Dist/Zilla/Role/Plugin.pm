@@ -2,6 +2,10 @@ package Dist::Zilla::Role::Plugin;
 # ABSTRACT: something that gets plugged in to Dist::Zilla
 use Moose::Role;
 
+use Params::Util qw(_HASHLIKE);
+
+use namespace::autoclean;
+
 =head1 DESCRIPTION
 
 The Plugin role should be applied to all plugin classes.  It provides a few key
@@ -44,11 +48,12 @@ L<Dist::Zilla/log> method after including a bit of argument-munging.
 for my $method (qw(log log_debug log_fatal)) {
   Sub::Install::install_sub({
     code => sub {
-      my $self = shift;
-      $self->zilla->logger->$method(
-        '[' . $self->plugin_name . ']',
-        @_,
-      );
+      my ($self, @rest) = @_;
+      my $arg = _HASHLIKE($rest[0]) ? (shift @rest) : {};
+      local $arg->{prefix} = '[' . $self->plugin_name . '] '
+                           . (defined $arg->{prefix} ? $arg->{prefix} : '');
+
+      $self->zilla->logger->$method($arg, @rest);
     },
     as   => $method,
   });

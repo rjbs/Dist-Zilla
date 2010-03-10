@@ -9,6 +9,8 @@ use Moose::Util::TypeConstraints;
 
 use File::Find::Rule;
 use Hash::Merge::Simple ();
+use Log::Dispatchouli 1.100671; # new-style prefix
+use Params::Util qw(_HASHLIKE);
 use Path::Class ();
 use Software::License;
 use String::RewritePrefix;
@@ -784,7 +786,14 @@ sub default_logger {
 
 for my $method (qw(log log_debug log_fatal)) {
   Sub::Install::install_sub({
-    code => sub { shift()->logger->$method('[DZ]', @_); },
+    code => sub {
+      my ($self, @rest) = @_;
+      my $arg = _HASHLIKE($rest[0]) ? (shift @rest) : {};
+      local $arg->{prefix} = '[DZ] '
+                           . (defined $arg->{prefix} ? $arg->{prefix} : '');
+
+      $self->logger->$method($arg, @rest);
+    },
     as   => $method,
   });
 }
