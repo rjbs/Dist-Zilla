@@ -9,7 +9,7 @@ use Moose::Util::TypeConstraints;
 
 use File::Find::Rule;
 use Hash::Merge::Simple ();
-use Log::Dispatchouli 1.100671; # new-style prefix
+use Log::Dispatchouli 1.100681; # new-style prefix
 use Params::Util qw(_HASHLIKE);
 use Path::Class ();
 use Software::License;
@@ -173,9 +173,7 @@ has main_module => (
     my $guessing = q{};
 
     if ( $self->has_main_module_override ) {
-
        $file = $self->files->grep(sub{ $_->name eq $self->main_module_override })->head;
-
     } else {
        $guessing = 'guessing '; # We're having to guess
 
@@ -189,14 +187,13 @@ has main_module => (
              ->head;
     }
 
-    die "Unable to find main_module in dist\n" unless $file;
+    $self->log_fatal("Unable to find main_module in dist") unless $file;
 
     $self->log("${guessing}dist's main_module is " . $file->name);
 
     return $file;
   },
 );
-
 
 =attr copyright_holder
 
@@ -699,7 +696,7 @@ sub _prep_build_root {
 
   $build_root->rmtree if -d $build_root;
 
-  return $build_root->absolute;
+  return $build_root;
 }
 
 sub _write_out_file {
