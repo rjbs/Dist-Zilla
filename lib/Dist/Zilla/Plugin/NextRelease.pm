@@ -7,7 +7,7 @@ with 'Dist::Zilla::Role::TextTemplate';
 with 'Dist::Zilla::Role::AfterRelease';
 
 use DateTime;
-use String::Formatter stringf => {
+use String::Formatter 0.100680 stringf => {
   -as => '_format_version',
 
   input_processor => 'require_single_input',
