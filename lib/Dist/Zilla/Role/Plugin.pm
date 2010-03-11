@@ -49,11 +49,14 @@ for my $method (qw(log log_debug log_fatal)) {
   Sub::Install::install_sub({
     code => sub {
       my ($self, @rest) = @_;
-      my $arg = _HASHLIKE($rest[0]) ? (shift @rest) : {};
-      local $arg->{prefix} = '[' . $self->plugin_name . '] '
-                           . (defined $arg->{prefix} ? $arg->{prefix} : '');
 
-      $self->zilla->logger->$method($arg, @rest);
+      my $logger = $self->zilla->logger;
+      my ($arg, $rest) = $logger->prepend_prefix_to_log_args(
+        '[' . $self->plugin_name . '] ',
+        \@rest,
+      );
+
+      $logger->$method($arg, @$rest);
     },
     as   => $method,
   });
