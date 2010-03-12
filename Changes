@@ -1,7 +1,16 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
-          UploadToCPAN now logs via the standard logger
+
+1.100710  2010-03-12 09:58:10 America/New_York
+          huge update to logging system; uses Log::Dispatchouli::Proxy
+
+          UploadToCPAN, FakeRelease now log via the standard logger
+          App::Cmd layer'Zilla is shared between commands
+
+          bump up some prereqs to avoid bugs fixed upstream
+
+          HIGHLY EXPERIMENTAL: first pass at testing systems
 
 1.100660  2010-03-07 07:56:30 America/New_York
           Global logger handles log_fatal correctly
