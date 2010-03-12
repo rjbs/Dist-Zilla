@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+1.100711  2010-03-12 12:51:55 America/New_York
           remove bogus attempt to load obsolete DZ::Logger::Global
 
 1.100710  2010-03-12 09:58:10 America/New_York
