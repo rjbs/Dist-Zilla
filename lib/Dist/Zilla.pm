@@ -9,7 +9,7 @@ use Moose::Util::TypeConstraints;
 
 use File::Find::Rule;
 use Hash::Merge::Simple ();
-use Log::Dispatchouli 1.100691; # new-style prefix
+use Log::Dispatchouli 1.100710; # proxy loggers
 use Params::Util qw(_HASHLIKE);
 use Path::Class ();
 use Software::License;
