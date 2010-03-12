@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          remove bogus attempt to load obsolete DZ::Logger::Global
 
 1.100710  2010-03-12 09:58:10 America/New_York
           huge update to logging system; uses Log::Dispatchouli::Proxy

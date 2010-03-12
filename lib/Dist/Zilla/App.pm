@@ -65,7 +65,6 @@ sub zilla {
   my ($self) = @_;
 
   require Dist::Zilla;
-  require Dist::Zilla::Logger::Global;
 
   return $self->{__PACKAGE__}{zilla} ||= do {
     my $verbose = $self->global_options->verbose;
