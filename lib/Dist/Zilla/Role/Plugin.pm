@@ -45,22 +45,16 @@ L<Dist::Zilla/log> method after including a bit of argument-munging.
 
 =cut
 
-for my $method (qw(log log_debug log_fatal)) {
-  Sub::Install::install_sub({
-    code => sub {
-      my ($self, @rest) = @_;
-
-      my $logger = $self->zilla->logger;
-      my ($arg, $rest) = $logger->prepend_prefix_to_log_args(
-        '[' . $self->plugin_name . '] ',
-        \@rest,
-      );
-
-      $logger->$method($arg, @$rest);
-    },
-    as   => $method,
-  });
-}
+has logger => (
+  is   => 'ro',
+  lazy => 1,
+  handles => [ qw(log log_debug log_fatal) ],
+  default => sub {
+    $_[0]->zilla->logger->proxy({
+      proxy_prefix => '[' . $_[0]->plugin_name . '] ',
+    });
+  },
+);
 
 no Moose::Role;
 1;
