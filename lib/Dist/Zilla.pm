@@ -455,7 +455,10 @@ sub from_config {
 
   my $core_config = $seq->section_named('_')->payload;
 
-  my $self = $class->new($core_config);
+  my $self = $class->new({
+    global_logger => $logger,
+    %$core_config
+  });
 
   $self->logger->set_debug(1) if $arg->{core_debug};
 
