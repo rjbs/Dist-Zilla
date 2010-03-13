@@ -9,7 +9,7 @@ use Moose::Util::TypeConstraints;
 
 use File::Find::Rule;
 use Hash::Merge::Simple ();
-use Log::Dispatchouli 1.100710; # proxy loggers
+use Log::Dispatchouli 1.100712; # proxy_loggers, quiet_fatal
 use Params::Util qw(_HASHLIKE);
 use Path::Class ();
 use Software::License;
@@ -445,7 +445,7 @@ sub from_config {
 
   my $root = Path::Class::dir($arg->{dist_root} || '.');
 
-  my $logger = $arg->{logger} || $class->default_logger;
+  my $logger = $arg->{global_logger} || $class->default_logger;
 
   my ($seq) = $class->_load_config({
     root   => $root,
@@ -456,6 +456,8 @@ sub from_config {
   my $core_config = $seq->section_named('_')->payload;
 
   my $self = $class->new($core_config);
+
+  $self->logger->set_debug(1) if $arg->{core_debug};
 
   for my $section ($seq->sections) {
     next if $section->name eq '_';
@@ -769,7 +771,18 @@ This method logs the given message.
 
 has logger => (
   is   => 'ro',
-  isa  => 'Log::Dispatchouli', # could be duck typed, I guess
+  isa  => 'Log::Dispatchouli::Proxy', # could be duck typed, I guess
+  lazy => 1,
+  handles => [ qw(log log_debug log_fatal) ],
+  default => sub {
+    $_[0]->global_logger->proxy({ proxy_prefix => '[DZ] ' })
+  },
+);
+
+has global_logger => (
+  is   => 'ro',
+  isa  => 'Log::Dispatchouli',
+  lazy => 1,
   builder => 'default_logger',
 );
 
@@ -778,20 +791,7 @@ sub default_logger {
     ident     => 'Dist::Zilla',
     to_stdout => 1,
     log_pid   => 0,
-  });
-}
-
-for my $method (qw(log log_debug log_fatal)) {
-  Sub::Install::install_sub({
-    code => sub {
-      my ($self, @rest) = @_;
-      my $arg = _HASHLIKE($rest[0]) ? (shift @rest) : {};
-      local $arg->{prefix} = '[DZ] '
-                           . (defined $arg->{prefix} ? $arg->{prefix} : '');
-
-      $self->logger->$method($arg, @rest);
-    },
-    as   => $method,
+    quiet_fatal => 'stdout',
   });
 }
 

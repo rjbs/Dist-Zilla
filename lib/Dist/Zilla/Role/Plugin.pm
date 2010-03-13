@@ -50,7 +50,7 @@ has logger => (
   lazy => 1,
   handles => [ qw(log log_debug log_fatal) ],
   default => sub {
-    $_[0]->zilla->logger->proxy({
+    $_[0]->zilla->global_logger->proxy({
       proxy_prefix => '[' . $_[0]->plugin_name . '] ',
     });
   },

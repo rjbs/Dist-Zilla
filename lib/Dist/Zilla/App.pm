@@ -47,8 +47,8 @@ sub config_for {
 
 sub global_opt_spec {
   return (
-    [ "verbose|v", "log additional output" ],
-    [ "inc|I=s@",  "additional \@INC dirs", {
+    [ "verbose|v:s@", "log additional output" ],
+    [ "inc|I=s@",     "additional \@INC dirs", {
         callbacks => { 'always fine' => sub { unshift @INC, @{$_[0]}; } }
     } ]
   );
@@ -67,15 +67,37 @@ sub zilla {
   require Dist::Zilla;
 
   return $self->{__PACKAGE__}{zilla} ||= do {
-    my $verbose = $self->global_options->verbose;
+    my @v_plugins = $self->global_options->verbose
+                  ? grep { length } @{ $self->global_options->verbose }
+                  : ();
+
+    my $verbose = $self->global_options->verbose && ! @v_plugins;
 
     my $logger = Dist::Zilla->default_logger;
-    $logger->set_debug($verbose);
+    $logger->set_debug($verbose ? 1 : 0);
 
-    my $zilla = Dist::Zilla->from_config({ logger => $logger });
+    my $core_debug = grep { $_ eq '_' } @v_plugins;
+
+    my $zilla = Dist::Zilla->from_config({
+      global_logger => $logger,
+      core_debug    => $core_debug,
+    });
+
     $zilla->dzil_app($self);
 
-    $zilla->logger->set_debug($verbose);
+    $zilla->global_logger->set_debug($verbose ? 1 : 0);
+
+    VERBOSE_PLUGIN: for my $plugin_name (@v_plugins) {
+      next VERBOSE_PLUGIN if $plugin_name eq '_';
+
+      my ($plugin) = grep { $_->plugin_name eq $plugin_name }
+                     @{ $zilla->plugins };
+
+      $zilla->log_fatal("can't find plugin $plugin_name to set debug mode")
+        unless $plugin;
+
+      $plugin->logger->set_debug(1);
+    }
 
     $zilla;
   }
