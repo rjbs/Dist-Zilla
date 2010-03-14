@@ -76,7 +76,7 @@ sub zilla {
     my $logger = Dist::Zilla->default_logger;
     $logger->set_debug($verbose ? 1 : 0);
 
-    my $core_debug = grep { $_ =~ m{\A[-_]\z} } @v_plugins;
+    my $core_debug = grep { m/\A[-_]\z/ } @v_plugins;
 
     my $zilla = Dist::Zilla->from_config({
       logger     => $logger,
@@ -87,9 +87,7 @@ sub zilla {
 
     $zilla->logger->set_debug($verbose ? 1 : 0);
 
-    VERBOSE_PLUGIN: for my $plugin_name (@v_plugins) {
-      next VERBOSE_PLUGIN if $plugin_name =~ m{\A[-_]\z};
-
+    VERBOSE_PLUGIN: for my $plugin_name (grep { ! m{\A[-_]\z} } @v_plugins) {
       my ($plugin) = grep { $_->plugin_name eq $plugin_name }
                      @{ $zilla->plugins };
 
