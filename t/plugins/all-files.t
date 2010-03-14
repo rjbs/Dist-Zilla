@@ -16,7 +16,7 @@ copyright_holder = E. Xavier Ample
 END_INI
 
 my $tzil = Dist::Zilla::Tester->from_config({
-  dist_root => 't/eg/DZT',
+  dist_root => 'corpus/DZT',
   add_files => { 'dist.ini' => $dist_ini },
 });
 

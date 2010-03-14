@@ -7,7 +7,7 @@ use Dist::Zilla::Tester;
 
 ## SIMPLE TEST WITH DZIL::APP TESTER
 
-my $result = test_dzil('t/eg/DZ1', [ qw(build) ]);
+my $result = test_dzil('corpus/DZ1', [ qw(build) ]);
 
 is($result->exit_code, 0, "dzil would have exited 0");
 
@@ -31,7 +31,7 @@ copyright_holder = E. Xavier Ample
 END_INI
 
 my $tester = Dist::Zilla::Tester->from_config({
-  dist_root => 't/eg/DZT',
+  dist_root => 'corpus/DZT',
   add_files => { 'dist.ini' => $dist_ini },
 });
 

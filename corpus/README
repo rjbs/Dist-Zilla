@@ -1,0 +1,6 @@
+
+This directory contains a set of distributions used by testing.  Since the
+distributions contain *.t files, it's easier to put them outside of ./t so that
+recursive test harnesses do not try running their dists.
+
+
