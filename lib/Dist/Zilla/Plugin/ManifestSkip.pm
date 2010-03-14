@@ -3,7 +3,7 @@ package Dist::Zilla::Plugin::ManifestSkip;
 use Moose;
 with 'Dist::Zilla::Role::FilePruner';
 
-use ExtUtils::Manifest;
+use ExtUtils::Manifest 1.54; # public maniskip routine
 
 =head1 DESCRIPTION
 

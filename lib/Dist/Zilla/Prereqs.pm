@@ -8,7 +8,6 @@ use Hash::Merge::Simple ();
 use Path::Class ();
 use String::RewritePrefix;
 use Version::Requirements;
-use version 0.79 ();
 
 use namespace::autoclean;
 

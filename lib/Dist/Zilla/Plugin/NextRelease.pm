@@ -6,7 +6,7 @@ with 'Dist::Zilla::Role::FileMunger';
 with 'Dist::Zilla::Role::TextTemplate';
 with 'Dist::Zilla::Role::AfterRelease';
 
-use DateTime;
+use DateTime 0.44; # CLDR fixes
 use String::Formatter 0.100680 stringf => {
   -as => '_format_version',
 

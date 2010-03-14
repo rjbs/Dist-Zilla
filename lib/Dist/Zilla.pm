@@ -1,7 +1,7 @@
 package Dist::Zilla;
 # ABSTRACT: distribution builder; installer not included!
-use Moose;
-use Moose::Autobox;
+use Moose 0.92; # role composition fixes
+use Moose::Autobox 0.09; # ->flatten
 use Dist::Zilla::Types qw(DistName License);
 use MooseX::Types::Moose qw(Bool HashRef);
 use MooseX::Types::Path::Class qw(Dir File);
@@ -14,7 +14,6 @@ use Params::Util qw(_HASHLIKE);
 use Path::Class ();
 use Software::License;
 use String::RewritePrefix;
-use version 0.79 ();
 
 use Dist::Zilla::Prereqs;
 use Dist::Zilla::File::OnDisk;

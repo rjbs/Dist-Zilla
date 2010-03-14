@@ -3,22 +3,12 @@ use warnings;
 package Dist::Zilla::Util;
 # ABSTRACT: random snippets of code that Dist::Zilla wants
 
-use String::Flogger;
-use String::RewritePrefix;
-
-{
-  package
-    Dist::Zilla::Util::Nonpod;
-  use base 'Pod::Eventual';
-  sub _new  { bless { nonpod => '' } => shift; }
-  sub handle_nonpod { $_[0]->{nonpod} .= $_[1]->{content} }
-  sub handle_event {}
-  sub _nonpod { $_[0]->{nonpod} }
-}
+use String::RewritePrefix 0.002; # better string context behavior
 
 {
   package
     Dist::Zilla::Util::PEA;
+  use Pod::Eventual 0.091480; # better nonpod/blank events
   use base 'Pod::Eventual';
   sub _new  { bless {} => shift; }
   sub handle_nonpod {

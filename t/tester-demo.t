@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::More;
+use Test::More 0.88;
 
 use Dist::Zilla::App::Tester;
 use Dist::Zilla::Tester;

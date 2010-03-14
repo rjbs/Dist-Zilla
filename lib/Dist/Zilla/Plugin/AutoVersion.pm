@@ -6,7 +6,7 @@ with(
   'Dist::Zilla::Role::TextTemplate',
 );
 
-use DateTime ();
+use DateTime 0.44 (); # CLDR fixes
 
 =head1 DESCRIPTION
 

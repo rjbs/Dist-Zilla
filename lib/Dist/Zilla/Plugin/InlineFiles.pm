@@ -12,7 +12,7 @@ L<Data::Section|Data::Section>.
 
 =cut
 
-use Data::Section -setup;
+use Data::Section 0.004 -setup; # fixed header_re
 use Dist::Zilla::File::InMemory;
 
 sub gather_files {
