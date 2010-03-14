@@ -505,7 +505,7 @@ sub _load_config {
 
   $arg->{logger}->log_debug(
     { prefix => '[DZ] ' },
-    "[DZ] reading configuration using $config_class"
+    "reading configuration using $config_class"
   );
 
   my $root = $arg->{root};
