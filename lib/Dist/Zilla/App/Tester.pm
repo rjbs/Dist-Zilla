@@ -31,6 +31,7 @@ sub test_dzil {
 
   local $CWD = $root;
 
+  local $ENV{DZIL_TESTING} = 1;
   my $result = $self->test_app('Dist::Zilla::App' => $argv);
   $result->{tempdir} = $tempdir;
 
@@ -64,6 +65,11 @@ sub test_dzil {
   sub log_events {
     my ($self) = @_;
     $self->app->zilla->logger->logger->events;
+  }
+
+  sub log_messages {
+    my ($self) = @_;
+    [ map {; $_->{message} } @{ $self->app->zilla->logger->logger->events } ];
   }
 }
 

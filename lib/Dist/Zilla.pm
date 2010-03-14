@@ -795,6 +795,7 @@ sub default_logger {
     ident     => 'Dist::Zilla',
     to_stdout => 1,
     log_pid   => 0,
+    to_self   => ($ENV{DZIL_TESTING} ? 1 : 0),
     quiet_fatal => 'stdout',
   });
 }
