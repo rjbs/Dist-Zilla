@@ -19,7 +19,16 @@ around from_config => sub {
   confess "dist_root required for from_config" unless $orig_arg->{dist_root};
   my $source = $orig_arg->{dist_root};
 
-  my $tempdir ||= dir( File::Temp::tempdir(CLEANUP => 1) );
+  my $tempdir_root = exists($arg->{tempdir_root})
+                   ? delete($arg->{tempdir_root})
+                   : 't/tmp';
+
+  mkdir $tempdir_root if defined $tempdir_root and not -d $tempdir_root;
+
+  my $tempdir = dir( File::Temp::tempdir(
+      CLEANUP => 1,
+      (defined $tempdir_root ? (DIR => $tempdir_root) : ()),
+  ))->absolute;
 
   my $root = $tempdir->subdir('source');
   $root->mkpath;
