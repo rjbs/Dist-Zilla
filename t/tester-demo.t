@@ -19,7 +19,21 @@ ok(
 
 ## SIMPLE TEST WITH DZIL TESTER
 
-my $tester = Dist::Zilla::Tester->from_config({ dist_root => 't/eg/DZ1' });
+my $dist_ini = <<'END_INI';
+name     = DZT-Sample
+abstract = Sample DZ Dist
+version  = 0.001
+author   = E. Xavier Ample <example@example.org>
+license  = Perl_5
+copyright_holder = E. Xavier Ample
+
+[@Classic]
+END_INI
+
+my $tester = Dist::Zilla::Tester->from_config({
+  dist_root => 't/eg/DZT',
+  add_files => { 'dist.ini' => $dist_ini },
+});
 
 $tester->build;
 
