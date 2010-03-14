@@ -445,7 +445,7 @@ sub from_config {
 
   my $root = Path::Class::dir($arg->{dist_root} || '.');
 
-  my $logger = $arg->{global_logger} || $class->default_logger;
+  my $logger = $arg->{logger} || $class->default_logger;
 
   my ($seq) = $class->_load_config({
     root   => $root,
@@ -456,11 +456,11 @@ sub from_config {
   my $core_config = $seq->section_named('_')->payload;
 
   my $self = $class->new({
-    global_logger => $logger,
+    logger => $logger,
     %$core_config
   });
 
-  $self->logger->set_debug(1) if $arg->{core_debug};
+  $self->core_logger->set_debug(1) if $arg->{core_debug};
 
   for my $section ($seq->sections) {
     next if $section->name eq '_';
@@ -504,6 +504,7 @@ sub _load_config {
   }
 
   $arg->{logger}->log_debug(
+    { prefix => '[DZ] ' },
     "[DZ] reading configuration using $config_class"
   );
 
@@ -772,17 +773,17 @@ This method logs the given message.
 
 =cut
 
-has logger => (
+has core_logger => (
   is   => 'ro',
   isa  => 'Log::Dispatchouli::Proxy', # could be duck typed, I guess
   lazy => 1,
   handles => [ qw(log log_debug log_fatal) ],
   default => sub {
-    $_[0]->global_logger->proxy({ proxy_prefix => '[DZ] ' })
+    $_[0]->logger->proxy({ proxy_prefix => '[DZ] ' })
   },
 );
 
-has global_logger => (
+has logger => (
   is   => 'ro',
   isa  => 'Log::Dispatchouli',
   lazy => 1,

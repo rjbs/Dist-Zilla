@@ -76,19 +76,19 @@ sub zilla {
     my $logger = Dist::Zilla->default_logger;
     $logger->set_debug($verbose ? 1 : 0);
 
-    my $core_debug = grep { $_ eq '_' } @v_plugins;
+    my $core_debug = grep { $_ =~ m{\A[-_]\z} } @v_plugins;
 
     my $zilla = Dist::Zilla->from_config({
-      global_logger => $logger,
-      core_debug    => $core_debug,
+      logger     => $logger,
+      core_debug => $core_debug,
     });
 
     $zilla->dzil_app($self);
 
-    $zilla->global_logger->set_debug($verbose ? 1 : 0);
+    $zilla->logger->set_debug($verbose ? 1 : 0);
 
     VERBOSE_PLUGIN: for my $plugin_name (@v_plugins) {
-      next VERBOSE_PLUGIN if $plugin_name eq '_';
+      next VERBOSE_PLUGIN if $plugin_name =~ m{\A[-_]\z};
 
       my ($plugin) = grep { $_->plugin_name eq $plugin_name }
                      @{ $zilla->plugins };
