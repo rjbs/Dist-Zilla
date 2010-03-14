@@ -569,7 +569,15 @@ This method builds the distribution in the given directory.  If no directory
 name is given, it defaults to DistName-Version.  If the distribution has
 already been built, an exception will be thrown.
 
+=method build
+
+This method just calls C<build_in> with no arguments.  It get you the default
+behavior without the weird-looking formulation of C<build_in> with no object
+for the preposition!
+
 =cut
+
+sub build { $_[0]->build_in }
 
 sub build_in {
   my ($self, $root) = @_;

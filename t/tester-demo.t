@@ -21,7 +21,7 @@ ok(
 
 my $tester = Dist::Zilla::Tester->from_config({ dist_root => 't/eg/DZ1' });
 
-$tester->build_in;
+$tester->build;
 
 ok(
   (grep { $_->{message} =~ m<^\[DZ\]\s> } @{ $tester->logger->events }),
