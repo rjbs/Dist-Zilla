@@ -5,12 +5,19 @@ use Test::More;
 use Dist::Zilla::App::Tester;
 use Dist::Zilla::Tester;
 
+## SIMPLE TEST WITH DZIL::APP TESTER
+
 my $result = test_dzil('t/eg/DZ1', [ qw(build) ]);
 
-is($result->exit_code, 0, "exited 0");
-# diag($result->build_dir);
-# diag $result->output;
-# diag explain $result->log_events;
+is($result->exit_code, 0, "dzil would have exited 0");
+
+ok(
+  (grep { $_ eq '[DZ] writing archive to DZ1-0.001.tar.gz' }
+    @{ $result->log_messages }),
+  "we logged the archive-creation",
+);
+
+## SIMPLE TEST WITH DZIL TESTER
 
 my $tester = Dist::Zilla::Tester->from_config({ dist_root => 't/eg/DZ1' });
 
