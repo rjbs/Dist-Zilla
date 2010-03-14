@@ -2,6 +2,7 @@ package Dist::Zilla::Tester;
 use Moose;
 extends 'Dist::Zilla';
 
+use autodie;
 use File::Copy::Recursive qw(dircopy);
 use File::chdir;
 use File::Spec;
@@ -10,14 +11,11 @@ use Path::Class;
 
 around from_config => sub {
   my ($orig, $self, $orig_arg) = @_;
-
   my $arg = { %{ $orig_arg || {} } };
-  delete $arg->{dist_root};
-
-  local @INC = map {; ref($_) ? $_ : File::Spec->rel2abs($_) } @INC;
 
   confess "dist_root required for from_config" unless $orig_arg->{dist_root};
-  my $source = $orig_arg->{dist_root};
+
+  my $source = delete $arg->{dist_root};
 
   my $tempdir_root = exists($arg->{tempdir_root})
                    ? delete($arg->{tempdir_root})
@@ -35,7 +33,18 @@ around from_config => sub {
 
   dircopy($source, $root);
 
+  if (my $files = delete $arg->{add_files}) {
+    while (my ($name, $content) = each %$files) {
+      my $fn = $root->file($name);
+      open my $fh, '>', $fn;
+      print { $fh } $content;
+      close $fh;
+    }
+  }
+
   $arg->{dist_root} = "$root";
+
+  local @INC = map {; ref($_) ? $_ : File::Spec->rel2abs($_) } @INC;
 
   my $zilla = $self->$orig($arg);
 
