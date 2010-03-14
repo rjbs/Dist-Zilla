@@ -30,10 +30,12 @@ copyright_holder = E. Xavier Ample
 [@Classic]
 END_INI
 
-my $tester = Dist::Zilla::Tester->from_config({
-  dist_root => 'corpus/DZT',
-  add_files => { 'dist.ini' => $dist_ini },
-});
+my $tester = Dist::Zilla::Tester->from_config(
+  { dist_root => 'corpus/DZT' },
+  {
+    add_files => { 'dist.ini' => $dist_ini },
+  }
+);
 
 $tester->build;
 

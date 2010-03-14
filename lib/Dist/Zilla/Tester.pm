@@ -10,15 +10,14 @@ use File::Temp;
 use Path::Class;
 
 around from_config => sub {
-  my ($orig, $self, $orig_arg) = @_;
-  my $arg = { %{ $orig_arg || {} } };
+  my ($orig, $self, $arg, $tester_arg) = @_;
 
-  confess "dist_root required for from_config" unless $orig_arg->{dist_root};
+  confess "dist_root required for from_config" unless $arg->{dist_root};
 
-  my $source = delete $arg->{dist_root};
+  my $source = $arg->{dist_root};
 
-  my $tempdir_root = exists($arg->{tempdir_root})
-                   ? delete($arg->{tempdir_root})
+  my $tempdir_root = exists $tester_arg->{tempdir_root}
+                   ? $tester_arg->{tempdir_root}
                    : 't/tmp';
 
   mkdir $tempdir_root if defined $tempdir_root and not -d $tempdir_root;
@@ -33,7 +32,7 @@ around from_config => sub {
 
   dircopy($source, $root);
 
-  if (my $files = delete $arg->{add_files}) {
+  if (my $files = $tester_arg->{add_files}) {
     while (my ($name, $content) = each %$files) {
       my $fn = $root->file($name);
       open my $fh, '>', $fn;
@@ -42,7 +41,7 @@ around from_config => sub {
     }
   }
 
-  $arg->{dist_root} = "$root";
+  local $arg->{dist_root} = "$root";
 
   local @INC = map {; ref($_) ? $_ : File::Spec->rel2abs($_) } @INC;
 
