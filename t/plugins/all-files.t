@@ -4,11 +4,11 @@ use Test::More 0.88;
 
 use Dist::Zilla::Tester;
 
-my $dist_ini = <<"END_INI";
+my $dist_ini = <<'END_INI';
 name     = DZT-Sample
 abstract = Sample DZ Dist
 version  = 0.001
-author   = E. Xavier Ample <example\@example.org>
+author   = E. Xavier Ample <example@example.org>
 license  = Perl_5
 copyright_holder = E. Xavier Ample
 
