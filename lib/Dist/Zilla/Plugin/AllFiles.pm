@@ -17,6 +17,9 @@ with the current user's home directory according to L<File::HomeDir>.
 use File::Find::Rule;
 use File::HomeDir;
 use File::Spec;
+use Path::Class;
+
+use namespace::autoclean;
 
 has root => (
   is   => 'ro',
@@ -42,7 +45,7 @@ sub gather_files {
 
   my @files;
   for my $filename (File::Find::Rule->file->in($root)) {
-    next if $filename =~ qr/^\./;
+    next if file($filename)->basename =~ qr/^\./;
     push @files, Dist::Zilla::File::OnDisk->new({
       name => $filename,
       mode => (stat $filename)[2] & 0755, # kill world-writeability
