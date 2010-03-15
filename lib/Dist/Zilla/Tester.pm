@@ -32,9 +32,15 @@ around from_config => sub {
 
   dircopy($source, $root);
 
+  if ($tester_arg->{also_copy}) {
+    while (my ($src, $dest) = each %{ $tester_arg->{also_copy} }) {
+      dircopy($src, $tempdir->subdir($dest));
+    }
+  }
+
   if (my $files = $tester_arg->{add_files}) {
     while (my ($name, $content) = each %$files) {
-      my $fn = $root->file($name);
+      my $fn = $tempdir->file($name);
       open my $fh, '>', $fn;
       print { $fh } $content;
       close $fh;
