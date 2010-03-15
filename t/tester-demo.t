@@ -33,7 +33,7 @@ END_INI
 my $tester = Dist::Zilla::Tester->from_config(
   { dist_root => 'corpus/DZT' },
   {
-    add_files => { 'dist.ini' => $dist_ini },
+    add_files => { 'source/dist.ini' => $dist_ini },
   }
 );
 
