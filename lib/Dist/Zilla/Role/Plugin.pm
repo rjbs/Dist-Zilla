@@ -13,8 +13,7 @@ methods and attributes that all plugins will need.
 
 =attr plugin_name
 
-The plugin name is generally determined when configuration is read.  It is
-initialized by the C<=name> argument to the plugin's constructor.
+The plugin name is generally determined when configuration is read.
 
 =cut
 
