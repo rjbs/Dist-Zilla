@@ -20,7 +20,6 @@ my $tzil = Dist::Zilla::Tester->from_config(
       'source/.profile' => "Bogus dotfile.\n",
       'corpus/extra/.dotfile' => "Bogus dotfile.\n",
     },
-    callbacks => [ ],
     also_copy => { 'corpus/extra' => 'corpus/extra' },
   },
 );

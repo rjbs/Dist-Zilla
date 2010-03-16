@@ -55,7 +55,6 @@ sub _build_ini_builder {
         $config .= "$key = $_\n" for @values;
       }
 
-
       $config .= "\n";
     }
 
