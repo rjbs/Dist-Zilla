@@ -12,9 +12,14 @@ my $tzil = Dist::Zilla::Tester->from_config(
     add_files => {
       'source/dist.ini' => simple_ini(
         [ AllFiles => ],
-        [ AllFiles => ExtraFiles => {
+        [ AllFiles => BonusFiles => {
           root   => '../corpus/extra',
           prefix => 'bonus',
+        } ],
+        [ AllFiles => DottyFiles => {
+          root   => '../corpus/extra',
+          prefix => 'dotty',
+          include_dotfiles => 1,
         } ],
       ),
       'source/.profile' => "Bogus dotfile.\n",
@@ -30,6 +35,7 @@ is_deeply(
   [ sort map {; $_->name } @{ $tzil->files } ],
   [ sort qw(
     bonus/subdir/index.html bonus/vader.txt
+    dotty/subdir/index.html dotty/vader.txt dotty/.dotfile
     dist.ini lib/DZT/Simple.pm t/basic.t
   ) ],
   "AllFiles gathers all files in the source dir",

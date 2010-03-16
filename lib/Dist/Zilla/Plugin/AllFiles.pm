@@ -36,6 +36,12 @@ has prefix => (
   default => '',
 );
 
+has include_dotfiles => (
+  is  => 'ro',
+  isa => 'Bool',
+  default => 0,
+);
+
 sub gather_files {
   my ($self) = @_;
 
@@ -45,7 +51,7 @@ sub gather_files {
 
   my @files;
   for my $filename (File::Find::Rule->file->in($root)) {
-    next if file($filename)->basename =~ qr/^\./;
+    next if ! $self->include_dotfiles and file($filename)->basename =~ qr/^\./;
     push @files, Dist::Zilla::File::OnDisk->new({
       name => $filename,
       mode => (stat $filename)[2] & 0755, # kill world-writeability
