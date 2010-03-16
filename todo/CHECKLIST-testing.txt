@@ -24,7 +24,6 @@ Dist::Zilla::File::FromCode
 Dist::Zilla::File::InMemory
 Dist::Zilla::File::OnDisk
 
-Dist::Zilla::Plugin::AllFiles
 Dist::Zilla::Plugin::AutoVersion
 Dist::Zilla::Plugin::BumpVersion
 Dist::Zilla::Plugin::ExtraTests
