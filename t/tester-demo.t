@@ -2,8 +2,10 @@ use strict;
 use warnings;
 use Test::More 0.88;
 
+use lib 't/lib';
+
 use Dist::Zilla::App::Tester;
-use Dist::Zilla::Tester;
+use Test::DZil;
 
 ## SIMPLE TEST WITH DZIL::APP TESTER
 
@@ -19,21 +21,10 @@ ok(
 
 ## SIMPLE TEST WITH DZIL TESTER
 
-my $dist_ini = <<'END_INI';
-name     = DZT-Sample
-abstract = Sample DZ Dist
-version  = 0.001
-author   = E. Xavier Ample <example@example.org>
-license  = Perl_5
-copyright_holder = E. Xavier Ample
-
-[@Classic]
-END_INI
-
 my $tester = Dist::Zilla::Tester->from_config(
   { dist_root => 'corpus/DZT' },
   {
-    add_files => { 'source/dist.ini' => $dist_ini },
+    add_files => { 'source/dist.ini' => simple_ini('@Classic') },
   }
 );
 

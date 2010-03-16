@@ -2,28 +2,21 @@ use strict;
 use warnings;
 use Test::More 0.88;
 
-use Dist::Zilla::Tester;
+use lib 't/lib';
 
-my $dist_ini = <<'END_INI';
-name     = DZT-Sample
-abstract = Sample DZ Dist
-version  = 0.001
-author   = E. Xavier Ample <example@example.org>
-license  = Perl_5
-copyright_holder = E. Xavier Ample
-
-[AllFiles]
-
-[AllFiles / ExtraFiles]
-root = ../corpus/extra
-prefix = bonus
-END_INI
+use Test::DZil;
 
 my $tzil = Dist::Zilla::Tester->from_config(
   { dist_root => 'corpus/DZT' },
   {
     add_files => {
-      'source/dist.ini' => $dist_ini,
+      'source/dist.ini' => simple_ini(
+        [ AllFiles => ],
+        [ AllFiles => ExtraFiles => {
+          root   => '../corpus/extra',
+          prefix => 'bonus',
+        } ],
+      ),
       'source/.profile' => "Bogus dotfile.\n",
       'corpus/extra/.dotfile' => "Bogus dotfile.\n",
     },
