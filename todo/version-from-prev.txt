@@ -1,0 +1,7 @@
+
+# NEXT VERSION FROM PREVIOUS VERSION
+
+Sort of like BumpVersion, but with pluggable version-finding and -bumping.
+
+Ævar wrote something like this, and it should be cored after being rewritten to
+use plugin-by-name finding and some other future dzilisms.

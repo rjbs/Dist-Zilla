@@ -1,0 +1,9 @@
+
+# PREREQ COMMAND
+
+  dzil prereq
+
+should print the dist's computed prereqs, and nothing else, for consumption by
+(say) cpanm
+
+hanekomu wrote something like this; it should be refined and cored
