@@ -7,6 +7,9 @@
 
 3. All config arg names that start with : are reserved for Dist::Zilla.
 
+4. All config arg names that start with = are prohibited and are used internall
+   for things like plugin_name (?)
+
 This will let us say:
 
   [Plugin]
