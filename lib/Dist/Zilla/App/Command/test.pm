@@ -8,32 +8,33 @@ use Moose::Autobox;
 
 =head1 SYNOPSIS
 
-Test your distribution.
+Test your distribution:
 
-    dzil test
+  dzil test
 
 This runs with AUTHOR_TESTING and RELEASE_TESTING environment variables turned
-on, so its ultimately like doing this:
+on, so it's like doing this:
 
-    export AUTHOR_TESTING=1
-    export RELEASE_TESTING=1
-    dzil build
-    rsync -avp My-Project-Version/ .build/
-    cd .build;
-    perl Makefile.PL
-    make
-    make test
+  export AUTHOR_TESTING=1
+  export RELEASE_TESTING=1
+  dzil build
+  rsync -avp My-Project-Version/ .build/
+  cd .build;
+  perl Makefile.PL
+  make
+  make test
 
 Except for the fact it's built directly in a subdir of .build (like
 F<.build/ASDF123>).
 
-A build that fails tests will be left behind for analysis, and dzil
-will exit with status 1.  If the tests are successful, the build
-directory will be removed and dzil will exit with status 0.
+A build that fails tests will be left behind for analysis, and F<dzil> will
+exit a non-zero value.  If the tests are successful, the build directory will
+be removed and F<dzil> will exit with status 0.
 
 =head1 SEE ALSO
 
-The heavy lifting of this module is now done by L<Dist::Zilla::Role::TestRunner> plugins.
+The heavy lifting of this module is now done by
+L<Dist::Zilla::Role::TestRunner> plugins.
 
 =cut
 
@@ -45,7 +46,6 @@ sub execute {
   Carp::croak("you can't release without any TestRunner plugins")
     unless my @testers = $self->zilla->plugins_with(-TestRunner)->flatten;
 
-  require Dist::Zilla;
   require File::chdir;
   require File::Temp;
   require Path::Class;
@@ -75,10 +75,10 @@ sub execute {
     last if $error;
   }
 
-  if ( $error ) {
+  if ($error) {
     $self->log($error);
     $self->log("left failed dist in place at $target");
-    exit 1;                     # Indicate test failure
+    exit 1;
   } else {
     $self->log("all's well; removing $target");
     $target->rmtree;

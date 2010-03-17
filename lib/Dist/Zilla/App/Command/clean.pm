@@ -37,12 +37,8 @@ sub execute {
   };
 
   # removing leftovers
-  my @temps =
-    File::Find::Rule
-    ->file
-    ->name( qr/~$/ )
-    ->in('.');
-  unlink @temps;
+  my @temps = File::Find::Rule->file->name( qr{~$} )->in('.');
+  $self->log("clean: removing $_"), unlink for @temps;
 }
 
 1;

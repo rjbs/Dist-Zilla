@@ -8,7 +8,7 @@ use Dist::Zilla::App -command;
 
 Builds your distribution and emits tar.gz files / directories.
 
-    dzil build [--tgz|--notgz]
+    dzil build [ --tgz | --no-tgz ]
 
 =cut
 
@@ -18,7 +18,7 @@ sub abstract { 'build your dist' }
 
     $ dzil build
     $ dzil build --tgz
-    $ dzil build --notgz
+    $ dzil build --no-tgz
 
 =cut
 
@@ -28,18 +28,18 @@ sub opt_spec {
 
 =head1 OPTIONS
 
-=head2 --tgz | --notgz
+=head2 --tgz | --no-tgz
 
 Builds a .tar.gz in your project directory after building the distribution.
 
---tgz behaviour is by default, use --notgz to disable building an archive.
+--tgz behaviour is by default, use --no-tgz to disable building an archive.
 
 =cut
 
 sub execute {
   my ($self, $opt, $arg) = @_;
 
-  my $method = $opt->{tgz} ? 'build_archive' : 'build_in';
+  my $method = $opt->tgz ? 'build_archive' : 'build';
   $self->zilla->$method;
 }
 
