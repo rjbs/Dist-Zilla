@@ -30,7 +30,6 @@ Dist::Zilla::Plugin::ExtraTests
 Dist::Zilla::Plugin::FakeRelease
 Dist::Zilla::Plugin::InlineFiles
 Dist::Zilla::Plugin::InstallDirs
-Dist::Zilla::Plugin::License
 Dist::Zilla::Plugin::MakeMaker
 Dist::Zilla::Plugin::Manifest
 Dist::Zilla::Plugin::ManifestSkip
