@@ -20,12 +20,13 @@ sub gather_files {
 
   my $template = q|
 
-This archive contains the distribution {{ $dist->name }}, version
-{{ $dist->version }}:
+This archive contains the distribution {{ $dist->name }},
+version {{ $dist->version }}:
 
   {{ $dist->abstract }}
 
 {{ $dist->license->notice }}
+
 |;
 
   my $content = $self->fill_in_string(

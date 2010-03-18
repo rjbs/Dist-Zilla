@@ -34,7 +34,6 @@ Dist::Zilla::File::OnDisk
 
 # PLUGINS
 
-Dist::Zilla::Plugin::Readme
 Dist::Zilla::Plugin::PkgVersion
 Dist::Zilla::Plugin::PodVersion
 
