@@ -18,11 +18,7 @@ my $tzil = Dist::Zilla::Tester->from_config(
 
 $tzil->build;
 
-my $contents = do {
-  local $/;
-  open my $fh, '<', $tzil->built_in->file('LICENSE');
-  <$fh>;
-};
+my $contents = $tzil->slurp_file('build/LICENSE');
 
 like(
   $contents,
