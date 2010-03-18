@@ -41,7 +41,6 @@ Dist::Zilla::Plugin::MetaYAML
 Dist::Zilla::Plugin::ManifestSkip
 Dist::Zilla::Plugin::PruneCruft
 Dist::Zilla::Plugin::PruneFiles
-Dist::Zilla::Plugin::Manifest
 
 Dist::Zilla::Plugin::Prereq
 

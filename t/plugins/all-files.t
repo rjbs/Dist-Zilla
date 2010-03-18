@@ -21,6 +21,7 @@ my $tzil = Dist::Zilla::Tester->from_config(
           prefix => 'dotty',
           include_dotfiles => 1,
         } ],
+        'Manifest',
       ),
       'source/.profile' => "Bogus dotfile.\n",
       'corpus/extra/.dotfile' => "Bogus dotfile.\n",
@@ -31,15 +32,25 @@ my $tzil = Dist::Zilla::Tester->from_config(
 
 $tzil->build;
 
+my @files = map {; $_->name } @{ $tzil->files };
+
 is_deeply(
-  [ sort map {; $_->name } @{ $tzil->files } ],
+  [ sort @files ],
   [ sort qw(
     bonus/subdir/index.html bonus/vader.txt
     dotty/subdir/index.html dotty/vader.txt dotty/.dotfile
     dist.ini lib/DZT/Sample.pm t/basic.t
+    MANIFEST
   ) ],
   "AllFiles gathers all files in the source dir",
 );
+
+my $manifest = $tzil->slurp_file('build/MANIFEST');
+my %in_manifest = map {; chomp; $_ => 1 } grep {length} split /\n/, $manifest;
+
+my $count = grep { $in_manifest{$_} } @files;
+ok($count == @files, "all files found were in manifest");
+ok(keys(%in_manifest) == @files, "all files in manifest were on disk");
 
 done_testing;
 

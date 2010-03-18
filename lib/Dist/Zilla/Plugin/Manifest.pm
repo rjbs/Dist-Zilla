@@ -4,6 +4,8 @@ use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::InstallTool';
 
+use Dist::Zilla::File::InMemory;
+
 =head1 DESCRIPTION
 
 If included, this plugin will produce a F<MANIFEST> file for the distribution,
