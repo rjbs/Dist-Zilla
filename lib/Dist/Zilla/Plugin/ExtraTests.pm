@@ -25,7 +25,6 @@ sub munge_file {
 
   $self->log("rewriting $1 test " . $file->name);
 
-
   $self->$method($file);
 }
 

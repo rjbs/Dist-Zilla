@@ -1,4 +1,4 @@
-# METHODS OF Dist::Zilla
+# METHODS OF Dist::Zilla - these are actually really important (and hard?)
 
 find_files
 plugins_with
@@ -8,7 +8,7 @@ build_archive
 test
 release
 
-# COMMANDS IN Dist::Zilla::App
+# COMMANDS IN Dist::Zilla::App - should stop being interesting as overhauled
 
 Dist::Zilla::App::Command
 Dist::Zilla::App::Command::build
@@ -20,23 +20,19 @@ Dist::Zilla::App::Command::run
 Dist::Zilla::App::Command::smoke
 Dist::Zilla::App::Command::test
 
-# CONFIG STUFF ?
+# CONFIG STUFF - don't bother until assembly overhaul happens
 
 Dist::Zilla::Config
 Dist::Zilla::Config::Finder
 Dist::Zilla::Config::Perl
 
-# FILE CLASSES
+# FILE CLASSES - probably tested sufficiently by testing plugins
 
 Dist::Zilla::File::FromCode
 Dist::Zilla::File::InMemory
 Dist::Zilla::File::OnDisk
 
 # PLUGINS
-
-Dist::Zilla::Plugin::ExtraTests
-Dist::Zilla::Plugin::MetaTests
-Dist::Zilla::Plugin::PodTests
 
 Dist::Zilla::Plugin::MetaJSON
 Dist::Zilla::Plugin::MetaResources
@@ -57,6 +53,8 @@ Dist::Zilla::Plugin::NextRelease
 Dist::Zilla::Plugin::InstallDirs
 Dist::Zilla::Plugin::MakeMaker
 Dist::Zilla::Plugin::ModuleBuild
+
+Dist::Zilla::Plugin::ExtraTests
 
 * Dist::Zilla::Plugin::InlineFiles  - exercised by other plugins
 * Dist::Zilla::Plugin::UploadToCPAN - difficult to test

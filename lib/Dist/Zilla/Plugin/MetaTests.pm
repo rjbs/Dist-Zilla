@@ -8,7 +8,7 @@ extends 'Dist::Zilla::Plugin::InlineFiles';
 This is an extension of L<Dist::Zilla::Plugin::InlineFiles>, providing the
 following files:
 
-    xt/release/meta-yaml.t - a standard Test::CPAN::Meta test
+  xt/release/meta-yaml.t - a standard Test::CPAN::Meta test
 
 =cut
 
@@ -17,7 +17,7 @@ no Moose;
 1;
 
 __DATA__
-___[ xt/release/meta-yaml.t ]___
+___[ xt/release/distmeta.t ]___
 #!perl
 
 use Test::More;
