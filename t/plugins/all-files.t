@@ -36,7 +36,7 @@ is_deeply(
   [ sort qw(
     bonus/subdir/index.html bonus/vader.txt
     dotty/subdir/index.html dotty/vader.txt dotty/.dotfile
-    dist.ini lib/DZT/Simple.pm t/basic.t
+    dist.ini lib/DZT/Sample.pm t/basic.t
   ) ],
   "AllFiles gathers all files in the source dir",
 );
