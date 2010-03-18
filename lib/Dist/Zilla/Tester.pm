@@ -88,4 +88,29 @@ has tempdir => (
   init_arg => undef,
 );
 
+sub clear_log_events {
+  my ($self) = @_;
+  $self->logger->clear_events;
+}
+
+sub log_events {
+  my ($self) = @_;
+  $self->logger->events;
+}
+
+sub log_messages {
+  my ($self) = @_;
+  [ map {; $_->{message} } @{ $self->logger->events } ];
+}
+
+sub slurp_file {
+  my ($self, $filename) = @_;
+
+  return scalar do {
+    local $/;
+    open my $fh, '<', $self->tempdir->file($filename);
+    <$fh>;
+  };
+}
+
 1;
