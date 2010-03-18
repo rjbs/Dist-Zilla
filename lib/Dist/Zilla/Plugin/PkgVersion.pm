@@ -17,6 +17,9 @@ module or program (more or less) within the distribution:
 sub munge_file {
   my ($self, $file) = @_;
 
+  # XXX: for test purposes, for now! evil! -- rjbs, 2010-03-17
+  return                          if $file->name    =~ /^corpus\//;
+
   return                          if $file->name    =~ /\.t$/i;
   return $self->munge_perl($file) if $file->name    =~ /\.(?:pm|pl)$/i;
   return $self->munge_perl($file) if $file->content =~ /^#!(?:.*)perl(?:$|\s)/;
