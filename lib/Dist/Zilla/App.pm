@@ -88,11 +88,8 @@ sub zilla {
     $zilla->logger->set_debug($verbose ? 1 : 0);
 
     VERBOSE_PLUGIN: for my $plugin_name (grep { ! m{\A[-_]\z} } @v_plugins) {
-      my ($plugin) = grep { $_->plugin_name eq $plugin_name }
-                     @{ $zilla->plugins };
-
       $zilla->log_fatal("can't find plugin $plugin_name to set debug mode")
-        unless $plugin;
+        unless my $plugin = $zilla->plugin_named($plugin_name);
 
       $plugin->logger->set_debug(1);
     }

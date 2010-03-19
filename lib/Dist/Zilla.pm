@@ -9,6 +9,7 @@ use Moose::Util::TypeConstraints;
 
 use File::Find::Rule;
 use Hash::Merge::Simple ();
+use List::Util qw(first);
 use Log::Dispatchouli 1.100712; # proxy_loggers, quiet_fatal
 use Params::Util qw(_HASHLIKE);
 use Path::Class ();
@@ -172,14 +173,15 @@ has main_module => (
     my $guessing = q{};
 
     if ( $self->has_main_module_override ) {
-       $file = $self->files->grep(sub{ $_->name eq $self->main_module_override })->head;
+       $file = first { $_->name eq $self->main_module_override }
+               $self->files->flatten;
     } else {
        $guessing = 'guessing '; # We're having to guess
 
        (my $guess = $self->name) =~ s{-}{/}g;
        $guess = "lib/$guess.pm";
 
-       $file = $self->files->grep(sub{ $_->name eq $guess })->head
+       $file = (first { $_->name eq $guess } $self->files->flatten)
            ||  $self->files
              ->grep(sub { $_->name =~ m{\.pm\z} and $_->name =~ m{\Alib/} })
              ->sort(sub { length $_[0]->name <=> length $_[1]->name })
@@ -520,6 +522,20 @@ sub _load_config {
   return $sequence;
 }
 
+=method plugin_named
+
+  my $plugin = $zilla->plugin_named( $plugin_name );
+
+=cut
+
+sub plugin_named {
+  my ($self, $name) = @_;
+  my $plugin = first { $_->plugin_name eq $name } $self->plugins->flatten;
+
+  return $plugin if $plugin;
+  return;
+}
+
 =method plugins_with
 
   my $roles = $zilla->plugins_with( -SomeRole );
@@ -553,10 +569,11 @@ found, an exception will be raised.
 sub find_files {
   my ($self, $finder_name) = @_;
 
-  my $plugin = $self->plugins_with(-FileFinder)
-             ->grep(sub { $_->plugin_name eq $finder_name })->head;
+  confess("no plugin named $finder_name found")
+    unless my $plugin = $self->plugins_named($finder_name);
 
-  confess("no FileFinder named $finder_name found") unless $plugin;
+  confess("plugin $finder_name is not a FileFinder")
+    unless $plugin->does('Dist::Zilla::Role::FileFinder');
 
   $plugin->find_files;
 }
