@@ -34,10 +34,6 @@ Dist::Zilla::File::OnDisk
 
 # PLUGINS
 
-Dist::Zilla::Plugin::MetaJSON
-Dist::Zilla::Plugin::MetaResources
-Dist::Zilla::Plugin::MetaYAML
-
 Dist::Zilla::Plugin::ManifestSkip
 Dist::Zilla::Plugin::PruneCruft
 Dist::Zilla::Plugin::PruneFiles
