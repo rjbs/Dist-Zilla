@@ -769,7 +769,7 @@ sub release {
   $_->release($tgz) for @releasers;
 
   # call all plugins implementing AfterRelease role
-  $_->after_release() for $self->plugins_with(-AfterRelease)->flatten;
+  $_->after_release($tgz) for $self->plugins_with(-AfterRelease)->flatten;
 }
 
 =method log
