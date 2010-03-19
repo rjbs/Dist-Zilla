@@ -7,6 +7,10 @@ Allow all META 2.0 phases and relationship types.
 
 ...and maybe not "conflicts."
 
+finalization of prereqs should replace the Version::Requirements objects with
+ones that still respond to add/etc, but throw if the new requirement does not
+fit the existing specs.
+
 ## TODO
 
 * add a means to say "my installed version"
