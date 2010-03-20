@@ -39,6 +39,12 @@ my {{ $WriteMakefileArgs }}
 delete $WriteMakefileArgs{LICENSE}
   unless eval { ExtUtils::MakeMaker->VERSION(6.31) };
 
+delete $WriteMakefileArgs{BUILD_REQUIRES}
+  unless eval { ExtUtils::MakeMaker->VERSION(6.56) };
+
+delete $WriteMakefileArgs{CONFIGURE_REQUIRES}
+  unless eval { ExtUtils::MakeMaker->VERSION(6.52) };
+
 WriteMakefile(%WriteMakefileArgs);
 
 {{ $share_dir_block[1] }}
