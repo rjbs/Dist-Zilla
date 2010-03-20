@@ -41,6 +41,7 @@ around from_config => sub {
   if (my $files = $tester_arg->{add_files}) {
     while (my ($name, $content) = each %$files) {
       my $fn = $tempdir->file($name);
+      $fn->dir->mkpath;
       open my $fh, '>', $fn;
       print { $fh } $content;
       close $fh;
