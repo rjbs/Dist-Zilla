@@ -18,7 +18,7 @@ In your F<dist.ini>:
 =cut
 
 sub mvp_multivalue_args { qw(filenames) }
-# sub mvp_aliases {  warn "..."; return { filename => 'filenames' } }
+sub mvp_aliases { return { filename => 'filenames' } }
 
 =attr filenames
 

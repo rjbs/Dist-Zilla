@@ -34,10 +34,6 @@ Dist::Zilla::File::OnDisk
 
 # PLUGINS
 
-Dist::Zilla::Plugin::ManifestSkip
-Dist::Zilla::Plugin::PruneCruft
-Dist::Zilla::Plugin::PruneFiles
-
 Dist::Zilla::Plugin::Prereq
 
 Dist::Zilla::Plugin::AutoVersion
