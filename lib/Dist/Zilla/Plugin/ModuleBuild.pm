@@ -96,6 +96,8 @@ sub setup_installer {
     $self->zilla->prereq->as_distmeta->flatten,
   );
 
+  $self->__module_build_args(\%module_build_args);
+
   my $module_build_dumper = Data::Dumper->new(
     [ \%module_build_args ],
     [ '*module_build_args' ],
@@ -117,6 +119,12 @@ sub setup_installer {
   $self->add_file($file);
   return;
 }
+
+# XXX:  Just here to facilitate testing. -- rjbs, 2010-03-20
+has __module_build_args => (
+  is   => 'rw',
+  isa  => 'HashRef',
+);
 
 sub build {
   my $self = shift;

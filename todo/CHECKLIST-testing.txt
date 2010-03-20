@@ -41,8 +41,6 @@ Dist::Zilla::Plugin::AutoVersion
 Dist::Zilla::Plugin::NextRelease
 
 Dist::Zilla::Plugin::InstallDirs
-Dist::Zilla::Plugin::MakeMaker
-Dist::Zilla::Plugin::ModuleBuild
 
 Dist::Zilla::Plugin::ExtraTests
 

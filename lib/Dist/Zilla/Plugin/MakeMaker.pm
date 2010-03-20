@@ -133,6 +133,8 @@ sub setup_installer {
     test => { TESTS => join q{ }, sort keys %test_dirs },
   );
 
+  $self->__write_makefile_args(\%write_makefile_args);
+
   my $makefile_args_dumper = Data::Dumper->new(
     [ \%write_makefile_args ],
     [ '*WriteMakefileArgs' ],
@@ -155,6 +157,12 @@ sub setup_installer {
   $self->add_file($file);
   return;
 }
+
+# XXX:  Just here to facilitate testing. -- rjbs, 2010-03-20
+has __write_makefile_args => (
+  is   => 'rw',
+  isa  => 'HashRef',
+);
 
 sub build {
   my $self = shift;
