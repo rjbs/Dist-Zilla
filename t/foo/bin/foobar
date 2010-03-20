@@ -1,0 +1,14 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use lib 'mylib';
+
+# require in a script
+use DZPA::ScriptUse;
+
+# module shipped by dist
+use DZPA::Main;
+
+# DZPA::Skip should be trimmed
+require DZPA::Skip::Foo;
