@@ -74,6 +74,17 @@ around build_in => sub {
   return $self->$orig($target);
 };
 
+around release => sub {
+  my ($orig, $self) = @_;
+
+  # XXX: We *must eliminate* the need for this!  It's only here because right
+  # now building a dist with (root <> cwd) doesn't work. -- rjbs, 2010-03-08
+  local $CWD = $self->root;
+
+  return $self->$orig;
+};
+
+
 sub default_logger {
   return Log::Dispatchouli->new({
     ident   => 'Dist::Zilla::Tester',

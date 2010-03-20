@@ -38,7 +38,6 @@ Dist::Zilla::Plugin::Prereq
 
 Dist::Zilla::Plugin::AutoVersion
 Dist::Zilla::Plugin::BumpVersion
-Dist::Zilla::Plugin::FakeRelease
 Dist::Zilla::Plugin::NextRelease
 
 Dist::Zilla::Plugin::InstallDirs
