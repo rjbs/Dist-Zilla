@@ -13,12 +13,12 @@ Revision history for {{$dist->next}}
 {{$NEXT}}
           got included in an awesome test suite
 
-1.200300  2009-01-02
+0.000     2009-01-02
           finally left home, proving to mom I can make it!
 
 END_CHANGES
 
-if (0) {
+{
   my $tzil = Dist::Zilla::Tester->from_config(
     { dist_root => 'corpus/DZT' },
     {
@@ -30,7 +30,26 @@ if (0) {
   );
 
   $tzil->build;
+
+  like(
+    $tzil->slurp_file('build/Changes'),
+    qr{0\.001},
+    "new version appears in build Changes file",
+  );
+
+  unlike(
+    $tzil->slurp_file('source/Changes'),
+    qr{0\.001},
+    "new version does not yet appear in source Changes file",
+  );
+
   $tzil->release;
+
+  like(
+    $tzil->slurp_file('source/Changes'),
+    qr{0\.001},
+    "new version appears in source Changes file after release",
+  );
 
   ok(
     grep({ /fake release happen/i } @{ $tzil->log_messages }),
@@ -44,14 +63,27 @@ if (0) {
     {
       add_files => {
         'source/Changes' => $changes,
-        'source/dist.ini' => simple_ini(qw(AllFiles FakeRelease)),
+        'source/dist.ini' => simple_ini(qw(AllFiles NextRelease FakeRelease)),
       },
     },
   );
 
+  $tzil->build;
+
+  like(
+    $tzil->slurp_file('build/Changes'),
+    qr{0\.001},
+    "new version appears in build Changes file",
+  );
+
+  unlike(
+    $tzil->slurp_file('source/Changes'),
+    qr{0\.001},
+    "new version does not yet appear in source Changes file",
+  );
+
   try {
     local $ENV{DZIL_FAKERELEASE_FAIL} = 1;
-    $tzil->build;
     $tzil->release;
   } catch {
     like(
@@ -60,6 +92,12 @@ if (0) {
       "we can make FakeRelease fail when we want!"
     );
   };
+
+  unlike(
+    $tzil->slurp_file('source/Changes'),
+    qr{0\.001},
+    "no new version in source Changes after failed release",
+  );
 }
 
 done_testing;
