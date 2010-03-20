@@ -612,7 +612,15 @@ sub build_in {
 
   for my $plugin ($self->plugins_with(-FixedPrereqs)->flatten) {
     my $prereq = $plugin->prereq;
-    $self->register_prereqs($_ => $prereq->{$_}) for keys %$prereq;
+    for (keys %$prereq) {
+      $self->register_prereqs(
+        {
+          phase => $plugin->prereq_phase,
+          type  => $plugin->prereq_type,
+        },
+        $_ => $prereq->{$_}
+      );
+    }
   }
 
   $self->prereq->finalize;

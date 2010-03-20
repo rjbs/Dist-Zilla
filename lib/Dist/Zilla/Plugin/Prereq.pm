@@ -33,10 +33,22 @@ sub BUILDARGS {
   my $zilla = delete $copy{zilla};
   my $name  = delete $copy{plugin_name};
 
+  my @dashed = grep { /^-/ } keys %copy;
+
+  my %other;
+  for my $dkey (@dashed) {
+    (my $key = $dkey) =~ s/^-//;
+
+    $other{ $key } = delete $copy{ $dkey };
+  }
+
+  confess "don't try to pass -_prereq as a build arg!" if $other{_prereq};
+
   return {
     zilla => $zilla,
     plugin_name => $name,
     _prereq     => \%copy,
+    %other,
   }
 }
 
