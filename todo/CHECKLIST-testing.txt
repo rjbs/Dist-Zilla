@@ -38,11 +38,8 @@ Dist::Zilla::Plugin::Prereq
 
 Dist::Zilla::Plugin::AutoVersion
 * Dist::Zilla::Plugin::BumpVersion - not worth testing, doomed to be replaced
-Dist::Zilla::Plugin::NextRelease
 
 Dist::Zilla::Plugin::InstallDirs
-
-Dist::Zilla::Plugin::ExtraTests
 
 * Dist::Zilla::Plugin::InlineFiles  - exercised by other plugins
 * Dist::Zilla::Plugin::UploadToCPAN - difficult to test
