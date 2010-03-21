@@ -1,7 +1,12 @@
 package Dist::Zilla::Plugin::PkgVersion;
 # ABSTRACT: add a $VERSION to your packages
 use Moose;
-with 'Dist::Zilla::Role::FileMunger';
+with(
+  'Dist::Zilla::Role::FileMunger',
+  'Dist::Zilla::Role::FileFinderUser' => {
+    default_finders => [ ':ModulesToInstall' ],
+  },
+);
 
 use PPI;
 
@@ -13,6 +18,12 @@ module or program (more or less) within the distribution:
   our $VERSION = 0.001; # where 0.001 is the version of the dist
 
 =cut
+
+sub munge_files {
+  my ($self) = @_;
+
+  $self->munge_file($_) for @{ $self->found_files };
+}
 
 sub munge_file {
   my ($self, $file) = @_;

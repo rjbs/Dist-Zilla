@@ -506,8 +506,10 @@ sub _setup_default_plugins {
       plugin_name => ':ModulesToInstall',
       zilla       => $self,
       style       => 'grep',
-      code        => sub { m{\Alib/} and m{\.(pm|pod)$} },
+      code        => sub { local $_ = $_->name; m{\Alib/} and m{\.(pm|pod)$} },
     });
+
+    $self->plugins->push($plugin);
   }
 }
 
@@ -586,7 +588,7 @@ sub find_files {
   my ($self, $finder_name) = @_;
 
   confess("no plugin named $finder_name found")
-    unless my $plugin = $self->plugins_named($finder_name);
+    unless my $plugin = $self->plugin_named($finder_name);
 
   confess("plugin $finder_name is not a FileFinder")
     unless $plugin->does('Dist::Zilla::Role::FileFinder');

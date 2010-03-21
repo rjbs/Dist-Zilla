@@ -3,7 +3,7 @@ use MooseX::Role::Parameterized;
 
 parameter finder_arg_names => (
   isa => 'ArrayRef',
-  default => [ 'finder' ],
+  default => sub { [ 'finder' ] },
 );
 
 parameter default_finders => (
@@ -23,7 +23,7 @@ role {
   confess "no finder arg names given!" unless $finder_arg;
 
   around mvp_multivalue_args => sub {
-    my ($self, $orig) = @_;
+    my ($orig, $self) = @_;
 
     my @start = $self->$orig;
     return (@start, $finder_arg);
@@ -31,7 +31,7 @@ role {
 
   if (@finder_arg_aliases) {
     around mvp_aliases => sub {
-      my ($self, $orig) = @_;
+      my ($orig, $self) = @_;
 
       my $start = $self->$orig;
 
@@ -48,7 +48,7 @@ role {
   has $finder_arg => (
     is  => 'ro',
     isa => 'ArrayRef[Str]',
-    default => $p->default_finder,
+    default => sub { [ @{ $p->default_finders } ] },
   );
 
   method $p->method => sub {
