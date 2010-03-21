@@ -30,7 +30,7 @@ sub _build_ini_builder {
                  ? @{ $core_config->{ $key } }
                  : $core_config->{ $key };
 
-      $config .= "$key = $_\n" for @values;
+      $config .= "$key = $_\n" for grep {defined} @values;
     }
 
     $config .= "\n" if length $config;
