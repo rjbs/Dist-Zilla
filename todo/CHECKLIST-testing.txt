@@ -34,18 +34,12 @@ Dist::Zilla::File::OnDisk
 
 # PLUGINS
 
-Dist::Zilla::Plugin::Prereq
+* Dist::Zilla::Plugin::BumpVersion  - not worth testing, doomed to be replaced
 
-* Dist::Zilla::Plugin::BumpVersion - not worth testing, doomed to be replaced
-
-Dist::Zilla::Plugin::InstallDirs
+* Dist::Zilla::Plugin::InstallDirs  - problematic in design; replace?
 
 * Dist::Zilla::Plugin::InlineFiles  - exercised by other plugins
 * Dist::Zilla::Plugin::UploadToCPAN - difficult to test
-
-# BUNDLES
-Dist::Zilla::PluginBundle::Classic
-Dist::Zilla::PluginBundle::Filter
 
 # PREREQ HANDLING
 Dist::Zilla::Prereqs
