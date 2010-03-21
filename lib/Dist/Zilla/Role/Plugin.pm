@@ -55,5 +55,10 @@ has logger => (
   },
 );
 
+# We define these effectively-pointless subs here to allow other roles to
+# modify them with around. -- rjbs, 2010-03-21
+sub mvp_multivalue_args {};
+sub mvp_aliases         { return {} };
+
 no Moose::Role;
 1;

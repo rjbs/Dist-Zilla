@@ -492,7 +492,23 @@ sub from_config {
     $self->plugins->push($plugin);
   }
 
+  $self->_setup_default_plugins;
+
   return $self;
+}
+
+sub _setup_default_plugins {
+  my ($self) = @_;
+
+  unless ($self->plugin_named(':ModulesToInstall')) {
+    require Dist::Zilla::Plugin::FinderCode;
+    my $plugin = Dist::Zilla::Plugin::FinderCode->new({
+      plugin_name => ':ModulesToInstall',
+      zilla       => $self,
+      style       => 'grep',
+      code        => sub { m{\Alib/} and m{\.(pm|pod)$} },
+    });
+  }
 }
 
 sub _load_config {
