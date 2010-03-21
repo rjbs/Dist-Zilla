@@ -36,7 +36,6 @@ Dist::Zilla::File::OnDisk
 
 Dist::Zilla::Plugin::Prereq
 
-Dist::Zilla::Plugin::AutoVersion
 * Dist::Zilla::Plugin::BumpVersion - not worth testing, doomed to be replaced
 
 Dist::Zilla::Plugin::InstallDirs
