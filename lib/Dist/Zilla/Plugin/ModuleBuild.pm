@@ -58,7 +58,7 @@ sub metadata {
 sub setup_installer {
   my ($self, $arg) = @_;
 
-  Carp::croak("can't build a Build.PL; license has no known META.yml value")
+  $self->log_fatal("can't build Build.PL; license has no known META.yml value")
     unless $self->zilla->license->meta_yml_name;
 
   (my $name = $self->zilla->name) =~ s/-/::/g;
@@ -71,14 +71,14 @@ sub setup_installer {
   my @bin_dirs    = uniq map {; $_->bin->flatten   } @dir_plugins;
   my @share_dirs  = uniq map {; $_->share->flatten } @dir_plugins;
 
-  confess "can't install more than one ShareDir" if @share_dirs > 1;
+  $self->log_fatal("can't install more than one ShareDir") if @share_dirs > 1;
 
   my @exe_files = $self->zilla->files
     ->grep(sub { my $f = $_; any { $f->name =~ qr{^\Q$_\E[\\/]} } @bin_dirs; })
     ->map( sub { $_->name })
     ->flatten;
 
-  confess "can't install files with whitespace in their names"
+  $self->log_fatal("can't install files with whitespace in their names")
     if grep { /\s/ } @exe_files;
 
   my %module_build_args = (

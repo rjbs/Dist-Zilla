@@ -92,12 +92,12 @@ sub _build_version {
   for my $plugin ($self->plugins_with(-VersionProvider)->flatten) {
     next unless defined(my $this_version = $plugin->provide_version);
 
-    confess('attempted to set version twice') if defined $version;
+    $self->log_fatal('attempted to set version twice') if defined $version;
 
     $version = $this_version;
   }
 
-  confess('no version was ever set') unless defined $version;
+  $self->log_fatal('no version was ever set') unless defined $version;
 
   $self->log("warning: version number does not look like a number")
     unless $version =~ m{\A\d+(?:\.\d+)\z};
@@ -273,7 +273,7 @@ sub _initialize_license {
         $self->main_module->content
       );
 
-      Carp::confess("couldn't make a good guess at license") if @guess != 1;
+      $self->log_fatal("couldn't make a good guess at license") if @guess != 1;
 
       my $filename = $self->main_module->name;
       $license_class = $guess[0];
@@ -288,7 +288,8 @@ sub _initialize_license {
     });
   }
 
-  confess "$value is not a valid license" if ! License->check($license);
+  $self->log_fatal("$value is not a valid license")
+    if ! License->check($license);
 
   $self->_set_license($license);
 }
@@ -472,10 +473,10 @@ sub from_config {
       $section->payload,
     );
 
-    confess "arguments attempted to override plugin name"
+    $self->log_fatal("$name arguments attempted to override plugin name")
       if defined $arg->{plugin_name};
 
-    confess "arguments attempted to override plugin name"
+    $self->log_fatal("$name arguments attempted to override plugin name")
       if defined $arg->{zilla};
 
     my $plugin = $plugin_class->new(
@@ -587,10 +588,10 @@ found, an exception will be raised.
 sub find_files {
   my ($self, $finder_name) = @_;
 
-  confess("no plugin named $finder_name found")
+  $self->log_fatal("no plugin named $finder_name found")
     unless my $plugin = $self->plugin_named($finder_name);
 
-  confess("plugin $finder_name is not a FileFinder")
+  $self->log_fatal("plugin $finder_name is not a FileFinder")
     unless $plugin->does('Dist::Zilla::Role::FileFinder');
 
   $plugin->find_files;
@@ -617,7 +618,7 @@ sub build { $_[0]->build_in }
 sub build_in {
   my ($self, $root) = @_;
 
-  Carp::confess("attempted to build " . $self->name . " a second time")
+  $self->log_fatal("attempted to build " . $self->name . " a second time")
     if $self->built_in;
 
   $_->before_build for $self->plugins_with(-BeforeBuild)->flatten;

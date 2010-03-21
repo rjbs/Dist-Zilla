@@ -20,7 +20,7 @@ sub find_files {
   my ($self) = @_;
 
   my $style = $self->style;
-  confess "unknown FinderCode style '$style'" unless $style eq 'grep';
+  $self->log_fatal("unknown FinderCode style '$style'") if $style ne 'grep';
 
   $self->zilla->files->grep($self->code);
 }
