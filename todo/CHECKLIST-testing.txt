@@ -1,7 +1,6 @@
 # METHODS OF Dist::Zilla - these are actually really important (and hard?)
 
 find_files
-plugins_with
 build, build_in
 ensure_built_in
 build_archive

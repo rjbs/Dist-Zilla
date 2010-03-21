@@ -7,6 +7,14 @@ Revision history for {{$dist->name}}
           added include_dotfiles option to AllFiles
           allow relative root directory for AllFiles
 
+          AutoPrereq is now distributed with Dist::Zilla
+
+          MakeMaker-produced Makefile.PL will produce warnings less often
+
+          Prereq plugin can target config_requires, build_requires, etc
+
+          dzil takes -v arg to enable debugging globally or per-plugin
+
           PkgVersion now adds a fully-qualified $VERSION variables, not 'our'
           add 'dzil nop' command to initialize zilla object and exit
 
