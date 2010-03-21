@@ -39,8 +39,6 @@ sub section_header {
   return _format_version($self->format, $self->zilla);
 }
 
-sub munge_file { die 'unimplemented' };
-
 sub munge_files {
   my ($self) = @_;
 
