@@ -1,7 +1,12 @@
 package Dist::Zilla::Plugin::PodVersion;
 # ABSTRACT: add a VERSION head1 to each Perl document
 use Moose;
-with 'Dist::Zilla::Role::FileMunger';
+with(
+  'Dist::Zilla::Role::FileMunger',
+  'Dist::Zilla::Role::FileFinderUser' => {
+    default_finders => [ ':ModulesToInstall' ],
+  },
+);
 
 =head1 DESCRIPTION
 
@@ -12,17 +17,14 @@ is also loaded.
 
 =cut
 
+sub munge_files {
+  my ($self) = @_;
+
+  $self->munge_file($_) for @{ $self->found_files };
+}
+
 sub munge_file {
   my ($self, $file) = @_;
-
-  return $self->munge_pod($file)
-    if $file->name =~ /\.pm$/i and $file->name !~ m{^t/};
-
-  return unless $file->content =~ /^#!(?:.*)perl(?:$|\s)/;
-
-  return if $file->name eq 'Makefile.PL';
-  return if $file->name eq 'Build.PL';
-  return if $file->name =~ /\.t$/;
 
   return $self->munge_pod($file);
 }
