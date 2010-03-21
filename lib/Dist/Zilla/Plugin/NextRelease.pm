@@ -39,10 +39,13 @@ sub section_header {
   return _format_version($self->format, $self->zilla);
 }
 
-sub munge_file {
-  my ($self, $file) = @_;
+sub munge_file { die 'unimplemented' };
 
-  return unless $file->name eq $self->filename;
+sub munge_files {
+  my ($self) = @_;
+
+  my ($file) = grep { $_->name eq $self->filename } @{ $self->zilla->files };
+  return unless $file;
 
   my $content = $self->fill_in_string(
     $file->content,

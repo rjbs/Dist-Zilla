@@ -16,10 +16,12 @@ written out to the built distribution.
 =cut
 
 with 'Dist::Zilla::Role::Plugin';
-requires 'munge_file';
 
 sub munge_files {
   my ($self) = @_;
+
+  $self->log_fatal("no munge_file behavior implemented!")
+    unless $self->can('munge_file');
 
   $self->munge_file($_) for $self->zilla->files->flatten;
 }
