@@ -530,6 +530,23 @@ sub _setup_default_plugins {
 
     $self->plugins->push($plugin);
   }
+
+  unless ($self->plugin_named(':ShareFiles')) {
+    require Dist::Zilla::Plugin::FinderCode;
+    my $plugin = Dist::Zilla::Plugin::FinderCode->new({
+      plugin_name => ':ShareFiles',
+      zilla       => $self,
+      style       => 'list',
+      code        => sub {
+        return [] unless my $dir = $self->zilla->_share_dir;
+        return $self->zilla->files->grep(sub {
+          local $_ = $_->name; m{\A\Q$dir\E/}
+        });
+      },
+    });
+
+    $self->plugins->push($plugin);
+  }
 }
 
 sub _load_config {
