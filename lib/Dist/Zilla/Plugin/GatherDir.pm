@@ -1,5 +1,5 @@
-package Dist::Zilla::Plugin::AllFiles;
-# ABSTRACT: gather all the files in your dist's root
+package Dist::Zilla::Plugin::GatherDir;
+# ABSTRACT: gather all the files in a directory
 use Moose;
 use Moose::Autobox;
 use MooseX::Types::Path::Class qw(Dir File);

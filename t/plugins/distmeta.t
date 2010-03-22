@@ -14,7 +14,7 @@ my $tzil = Dist::Zilla::Tester->from_config(
   {
     add_files => {
       'source/dist.ini' => simple_ini(
-        [ AllFiles => ],
+        [ GatherDir => ],
         [ MetaResources => { homepage => 'http://bana.na/phone' } ],
         [ Prereq   => { 'Foo::Bar' => '1.234' } ],
         [ MetaJSON => ],

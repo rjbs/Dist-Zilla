@@ -27,7 +27,7 @@ my $tzil = Dist::Zilla::Tester->from_config(
     add_files => {
       'source/lib/DZT/TP1.pm'  => $two_packages,
       'source/lib/DZT/WVer.pm' => $with_version,
-      'source/dist.ini' => simple_ini('AllFiles', 'PkgVersion'),
+      'source/dist.ini' => simple_ini('GatherDir', 'PkgVersion'),
     },
   },
 );

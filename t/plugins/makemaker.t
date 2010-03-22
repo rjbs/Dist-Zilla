@@ -12,7 +12,7 @@ use Test::DZil;
     {
       add_files => {
         'source/dist.ini' => simple_ini(
-          'AllFiles',
+          'GatherDir',
           'MakeMaker',
           [ Prereq => { 'Foo::Bar' => '1.20' } ],
           [ Prereq => BuildRequires => { 'Builder::Bob' => '9.901' } ],

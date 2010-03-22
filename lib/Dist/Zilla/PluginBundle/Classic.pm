@@ -8,7 +8,7 @@ sub bundle_config {
   my ($self, $arg) = @_;
 
   my @plugins = qw(
-    AllFiles
+    GatherDir
     PruneCruft
     ManifestSkip
     MetaYAML
@@ -52,7 +52,7 @@ It includes the following plugins with their default configuration:
 
 =over
 
-=item * L<Dist::Zilla::Plugin::AllFiles>
+=item * L<Dist::Zilla::Plugin::GatherDir>
 
 =item * L<Dist::Zilla::Plugin::PruneCruft>
 

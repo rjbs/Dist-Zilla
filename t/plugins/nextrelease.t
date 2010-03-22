@@ -24,7 +24,7 @@ END_CHANGES
     {
       add_files => {
         'source/Changes' => $changes,
-        'source/dist.ini' => simple_ini(qw(AllFiles NextRelease FakeRelease)),
+        'source/dist.ini' => simple_ini(qw(GatherDir NextRelease FakeRelease)),
       },
     },
   );
@@ -63,7 +63,7 @@ END_CHANGES
     {
       add_files => {
         'source/Changes' => $changes,
-        'source/dist.ini' => simple_ini(qw(AllFiles NextRelease FakeRelease)),
+        'source/dist.ini' => simple_ini(qw(GatherDir NextRelease FakeRelease)),
       },
     },
   );

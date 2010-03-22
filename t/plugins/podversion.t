@@ -47,7 +47,7 @@ my $tzil = Dist::Zilla::Tester->from_config(
     add_files => {
       'source/lib/DZT/WPFP.pm' => $with_place_for_pod,
       'source/lib/DZT/WVer.pm' => $with_version,
-      'source/dist.ini' => simple_ini('AllFiles', 'PodVersion'),
+      'source/dist.ini' => simple_ini('GatherDir', 'PodVersion'),
     },
   },
 );

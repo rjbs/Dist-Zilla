@@ -12,8 +12,8 @@ for my $skip_skip (0, 1) {
     {
       add_files => {
         'source/dist.ini' => simple_ini(
-          [ AllFiles => ],
-          [ AllFiles => BonusFiles => {
+          [ GatherDir => ],
+          [ GatherDir => BonusFiles => {
             root   => '../corpus/extra',
             prefix => 'bonus',
           } ],
@@ -48,7 +48,7 @@ for my $skip_skip (0, 1) {
     {
       add_files => {
         'source/Build'    => "This file is cruft.\n",
-        'source/dist.ini' => simple_ini('AllFiles'),
+        'source/dist.ini' => simple_ini('GatherDir'),
       },
     },
   );
@@ -70,7 +70,7 @@ for my $skip_skip (0, 1) {
     {
       add_files => {
         'source/Build'    => "This file is cruft.\n",
-        'source/dist.ini' => simple_ini('AllFiles', 'PruneCruft'),
+        'source/dist.ini' => simple_ini('GatherDir', 'PruneCruft'),
       },
     },
   );
@@ -92,7 +92,7 @@ for my $arg (qw(filename filenames)) {
     {
       add_files => {
         'source/dist.ini' => simple_ini(
-          'AllFiles',
+          'GatherDir',
           [ PruneFiles => { $arg => 'dist.ini' } ],
         ),
       },

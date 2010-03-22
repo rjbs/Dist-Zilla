@@ -12,7 +12,7 @@ use Try::Tiny;
     { dist_root => 'corpus/DZT' },
     {
       add_files => {
-        'source/dist.ini' => simple_ini(qw(AllFiles FakeRelease)),
+        'source/dist.ini' => simple_ini(qw(GatherDir FakeRelease)),
       },
     },
   );
@@ -31,7 +31,7 @@ use Try::Tiny;
       { dist_root => 'corpus/DZT' },
       {
         add_files => {
-          'source/dist.ini' => simple_ini(qw(AllFiles FakeRelease)),
+          'source/dist.ini' => simple_ini(qw(GatherDir FakeRelease)),
         },
       },
     );

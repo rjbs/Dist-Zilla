@@ -11,12 +11,12 @@ my $tzil = Dist::Zilla::Tester->from_config(
   {
     add_files => {
       'source/dist.ini' => simple_ini(
-        [ AllFiles => ],
-        [ AllFiles => BonusFiles => {
+        [ GatherDir => ],
+        [ GatherDir => BonusFiles => {
           root   => '../corpus/extra',
           prefix => 'bonus',
         } ],
-        [ AllFiles => DottyFiles => {
+        [ GatherDir => DottyFiles => {
           root   => '../corpus/extra',
           prefix => 'dotty',
           include_dotfiles => 1,
@@ -42,7 +42,7 @@ is_deeply(
     dist.ini lib/DZT/Sample.pm t/basic.t
     MANIFEST
   ) ],
-  "AllFiles gathers all files in the source dir",
+  "GatherDir gathers all files in the source dir",
 );
 
 my $manifest = $tzil->slurp_file('build/MANIFEST');

@@ -26,7 +26,7 @@ my $tzil = Dist::Zilla::Tester->from_config(
   { dist_root => 'corpus/DZT' },
   {
     add_files => {
-      'source/dist.ini' => simple_ini('AllFiles', 'ExtraTests'),
+      'source/dist.ini' => simple_ini('GatherDir', 'ExtraTests'),
       (map {; "source/xt/$_/huffer.t" => $generic_test }
            @xt_types, qw(blort))
     },

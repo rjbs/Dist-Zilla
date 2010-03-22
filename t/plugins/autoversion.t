@@ -14,7 +14,7 @@ use YAML::Tiny;
       add_files => {
         'source/dist.ini' => simple_ini(
           { version => undef },
-          'AllFiles',
+          'GatherDir',
           [ AutoVersion => { major => 6, format => '{{$major}}.{{$^T}}' } ],
         ),
       },
