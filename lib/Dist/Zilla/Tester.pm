@@ -1,6 +1,7 @@
 package Dist::Zilla::Tester;
 use Moose;
 extends 'Dist::Zilla';
+# ABSTRACT: a testing-enabling stand-in for  Dist::Zilla
 
 use autodie;
 use File::Copy::Recursive qw(dircopy);

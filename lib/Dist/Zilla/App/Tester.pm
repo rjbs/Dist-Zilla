@@ -1,6 +1,7 @@
 package Dist::Zilla::App::Tester;
 use base 'App::Cmd::Tester';
 use App::Cmd::Tester 0.306 (); # result_class, ->app
+# ABSTRACT: testing library for Dist::Zilla::App
 
 use Dist::Zilla::App;
 use File::Copy::Recursive qw(dircopy);

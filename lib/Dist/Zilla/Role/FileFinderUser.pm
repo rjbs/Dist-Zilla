@@ -1,5 +1,6 @@
 package Dist::Zilla::Role::FileFinderUser;
 use MooseX::Role::Parameterized;
+# ABSTRACT: something that uses FileFinder plugins
 
 parameter finder_arg_names => (
   isa => 'ArrayRef',
