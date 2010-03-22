@@ -78,15 +78,6 @@ sub setup_installer {
 
   (my $name = $self->zilla->name) =~ s/-/::/g;
 
-  # XXX: SHAMELESSLY COPIED AND PASTED INTO ModuleBuild -- rjbs, 2010-01-05
-  my @dir_plugins = $self->zilla->plugins
-    ->grep( sub { $_->isa('Dist::Zilla::Plugin::InstallDirs') })
-    ->flatten;
-
-  my @share_dirs  = uniq map {; $_->share->flatten } @dir_plugins;
-
-  $self->log_fatal("can't install more than one ShareDir") if @share_dirs > 1;
-
   my @exe_files =
     $self->zilla->find_files(':InstallExecs')->map(sub { $_->name })->flatten;
 
@@ -103,8 +94,8 @@ sub setup_installer {
 
   my @share_dir_block = (q{}, q{});
 
-  if ($share_dirs[0]) {
-    my $share_dir = quotemeta $share_dirs[0];
+  if (my $share_dir = $self->zilla->_share_dir) {
+    my $share_dir = quotemeta $share_dir;
     @share_dir_block = (
       qq{use File::ShareDir::Install;\ninstall_share "$share_dir";\n},
       qq{package\nMY;\nuse File::ShareDir::Install qw(postamble);\n},

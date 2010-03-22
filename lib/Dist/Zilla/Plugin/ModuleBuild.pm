@@ -63,15 +63,6 @@ sub setup_installer {
 
   (my $name = $self->zilla->name) =~ s/-/::/g;
 
-  # XXX: SHAMELESSLY COPIED AND PASTED FROM MakeMaker -- rjbs, 2010-01-05
-  my @dir_plugins = $self->zilla->plugins
-    ->grep( sub { $_->isa('Dist::Zilla::Plugin::InstallDirs') })
-    ->flatten;
-
-  my @share_dirs  = uniq map {; $_->share->flatten } @dir_plugins;
-
-  $self->log_fatal("can't install more than one ShareDir") if @share_dirs > 1;
-
   my @exe_files =
     $self->zilla->find_files(':InstallExecs')->map(sub { $_->name })->flatten;
 
@@ -86,7 +77,7 @@ sub setup_installer {
     dist_version  => $self->zilla->version,
     dist_author   => [ $self->zilla->authors->flatten ],
     script_files  => \@exe_files,
-    (defined $share_dirs[0] ? (share_dir => $share_dirs[0]) : ()),
+    ($self->zilla->_share_dir ? (share_dir => $self->zilla->_share_dir) : ()),
 
     # I believe it is a happy coincidence, for the moment, that this happens to
     # return just the same thing that is needed here. -- rjbs, 2010-01-22

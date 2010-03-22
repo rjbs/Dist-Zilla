@@ -9,6 +9,7 @@ use Moose::Util::TypeConstraints;
 
 use File::Find::Rule;
 use Hash::Merge::Simple ();
+use List::MoreUtils qw(uniq);
 use List::Util qw(first);
 use Log::Dispatchouli 1.100712; # proxy_loggers, quiet_fatal
 use Params::Util qw(_HASHLIKE);
@@ -612,6 +613,17 @@ sub find_files {
     unless $plugin->does('Dist::Zilla::Role::FileFinder');
 
   $plugin->find_files;
+}
+
+sub _share_dir {
+  my ($self) = @_;
+
+  my @share_dirs =
+    uniq $self->plugins_with(-InstallShare)->map(sub { $_->dir })->flatten;
+
+  $self->log_fatal("can't install more than one ShareDir") if @share_dirs > 1;
+
+  return @share_dirs;
 }
 
 =method build_in
