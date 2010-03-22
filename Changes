@@ -1,11 +1,19 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          INCOMPATIBLE CHANGES:
+
+          the AllFiles plugin is now known as GatherDir
+
+          the InstallDirs plugin has been replaced by ExecDir and ShareDir
+
+          OTHER CHANGES:
+
           numerous improvements to testing libraries
           ...and numerous actual tests!
 
-          added include_dotfiles option to AllFiles
-          allow relative root directory for AllFiles
+          added include_dotfiles option to GatherDir
+          allow relative root directory for GatherDir
 
           AutoPrereq is now distributed with Dist::Zilla
 
