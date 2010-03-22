@@ -19,6 +19,7 @@ sub bundle_config {
     PodTests
     ExtraTests
     ExecDir
+    ShareDir
 
     MakeMaker
     Manifest
@@ -71,7 +72,9 @@ It includes the following plugins with their default configuration:
 
 =item * L<Dist::Zilla::Plugin::ExtraTests>
 
-=item * L<Dist::Zilla::Plugin::InstallDirs>
+=item * L<Dist::Zilla::Plugin::ExecDir>
+
+=item * L<Dist::Zilla::Plugin::ShareDir>
 
 =item * L<Dist::Zilla::Plugin::MakeMaker>
 

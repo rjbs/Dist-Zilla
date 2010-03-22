@@ -15,7 +15,7 @@ In your F<dist.ini>:
 has dir => (
   is   => 'ro',
   isa  => 'Str',
-  default => 'bin',
+  default => 'share',
 );
 
 with 'Dist::Zilla::Role::InstallShare';
