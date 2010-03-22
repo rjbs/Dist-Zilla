@@ -41,29 +41,6 @@ Dist::Zilla::File::OnDisk
 # PREREQ HANDLING
 Dist::Zilla::Prereqs
 
-# DO ANY OF THESE REALLY NEED TESTS?
-
-Dist::Zilla::Role::AfterBuild
-Dist::Zilla::Role::AfterRelease
-Dist::Zilla::Role::BeforeBuild
-Dist::Zilla::Role::BeforeRelease
-Dist::Zilla::Role::BuildRunner
-Dist::Zilla::Role::File
-Dist::Zilla::Role::FileFinder
-Dist::Zilla::Role::FileGatherer
-Dist::Zilla::Role::FileInjector
-Dist::Zilla::Role::FileMunger
-Dist::Zilla::Role::FilePruner
-Dist::Zilla::Role::FixedPrereqs
-Dist::Zilla::Role::InstallTool
-Dist::Zilla::Role::MetaProvider
-Dist::Zilla::Role::Plugin
-Dist::Zilla::Role::PluginBundle
-Dist::Zilla::Role::Releaser
-Dist::Zilla::Role::TestRunner
-Dist::Zilla::Role::TextTemplate
-Dist::Zilla::Role::VersionProvider
-
 # MISC
 Dist::Zilla::Tester
 Dist::Zilla::Types
