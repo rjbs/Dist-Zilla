@@ -64,7 +64,7 @@ sub setup_installer {
   (my $name = $self->zilla->name) =~ s/-/::/g;
 
   my @exe_files =
-    $self->zilla->find_files(':InstallExecs')->map(sub { $_->name })->flatten;
+    $self->zilla->find_files(':ExecFiles')->map(sub { $_->name })->flatten;
 
   $self->log_fatal("can't install files with whitespace in their names")
     if grep { /\s/ } @exe_files;

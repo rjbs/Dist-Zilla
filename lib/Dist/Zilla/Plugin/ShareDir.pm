@@ -18,7 +18,7 @@ has dir => (
   default => 'share',
 );
 
-with 'Dist::Zilla::Role::InstallShare';
+with 'Dist::Zilla::Role::ShareDir';
 __PACKAGE__->meta->make_immutable;
 no Moose;
 1;

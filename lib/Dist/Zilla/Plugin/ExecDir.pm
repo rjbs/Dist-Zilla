@@ -27,7 +27,7 @@ sub find_files {
   index($_->name, "$dir/") == 0 });
 }
 
-with 'Dist::Zilla::Role::InstallExec';
+with 'Dist::Zilla::Role::ExecFiles';
 __PACKAGE__->meta->make_immutable;
 no Moose;
 1;

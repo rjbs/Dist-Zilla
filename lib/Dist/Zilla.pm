@@ -514,14 +514,14 @@ sub _setup_default_plugins {
     $self->plugins->push($plugin);
   }
 
-  unless ($self->plugin_named(':InstallExecs')) {
+  unless ($self->plugin_named(':ExecFiles')) {
     require Dist::Zilla::Plugin::FinderCode;
     my $plugin = Dist::Zilla::Plugin::FinderCode->new({
-      plugin_name => ':InstallExecs',
+      plugin_name => ':ExecFiles',
       zilla       => $self,
       style       => 'list',
       code        => sub {
-        my $plugins = $_[0]->zilla->plugins_with(-InstallExec);
+        my $plugins = $_[0]->zilla->plugins_with(-ExecFiles);
         my @files = map {; @{ $_->find_files } } @$plugins;
 
         return \@files;
@@ -619,7 +619,7 @@ sub _share_dir {
   my ($self) = @_;
 
   my @share_dirs =
-    uniq $self->plugins_with(-InstallShare)->map(sub { $_->dir })->flatten;
+    uniq $self->plugins_with(-ShareDir)->map(sub { $_->dir })->flatten;
 
   $self->log_fatal("can't install more than one ShareDir") if @share_dirs > 1;
 

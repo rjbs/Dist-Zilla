@@ -59,11 +59,7 @@ sub prereq {
     'ExtUtils::MakeMaker' => $self->eumm_version,
   );
 
-  my @dir_plugins = $self->zilla->plugins
-    ->grep( sub { $_->isa('Dist::Zilla::Plugin::InstallDirs') })
-    ->flatten;
-
-  return {} unless uniq map {; $_->share->flatten } @dir_plugins;
+  return {} unless $self->zilla->_share_dir;
 
   $self->zilla->register_prereqs(
     { phase => 'configure' },
@@ -79,7 +75,7 @@ sub setup_installer {
   (my $name = $self->zilla->name) =~ s/-/::/g;
 
   my @exe_files =
-    $self->zilla->find_files(':InstallExecs')->map(sub { $_->name })->flatten;
+    $self->zilla->find_files(':ExecFiles')->map(sub { $_->name })->flatten;
 
   $self->log_fatal("can't install files with whitespace in their names")
     if grep { /\s/ } @exe_files;

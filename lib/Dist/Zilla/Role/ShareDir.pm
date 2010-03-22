@@ -1,8 +1,6 @@
-package Dist::Zilla::Role::InstallExec;
+package Dist::Zilla::Role::ShareDir;
 use Moose::Role;
 with 'Dist::Zilla::Role::FileFinder';
-
-requires 'dir';
 
 sub find_files {
   my ($self) = @_;
