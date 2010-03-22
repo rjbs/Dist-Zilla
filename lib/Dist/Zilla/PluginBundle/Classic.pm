@@ -18,7 +18,7 @@ sub bundle_config {
     PodVersion
     PodTests
     ExtraTests
-    InstallDirs
+    ExecDir
 
     MakeMaker
     Manifest

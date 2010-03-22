@@ -513,15 +513,15 @@ sub _setup_default_plugins {
     $self->plugins->push($plugin);
   }
 
-  unless ($self->plugin_named(':InstallExec')) {
+  unless ($self->plugin_named(':InstallExecs')) {
     require Dist::Zilla::Plugin::FinderCode;
     my $plugin = Dist::Zilla::Plugin::FinderCode->new({
       plugin_name => ':InstallExecs',
       zilla       => $self,
       style       => 'list',
       code        => sub {
-        my @plugins = $_[0]->zilla->plugins_with(-InstallExec);
-        my @files = map {; @{ $_->find_files } } @plugins;
+        my $plugins = $_[0]->zilla->plugins_with(-InstallExec);
+        my @files = map {; @{ $_->find_files } } @$plugins;
 
         return \@files;
       },
