@@ -501,13 +501,30 @@ sub from_config {
 sub _setup_default_plugins {
   my ($self) = @_;
 
-  unless ($self->plugin_named(':ModulesToInstall')) {
+  unless ($self->plugin_named(':InstallModules')) {
     require Dist::Zilla::Plugin::FinderCode;
     my $plugin = Dist::Zilla::Plugin::FinderCode->new({
-      plugin_name => ':ModulesToInstall',
+      plugin_name => ':InstallModules',
       zilla       => $self,
       style       => 'grep',
       code        => sub { local $_ = $_->name; m{\Alib/} and m{\.(pm|pod)$} },
+    });
+
+    $self->plugins->push($plugin);
+  }
+
+  unless ($self->plugin_named(':InstallExec')) {
+    require Dist::Zilla::Plugin::FinderCode;
+    my $plugin = Dist::Zilla::Plugin::FinderCode->new({
+      plugin_name => ':InstallExecs',
+      zilla       => $self,
+      style       => 'list',
+      code        => sub {
+        my @plugins = $_[0]->zilla->plugins_with(-InstallExec);
+        my @files = map {; @{ $_->find_files } } @plugins;
+
+        return \@files;
+      },
     });
 
     $self->plugins->push($plugin);

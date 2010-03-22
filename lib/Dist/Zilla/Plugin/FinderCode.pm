@@ -3,6 +3,8 @@ use Moose;
 with 'Dist::Zilla::Role::FileFinder';
 
 use Moose::Autobox;
+use Moose::Util::TypeConstraints;
+use namespace::autoclean;
 
 has code => (
   is  => 'ro',
@@ -12,17 +14,29 @@ has code => (
 
 has style => (
   is  => 'ro',
-  isa => 'Str',
-  default => 'grep',
+  isa => enum([ qw(grep list) ]),
+  required => 1,
 );
 
 sub find_files {
   my ($self) = @_;
 
-  my $style = $self->style;
-  $self->log_fatal("unknown FinderCode style '$style'") if $style ne 'grep';
+  my $method = '_find_via_' . $self->style;
+
+  $self->$method;
+}
+
+sub _find_via_grep {
+  my ($self) = @_;
 
   $self->zilla->files->grep($self->code);
+}
+
+sub _find_via_list {
+  my ($self) = @_;
+
+  my $code = $self->code;
+  $self->$code;
 }
 
 1;
