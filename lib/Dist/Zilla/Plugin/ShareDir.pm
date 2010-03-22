@@ -1,5 +1,5 @@
 package Dist::Zilla::Plugin::ShareDir;
-# ABSTRACT: install a directory's contents as executables
+# ABSTRACT: install a directory's contents as "ShareDir" content
 use Moose;
 
 use Moose::Autobox;
