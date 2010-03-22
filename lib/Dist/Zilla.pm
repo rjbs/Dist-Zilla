@@ -623,7 +623,12 @@ sub _share_dir {
 
   $self->log_fatal("can't install more than one ShareDir") if @share_dirs > 1;
 
-  return @share_dirs;
+  return unless defined(my $share_dir = $share_dirs[0]);
+
+  return unless grep { $_->name =~ m{\A\Q$share_dir\E/} }
+                $self->files->flatten;
+
+  return $share_dirs[0];
 }
 
 =method build_in
