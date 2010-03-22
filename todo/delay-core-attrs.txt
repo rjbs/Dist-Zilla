@@ -8,10 +8,15 @@ know all its required attribute values.
 
 We'll probably mark those values as LazyRequired and SetOnce.
 
-## LIKE ATTRIBUTES TO FIX
+## ATTRIBUTES TO FIX, IN ORDER:
 
-* name
+* main_module, name -- interdependent
+
+* abstract
+
 * version - it's unique and should be simplified
 * copyright_{holder,year} - should come from a plugin somehow, too
-* license?
+* license
 * authors
+
+* root?

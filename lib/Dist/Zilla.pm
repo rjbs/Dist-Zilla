@@ -44,7 +44,7 @@ anything else using it through Dist::Zilla::App).
 
 =cut
 
-has 'dzil_app' => (
+has dzil_app => (
   is  => 'rw',
   isa => 'Dist::Zilla::App',
 );
@@ -355,7 +355,8 @@ object.
 has plugins => (
   is   => 'ro',
   isa  => 'ArrayRef[Dist::Zilla::Role::Plugin]',
-  default => sub { [ ] },
+  init_arg => undef,
+  default  => sub { [ ] },
 );
 
 =attr built_in
@@ -424,8 +425,9 @@ the future.
 has prereq => (
   is   => 'ro',
   isa  => 'Dist::Zilla::Prereqs',
-  default => sub { Dist::Zilla::Prereqs->new },
-  handles => [ qw(register_prereqs) ],
+  init_arg => undef,
+  default  => sub { Dist::Zilla::Prereqs->new },
+  handles  => [ qw(register_prereqs) ],
 );
 
 =method from_config
