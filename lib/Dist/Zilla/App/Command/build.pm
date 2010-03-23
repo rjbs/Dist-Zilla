@@ -23,7 +23,8 @@ sub abstract { 'build your dist' }
 =cut
 
 sub opt_spec {
-  [ 'tgz!', 'build a tarball (default behavior)', { default => 1 } ]
+  [ 'trial' => 'build a trial release that PAUSE will not index'      ],
+  [ 'tgz!'  => 'build a tarball (default behavior)', { default => 1 } ]
 }
 
 =head1 OPTIONS
@@ -40,7 +41,9 @@ sub execute {
   my ($self, $opt, $arg) = @_;
 
   my $method = $opt->tgz ? 'build_archive' : 'build';
-  $self->zilla->$method;
+  my $zilla  = $self->zilla;
+  $zilla->is_trial(1) if $opt->trial;
+  $zilla->$method;
 }
 
 1;

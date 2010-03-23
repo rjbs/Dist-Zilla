@@ -352,7 +352,7 @@ This attribute tells us whether or not the dist will be a trial release.
 =cut
 
 has is_trial => (
-  is => 'ro',
+  is => 'rw', # XXX: make SetOnce -- rjbs, 2010-03-23
   isa => Bool,
   default => sub { $ENV{TRIAL} ? 1 : 0 }
 );

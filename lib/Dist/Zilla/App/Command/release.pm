@@ -17,8 +17,17 @@ L<Dist::Zilla::Role::Releaser>, such as L<Dist::Zilla::Plugin::UploadToCPAN>
 
 sub abstract { 'release your dist' }
 
+sub opt_spec {
+  [ 'trial' => 'build a trial release that PAUSE will not index' ],
+}
+
 sub execute {
   my ($self, $opt, $arg) = @_;
+
+  my $zilla = $self->zilla;
+
+  $zilla->is_trial(1) if $opt->trial;
+
   $self->zilla->release;
 }
 
