@@ -345,6 +345,18 @@ has root => (
   required => 1,
 );
 
+=attr is_trial
+
+This attribute tells us whether or not the dist will be a trial release.
+
+=cut
+
+has is_trial => (
+  is => 'ro',
+  isa => Bool,
+  default => sub { $ENV{TRIAL} ? 1 : 0 }
+);
+
 =attr plugins
 
 This is an arrayref of plugins that have been plugged into this Dist::Zilla
@@ -766,7 +778,13 @@ sub build_archive {
   }
 
   ## no critic
-  my $file = Path::Class::file($self->name . '-' . $self->version . '.tar.gz');
+  my $file = Path::Class::file(join(q{},
+    $self->name,
+    '-',
+    $self->version,
+    ($self->is_trial ? '-TRIAL' : ''),
+    '.tar.gz',
+  ));
 
   $self->log("writing archive to $file");
   $archive->write("$file", 9);
