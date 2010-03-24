@@ -29,7 +29,7 @@ sub metadata {
     };
   }
 
-  return { X_Dist_Zilla => $dump };
+  return { x_Dist_Zilla => $dump };
 }
 
 no Moose;
