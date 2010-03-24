@@ -15,7 +15,8 @@ my $tzil = Dist::Zilla::Tester->from_config(
     add_files => {
       'source/dist.ini' => simple_ini(
         [ GatherDir => ],
-        [ MetaResources => { homepage => 'http://bana.na/phone' } ],
+        [ MetaResources => HomePage => { homepage => 'http://bana.na/phone' } ],
+        [ MetaResources => License  => { license  => 'http://b.sd/license'  } ],
         [ Prereq   => { 'Foo::Bar' => '1.234' } ],
         [ MetaJSON => ],
         [ MetaYAML => ],
@@ -42,12 +43,16 @@ for my $type (qw(json yaml)) {
   my $meta = $meta{$type};
 
   my %want = (
-    name     => 'DZT-Sample',
-    abstract => 'Sample DZ Dist',
-    author   => [ 'E. Xavier Ample <example@example.org>' ],
-    requires => { 'Foo::Bar' => '1.234' },
-    license  => 'perl',
-    version  => '0.001',
+    name      => 'DZT-Sample',
+    abstract  => 'Sample DZ Dist',
+    author    => [ 'E. Xavier Ample <example@example.org>' ],
+    requires  => { 'Foo::Bar' => '1.234' },
+    license   => 'perl',
+    resources => {
+      homepage => 'http://bana.na/phone',
+      license  => 'http://b.sd/license',
+    },
+    version   => '0.001',
   );
 
   for my $key (sort keys %want) {
