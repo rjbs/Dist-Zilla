@@ -43,7 +43,7 @@ sub abstract { 'test your dist' }
 sub execute {
   my ($self, $opt, $arg) = @_;
 
-  Carp::croak("you can't release without any TestRunner plugins")
+  Carp::croak("you can't test without any TestRunner plugins")
     unless my @testers = $self->zilla->plugins_with(-TestRunner)->flatten;
 
   require File::chdir;
