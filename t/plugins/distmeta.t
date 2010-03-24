@@ -14,12 +14,13 @@ my $tzil = Dist::Zilla::Tester->from_config(
   {
     add_files => {
       'source/dist.ini' => simple_ini(
-        [ GatherDir => ],
+        'GatherDir',
         [ MetaResources => HomePage => { homepage => 'http://bana.na/phone' } ],
         [ MetaResources => License  => { license  => 'http://b.sd/license'  } ],
         [ Prereq   => { 'Foo::Bar' => '1.234' } ],
-        [ MetaJSON => ],
-        [ MetaYAML => ],
+        'MetaJSON',
+        'MetaYAML',
+        'MetaConfig',
       ),
     },
   },

@@ -57,6 +57,19 @@ has prereq_type => (
   },
 );
 
+around dump_config => sub {
+  my ($orig, $self) = @_;
+  my $config = $self->$orig;
+
+  my $this_config = {
+    type  => $self->prereq_type,
+    phase => $self->prereq_phase,
+  };
+
+  $config->{'' . __PACKAGE__} = $this_config;
+
+  return $config;
+};
 
 no Moose::Role;
 1;

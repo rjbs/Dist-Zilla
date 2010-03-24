@@ -1,6 +1,8 @@
 package Dist::Zilla;
 # ABSTRACT: distribution builder; installer not included!
 use Moose 0.92; # role composition fixes
+with 'Dist::Zilla::Role::ConfigDumper';
+
 use Moose::Autobox 0.09; # ->flatten
 use Dist::Zilla::Types qw(DistName License);
 use MooseX::Types::Moose qw(Bool HashRef);
@@ -927,6 +929,13 @@ sub BUILD {
 
   $self->_initialize_license($arg->{license});
 }
+
+around dump_config => sub {
+  my ($orig, $self) = @_;
+  my $config = $self->$orig;
+  $config->{is_trial} = $self->is_trial;
+  return $config;
+};
 
 __PACKAGE__->meta->make_immutable;
 1;
