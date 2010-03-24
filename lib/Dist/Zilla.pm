@@ -744,7 +744,7 @@ sub ensure_built_in {
   my ($self, $root) = @_;
 
   # $root ||= $self->name . q{-} . $self->version;
-  return if $self->built_in and
+  return $self->built_in if $self->built_in and
     (!$root or ($self->built_in eq $root));
 
   Carp::croak("dist is already built, but not in $root") if $self->built_in;
