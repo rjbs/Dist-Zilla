@@ -1,6 +1,12 @@
 package Dist::Zilla::Plugin::AutoPrereq;
 use Moose;
-with 'Dist::Zilla::Role::FixedPrereqs';
+with(
+  'Dist::Zilla::Role::FixedPrereqs',
+  'Dist::Zilla::Role::FileFinderUser' => {
+    default_finders => [ ':InstallModules', ':TestFiles', ':ExecFiles' ],
+  },
+);
+
 # ABSTRACT: automatically extract prereqs from your modules
 
 use Perl::PrereqScanner 0.100521;
@@ -47,7 +53,7 @@ has skip => (
 
 sub prereq {
   my $self  = shift;
-  my $files = $self->zilla->files;
+  my $files = $self->found_files;
 
   my $req = Version::Requirements->new;
 
@@ -59,7 +65,7 @@ sub prereq {
 
     # store module name, to trim it from require list later on
     my $module = $file->name;
-    $module =~ s{^lib/}{};
+    $module =~ s{^(?:t/)?lib/}{};
     $module =~ s{\.pm$}{};
     $module =~ s{/}{::}g;
     push @modules, $module;

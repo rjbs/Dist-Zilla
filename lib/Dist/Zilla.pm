@@ -530,6 +530,18 @@ sub _setup_default_plugins {
     $self->plugins->push($plugin);
   }
 
+  unless ($self->plugin_named(':TestFiles')) {
+    require Dist::Zilla::Plugin::FinderCode;
+    my $plugin = Dist::Zilla::Plugin::FinderCode->new({
+      plugin_name => ':TestFiles',
+      zilla       => $self,
+      style       => 'grep',
+      code        => sub { local $_ = $_->name; m{\At/} },
+    });
+
+    $self->plugins->push($plugin);
+  }
+
   unless ($self->plugin_named(':ExecFiles')) {
     require Dist::Zilla::Plugin::FinderCode;
     my $plugin = Dist::Zilla::Plugin::FinderCode->new({
