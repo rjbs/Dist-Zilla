@@ -7,19 +7,18 @@ use Moose;
 with 'Dist::Zilla::Role::BeforeRelease';
 
 sub before_release {
-  my $self = shift;
-  my $dist = $self->zilla->name . "-" . $self->zilla->version;
-  
-  my $prompt =  "\n*** Preparing to upload $dist to CPAN ***\n\n" .
+  my ($self, $tgz) = @_;
+
+  my $prompt =  "\n*** Preparing to upload $tgz to CPAN ***\n\n" .
                 "Do you want to continue the release process? (yes/no)";
 
-  my $default = exists $ENV{DZIL_CONFIRMRELEASE_DEFAULT} 
-              ? $ENV{DZIL_CONFIRMRELEASE_DEFAULT} 
+  my $default = exists $ENV{DZIL_CONFIRMRELEASE_DEFAULT}
+              ? $ENV{DZIL_CONFIRMRELEASE_DEFAULT}
               : "no" ;
 
-  my $answer = ExtUtils::MakeMaker::prompt($prompt,$default);
-    
-  if ( $answer !~ /^y/i ) {
+  my $answer = ExtUtils::MakeMaker::prompt($prompt, $default);
+
+  if ( $answer !~ /\Ay(?:e(?:s))\z/i ) {
     $self->log_fatal("Aborting release");
   }
 }
@@ -36,7 +35,7 @@ This plugin prompts the author whether or not to continue before releasing
 the distribution to CPAN.  It gives authors a chance to abort before
 they upload.
 
-The default is "no", but you can set the environment variable 
+The default is "no", but you can set the environment variable
 C<DZIL_CONFIRM_RELEASE> to "yes" if you just want to hit enter to release.
 
 This plugin uses C<ExtUtils::MakeMaker::prompt()>, so setting
