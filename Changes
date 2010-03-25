@@ -17,6 +17,8 @@ Revision history for {{$dist->name}}
 
           AutoPrereq is now distributed with Dist::Zilla
 
+          ConfirmRelease plugin added and made part of @Classic (dagolden)
+
           MakeMaker-produced Makefile.PL will produce warnings less often
 
           Prereq plugin can target config_requires, build_requires, etc
