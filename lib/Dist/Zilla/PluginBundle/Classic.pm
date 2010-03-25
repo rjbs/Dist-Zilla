@@ -24,6 +24,7 @@ sub bundle_config {
     MakeMaker
     Manifest
 
+    ConfirmRelease
     UploadToCPAN
   );
 
