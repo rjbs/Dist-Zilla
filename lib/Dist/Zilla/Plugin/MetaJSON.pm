@@ -25,7 +25,8 @@ sub gather_files {
   my $file  = Dist::Zilla::File::FromCode->new({
     name => 'META.json',
     code => sub {
-      JSON->new->ascii(1)->pretty->encode($zilla->distmeta) . "\n";
+      JSON->new->ascii(1)->canonical(1)->pretty->encode($zilla->distmeta)
+      . "\n";
     },
   });
 
