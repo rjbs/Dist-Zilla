@@ -18,7 +18,7 @@ sub execute {
     unless my @builders =
     $self->zilla->plugins_with(-BuildRunner)->sort->reverse->flatten;
 
-  require Config;
+  require "Config.pm"; # skip autoprereq
   require File::chdir;
   require File::Temp;
   require Path::Class;
