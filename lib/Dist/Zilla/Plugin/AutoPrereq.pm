@@ -14,7 +14,7 @@ with(
 
 # ABSTRACT: automatically extract prereqs from your modules
 
-use Perl::PrereqScanner 0.100521;
+use Perl::PrereqScanner 0.100830; # bugfixes
 use PPI;
 use Version::Requirements 0.100630;  # merge with 0-min bug
 use version;
@@ -67,6 +67,8 @@ sub prereq {
     [ test    => 'found_test_files' ],
   );
 
+  my %runtime_final;
+
   for my $fileset (@sets) {
     my ($phase, $method) = @$fileset;
 
@@ -104,8 +106,16 @@ sub prereq {
     }
 
     # we're done, return what we've found
-    my $got = $req->as_string_hash;
-    $self->zilla->prereq->register_prereqs({ phase => $phase }, %$got);
+    my %got = %{ $req->as_string_hash };
+    if ($phase eq 'runtime') {
+      %runtime_final = %got;
+    } else {
+      delete $got{$_} for
+        grep { exists $got{$_} and $runtime_final{$_} ge $got{$_} }
+        keys %runtime_final;
+    }
+
+    $self->zilla->prereq->register_prereqs({ phase => $phase }, %got);
   }
 
   # XXX: cheating -- rjbs, 2010-03-25
