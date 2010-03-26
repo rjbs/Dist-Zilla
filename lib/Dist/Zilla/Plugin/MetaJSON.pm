@@ -4,7 +4,9 @@ use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::FileGatherer';
 
+use Dist::Zilla::File::FromCode;
 use Hash::Merge::Simple ();
+use JSON 2;
 
 =head1 DESCRIPTION
 
@@ -18,9 +20,6 @@ L<http://module-build.sourceforge.net/META-spec-v1.3.html>.
 
 sub gather_files {
   my ($self, $arg) = @_;
-
-  require Dist::Zilla::File::FromCode;
-  require JSON;
 
   my $zilla = $self->zilla;
   my $file  = Dist::Zilla::File::FromCode->new({
