@@ -16,7 +16,8 @@ sub bundle_config {
     Readme
     PkgVersion
     PodVersion
-    PodTests
+    PodCoverageTest
+    PodSyntaxTest
     ExtraTests
     ExecDir
     ShareDir

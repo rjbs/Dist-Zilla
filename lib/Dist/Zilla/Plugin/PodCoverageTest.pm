@@ -1,5 +1,5 @@
-package Dist::Zilla::Plugin::PodTests;
-# ABSTRACT: common extra tests for pod
+package Dist::Zilla::Plugin::PodCoverageTest;
+# ABSTRACT: a release test for Pod coverage
 use Moose;
 extends 'Dist::Zilla::Plugin::InlineFiles';
 
@@ -9,7 +9,6 @@ This is an extension of L<Dist::Zilla::Plugin::InlineFiles>, providing the
 following files:
 
   xt/release/pod-coverage.t - a standard Test::Pod::Coverage test
-  xt/release/pod-syntax.t   - a standard Test::Pod test
 
 =cut
 
@@ -32,12 +31,3 @@ plan skip_all => "Pod::Coverage::TrustPod required for testing POD coverage"
   if $@;
 
 all_pod_coverage_ok({ coverage_class => 'Pod::Coverage::TrustPod' });
-
-___[ xt/release/pod-syntax.t ]___
-#!perl
-use Test::More;
-
-eval "use Test::Pod 1.00";
-plan skip_all => "Test::Pod 1.00 required for testing POD" if $@;
-
-all_pod_files_ok();
