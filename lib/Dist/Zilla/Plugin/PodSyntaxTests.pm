@@ -1,4 +1,4 @@
-package Dist::Zilla::Plugin::PodSyntaxTest;
+package Dist::Zilla::Plugin::PodSyntaxTests;
 # ABSTRACT: a release test for Pod syntax
 use Moose;
 extends 'Dist::Zilla::Plugin::InlineFiles';

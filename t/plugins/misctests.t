@@ -11,7 +11,9 @@ my $tzil = Dist::Zilla::Tester->from_config(
   { dist_root => 'corpus/DZT' },
   {
     add_files => {
-      'source/dist.ini' => simple_ini('GatherDir', 'MetaTests', 'PodTests'),
+      'source/dist.ini' => simple_ini(
+        qw(GatherDir MetaTests PodSyntaxTests PodCoverageTests)
+      ),
     },
   },
 );

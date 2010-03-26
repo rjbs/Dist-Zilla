@@ -1,4 +1,3 @@
-
 use strict;
 use warnings;
 use Test::More 0.88;
@@ -17,23 +16,22 @@ my @filtered = Dist::Zilla::PluginBundle::Filter->bundle_config({
   package => 'Dist::Zilla::PluginBundle::Filter',
   payload => {
     bundle => '@Classic',
-    remove => [ qw(ManifestSkip PodTests) ],
+    remove => [ qw(ManifestSkip PkgVersion) ],
   },
 });
 
 is(@filtered, @classic - 2, "filtering 2 plugins gets us 2 fewer plugins!");
 
 my $before_count =
-  grep { $_->[1] =~ /\ADist::Zilla::Plugin::(?:ManifestSkip|PodTests)\z/ }
+  grep { $_->[1] =~ /\ADist::Zilla::Plugin::(?:ManifestSkip|PkgVersion)\z/ }
   @classic;
 
 is($before_count, 2, "we started with the 2 we wanted to remove");
 
 my $after_count =
-  grep { $_->[1] =~ /\ADist::Zilla::Plugin::(?:ManifestSkip|PodTests)\z/ }
+  grep { $_->[1] =~ /\ADist::Zilla::Plugin::(?:ManifestSkip|PkgVersion)\z/ }
   @filtered;
 
 is($after_count, 0, "...then we removed them");
 
 done_testing;
-

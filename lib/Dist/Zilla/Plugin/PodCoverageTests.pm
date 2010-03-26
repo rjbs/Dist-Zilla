@@ -1,4 +1,4 @@
-package Dist::Zilla::Plugin::PodCoverageTest;
+package Dist::Zilla::Plugin::PodCoverageTests;
 # ABSTRACT: a release test for Pod coverage
 use Moose;
 extends 'Dist::Zilla::Plugin::InlineFiles';
