@@ -3,7 +3,12 @@ use Moose;
 with(
   'Dist::Zilla::Role::FixedPrereqs',
   'Dist::Zilla::Role::FileFinderUser' => {
-    default_finders => [ ':InstallModules', ':TestFiles', ':ExecFiles' ],
+    default_finders => [ ':InstallModules', ':ExecFiles' ],
+  },
+  'Dist::Zilla::Role::FileFinderUser' => {
+    method           => 'found_test_files',
+    finder_arg_names => [ 'test_finder' ],
+    default_finders  => [ ':TestFiles' ],
   },
 );
 
@@ -53,44 +58,58 @@ has skip => (
 
 sub prereq {
   my $self  = shift;
-  my $files = $self->found_files;
 
   my $req = Version::Requirements->new;
-
   my @modules;
-  foreach my $file (@$files) {
-    # parse only perl files
-    next unless $file->name =~ /\.(?:pm|pl|t)$/i
-             || $file->content =~ /^#!(?:.*)perl(?:$|\s)/;
 
-    # store module name, to trim it from require list later on
-    my $module = $file->name;
-    $module =~ s{^(?:t/)?lib/}{};
-    $module =~ s{\.pm$}{};
-    $module =~ s{/}{::}g;
-    push @modules, $module;
+  my @sets = (
+    [ runtime => 'found_files'      ],
+    [ test    => 'found_test_files' ],
+  );
 
-    # parse a file, and merge with existing prereqs
-    my $file_req = Perl::PrereqScanner->new->scan_string($file->content);
+  for my $fileset (@sets) {
+    my ($phase, $method) = @$fileset;
 
-    $req->add_requirements($file_req);
-  }
+    my $files = $self->$method;
 
-  # remove prereqs shipped with current dist
-  $req->clear_requirement($_) for @modules;
+    foreach my $file (@$files) {
+      # parse only perl files
+      next unless $file->name =~ /\.(?:pm|pl|t)$/i
+               || $file->content =~ /^#!(?:.*)perl(?:$|\s)/;
 
-  # remove prereqs from skiplist
-  if ($self->has_skip && $self->skip) {
-    my $skip = $self->skip;
-    my $re   = qr/$skip/;
+      # store module name, to trim it from require list later on
+      my $module = $file->name;
+      $module =~ s{^(?:t/)?lib/}{};
+      $module =~ s{\.pm$}{};
+      $module =~ s{/}{::}g;
+      push @modules, $module;
 
-    foreach my $k ($req->required_modules) {
-      $req->clear_requirement($k) if $k =~ $re;
+      # parse a file, and merge with existing prereqs
+      my $file_req = Perl::PrereqScanner->new->scan_string($file->content);
+
+      $req->add_requirements($file_req);
     }
+
+    # remove prereqs shipped with current dist
+    $req->clear_requirement($_) for @modules;
+
+    # remove prereqs from skiplist
+    if ($self->has_skip && $self->skip) {
+      my $skip = $self->skip;
+      my $re   = qr/$skip/;
+
+      foreach my $k ($req->required_modules) {
+        $req->clear_requirement($k) if $k =~ $re;
+      }
+    }
+
+    # we're done, return what we've found
+    my $got = $req->as_string_hash;
+    $self->zilla->prereq->register_prereqs({ phase => $phase }, %$got);
   }
 
-  # we're done, return what we've found
-  return $req->as_string_hash;
+  # XXX: cheating -- rjbs, 2010-03-25
+  return {};
 }
 
 no Moose;
