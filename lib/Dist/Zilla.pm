@@ -902,6 +902,44 @@ sub clean {
   $self->log("clean: removing $_"), unlink for @temps;
 }
 
+=method install
+
+=cut
+
+sub install {
+  my ($self, $arg) = @_;
+  $arg ||= {};
+
+  require File::chdir;
+  require File::Temp;
+  require Path::Class;
+
+  my $build_root = Path::Class::dir('.build');
+  $build_root->mkpath unless -d $build_root;
+
+  my $target = Path::Class::dir( File::Temp::tempdir(DIR => $build_root) );
+  $self->log("building distribution under $target for installation");
+  $self->ensure_built_in($target);
+
+  eval {
+    ## no critic Punctuation
+    local $File::chdir::CWD = $target;
+    my @cmd = $arg->{install_command}
+            ? $arg->{install_command}
+            : ($^X => '-MCPAN' => '-einstall "."');
+
+    system(@cmd) && die "error with '@cmd'\n";
+  };
+
+  if ($@) {
+    $self->log($@);
+    $self->log("left failed dist in place at $target");
+  } else {
+    $self->log("all's well; removing $target");
+    $target->rmtree;
+  }
+}
+
 =method log
 
   $zilla->log($message);
