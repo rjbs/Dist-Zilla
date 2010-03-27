@@ -1,5 +1,5 @@
 package Dist::Zilla::Role::PluginBundle;
-# ABSTRACT: a bundle of plugins
+# ABSTRACT: something that bundles a bunch of plugins
 use Moose::Role;
 
 =head1 DESCRIPTION
