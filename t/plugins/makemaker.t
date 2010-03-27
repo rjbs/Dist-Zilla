@@ -42,7 +42,7 @@ use Test::DZil;
       'Test::Deet'   => '7',
     },
     CONFIGURE_REQUIRES => {
-      'ExtUtils::MakeMaker' => '6.11'
+      'ExtUtils::MakeMaker' => '6.31'
     },
   );
 
