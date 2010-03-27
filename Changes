@@ -27,6 +27,8 @@ Revision history for {{$dist->name}}
           ConfirmRelease plugin added and made part of @Classic (dagolden)
 
           MakeMaker-produced Makefile.PL will produce warnings less often
+          
+          MakeMaker-produced Makefile.PL will require v6.31 for INSTALL_BASE
 
           Prereq plugin can target config_requires, build_requires, etc
 
