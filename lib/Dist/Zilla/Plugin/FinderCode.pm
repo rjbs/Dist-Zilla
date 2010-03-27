@@ -1,6 +1,7 @@
 package Dist::Zilla::Plugin::FinderCode;
 use Moose;
 with 'Dist::Zilla::Role::FileFinder';
+# ABSTRACT: a callback-based FileFinder plugin
 
 use Moose::Autobox;
 use Moose::Util::TypeConstraints;

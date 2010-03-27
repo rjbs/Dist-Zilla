@@ -1,6 +1,7 @@
 package Dist::Zilla::Role::ExecFiles;
 use Moose::Role;
 with 'Dist::Zilla::Role::FileFinder';
+# something that finds files to install as executables
 
 requires 'dir';
 
