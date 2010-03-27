@@ -19,7 +19,7 @@ around from_config => sub {
 
   my $tempdir_root = exists $tester_arg->{tempdir_root}
                    ? $tester_arg->{tempdir_root}
-                   : 't/tmp';
+                   : 'tmp';
 
   mkdir $tempdir_root if defined $tempdir_root and not -d $tempdir_root;
 
