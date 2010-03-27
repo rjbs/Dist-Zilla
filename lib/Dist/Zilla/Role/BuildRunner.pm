@@ -7,7 +7,7 @@ package Dist::Zilla::Role::BuildRunner;
 use Moose::Role;
 
 with 'Dist::Zilla::Role::Plugin';
-requires 'test';
+requires 'build';
 
 no Moose::Role;
 1;
