@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+2.100861  2010-03-27 13:17:23 America/New_York
           INCOMPATIBLE CHANGES:
 
           the AllFiles plugin is now known as GatherDir
