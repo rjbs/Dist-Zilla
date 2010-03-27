@@ -30,14 +30,11 @@ use warnings;
 
 {{ $perl_prereq ? qq{ BEGIN { require $perl_prereq; } } : ''; }}
 
-use ExtUtils::MakeMaker 6.11;
+use ExtUtils::MakeMaker {{ $eumm_version }};
 
 {{ $share_dir_block[0] }}
 
 my {{ $WriteMakefileArgs }}
-
-delete $WriteMakefileArgs{LICENSE}
-  unless eval { ExtUtils::MakeMaker->VERSION(6.31) };
 
 delete $WriteMakefileArgs{BUILD_REQUIRES}
   unless eval { ExtUtils::MakeMaker->VERSION(6.56) };
@@ -125,6 +122,7 @@ sub setup_installer {
   my $content = $self->fill_in_string(
     $template,
     {
+      eumm_version      => \($self->eumm_version),
       perl_prereq       => \$perl_prereq,
       share_dir_block   => \@share_dir_block,
       WriteMakefileArgs => \($makefile_args_dumper->Dump),
@@ -164,7 +162,7 @@ sub test {
 has 'eumm_version' => (
   isa => 'Str',
   is  => 'rw',
-  default => '6.11',
+  default => '6.31',
 );
 
 __PACKAGE__->meta->make_immutable;
