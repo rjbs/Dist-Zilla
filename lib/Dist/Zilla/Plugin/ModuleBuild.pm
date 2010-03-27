@@ -4,10 +4,10 @@ use List::MoreUtils qw(any uniq);
 use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::BuildRunner';
+with 'Dist::Zilla::Role::PrereqSource';
 with 'Dist::Zilla::Role::InstallTool';
 with 'Dist::Zilla::Role::TextTemplate';
 with 'Dist::Zilla::Role::TestRunner';
-with 'Dist::Zilla::Role::MetaProvider';
 
 use Dist::Zilla::File::InMemory;
 use List::MoreUtils qw(any uniq);
@@ -47,12 +47,18 @@ my $build = Module::Build->new(%module_build_args);
 $build->create_build_script;
 |;
 
-sub metadata {
+sub register_prereqs {
   my ($self) = @_;
-  return {
-    configure_requires => { 'Module::Build' => $self->mb_version },
-    build_requires     => { 'Module::Build' => $self->mb_version },
-  };
+
+  $self->zilla->register_prereqs(
+    { phase => 'configure' },
+    'Module::Build' => $self->mb_version,
+  );
+
+  $self->zilla->register_prereqs(
+    { phase => 'build' },
+    'Module::Build' => $self->mb_version,
+  );
 }
 
 sub setup_installer {
