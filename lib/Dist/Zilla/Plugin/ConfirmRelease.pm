@@ -18,7 +18,7 @@ sub before_release {
 
   my $answer = ExtUtils::MakeMaker::prompt($prompt, $default);
 
-  if ( $answer !~ /\Ay(?:e(?:s))\z/i ) {
+  if ($answer !~ /\Ay(?:e(?:s)?)?\z/i) {
     $self->log_fatal("Aborting release");
   }
 }
