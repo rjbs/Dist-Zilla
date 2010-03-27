@@ -17,3 +17,12 @@ config.  It doesn't exactly make sense.  It should be more related to
 UploadToCPAN.
 
 I don't have a plan yet.
+
+# COMMANDS TO FIX:
+
+* clean
+* install
+* new
+* run
+* test
+

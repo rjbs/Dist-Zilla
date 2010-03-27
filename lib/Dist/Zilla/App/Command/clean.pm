@@ -30,15 +30,7 @@ sub abstract { 'clean up after build, test, or install' }
 sub execute {
   my ($self, $opt, $arg) = @_;
 
-  require File::Path;
-  for my $x (grep { -e } '.build', glob($self->zilla->name . '-*')) {
-    $self->log("clean: removing $x");
-    File::Path::rmtree($x);
-  };
-
-  # removing leftovers
-  my @temps = File::Find::Rule->file->name( qr{~$} )->in('.');
-  $self->log("clean: removing $_"), unlink for @temps;
+  $self->zilla->clean;
 }
 
 1;
