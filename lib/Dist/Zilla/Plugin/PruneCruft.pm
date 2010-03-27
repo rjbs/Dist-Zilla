@@ -27,6 +27,7 @@ sub exclude_file {
   return 1 if index($file->name, $self->zilla->name . '-') == 0;
   return 1 if $file->name =~ /\A\./;
   return 1 if $file->name =~ /\A(?:Build|Makefile)\z/;
+  return 1 if $file->name eq 'MYMETA.yml';
   return;
 }
 

@@ -36,6 +36,8 @@ Revision history for {{$dist->name}}
 
           PkgVersion now adds a fully-qualified $VERSION variables, not 'our'
 
+          PruneCruft prunes MYMETA.yml
+
           add 'dzil nop' command to initialize zilla object and exit
 
 1.100711  2010-03-12 12:51:55 America/New_York
