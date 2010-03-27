@@ -42,10 +42,13 @@ use Test::DZil;
       'Foo::Bar' => '1.20'
     },
     build_requires => {
-      'Builder::Bob' => '9.901',
-      'Test::Deet'   => '7'
+      'Builder::Bob'  => '9.901',
+      'Module::Build' => '0.3601',
+      'Test::Deet'    => '7',
     },
-    'configure_requires' => {},
+    'configure_requires' => {
+      'Module::Build' => '0.3601',
+    },
   );
 
   for my $key (sort keys %want) {
