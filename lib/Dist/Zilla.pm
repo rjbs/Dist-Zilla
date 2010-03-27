@@ -38,15 +38,9 @@ make much more ludicrous demands in terms of prerequisites.
 
 For more information, see L<Dist::Zilla::Tutorial>.
 
-=attr dzil_app
-
-This attribute (which is optional) will provide the Dist::Zilla::App object if
-the Dist::Zilla object is being used in the context of the F<dzil> command (or
-anything else using it through Dist::Zilla::App).
-
 =cut
 
-has dzil_app => (
+has controller => (
   is  => 'rw',
   isa => 'Dist::Zilla::App',
 );

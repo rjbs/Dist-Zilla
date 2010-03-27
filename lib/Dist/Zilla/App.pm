@@ -83,7 +83,7 @@ sub zilla {
       core_debug => $core_debug,
     });
 
-    $zilla->dzil_app($self);
+    $zilla->controller($self);
 
     $zilla->logger->set_debug($verbose ? 1 : 0);
 
