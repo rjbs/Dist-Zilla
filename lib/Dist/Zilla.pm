@@ -698,22 +698,11 @@ sub build_in {
 
   $self->log("beginning to build " . $self->name);
 
-  $_->gather_files    for $self->plugins_with(-FileGatherer)->flatten;
-  $_->prune_files     for $self->plugins_with(-FilePruner)->flatten;
-  $_->munge_files     for $self->plugins_with(-FileMunger)->flatten;
+  $_->gather_files     for $self->plugins_with(-FileGatherer)->flatten;
+  $_->prune_files      for $self->plugins_with(-FilePruner)->flatten;
+  $_->munge_files      for $self->plugins_with(-FileMunger)->flatten;
 
-  for my $plugin ($self->plugins_with(-FixedPrereqs)->flatten) {
-    my $prereq = $plugin->prereq;
-    for (keys %$prereq) {
-      $self->register_prereqs(
-        {
-          phase => $plugin->prereq_phase,
-          type  => $plugin->prereq_type,
-        },
-        $_ => $prereq->{$_}
-      );
-    }
-  }
+  $_->register_prereqs for $self->plugins_with(-PrereqSource)->flatten;
 
   $self->prereq->finalize;
 

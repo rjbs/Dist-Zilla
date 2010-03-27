@@ -10,6 +10,8 @@ Revision history for {{$dist->name}}
           the PodTests plugin has been replaced by PodCoverageTests and
           PodSyntaxTests
 
+          the FixedPrereq role is replaced with PrereqSource
+
           OTHER CHANGES:
 
           numerous improvements to testing libraries

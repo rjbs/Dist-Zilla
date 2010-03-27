@@ -4,7 +4,7 @@ package Dist::Zilla::Plugin::MakeMaker;
 use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::BuildRunner';
-with 'Dist::Zilla::Role::FixedPrereqs';
+with 'Dist::Zilla::Role::PrereqSource';
 with 'Dist::Zilla::Role::InstallTool';
 with 'Dist::Zilla::Role::TestRunner';
 with 'Dist::Zilla::Role::TextTemplate';
@@ -51,7 +51,7 @@ WriteMakefile(%WriteMakefileArgs);
 
 |;
 
-sub prereq {
+sub register_prereqs {
   my ($self) = @_;
 
   $self->zilla->register_prereqs(
@@ -59,14 +59,12 @@ sub prereq {
     'ExtUtils::MakeMaker' => $self->eumm_version,
   );
 
-  return {} unless $self->zilla->_share_dir;
+  return unless $self->zilla->_share_dir;
 
   $self->zilla->register_prereqs(
     { phase => 'configure' },
     'File::ShareDir::Install' => 0.03,
   );
-
-  return {};
 }
 
 sub setup_installer {

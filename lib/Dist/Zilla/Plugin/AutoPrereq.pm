@@ -1,7 +1,7 @@
 package Dist::Zilla::Plugin::AutoPrereq;
 use Moose;
 with(
-  'Dist::Zilla::Role::FixedPrereqs',
+  'Dist::Zilla::Role::PrereqSource',
   'Dist::Zilla::Role::FileFinderUser' => {
     default_finders => [ ':InstallModules', ':ExecFiles' ],
   },
@@ -56,7 +56,7 @@ has skip => (
 
 # -- public methods
 
-sub prereq {
+sub register_prereqs {
   my $self  = shift;
 
   my $req = Version::Requirements->new;
@@ -115,11 +115,8 @@ sub prereq {
         keys %runtime_final;
     }
 
-    $self->zilla->prereq->register_prereqs({ phase => $phase }, %got);
+    $self->zilla->register_prereqs({ phase => $phase }, %got);
   }
-
-  # XXX: cheating -- rjbs, 2010-03-25
-  return {};
 }
 
 no Moose;
