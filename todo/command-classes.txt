@@ -20,9 +20,6 @@ I don't have a plan yet.
 
 # COMMANDS TO FIX:
 
-* clean
-* install
 * new
 * run
-* test
 

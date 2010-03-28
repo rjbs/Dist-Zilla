@@ -845,17 +845,6 @@ sub _write_out_file {
   chmod $file->mode, "$to" or die "couldn't chmod $to: $!";
 }
 
-=method test
-
-  $zilla->test;
-
-This method builds a new copy of the distribution and tests it.  If the tests
-appear to pass, it returns true.  If something goes wrong, it returns false.
-
-=cut
-
-sub test { die '...' }
-
 =method release
 
   $zilla->release;
@@ -944,6 +933,9 @@ sub install {
 
 =method test
 
+  $zilla->test;
+
+This method builds a new copy of the distribution and tests it.
 
 =cut
 
