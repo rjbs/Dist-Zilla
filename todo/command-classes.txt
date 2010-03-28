@@ -21,5 +21,4 @@ I don't have a plan yet.
 # COMMANDS TO FIX:
 
 * new
-* run
 
