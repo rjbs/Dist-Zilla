@@ -43,47 +43,7 @@ sub abstract { 'test your dist' }
 sub execute {
   my ($self, $opt, $arg) = @_;
 
-  Carp::croak("you can't test without any TestRunner plugins")
-    unless my @testers = $self->zilla->plugins_with(-TestRunner)->flatten;
-
-  require File::chdir;
-  require File::Temp;
-  require Path::Class;
-
-  my $build_root = Path::Class::dir('.build');
-  $build_root->mkpath unless -d $build_root;
-
-  my $target = Path::Class::dir( File::Temp::tempdir(DIR => $build_root) );
-  $self->log("building test distribution under $target");
-
-  local $ENV{AUTHOR_TESTING} = 1;
-  local $ENV{RELEASE_TESTING} = 1;
-
-  $self->zilla->ensure_built_in($target);
-
-  my $error;
-
-  for my $tester ( @testers ) {
-    undef $error;
-    eval {
-      local $File::chdir::CWD = $target;
-      $error = $tester->test( $target );
-      1;
-    } or do {
-      $error = $@;
-    };
-    last if $error;
-  }
-
-  if ($error) {
-    $self->log($error);
-    $self->log("left failed dist in place at $target");
-    exit 1;
-  } else {
-    $self->log("all's well; removing $target");
-    $target->rmtree;
-  }
-
+  $self->zilla->test;
 }
 
 1;

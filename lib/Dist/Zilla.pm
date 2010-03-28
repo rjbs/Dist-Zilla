@@ -942,6 +942,55 @@ sub install {
   return;
 }
 
+=method test
+
+
+=cut
+
+sub test {
+  my ($self) = @_;
+
+  Carp::croak("you can't test without any TestRunner plugins")
+    unless my @testers = $self->plugins_with(-TestRunner)->flatten;
+
+  require File::chdir;
+  require File::Temp;
+  require Path::Class;
+
+  my $build_root = Path::Class::dir('.build');
+  $build_root->mkpath unless -d $build_root;
+
+  my $target = Path::Class::dir( File::Temp::tempdir(DIR => $build_root) );
+  $self->log("building test distribution under $target");
+
+  local $ENV{AUTHOR_TESTING} = 1;
+  local $ENV{RELEASE_TESTING} = 1;
+
+  $self->ensure_built_in($target);
+
+  my $error;
+
+  for my $tester (@testers) {
+    undef $error;
+    eval {
+      local $File::chdir::CWD = $target;
+      $error = $tester->test( $target );
+      1;
+    } or do {
+      $error = $@;
+    };
+    last if $error;
+  }
+
+  if ($error) {
+    $self->log($error);
+    $self->log_fatal("left failed dist in place at $target");
+  } else {
+    $self->log("all's well; removing $target");
+    $target->rmtree;
+  }
+}
+
 =method log
 
   $zilla->log($message);
