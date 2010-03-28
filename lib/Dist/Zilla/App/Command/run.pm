@@ -50,8 +50,7 @@ sub execute {
   } else {
     my $error = $@ || '(unknown error)';
     $self->log($error);
-    $self->log("left failed dist in place at $target");
-    exit 1;
+    $self->log_fatal("left failed dist in place at $target");
   }
 }
 
