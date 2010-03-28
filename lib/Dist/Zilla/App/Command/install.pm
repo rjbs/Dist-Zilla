@@ -38,7 +38,6 @@ If not specified, calls
 
 =cut
 
-
 sub execute {
   my ($self, $opt, $arg) = @_;
 

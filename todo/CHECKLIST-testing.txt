@@ -6,6 +6,8 @@ ensure_built_in
 build_archive
 test
 release
+install
+clean
 
 # COMMANDS IN Dist::Zilla::App - should stop being interesting as overhauled
 

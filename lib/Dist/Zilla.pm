@@ -928,7 +928,7 @@ sub install {
             ? $arg->{install_command}
             : ($^X => '-MCPAN' => '-einstall "."');
 
-    system(@cmd) && die "error with '@cmd'\n";
+    system(@cmd) && $self->log_fatal([ "error running %s", \@cmd ]);
   };
 
   if ($@) {
@@ -938,6 +938,8 @@ sub install {
     $self->log("all's well; removing $target");
     $target->rmtree;
   }
+
+  return;
 }
 
 =method log
