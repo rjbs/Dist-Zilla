@@ -14,7 +14,7 @@ sub execute {
 
   # The sort below is a cheap hack to get ModuleBuild ahead of
   # ExtUtils::MakeMaker. -- rjbs, 2010-01-05
-  Carp::croak("you can't release without any InstallTool plugins")
+  Carp::croak("you can't build without any BuildRunner plugins")
     unless my @builders =
     $self->zilla->plugins_with(-BuildRunner)->sort->reverse->flatten;
 
