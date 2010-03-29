@@ -2,6 +2,9 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+2.100880  2010-03-29 10:00:20 America/New_York
+          first non-dev release of version 2
+
 2.100870  2010-03-28 17:07:24 America/New_York
 
 2.100862  2010-03-27 13:32:01 America/New_York
