@@ -35,6 +35,9 @@ sub as_distmeta {
     requires           =>
       ($self->_guts->{runtime}{requires} || Version::Requirements->new)
       ->as_string_hash,
+    recommends         =>
+      ($self->_guts->{runtime}{recommends} || Version::Requirements->new)
+      ->as_string_hash,
     build_requires     =>
       ($self->_guts->{build}{requires} || Version::Requirements->new)
       ->as_string_hash,
