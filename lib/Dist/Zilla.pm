@@ -901,7 +901,6 @@ sub install {
 
   require File::chdir;
   require File::Temp;
-  require Path::Class;
 
   my $build_root = Path::Class::dir('.build');
   $build_root->mkpath unless -d $build_root;
@@ -947,7 +946,6 @@ sub test {
 
   require File::chdir;
   require File::Temp;
-  require Path::Class;
 
   my $build_root = Path::Class::dir('.build');
   $build_root->mkpath unless -d $build_root;
@@ -999,7 +997,6 @@ sub run_in_build {
   require "Config.pm"; # skip autoprereq
   require File::chdir;
   require File::Temp;
-  require Path::Class;
 
   # dzil-build the dist
   my $build_root = Path::Class::dir('.build');
