@@ -948,7 +948,6 @@ sub test {
   Carp::croak("you can't test without any TestRunner plugins")
     unless my @testers = $self->plugins_with(-TestRunner)->flatten;
 
-  require File::chdir;
   require File::Temp;
 
   my $build_root = Path::Class::dir('.build');
@@ -961,6 +960,38 @@ sub test {
   local $ENV{RELEASE_TESTING} = 1;
 
   $self->ensure_built_in($target);
+
+  my $error = $self->run_tests_in($target);
+
+  if ($error) {
+    $self->log($error);
+    $self->log_fatal("left failed dist in place at $target");
+  } else {
+    $self->log("all's well; removing $target");
+    $target->rmtree;
+  }
+}
+
+=method run_tests_in
+
+  my $error = $zilla->run_tests_in($directory);
+
+This method runs the tests in $directory (a Path::Class::Dir), which
+must contain an already-built copy of the distribution.  It returns
+C<undef> if the tests pass, or the error message if they failed.
+
+It does I<not> set any of the C<*_TESTING> environment variables, nor
+does it clean up C<$directory> afterwards.
+
+=cut
+
+sub run_tests_in {
+  my ($self, $target) = @_;
+
+  Carp::croak("you can't test without any TestRunner plugins")
+    unless my @testers = $self->plugins_with(-TestRunner)->flatten;
+
+  require File::chdir;
 
   my $error;
 
@@ -976,13 +1007,7 @@ sub test {
     last if $error;
   }
 
-  if ($error) {
-    $self->log($error);
-    $self->log_fatal("left failed dist in place at $target");
-  } else {
-    $self->log("all's well; removing $target");
-    $target->rmtree;
-  }
+  return $error;
 }
 
 =method run_in_build

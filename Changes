@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          refactored run_tests_in out of the test method
 
 2.100921  2010-04-02 16:04:57 America/New_York
           add the missing ->ensure_built method
