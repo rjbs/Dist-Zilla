@@ -37,27 +37,27 @@ $tzil->build;
 my $dzt_sample = $tzil->slurp_file('build/lib/DZT/Sample.pm');
 like(
   $dzt_sample,
-  qr{^\$\QDZT::Sample::VERSION = '0.001';\E$}m,
+  qr{^\s*\$\QDZT::Sample::VERSION = '0.001';\E$}m,
   "added version to DZT::Sample",
 );
 
 my $dzt_tp1 = $tzil->slurp_file('build/lib/DZT/TP1.pm');
 like(
   $dzt_tp1,
-  qr{^\$\QDZT::TP1::VERSION = '0.001';\E$}m,
+  qr{^\s*\$\QDZT::TP1::VERSION = '0.001';\E$}m,
   "added version to DZT::TP1",
 );
 
 like(
   $dzt_tp1,
-  qr{^\$\QDZT::TP2::VERSION = '0.001';\E$}m,
+  qr{^\s*\$\QDZT::TP2::VERSION = '0.001';\E$}m,
   "added version to DZT::TP2",
 );
 
 my $dzt_wver = $tzil->slurp_file('build/lib/DZT/WVer.pm');
 unlike(
   $dzt_wver,
-  qr{^\$\QDZT::WVer::VERSION = '0.001';\E$}m,
+  qr{^\s*\$\QDZT::WVer::VERSION = '0.001';\E$}m,
   "*not* added to DZT::WVer; we have one already",
 );
 
