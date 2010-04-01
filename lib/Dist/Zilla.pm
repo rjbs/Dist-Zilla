@@ -9,6 +9,7 @@ use MooseX::Types::Moose qw(Bool HashRef);
 use MooseX::Types::Path::Class qw(Dir File);
 use Moose::Util::TypeConstraints;
 
+use Archive::Tar;
 use File::Find::Rule;
 use Hash::Merge::Simple ();
 use List::MoreUtils qw(uniq);
@@ -750,24 +751,21 @@ sub ensure_built_in {
 
 =method build_archive
 
-  $dist->build_archive($root);
+  $dist->build_archive;
 
-This method will ensure that the dist has been built in the given root, and
-will then build a tarball of that directory in the current directory.
+This method will ensure that the dist has been built, and will then build a
+tarball of the build directory in the current directory.
 
 =cut
 
 sub build_archive {
-  my ($self, $root) = @_;
+  my ($self) = @_;
 
-  $self->ensure_built_in($root);
+  my $built_in = $self->ensure_built;
 
-  require Archive::Tar;
   my $archive = Archive::Tar->new;
-  my $built_in = $self->built_in;
 
   my %seen_dir;
-
   for my $file ($self->files->flatten) {
     my $in = Path::Class::file($file->name)->dir;
     $archive->add_files( $built_in->subdir($in) ) unless $seen_dir{ $in }++;
