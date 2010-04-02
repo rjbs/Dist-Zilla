@@ -973,8 +973,8 @@ sub test {
   my $error = $zilla->run_tests_in($directory);
 
 This method runs the tests in $directory (a Path::Class::Dir), which
-must contain an already-built copy of the distribution.  It returns
-C<undef> if the tests pass, or the error message if they failed.
+must contain an already-built copy of the distribution.  It will throw an
+exception if there are test failures.
 
 It does I<not> set any of the C<*_TESTING> environment variables, nor
 does it clean up C<$directory> afterwards.
