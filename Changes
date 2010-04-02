@@ -1,6 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          BuildRunner and TestRunner routines now must die, not return errors
+
+          added TestRelease plugin (from Christopher J. Madsen)
           refactored run_tests_in out of the test method
 
 2.100921  2010-04-02 16:04:57 America/New_York
