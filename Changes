@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+2.100922  2010-04-02 18:53:55 America/New_York
           BuildRunner and TestRunner routines now must die, not return errors
 
           added TestRelease plugin (from Christopher J. Madsen)
