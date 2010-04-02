@@ -738,6 +738,10 @@ C<$root> (or the default root, if no root is given), no exception is raised.
 
 =cut
 
+sub ensure_built {
+  $_[0]->ensure_built_in;
+}
+
 sub ensure_built_in {
   my ($self, $root) = @_;
 

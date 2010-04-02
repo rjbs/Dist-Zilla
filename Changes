@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          add the missing ->ensure_built method
 
 2.100920  2010-04-02 10:45:45 America/New_York
           BeforeArchive plugins introduced (thanks, Graham Barr)
