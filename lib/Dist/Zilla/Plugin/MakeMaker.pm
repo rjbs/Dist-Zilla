@@ -146,16 +146,19 @@ has __write_makefile_args => (
 
 sub build {
   my $self = shift;
+
   system($^X => 'Makefile.PL') and die "error with Makefile.PL\n";
   system('make')               and die "error running make\n";
+
   return;
 }
 
 sub test {
   my ( $self, $target ) = @_;
-  ## no critic Punctuation
+
   $self->build;
   system('make test') and die "error running make test\n";
+
   return;
 }
 

@@ -11,6 +11,7 @@ use Moose::Util::TypeConstraints;
 
 use Archive::Tar;
 use File::Find::Rule;
+use File::chdir ();
 use Hash::Merge::Simple ();
 use List::MoreUtils qw(uniq);
 use List::Util qw(first);
@@ -763,7 +764,7 @@ tarball of the build directory in the current directory.
 =cut
 
 sub build_archive {
-  my ($self) = @_;
+  my ($self, $file) = @_;
 
   my $built_in = $self->ensure_built;
 
@@ -772,14 +773,14 @@ sub build_archive {
   $_->before_archive for $self->plugins_with(-BeforeArchive)->flatten;
 
   my %seen_dir;
-  for my $file ($self->files->flatten) {
-    my $in = Path::Class::file($file->name)->dir;
+  for my $distfile ($self->files->flatten) {
+    my $in = Path::Class::file($distfile->name)->dir;
     $archive->add_files( $built_in->subdir($in) ) unless $seen_dir{ $in }++;
-    $archive->add_files( $built_in->file( $file->name ) );
+    $archive->add_files( $built_in->file( $distfile->name ) );
   }
 
   ## no critic
-  my $file = Path::Class::file(join(q{},
+  $file ||= Path::Class::file(join(q{},
     $self->name,
     '-',
     $self->version,
@@ -963,13 +964,8 @@ sub test {
 
   my $error = $self->run_tests_in($target);
 
-  if ($error) {
-    $self->log($error);
-    $self->log_fatal("left failed dist in place at $target");
-  } else {
-    $self->log("all's well; removing $target");
-    $target->rmtree;
-  }
+  $self->log("all's well; removing $target");
+  $target->rmtree;
 }
 
 =method run_tests_in
@@ -991,23 +987,10 @@ sub run_tests_in {
   Carp::croak("you can't test without any TestRunner plugins")
     unless my @testers = $self->plugins_with(-TestRunner)->flatten;
 
-  require File::chdir;
-
-  my $error;
-
   for my $tester (@testers) {
-    undef $error;
-    eval {
-      local $File::chdir::CWD = $target;
-      $error = $tester->test( $target );
-      1;
-    } or do {
-      $error = $@;
-    };
-    last if $error;
+    local $File::chdir::CWD = $target;
+    $tester->test( $target );
   }
-
-  return $error;
 }
 
 =method run_in_build
