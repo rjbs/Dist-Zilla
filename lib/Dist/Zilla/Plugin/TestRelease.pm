@@ -9,6 +9,7 @@ use Path::Class ();
 
 sub before_release {
   my ($self, $tgz) = @_;
+  $tgz = $tgz->absolute;
 
   my $build_root = $self->zilla->root->subdir('.build');
   $build_root->mkpath unless -d $build_root;
@@ -19,7 +20,7 @@ sub before_release {
 
   my @files = do {
     local $File::chdir::CWD = $tmpdir;
-    Archive::Tar->extract_archive($tgz->absolute);
+    Archive::Tar->extract_archive("$tgz");
   };
 
   $self->log_fatal([ "Failed to extract archive: %s", Archive::Tar->error ])
