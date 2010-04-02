@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+2.100921  2010-04-02 16:04:57 America/New_York
           add the missing ->ensure_built method
 
 2.100920  2010-04-02 10:45:45 America/New_York
