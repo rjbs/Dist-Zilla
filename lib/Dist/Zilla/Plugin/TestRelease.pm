@@ -30,6 +30,7 @@ sub before_release {
   my $target = $tmpdir->subdir($files[0]); # Should be the root of the tarball
 
   local $ENV{RELEASE_TESTING} = 1;
+  $self->zilla->run_tests_in($target);
 
   $self->log("all's well; removing $tmpdir");
   $tmpdir->rmtree;
