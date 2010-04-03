@@ -31,7 +31,7 @@ my $tester = Dist::Zilla::Tester->from_config(
 $tester->build;
 
 ok(
-  (grep { $_->{message} =~ m<^\[DZ\]\s> } @{ $tester->controller->logger->events }),
+  (grep { $_->{message} =~ m<^\[DZ\]\s> } @{ $tester->interface->logger->events }),
   "we have at least some expected log content",
 );
 

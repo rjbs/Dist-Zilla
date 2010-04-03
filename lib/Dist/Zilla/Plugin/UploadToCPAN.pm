@@ -48,7 +48,7 @@ has user => (
   required => 1,
   default  => sub {
     my ($self) = @_;
-    return unless my $app = $self->zilla->controller;
+    return unless my $app = $self->zilla->interface;
     my $user = $app->config_for('Dist::Zilla::App::Command::release')->{user};
     return $user if defined $user;
     return $self->pause_cfg->{user};
@@ -62,7 +62,7 @@ has password => (
   required => 1,
   default  => sub {
     my ($self) = @_;
-    return unless my $app = $self->zilla->controller;
+    return unless my $app = $self->zilla->interface;
     my $pass = $app->config_for('Dist::Zilla::App::Command::release')->{password};
     return $pass if defined $pass;
     return $self->pause_cfg->{password};

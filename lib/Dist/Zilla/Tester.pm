@@ -50,7 +50,7 @@ around from_config => sub {
   }
 
   local $arg->{dist_root} = "$root";
-  local $arg->{controller} = Dist::Zilla::Tester::UI->new;
+  local $arg->{interface} = Dist::Zilla::Tester::UI->new;
 
   local @INC = map {; ref($_) ? $_ : File::Spec->rel2abs($_) } @INC;
 
@@ -113,17 +113,17 @@ has tempdir => (
 
 sub clear_log_events {
   my ($self) = @_;
-  $self->controller->logger->clear_events;
+  $self->interface->logger->clear_events;
 }
 
 sub log_events {
   my ($self) = @_;
-  $self->controller->logger->events;
+  $self->interface->logger->events;
 }
 
 sub log_messages {
   my ($self) = @_;
-  [ map {; $_->{message} } @{ $self->controller->logger->events } ];
+  [ map {; $_->{message} } @{ $self->interface->logger->events } ];
 }
 
 sub slurp_file {

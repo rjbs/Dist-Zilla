@@ -51,7 +51,7 @@ has logger => (
   lazy => 1,
   handles => [ qw(log log_debug log_fatal) ],
   default => sub {
-    $_[0]->zilla->controller->logger->proxy({
+    $_[0]->zilla->interface->logger->proxy({
       proxy_prefix => '[' . $_[0]->plugin_name . '] ',
     });
   },

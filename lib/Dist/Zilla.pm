@@ -42,7 +42,7 @@ For more information, see L<Dist::Zilla::Tutorial>.
 
 =cut
 
-has controller => (
+has interface => (
   is  => 'rw',
   isa => 'Object', # will be does => 'Dist::Zilla::UI' when that exists
   required => 1,
@@ -463,7 +463,7 @@ sub from_config {
 
   my ($seq) = $class->_load_config({
     root   => $root,
-    logger => $arg->{controller}->logger,
+    logger => $arg->{interface}->logger,
     config_class => $arg->{config_class},
   });
 
@@ -471,7 +471,7 @@ sub from_config {
 
   my $self = $class->new({
     %$core_config,
-    controller => $arg->{controller},
+    interface => $arg->{interface},
   });
 
   for my $section ($seq->sections) {
@@ -1052,7 +1052,7 @@ has logger => (
   lazy => 1,
   handles => [ qw(log log_debug log_fatal) ],
   default => sub {
-    $_[0]->controller->logger->proxy({ proxy_prefix => '[DZ] ' })
+    $_[0]->interface->logger->proxy({ proxy_prefix => '[DZ] ' })
   },
 );
 

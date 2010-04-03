@@ -89,7 +89,7 @@ sub zilla {
     my $core_debug = grep { m/\A[-_]\z/ } @v_plugins;
 
     my $zilla = Dist::Zilla->from_config({
-      controller => $self,
+      interface => $self,
     });
 
     $zilla->logger->set_debug($verbose ? 1 : 0);
