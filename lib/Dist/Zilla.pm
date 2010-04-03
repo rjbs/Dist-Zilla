@@ -44,7 +44,8 @@ For more information, see L<Dist::Zilla::Tutorial>.
 
 has controller => (
   is  => 'rw',
-  isa => 'Dist::Zilla::App',
+  isa => 'Object', # will be does => 'Dist::Zilla::UI' when that exists
+  required => 1,
 );
 
 =attr name
@@ -460,22 +461,18 @@ sub from_config {
 
   my $root = Path::Class::dir($arg->{dist_root} || '.');
 
-  my $logger = $arg->{logger} || $class->default_logger;
-
   my ($seq) = $class->_load_config({
     root   => $root,
-    logger => $logger,
+    logger => $arg->{controller}->logger,
     config_class => $arg->{config_class},
   });
 
   my $core_config = $seq->section_named('_')->payload;
 
   my $self = $class->new({
-    logger => $logger,
-    %$core_config
+    %$core_config,
+    controller => $arg->{controller},
   });
-
-  $self->core_logger->set_debug(1) if $arg->{core_debug};
 
   for my $section ($seq->sections) {
     next if $section->name eq '_';
@@ -1049,32 +1046,15 @@ This method logs the given message.
 
 =cut
 
-has core_logger => (
+has logger => (
   is   => 'ro',
   isa  => 'Log::Dispatchouli::Proxy', # could be duck typed, I guess
   lazy => 1,
   handles => [ qw(log log_debug log_fatal) ],
   default => sub {
-    $_[0]->logger->proxy({ proxy_prefix => '[DZ] ' })
+    $_[0]->controller->logger->proxy({ proxy_prefix => '[DZ] ' })
   },
 );
-
-has logger => (
-  is   => 'ro',
-  isa  => 'Log::Dispatchouli',
-  lazy => 1,
-  builder => 'default_logger',
-);
-
-sub default_logger {
-  return Log::Dispatchouli->new({
-    ident     => 'Dist::Zilla',
-    to_stdout => 1,
-    log_pid   => 0,
-    to_self   => ($ENV{DZIL_TESTING} ? 1 : 0),
-    quiet_fatal => 'stdout',
-  });
-}
 
 sub BUILD {
   my ($self, $arg) = @_;

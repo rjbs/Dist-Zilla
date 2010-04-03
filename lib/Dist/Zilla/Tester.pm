@@ -50,6 +50,7 @@ around from_config => sub {
   }
 
   local $arg->{dist_root} = "$root";
+  local $arg->{controller} = Dist::Zilla::Tester::UI->new;
 
   local @INC = map {; ref($_) ? $_ : File::Spec->rel2abs($_) } @INC;
 
@@ -87,12 +88,21 @@ around release => sub {
 };
 
 
-sub default_logger {
-  return Log::Dispatchouli->new({
-    ident   => 'Dist::Zilla::Tester',
-    log_pid => 0,
-    to_self => 1,
-  });
+{
+  package
+    Dist::Zilla::Tester::UI;
+
+  use Moose;
+  has logger => (
+    is => 'ro',
+    default => sub {
+      Log::Dispatchouli->new({
+        ident   => 'Dist::Zilla::Tester',
+        log_pid => 0,
+        to_self => 1,
+      });
+    }
+  );
 }
 
 has tempdir => (
@@ -103,17 +113,17 @@ has tempdir => (
 
 sub clear_log_events {
   my ($self) = @_;
-  $self->logger->clear_events;
+  $self->controller->logger->clear_events;
 }
 
 sub log_events {
   my ($self) = @_;
-  $self->logger->events;
+  $self->controller->logger->events;
 }
 
 sub log_messages {
   my ($self) = @_;
-  [ map {; $_->{message} } @{ $self->logger->events } ];
+  [ map {; $_->{message} } @{ $self->controller->logger->events } ];
 }
 
 sub slurp_file {
