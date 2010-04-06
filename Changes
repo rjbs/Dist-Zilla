@@ -2,7 +2,7 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
           delegate logging to the Dist::Zilla::App object
-          replace File::chdir with File::pushd
+          replace File::chdir with File::pushd (David Golden)
 
 2.100922  2010-04-02 18:53:55 America/New_York
           BuildRunner and TestRunner routines now must die, not return errors
