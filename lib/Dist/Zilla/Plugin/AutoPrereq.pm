@@ -19,8 +19,6 @@ use PPI;
 use Version::Requirements 0.100630;  # merge with 0-min bug
 use version;
 
-=for Pod::Coverage prereq
-
 =head1 SYNOPSIS
 
 In your F<dist.ini>:
@@ -38,23 +36,22 @@ L<Dist::Zilla::Plugin::Prereq> plugin.
 
 This plugin will skip the modules shipped within your dist.
 
-The module accept the following options:
+=attr skip
 
-=for :list
-= skip
-a regex that will remove any matching modules found from prereqs
+This string will be used as a regular expression.  Any module names matching
+this regex will not be registered as prerequisites.
+
+=head1 CREDITS
+
+This plugin was originally contributed by Jerome Quelin.
 
 =cut
-
-# -- attributes
 
 # skiplist - a regex
 has skip => (
   is => 'ro',
   predicate => 'has_skip',
 );
-
-# -- public methods
 
 sub register_prereqs {
   my $self  = shift;
