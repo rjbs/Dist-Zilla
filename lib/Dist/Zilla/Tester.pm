@@ -50,7 +50,7 @@ around from_config => sub {
   }
 
   local $arg->{dist_root} = "$root";
-  local $arg->{interface} = Dist::Zilla::Tester::UI->new;
+  local $arg->{chrome} = Dist::Zilla::Tester::UI->new;
 
   local @INC = map {; ref($_) ? $_ : File::Spec->rel2abs($_) } @INC;
 
@@ -113,17 +113,17 @@ has tempdir => (
 
 sub clear_log_events {
   my ($self) = @_;
-  $self->interface->logger->clear_events;
+  $self->chrome->logger->clear_events;
 }
 
 sub log_events {
   my ($self) = @_;
-  $self->interface->logger->events;
+  $self->chrome->logger->events;
 }
 
 sub log_messages {
   my ($self) = @_;
-  [ map {; $_->{message} } @{ $self->interface->logger->events } ];
+  [ map {; $_->{message} } @{ $self->chrome->logger->events } ];
 }
 
 sub slurp_file {

@@ -42,9 +42,9 @@ For more information, see L<Dist::Zilla::Tutorial>.
 
 =cut
 
-has interface => (
+has chrome => (
   is  => 'rw',
-  isa => 'Object', # will be does => 'Dist::Zilla::UI' when that exists
+  isa => 'Object', # will be does => 'Dist::Zilla::Role::Chrome' when it exists
   required => 1,
 );
 
@@ -463,7 +463,7 @@ sub from_config {
 
   my ($seq) = $class->_load_config({
     root   => $root,
-    logger => $arg->{interface}->logger,
+    logger => $arg->{chrome}->logger,
     config_class => $arg->{config_class},
   });
 
@@ -471,7 +471,7 @@ sub from_config {
 
   my $self = $class->new({
     %$core_config,
-    interface => $arg->{interface},
+    chrome => $arg->{chrome},
   });
 
   for my $section ($seq->sections) {
@@ -1050,7 +1050,7 @@ has logger => (
   lazy => 1,
   handles => [ qw(log log_debug log_fatal) ],
   default => sub {
-    $_[0]->interface->logger->proxy({ proxy_prefix => '[DZ] ' })
+    $_[0]->chrome->logger->proxy({ proxy_prefix => '[DZ] ' })
   },
 );
 
