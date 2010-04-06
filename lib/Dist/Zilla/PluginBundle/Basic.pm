@@ -1,5 +1,5 @@
 package Dist::Zilla::PluginBundle::Basic;
-# ABSTRACT: the basic plugins to release CPAN dists
+# ABSTRACT: the basic plugins to maintain and release CPAN dists
 use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::PluginBundle';
@@ -44,8 +44,9 @@ __END__
 
 =head1 DESCRIPTION
 
-This bundle is meant to do just about everything needed for building a plain
-ol' CPAN distribution in the manner of our forefathers.
+This plugin is meant to be a basic "first step" bundle for using Dist::Zilla.
+It won't munge any of your code, but will generate a F<Makefile.PL> and allows
+easy, reliable releasing of distributions.
 
 It includes the following plugins with their default configuration:
 
