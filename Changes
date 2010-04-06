@@ -1,7 +1,11 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+2.100960  2010-04-06 17:00:26 America/New_York
+          added @Basic, more suitable for basic use than @Classic
           delegate logging to the Dist::Zilla::App object
+          the controller attribute is now called "chrome"; this should last
           replace File::chdir with File::pushd (David Golden)
 
 2.100922  2010-04-02 18:53:55 America/New_York
