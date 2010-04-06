@@ -1,5 +1,5 @@
-package Dist::Zilla::PluginBundle::Classic;
-# ABSTRACT: the classic (old) default configuration for Dist::Zilla
+package Dist::Zilla::PluginBundle::Basic;
+# ABSTRACT: the basic plugins to release CPAN dists
 use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::PluginBundle';
@@ -14,10 +14,6 @@ sub bundle_config {
     MetaYAML
     License
     Readme
-    PkgVersion
-    PodVersion
-    PodCoverageTests
-    PodSyntaxTests
     ExtraTests
     ExecDir
     ShareDir
@@ -25,6 +21,7 @@ sub bundle_config {
     MakeMaker
     Manifest
 
+    TestRelease
     ConfirmRelease
     UploadToCPAN
   );
@@ -52,21 +49,19 @@ ol' CPAN distribution in the manner of our forefathers.
 
 It includes the following plugins with their default configuration:
 
+=for :list
 * L<Dist::Zilla::Plugin::GatherDir>
 * L<Dist::Zilla::Plugin::PruneCruft>
 * L<Dist::Zilla::Plugin::ManifestSkip>
 * L<Dist::Zilla::Plugin::MetaYAML>
 * L<Dist::Zilla::Plugin::License>
 * L<Dist::Zilla::Plugin::Readme>
-* L<Dist::Zilla::Plugin::PkgVersion>
-* L<Dist::Zilla::Plugin::PodVersion>
-* L<Dist::Zilla::Plugin::PodCoverageTests>
-* L<Dist::Zilla::Plugin::PodSyntaxTests>
 * L<Dist::Zilla::Plugin::ExtraTests>
 * L<Dist::Zilla::Plugin::ExecDir>
 * L<Dist::Zilla::Plugin::ShareDir>
 * L<Dist::Zilla::Plugin::MakeMaker>
 * L<Dist::Zilla::Plugin::Manifest>
+* L<Dist::Zilla::Plugin::TestRelease>
 * L<Dist::Zilla::Plugin::ConfirmRelease>
 * L<Dist::Zilla::Plugin::UploadToCPAN>
 
