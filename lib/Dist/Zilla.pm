@@ -11,7 +11,7 @@ use Moose::Util::TypeConstraints;
 
 use Archive::Tar;
 use File::Find::Rule;
-use File::chdir ();
+use File::pushd ();
 use Hash::Merge::Simple ();
 use List::MoreUtils qw(uniq);
 use List::Util qw(first);
@@ -901,7 +901,6 @@ sub install {
   my ($self, $arg) = @_;
   $arg ||= {};
 
-  require File::chdir;
   require File::Temp;
 
   my $build_root = Path::Class::dir('.build');
@@ -913,7 +912,7 @@ sub install {
 
   eval {
     ## no critic Punctuation
-    local $File::chdir::CWD = $target;
+    my $wd = File::pushd::pushd($target);
     my @cmd = $arg->{install_command}
             ? $arg->{install_command}
             : ($^X => '-MCPAN' => '-einstall "."');
@@ -985,7 +984,7 @@ sub run_tests_in {
     unless my @testers = $self->plugins_with(-TestRunner)->flatten;
 
   for my $tester (@testers) {
-    local $File::chdir::CWD = $target;
+    my $wd = File::pushd::pushd($target);
     $tester->test( $target );
   }
 }
@@ -1004,7 +1003,6 @@ sub run_in_build {
     $self->plugins_with(-BuildRunner)->sort->reverse->flatten;
 
   require "Config.pm"; # skip autoprereq
-  require File::chdir;
   require File::Temp;
 
   # dzil-build the dist
@@ -1019,7 +1017,7 @@ sub run_in_build {
 
   # building the dist for real
   my $ok = eval {
-    local $File::chdir::CWD = $target;
+    my $wd = File::pushd::pushd($target);
     $builders[0]->build;
     local $ENV{PERL5LIB} =
       join $Config::Config{path_sep},

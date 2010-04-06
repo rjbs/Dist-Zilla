@@ -5,7 +5,7 @@ use App::Cmd::Tester 0.306 (); # result_class, ->app
 
 use Dist::Zilla::App;
 use File::Copy::Recursive qw(dircopy);
-use File::chdir;
+use File::pushd ();
 use File::Spec;
 use File::Temp;
 use Path::Class;
@@ -30,7 +30,7 @@ sub test_dzil {
 
   dircopy($source, $root);
 
-  local $CWD = $root;
+  my $wd = File::pushd::pushd($root);
 
   local $ENV{DZIL_TESTING} = 1;
   my $result = $self->test_app('Dist::Zilla::App' => $argv);

@@ -5,7 +5,7 @@ extends 'Dist::Zilla';
 
 use autodie;
 use File::Copy::Recursive qw(dircopy);
-use File::chdir;
+use File::pushd ();
 use File::Spec;
 use File::Temp;
 use Path::Class;
@@ -66,7 +66,7 @@ around build_in => sub {
 
   # XXX: We *must eliminate* the need for this!  It's only here because right
   # now building a dist with (root <> cwd) doesn't work. -- rjbs, 2010-03-08
-  local $CWD = $self->root;
+  my $wd = File::pushd::pushd($self->root);
 
   $target ||= do {
     my $target = dir($self->tempdir)->subdir('build');
@@ -82,7 +82,7 @@ around release => sub {
 
   # XXX: We *must eliminate* the need for this!  It's only here because right
   # now building a dist with (root <> cwd) doesn't work. -- rjbs, 2010-03-08
-  local $CWD = $self->root;
+  my $wd = File::pushd::pushd($self->root);
 
   return $self->$orig;
 };

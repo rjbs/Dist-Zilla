@@ -3,7 +3,7 @@ use Moose;
 with 'Dist::Zilla::Role::BeforeRelease';
 
 use Archive::Tar;
-use File::chdir ();
+use File::pushd ();
 use Moose::Autobox;
 use Path::Class ();
 
@@ -19,7 +19,7 @@ sub before_release {
   $self->log("Extracting $tgz to $tmpdir");
 
   my @files = do {
-    local $File::chdir::CWD = $tmpdir;
+    my $wd = File::pushd::pushd($tmpdir);
     Archive::Tar->extract_archive("$tgz");
   };
 
