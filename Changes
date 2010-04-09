@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+2.100990  2010-04-09 10:12:06 America/New_York
           fix Pod errors in @Classic (thanks Ævar)
 
 2.100960  2010-04-06 17:00:26 America/New_York
