@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          fix Pod errors in @Classic (thanks Ævar)
 
 2.100960  2010-04-06 17:00:26 America/New_York
           added @Basic, more suitable for basic use than @Classic

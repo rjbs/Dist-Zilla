@@ -56,6 +56,7 @@ lot of more useful features like autoversioning, autoprereqs, or Pod::Weaver.
 
 It includes the following plugins with their default configuration:
 
+=for :list
 * L<Dist::Zilla::Plugin::GatherDir>
 * L<Dist::Zilla::Plugin::PruneCruft>
 * L<Dist::Zilla::Plugin::ManifestSkip>
