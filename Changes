@@ -2,6 +2,7 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
           added PluginBundle::Easy role (from Christopher J. Madsen)
+          changed @Basic and @Classic to use PluginBundle::Easy
 
 2.100991  2010-04-09 22:42:49 America/New_York
           correct the 2.100990 release, which was broken in all $VERSION nums

@@ -1,13 +1,12 @@
 package Dist::Zilla::PluginBundle::Classic;
 # ABSTRACT: the classic (old) default configuration for Dist::Zilla
 use Moose;
-use Moose::Autobox;
-with 'Dist::Zilla::Role::PluginBundle';
+with 'Dist::Zilla::Role::PluginBundle::Easy';
 
-sub bundle_config {
-  my ($self, $arg) = @_;
+sub configure {
+  my ($self) = @_;
 
-  my @plugins = qw(
+  $self->add_plugins(qw(
     GatherDir
     PruneCruft
     ManifestSkip
@@ -27,17 +26,7 @@ sub bundle_config {
 
     ConfirmRelease
     UploadToCPAN
-  );
-
-  my @config;
-  for (@plugins) {
-    my $class = "Dist::Zilla::Plugin::$_";
-    Class::MOP::load_class($class);
-
-    push @config, [ "$arg->{name}/$_" => $class => {} ];
-  }
-
-  return @config;
+  ));
 }
 
 __PACKAGE__->meta->make_immutable;
