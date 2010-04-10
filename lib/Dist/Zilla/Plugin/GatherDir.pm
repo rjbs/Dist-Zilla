@@ -42,6 +42,10 @@ has include_dotfiles => (
   default => 0,
 );
 
+# Total hack to work around adding 234249018 files in .git only to remove them
+# later.  Will fix more elegantly later. -- rjbs, 2010-04-09
+sub __log_inject { 0 }
+
 sub gather_files {
   my ($self) = @_;
 
