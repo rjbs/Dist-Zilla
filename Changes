@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+2.100991  2010-04-09 22:42:49 America/New_York
           correct the 2.100990 release, which was broken in all $VERSION nums
           add debug output to many more plugins
           improve the -v switch to allow substrings (\bNAME\b) to match
