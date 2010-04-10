@@ -39,7 +39,9 @@ sub prune_files {
 
   for my $filename ($self->filenames->flatten) {
     @$files = $files->grep(sub {
-      ($_->name ne $filename) && ($_->name !~ m{\A\Q$filename\E/})
+      (($_->name ne $filename) && ($_->name !~ m{\A\Q$filename\E/}))
+      ? 1
+      : do { $self->log_debug([ 'pruning %s', $_->name ]); 0 }
     })->flatten;
   }
 

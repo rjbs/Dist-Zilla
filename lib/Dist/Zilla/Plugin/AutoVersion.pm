@@ -75,6 +75,10 @@ sub provide_version {
       cldr  => sub { $now->format_cldr($_[0]) },
     },
   );
+
+  $self->log_debug([ 'providing version %s', $version ]);
+
+  return $version;
 }
 
 __PACKAGE__->meta->make_immutable;

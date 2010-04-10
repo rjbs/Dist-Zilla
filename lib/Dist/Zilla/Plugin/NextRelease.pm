@@ -54,6 +54,7 @@ sub munge_files {
     },
   );
 
+  $self->log_debug([ 'updating contents of %s in memory', $file->name ]);
   $file->content($content);
 }
 
@@ -75,6 +76,8 @@ sub after_release {
   my $header = $self->section_header;
   $content =~ s{ (\Q$delim->[0]\E \s*) \$NEXT (\s* \Q$delim->[1]\E) }
                {$1\$NEXT$2\n\n$header}xs;
+
+  $self->log_debug([ 'updating contents of %s on disk', $filename ]);
 
   # and finally rewrite the changelog on disk
   open my $out_fh, '>', $filename

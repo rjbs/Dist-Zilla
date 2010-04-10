@@ -26,7 +26,11 @@ sub prune_files {
   my $skip = ExtUtils::Manifest::maniskip($self->skipfile);
 
   my $files = $self->zilla->files;
-  @$files = grep { ! $skip->($_->name) } @$files;
+  @$files = grep {
+    $skip->($_->name)
+    ? do { $self->log_debug([ 'pruning %s', $_->name ]); 0 }
+    : 1
+  } @$files;
 
   return;
 }

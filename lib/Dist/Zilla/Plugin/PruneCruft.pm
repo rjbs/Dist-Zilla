@@ -36,7 +36,11 @@ sub prune_files {
 
   my $files = $self->zilla->files;
 
-  @$files = $files->grep(sub { ! $self->exclude_file($_) })->flatten;
+  @$files = grep {
+    $self->exclude_file($_)
+    ? do { $self->log_debug([ 'pruning %s', $_->name ]); 0 }
+    : 1
+  } @$files;
 
   return;
 }

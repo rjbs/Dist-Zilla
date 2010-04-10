@@ -56,6 +56,7 @@ sub munge_pod {
       "version " . $self->zilla->version . q{},
     );
 
+    $self->log_debug([ 'adding VERSION Pod section to %s', $file->name ]);
     $file->content(join "\n", @content);
     return;
   }

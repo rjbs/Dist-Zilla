@@ -18,6 +18,8 @@ has code => (
 sub content {
   my ($self) = @_;
 
+  confess "cannot set content of a FromCode file" if @_ > 1;
+
   my $code = $self->code;
   return $self->$code;
 }
