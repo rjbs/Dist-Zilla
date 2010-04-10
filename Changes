@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          correct the 2.100990 release, which was broken in all $VERSION nums
 
 2.100990  2010-04-09 10:12:06 America/New_York
           fix Pod errors in @Classic (thanks Ævar)
