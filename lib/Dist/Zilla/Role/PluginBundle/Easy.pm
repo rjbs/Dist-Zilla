@@ -1,8 +1,8 @@
 package Dist::Zilla::Role::PluginBundle::Easy;
 # ABSTRACT: something that bundles a bunch of plugins easily
 # This plugin was originally contributed by Christopher J. Madsen
-
 use Moose::Role;
+with 'Dist::Zilla::Role::PluginBundle';
 
 =head1 SYNOPSIS
 
@@ -10,8 +10,7 @@ use Moose::Role;
   use Moose;
   with 'Dist::Zilla::Role::PluginBundle::Easy';
 
-  sub configure
-  {
+  sub configure {
     my $self = shift;
 
     $self->add_plugins('VersionFromModule');
@@ -20,16 +19,13 @@ use Moose::Role;
 
 =head1 DESCRIPTION
 
-This role extends the PluginBundle role with methods to take most of
-the grunt work out of creating a bundle.  It supplies the
-C<bundle_config> method for you.  Instead, you must supply a
-C<configure> method, which will store the bundle's configuration in
-the C<plugins> attribute by calling C<add_plugins> and/or
-C<add_bundle>.
+This role builds upon the PluginBundle role, adding methods to take most of the
+grunt work out of creating a bundle.  It supplies the C<bundle_config> method
+for you.  In exchange, you must supply a C<configure> method, which will store
+the bundle's configuration in the C<plugins> attribute by calling
+C<add_plugins> and/or C<add_bundle>.
 
 =cut
-
-with 'Dist::Zilla::Role::PluginBundle';
 
 use Moose::Autobox;
 use MooseX::Types::Moose qw(Str ArrayRef HashRef);
@@ -41,7 +37,11 @@ use String::RewritePrefix
   },
   rewrite => {
     -as => '_bundle_class',
-    prefixes => { '' => 'Dist::Zilla::PluginBundle::', '=' => '' },
+    prefixes => {
+      ''  => 'Dist::Zilla::PluginBundle::',
+      '@' => 'Dist::Zilla::PluginBundle::',
+      '=' => ''
+    },
   };
 
 use namespace::autoclean;
@@ -89,8 +89,7 @@ has plugins => (
 );
 #---------------------------------------------------------------------
 
-sub bundle_config
-{
+sub bundle_config {
   my ($class, $section) = @_;
 
   my $self = $class->new($section);
@@ -105,45 +104,58 @@ sub bundle_config
 
   $self->add_plugins('Plugin1', [ Plugin2 => \%plugin2config ])
 
-Use this method to add plugins to your bundle.  Each parameter is
-either a plugin name or an arrayref of two elements: the plugin name
-and a hashref of parameters for it.  The plugins are appended to the
-config in the order given.
+Use this method to add plugins to your bundle.
+
+It is passed a list of plugin specifiers, which can be one of a few things:
+
+=for :list
+* a plugin moniker (like you might provide in your config file)
+* an arrayref of: C<< [ $moniker, $plugin_name, \%plugin_config >>
+
+In the case of an arrayref, both C<$plugin_name> and C<\%plugin_config> are
+optional.
+
+The plugins are added to the config in the order given.
 
 =cut
 
-sub add_plugins
-{
-  my ($self, @newPlugins) = @_;
+sub add_plugins {
+  my ($self, @plugin_specs) = @_;
 
-  my $name    = $self->name . '/';
+  my $prefix  = $self->name . '/';
   my $plugins = $self->plugins;
 
-  foreach my $plugin (@newPlugins) {
+  foreach my $this_spec (@plugin_specs) {
+    my $moniker;
+    my $name;
     my $payload;
 
-    if (ref $plugin) {
-      ($plugin, $payload) = @$plugin;
+    if (! ref $this_spec) {
+      ($moniker, $name, $payload) = ($this_spec, $this_spec, {});
+    } elsif (@$this_spec == 1) {
+      ($moniker, $name, $payload) = ($this_spec->[0], $this_spec->[0], {});
+    } elsif (@$this_spec == 2) {
+      $moniker = $this_spec->[0];
+      $name    = ref $this_spec->[1] ? $moniker : $this_spec->[1];
+      $payload = ref $this_spec->[1] ? $this_spec->[1] : {};
+    } else {
+      ($moniker, $name, $payload) = @$this_spec;
     }
-    $payload ||= {};
 
-    push @$plugins, [ $name . $plugin => _plugin_class($plugin) => $payload ];
-  } # end foreach $plugin in @newPlugins
-} # end add_plugins
-#---------------------------------------------------------------------
+    push @$plugins, [ $prefix . $name => _plugin_class($moniker) => $payload ];
+  }
+}
 
 =method add_bundle
 
-  $self->add_bundle(BundleName => \%bundleConfig)
+  $self->add_bundle(BundleName => \%bundle_config)
 
-Use this method to add all the plugins from another bundle to your
-bundle.  If you omit C<%bundleConfig>, an empty hashref will be
-supplied.  The plugins are appended to the config.
+Use this method to add all the plugins from another bundle to your bundle.  If
+you omit C<%bundleConfig>, an empty hashref will be supplied.
 
 =cut
 
-sub add_bundle
-{
+sub add_bundle {
   my ($self, $bundle, $payload) = @_;
 
   my $package = _bundle_class($bundle);
@@ -158,13 +170,11 @@ sub add_bundle
       payload => $payload,
     })
   );
-} # end add_bundle
-#---------------------------------------------------------------------
+}
 
-=method get_args
+=method config_slice
 
-  $hashRef = $self->get_args(arg1, { arg2 => 'plugin_arg2' })
-  %hash    = $self->get_args(arg1, { arg2 => 'plugin_arg2' })
+  $hash_ref = $self->config_slice(arg1, { arg2 => 'plugin_arg2' })
 
 Use this method to extract parameters from your bundle's C<payload> so
 that you can pass them to a plugin or subsidiary bundle.  It supports
@@ -175,16 +185,13 @@ Each arg is either a key in C<payload>, or a hashref that maps keys in
 C<payload> to keys in the hash being constructed.  If any specified
 key does not exist in C<payload>, then it is omitted from the result.
 
-In scalar context, it returns a hashref.  In list context, it returns
-the key-value pairs from the hash.
-
 =cut
 
-sub get_args
-{
+sub config_slice {
   my $self = shift;
 
   my $payload = $self->payload;
+
   my %arg;
 
   foreach my $arg (@_) {
@@ -195,9 +202,9 @@ sub get_args
     } else {
       $arg{$arg} = $payload->{$arg} if exists $payload->{$arg};
     }
-  } # end foreach $arg
+  }
 
-  wantarray ? %arg : \%arg;
-} # end get_args
+  return \%arg;
+}
 
 1;
