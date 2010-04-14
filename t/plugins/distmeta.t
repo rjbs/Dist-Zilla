@@ -50,10 +50,16 @@ for my $type (qw(json yaml)) {
     name      => 'DZT-Sample',
     abstract  => 'Sample DZ Dist',
     author    => [ 'E. Xavier Ample <example@example.org>' ],
-    requires  => { 'Foo::Bar' => '1.234' },
-    recommends => { 'Foo::Bar::Opt' => '1.234' },
-    build_requires => { 'Test::Foo' => '2.34' },
-    configure_requires => { 'Build::Foo' => '0.12' },
+
+    prereqs   => {
+      runtime => {
+        requires   => { 'Foo::Bar' => '1.234' },
+        recommends => { 'Foo::Bar::Opt' => '1.234' },
+      },
+      build     => { requires => { 'Test::Foo' => '2.34'  } },
+      configure => { requires => { 'Build::Foo' => '0.12' } },
+    },
+
     license   => 'perl',
     resources => {
       homepage => 'http://bana.na/phone',

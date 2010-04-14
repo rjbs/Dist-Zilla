@@ -4,6 +4,7 @@ use Moose;
 use Moose::Autobox;
 use MooseX::Types::Moose qw(Bool HashRef);
 
+use CPAN::Meta::Prereqs;
 use Hash::Merge::Simple ();
 use Path::Class ();
 use String::RewritePrefix;
@@ -11,42 +12,33 @@ use Version::Requirements;
 
 use namespace::autoclean;
 
-has is_finalized => (
+has _cpan_meta_prereqs => (
   is  => 'ro',
-  isa => Bool,
-  traits  => [ qw(Bool) ],
-  default => 0,
-  handles => {
-    finalize => 'set',
-  },
-);
-
-has _guts => (
-  is  => 'ro',
-  isa => HashRef,
-  default  => sub { {} },
+  isa => 'CPAN::Meta::Prereqs',
   init_arg => undef,
+  default  => sub { CPAN::Meta::Prereqs->new },
+  handles  => [ qw(
+    finalize
+    is_finalized
+    requirements_for
+    as_string_hash
+  ) ],
 );
 
 sub as_distmeta {
   my ($self) = @_;
 
-  my $distmeta = {
-    requires           =>
-      ($self->_guts->{runtime}{requires} || Version::Requirements->new)
-      ->as_string_hash,
-    recommends         =>
-      ($self->_guts->{runtime}{recommends} || Version::Requirements->new)
-      ->as_string_hash,
-    build_requires     =>
-      ($self->_guts->{build}{requires} || Version::Requirements->new)
-      ->as_string_hash,
-    configure_requires =>
-      ($self->_guts->{configure}{requires} || Version::Requirements->new)
-      ->as_string_hash,
-  };
+  my %distmeta = (
+    requires           => $self->requirements_for(qw(runtime requires)),
+    recommends         => $self->requirements_for(qw(runtime recommends)),
+    configure_requires => $self->requirements_for(qw(configure requires)),
+  );
 
-  return $distmeta;
+  my $build = $self->requirements_for(qw(build requires))->clone;
+  $build->add_requirements( $self->requirements_for(qw(test requires)) );
+  $distmeta{build_requires} = $build;
+
+  return { map {; $_ => $distmeta{$_}->as_string_hash } keys %distmeta };
 }
 
 sub register_prereqs {
@@ -54,17 +46,13 @@ sub register_prereqs {
   my $arg  = ref($_[0]) ? shift(@_) : {};
   my %prereq = @_;
 
-  confess "too late to register a prereq" if $self->is_finalized;
-
   my $phase = $arg->{phase} || 'runtime';
   my $type  = $arg->{type}  || 'requires';
 
-  $phase = 'build' if $phase eq 'test';
-
-  my $prereq = ($self->_guts->{$phase}{$type} ||= Version::Requirements->new);
+  my $req = $self->requirements_for($phase, $type);
 
   while (my ($package, $version) = each %prereq) {
-    $prereq->add_minimum($package, $version);
+    $req->add_minimum($package, $version);
   }
 
   return;

@@ -401,17 +401,18 @@ sub _build_distmeta {
 
   my $meta = {
     'meta-spec' => {
-      version => 1.4,
-      url     => 'http://module-build.sourceforge.net/META-spec-v1.4.html',
+      version => 2,
+      url     => 'http://github.com/dagolden/cpan-meta/',
     },
     name     => $self->name,
     version  => $self->version,
     abstract => $self->abstract,
     author   => $self->authors,
     license  => $self->license->meta_yml_name,
-    generated_by => (ref $self)
-                  . ' version '
-                  . (defined $self->VERSION ? $self->VERSION : '(undef)')
+    dynamic_config => 0,
+    generated_by   => (ref $self)
+                    . ' version '
+                    . (defined $self->VERSION ? $self->VERSION : '(undef)')
   };
 
   $meta = Hash::Merge::Simple::merge($meta, $_->metadata)
@@ -420,24 +421,22 @@ sub _build_distmeta {
   return $meta;
 }
 
-=attr prereq
+=attr prereqs
 
-This is a hashref of module prerequisites.  This attribute is likely to get
-greatly overhauled, or possibly replaced with a method based on other
-(private?) attributes.
-
-I<Actually>, it is more likely that this attribute will contain an object in
-the future.
+This is a L<Dist::Zilla::Prereqs> object, which is a thin layer atop
+L<CPAN::Meta::Prereqs>, and describes the distribution's prerequisites.
 
 =cut
 
-has prereq => (
+has prereqs => (
   is   => 'ro',
   isa  => 'Dist::Zilla::Prereqs',
   init_arg => undef,
   default  => sub { Dist::Zilla::Prereqs->new },
   handles  => [ qw(register_prereqs) ],
 );
+
+sub prereq { $_[0]->prereqs } # XXX: deprecated -- rjbs, 2010-04-13
 
 =method from_config
 
@@ -722,11 +721,10 @@ sub build_in {
 
   $_->register_prereqs for $self->plugins_with(-PrereqSource)->flatten;
 
-  $self->prereq->finalize;
+  $self->prereqs->finalize;
 
-  my $meta   = $self->distmeta;
-  my $prereq = $self->prereq->as_distmeta;
-  $meta->{ $_ } = $prereq->{ $_ } for keys %$prereq;
+  # Barf if someone has already set up a prereqs entry? -- rjbs, 2010-04-13
+  $self->distmeta->{prereqs} = $self->prereqs->as_string_hash;
 
   $_->setup_installer for $self->plugins_with(-InstallTool)->flatten;
 

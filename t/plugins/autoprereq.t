@@ -41,6 +41,10 @@ my %wanted = (
   'perl'                  => 5.008,
 );
 
-is_deeply( $meta->{requires}, \%wanted, 'all requires found, but no more' );
+is_deeply(
+  $meta->{prereqs}{runtime}{requires},
+  \%wanted,
+  'all requires found, but no more',
+);
 
 done_testing;
