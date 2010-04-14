@@ -151,7 +151,7 @@ sub add_plugins {
   $self->add_bundle(BundleName => \%bundle_config)
 
 Use this method to add all the plugins from another bundle to your bundle.  If
-you omit C<%bundleConfig>, an empty hashref will be supplied.
+you omit C<%bundle_config>, an empty hashref will be supplied.
 
 =cut
 
