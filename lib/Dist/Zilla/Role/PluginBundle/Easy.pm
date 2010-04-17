@@ -30,7 +30,7 @@ C<add_plugins> and/or C<add_bundle>.
 use Moose::Autobox;
 use MooseX::Types::Moose qw(Str ArrayRef HashRef);
 
-use String::RewritePrefix
+use String::RewritePrefix 0.005
   rewrite => {
     -as => '_plugin_class',
     prefixes => { '' => 'Dist::Zilla::Plugin::', '=' => '' },
