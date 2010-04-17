@@ -1,5 +1,6 @@
 package Dist::Zilla::Chrome::Term;
 use Moose;
+# ABSTRACT: chrome used for terminal-based interaction
 
 use Log::Dispatchouli;
 
