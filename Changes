@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          add missing version on String::RewritePrefix usage (Andrew Rodland)
 
 2.101040  2010-04-14 11:54:45 America/New_York
           added PluginBundle::Easy role (from Christopher J. Madsen)
