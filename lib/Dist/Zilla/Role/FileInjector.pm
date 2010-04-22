@@ -22,7 +22,11 @@ sub add_file {
   my ($self, $file) = @_;
   my ($pkg, undef, $line) = caller;
 
-  $file->meta->get_attribute('added_by')->set_value($file, "$pkg line $line");
+  $file->meta->get_attribute('added_by')->set_value(
+    $file,
+    sprintf("%s (%s line %s)", $self->plugin_name, $pkg, $line),
+  );
+
   $self->log_debug([ 'adding file %s', $file->name ]) if $self->__log_inject;
   $self->zilla->files->push($file);
 }
