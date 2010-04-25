@@ -887,10 +887,6 @@ sub clean {
     $self->log("clean: removing $x");
     File::Path::rmtree($x);
   };
-
-  # removing leftovers
-  my @temps = File::Find::Rule->file->name( qr{~$} )->in('.');
-  $self->log("clean: removing $_"), unlink for @temps;
 }
 
 =method install
