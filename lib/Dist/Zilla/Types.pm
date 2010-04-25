@@ -1,8 +1,10 @@
 package Dist::Zilla::Types;
 # ABSTRACT: dzil-specific type library
 
-use MooseX::Types -declare => [qw(DistName License)];
+use MooseX::Types -declare => [qw(DistName License VersionStr)];
 use MooseX::Types::Moose qw(Str);
+
+use version 0.82;
 
 subtype DistName,
   as Str,
@@ -11,5 +13,10 @@ subtype DistName,
 
 subtype License,
   as class_type('Software::License');
+
+subtype VersionStr,
+  as Str,
+  where { version::is_lax($_) },
+  message { "$_ is not a valid version string" };
 
 1;

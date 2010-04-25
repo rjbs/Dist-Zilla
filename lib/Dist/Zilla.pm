@@ -4,7 +4,7 @@ use Moose 0.92; # role composition fixes
 with 'Dist::Zilla::Role::ConfigDumper';
 
 use Moose::Autobox 0.09; # ->flatten
-use Dist::Zilla::Types qw(DistName License);
+use Dist::Zilla::Types qw(DistName License VersionStr);
 use MooseX::Types::Moose qw(Bool HashRef);
 use MooseX::Types::Path::Class qw(Dir File);
 use Moose::Util::TypeConstraints;
@@ -77,7 +77,7 @@ has version_override => (
 # XXX: *clearly* this needs to be really much smarter -- rjbs, 2008-06-01
 has version => (
   is   => 'rw',
-  isa  => 'Str',
+  isa  => VersionStr,
   lazy => 1,
   init_arg  => undef,
   required  => 1,
@@ -98,9 +98,6 @@ sub _build_version {
   }
 
   $self->log_fatal('no version was ever set') unless defined $version;
-
-  $self->log("warning: version number does not look like a number")
-    unless $version =~ m{\A\d+(?:\.\d+)\z};
 
   $version;
 }
