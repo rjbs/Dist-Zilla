@@ -1,6 +1,11 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          GatherDir skips dot-directories if skipping dotfiles
+          GatherDir and PruneCruft now both have verbose log output
+
+          `dzil clean` no longer removes backup~ files (sorry, jq)
+
           TestRelease is better about picking a build location (Christopher J.
           Madsen)
 
