@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+2.101150  2010-04-25 11:52:11 America/New_York
           when duplicate files are added, report plugin_names with pkg/line
           add missing version on String::RewritePrefix usage (Andrew Rodland)
           more tweaking to how Chrome works
