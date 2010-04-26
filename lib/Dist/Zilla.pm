@@ -1060,6 +1060,42 @@ around dump_config => sub {
   return $config;
 };
 
+sub _global_config {
+  my ($self) = @_;
+
+  my $homedir = File::HomeDir->my_home
+    or Carp::croak("couldn't determine home directory");
+
+  my $file = dir($homedir)->file('.dzil');
+  return unless -e $file;
+
+  if (-d $file) {
+    return Dist::Zilla::Config::Finder->new->read_config({
+      root     =>  dir($homedir)->subdir('.dzil'),
+      basename => 'config',
+    });
+  } else {
+    return Dist::Zilla::Config::Finder->new->read_config({
+      root     => dir($homedir),
+      filename => '.dzil',
+    });
+  }
+}
+
+sub _global_config_for {
+  my ($self, $plugin_class) = @_;
+
+  return {} unless my $global_config = $self->_global_config;
+
+  my ($section) = grep { ($_->package||'') eq $plugin_class }
+                  $global_config->sections;
+
+  return {} unless $section;
+
+  return $section->payload;
+}
+
+
 __PACKAGE__->meta->make_immutable;
 1;
 __END__

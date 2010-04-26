@@ -18,15 +18,10 @@ sub zilla {
   return $_[0]->app->zilla;
 }
 
-=method config
-
-This method returns the configuration for the current command.
-
-=cut
-
 sub config {
   my ($self) = @_;
-  return $self->{__PACKAGE__}{config} ||= $self->app->config_for(ref $self);
+  return $self->{__PACKAGE__}{config}
+    ||= $self->zilla->_global_config_for(ref $self);
 }
 
 =method log
