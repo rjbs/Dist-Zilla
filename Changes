@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+2.101160  2010-04-26 19:51:52 America/New_York
           `dzil new` now does nothing and says so
 
           dzil commands will not create a zilla object just for logging
