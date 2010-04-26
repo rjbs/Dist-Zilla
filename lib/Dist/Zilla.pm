@@ -1066,17 +1066,17 @@ sub _global_config {
   my $homedir = File::HomeDir->my_home
     or Carp::croak("couldn't determine home directory");
 
-  my $file = dir($homedir)->file('.dzil');
+  my $file = Path::Class::dir($homedir)->file('.dzil');
   return unless -e $file;
 
   if (-d $file) {
     return Dist::Zilla::Config::Finder->new->read_config({
-      root     =>  dir($homedir)->subdir('.dzil'),
+      root     =>  Path::Class::dir($homedir)->subdir('.dzil'),
       basename => 'config',
     });
   } else {
     return Dist::Zilla::Config::Finder->new->read_config({
-      root     => dir($homedir),
+      root     => Path::Class::dir($homedir),
       filename => '.dzil',
     });
   }
