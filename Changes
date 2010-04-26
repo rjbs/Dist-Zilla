@@ -1,6 +1,11 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          `dzil new` now does nothing and says so
+
+          dzil commands will not create a zilla object just for logging
+
+          easy bundles will less often create names with @@ in them
 
 2.101151  2010-04-25 23:40:28 America/New_York
           GatherDir and PruneCruft now both have verbose log output
