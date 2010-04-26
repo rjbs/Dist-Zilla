@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+2.101151  2010-04-25 23:40:28 America/New_York
           GatherDir and PruneCruft now both have verbose log output
 
           the App config system has been moved and made non-public; it was
