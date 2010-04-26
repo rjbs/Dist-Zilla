@@ -54,7 +54,7 @@ sub gather_files {
     unless ($self->include_dotfiles) {
       my $file = file($filename);
       next FILE if $file->basename =~ qr/^\./;
-      next FILE if grep { /^\.[^.]/ } $file->dir->dir_list;
+      # next FILE if grep { /^\.[^.]/ } $file->dir->dir_list;
     }
 
     push @files, Dist::Zilla::File::OnDisk->new({
