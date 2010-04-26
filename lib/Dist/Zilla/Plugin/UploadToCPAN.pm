@@ -48,7 +48,7 @@ has user => (
   required => 1,
   default  => sub {
     my ($self) = @_;
-    my $user = $self->_global_config_for('Dist::Zilla::App::Command::release')->{user};
+    my $user = $self->zilla->_global_config_for('Dist::Zilla::App::Command::release')->{user};
     return $user if defined $user;
     return $self->pause_cfg->{user};
   },
@@ -61,7 +61,7 @@ has password => (
   required => 1,
   default  => sub {
     my ($self) = @_;
-    my $pass = $self->_global_config_for('Dist::Zilla::App::Command::release')->{password};
+    my $pass = $self->zilla->_global_config_for('Dist::Zilla::App::Command::release')->{password};
     return $pass if defined $pass;
     return $self->pause_cfg->{password};
   },
