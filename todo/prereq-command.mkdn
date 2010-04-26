@@ -1,7 +1,7 @@
 
 # PREREQ COMMAND
 
-  dzil prereq
+    dzil prereq
 
 should print the dist's computed prereqs, and nothing else, for consumption by
 (say) cpanm

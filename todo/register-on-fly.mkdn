@@ -15,8 +15,8 @@ The zilla object should also have reference back to its assembler, at least as
 long as the assembler is assembling.  This will allow something insane like
 this:
 
-  [ExtraExpander]
-  Glug:: = Glug::Dist::Zilla::Plugin::
+    [ExtraExpander]
+    Glug:: = Glug::Dist::Zilla::Plugin::
 
 ExtraExpander will, upon plugin registration, find the Assembler and apply a
 trait with a method modifier to alter the String::RewritePrefix usage to add a

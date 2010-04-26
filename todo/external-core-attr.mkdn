@@ -11,10 +11,10 @@ decision on name and version until FileGather-ing is done.)
 
 I think what I want is some simple attribute traits:
 
-  has name => (
-    ...
-    traits => [ qw(WORM Demanded) ],
-  );
+    has name => (
+      ...
+      traits => [ qw(WORM Demanded) ],
+    );
 
 WORM is what it sounds like.  Once set, the value cannot be changed.  The
 writer throws if the predicate returns true.

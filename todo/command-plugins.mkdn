@@ -6,5 +6,5 @@ probably going to be a pain, in the future.  There should be a way to mitigate
 an overabundance of command plugins.  One option is that only the "core" ones
 are loaded unless you have ~/.dzil/config.ini with:
 
-  [!newcommand]
+    [!newcommand]
 

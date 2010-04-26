@@ -3,10 +3,10 @@
 
 Most of the command plugins for `dzil` should be very, very small:
 
-  package Dist::Zilla::App::Command::foo;
-  sub execute {
-    $self->zilla->foo;
-  }
+    package Dist::Zilla::App::Command::foo;
+    sub execute {
+      $self->zilla->foo;
+    }
 
 This means moving a bunch of logic into Zilla.pm, which should be easy.
 
