@@ -1,0 +1,18 @@
+
+# GLOBAL CONFIGURATION SUBSYSTEM
+
+There should be a place to stick global configuration.  There are a lot of
+concerns that need to temper the design of this sticking-place.
+
+* Config is per-user more than really global, so a project should avoid relying on things that will be stored in global configuration.
+
+* Config is per-user, so it's an ideal for specifically per-user stuff like
+PAUSE credentials.
+
+* Global configuration is going to be shared across multiple plugins, so it
+should be possible to have sections that do not necessarily relate to packages,
+or that relate to packages that exist only to provide MVP data.  This means
+that any "MVP loader instantiates result objects" changes to the MVP assembler
+will need a way to skip this sort of thing.  We'll probably also want a prefix
+for "do not look for package."
+
