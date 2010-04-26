@@ -1,8 +1,13 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
-          GatherDir skips dot-directories if skipping dotfiles
           GatherDir and PruneCruft now both have verbose log output
+
+          the App config system has been moved and made non-public; it was
+          crazy and awful
+
+          version numbers are not validated by version.pm, not my own dumb
+          regex
 
           `dzil clean` no longer removes backup~ files (sorry, jq)
 
