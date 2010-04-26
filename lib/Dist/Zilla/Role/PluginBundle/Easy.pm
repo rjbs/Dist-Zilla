@@ -87,7 +87,6 @@ has plugins => (
   isa      => ArrayRef,
   default  => sub { [] },
 );
-#---------------------------------------------------------------------
 
 sub bundle_config {
   my ($class, $section) = @_;
@@ -97,8 +96,7 @@ sub bundle_config {
   $self->configure;
 
   return $self->plugins->flatten;
-} # end bundle_config
-#---------------------------------------------------------------------
+}
 
 =method add_plugins
 
@@ -163,9 +161,11 @@ sub add_bundle {
 
   Class::MOP::load_class($package);
 
+  $bundle = "\@$bundle" unless $bundle =~ /^@/;
+
   $self->plugins->push(
     $package->bundle_config({
-      name    => $self->name . '/@' . $bundle,
+      name    => $self->name . '/' . $bundle,
       package => $package,
       payload => $payload,
     })
