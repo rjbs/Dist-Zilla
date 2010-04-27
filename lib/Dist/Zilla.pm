@@ -1105,11 +1105,7 @@ __END__
 There are usually people on C<irc.perl.org> in C<#distzilla>, even if they're
 idling.
 
-There is a mailing list to discuss Dist::Zilla, which you can join here:
-
-L<http://www.listbox.com/subscribe/?list_id=139292>
-
-The archive is available here:
-
-L<http://listbox.com/member/archive/139292>
+There is a mailing list to discuss Dist::Zilla.  You can L<join the
+list|http://www.listbox.com/subscribe/?list_id=139292> or L<browse the
+archives|http://listbox.com/member/archive/139292>.
 
