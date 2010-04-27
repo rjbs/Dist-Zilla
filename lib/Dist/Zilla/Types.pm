@@ -15,7 +15,7 @@ subtype ModuleName,
 
 subtype DistName,
   as Str,
-  where   { return if /:/; (my $str = $_) =~ s/-/::/; _CLASS($str) },
+  where   { return if /:/; (my $str = $_) =~ s/-/::/g; _CLASS($str) },
   message {
     /::/
     ? "$_ looks like a module name, not a dist name"
