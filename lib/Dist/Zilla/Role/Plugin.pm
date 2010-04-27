@@ -5,6 +5,7 @@ use Moose::Role;
 with 'Dist::Zilla::Role::ConfigDumper';
 
 use Params::Util qw(_HASHLIKE);
+use MooseX::Types;
 
 use namespace::autoclean;
 
@@ -34,7 +35,7 @@ plugged.
 
 has zilla => (
   is  => 'ro',
-  isa => 'Dist::Zilla',
+  isa => class_type('Dist::Zilla') | class_type('Dist::Zilla::NewDist'),
   required => 1,
   weak_ref => 1,
 );

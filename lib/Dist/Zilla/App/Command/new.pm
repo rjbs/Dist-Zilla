@@ -12,20 +12,11 @@ Creates a new Dist-Zilla based distribution under the current directory.
 
 =cut
 
-# I wouldn't need this if I properly moosified my commands. -- rjbs, 2008-10-12
-use Mixin::ExtraFields -fields => {
-  driver  => 'HashGuts',
-  id      => undef,
-};
-
 use Dist::Zilla::Types qw(ModuleName);
 use Moose::Autobox;
 use Path::Class;
 
 sub abstract { 'start a new dist' }
-
-sub mvp_aliases         { { author => 'authors' } }
-sub mvp_multivalue_args { qw(authors) }
 
 sub validate_args {
   my ($self, $opt, $args) = @_;
@@ -39,6 +30,7 @@ sub validate_args {
 }
 
 sub opt_spec {
+  [ 'profile|p=s', 'name of the profile to use', { default => 'default' } ],
 }
 
 sub execute {
@@ -46,10 +38,14 @@ sub execute {
 
   (my $dist = $arg->[0]) =~ s/::/-/g;
 
-  $self->log([
-    'dzil new does nothing; if it did something, it would have created %s',
-    $dist,
-  ]);
+  require Dist::Zilla::NewDist;
+  my $minter = Dist::Zilla::NewDist->_new_from_profile(
+    $opt->profile => {
+      chrome => $self->app->chrome,
+    },
+  );
+
+  $minter->mint_dist({ name => $dist });
 }
 
 1;

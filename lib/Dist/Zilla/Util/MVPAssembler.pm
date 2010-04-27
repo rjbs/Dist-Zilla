@@ -4,6 +4,8 @@ extends 'Config::MVP::Assembler';
 with 'Config::MVP::Assembler::WithBundles';
 # ABSTRACT: Dist::Zilla-specific subclass of Config::MVP::Assembler
 
+use Dist::Zilla::Util;
+
 sub expand_package {
   my $str = Dist::Zilla::Util->expand_config_package_name($_[1]);
   return $str;

@@ -460,7 +460,7 @@ sub from_config {
 
   my ($seq) = $class->_load_config({
     root   => $root,
-    logger => $arg->{chrome}->logger,
+    chrome => $arg->{chrome},
     config_class => $arg->{config_class},
   });
 
@@ -572,11 +572,9 @@ sub _load_config {
   $arg ||= {};
 
   my $config_class = $arg->{config_class} ||= 'Dist::Zilla::Config::Finder';
-  unless (eval "require $config_class; 1") {
-    die "couldn't load $config_class: $@"; ## no critic Carp
-  }
+  Class::MOP::load_class($config_class);
 
-  $arg->{logger}->log_debug(
+  $arg->{chrome}->logger->log_debug(
     { prefix => '[DZ] ' },
     "reading configuration using $config_class"
   );

@@ -30,7 +30,19 @@ sub chrome {
   my ($self) = @_;
   require Dist::Zilla::Chrome::Term;
 
-  $self->{__chrome__} ||= Dist::Zilla::Chrome::Term->new;
+  return $self->{__chrome__} if $self->{__chrome__};
+  
+  $self->{__chrome__} = Dist::Zilla::Chrome::Term->new;
+
+  my @v_plugins = $self->global_options->verbose
+                ? grep { length } @{ $self->global_options->verbose }
+                : ();
+
+  my $verbose = $self->global_options->verbose && ! @v_plugins;
+
+  $self->{__chrome__}->logger->set_debug($verbose ? 1 : 0);
+
+  return $self->{__chrome__};
 }
 
 sub zilla {
