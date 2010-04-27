@@ -4,6 +4,13 @@ package Dist::Zilla::Plugin::FakeRelease;
 use Moose;
 with 'Dist::Zilla::Role::Releaser';
 
+has user => (
+  is   => 'ro',
+  isa  => 'Str',
+  required => 1,
+  default  => 'AUTHORID',
+);
+
 sub release {
   my $self = shift;
 
