@@ -11,9 +11,9 @@ with(
 =head1 DESCRIPTION
 
 This plugin adds a C<=head1 VERSION> section to most perl files in the
-distribution, indicating the version of the dist being build (and, thus, the
-version of the module, assuming L<PkgVersion|Dist::Zilla::Plugin::PkgVersion>
-is also loaded.
+distribution, indicating the version of the dist being built.  This section is
+added after C<=head1 NAME>.  If there is no such section, the version section
+will not be added.
 
 =cut
 
@@ -61,10 +61,10 @@ sub munge_pod {
     return;
   }
 
-  $self->log(
-    "couldn't find a place to insert VERSION section to "
-    . $file->name,
-  );
+  $self->log([
+    "couldn't find '=head1 VERSION' in %s, not adding '=head1 VERSION'",
+    $file->name,
+  ]);
 }
 
 __PACKAGE__->meta->make_immutable;
