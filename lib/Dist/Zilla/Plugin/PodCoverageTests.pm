@@ -10,6 +10,12 @@ following files:
 
   xt/release/pod-coverage.t - a standard Test::Pod::Coverage test
 
+This test uses L<Pod::Coverage::TrustPod> to check your Pod coverage.  This
+means that to indicate that some subs should be treated as covered, even if no
+documentation can be found, you can add:
+
+  =for Pod::Coverage sub_name other_sub this_one_too
+
 =cut
 
 __PACKAGE__->meta->make_immutable;
