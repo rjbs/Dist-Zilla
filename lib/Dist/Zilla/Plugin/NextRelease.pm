@@ -13,13 +13,19 @@ use String::Formatter 0.100680 stringf => {
   input_processor => 'require_single_input',
   string_replacer => 'method_replace',
   codes => {
-    v => sub { $_[0]->version },
+    v => sub { $_[0]->zilla->version },
     d => sub {
-      DateTime->from_epoch(epoch => $^T, time_zone => 'local')
+      DateTime->from_epoch(epoch => $^T, time_zone => $_[0]->time_zone)
               ->format_cldr($_[1]),
     }
   },
 };
+
+has time_zone => (
+  is => 'ro',
+  isa => 'Str', # should be more validated later -- apocal
+  default => 'local',
+);
 
 has format => (
   is  => 'ro',
@@ -36,7 +42,7 @@ has filename => (
 sub section_header {
   my ($self) = @_;
 
-  return _format_version($self->format, $self->zilla);
+  return _format_version($self->format, $self);
 }
 
 sub munge_files {
@@ -138,5 +144,7 @@ The module accepts the following options in its F<dist.ini> section:
 =item * filename - the name of your changelog file. defaults to F<Changes>.
 
 =item * format - the date format. defaults to C<%-9v %{yyyy-MM-dd HH:mm:ss VVVV}d>.
+
+=item * time_zone - the timezone to use when generating the date. defaults to I<local>.
 
 =back

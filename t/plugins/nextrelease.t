@@ -8,7 +8,7 @@ use Test::DZil;
 use Try::Tiny;
 
 my $changes = <<'END_CHANGES';
-Revision history for {{$dist->next}}
+Revision history for {{$dist->name}}
 
 {{$NEXT}}
           got included in an awesome test suite
@@ -97,6 +97,54 @@ END_CHANGES
     $tzil->slurp_file('source/Changes'),
     qr{0\.001},
     "no new version in source Changes after failed release",
+  );
+}
+
+{
+  my $tzil = Dist::Zilla::Tester->from_config(
+    { dist_root => 'corpus/DZT' },
+    {
+      add_files => {
+        'source/Changes' => $changes,
+        'source/dist.ini' => simple_ini(
+                'GatherDir',
+                [ NextRelease => { format => "** FOOTASTIC %-9v", } ],
+                'FakeRelease',
+        ),
+      },
+    },
+  );
+
+  $tzil->build;
+
+  like(
+    $tzil->slurp_file('build/Changes'),
+    qr{FOOTASTIC},
+    "setting a custom format works",
+  );
+}
+
+{
+  my $tzil = Dist::Zilla::Tester->from_config(
+    { dist_root => 'corpus/DZT' },
+    {
+      add_files => {
+        'source/Changes' => $changes,
+        'source/dist.ini' => simple_ini(
+                'GatherDir',
+                [ NextRelease => { time_zone => 'UTC', } ],
+                'FakeRelease',
+        ),
+      },
+    },
+  );
+
+  $tzil->build;
+
+  like(
+    $tzil->slurp_file('build/Changes'),
+    qr{UTC},
+    "setting a custom time_zone works",
   );
 }
 
