@@ -8,6 +8,7 @@ has logger => (
   is  => 'ro',
   isa => 'Log::Dispatchouli',
   init_arg => undef,
+  writer   => '_set_logger',
   default  => sub {
     Log::Dispatchouli->new({
       ident     => 'Dist::Zilla',
