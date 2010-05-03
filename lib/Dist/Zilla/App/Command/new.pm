@@ -31,6 +31,7 @@ sub validate_args {
 
 sub opt_spec {
   [ 'profile|p=s', 'name of the profile to use', { default => 'default' } ],
+  # [ 'module|m=s@', 'module(s) to create; may be given many times'         ],
 }
 
 sub execute {
@@ -41,12 +42,14 @@ sub execute {
   require Dist::Zilla;
   my $minter = Dist::Zilla->_new_from_profile(
     $opt->profile => {
-      chrome => $self->app->chrome,
-      name   => $dist,
+      chrome  => $self->app->chrome,
+      name    => $dist,
     },
   );
 
-  $minter->mint_dist({ name => $dist });
+  $minter->mint_dist({
+    # modules => $opt->module,
+  });
 }
 
 1;

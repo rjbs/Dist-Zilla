@@ -508,6 +508,29 @@ sub from_config {
 sub _setup_default_plugins {
   my ($self) = @_;
 
+  my $infix  = $self->__is_minter ? 'minter' : 'builder';
+  my $method = "_setup_default_$infix\_plugins";
+  $self->$method;
+}
+
+sub _setup_default_minter_plugins {
+  my ($self) = @_;
+
+  unless ($self->plugin_named(':DefaultModuleMaker')) {
+    require Dist::Zilla::Plugin::FinderCode;
+    my $plugin = Dist::Zilla::Plugin::FinderCode->new({
+      plugin_name => ':InstallModules',
+      zilla       => $self,
+      style       => 'grep',
+      code        => sub { local $_ = $_->name; m{\Alib/} and m{\.(pm|pod)$} },
+    });
+
+    $self->plugins->push($plugin);
+  }
+}
+
+sub _setup_default_builder_plugins {
+  my ($self) = @_;
   unless ($self->plugin_named(':InstallModules')) {
     require Dist::Zilla::Plugin::FinderCode;
     my $plugin = Dist::Zilla::Plugin::FinderCode->new({
@@ -1177,11 +1200,18 @@ sub mint_dist {
 
   $self->log_fatal("tried to mint with a builder") unless $self->__is_minter;
 
-  my $name = $arg->{name};
+  my $name = $self->name;
   my $dir  = dir($name);
   $self->log_fatal("./$name already exists") if -e $dir;
 
   $dir = $dir->absolute;
+
+  # XXX: We should have a way to get more than one module name in, and to
+  # supply plugin names for the minter to use. -- rjbs, 2010-05-03
+  my @modules = do {
+    (my $module_name = $name) =~ s/-/::/g;
+    return ({ name => $module_name });
+  };
 
   $self->log("making directory ./$name");
   $dir->mkpath;
@@ -1190,6 +1220,15 @@ sub mint_dist {
 
   $_->before_mint  for $self->plugins_with(-BeforeMint)->flatten;
   $_->gather_files for $self->plugins_with(-FileGatherer)->flatten;
+
+  for my $module (@modules) {
+    my $minter = $self->plugin_named(
+      $module->{minter_name} || ':DefaultModuleMaker'
+    );
+    
+    $_->mint_module({ module => $module->{name} })
+  }
+
   $_->prune_files  for $self->plugins_with(-FilePruner)->flatten;
   $_->munge_files  for $self->plugins_with(-FileMunger)->flatten;
 
