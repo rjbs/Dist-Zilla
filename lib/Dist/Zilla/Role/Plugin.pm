@@ -35,7 +35,7 @@ plugged.
 
 has zilla => (
   is  => 'ro',
-  isa => class_type('Dist::Zilla') | class_type('Dist::Zilla::NewDist'),
+  isa => class_type('Dist::Zilla'),
   required => 1,
   weak_ref => 1,
 );

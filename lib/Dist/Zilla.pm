@@ -17,7 +17,7 @@ use List::MoreUtils qw(uniq);
 use List::Util qw(first);
 use Log::Dispatchouli 1.100712; # proxy_loggers, quiet_fatal
 use Params::Util qw(_HASHLIKE);
-use Path::Class ();
+use Path::Class;
 use Software::License;
 use String::RewritePrefix;
 
@@ -456,7 +456,7 @@ sub from_config {
   my ($class, $arg) = @_;
   $arg ||= {};
 
-  my $root = Path::Class::dir($arg->{dist_root} || '.');
+  my $root = dir($arg->{dist_root} || '.');
 
   my ($seq) = $class->_load_config({
     root   => $root,
@@ -766,13 +766,13 @@ sub build_archive {
 
   my %seen_dir;
   for my $distfile ($self->files->flatten) {
-    my $in = Path::Class::file($distfile->name)->dir;
+    my $in = file($distfile->name)->dir;
     $archive->add_files( $built_in->subdir($in) ) unless $seen_dir{ $in }++;
     $archive->add_files( $built_in->file( $distfile->name ) );
   }
 
   ## no critic
-  $file ||= Path::Class::file(join(q{},
+  $file ||= file(join(q{},
     $self->name,
     '-',
     $self->version,
@@ -810,7 +810,7 @@ sub _prep_build_root {
   my ($self, $build_root) = @_;
 
   my $default_name = $self->name . q{-} . $self->version;
-  $build_root = Path::Class::dir($build_root || $default_name);
+  $build_root = dir($build_root || $default_name);
 
   $build_root->mkpath unless -d $build_root;
 
@@ -827,7 +827,7 @@ sub _write_out_file {
   # Okay, this is a bit much, until we have ->debug. -- rjbs, 2008-06-13
   # $self->log("writing out " . $file->name);
 
-  my $file_path = Path::Class::file($file->name);
+  my $file_path = file($file->name);
 
   my $to_dir = $build_root->subdir( $file_path->dir );
   my $to = $to_dir->file( $file_path->basename );
@@ -894,10 +894,10 @@ sub install {
 
   require File::Temp;
 
-  my $build_root = Path::Class::dir('.build');
+  my $build_root = dir('.build');
   $build_root->mkpath unless -d $build_root;
 
-  my $target = Path::Class::dir( File::Temp::tempdir(DIR => $build_root) );
+  my $target = dir( File::Temp::tempdir(DIR => $build_root) );
   $self->log("building distribution under $target for installation");
   $self->ensure_built_in($target);
 
@@ -938,10 +938,10 @@ sub test {
 
   require File::Temp;
 
-  my $build_root = Path::Class::dir('.build');
+  my $build_root = dir('.build');
   $build_root->mkpath unless -d $build_root;
 
-  my $target = Path::Class::dir( File::Temp::tempdir(DIR => $build_root) );
+  my $target = dir( File::Temp::tempdir(DIR => $build_root) );
   $self->log("building test distribution under $target");
 
   local $ENV{AUTHOR_TESTING} = 1;
@@ -997,10 +997,10 @@ sub run_in_build {
   require File::Temp;
 
   # dzil-build the dist
-  my $build_root = Path::Class::dir('.build');
+  my $build_root = dir('.build');
   $build_root->mkpath unless -d $build_root;
 
-  my $target    = Path::Class::dir( File::Temp::tempdir(DIR => $build_root) );
+  my $target    = dir( File::Temp::tempdir(DIR => $build_root) );
   my $abstarget = $target->absolute;
   $self->log("building test distribution under $target");
 
@@ -1064,17 +1064,17 @@ sub _global_config {
   my $homedir = File::HomeDir->my_home
     or Carp::croak("couldn't determine home directory");
 
-  my $file = Path::Class::dir($homedir)->file('.dzil');
+  my $file = dir($homedir)->file('.dzil');
   return unless -e $file;
 
   if (-d $file) {
     return Dist::Zilla::Config::Finder->new->read_config({
-      root     =>  Path::Class::dir($homedir)->subdir('.dzil'),
+      root     =>  dir($homedir)->subdir('.dzil'),
       basename => 'config',
     });
   } else {
     return Dist::Zilla::Config::Finder->new->read_config({
-      root     => Path::Class::dir($homedir),
+      root     => dir($homedir),
       filename => '.dzil',
     });
   }
@@ -1093,6 +1093,110 @@ sub _global_config_for {
   return $section->payload;
 }
 
+#####################################
+## BEGIN DIST MINTING CODE
+#####################################
+
+sub _new_from_profile {
+  my ($class, $profile_name, $arg) = @_;
+  $arg ||= {};
+
+  my $config_class = $arg->{config_class} ||= 'Dist::Zilla::Config::Finder';
+  Class::MOP::load_class($config_class);
+
+  $arg->{chrome}->logger->log_debug(
+    { prefix => '[DZ] ' },
+    "reading configuration using $config_class"
+  );
+
+  my $profile_dir = dir( File::HomeDir->my_home )->subdir(qw(.dzil profiles));
+
+  my $sequence;
+
+  if ($profile_name eq 'default' and ! -e $profile_dir->subdir('default')) {
+    ...
+  } else {
+    ($sequence) = $config_class->new->read_config({
+      root     => $profile_dir->subdir($profile_name),
+      basename => 'profile',
+    });
+  }
+
+  my $self = $class->new({
+    %{ $sequence->section_named('_')->payload },
+    name   => $arg->{name},
+    chrome => $arg->{chrome},
+    root   => $profile_dir->subdir($profile_name),
+  });
+
+  for my $section ($sequence->sections) {
+    next if $section->name eq '_';
+
+    my ($name, $plugin_class, $arg) = (
+      $section->name,
+      $section->package,
+      $section->payload,
+    );
+
+    $self->log_fatal("$name arguments attempted to override plugin name")
+      if defined $arg->{plugin_name};
+
+    $self->log_fatal("$name arguments attempted to override plugin name")
+      if defined $arg->{zilla};
+
+    my $plugin = $plugin_class->new(
+      $arg->merge({
+        plugin_name => $name,
+        zilla       => $self,
+      }),
+    );
+
+    my $version = $plugin->VERSION || 0;
+
+    $plugin->log_debug([ 'online, %s v%s', $plugin->meta->name, $version ]);
+
+    $self->plugins->push($plugin);
+  }
+
+  return $self;
+}
+
+sub mint_dist {
+  my ($self, $arg) = @_;
+
+  my $name = $arg->{name};
+  my $dir  = dir($name);
+  $self->log_fatal("./$name already exists") if -e $dir;
+
+  $dir = $dir->absolute;
+
+  $self->log("making directory ./$name");
+  $dir->mkpath;
+
+  my $wd = File::pushd::pushd($self->root);
+
+  $_->before_mint  for $self->plugins_with(-BeforeMint)->flatten;
+  $_->gather_files for $self->plugins_with(-FileGatherer)->flatten;
+  $_->prune_files  for $self->plugins_with(-FilePruner)->flatten;
+  $_->munge_files  for $self->plugins_with(-FileMunger)->flatten;
+
+  $self->_check_dupe_files;
+
+  $self->log("writing files to $dir");
+
+  for my $file ($self->files->flatten) {
+    $self->_write_out_file($file, $dir);
+  }
+
+  $_->after_mint({ mint_root => $dir })
+    for $self->plugins_with(-AfterMint)->flatten;
+
+  $self->log("dist minted in ./$name");
+}
+
+#####################################
+## END DIST MINTING CODE
+#####################################
 
 __PACKAGE__->meta->make_immutable;
 1;

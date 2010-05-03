@@ -12,7 +12,7 @@ Creates a new Dist-Zilla based distribution under the current directory.
 
 =cut
 
-use Dist::Zilla::Types qw(ModuleName);
+use Dist::Zilla::Types qw(DistName);
 use Moose::Autobox;
 use Path::Class;
 
@@ -25,8 +25,8 @@ sub validate_args {
 
   my $name = $args->[0];
 
-  $self->usage_error("$name is not a valid module name")
-    unless is_ModuleName($args->[0]);
+  $self->usage_error("$name is not a valid distribution name")
+    unless is_DistName($args->[0]);
 }
 
 sub opt_spec {
@@ -36,12 +36,13 @@ sub opt_spec {
 sub execute {
   my ($self, $opt, $arg) = @_;
 
-  (my $dist = $arg->[0]) =~ s/::/-/g;
+  my $dist = $arg->[0];
 
-  require Dist::Zilla::NewDist;
-  my $minter = Dist::Zilla::NewDist->_new_from_profile(
+  require Dist::Zilla;
+  my $minter = Dist::Zilla->_new_from_profile(
     $opt->profile => {
       chrome => $self->app->chrome,
+      name   => $dist,
     },
   );
 
