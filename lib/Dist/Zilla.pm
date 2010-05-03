@@ -685,6 +685,8 @@ sub build { $_[0]->build_in }
 sub build_in {
   my ($self, $root) = @_;
 
+  $self->log_fatal("tried to build with a minter") if $self->__is_minter;
+
   $self->log_fatal("attempted to build " . $self->name . " a second time")
     if $self->built_in;
 
@@ -1127,6 +1129,7 @@ sub _new_from_profile {
     name   => $arg->{name},
     chrome => $arg->{chrome},
     root   => $profile_dir->subdir($profile_name),
+    __is_minter => 1,
   });
 
   for my $section ($sequence->sections) {
@@ -1161,8 +1164,18 @@ sub _new_from_profile {
   return $self;
 }
 
+# XXX: This is here only because we have not yet broken Zilla into a abstract
+# base class with Minter and Builder subclasses. -- rjbs, 2010-05-03
+has __is_minter => (
+  is  => 'ro',
+  isa => Bool,
+  default => 0,
+);
+
 sub mint_dist {
   my ($self, $arg) = @_;
+
+  $self->log_fatal("tried to mint with a builder") unless $self->__is_minter;
 
   my $name = $arg->{name};
   my $dir  = dir($name);
