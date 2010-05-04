@@ -31,7 +31,7 @@ sub chrome {
   require Dist::Zilla::Chrome::Term;
 
   return $self->{__chrome__} if $self->{__chrome__};
-  
+
   $self->{__chrome__} = Dist::Zilla::Chrome::Term->new;
 
   my @v_plugins = $self->global_options->verbose
