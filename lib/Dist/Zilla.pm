@@ -517,12 +517,10 @@ sub _setup_default_minter_plugins {
   my ($self) = @_;
 
   unless ($self->plugin_named(':DefaultModuleMaker')) {
-    require Dist::Zilla::Plugin::FinderCode;
-    my $plugin = Dist::Zilla::Plugin::FinderCode->new({
-      plugin_name => ':InstallModules',
+    require Dist::Zilla::Plugin::TemplateModule;
+    my $plugin = Dist::Zilla::Plugin::TemplateModule->new({
+      plugin_name => ':DefaultModuleMaker',
       zilla       => $self,
-      style       => 'grep',
-      code        => sub { local $_ = $_->name; m{\Alib/} and m{\.(pm|pod)$} },
     });
 
     $self->plugins->push($plugin);
@@ -1184,6 +1182,8 @@ sub _new_from_profile {
     $self->plugins->push($plugin);
   }
 
+  $self->_setup_default_plugins;
+
   return $self;
 }
 
@@ -1210,7 +1210,7 @@ sub mint_dist {
   # supply plugin names for the minter to use. -- rjbs, 2010-05-03
   my @modules = do {
     (my $module_name = $name) =~ s/-/::/g;
-    return ({ name => $module_name });
+    ({ name => $module_name });
   };
 
   $self->log("making directory ./$name");
@@ -1226,7 +1226,7 @@ sub mint_dist {
       $module->{minter_name} || ':DefaultModuleMaker'
     );
     
-    $_->mint_module({ module => $module->{name} })
+    $minter->make_module({ name => $module->{name} })
   }
 
   $_->prune_files  for $self->plugins_with(-FilePruner)->flatten;
