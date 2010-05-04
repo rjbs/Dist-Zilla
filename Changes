@@ -1,7 +1,16 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          NextRelease now has a time_zone parameter (thanks, APOCAL)
+
+          add a `dzil listdeps` command based on MARCEL's work (thanks, Robin
+            Smidsrød)
+
           the new `dzil new` does stuff, but is not documented
+
+          add a "user" parameter to FakeRelease (David Golden)
+
+          minor documentation improvements here and there
 
 2.101170  2010-04-27 09:59:11 America/New_York
           fix a bug that broke dists with multiple - in their name
