@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+2.101230  2010-05-03 23:42:27 America/New_York
           NextRelease now has a time_zone parameter (thanks, APOCAL)
 
           add a `dzil listdeps` command based on MARCEL's work (thanks, Robin
