@@ -128,6 +128,7 @@ sub setup_installer {
     [ \%write_makefile_args ],
     [ '*WriteMakefileArgs' ],
   );
+  $makefile_args_dumper->Sortkeys( 1 );
 
   my $content = $self->fill_in_string(
     $template,
