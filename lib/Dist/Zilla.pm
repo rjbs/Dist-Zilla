@@ -1137,7 +1137,10 @@ sub _new_from_profile {
   my $sequence;
 
   if ($profile_name eq 'default' and ! -e $profile_dir->subdir('default')) {
-    ...
+    $arg->{chrome}->logger->log_fatal(
+      { prefix => '[DZ] ' },
+      "no default dist minting profile available"
+    );
   } else {
     ($sequence) = $config_class->new->read_config({
       root     => $profile_dir->subdir($profile_name),

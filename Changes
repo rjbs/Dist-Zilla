@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          remove a 5.12 specific hunk of syntax (...) (thanks, BRICAS)
 
 2.101230  2010-05-03 23:42:27 America/New_York
           NextRelease now has a time_zone parameter (thanks, APOCAL)
