@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+2.101240  2010-05-04 07:46:47 America/New_York
           remove a 5.12 specific hunk of syntax (...) (thanks, BRICAS)
 
 2.101230  2010-05-03 23:42:27 America/New_York
