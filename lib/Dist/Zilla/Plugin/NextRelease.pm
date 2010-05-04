@@ -139,26 +139,25 @@ information.
 
 The module accepts the following options in its F<dist.ini> section:
 
-=over 4
+=begin :list
 
-=item * filename - the name of your changelog file. defaults to F<Changes>.
+= filename
+the name of your changelog file;  defaults to F<Changes>
 
-=item * format - what to replace C<{{$NEXT}}> with. defaults to C<%-9v %{yyyy-MM-dd HH:mm:ss VVVV}d>.
+= format
+sprintf-like string used to compute the next value of C<{{$NEXT}}>;
+defaults to C<%-9v %{yyyy-MM-dd HH:mm:ss VVVV}d>
 
-=item * time_zone - the timezone to use when generating the date. defaults to I<local>.
+= time_zone
+the timezone to use when generating the date;  defaults to I<local>
 
-=back
+=end :list
 
-The module uses the following variables for the format:
+The module allows the following sprintf-like format codes in the format:
 
-=over 4
+=for :list
+* v - the version of the dist
+* d - the CLDR format for L<DateTime>
+* n - a newline
+* t - a tab
 
-=item * v - the version of the dist
-
-=item * d - the CLDR format for L<DateTime>
-
-=item * n - a newline
-
-=item * t - a tab
-
-=back
