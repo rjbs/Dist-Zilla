@@ -17,7 +17,9 @@ use String::Formatter 0.100680 stringf => {
     d => sub {
       DateTime->from_epoch(epoch => $^T, time_zone => $_[0]->time_zone)
               ->format_cldr($_[1]),
-    }
+    },
+    t => sub { "\t" },
+    n => sub { "\n" },
   },
 };
 
@@ -119,7 +121,6 @@ F<Changes> file:
 
   {{$NEXT}}
 
-
 The C<NextRelease> plugin will then do 2 things:
 
 =over 4
@@ -136,15 +137,28 @@ information.
 
 =back
 
-
 The module accepts the following options in its F<dist.ini> section:
 
 =over 4
 
 =item * filename - the name of your changelog file. defaults to F<Changes>.
 
-=item * format - the date format. defaults to C<%-9v %{yyyy-MM-dd HH:mm:ss VVVV}d>.
+=item * format - what to replace C<{{$NEXT}}> with. defaults to C<%-9v %{yyyy-MM-dd HH:mm:ss VVVV}d>.
 
 =item * time_zone - the timezone to use when generating the date. defaults to I<local>.
+
+=back
+
+The module uses the following variables for the format:
+
+=over 4
+
+=item * v - the version of the dist
+
+=item * d - the CLDR format for L<DateTime>
+
+=item * n - a newline
+
+=item * t - a tab
 
 =back
