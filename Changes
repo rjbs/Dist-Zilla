@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          the new `dzil new` does stuff, but is not documented
 
 2.101170  2010-04-27 09:59:11 America/New_York
           fix a bug that broke dists with multiple - in their name
