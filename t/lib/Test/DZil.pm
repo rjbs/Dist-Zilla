@@ -7,11 +7,21 @@ use Params::Util qw(_HASH0);
 
 use Sub::Exporter -setup => {
   exports => [
-    dist_ini   => \'_dist_ini',
-    simple_ini => \'_simple_ini',
+    is_filelist =>
+    dist_ini    => \'_dist_ini',
+    simple_ini  => \'_simple_ini',
   ],
-  groups  => [ default => [ qw(dist_ini simple_ini) ] ],
+  groups  => [ default => [ qw(dist_ini simple_ini is_filelist) ] ],
 };
+
+sub is_filelist {
+  my ($have, $want, $comment) = @_;
+
+  my @want = sort @$want;
+  my @have = sort map { my $str = $_; $str =~ s{\\}{/}g; $str } @$have;
+
+  Test::More::is_deeply(\@have, \@want, $comment);
+}
 
 sub _build_ini_builder {
   my ($starting_core) = @_;

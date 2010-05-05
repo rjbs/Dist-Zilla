@@ -34,9 +34,9 @@ $tzil->build;
 
 my @files = map {; $_->name } @{ $tzil->files };
 
-is_deeply(
-  [ sort @files ],
-  [ sort qw(
+is_filelist(
+  [ @files ],
+  [ qw(
     bonus/subdir/index.html bonus/vader.txt
     dotty/subdir/index.html dotty/vader.txt dotty/.dotfile
     dist.ini lib/DZT/Sample.pm t/basic.t

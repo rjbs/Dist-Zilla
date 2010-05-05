@@ -33,10 +33,10 @@ for my $skip_skip (0, 1) {
 
   my @files = map {; $_->name } @{ $tzil->files };
 
-  is_deeply(
-    [ sort @files ],
-    [ sort(qw(bonus/subdir/index.html lib/DZT/Sample.pm t/basic.t),
-           ($skip_skip ? () : 'MANIFEST.SKIP')),
+  is_filelist(
+    [ @files ],
+    [ qw(bonus/subdir/index.html lib/DZT/Sample.pm t/basic.t),
+      ($skip_skip ? () : 'MANIFEST.SKIP'),
     ],
     "ManifestSkip prunes files from MANIFEST.SKIP",
   );
@@ -57,9 +57,9 @@ for my $skip_skip (0, 1) {
 
   my @files = map {; $_->name } @{ $tzil->files };
 
-  is_deeply(
-    [ sort @files ],
-    [ sort qw(dist.ini lib/DZT/Sample.pm t/basic.t Build) ],
+  is_filelist(
+    [ @files ],
+    [ qw(dist.ini lib/DZT/Sample.pm t/basic.t Build) ],
     "./Build is included by default...",
   );
 }
@@ -79,9 +79,9 @@ for my $skip_skip (0, 1) {
 
   my @files = map {; $_->name } @{ $tzil->files };
 
-  is_deeply(
-    [ sort @files ],
-    [ sort qw(dist.ini lib/DZT/Sample.pm t/basic.t) ],
+  is_filelist(
+    [ @files ],
+    [ qw(dist.ini lib/DZT/Sample.pm t/basic.t) ],
     "...but /Build is pruned by PruneCruft",
   );
 }
@@ -103,9 +103,9 @@ for my $arg (qw(filename filenames)) {
 
   my @files = map {; $_->name } @{ $tzil->files };
 
-  is_deeply(
-    [ sort @files ],
-    [ sort qw(lib/DZT/Sample.pm t/basic.t) ],
+  is_filelist(
+    [ @files ],
+    [ qw(lib/DZT/Sample.pm t/basic.t) ],
     "we can prune a specific file by request (arg $arg)",
   );
 }
