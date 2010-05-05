@@ -97,6 +97,7 @@ sub setup_installer {
     [ '*module_build_args' ],
   );
   $module_build_dumper->Sortkeys( 1 );
+  $module_build_dumper->Indent( 1 );
 
   my $content = $self->fill_in_string(
     $template,
