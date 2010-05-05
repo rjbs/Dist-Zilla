@@ -1,10 +1,14 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+2.101241  2010-05-04 22:51:31 America/New_York
+          tests should now pass on Win32
+
           (these changes all thanks to APOCAL)
           add GenerateFile plugin
           make PodSyntaxTests require a newer, less-broken Test::Pod
-          sort the keys of args written to Makefile.PL and Build.PL
+          sort and indent keys of args written to Makefile.PL and Build.PL
           add %n and %t for \n and \t to NextRelease
 
 2.101240  2010-05-04 07:46:47 America/New_York
