@@ -41,13 +41,26 @@ sub foo { }
 1;
 ';
 
+my $script = '
+#!/usr/bin/perl
+
+=head1 NAME
+
+script.pl - a podded script!
+
+=cut
+
+print "hello world\n";
+';
+
 my $tzil = Dist::Zilla::Tester->from_config(
   { dist_root => 'corpus/DZT' },
   {
     add_files => {
       'source/lib/DZT/WPFP.pm' => $with_place_for_pod,
       'source/lib/DZT/WVer.pm' => $with_version,
-      'source/dist.ini' => simple_ini('GatherDir', 'PodVersion'),
+      'source/bin/script.pl'   => $script,
+      'source/dist.ini' => simple_ini('GatherDir', 'PodVersion', 'ExecDir'),
     },
   },
 );
@@ -78,6 +91,12 @@ my $dzt_wver = $tzil->slurp_file('build/lib/DZT/WVer.pm');
 ok(
   index($dzt_wver, $want) == -1,
   "we didn't add version pod to WVer; it has one already",
+);
+
+my $dzt_script = $tzil->slurp_file('build/bin/script.pl');
+ok(
+  index($dzt_script, $want) > 0,
+  "we did add version pod to script",
 );
 
 done_testing;
