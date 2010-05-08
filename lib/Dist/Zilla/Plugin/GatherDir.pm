@@ -52,9 +52,9 @@ sub gather_files {
   my @files;
   FILE: for my $filename (File::Find::Rule->file->in($root)) {
     unless ($self->include_dotfiles) {
-      my $file = file($filename);
+      my $file = file($filename)->relative($root);
       next FILE if $file->basename =~ qr/^\./;
-      # next FILE if grep { /^\.[^.]/ } $file->dir->dir_list;
+      next FILE if grep { /^\.[^.]/ } $file->dir->dir_list;
     }
 
     push @files, Dist::Zilla::File::OnDisk->new({
