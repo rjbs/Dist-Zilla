@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+2.101290  2010-05-09 18:43:02 America/New_York
           added GatherDir::Template (for use in dzil new profiles)
           GatherDir will skip dot-dirs when excluding dotfiles
 
