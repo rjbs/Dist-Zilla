@@ -57,10 +57,7 @@ sub gather_files {
       next FILE if grep { /^\.[^.]/ } $file->dir->dir_list;
     }
 
-    push @files, Dist::Zilla::File::OnDisk->new({
-      name => $filename,
-      mode => (stat $filename)[2] & 0755, # kill world-writeability
-    });
+    push @files, $self->_file_from_filename($filename);
   }
 
   for my $file (@files) {
@@ -72,6 +69,15 @@ sub gather_files {
   }
 
   return;
+}
+
+sub _file_from_filename {
+  my ($self, $filename) = @_;
+
+  return Dist::Zilla::File::OnDisk->new({
+    name => $filename,
+    mode => (stat $filename)[2] & 0755, # kill world-writeability
+  });
 }
 
 __PACKAGE__->meta->make_immutable;
