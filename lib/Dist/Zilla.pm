@@ -1090,7 +1090,17 @@ around dump_config => sub {
   return $config;
 };
 
-sub _global_config {
+has _global_config => (
+  is   => 'ro',
+  isa  => 'Config::MVP::Sequence',
+  lazy => 1,
+  builder => '_build_global_config',
+  handles => {
+    '_global_config_for' => 'section_named',
+  },
+);
+
+sub _build_global_config {
   my ($self) = @_;
 
   my $homedir = File::HomeDir->my_home
@@ -1102,19 +1112,6 @@ sub _global_config {
   return Dist::Zilla::Config::Finder->new->read_config(
     dir($homedir)->subdir('.dzil')->file('config')
   );
-}
-
-sub _global_config_for {
-  my ($self, $plugin_class) = @_;
-
-  return {} unless my $global_config = $self->_global_config;
-
-  my ($section) = grep { ($_->package||'') eq $plugin_class }
-                  $global_config->sections;
-
-  return {} unless $section;
-
-  return $section->payload;
 }
 
 #####################################
