@@ -4,6 +4,7 @@ use Moose 0.92; # role composition fixes
 with 'Dist::Zilla::Role::ConfigDumper';
 
 use Moose::Autobox 0.09; # ->flatten
+use MooseX::LazyRequire;
 use MooseX::Types::Moose qw(Bool HashRef);
 use MooseX::Types::Perl qw(DistName LaxVersionStr);
 use MooseX::Types::Path::Class qw(Dir File);
@@ -61,7 +62,7 @@ double colons (C<::>) replaced with dashes.  For example: C<Dist-Zilla>.
 has name => (
   is   => 'ro',
   isa  => DistName,
-  required => 1,
+  lazy_required => 1,
 );
 
 =attr version
@@ -205,7 +206,7 @@ This is a required attribute with no default!
 has copyright_holder => (
   is   => 'ro',
   isa  => 'Str',
-  required => 1,
+  lazy_required => 1,
 );
 
 =attr copyright_year
@@ -244,6 +245,7 @@ has license => (
   writer => '_set_license',
   isa    => License,
   init_arg => undef,
+  lazy_required => 1,
 );
 
 sub _initialize_license {
@@ -1100,19 +1102,13 @@ has _global_config => (
   },
 );
 
-sub _build_global_config {
-  my ($self) = @_;
-
-  my $homedir = File::HomeDir->my_home
-    or Carp::croak("couldn't determine home directory");
-
-  my $file = dir($homedir)->file('.dzil');
-  return unless -e $file and -d $file;
-
-  return Dist::Zilla::Config::Finder->new->read_config(
-    dir($homedir)->subdir('.dzil')->file('config')
-  );
-}
+has _global_config_builder => (
+  is  => 'ro',
+  isa => 'CodeRef',
+  traits  => [ 'Code' ],
+  handles => { _build_global_config => 'execute_method' },
+  default => sub { sub { Config::MVP::Sequence->new; } },
+);
 
 #####################################
 ## BEGIN DIST MINTING CODE

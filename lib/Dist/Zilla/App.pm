@@ -45,6 +45,27 @@ sub chrome {
   return $self->{__chrome__};
 }
 
+sub _build_global_config {
+  my $homedir = File::HomeDir->my_home
+    or Carp::croak("couldn't determine home directory");
+
+  my $dzil_dir = dir($homedir)->file('.dzil');
+
+  my $finder = Dist::Zilla::Config::Finder->new({
+    assembler => Dist::Zilla::Util::MVPAssembler->new,
+  });
+
+  return $finder->assembler->sequence unless -e $dzil_dir;
+
+  confess("non-directory ~/.dzil is illegal; switch to ~/.dzil/config.ini")
+    if ! -d $dzil_dir;
+
+  return $finder->read_config({
+    root     =>  $dzil_dir,
+    basename => 'config',
+  });
+}
+
 sub zilla {
   my ($self) = @_;
 
@@ -63,6 +84,7 @@ sub zilla {
 
     my $zilla = Dist::Zilla->from_config({
       chrome => $self->chrome,
+      _global_config_builder => sub { $self->_build_global_config },
     });
 
     $zilla->logger->set_debug($verbose ? 1 : 0);
