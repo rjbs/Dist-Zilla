@@ -18,12 +18,6 @@ sub zilla {
   return $_[0]->app->zilla;
 }
 
-sub config {
-  my ($self) = @_;
-  return $self->{'' . __PACKAGE__}{config}
-    ||= $self->zilla->_global_config_for(ref $self);
-}
-
 =method log
 
 This method calls the C<log> method of the application's chrome.
