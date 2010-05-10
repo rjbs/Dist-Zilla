@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          update_filename arg added to NextRelease
 
 2.101290  2010-05-09 18:43:02 America/New_York
           added GatherDir::Template (for use in dzil new profiles)

@@ -41,6 +41,13 @@ has filename => (
   default => 'Changes',
 );
 
+has update_filename => (
+  is  => 'ro',
+  isa => 'Str',
+  lazy    => 1,
+  default => sub { $_[0]->filename },
+);
+
 sub section_header {
   my ($self) = @_;
 
@@ -85,13 +92,14 @@ sub after_release {
   $content =~ s{ (\Q$delim->[0]\E \s*) \$NEXT (\s* \Q$delim->[1]\E) }
                {$1\$NEXT$2\n\n$header}xs;
 
-  $self->log_debug([ 'updating contents of %s on disk', $filename ]);
+  my $update_fn = $self->update_filename;
+  $self->log_debug([ 'updating contents of %s on disk', $update_fn ]);
 
   # and finally rewrite the changelog on disk
-  open my $out_fh, '>', $filename
-    or Carp::croak("can't open $filename for writing: $!");
-  print $out_fh $content or Carp::croak("error writing to $filename: $!");
-  close $out_fh or Carp::croak("error closing $filename: $!");
+  open my $out_fh, '>', $update_fn
+    or Carp::croak("can't open $update_fn for writing: $!");
+  print $out_fh $content or Carp::croak("error writing to $update_fn: $!");
+  close $out_fh or Carp::croak("error closing $update_fn: $!");
 }
 
 __PACKAGE__->meta->make_immutable;
@@ -143,6 +151,9 @@ The module accepts the following options in its F<dist.ini> section:
 
 = filename
 the name of your changelog file;  defaults to F<Changes>
+
+= update_filename
+the file to which to write an updated changelog to; defaults to the C<filename>
 
 = format
 sprintf-like string used to compute the next value of C<{{$NEXT}}>;
