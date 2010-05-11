@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+2.101310  2010-05-11 09:02:45 America/New_York
           update_filename arg added to NextRelease
           `dzil new` can now be given a module name instead of dist name
           PkgVersion will only declare $VERSION once per package in a file
