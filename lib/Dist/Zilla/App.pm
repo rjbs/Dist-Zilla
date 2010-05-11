@@ -50,7 +50,7 @@ sub zilla {
 
   require Dist::Zilla;
 
-  return $self->{__PACKAGE__}{zilla} ||= do {
+  return $self->{'' . __PACKAGE__}{zilla} ||= do {
     my @v_plugins = $self->global_options->verbose
                   ? grep { length } @{ $self->global_options->verbose }
                   : ();

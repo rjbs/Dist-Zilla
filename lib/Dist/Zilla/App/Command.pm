@@ -20,7 +20,7 @@ sub zilla {
 
 sub config {
   my ($self) = @_;
-  return $self->{__PACKAGE__}{config}
+  return $self->{'' . __PACKAGE__}{config}
     ||= $self->zilla->_global_config_for(ref $self);
 }
 
