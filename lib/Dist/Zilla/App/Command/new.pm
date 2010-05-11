@@ -12,7 +12,7 @@ Creates a new Dist-Zilla based distribution under the current directory.
 
 =cut
 
-use Dist::Zilla::Types qw(DistName);
+use Dist::Zilla::Types qw(DistName ModuleName);
 use Moose::Autobox;
 use Path::Class;
 
@@ -25,8 +25,12 @@ sub validate_args {
 
   my $name = $args->[0];
 
+  $name =~ s/::/-/g if is_ModuleName($name) and not is_DistName($name);
+
   $self->usage_error("$name is not a valid distribution name")
-    unless is_DistName($args->[0]);
+    unless is_DistName($name);
+
+  $args->[0] = $name;
 }
 
 sub opt_spec {
