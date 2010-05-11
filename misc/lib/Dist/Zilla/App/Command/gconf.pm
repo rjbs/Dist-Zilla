@@ -13,7 +13,10 @@ sub execute {
   my ($self, $opt, $arg) = @_;
 
   require Data::Dumper;
-  warn Data::Dumper::Dumper($self->zilla->_global_config);
+  for my $name ($self->zilla->_global_config->section_names) {
+    print "[ $name ]\n";
+    print Data::Dumper::Dumper($self->zilla->_global_config_for($name));
+  }
 }
 
 1;
