@@ -21,12 +21,23 @@ package DZT::TP2;
 1;
 ';
 
+my $repeated_packages = '
+package DZT::R1;
+
+package DZT::R2;
+
+package DZT::R1;
+
+1;
+';
+
 my $tzil = Dist::Zilla::Tester->from_config(
   { dist_root => 'corpus/DZT' },
   {
     add_files => {
       'source/lib/DZT/TP1.pm'  => $two_packages,
       'source/lib/DZT/WVer.pm' => $with_version,
+      'source/lib/DZT/R1.pm'   => $repeated_packages,
       'source/dist.ini' => simple_ini('GatherDir', 'PkgVersion'),
     },
   },
@@ -66,6 +77,10 @@ ok(
     @{ $tzil->log_messages }),
   "we report the reason for no updateing WVer",
 );
+
+my $dzt_r1 = $tzil->slurp_file('build/lib/DZT/R1.pm');
+my @matches = grep { /R1::VER/ } split /\n/, $dzt_r1;
+is(@matches, 1, "we add at most 1 VERSION per package");
 
 done_testing;
 

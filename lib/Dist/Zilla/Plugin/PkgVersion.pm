@@ -55,15 +55,22 @@ sub munge_perl {
     my $code_only = $document->clone;
     $code_only->prune("PPI::Token::$_") for qw(Comment Pod Quote Regexp);
     if ($code_only->serialize =~ /\$VERSION\s*=/sm) {
-      $self->log(sprintf('skipping %s: assigns to $VERSION', $file->name));
+      $self->log([ 'skipping %s: assigns to $VERSION', $file->name ]);
       return;
     }
   }
 
   return unless my $package_stmts = $document->find('PPI::Statement::Package');
 
+  my %seen_pkg;
+
   for my $stmt (@$package_stmts) {
     my $package = $stmt->namespace;
+
+    if ($seen_pkg{ $package }++) {
+      $self->log([ 'skipping package re-declaration for %s', $package ]);
+      next;
+    }
 
     # the \x20 hack is here so that when we scan *this* document we don't find
     # an assignment to version; it shouldn't be needed, but it's been annoying
