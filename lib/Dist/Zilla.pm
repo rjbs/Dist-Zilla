@@ -472,6 +472,10 @@ sub from_config {
     root   => $root,
     %$core_config,
     chrome => $arg->{chrome},
+
+    ($arg->{_global_config_builder}
+      ? (_global_config_builder => $arg->{_global_config_builder})
+      : ()),
   });
 
   for my $section ($seq->sections) {
