@@ -79,7 +79,7 @@ sub gather_files {
   my ($self, $arg) = @_;
 
   my $content = join "\n", $self->content->flatten;
-  $content .= q{\\};
+  $content .= qq{\n};
 
   if ($self->is_template) {
     $content = $self->fill_in_string(
