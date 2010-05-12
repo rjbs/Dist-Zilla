@@ -136,7 +136,7 @@ sub build {
   my $self = shift;
 
   system($^X => 'Build.PL') and die "error with Build.PL\n";
-  system('./Build')         and die "error running ./Build\n";
+  system($^X, 'Build')      and die "error running $^X Build\n";
 
   return;
 }
@@ -145,7 +145,7 @@ sub test {
   my ($self, $target) = @_;
 
   $self->build;
-  system('./Build test') and die "error running ./Build test\n";
+  system($^X, 'Build', 'test') and die "error running $^X Build test\n";
 
   return;
 }
