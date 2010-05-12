@@ -17,6 +17,8 @@ plugin should also be loaded.
 
 =cut
 
+use Config;
+
 use Data::Dumper ();
 use List::MoreUtils qw(any uniq);
 
@@ -164,11 +166,18 @@ has __write_makefile_args => (
   isa  => 'HashRef',
 );
 
+has 'make_path' => (
+  isa => 'Str',
+  is  => 'ro',
+  default => $Config{make} || 'make',
+);
+
 sub build {
   my $self = shift;
 
+  my $make = $self->make_path;
   system($^X => 'Makefile.PL') and die "error with Makefile.PL\n";
-  system('make')               and die "error running make\n";
+  system($make)                and die "error running $make\n";
 
   return;
 }
@@ -176,8 +185,9 @@ sub build {
 sub test {
   my ( $self, $target ) = @_;
 
+  my $make = $self->make_path;
   $self->build;
-  system('make test') and die "error running make test\n";
+  system($make, 'test') and die "error running $make test\n";
 
   return;
 }
