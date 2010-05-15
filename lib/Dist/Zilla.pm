@@ -4,8 +4,9 @@ use Moose 0.92; # role composition fixes
 with 'Dist::Zilla::Role::ConfigDumper';
 
 use Moose::Autobox 0.09; # ->flatten
-use Dist::Zilla::Types qw(DistName License VersionStr);
+use Dist::Zilla::Types qw(License);
 use MooseX::Types::Moose qw(Bool HashRef);
+use MooseX::Types::Perl qw(DistName LaxVersionStr);
 use MooseX::Types::Path::Class qw(Dir File);
 use Moose::Util::TypeConstraints;
 
@@ -77,7 +78,7 @@ has version_override => (
 # XXX: *clearly* this needs to be really much smarter -- rjbs, 2008-06-01
 has version => (
   is   => 'rw',
-  isa  => VersionStr,
+  isa  => LaxVersionStr,
   lazy => 1,
   init_arg  => undef,
   required  => 1,

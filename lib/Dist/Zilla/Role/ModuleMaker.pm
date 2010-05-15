@@ -8,7 +8,7 @@ Plugins implementing this role have their C<make_module> method called for each
 module requesting creation by the plugin with this name.  It is passed a
 hashref with the following data:
 
-  name - the name of the module to make (a Dist::Zilla::Types::ModuleName)
+  name - the name of the module to make (a MooseX::Types::Perl::ModuleName)
 
 Classes composing this role also compose
 L<FileInjector|Dist::Zilla::Role::FileInjector> and are expected to inject a

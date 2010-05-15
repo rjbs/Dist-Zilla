@@ -12,7 +12,7 @@ Creates a new Dist-Zilla based distribution under the current directory.
 
 =cut
 
-use Dist::Zilla::Types qw(DistName ModuleName);
+use MooseX::Types::Perl qw(DistName ModuleName);
 use Moose::Autobox;
 use Path::Class;
 
