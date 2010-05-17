@@ -4,6 +4,7 @@ use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::FileGatherer';
 
+use CPAN::Meta::Converter 2.101370; # downgrade
 use Hash::Merge::Simple ();
 
 =head1 DESCRIPTION
@@ -15,6 +16,18 @@ L<http://module-build.sourceforge.net/META-spec-v1.3.html>.
 
 =cut
 
+has filename => (
+  is  => 'ro',
+  isa => 'Str',
+  default => 'META.yml',
+);
+
+has version => (
+  is  => 'ro',
+  isa => 'Num',
+  default => '1.4',
+);
+
 sub gather_files {
   my ($self, $arg) = @_;
 
@@ -22,10 +35,15 @@ sub gather_files {
   require YAML::Tiny;
 
   my $zilla = $self->zilla;
+
+  my $distmeta  = $zilla->distmeta;
+  my $converter = CPAN::Meta::Converter->new($distmeta);
+  my $output    = $converter->convert(version => $self->version);
+
   my $file  = Dist::Zilla::File::FromCode->new({
-    name => 'META.yml',
+    name => $self->filename,
     code => sub {
-      YAML::Tiny::Dump($zilla->distmeta);
+      YAML::Tiny::Dump($output);
     },
   });
 
