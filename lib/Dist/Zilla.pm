@@ -19,7 +19,7 @@ use List::Util qw(first);
 use Log::Dispatchouli 1.100712; # proxy_loggers, quiet_fatal
 use Params::Util qw(_HASHLIKE);
 use Path::Class;
-use Software::License;
+use Software::License 0.101370; # meta2_name
 use String::RewritePrefix;
 
 use Dist::Zilla::Prereqs;
