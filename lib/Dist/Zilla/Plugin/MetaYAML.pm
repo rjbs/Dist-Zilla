@@ -36,13 +36,13 @@ sub gather_files {
 
   my $zilla = $self->zilla;
 
-  my $distmeta  = $zilla->distmeta;
-  my $converter = CPAN::Meta::Converter->new($distmeta);
-  my $output    = $converter->convert(version => $self->version);
-
   my $file  = Dist::Zilla::File::FromCode->new({
     name => $self->filename,
     code => sub {
+      my $distmeta  = $zilla->distmeta;
+      my $converter = CPAN::Meta::Converter->new($distmeta);
+      my $output    = $converter->convert(version => $self->version);
+
       YAML::Tiny::Dump($output);
     },
   });

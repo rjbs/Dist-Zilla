@@ -408,7 +408,7 @@ sub _build_distmeta {
     version  => $self->version,
     abstract => $self->abstract,
     author   => $self->authors,
-    license  => $self->license->meta_yml_name,
+    license  => $self->license->meta2_name,
     dynamic_config => 0,
     generated_by   => (ref $self)
                     . ' version '
