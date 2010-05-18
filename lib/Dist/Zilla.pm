@@ -928,7 +928,7 @@ sub install {
     my $wd = File::pushd::pushd($target);
     my @cmd = $arg->{install_command}
             ? $arg->{install_command}
-            : ($^X => '-MCPAN' => '-einstall "."');
+            : ($^X => '-MCPAN' => q{-e"install '.'"});
 
     system(@cmd) && $self->log_fatal([ "error running %s", \@cmd ]);
   };
