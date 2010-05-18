@@ -3,6 +3,8 @@ Revision history for {{$dist->name}}
 {{$NEXT}}
           META.json and META.yml are now produced by CPAN::Meta
           Dist::Zilla::Prereqs now proxies for CPAN::Meta::Prereqs
+          MetaResources supports CPAN Meta Spec version 2, but still works
+            with old-style resources as well (Dave Rolsky)
           quote filenames with spaces in MANIFEST (Dave Rolsky)
           Manifest plugin is now a FileGatherer, not an InstallTool
 
