@@ -2,9 +2,9 @@ package Dist::Zilla::Plugin::Manifest;
 # ABSTRACT: build a MANIFEST file
 use Moose;
 use Moose::Autobox;
-with 'Dist::Zilla::Role::InstallTool';
+with 'Dist::Zilla::Role::FileGatherer';
 
-use Dist::Zilla::File::InMemory;
+use Dist::Zilla::File::FromCode;
 
 =head1 DESCRIPTION
 
@@ -14,13 +14,26 @@ included as close to last as possible.
 
 =cut
 
-sub setup_installer {
+sub __fix_filename {
+  my ($name) = @_;
+  return $name unless $name =~ /[ '\\]/;
+  $name =~ s/\\/\\\\/g;
+  $name =~ s/'/\\'/g;
+  return qq{'$name'};
+}
+
+sub gather_files {
   my ($self, $arg) = @_;
 
-  my $file = Dist::Zilla::File::InMemory->new({
-    name    => 'MANIFEST',
-    content => $self->zilla->files->map(sub{$_->name})->push('MANIFEST')
-               ->sort->map( sub { / / ? q{'} . $_ . q{'} : $_ } )->join("\n"),
+  my $zilla = $self->zilla;
+
+  my $file = Dist::Zilla::File::FromCode->new({
+    name => 'MANIFEST',
+    code => sub {
+      $zilla->files->map(sub { $_->name })
+            ->sort->map( sub { __fix_filename($_) } )->join("\n")
+      . "\n",
+    },
   });
 
   $self->add_file($file);
