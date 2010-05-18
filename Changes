@@ -4,6 +4,7 @@ Revision history for {{$dist->name}}
           META.json and META.yml are now produced by CPAN::Meta
           Dist::Zilla::Prereqs now proxies for CPAN::Meta::Prereqs
           quote filenames with spaces in MANIFEST (Dave Rolsky)
+          Manifest plugin is now a FileGatherer, not an InstallTool
 
 2.101310  2010-05-11 09:02:45 America/New_York
           update_filename arg added to NextRelease
