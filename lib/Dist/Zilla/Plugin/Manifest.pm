@@ -20,7 +20,7 @@ sub setup_installer {
   my $file = Dist::Zilla::File::InMemory->new({
     name    => 'MANIFEST',
     content => $self->zilla->files->map(sub{$_->name})->push('MANIFEST')
-               ->sort->join("\n"),
+               ->sort->map( sub { / / ? q{'} . $_ . q{'} : $_ } )->join("\n"),
   });
 
   $self->add_file($file);
