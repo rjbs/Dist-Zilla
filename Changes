@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          quote filenames with spaces in MANIFEST (Dave Rolsky)
 
 2.101310  2010-05-11 09:02:45 America/New_York
           update_filename arg added to NextRelease
