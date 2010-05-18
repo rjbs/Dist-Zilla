@@ -4,7 +4,7 @@ use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::FileGatherer';
 
-use CPAN::Meta::Converter 2.101370; # downgrade
+use CPAN::Meta::Converter 2.101380; # downgrade
 use Dist::Zilla::File::FromCode;
 use Hash::Merge::Simple ();
 use JSON 2;
@@ -14,8 +14,7 @@ use JSON 2;
 This plugin will add a F<META.json> file to the distribution.
 
 This file is meant to replace the old-style F<META.yml>.  For more information
-on this file, see L<Module::Build::API> and
-L<http://module-build.sourceforge.net/META-spec-v1.3.html>.
+on this file, see L<Module::Build::API> and L<CPAN::Meta>.
 
 =cut
 

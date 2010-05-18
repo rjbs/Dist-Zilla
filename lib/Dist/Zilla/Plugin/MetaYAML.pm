@@ -4,15 +4,14 @@ use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::FileGatherer';
 
-use CPAN::Meta::Converter 2.101370; # downgrade
+use CPAN::Meta::Converter 2.101380; # downgrade
 use Hash::Merge::Simple ();
 
 =head1 DESCRIPTION
 
 This plugin will add a F<META.yml> file to the distribution.
 
-For more information on this file, see L<Module::Build::API> and
-L<http://module-build.sourceforge.net/META-spec-v1.3.html>.
+For more information on this file, see L<Module::Build::API> and L<CPAN::Meta>.
 
 =cut
 
