@@ -25,11 +25,10 @@ sub execute {
   $_->register_prereqs for $self->zilla->plugins_with(-PrereqSource)->flatten;
 
   my $req = Version::Requirements->new;
-  my $prereq = $self->zilla->prereq->as_distmeta;
+  my $prereqs = $self->zilla->prereqs;
 
-  for my $type (qw(requires build_requires configure_requires)) {
-    $req->add_minimum($_ => $prereq->{ $type }{$_})
-      for keys %{ $prereq->{$type} };
+  for my $phase (qw(build test configure runtime)) {
+    $req->add_requirements( $prereqs->requirements_for($phase, 'requires');
   }
 
   print "$_\n" for sort { lc $a cmp lc $b }
