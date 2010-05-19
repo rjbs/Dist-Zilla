@@ -103,8 +103,16 @@ sub setup_installer {
     );
   }
 
-  my $meta_prereq = $self->zilla->prereq->as_distmeta;
-  my $perl_prereq = delete $meta_prereq->{requires}{perl};
+  my $prereqs = $self->zilla->prereqs;
+  my $perl_prereq = $prereqs->requirements_for(qw(runtime requires))
+                  ->as_string_hash->{perl};
+
+  my $prereqs_dump = sub {
+    $prereqs->requirements_for(@_)
+            ->clone
+            ->clear_requirement('perl')
+            ->as_string_hash;
+  };
 
   my %write_makefile_args = (
     DISTNAME  => $self->zilla->name,
@@ -115,9 +123,9 @@ sub setup_installer {
     LICENSE   => $self->zilla->license->meta_yml_name,
     EXE_FILES => [ @exe_files ],
 
-    CONFIGURE_REQUIRES => delete $meta_prereq->{configure_requires},
-    BUILD_REQUIRES     => delete $meta_prereq->{build_requires},
-    PREREQ_PM          => delete $meta_prereq->{requires},
+    CONFIGURE_REQUIRES => $prereqs_dump->(qw(configure requires)),
+    BUILD_REQUIRES     => $prereqs_dump->(qw(build     requires)),
+    PREREQ_PM          => $prereqs_dump->(qw(runtime   requires)),
 
     test => { TESTS => join q{ }, sort keys %test_dirs },
   );

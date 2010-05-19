@@ -12,7 +12,7 @@ use Version::Requirements;
 
 use namespace::autoclean;
 
-has _cpan_meta_prereqs => (
+has cpan_meta_prereqs => (
   is  => 'ro',
   isa => 'CPAN::Meta::Prereqs',
   init_arg => undef,
