@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+3.101390  2010-05-19 09:15:32 America/New_York
           INCOMPATIBLE CHANGES:
 
           the as_distmeta method of Prereqs is removed
