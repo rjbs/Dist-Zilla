@@ -928,8 +928,10 @@ sub install {
     my $wd = File::pushd::pushd($target);
     my @cmd = $arg->{install_command}
             ? $arg->{install_command}
-            : ($^X => '-MCPAN' => q{-e"install '.'"});
+            : ($^X => '-MCPAN' =>
+                $^O eq 'MSWin32' ? q{-e"install '.'"} : '-einstall "."');
 
+    $self->log_debug([ 'installing via %s', \@cmd ]);
     system(@cmd) && $self->log_fatal([ "error running %s", \@cmd ]);
   };
 
