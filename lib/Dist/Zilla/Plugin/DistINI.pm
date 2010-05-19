@@ -5,6 +5,18 @@ with qw(Dist::Zilla::Role::FileGatherer);
 
 use Dist::Zilla::File::InMemory;
 
+=head1 DESCRIPTION
+
+This plugins produces a F<dist.ini> file in a new dist, specifying the required
+core attributes from the dist being minted.
+
+This plugin is dead simple and pretty stupid, but should get better as dist
+minting facilities improve.  For example, it will not specify any plugins.
+
+In the meantime, you may be happier with a F<dist.ini> template.
+
+=cut
+
 sub gather_files {
   my ($self, $arg) = @_;
 

@@ -16,6 +16,9 @@ It looks in the directory named in the L</root> attribute and adds all the
 files it finds there.  If the root begins with a tilde, the tilde is replaced
 with the current user's home directory according to L<File::HomeDir>.
 
+It is meant to be used when minting dists with C<dzil new>, but could be used
+in building existing dists, too.
+
 =cut
 
 sub _file_from_filename {
