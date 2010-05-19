@@ -75,6 +75,18 @@ sub setup_installer {
   $self->log_fatal("can't install files with whitespace in their names")
     if grep { /\s/ } @exe_files;
 
+  my $prereqs = $self->zilla->prereqs;
+  my %prereqs = (
+    configure_requires => $prereqs->requirements_for(qw(configure requires)),
+    build_requires     => $prereqs->requirements_for(qw(build     requires)),
+    requires           => $prereqs->requirements_for(qw(runtime   requires)),
+    recommends         => $prereqs->requirements_for(qw(runtime   recommends)),
+  );
+
+  $prereqs{build_requires} = $prereqs{build_requires}->clone->add_requirements(
+    $prereqs->requirements_for(qw(test requires))
+  );
+
   my %module_build_args = (
     module_name   => $name,
     license       => $self->zilla->license->meta_yml_name,
@@ -85,9 +97,7 @@ sub setup_installer {
     script_files  => \@exe_files,
     ($self->zilla->_share_dir ? (share_dir => $self->zilla->_share_dir) : ()),
 
-    # I believe it is a happy coincidence, for the moment, that this happens to
-    # return just the same thing that is needed here. -- rjbs, 2010-01-22
-    $self->zilla->prereq->as_distmeta->flatten,
+    (map {; $_ => $prereqs{$_}->as_string_hash } keys %prereqs),
   );
 
   $self->__module_build_args(\%module_build_args);
