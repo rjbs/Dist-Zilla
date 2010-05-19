@@ -25,22 +25,6 @@ has cpan_meta_prereqs => (
   ) ],
 );
 
-sub as_distmeta {
-  my ($self) = @_;
-
-  my %distmeta = (
-    requires           => $self->requirements_for(qw(runtime requires)),
-    recommends         => $self->requirements_for(qw(runtime recommends)),
-    configure_requires => $self->requirements_for(qw(configure requires)),
-  );
-
-  my $build = $self->requirements_for(qw(build requires))->clone;
-  $build->add_requirements( $self->requirements_for(qw(test requires)) );
-  $distmeta{build_requires} = $build;
-
-  return { map {; $_ => $distmeta{$_}->as_string_hash } keys %distmeta };
-}
-
 sub register_prereqs {
   my $self = shift;
   my $arg  = ref($_[0]) ? shift(@_) : {};
