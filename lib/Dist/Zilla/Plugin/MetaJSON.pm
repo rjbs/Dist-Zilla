@@ -42,8 +42,6 @@ sub gather_files {
       my $converter = CPAN::Meta::Converter->new($distmeta);
       my $output    = $converter->convert(version => $self->version);
 
-      $output->{generated_by} = $distmeta->{generated_by};
-
       JSON->new->ascii(1)->canonical(1)->pretty->encode($output)
       . "\n";
     },

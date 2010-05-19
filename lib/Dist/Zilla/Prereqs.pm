@@ -4,7 +4,7 @@ use Moose;
 use Moose::Autobox;
 use MooseX::Types::Moose qw(Bool HashRef);
 
-use CPAN::Meta::Prereqs;
+use CPAN::Meta::Prereqs 2.101390;
 use Hash::Merge::Simple ();
 use Path::Class ();
 use String::RewritePrefix;
