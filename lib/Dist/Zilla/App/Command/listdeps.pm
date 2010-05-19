@@ -28,7 +28,7 @@ sub execute {
   my $prereqs = $self->zilla->prereqs;
 
   for my $phase (qw(build test configure runtime)) {
-    $req->add_requirements( $prereqs->requirements_for($phase, 'requires');
+    $req->add_requirements( $prereqs->requirements_for($phase, 'requires') );
   }
 
   print "$_\n" for sort { lc $a cmp lc $b }
