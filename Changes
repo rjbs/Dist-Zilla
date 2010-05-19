@@ -1,12 +1,31 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          INCOMPATIBLE CHANGES:
+
+          the as_distmeta method of Prereqs is removed
+
+          the ->prereq method on Dist::Zilla is gone (only prereqs remains)
+
+          distmeta is managed by CPAN::Meta, which expects v2 spec data by
+          default
+
+          most Dist::Zilla::Types are gone, now in MooseX::Types::Perl
+
+          OTHER CHANGES:
+
           META.json and META.yml are now produced by CPAN::Meta
+
           Dist::Zilla::Prereqs now proxies for CPAN::Meta::Prereqs
+
           MetaResources supports CPAN Meta Spec version 2, but still works
             with old-style resources as well (Dave Rolsky)
+
           quote filenames with spaces in MANIFEST (Dave Rolsky)
+
           Manifest plugin is now a FileGatherer, not an InstallTool
+
+          attempted a fix for `dzil install` on Win32 (RT #57404)
 
 2.101310  2010-05-11 09:02:45 America/New_York
           update_filename arg added to NextRelease
