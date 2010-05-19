@@ -16,6 +16,11 @@ This plugin will add a F<META.json> file to the distribution.
 This file is meant to replace the old-style F<META.yml>.  For more information
 on this file, see L<Module::Build::API> and L<CPAN::Meta>.
 
+=attr filename
+
+If given, parameter allows you to specify an alternate name for the generated
+file.  It defaults, of course, to F<META.json>.
+
 =cut
 
 has filename => (
@@ -23,6 +28,16 @@ has filename => (
   isa => 'Str',
   default => 'META.json',
 );
+
+=attr version
+
+This parameter lets you pick what version of the spec to use when generating
+the output.  It defaults to 2 at present, but may be updated to new specs as
+they are released and adopted.
+
+If you want a fixed version, specify it.
+
+=cut
 
 has version => (
   is  => 'ro',

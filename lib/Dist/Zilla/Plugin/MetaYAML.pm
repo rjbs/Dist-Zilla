@@ -13,6 +13,11 @@ This plugin will add a F<META.yml> file to the distribution.
 
 For more information on this file, see L<Module::Build::API> and L<CPAN::Meta>.
 
+=attr filename
+
+If given, parameter allows you to specify an alternate name for the generated
+file.  It defaults, of course, to F<META.yml>.
+
 =cut
 
 has filename => (
@@ -20,6 +25,19 @@ has filename => (
   isa => 'Str',
   default => 'META.yml',
 );
+
+=attr version
+
+This parameter lets you pick what version of the spec to use when generating
+the output.  It defaults to 1.4, the most commonly supported version at
+present.
+
+B<This may change without notice in the future.>
+
+Once version 2 of the META file spec is more widely supported, this may default
+to 2.
+
+=cut
 
 has version => (
   is  => 'ro',
