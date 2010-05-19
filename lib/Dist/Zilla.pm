@@ -436,8 +436,6 @@ has prereqs => (
   handles  => [ qw(register_prereqs) ],
 );
 
-sub prereq { $_[0]->prereqs } # XXX: deprecated -- rjbs, 2010-04-13
-
 =method from_config
 
   my $zilla = Dist::Zilla->from_config(\%arg);
