@@ -1004,6 +1004,13 @@ sub run_tests_in {
 
 =method run_in_build
 
+  $zilla->run_in_build(\@cmd);
+
+This method makes a temporary directory, builds the distribution there,
+executes the dist's first L<BuildRunner|Dist::Zilla::Role::BuildRunner>, and
+then runs the given command in the build directory.  If the command exits
+non-zero, the directory will be left in place.
+
 =cut
 
 sub run_in_build {
@@ -1049,11 +1056,18 @@ sub run_in_build {
   }
 }
 
-=method log
+=attr logger
 
-  $zilla->log($message);
+This attribute stores a L<Log::Dispatchouli::Proxy> object, used to log
+messages.  By default, a proxy to the dist's L<Chrome|Dist::Zilla::Chrome> is
+taken.
 
-This method logs the given message.
+The following methods are delegated from the Dist::Zilla object to the logger:
+
+=for :list
+* log
+* log_debug
+* log_fatal
 
 =cut
 
