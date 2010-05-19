@@ -5,9 +5,13 @@ use Test::More 0.88;
 use lib 't/lib';
 
 use Test::DZil;
+use CPAN::Meta::Converter;
 
 my $generated_by = 'Dist::Zilla::Tester version '
   . (Dist::Zilla::Tester->VERSION || '(undef)');
+
+my $converted_by = "$generated_by, CPAN::Meta::Converter version "
+                 . CPAN::Meta::Converter->VERSION;
 
 {
   my $tzil = Dist::Zilla::Tester->from_config(
@@ -39,7 +43,7 @@ my $generated_by = 'Dist::Zilla::Tester version '
       abstract       => 'Sample DZ Dist',
       author         => ['E. Xavier Ample <example@example.org>'],
       dynamic_config => 0,
-      generated_by   => $generated_by,
+      generated_by   => $converted_by,
       license        => 'perl',
       'meta-spec'    => {
         url     => 'http://module-build.sourceforge.net/META-spec-v1.4.html',
@@ -77,7 +81,7 @@ my $generated_by = 'Dist::Zilla::Tester version '
       },
       version => '0.001'
     },
-    'META.json was upgraded to 2.0 output, old-style resources were upgraded'
+    'META.json was 2.0 output, old-style resources were upgraded'
   );
 }
 
@@ -114,7 +118,7 @@ my $generated_by = 'Dist::Zilla::Tester version '
       abstract       => 'Sample DZ Dist',
       author         => ['E. Xavier Ample <example@example.org>'],
       dynamic_config => 0,
-      generated_by   => $generated_by,
+      generated_by   => $converted_by,
       license        => 'perl',
       'meta-spec'    => {
         url     => 'http://module-build.sourceforge.net/META-spec-v1.4.html',
@@ -159,7 +163,7 @@ my $generated_by = 'Dist::Zilla::Tester version '
       },
       version => '0.001'
     },
-    'META.json was upgraded to 2.0 output'
+    'META.json was 2.0 output'
   );
 }
 
