@@ -1,4 +1,4 @@
-package Dist::Zilla::Util::MVPAssembler;
+package Dist::Zilla::MVP::Assembler;
 use Moose;
 extends 'Config::MVP::Assembler';
 with 'Config::MVP::Assembler::WithBundles';
@@ -17,6 +17,16 @@ sub package_bundle_method {
          and    $pkg->does('Dist::Zilla::Role::PluginBundle');
   return 'bundle_config';
 }
+
+before replace_bundle_with_contents => sub {
+  my ($self, $bundle_sec, $method) = @_;
+
+  warn sprintf(
+    "MAKE NOTE: added bundle %s isa %s\n",
+    $bundle_sec->name,
+    $bundle_sec->package,
+  );
+};
 
 no Moose;
 1;

@@ -4,7 +4,7 @@ use Moose::Role;
 
 use Config::MVP 2; # finalization and what not
 
-use Dist::Zilla::Util::MVPAssembler;
+use Dist::Zilla::MVP::Assembler;
 
 =head1 DESCRIPTION
 
@@ -22,7 +22,7 @@ multivalue argument.
 =cut
 
 sub build_assembler {
-  my $assembler = Dist::Zilla::Util::MVPAssembler->new;
+  my $assembler = Dist::Zilla::MVP::Assembler->new;
 
   my $root = $assembler->section_class->new({
     name    => '_',

@@ -26,6 +26,29 @@ use Try::Tiny;
 }
 
 {
+  my $tzil = Dist::Zilla::Tester->from_config(
+    { dist_root => 'corpus/DZT' },
+    {
+      add_files => {
+        'source/dist.ini' => simple_ini(
+          [ '@Filter' => {
+            bundle => '@FakeClassic',
+            remove => 'ConfirmRelease',
+          } ]
+        ),
+      },
+    },
+  );
+
+  $tzil->release;
+
+  ok(
+    grep({ /fake release happen/i } @{ $tzil->log_messages }),
+    "we log a fake release when we fake release",
+  );
+}
+
+{
   try {
     my $tzil = Dist::Zilla::Tester->from_config(
       { dist_root => 'corpus/DZT' },

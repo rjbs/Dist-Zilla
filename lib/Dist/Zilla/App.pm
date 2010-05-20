@@ -52,7 +52,7 @@ sub _build_global_config {
   my $dzil_dir = dir($homedir)->file('.dzil');
 
   my $finder = Dist::Zilla::Config::Finder->new({
-    assembler => Dist::Zilla::Util::MVPAssembler->new,
+    assembler => Dist::Zilla::MVP::Assembler->new,
   });
 
   return $finder->assembler->sequence unless -e $dzil_dir;

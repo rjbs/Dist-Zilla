@@ -5,7 +5,7 @@ extends 'Config::MVP::Reader::Finder';
 with 'Dist::Zilla::Config';
 # ABSTRACT: the reader for dist.ini files
 
-use Dist::Zilla::Util::MVPAssembler;
+use Dist::Zilla::MVP::Assembler;
 
 sub default_search_path {
   return qw(Dist::Zilla::Config Config::MVP::Reader);
