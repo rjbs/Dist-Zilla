@@ -1,6 +1,10 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          ModuleBuild now uses $^X to run Build (Christian Walde)
+          
+          MakeMaker now uses the "make" program found in Config (Christian
+          Walde)
 
 3.101390  2010-05-19 09:15:32 America/New_York
           INCOMPATIBLE CHANGES:
