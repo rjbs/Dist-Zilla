@@ -460,25 +460,27 @@ sub from_config {
 
   my $root = dir($arg->{dist_root} || '.');
 
-  my ($seq) = $class->_load_config({
+  my $assembler = $class->_load_config({
     root   => $root,
     chrome => $arg->{chrome},
     config_class => $arg->{config_class},
   });
 
-  my $core_config = $seq->section_named('_')->payload;
+  my $core_config = $assembler->sequence->section_named('_')->payload;
 
-  my $self = $class->new({
-    root   => $root,
-    %$core_config,
-    chrome => $arg->{chrome},
+  #my $self = $class->new({
+  #  root   => $root,
+  #  %$core_config,
+  #  chrome => $arg->{chrome},
 
-    ($arg->{_global_config_builder}
-      ? (_global_config_builder => $arg->{_global_config_builder})
-      : ()),
-  });
+  #  ($arg->{_global_config_builder}
+  #    ? (_global_config_builder => $arg->{_global_config_builder})
+  #    : ()),
+  #});
 
-  for my $section ($seq->sections) {
+  my $self = $assembler->zilla;
+
+  for my $section ($assembler->sequence->sections) {
     next if $section->name eq '_';
 
     my ($name, $plugin_class, $arg) = (
@@ -596,7 +598,7 @@ sub _setup_default_builder_plugins {
 }
 
 sub _load_config {
-  my ($self, $arg) = @_;
+  my ($class, $arg) = @_;
   $arg ||= {};
 
   my $config_class = $arg->{config_class} ||= 'Dist::Zilla::Config::Finder';
@@ -608,9 +610,25 @@ sub _load_config {
   );
 
   my $root = $arg->{root};
-  my ($sequence) = $config_class->new->read_config( $root->file('dist') );
 
-  return $sequence;
+  # my ($sequence) = $config_class->new->read_config( $root->file('dist') );
+
+  my $reader = $config_class->new({
+    _core_preload => {
+      root   => $root,
+      chrome => $arg->{chrome},
+    },
+  });
+
+  # XXX: HORRIBLE -- rjbs, 2010-05-20
+  $reader->assembler->{zilla_class} = $class;
+
+  $reader->read_config({
+    root     => $root,
+    basename => 'dist',
+  });
+
+  return $reader->assembler;
 }
 
 =method plugin_named

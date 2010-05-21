@@ -21,18 +21,14 @@ multivalue argument.
 
 =cut
 
+has _core_preload => (is => 'ro', isa => 'HashRef', default => sub{ {} });
+
 sub build_assembler {
-  my $assembler = Dist::Zilla::MVP::Assembler->new;
+  my ($self) = @_;
 
-  my $root = $assembler->section_class->new({
-    name    => '_',
-    aliases => { author => 'authors' },
-    multivalue_args => [ qw(authors) ],
+  Dist::Zilla::MVP::Assembler->new({
+    _core_preload => $self->_core_preload,
   });
-
-  $assembler->sequence->add_section($root);
-
-  return $assembler;
 }
 
 no Moose::Role;
