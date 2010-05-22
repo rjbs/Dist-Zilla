@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+3.101410  2010-05-21 22:17:44 America/New_York
           cope with newest Config::MVP
 
 3.101400  2010-05-20 11:30:41 America/New_York
