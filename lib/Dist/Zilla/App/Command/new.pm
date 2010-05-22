@@ -18,6 +18,8 @@ use Path::Class;
 
 sub abstract { 'start a new dist' }
 
+sub usage_desc { '%c %o <DistName>' }
+
 sub validate_args {
   my ($self, $opt, $args) = @_;
 
