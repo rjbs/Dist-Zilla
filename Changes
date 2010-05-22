@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          cope with newest Config::MVP
 
 3.101400  2010-05-20 11:30:41 America/New_York
           ModuleBuild now uses $^X to run Build (Christian Walde)
