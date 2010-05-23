@@ -4,7 +4,7 @@ use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::FileGatherer';
 
-use CPAN::Meta::Converter 2.101380; # downgrade
+use CPAN::Meta::Converter 2.101410; # downgrade with test/build merge
 use Dist::Zilla::File::FromCode;
 use Hash::Merge::Simple ();
 use JSON 2;
