@@ -42,6 +42,7 @@ my $converted_by = "$generated_by, CPAN::Meta::Converter version "
     {
       abstract       => 'Sample DZ Dist',
       author         => ['E. Xavier Ample <example@example.org>'],
+      build_requires => {},
       dynamic_config => 0,
       generated_by   => $converted_by,
       license        => 'perl',
@@ -117,6 +118,7 @@ my $converted_by = "$generated_by, CPAN::Meta::Converter version "
     {
       abstract       => 'Sample DZ Dist',
       author         => ['E. Xavier Ample <example@example.org>'],
+      build_requires => {},
       dynamic_config => 0,
       generated_by   => $converted_by,
       license        => 'perl',

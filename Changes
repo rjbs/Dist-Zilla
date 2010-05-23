@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          note the new version of CPAN::Meta::Converter required
 
 3.101410  2010-05-21 22:17:44 America/New_York
           cope with newest Config::MVP
