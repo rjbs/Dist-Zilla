@@ -2,11 +2,23 @@ package Dist::Zilla::MVP::RootSection;
 use Moose;
 extends 'Config::MVP::Section';
 
+use MooseX::LazyRequire;
+use MooseX::SetOnce;
+use Moose::Util::TypeConstraints;
+
 has '+name'    => (default => '_');
 
 has '+aliases' => (default => sub { return { author => 'authors' } });
 
 has '+multivalue_args' => (default => sub { [ qw(authors) ] });
+
+has zilla => (
+  is     => 'ro',
+  isa    => class_type('Dist::Zilla'),
+  traits => [ qw(SetOnce) ],
+  writer => 'set_zilla',
+  lazy_required => 1,
+);
 
 after finalize => sub {
   my ($self) = @_;
@@ -19,7 +31,7 @@ after finalize => sub {
     %{ $self->payload }
   });
 
-  $assembler->set_zilla($zilla);
+  $self->set_zilla($zilla);
 };
 
 1;

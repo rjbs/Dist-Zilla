@@ -4,8 +4,6 @@ extends 'Config::MVP::Assembler';
 with 'Config::MVP::Assembler::WithBundles';
 # ABSTRACT: Dist::Zilla-specific subclass of Config::MVP::Assembler
 
-use MooseX::LazyRequire;
-use MooseX::SetOnce;
 use MooseX::Types::Perl qw(PackageName);
 
 use Moose::Util::TypeConstraints;
@@ -28,14 +26,6 @@ has zilla_class => (
   default => 'Dist::Zilla',
 );
 
-has zilla => (
-  is     => 'ro',
-  isa    => class_type('Dist::Zilla'),
-  traits => [ qw(SetOnce) ],
-  writer => 'set_zilla',
-  lazy_required => 1,
-);
-
 sub expand_package {
   my $str = Dist::Zilla::Util->expand_config_package_name($_[1]);
   return $str;
@@ -52,6 +42,11 @@ before replace_bundle_with_contents => sub {
   my ($self, $bundle_sec, $method) = @_;
   # This is where we will want to make note that the bundle was present.
 };
+
+sub zilla {
+  my ($self) = @_;
+  $self->sequence->section_named('_')->zilla;
+}
 
 no Moose;
 1;
