@@ -1,6 +1,6 @@
 package Dist::Zilla::Config::Perl;
 use Moose;
-with qw(Config::MVP::Reader::Findable);
+with qw(Config::MVP::Reader::Findable::ByExtension);
 with qw(Dist::Zilla::Config);
 # ABSTRACT: the reader for dist.pl files
 
@@ -12,13 +12,10 @@ Dist::Zilla::Config reads in the F<dist.pl> file for a distribution.
 
 sub default_extension { 'pl' }
 
-sub read_config {
-  my ($self, $arg) = @_;
-  my $config_file = $self->filename_from_args($arg);
+sub read_into_assembler {
+  my ($self, $location, $asm) = @_;
 
-  my $asm = $self->assembler;
-
-  my @input = do $config_file;
+  my @input = do $location;
   while (@input and ! ref $input[0]) {
     my ($key, $value) = (shift(@input), shift(@input));
     $asm->add_value($key => $value);

@@ -601,10 +601,7 @@ sub _load_config {
   );
 
   my $root = $arg->{root};
-  my ($sequence) = $config_class->new->read_config({
-    root     => $root,
-    basename => 'dist',
-  });
+  my ($sequence) = $config_class->new->read_config( $root->file('dist') );
 
   return $sequence;
 }
