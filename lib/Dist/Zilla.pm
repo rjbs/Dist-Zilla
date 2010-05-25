@@ -613,22 +613,29 @@ sub _load_config {
 
   # my ($sequence) = $config_class->new->read_config( $root->file('dist') );
 
-  my $reader = $config_class->new({
-    _core_preload => {
-      root   => $root,
-      chrome => $arg->{chrome},
+  #  _core_preload => {
+  #    root   => $root,
+  #    chrome => $arg->{chrome},
+  #  },
+
+  require Dist::Zilla::MVP::Assembler;
+  my $assembler = Dist::Zilla::MVP::Assembler->new({
+    zilla_class => $class,
+  });
+
+  for ($assembler->sequence->section_named('_')) {
+    $_->add_value(chrome => $arg->{chrome});
+    $_->add_value(root   => $arg->{root});
+  }
+
+  my $seq = $config_class->read_config(
+    $root->file('dist'),
+    {
+      assembler => $assembler
     },
-  });
+  );
 
-  # XXX: HORRIBLE -- rjbs, 2010-05-20
-  $reader->assembler->{zilla_class} = $class;
-
-  $reader->read_config({
-    root     => $root,
-    basename => 'dist',
-  });
-
-  return $reader->assembler->sequence;
+  return $seq;
 }
 
 =method plugin_named
