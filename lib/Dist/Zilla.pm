@@ -460,27 +460,27 @@ sub from_config {
 
   my $root = dir($arg->{dist_root} || '.');
 
-  my $assembler = $class->_load_config({
+  my $sequence = $class->_load_config({
     root   => $root,
     chrome => $arg->{chrome},
     config_class => $arg->{config_class},
   });
 
-  my $core_config = $assembler->sequence->section_named('_')->payload;
-
+  #my $core_config = $assembler->sequence->section_named('_')->payload;
+  #
   #my $self = $class->new({
   #  root   => $root,
   #  %$core_config,
   #  chrome => $arg->{chrome},
-
+  #
   #  ($arg->{_global_config_builder}
   #    ? (_global_config_builder => $arg->{_global_config_builder})
   #    : ()),
   #});
 
-  my $self = $assembler->zilla;
+  my $self = $sequence->section_named('_')->zilla;
 
-  for my $section ($assembler->sequence->sections) {
+  for my $section ($sequence->sections) {
     next if $section->name eq '_';
 
     my ($name, $plugin_class, $arg) = (
@@ -628,7 +628,7 @@ sub _load_config {
     basename => 'dist',
   });
 
-  return $reader->assembler;
+  return $reader->assembler->sequence;
 }
 
 =method plugin_named
