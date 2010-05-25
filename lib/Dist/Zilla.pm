@@ -1096,19 +1096,11 @@ sub _global_config {
     or Carp::croak("couldn't determine home directory");
 
   my $file = dir($homedir)->file('.dzil');
-  return unless -e $file;
+  return unless -e $file and -d $file;
 
-  if (-d $file) {
-    return Dist::Zilla::Config::Finder->new->read_config({
-      root     =>  dir($homedir)->subdir('.dzil'),
-      basename => 'config',
-    });
-  } else {
-    return Dist::Zilla::Config::Finder->new->read_config({
-      root     => dir($homedir),
-      filename => '.dzil',
-    });
-  }
+  return Dist::Zilla::Config::Finder->new->read_config(
+    dir($homedir)->subdir('.dzil')->file('config')
+  );
 }
 
 sub _global_config_for {
@@ -1150,10 +1142,9 @@ sub _new_from_profile {
       "no default dist minting profile available"
     );
   } else {
-    ($sequence) = $config_class->new->read_config({
-      root     => $profile_dir->subdir($profile_name),
-      basename => 'profile',
-    });
+    ($sequence) = $config_class->new->read_config(
+      $profile_dir->subdir($profile_name)->file('profile'),
+    );
   }
 
   my $self = $class->new({
