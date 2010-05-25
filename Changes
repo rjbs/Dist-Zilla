@@ -2,6 +2,8 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+3.101450  2010-05-25 18:18:09 America/New_York
+
 3.101421  2010-05-22 20:48:10 America/New_York
           note the new version of CPAN::Meta::Converter required
 
