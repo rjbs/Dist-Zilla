@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+3.101460  2010-05-26 08:14:23 America/New_York
           note required version of Config::MVP::Reader::INI
 
           require a newer CPAN::Meta::Converter for laxer url validation
