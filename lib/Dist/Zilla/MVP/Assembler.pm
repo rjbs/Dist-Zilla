@@ -25,8 +25,7 @@ has zilla_class => (
 );
 
 sub expand_package {
-  my $str = Dist::Zilla::Util->expand_config_package_name($_[1]);
-  return $str;
+  return scalar Dist::Zilla::Util->expand_config_package_name($_[1]);
 }
 
 sub package_bundle_method {
