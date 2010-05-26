@@ -466,48 +466,7 @@ sub from_config {
     config_class => $arg->{config_class},
   });
 
-  #my $core_config = $assembler->sequence->section_named('_')->payload;
-  #
-  #my $self = $class->new({
-  #  root   => $root,
-  #  %$core_config,
-  #  chrome => $arg->{chrome},
-  #
-  #  ($arg->{_global_config_builder}
-  #    ? (_global_config_builder => $arg->{_global_config_builder})
-  #    : ()),
-  #});
-
   my $self = $sequence->section_named('_')->zilla;
-
-  for my $section ($sequence->sections) {
-    next if $section->name eq '_';
-
-    my ($name, $plugin_class, $arg) = (
-      $section->name,
-      $section->package,
-      $section->payload,
-    );
-
-    $self->log_fatal("$name arguments attempted to override plugin name")
-      if defined $arg->{plugin_name};
-
-    $self->log_fatal("$name arguments attempted to override plugin name")
-      if defined $arg->{zilla};
-
-    my $plugin = $plugin_class->new(
-      $arg->merge({
-        plugin_name => $name,
-        zilla       => $self,
-      }),
-    );
-
-    my $version = $plugin->VERSION || 0;
-
-    $plugin->log_debug([ 'online, %s v%s', $plugin->meta->name, $version ]);
-
-    $self->plugins->push($plugin);
-  }
 
   $self->_setup_default_plugins;
 
