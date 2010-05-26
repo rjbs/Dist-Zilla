@@ -612,8 +612,10 @@ sub _load_config {
   my $root = $arg->{root};
 
   require Dist::Zilla::MVP::Assembler;
+  require Dist::Zilla::MVP::Section;
   my $assembler = Dist::Zilla::MVP::Assembler->new({
-    zilla_class => $class,
+    zilla_class   => $class,
+    section_class => 'Dist::Zilla::MVP::Section', # make this DZMA default
   });
 
   for ($assembler->sequence->section_named('_')) {
