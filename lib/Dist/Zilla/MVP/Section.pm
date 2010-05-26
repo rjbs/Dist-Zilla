@@ -17,6 +17,28 @@ after finalize => sub {
 
   return unless $plugin_class->does('Dist::Zilla::Role::Plugin');
 
+  my %payload = %{ $self->payload };
+
+  my %dzil;
+  $dzil{$_} = delete $payload{":$_"} for grep { s/\A:// } keys %payload;
+
+  if (defined $dzil{version}) {
+    require Version::Requirements;
+    my $req = Version::Requirements->from_string_hash({
+      $plugin_class => $dzil{version}
+    });
+
+    my $version = $plugin_class->VERSION;
+    unless ($req->accepts_module($plugin_class => $version)) {
+      $zilla->log_fatal([
+        "%s version (%s) not match required version: %s",
+        $plugin_class,
+        $version,
+        $dzil{version},
+      ]);
+    }
+  }
+
   $zilla->log_fatal("$name arguments attempted to override plugin name")
     if defined $arg->{plugin_name};
 
