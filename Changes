@@ -1,8 +1,16 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          note required version of Config::MVP::Reader::INI
+
+          require a newer CPAN::Meta::Converter for laxer url validation
 
 3.101450  2010-05-25 18:18:09 America/New_York
+          compatibility with Config::MVP v1
+
+          merge test requires into build requires for MakeMaker
+
+          require a newer CPAN::Meta::Converter for custom key downgrades
 
 3.101421  2010-05-22 20:48:10 America/New_York
           note the new version of CPAN::Meta::Converter required

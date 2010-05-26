@@ -4,7 +4,7 @@ use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::FileGatherer';
 
-use CPAN::Meta::Converter 2.101450; # downgrade custom keys
+use CPAN::Meta::Converter 2.101460; # lax url schema validation
 use Hash::Merge::Simple ();
 
 =head1 DESCRIPTION
