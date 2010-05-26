@@ -1,6 +1,3 @@
-use strict;
-use warnings;
-
 package Dist::Zilla::Role::BeforeRelease;
 # ABSTRACT: something that runs before release really begins
 
