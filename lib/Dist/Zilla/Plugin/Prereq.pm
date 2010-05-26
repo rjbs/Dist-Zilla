@@ -45,7 +45,6 @@ has prereq_phase => (
     my ($phase, $type) = $self->__from_name;
     $phase ||= 'runtime';
     $phase = lc $phase;
-    $phase = 'build' if $phase eq 'test'; # XXX: Temporary -- rjbs, 2010-03-20
     return $phase;
   },
 );
