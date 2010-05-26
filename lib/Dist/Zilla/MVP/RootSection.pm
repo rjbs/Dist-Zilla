@@ -24,12 +24,8 @@ after finalize => sub {
   my ($self) = @_;
 
   my $assembler = $self->sequence->assembler;
-  my $preload   = $assembler->_core_preload;
 
-  my $zilla = $assembler->zilla_class->new({
-    %$preload,
-    %{ $self->payload }
-  });
+  my $zilla = $assembler->zilla_class->new( $self->payload );
 
   $self->set_zilla($zilla);
 };

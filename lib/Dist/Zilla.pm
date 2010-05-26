@@ -611,13 +611,6 @@ sub _load_config {
 
   my $root = $arg->{root};
 
-  # my ($sequence) = $config_class->new->read_config( $root->file('dist') );
-
-  #  _core_preload => {
-  #    root   => $root,
-  #    chrome => $arg->{chrome},
-  #  },
-
   require Dist::Zilla::MVP::Assembler;
   my $assembler = Dist::Zilla::MVP::Assembler->new({
     zilla_class => $class,

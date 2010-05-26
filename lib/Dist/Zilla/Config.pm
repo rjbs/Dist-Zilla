@@ -21,15 +21,7 @@ multivalue argument.
 
 =cut
 
-has _core_preload => (is => 'ro', isa => 'HashRef', default => sub{ {} });
-
-sub build_assembler {
-  my ($self) = @_;
-
-  Dist::Zilla::MVP::Assembler->new({
-    _core_preload => $self->_core_preload,
-  });
-}
+sub build_assembler { Dist::Zilla::MVP::Assembler->new }
 
 no Moose::Role;
 1;

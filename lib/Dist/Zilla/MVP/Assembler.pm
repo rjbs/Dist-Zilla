@@ -18,8 +18,6 @@ sub BUILD {
   $self->sequence->add_section($root);
 }
 
-has _core_preload => (is => 'ro', isa => 'HashRef', default => sub{ {} });
-
 has zilla_class => (
   is      => 'ro',
   isa     => PackageName,
