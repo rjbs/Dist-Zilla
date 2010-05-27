@@ -1,5 +1,6 @@
 package Dist::Zilla::Config::Perl;
 use Moose;
+extends 'Config::MVP::Reader';
 with qw(Config::MVP::Reader::Findable::ByExtension);
 with qw(Dist::Zilla::Config);
 # ABSTRACT: the reader for dist.pl files
