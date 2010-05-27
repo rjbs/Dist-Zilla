@@ -105,6 +105,7 @@ sub gather_files {
   for my $file (@files) {
     (my $newname = $file->name) =~ s{\A\Q$root\E[\\/]}{}g;
     $newname = File::Spec->catdir($self->prefix, $newname) if $self->prefix;
+    $newname = Path::Class::dir($newname)->as_foreign('Unix')->stringify;
 
     $file->name($newname);
     $self->add_file($file);
