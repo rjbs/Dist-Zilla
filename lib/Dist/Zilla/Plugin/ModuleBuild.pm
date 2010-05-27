@@ -26,6 +26,12 @@ B<Optional:> Specify the minimum version of L<Module::Build> to depend on.
 
 Defaults to 0.3601
 
+=attr mb_class
+
+B<Optional:> Specify the class to use to create the build object.  Defaults
+to C<Module::Build> itself.  If another class is specified, C<use lib 'inc'>
+is also added to the Build.PL file.
+
 =cut
 
 has 'mb_version' => (
@@ -34,18 +40,36 @@ has 'mb_version' => (
   default => '0.3601',
 );
 
+has 'mb_class' => (
+  isa => 'Str',
+  is  => 'rw',
+  default => 'Module::Build',
+);
+
 my $template = q|
 use strict;
 use warnings;
 
 use Module::Build {{ $plugin->mb_version }};
+{{ $plugin->_use_custom_class }}
 
 my {{ $module_build_args }}
 
-my $build = Module::Build->new(%module_build_args);
+my $build = {{ $plugin->mb_class }}->new(%module_build_args);
 
 $build->create_build_script;
 |;
+
+sub _use_custom_class {
+  my ($self) = @_;
+  my $class = $self->mb_class;
+  if ( $class eq 'Module::Build' ) {
+    return "";
+  }
+  else {
+    return "use lib 'inc'; use $class;";
+  }
+}
 
 sub register_prereqs {
   my ($self) = @_;
