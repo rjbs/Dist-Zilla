@@ -58,6 +58,35 @@ use Test::DZil;
       "correct value set for $key",
     );
   }
+
+  is($modulebuild->_use_custom_class, q{}, 'no custom class by default');
+}
+
+{
+  my $tzil = Dist::Zilla::Tester->from_config(
+    { dist_root => 'corpus/DZT' },
+    {
+      add_files => {
+        'source/dist.ini' => simple_ini(
+          'GatherDir', [ 'ModuleBuild' => { mb_class => 'Foo::Build' } ],
+        ),
+      },
+    },
+  );
+
+  $tzil->build;
+
+  my $modulebuild = $tzil->plugin_named('ModuleBuild');
+
+  is(
+    $modulebuild->_use_custom_class,
+    q{use lib 'inc'; use Foo::Build;},
+    'loads custom class from inc'
+  );
+
+  my $build = $tzil->slurp_file('build/Build.PL');
+
+  like($build, qr/\QFoo::Build->new/, 'Build.PL calls ->new on Foo::Build');
 }
 
 done_testing;
