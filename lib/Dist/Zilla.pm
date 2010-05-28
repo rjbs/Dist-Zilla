@@ -570,9 +570,9 @@ sub _load_config {
 
   my $root = $arg->{root};
 
-  require Dist::Zilla::MVP::Assembler;
+  require Dist::Zilla::MVP::Assembler::Zilla;
   require Dist::Zilla::MVP::Section;
-  my $assembler = Dist::Zilla::MVP::Assembler->new({
+  my $assembler = Dist::Zilla::MVP::Assembler::Zilla->new({
     zilla_class   => $class,
     section_class => 'Dist::Zilla::MVP::Section', # make this DZMA default
   });
