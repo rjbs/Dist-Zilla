@@ -1,6 +1,7 @@
 package Dist::Zilla::MVP::RootSection;
 use Moose;
 extends 'Config::MVP::Section';
+# ABSTRACT: a standard section in Dist::Zilla's configuration sequence
 
 use MooseX::LazyRequire;
 use MooseX::SetOnce;
