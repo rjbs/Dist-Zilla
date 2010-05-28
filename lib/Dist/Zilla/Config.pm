@@ -4,7 +4,7 @@ use Moose::Role;
 
 use Config::MVP 2; # finalization and what not
 
-use Dist::Zilla::MVP::Assembler;
+use Dist::Zilla::MVP::Assembler::Zilla;
 
 =head1 DESCRIPTION
 
@@ -21,7 +21,7 @@ multivalue argument.
 
 =cut
 
-sub build_assembler { Dist::Zilla::MVP::Assembler->new }
+sub build_assembler { Dist::Zilla::MVP::Assembler::Zilla->new }
 
 no Moose::Role;
 1;

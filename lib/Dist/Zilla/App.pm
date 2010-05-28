@@ -49,21 +49,16 @@ sub _build_global_config {
   my $homedir = File::HomeDir->my_home
     or Carp::croak("couldn't determine home directory");
 
-  my $dzil_dir = dir($homedir)->file('.dzil');
+  my $config_base = dir($homedir)->subdir('.dzil')->config('config');
 
-  my $finder = Dist::Zilla::Config::Finder->new({
-    assembler => Dist::Zilla::MVP::Assembler->new,
+  my $assembler = Dist::Zilla::Assembler::GlobalConfig->new;
+  my $reader    = Dist::Zilla::Config::Finder->new({
+    if_none => sub { return $_[2]->sequence },
   });
 
-  return $finder->assembler->sequence unless -e $dzil_dir;
+  my $seq = $reader->read_config($config_base, { assembler => $assembler });
 
-  confess("non-directory ~/.dzil is illegal; switch to ~/.dzil/config.ini")
-    if ! -d $dzil_dir;
-
-  return $finder->read_config({
-    root     =>  $dzil_dir,
-    basename => 'config',
-  });
+  return $seq;
 }
 
 sub zilla {
