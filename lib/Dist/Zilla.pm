@@ -410,6 +410,7 @@ sub _build_distmeta {
     abstract => $self->abstract,
     author   => $self->authors,
     license  => $self->license->meta2_name,
+    release_status => ($self->is_trial or $self->version =~ /_/) ? 'testing' : 'stable', # XXX: what about unstable?
     dynamic_config => 0,
     generated_by   => (ref $self)
                     . ' version '
