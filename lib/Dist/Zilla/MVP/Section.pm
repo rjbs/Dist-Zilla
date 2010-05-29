@@ -16,8 +16,6 @@ after finalize => sub {
     $self->payload,
   );
 
-  return unless $plugin_class->does('Dist::Zilla::Role::Plugin');
-
   my %payload = %{ $self->payload };
 
   my %dzil;

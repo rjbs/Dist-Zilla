@@ -33,10 +33,5 @@ sub package_bundle_method {
   return 'bundle_config';
 }
 
-before replace_bundle_with_contents => sub {
-  my ($self, $bundle_sec, $method) = @_;
-  # This is where we will want to make note that the bundle was present.
-};
-
 no Moose;
 1;

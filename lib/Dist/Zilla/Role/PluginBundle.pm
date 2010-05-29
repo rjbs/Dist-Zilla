@@ -11,6 +11,12 @@ configure the bundle.
 
 =cut
 
+sub register_component {
+  my ($class, $name, $arg, $self) = @_;
+  # ... we should register a placeholder so MetaConfig can tell us about the
+  # pluginbundle that was loaded
+}
+
 requires 'bundle_config';
 
 no Moose::Role;
