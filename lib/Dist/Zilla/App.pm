@@ -46,12 +46,17 @@ sub chrome {
 }
 
 sub _build_global_config {
+  my ($self) = @_;
+
   my $homedir = File::HomeDir->my_home
     or Carp::croak("couldn't determine home directory");
 
   my $config_base = dir($homedir)->subdir('.dzil')->config('config');
 
-  my $assembler = Dist::Zilla::Assembler::GlobalConfig->new;
+  my $assembler = Dist::Zilla::Assembler::GlobalConfig->new({
+    chrome  => $self->chrome,
+  });
+
   my $reader    = Dist::Zilla::Config::Finder->new({
     if_none => sub { return $_[2]->sequence },
   });

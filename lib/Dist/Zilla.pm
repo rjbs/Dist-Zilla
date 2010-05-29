@@ -573,6 +573,7 @@ sub _load_config {
   require Dist::Zilla::MVP::Assembler::Zilla;
   require Dist::Zilla::MVP::Section;
   my $assembler = Dist::Zilla::MVP::Assembler::Zilla->new({
+    chrome        => $arg->{chrome},
     zilla_class   => $class,
     section_class => 'Dist::Zilla::MVP::Section', # make this DZMA default
   });
