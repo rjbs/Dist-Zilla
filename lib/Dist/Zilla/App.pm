@@ -5,7 +5,7 @@ package Dist::Zilla::App;
 use App::Cmd::Setup 0.307 -app; # need ->app in Result of Tester, GLD vers
 
 use Carp ();
-use Dist::Zilla::Config::Finder;
+use Dist::Zilla::MVP::Reader::Finder;
 use File::HomeDir ();
 use Moose::Autobox;
 use Path::Class;
@@ -57,7 +57,7 @@ sub _build_global_config {
     chrome  => $self->chrome,
   });
 
-  my $reader    = Dist::Zilla::Config::Finder->new({
+  my $reader    = Dist::Zilla::MVP::Reader::Finder->new({
     if_none => sub { return $_[2]->sequence },
   });
 

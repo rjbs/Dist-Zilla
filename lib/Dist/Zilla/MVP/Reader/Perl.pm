@@ -1,4 +1,4 @@
-package Dist::Zilla::Config::Perl;
+package Dist::Zilla::MVP::Reader::Perl;
 use Moose;
 extends 'Config::MVP::Reader';
 with qw(Config::MVP::Reader::Findable::ByExtension);

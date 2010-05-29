@@ -450,7 +450,7 @@ directory.
 Valid arguments are:
 
   config_class - the class to use to read the config
-                 default: Dist::Zilla::Config::Finder
+                 default: Dist::Zilla::MVP::Reader::Finder
 
 =cut
 
@@ -560,7 +560,9 @@ sub _load_config {
   my ($class, $arg) = @_;
   $arg ||= {};
 
-  my $config_class = $arg->{config_class} ||= 'Dist::Zilla::Config::Finder';
+  my $config_class =
+    $arg->{config_class} ||= 'Dist::Zilla::MVP::Reader::Finder';
+
   Class::MOP::load_class($config_class);
 
   $arg->{chrome}->logger->log_debug(
@@ -1102,7 +1104,8 @@ sub _new_from_profile {
   my ($class, $profile_name, $arg) = @_;
   $arg ||= {};
 
-  my $config_class = $arg->{config_class} ||= 'Dist::Zilla::Config::Finder';
+  my $config_class =
+    $arg->{config_class} ||= 'Dist::Zilla::MVP::Reader::Finder';
   Class::MOP::load_class($config_class);
 
   $arg->{chrome}->logger->log_debug(
