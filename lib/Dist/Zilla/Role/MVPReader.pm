@@ -1,4 +1,4 @@
-package Dist::Zilla::Config;
+package Dist::Zilla::Role::MVPReader;
 use Moose::Role;
 # ABSTRACT: stored configuration loader role
 
