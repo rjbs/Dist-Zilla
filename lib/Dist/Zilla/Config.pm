@@ -4,7 +4,10 @@ use Moose::Role;
 
 use Config::MVP 2; # finalization and what not
 
+use Dist::Zilla::MVP::Assembler::GlobalConfig;
 use Dist::Zilla::MVP::Assembler::Zilla;
+
+use MooseX::Types::Perl qw(PackageName);
 
 =head1 DESCRIPTION
 
@@ -21,7 +24,19 @@ multivalue argument.
 
 =cut
 
-sub build_assembler { Dist::Zilla::MVP::Assembler::Zilla->new }
+has assembler_class => (
+  is  => 'ro',
+  isa => PackageName,
+);
+
+sub build_assembler {
+  my ($self) = @_;
+
+  confess "neither assembler nor assembler_class were provided"
+    unless my $assembler_class = $self->assembler_class;
+
+  return $assembler_class->new
+}
 
 no Moose::Role;
 1;
