@@ -1078,19 +1078,26 @@ around dump_config => sub {
   return $config;
 };
 
-has _local_stash => (
+has _local_stashes => (
   is   => 'ro',
   isa  => HashRef[ Object ],
   lazy => 1,
   default => sub { {} },
 );
 
-has _global_stash => (
+has _global_stashes => (
   is   => 'ro',
   isa  => HashRef[ Object ],
   lazy => 1,
-  builder => '_build_global_stash',
+  default => sub { {} },
 );
+
+sub stash_named {
+  my ($self, $name) = @_;
+
+  return $self->_local_stash->{ $name } if $self->_local_stash->{$name};
+  return $self->_global_stash->{ $name };
+}
 
 #####################################
 ## BEGIN DIST MINTING CODE
