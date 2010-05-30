@@ -33,5 +33,16 @@ sub package_bundle_method {
   return 'bundle_config';
 }
 
+before add_value => sub {
+  my ($self, $name) = @_;
+
+  return unless $name =~ /\A(?:plugin_name|zilla)\z/;
+
+  my $section_name = $self->current_section->name;
+  $self->log_fatal(
+    "$section_name arguments attempted to provide reserved argument $name"
+  );
+};
+
 no Moose;
 1;

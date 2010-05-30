@@ -64,16 +64,8 @@ has logger => (
 sub mvp_multivalue_args {};
 sub mvp_aliases         { return {} };
 
-sub register_component {
+sub plugin_from_config {
   my ($class, $name, $arg, $section) = @_;
-
-  $section->sequence->assembler->log_fatal(
-    "$name arguments attempted to override plugin name"
-  ) if defined $arg->{plugin_name};
-
-  $section->sequence->assembler->log_fatal(
-    "$name arguments attempted to override zilla object"
-  ) if defined $arg->{zilla};
 
   my $self = $class->new(
     $arg->merge({
@@ -81,6 +73,12 @@ sub register_component {
       zilla       => $section->sequence->assembler->zilla,
     }),
   );
+}
+
+sub register_component {
+  my ($class, $name, $arg, $section) = @_;
+
+  my $self = $class->plugin_from_config($name, $arg, $section);
 
   my $version = $self->VERSION || 0;
 
