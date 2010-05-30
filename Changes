@@ -7,6 +7,9 @@ Revision history for {{$dist->name}}
 
           set release_status distmeta based on is_trial (Apocalypse)
 
+          PkgVersion ignores packages which have a newline between the package
+          keyword and the package name (Dave Rolsky)
+
 3.101461  2010-05-26 22:34:18 America/New_York
 
 3.101460  2010-05-26 08:14:23 America/New_York

@@ -17,6 +17,15 @@ module or program (more or less) within the distribution:
 
   our $VERSION = 0.001; # where 0.001 is the version of the dist
 
+It will skip any package declaration that includes a newline between the
+C<package> keyword and the package name, like:
+
+  package
+    Foo::Bar;
+
+This sort of declaration is also ignored by the CPAN toolchain, and is
+typically used when doing monkey patching or other tricky things.
+
 =cut
 
 sub munge_files {
