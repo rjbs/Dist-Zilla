@@ -19,6 +19,31 @@ sub global_opt_spec {
   );
 }
 
+sub _build_global_stash {
+  my ($self) = @_;
+
+  return $self->{__global_stash__} if $self->{__global_stash__};
+
+  my $stash = $self->{__global_stash__} = {};
+
+  my $homedir = File::HomeDir->my_home
+    or Carp::croak("couldn't determine home directory");
+
+  my $config_base = dir($homedir)->subdir('.dzil')->config('config');
+
+  my $assembler = Dist::Zilla::Assembler::GlobalConfig->new({
+    chrome => $self->chrome,
+  });
+
+  my $reader = Dist::Zilla::MVP::Reader::Finder->new({
+    if_none => sub { return $_[2]->sequence },
+  });
+
+  my $seq = $reader->read_config($config_base, { assembler => $assembler });
+
+  return $stash;
+}
+
 =method zilla
 
 This returns the Dist::Zilla object in use by the command.  If none has yet
@@ -45,27 +70,6 @@ sub chrome {
   return $self->{__chrome__};
 }
 
-sub _build_global_config {
-  my ($self) = @_;
-
-  my $homedir = File::HomeDir->my_home
-    or Carp::croak("couldn't determine home directory");
-
-  my $config_base = dir($homedir)->subdir('.dzil')->config('config');
-
-  my $assembler = Dist::Zilla::Assembler::GlobalConfig->new({
-    chrome  => $self->chrome,
-  });
-
-  my $reader    = Dist::Zilla::MVP::Reader::Finder->new({
-    if_none => sub { return $_[2]->sequence },
-  });
-
-  my $seq = $reader->read_config($config_base, { assembler => $assembler });
-
-  return $seq;
-}
-
 sub zilla {
   my ($self) = @_;
 
@@ -84,7 +88,6 @@ sub zilla {
 
     my $zilla = Dist::Zilla->from_config({
       chrome => $self->chrome,
-      _global_config_builder => sub { $self->_build_global_config },
     });
 
     $zilla->logger->set_debug($verbose ? 1 : 0);

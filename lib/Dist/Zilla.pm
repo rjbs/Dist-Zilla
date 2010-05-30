@@ -5,7 +5,7 @@ with 'Dist::Zilla::Role::ConfigDumper';
 
 use Moose::Autobox 0.09; # ->flatten
 use MooseX::LazyRequire;
-use MooseX::Types::Moose qw(Bool HashRef);
+use MooseX::Types::Moose qw(ArrayRef Bool HashRef Object);
 use MooseX::Types::Perl qw(DistName LaxVersionStr);
 use MooseX::Types::Path::Class qw(Dir File);
 use Moose::Util::TypeConstraints;
@@ -1078,22 +1078,18 @@ around dump_config => sub {
   return $config;
 };
 
-has _global_config => (
+has _local_stash => (
   is   => 'ro',
-  isa  => 'Config::MVP::Sequence',
+  isa  => HashRef[ Object ],
   lazy => 1,
-  builder => '_build_global_config',
-  handles => {
-    '_global_config_for' => 'section_named',
-  },
+  default => sub { {} },
 );
 
-has _global_config_builder => (
-  is  => 'ro',
-  isa => 'CodeRef',
-  traits  => [ 'Code' ],
-  handles => { _build_global_config => 'execute_method' },
-  default => sub { sub { Config::MVP::Sequence->new; } },
+has _global_stash => (
+  is   => 'ro',
+  isa  => HashRef[ Object ],
+  lazy => 1,
+  builder => '_build_global_stash',
 );
 
 #####################################
