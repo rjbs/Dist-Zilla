@@ -72,6 +72,11 @@ sub munge_perl {
       next;
     }
 
+    if ($stmt->content =~ /package\s*\n\s*\Q$package/) {
+      $self->log([ 'skipping package for %s, it looks like a monkey patch', $package ]);
+      next;
+    }
+
     # the \x20 hack is here so that when we scan *this* document we don't find
     # an assignment to version; it shouldn't be needed, but it's been annoying
     # enough in the past that I'm keeping it here until tests are better
