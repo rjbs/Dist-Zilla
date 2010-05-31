@@ -8,8 +8,6 @@ use Moose::Autobox;
 after finalize => sub {
   my ($self) = @_;
 
-  my $zilla = $self->sequence->assembler->zilla;
-
   my ($name, $plugin_class, $arg) = (
     $self->name,
     $self->package,
@@ -29,12 +27,14 @@ after finalize => sub {
 
     my $version = $plugin_class->VERSION;
     unless ($req->accepts_module($plugin_class => $version)) {
-      $zilla->log_fatal([
+      # $self->assembler->log_fatal([
+      confess sprintf
         "%s version (%s) not match required version: %s",
         $plugin_class,
         $version,
         $dzil{version},
-      ]);
+      ;
+      # ]);
     }
   }
 

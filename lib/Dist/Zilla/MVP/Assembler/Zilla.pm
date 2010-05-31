@@ -24,7 +24,7 @@ sub zilla {
   $self->sequence->section_named('_')->zilla;
 }
 
-sub register_stash_entry {
+sub register_stash {
   my ($self, $name, $object) = @_;
   $self->log_fatal("tried to register $name stash entry twice")
     if $self->zilla->_local_stash->{ $name };

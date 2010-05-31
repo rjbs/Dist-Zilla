@@ -266,6 +266,7 @@ sub _build_license {
 has _license_class => (
   is        => 'ro',
   isa       => 'Str',
+  lazy      => 1,
   init_arg  => 'license',
   clearer   => '_clear_license_class',
   default   => sub {
@@ -277,6 +278,7 @@ has _license_class => (
 has _copyright_holder => (
   is        => 'ro',
   isa       => 'Str',
+  lazy      => 1,
   init_arg  => 'copyright_holder',
   clearer   => '_clear_copyright_holder',
   default   => sub {
@@ -288,8 +290,9 @@ has _copyright_holder => (
 
 has _copyright_year => (
   is        => 'ro',
-  init_arg  => 'copyright_year',
   isa       => 'Int',
+  lazy      => 1,
+  init_arg  => 'copyright_year',
   clearer   => '_clear_copyright_year',
   default   => sub {
     # Oh man.  This is a terrible idea!  I mean, what if by the code gets run
@@ -300,8 +303,8 @@ has _copyright_year => (
     # this until we can optimize the code to not take .1s to run, right? --
     # rjbs, 2008-06-13
     my $stash = $_[0]->stash_named(':License');
-    $stash && return $stash->value('copyright_holder');
-    return (localtime)[5] + 1900,
+    my $year  = $stash && $stash->value('copyright_year');
+    return $year ? $year : (localtime)[5] + 1900;
   }
 );
 
@@ -1132,8 +1135,8 @@ sub _new_from_profile {
   });
 
   for ($assembler->sequence->section_named('_')) {
+    $_->add_value(name   => $arg->{name});
     $_->add_value(chrome => $arg->{chrome});
-    $_->add_value(root   => $arg->{root});
     $_->add_value(__is_minter => 1);
     $_->add_value(_global_stashes => $arg->{_global_stashes})
       if $arg->{_global_stashes};
@@ -1149,6 +1152,9 @@ sub _new_from_profile {
       "no default dist minting profile available"
     );
   } else {
+    $assembler->sequence->section_named('_')->add_value(
+      root => $profile_dir->subdir($profile_name)
+    );
     $seq = $config_class->read_config(
       $profile_dir->subdir($profile_name)->file('profile'),
       {

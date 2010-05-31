@@ -50,6 +50,7 @@ sub execute {
     $opt->profile => {
       chrome  => $self->app->chrome,
       name    => $dist,
+      _global_stashes => $self->app->_build_global_stashes,
     },
   );
 

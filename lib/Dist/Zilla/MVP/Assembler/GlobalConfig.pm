@@ -9,10 +9,11 @@ has stash => (
   default => sub { {} },
 );
 
-sub register_stash_entry {
+sub register_stash {
   my ($self, $name, $object) = @_;
 
-  $self->log_fatal("tried to register $name stash entry twice")
+  # $self->log_fatal("tried to register $name stash entry twice")
+  confess("tried to register $name stash entry twice")
     if $self->stash->{ $name };
 
   $self->stash->{ $name } = $object;

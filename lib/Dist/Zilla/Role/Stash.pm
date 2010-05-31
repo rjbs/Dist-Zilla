@@ -6,7 +6,7 @@ sub register_component {
   my ($class, $name, $arg, $section) = @_;
 
   # $self->log_debug([ 'online, %s v%s', $self->meta->name, $version ]);
-  my $entry = $class->entry_from_config($name, $arg, $section);
+  my $entry = $class->stash_from_config($name, $arg, $section);
 
   $section->sequence->assembler->register_stash($name, $entry);
 

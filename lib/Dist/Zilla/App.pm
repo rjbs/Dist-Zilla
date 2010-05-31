@@ -32,8 +32,11 @@ sub _build_global_stashes {
   my $config_base = dir($homedir)->subdir('.dzil')->file('config');
 
   require Dist::Zilla::MVP::Assembler::GlobalConfig;
+  require Dist::Zilla::MVP::Section;
   my $assembler = Dist::Zilla::MVP::Assembler::GlobalConfig->new({
     chrome => $self->chrome,
+    stash  => $stash,
+    section_class => 'Dist::Zilla::MVP::Section', # make this DZMA default
   });
 
   my $reader = Dist::Zilla::MVP::Reader::Finder->new({
