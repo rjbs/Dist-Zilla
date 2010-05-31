@@ -74,7 +74,10 @@ sub expand_config_package_name {
     {
       '=' => '',
       '@' => 'Dist::Zilla::PluginBundle::',
-      '!' => 'Dist::Zilla::App::Command::',
+      '%' => sub {
+        return 'Dist::Zilla::Stash::Generic' if length $_[0] == 0;
+        return 'Dist::Zilla::Stash::';
+      },
       ''  => 'Dist::Zilla::Plugin::',
     },
     $package,

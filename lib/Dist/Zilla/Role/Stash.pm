@@ -1,5 +1,6 @@
-package Dist::Zilla::Role::StashEntry;
+package Dist::Zilla::Role::Stash;
 use Moose::Role;
+# ABSTRACT: something that stores options or data for later reference
 
 sub register_component {
   my ($class, $name, $arg, $section) = @_;

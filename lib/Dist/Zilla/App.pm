@@ -19,7 +19,7 @@ sub global_opt_spec {
   );
 }
 
-sub _build_global_stash {
+sub _build_global_stashes {
   my ($self) = @_;
 
   return $self->{__global_stash__} if $self->{__global_stash__};
@@ -29,9 +29,10 @@ sub _build_global_stash {
   my $homedir = File::HomeDir->my_home
     or Carp::croak("couldn't determine home directory");
 
-  my $config_base = dir($homedir)->subdir('.dzil')->config('config');
+  my $config_base = dir($homedir)->subdir('.dzil')->file('config');
 
-  my $assembler = Dist::Zilla::Assembler::GlobalConfig->new({
+  require Dist::Zilla::MVP::Assembler::GlobalConfig;
+  my $assembler = Dist::Zilla::MVP::Assembler::GlobalConfig->new({
     chrome => $self->chrome,
   });
 
@@ -88,6 +89,7 @@ sub zilla {
 
     my $zilla = Dist::Zilla->from_config({
       chrome => $self->chrome,
+      _global_stashes => $self->_build_global_stashes,
     });
 
     $zilla->logger->set_debug($verbose ? 1 : 0);

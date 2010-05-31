@@ -2,6 +2,8 @@ use strict;
 use warnings;
 use Test::More 0.88;
 
+plan skip_all => 'disabled during v4 devel';
+
 use lib 't/lib';
 
 use Dist::Zilla::App::Tester;

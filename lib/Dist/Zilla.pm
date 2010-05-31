@@ -196,38 +196,6 @@ has main_module => (
   },
 );
 
-=attr copyright_holder
-
-This is the name of the legal entity who holds the copyright on this code.
-This is a required attribute with no default!
-
-=cut
-
-has copyright_holder => (
-  is   => 'ro',
-  isa  => 'Str',
-  lazy_required => 1,
-);
-
-=attr copyright_year
-
-This is the year of copyright for the dist.  By default, it's this year.
-
-=cut
-
-has copyright_year => (
-  is   => 'ro',
-  isa  => 'Int',
-
-  # Oh man.  This is a terrible idea!  I mean, what if by the code gets run
-  # around like Dec 31, 23:59:59.9 and by the time the default gets called it's
-  # the next year but the default was already set up?  Oh man.  That could ruin
-  # lives!  I guess we could make this a sub to defer the guess, but think of
-  # the performance hit!  I guess we'll have to suffer through this until we
-  # can optimize the code to not take .1s to run, right? -- rjbs, 2008-06-13
-  default => (localtime)[5] + 1900,
-);
-
 =attr license
 
 This is the L<Software::License|Software::License> object for this dist's
@@ -241,59 +209,101 @@ understandable, like C<Perl_5>.
 =cut
 
 has license => (
-  reader => 'license',
-  writer => '_set_license',
-  isa    => License,
-  init_arg => undef,
-  lazy_required => 1,
+  is   => 'ro',
+  isa  => License,
+  lazy => 1,
+  init_arg  => 'license_obj',
+  predicate => '_has_license',
+  builder   => '_build_license',
+  handles   => {
+    copyright_holder => 'holder',
+    copyright_year   => 'year',
+  },
 );
 
-sub _initialize_license {
-  my ($self, $value) = @_;
+sub _build_license {
+  my ($self) = @_;
 
-  my $license;
+  my $license_class    = $self->_license_class;
+  my $copyright_holder = $self->_copyright_holder;
+  my $copyright_year   = $self->_copyright_year;
 
-  # If it's an object (weird!) we're being handed a pre-created license and
-  # we should probably just trust it. -- rjbs, 2009-07-21
-  $license = $value if blessed $value;
+  if ($license_class) {
+    $license_class = String::RewritePrefix->rewrite(
+      {
+        '=' => '',
+        ''  => 'Software::License::'
+      },
+      $license_class,
+    );
+  } else {
+    require Software::LicenseUtils;
+    my @guess = Software::LicenseUtils->guess_license_from_pod(
+      $self->main_module->content
+    );
 
-  unless ($license) {
-    my $license_class = $value;
+    $self->log_fatal("couldn't make a good guess at license") if @guess != 1;
 
-    if ($license_class) {
-      $license_class = String::RewritePrefix->rewrite(
-        {
-          '=' => '',
-          ''  => 'Software::License::'
-        },
-        $license_class,
-      );
-    } else {
-      require Software::LicenseUtils;
-      my @guess = Software::LicenseUtils->guess_license_from_pod(
-        $self->main_module->content
-      );
-
-      $self->log_fatal("couldn't make a good guess at license") if @guess != 1;
-
-      my $filename = $self->main_module->name;
-      $license_class = $guess[0];
-      $self->log("based on POD in $filename, guessing license is $guess[0]");
-    }
-
-    eval "require $license_class; 1" or die;
-
-    $license = $license_class->new({
-      holder => $self->copyright_holder,
-      year   => $self->copyright_year,
-    });
+    my $filename = $self->main_module->name;
+    $license_class = $guess[0];
+    $self->log("based on POD in $filename, guessing license is $guess[0]");
   }
 
-  $self->log_fatal("$value is not a valid license")
-    if ! License->check($license);
+  Class::MOP::load_class($license_class);
 
-  $self->_set_license($license);
+  my $license = $license_class->new({
+    holder => $self->_copyright_holder,
+    year   => $self->_copyright_year,
+  });
+
+  $self->_clear_license_class;
+  $self->_clear_copyright_holder;
+  $self->_clear_copyright_year;
+
+  return $license;
 }
+
+has _license_class => (
+  is        => 'ro',
+  isa       => 'Str',
+  init_arg  => 'license',
+  clearer   => '_clear_license_class',
+  default   => sub {
+    my $stash = $_[0]->stash_named(':License');
+    $stash && return $stash->value('class');
+  }
+);
+
+has _copyright_holder => (
+  is        => 'ro',
+  isa       => 'Str',
+  init_arg  => 'copyright_holder',
+  clearer   => '_clear_copyright_holder',
+  default   => sub {
+    my $stash = $_[0]->stash_named(':License');
+    $stash && return $stash->value('copyright_holder');
+    return;
+  }
+);
+
+has _copyright_year => (
+  is        => 'ro',
+  init_arg  => 'copyright_year',
+  isa       => 'Int',
+  clearer   => '_clear_copyright_year',
+  default   => sub {
+    # Oh man.  This is a terrible idea!  I mean, what if by the code gets run
+    # around like Dec 31, 23:59:59.9 and by the time the default gets called
+    # it's the next year but the default was already set up?  Oh man.  That
+    # could ruin lives!  I guess we could make this a sub to defer the guess,
+    # but think of the performance hit!  I guess we'll have to suffer through
+    # this until we can optimize the code to not take .1s to run, right? --
+    # rjbs, 2008-06-13
+    my $stash = $_[0]->stash_named(':License');
+    $stash && return $stash->value('copyright_holder');
+    return (localtime)[5] + 1900,
+  }
+);
 
 =attr authors
 
@@ -463,7 +473,8 @@ sub from_config {
   my $sequence = $class->_load_config({
     root   => $root,
     chrome => $arg->{chrome},
-    config_class => $arg->{config_class},
+    config_class    => $arg->{config_class},
+    _global_stashes => $arg->{_global_stashes},
   });
 
   my $self = $sequence->section_named('_')->zilla;
@@ -583,6 +594,8 @@ sub _load_config {
   for ($assembler->sequence->section_named('_')) {
     $_->add_value(chrome => $arg->{chrome});
     $_->add_value(root   => $arg->{root});
+    $_->add_value(_global_stashes => $arg->{_global_stashes})
+      if $arg->{_global_stashes};
   }
 
   my $seq = $config_class->read_config(
@@ -1065,12 +1078,6 @@ has logger => (
   },
 );
 
-sub BUILD {
-  my ($self, $arg) = @_;
-
-  $self->_initialize_license($arg->{license});
-}
-
 around dump_config => sub {
   my ($orig, $self) = @_;
   my $config = $self->$orig;
@@ -1095,8 +1102,8 @@ has _global_stashes => (
 sub stash_named {
   my ($self, $name) = @_;
 
-  return $self->_local_stash->{ $name } if $self->_local_stash->{$name};
-  return $self->_global_stash->{ $name };
+  return $self->_local_stashes->{ $name } if $self->_local_stashes->{$name};
+  return $self->_global_stashes->{ $name };
 }
 
 #####################################
@@ -1116,9 +1123,25 @@ sub _new_from_profile {
     "reading configuration using $config_class"
   );
 
+  require Dist::Zilla::MVP::Assembler::Zilla;
+  require Dist::Zilla::MVP::Section;
+  my $assembler = Dist::Zilla::MVP::Assembler::Zilla->new({
+    chrome        => $arg->{chrome},
+    zilla_class   => $class,
+    section_class => 'Dist::Zilla::MVP::Section', # make this DZMA default
+  });
+
+  for ($assembler->sequence->section_named('_')) {
+    $_->add_value(chrome => $arg->{chrome});
+    $_->add_value(root   => $arg->{root});
+    $_->add_value(__is_minter => 1);
+    $_->add_value(_global_stashes => $arg->{_global_stashes})
+      if $arg->{_global_stashes};
+  }
+
   my $profile_dir = dir( File::HomeDir->my_home )->subdir(qw(.dzil profiles));
 
-  my $sequence;
+  my $seq;
 
   if ($profile_name eq 'default' and ! -e $profile_dir->subdir('default')) {
     $arg->{chrome}->logger->log_fatal(
@@ -1126,47 +1149,15 @@ sub _new_from_profile {
       "no default dist minting profile available"
     );
   } else {
-    ($sequence) = $config_class->new->read_config(
+    $seq = $config_class->read_config(
       $profile_dir->subdir($profile_name)->file('profile'),
+      {
+        assembler => $assembler
+      },
     );
   }
 
-  my $self = $class->new({
-    %{ $sequence->section_named('_')->payload },
-    name   => $arg->{name},
-    chrome => $arg->{chrome},
-    root   => $profile_dir->subdir($profile_name),
-    __is_minter => 1,
-  });
-
-  for my $section ($sequence->sections) {
-    next if $section->name eq '_';
-
-    my ($name, $plugin_class, $arg) = (
-      $section->name,
-      $section->package,
-      $section->payload,
-    );
-
-    $self->log_fatal("$name arguments attempted to override plugin name")
-      if defined $arg->{plugin_name};
-
-    $self->log_fatal("$name arguments attempted to override plugin name")
-      if defined $arg->{zilla};
-
-    my $plugin = $plugin_class->new(
-      $arg->merge({
-        plugin_name => $name,
-        zilla       => $self,
-      }),
-    );
-
-    my $version = $plugin->VERSION || 0;
-
-    $plugin->log_debug([ 'online, %s v%s', $plugin->meta->name, $version ]);
-
-    $self->plugins->push($plugin);
-  }
+  my $self = $seq->section_named('_')->zilla;
 
   $self->_setup_default_plugins;
 

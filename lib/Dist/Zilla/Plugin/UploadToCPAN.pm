@@ -41,6 +41,21 @@ C<~/.pause>, in the same format that L<cpan-upload> requires:
   }
 }
 
+has credentials_stash => (
+  is  => 'ro',
+  isa => 'Str',
+  default => 'PAUSE'
+);
+
+sub _credential {
+  my ($self, $name) = @_;
+
+  my $stash = $self->zilla->stash_named( $self->credentials_stash );
+  return unless $stash;
+
+  return $stash->{ $name };
+}
+
 has user => (
   is   => 'ro',
   isa  => 'Str',
@@ -48,9 +63,7 @@ has user => (
   required => 1,
   default  => sub {
     my ($self) = @_;
-    my $user = $self->zilla->_global_config_for('!release')->{user};
-    return $user if defined $user;
-    return $self->pause_cfg->{user};
+    return $self->_credential('user') || $self->pause_cfg->{user};
   },
 );
 
@@ -61,9 +74,7 @@ has password => (
   required => 1,
   default  => sub {
     my ($self) = @_;
-    my $pass = $self->zilla->_global_config_for('!release')->{password};
-    return $pass if defined $pass;
-    return $self->pause_cfg->{password};
+    return $self->_credential('password') || $self->pause_cfg->{password};
   },
 );
 
