@@ -8,7 +8,7 @@ use Dist::Zilla::App -command;
 
 Builds your distribution and emits tar.gz files / directories.
 
-    dzil build [ --tgz | --no-tgz ]
+    dzil build [ --tgz | --no-tgz | --root /path/to/build/dir ]
 
 =cut
 
@@ -19,12 +19,14 @@ sub abstract { 'build your dist' }
     $ dzil build
     $ dzil build --tgz
     $ dzil build --no-tgz
+    $ dzil build --root /path/to/build/dir
 
 =cut
 
 sub opt_spec {
-  [ 'trial' => 'build a trial release that PAUSE will not index'      ],
-  [ 'tgz!'  => 'build a tarball (default behavior)', { default => 1 } ]
+  [ 'trial'  => 'build a trial release that PAUSE will not index'      ],
+  [ 'tgz!'   => 'build a tarball (default behavior)', { default => 1 } ],
+  [ 'root=s' => 'the directory to build the distribution into'         ]
 }
 
 =head1 OPTIONS
@@ -35,15 +37,24 @@ Builds a .tar.gz in your project directory after building the distribution.
 
 --tgz behaviour is by default, use --no-tgz to disable building an archive.
 
+=head2 --root
+
+Specifies the directory into which the distribution should be built. If
+necessary, the directory will be created. An archive will not be created.
+
 =cut
 
 sub execute {
   my ($self, $opt, $arg) = @_;
 
-  my $method = $opt->tgz ? 'build_archive' : 'build';
-  my $zilla  = $self->zilla;
-  $zilla->is_trial(1) if $opt->trial;
-  $zilla->$method;
+  if ($opt->root) {
+    $self->zilla->build_in($opt->root);
+  } else {
+    my $method = $opt->tgz ? 'build_archive' : 'build';
+    my $zilla  = $self->zilla;
+    $zilla->is_trial(1) if $opt->trial;
+    $zilla->$method;
+  }
 }
 
 1;
