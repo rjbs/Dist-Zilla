@@ -689,7 +689,7 @@ already been built, an exception will be thrown.
 
 =method build
 
-This method just calls C<build_in> with no arguments.  It get you the default
+This method just calls C<build_in> with no arguments.  It gets you the default
 behavior without the weird-looking formulation of C<build_in> with no object
 for the preposition!
 
