@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+3.101520  2010-06-01 11:50:16 America/New_York
           unixify all gathered filenames (Christian Walde)
 
           ModuleBuild can use a custom M::B class (David Golden, Dave Rolsky)
