@@ -10,6 +10,11 @@ Revision history for {{$dist->name}}
           PkgVersion ignores packages which have a newline between the package
           keyword and the package name (Dave Rolsky)
 
+          add version to :ExecFiles (scripts) as well as libraries with
+          PkgVersion and PodVersion
+
+          added --in option to the 'build' command (Marcel Gruenauer)
+
 3.101461  2010-05-26 22:34:18 America/New_York
 
 3.101460  2010-05-26 08:14:23 America/New_York
