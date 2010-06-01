@@ -1,6 +1,11 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          unixify all gathered filenames (Christian Walde)
+
+          ModuleBuild can use a custom M::B class (David Golden, Dave Rolsky)
+
+          set release_status distmeta based on is_trial (Apocalypse)
 
 3.101461  2010-05-26 22:34:18 America/New_York
 
