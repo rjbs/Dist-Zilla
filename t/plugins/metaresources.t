@@ -75,6 +75,7 @@ my $converted_by = "$generated_by, CPAN::Meta::Converter version "
       },
       name      => 'DZT-Sample',
       prereqs   => {},
+      release_status => 'stable',
       resources => {
         bugtracker => { web => 'http://bugs.example.com' },
         homepage   => 'http://example.com',
@@ -151,6 +152,7 @@ my $converted_by = "$generated_by, CPAN::Meta::Converter version "
       },
       name      => 'DZT-Sample',
       prereqs   => {},
+      release_status => 'stable',
       resources => {
         bugtracker => {
           web    => 'http://bugs.example.com',
