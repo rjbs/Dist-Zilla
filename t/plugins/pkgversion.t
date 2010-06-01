@@ -100,8 +100,7 @@ unlike(
 );
 
 ok(
-  grep({ m(skipping package for DZT::TP2, it looks like a monkey patch) }
-    @{ $tzil->log_messages }),
+  grep({ m(skipping .+ DZT::TP2) } @{ $tzil->log_messages }),
   "we report the reason for not updating Monkey",
 );
 

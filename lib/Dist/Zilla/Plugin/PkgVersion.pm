@@ -82,7 +82,7 @@ sub munge_perl {
     }
 
     if ($stmt->content =~ /package\s*\n\s*\Q$package/) {
-      $self->log([ 'skipping package for %s, it looks like a monkey patch', $package ]);
+      $self->log([ 'skipping private package %s', $package ]);
       next;
     }
 
