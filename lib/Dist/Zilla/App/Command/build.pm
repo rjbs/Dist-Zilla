@@ -45,7 +45,7 @@ necessary, the directory will be created.  An archive will not be created.
 =cut
 
 sub execute {
-  my ($self, $opt, $arg) = @_;
+  my ($self, $opt, $args) = @_;
 
   if ($opt->in) {
     $self->zilla->build_in($opt->in);

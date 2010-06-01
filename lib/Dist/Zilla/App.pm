@@ -13,7 +13,7 @@ use Path::Class;
 sub global_opt_spec {
   return (
     [ "verbose|v:s@", "log additional output" ],
-    [ "inc|I=s@",     "additional \@INC dirs", {
+    [ "lib-inc|I=s@",     "additional \@INC dirs", {
         callbacks => { 'always fine' => sub { unshift @INC, @{$_[0]}; } }
     } ]
   );
