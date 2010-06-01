@@ -9,6 +9,7 @@ use Moose::Autobox;
 In your F<dist.ini>:
 
   [ExecDir]
+  dir=scripts
 
 =cut
 
