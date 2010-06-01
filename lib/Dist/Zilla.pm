@@ -15,6 +15,7 @@ use Dist::Zilla::Types qw(License);
 use Archive::Tar;
 use File::Find::Rule;
 use File::pushd ();
+use File::ShareDir ();
 use Hash::Merge::Simple ();
 use List::MoreUtils qw(uniq);
 use List::Util qw(first);
@@ -1147,21 +1148,19 @@ sub _new_from_profile {
   my $seq;
 
   if ($profile_name eq 'default' and ! -e $profile_dir->subdir('default')) {
-    $arg->{chrome}->logger->log_fatal(
-      { prefix => '[DZ] ' },
-      "no default dist minting profile available"
-    );
-  } else {
-    $assembler->sequence->section_named('_')->add_value(
-      root => $profile_dir->subdir($profile_name)
-    );
-    $seq = $config_class->read_config(
-      $profile_dir->subdir($profile_name)->file('profile'),
-      {
-        assembler => $assembler
-      },
-    );
+    $profile_dir = dir( File::ShareDir::dist_dir('Dist-Zilla') )
+                 ->subdir('profiles');
   }
+
+  $assembler->sequence->section_named('_')->add_value(
+    root => $profile_dir->subdir($profile_name)
+  );
+  $seq = $config_class->read_config(
+    $profile_dir->subdir($profile_name)->file('profile'),
+    {
+      assembler => $assembler
+    },
+  );
 
   my $self = $seq->section_named('_')->zilla;
 
