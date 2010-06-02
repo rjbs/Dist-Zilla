@@ -35,6 +35,8 @@ Revision history for {{$dist->name}}
 
           generated Makefile.PL no longer has trailing spaces (Florian Ragwitz)
 
+          Document 'user' parameter for :FakeRelease (Kent Fredric)
+
 3.101520  2010-06-01 11:50:16 America/New_York
           unixify all gathered filenames (Christian Walde)
 
