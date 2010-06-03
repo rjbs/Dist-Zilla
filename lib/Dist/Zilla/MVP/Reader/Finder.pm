@@ -1,6 +1,6 @@
 package Dist::Zilla::MVP::Reader::Finder;
 use Moose;
-use Config::MVP::Reader 2;
+use Config::MVP::Reader 2.101540; # if_none
 extends 'Config::MVP::Reader::Finder';
 with 'Dist::Zilla::Config';
 # ABSTRACT: the reader for dist.ini files

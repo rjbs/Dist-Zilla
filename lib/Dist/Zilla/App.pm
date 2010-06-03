@@ -40,7 +40,7 @@ sub _build_global_stashes {
   });
 
   my $reader = Dist::Zilla::MVP::Reader::Finder->new({
-    if_none => sub { return $_[2]->sequence },
+    if_none => sub { return $_[2]->{assembler}->sequence },
   });
 
   my $seq = $reader->read_config($config_base, { assembler => $assembler });
