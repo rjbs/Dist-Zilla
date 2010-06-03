@@ -6,6 +6,7 @@ with 'Dist::Zilla::Role::Releaser';
 use CPAN::Uploader 0.100660; # log method
 use File::HomeDir;
 use File::Spec;
+use Moose::Util::TypeConstraints;
 use Scalar::Util qw(weaken);
 
 use namespace::autoclean;
@@ -47,13 +48,18 @@ has credentials_stash => (
   default => 'PAUSE'
 );
 
+has _credentials_stash_obj => (
+  is   => 'ro',
+  isa  => maybe_type( role_type('Dist::Zilla::Stash::PAUSE') ),
+  init_arg => undef,
+  default  => sub { $_[0]->zilla->stash_named( $_[0]->credentials_stash ) },
+);
+
 sub _credential {
   my ($self, $name) = @_;
 
-  my $stash = $self->zilla->stash_named( $self->credentials_stash );
-  return unless $stash;
-
-  return $stash->{ $name };
+  return unless my $stash = $self->_credentials_stash_obj;
+  return $stash->$name;
 }
 
 has user => (

@@ -1,7 +1,7 @@
-package Dist::Zilla::Stash::Generic;
+package Dist::Zilla::Stash::Heap;
 use Moose;
 with 'Dist::Zilla::Role::Stash';
-# ABSTRACT: a stash that just does named value lookup
+# ABSTRACT: a stash that's just a big heap of names and values
 
 has payload => (
   is  => 'ro',
