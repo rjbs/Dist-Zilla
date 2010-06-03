@@ -266,25 +266,26 @@ sub _build_license {
 
 has _license_class => (
   is        => 'ro',
-  isa       => 'Str',
+  isa       => 'Maybe[Str]',
   lazy      => 1,
   init_arg  => 'license',
   clearer   => '_clear_license_class',
   default   => sub {
-    my $stash = $_[0]->stash_named(':License');
-    $stash && return $stash->value('class');
+    my $stash = $_[0]->stash_named('%Rights');
+    $stash && return $stash->license_class;
+    return;
   }
 );
 
 has _copyright_holder => (
   is        => 'ro',
-  isa       => 'Str',
+  isa       => 'Maybe[Str]',
   lazy      => 1,
   init_arg  => 'copyright_holder',
   clearer   => '_clear_copyright_holder',
   default   => sub {
-    my $stash = $_[0]->stash_named(':License');
-    $stash && return $stash->value('copyright_holder');
+    return unless my $stash = $_[0]->stash_named('%Rights');
+    $stash && return $stash->copyright_holder;
     return;
   }
 );
@@ -303,7 +304,7 @@ has _copyright_year => (
     # but think of the performance hit!  I guess we'll have to suffer through
     # this until we can optimize the code to not take .1s to run, right? --
     # rjbs, 2008-06-13
-    my $stash = $_[0]->stash_named(':License');
+    my $stash = $_[0]->stash_named('%Rights');
     my $year  = $stash && $stash->value('copyright_year');
     return $year ? $year : (localtime)[5] + 1900;
   }
