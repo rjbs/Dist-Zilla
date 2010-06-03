@@ -9,6 +9,7 @@ use Dist::Zilla::MVP::Reader::Finder;
 use File::HomeDir ();
 use Moose::Autobox;
 use Path::Class;
+use Try::Tiny;
 
 sub global_opt_spec {
   return (
@@ -39,11 +40,20 @@ sub _build_global_stashes {
     section_class => 'Dist::Zilla::MVP::Section', # make this DZMA default
   });
 
-  my $reader = Dist::Zilla::MVP::Reader::Finder->new({
-    if_none => sub { return $_[2]->{assembler}->sequence },
-  });
+  try {
+    my $reader = Dist::Zilla::MVP::Reader::Finder->new({
+      if_none => sub { return $_[2]->{assembler}->sequence },
+    });
 
-  my $seq = $reader->read_config($config_base, { assembler => $assembler });
+    my $seq = $reader->read_config($config_base, { assembler => $assembler });
+  } catch {
+    die "\n"
+      . "Your global configuration file couldn't be loaded.  It's a file\n"
+      . "matching ~/.dzil/config.*\n\n"
+      . "You can try deleting the file or you might need to upgrade from\n"
+      . "pre-version 4 format.  In most cases, this will just mean replacing\n"
+      . "[!release] with [%PAUSE] and deleting any [!new] stanza.\n";
+  };
 
   return $stash;
 }
