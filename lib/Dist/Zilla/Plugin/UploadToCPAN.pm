@@ -17,10 +17,10 @@ If loaded, this plugin will allow the F<release> command to upload to the CPAN.
 
 =head1 DESCRIPTION
 
-This plugin looks for configuration in your C<dist.ini> or
-C<~/.dzil/config.ini>:
+This plugin looks for configuration in your C<dist.ini> or (more
+likely) C<~/.dzil/config.ini>:
 
-  [=Dist::Zilla::App::Command::release]
+  [%PAUSE]
   user     = YOUR-PAUSE-ID
   password = YOUR-PAUSE-PASSWORD
 
@@ -51,6 +51,7 @@ has credentials_stash => (
 has _credentials_stash_obj => (
   is   => 'ro',
   isa  => maybe_type( role_type('Dist::Zilla::Stash::PAUSE') ),
+  lazy => 1,
   init_arg => undef,
   default  => sub { $_[0]->zilla->stash_named( $_[0]->credentials_stash ) },
 );
