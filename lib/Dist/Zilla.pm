@@ -305,8 +305,8 @@ has _copyright_year => (
     # this until we can optimize the code to not take .1s to run, right? --
     # rjbs, 2008-06-13
     my $stash = $_[0]->stash_named('%Rights');
-    my $year  = $stash && $stash->value('copyright_year');
-    return $year ? $year : (localtime)[5] + 1900;
+    my $year  = $stash && $stash->copyright_year;
+    return defined $year ? $year : (localtime)[5] + 1900;
   }
 );
 
