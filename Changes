@@ -1,6 +1,37 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          INCOMPATIBLE CHANGES:
+
+          New global config system!
+
+          Your ~/.dzil/config.ini is now broken.  Running `dzil` should tell
+          you how to fix it.  Probably just replace [!release] with [%PAUSE]
+          and delete everything else.  Hope that helps!
+
+          Major refactoring of our use of Config::MVP; this probably won't
+          break anything unless you wrote your own config readers, which I'm
+          pretty sure you haven't done!
+
+          config parameters beginning with a colon are not passed to plugins
+          (this should not really affect anyone)
+
+          OTHER CHANGES:
+
+          plugins are now registered as soon as their config section has been
+          read
+
+          Dist::Zilla::Role::Stash has been added
+
+          :version can now be passed as a config section value to require that
+          the config's package be of the specified version
+
+          reserved config property names (plugin_name, zilla) are now fatal
+          during config read rather than plugin instantiation
+
+          core license attrs will look in the %Rights stash for defaults
+
+          `dzil new` will work if you have no configured profiles
 
 3.101520  2010-06-01 11:50:16 America/New_York
           unixify all gathered filenames (Christian Walde)
