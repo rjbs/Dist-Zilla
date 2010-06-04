@@ -933,6 +933,19 @@ sub clean {
 
 =method install
 
+  $zilla->install( \%arg );
+
+This method installs the distribution locally.  The distribution will be built
+in a temporary subdirectory, then the process will change directory to that
+subdir and an installer will be run.
+
+Valid arguments are:
+
+  install_command - the command to run in the subdir to install the dist
+                    default (roughly): $^X -MCPAN -einstall .
+
+                    this argument should be an arrayref
+
 =cut
 
 sub install {
@@ -952,7 +965,7 @@ sub install {
     ## no critic Punctuation
     my $wd = File::pushd::pushd($target);
     my @cmd = $arg->{install_command}
-            ? $arg->{install_command}
+            ? @{ $arg->{install_command} }
             : ($^X => '-MCPAN' =>
                 $^O eq 'MSWin32' ? q{-e"install '.'"} : '-einstall "."');
 

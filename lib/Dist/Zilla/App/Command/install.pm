@@ -42,7 +42,9 @@ sub execute {
   my ($self, $opt, $arg) = @_;
 
   $self->zilla->install({
-    ($opt->install_command ? (install_command => $opt->install_command) : ()),
+    $opt->install_command
+      ? (install_command => [ $opt->install_command ])
+      : (),
   });
 }
 
