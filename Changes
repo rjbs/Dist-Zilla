@@ -1,6 +1,20 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          a number of minor changes to documentation
+
+          a few improvements to use of type constraints in Zilla.pm
+
+          some methods that were undocumented have been _-prefixed
+
+          ModuleBuild now turns on recursive_test_files unconditionally
+
+          the install_command argument to $zilla->install should now be an
+          arrayref
+
+          suppressed a stringifying-undef warning when using UploadToCPAN
+
+          no longer try to compose an obsolete Dist::Zilla::Config role
 
 4.101540  2010-06-03 23:52:52 America/New_York
           INCOMPATIBLE CHANGES:
