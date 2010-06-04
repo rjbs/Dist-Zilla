@@ -5,7 +5,7 @@ with 'Dist::Zilla::Role::ConfigDumper';
 
 use Moose::Autobox 0.09; # ->flatten
 use MooseX::LazyRequire;
-use MooseX::Types::Moose qw(ArrayRef Bool HashRef Object);
+use MooseX::Types::Moose qw(ArrayRef Bool HashRef Object Str);
 use MooseX::Types::Perl qw(DistName LaxVersionStr);
 use MooseX::Types::Path::Class qw(Dir File);
 use Moose::Util::TypeConstraints;
@@ -330,7 +330,7 @@ This is likely to change at some point in the near future.
 
 has authors => (
   is   => 'ro',
-  isa  => 'ArrayRef[Str]',
+  isa  => ArrayRef[Str],
   lazy => 1,
   required => 1,
   default  => sub { [ $_[0]->copyright_holder ] },
@@ -341,11 +341,15 @@ has authors => (
 This is an arrayref of objects implementing L<Dist::Zilla::Role::File> that
 will, if left in this arrayref, be built into the dist.
 
+Non-core code should avoid altering this arrayref, but sometimes there is not
+other way to change the list of files.  In the future, the representation used
+for storing files will be changed.
+
 =cut
 
 has files => (
   is   => 'ro',
-  isa  => 'ArrayRef[Dist::Zilla::Role::File]',
+  isa  => ArrayRef[ role_type('Dist::Zilla::Role::File') ],
   lazy => 1,
   init_arg => undef,
   default  => sub { [] },
@@ -382,6 +386,8 @@ has is_trial => (
 This is an arrayref of plugins that have been plugged into this Dist::Zilla
 object.
 
+Non-core code should not alter this arrayref.
+
 =cut
 
 has plugins => (
@@ -405,9 +411,9 @@ has built_in => (
 
 =attr distmeta
 
-This is a hashref containing the metadata about this distribution that
-will be stored in META.yml or META.json.  You should not alter the
-metadata in this hash; use a MetaProvider plugin instead.
+This is a hashref containing the metadata about this distribution that will be
+stored in META.yml or META.json.  You should not alter the metadata in this
+hash; use a MetaProvider plugin instead.
 
 =cut
 
@@ -432,8 +438,13 @@ sub _build_distmeta {
     abstract => $self->abstract,
     author   => $self->authors,
     license  => $self->license->meta2_name,
-    release_status => ($self->is_trial or $self->version =~ /_/) ? 'testing' : 'stable', # XXX: what about unstable?
-    dynamic_config => 0,
+
+    # XXX: what about unstable?
+    release_status => ($self->is_trial or $self->version =~ /_/)
+                    ? 'testing'
+                    : 'stable',
+
+    dynamic_config => 0, # problematic, I bet -- rjbs, 2010-06-04
     generated_by   => (ref $self)
                     . ' version '
                     . (defined $self->VERSION ? $self->VERSION : '(undef)')
@@ -466,6 +477,9 @@ has prereqs => (
 
 This routine returns a new Zilla from the configuration in the current working
 directory.
+
+This method should not be relied upon, yet.  Its semantics are likely to
+change.
 
 Valid arguments are:
 
@@ -756,6 +770,12 @@ sub build_in {
 This method behaves like C<L</build_in>>, but if the dist is already built in
 C<$root> (or the default root, if no root is given), no exception is raised.
 
+=method ensure_built_in
+
+This method just calls C<ensure_built_in> with no arguments.  It gets you the
+default behavior without the weird-looking formulation of C<ensure_built_in>
+with no object for the preposition!
+
 =cut
 
 sub ensure_built {
@@ -775,7 +795,7 @@ sub ensure_built_in {
 
 =method build_archive
 
-  $dist->build_archive;
+  $zilla->build_archive;
 
 This method will ensure that the dist has been built, and will then build a
 tarball of the build directory in the current directory.
@@ -955,7 +975,8 @@ sub install {
 
   $zilla->test;
 
-This method builds a new copy of the distribution and tests it.
+This method builds a new copy of the distribution and tests it using
+C<L</run_tests_in>>.
 
 =cut
 
@@ -1011,7 +1032,7 @@ sub run_tests_in {
 
 =method run_in_build
 
-  $zilla->run_in_build(\@cmd);
+  $zilla->run_in_build( \@cmd );
 
 This method makes a temporary directory, builds the distribution there,
 executes the dist's first L<BuildRunner|Dist::Zilla::Role::BuildRunner>, and
@@ -1025,7 +1046,7 @@ sub run_in_build {
 
   # The sort below is a cheap hack to get ModuleBuild ahead of
   # ExtUtils::MakeMaker. -- rjbs, 2010-01-05
-  Carp::croak("you can't build without any BuildRunner plugins")
+  $self->log_fatal("you can't build without any BuildRunner plugins")
     unless my @builders =
     $self->plugins_with(-BuildRunner)->sort->reverse->flatten;
 
@@ -1108,6 +1129,16 @@ has _global_stashes => (
   lazy => 1,
   default => sub { {} },
 );
+
+=method stash_named
+
+  my $stash = $zilla->stash_named( $name );
+
+This method will return the stash with the given name, or undef if none exists.
+It looks for a local stash (for this dist) first, then falls back to a global
+stash (from the user's global configuration).
+
+=cut
 
 sub stash_named {
   my ($self, $name) = @_;
