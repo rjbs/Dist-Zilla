@@ -248,7 +248,12 @@ sub _build_license {
       $self->main_module->content
     );
 
-    $self->log_fatal("couldn't make a good guess at license") if @guess != 1;
+    if (@guess != 1) {
+      $self->log_fatal(
+        "no license data in config, no %Rights stash,",
+        "couldn't make a good guess at license from Pod; giving up"
+      );
+    }
 
     my $filename = $self->main_module->name;
     $license_class = $guess[0];
