@@ -33,6 +33,8 @@ Revision history for {{$dist->name}}
 
           `dzil new` will work if you have no configured profiles
 
+          generated Makefile.PL no longer has trailing spaces (Florian Ragwitz)
+
 3.101520  2010-06-01 11:50:16 America/New_York
           unixify all gathered filenames (Christian Walde)
 
