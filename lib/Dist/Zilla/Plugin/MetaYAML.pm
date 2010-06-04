@@ -4,7 +4,8 @@ use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::FileGatherer';
 
-use CPAN::Meta::Converter 2.101460; # lax url schema validation
+use CPAN::Meta::Converter 2.101550; # improved downconversion
+use CPAN::Meta::Validator 2.101550; # improved downconversion
 use Hash::Merge::Simple ();
 
 =head1 DESCRIPTION
@@ -57,6 +58,15 @@ sub gather_files {
     name => $self->filename,
     code => sub {
       my $distmeta  = $zilla->distmeta;
+
+      my $validator = CPAN::Meta::Validator->new($distmeta);
+
+      unless ($validator->is_valid) {
+        my $msg = "Invalid META structure.  Errors found:\n";
+        $msg .= join( "\n", $validator->errors );
+        $self->log_fatal($msg);
+      }
+
       my $converter = CPAN::Meta::Converter->new($distmeta);
       my $output    = $converter->convert(version => $self->version);
 
