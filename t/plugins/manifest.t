@@ -13,9 +13,9 @@ my $tzil = Dist::Zilla::Tester->from_config(
   {
     add_files => {
       q{source/file with spaces.txt}        => "foo\n",
-      q{source/file\\with some\\whacks.txt} => "bar\n",
+      # q{source/file\\with some\\whacks.txt} => "bar\n",
       # q{source/'file-with-ticks.txt'}       => "baz\n",
-      q{source/file'with'quotes\\or\\backslash.txt} => "quux\n",
+      # q{source/file'with'quotes\\or\\backslash.txt} => "quux\n",
       'source/dist.ini' => simple_ini(
         'GatherDir',
         'Manifest',
@@ -33,8 +33,8 @@ is_deeply(
   [ sort(
     'MANIFEST',
     q{file with spaces.txt},
-    q{file\\with some\\whacks.txt},
-    q{file'with'quotes\\or\\backslash.txt},
+    # q{file\\with some\\whacks.txt},
+    # q{file'with'quotes\\or\\backslash.txt},
     # q{'file-with-ticks.txt'},
     'dist.ini',
     'lib/DZT/Sample.pm',
@@ -51,9 +51,9 @@ is_deeply(
   [ sort(
     'MANIFEST',
     q{'file with spaces.txt'},
-    q{'file\\\\with some\\\\whacks.txt'},
+    # q{'file\\\\with some\\\\whacks.txt'},
     # q{'\\'file-with-ticks.txt\\''},
-    q{'file\\'with\\'quotes\\\\or\\\\backslash.txt'},
+    # q{'file\\'with\\'quotes\\\\or\\\\backslash.txt'},
     'dist.ini',
     'lib/DZT/Sample.pm',
     't/basic.t',
