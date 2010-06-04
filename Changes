@@ -37,6 +37,8 @@ Revision history for {{$dist->name}}
 
           Document 'user' parameter for :FakeRelease (Kent Fredric)
 
+          will probably work just fine on Win32 now!
+
 3.101520  2010-06-01 11:50:16 America/New_York
           unixify all gathered filenames (Christian Walde)
 
