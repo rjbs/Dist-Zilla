@@ -50,7 +50,7 @@ L<Dist::Zilla::Tutorial>.
 
 has chrome => (
   is  => 'rw',
-  isa => 'Object', # will be does => 'Dist::Zilla::Role::Chrome' when it exists
+  isa => role_type('Dist::Zilla::Role::Chrome'),
   required => 1,
 );
 
@@ -74,8 +74,8 @@ This is the version of the distribution to be created.
 
 =cut
 
-has version_override => (
-  isa => 'Str',
+has _version_override => (
+  isa => LaxVersionStr,
   is  => 'ro' ,
   init_arg => 'version',
 );
@@ -93,7 +93,7 @@ has version => (
 sub _build_version {
   my ($self) = @_;
 
-  my $version = $self->version_override;
+  my $version = $self->_version_override;
 
   for my $plugin ($self->plugins_with(-VersionProvider)->flatten) {
     next unless defined(my $this_version = $plugin->provide_version);
@@ -151,15 +151,16 @@ distribution.  This may change!
 
 You can override the default by specifying the file path explicitly,
 ie:
-    main_module = lib/Foo/Bar.pm
+
+  main_module = lib/Foo/Bar.pm
 
 =cut
 
-has main_module_override => (
+has _main_module_override => (
   isa => 'Str',
   is  => 'ro' ,
-  init_arg => 'main_module',
-  predicate => 'has_main_module_override',
+  init_arg  => 'main_module',
+  predicate => '_has_main_module_override',
 );
 
 has main_module => (
@@ -175,8 +176,8 @@ has main_module => (
     my $file;
     my $guessing = q{};
 
-    if ( $self->has_main_module_override ) {
-       $file = first { $_->name eq $self->main_module_override }
+    if ( $self->_has_main_module_override ) {
+       $file = first { $_->name eq $self->_main_module_override }
                $self->files->flatten;
     } else {
        $guessing = 'guessing '; # We're having to guess
