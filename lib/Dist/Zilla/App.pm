@@ -30,7 +30,11 @@ sub _build_global_stashes {
   my $homedir = File::HomeDir->my_home
     or Carp::croak("couldn't determine home directory");
 
-  my $config_base = dir($homedir)->subdir('.dzil')->file('config');
+  my $config_dir  = $ENV{DZIL_GLOBAL_CONFIG_ROOT}
+                  ? dir($ENV{DZIL_GLOBAL_CONFIG_ROOT})
+                  : dir($homedir)->subdir('.dzil');
+
+  my $config_base = $config_dir->file('config');
 
   require Dist::Zilla::MVP::Assembler::GlobalConfig;
   require Dist::Zilla::MVP::Section;

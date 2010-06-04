@@ -9,6 +9,8 @@ use Test::DZil;
 
 ## SIMPLE TEST WITH DZIL::APP TESTER
 
+$ENV{DZIL_GLOBAL_CONFIG_ROOT} = 't';
+
 my $result = test_dzil('corpus/DZ1', [ qw(build) ]);
 
 is($result->exit_code, 0, "dzil would have exited 0");
