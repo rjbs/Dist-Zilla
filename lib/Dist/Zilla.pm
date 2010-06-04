@@ -42,7 +42,9 @@ authors, and is meant to be run on a repository checkout rather than on
 published, released code, it can do much more than those tools, and is free to
 make much more ludicrous demands in terms of prerequisites.
 
-For more information, see L<Dist::Zilla::Tutorial>.
+If you have access to the web, you can learn more and find an interactive
+tutorial at L<dzil.org|http://dzil.org/>.  If not, try
+L<Dist::Zilla::Tutorial>.
 
 =cut
 
@@ -200,7 +202,9 @@ has main_module => (
 =attr license
 
 This is the L<Software::License|Software::License> object for this dist's
-license.  It will be created automatically, if possible, with the
+license and copyright.
+
+It will be created automatically, if possible, with the
 C<copyright_holder> and C<copyright_year> attributes.  If necessary, it will
 try to guess the license from the POD of the dist's main module.
 
