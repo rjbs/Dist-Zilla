@@ -122,6 +122,7 @@ sub setup_installer {
     ($self->zilla->_share_dir ? (share_dir => $self->zilla->_share_dir) : ()),
 
     (map {; $_ => $prereqs{$_}->as_string_hash } keys %prereqs),
+    recursive_test_files => 1,
   );
 
   $self->__module_build_args(\%module_build_args);
