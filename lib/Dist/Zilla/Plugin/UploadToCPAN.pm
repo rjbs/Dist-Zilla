@@ -3,7 +3,7 @@ package Dist::Zilla::Plugin::UploadToCPAN;
 use Moose;
 with 'Dist::Zilla::Role::Releaser';
 
-use CPAN::Uploader 0.100660; # log method
+use CPAN::Uploader 0.101550; # ua string
 use File::HomeDir;
 use File::Spec;
 use Moose::Util::TypeConstraints;
@@ -36,6 +36,8 @@ C<~/.pause>, in the same format that L<cpan-upload> requires:
   package
     Dist::Zilla::Plugin::UploadToCPAN::_Uploader;
   use base 'CPAN::Uploader';
+  sub _ua_string { CPAN::Uploader->_ua_string }
+
   sub log {
     my $self = shift;
     $self->{'Dist::Zilla'}{plugin}->log(@_);
