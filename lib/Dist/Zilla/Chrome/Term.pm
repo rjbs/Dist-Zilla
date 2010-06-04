@@ -2,6 +2,13 @@ package Dist::Zilla::Chrome::Term;
 use Moose;
 # ABSTRACT: chrome used for terminal-based interaction
 
+=head1 OVERVIEW
+
+This class provides a L<Dist::Zilla::Chrome> implementation for use in a
+terminal environment.  It's the default chrome used by L<Dist::Zilla::App>.
+
+=cut
+
 use Log::Dispatchouli;
 
 has logger => (

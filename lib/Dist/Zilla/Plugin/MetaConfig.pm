@@ -3,6 +3,17 @@ package Dist::Zilla::Plugin::MetaConfig;
 use Moose;
 with 'Dist::Zilla::Role::MetaProvider';
 
+=head1 DESCRIPTION
+
+This plugin adds a top-level C<x_Dist_Zilla> key to the
+L<distmeta|Dist::Zilla/distmeta> for the distribution.  It describe the
+Dist::Zilla version used as well as all the plugins used.  Each plugin's name,
+package, and version will be included.  Plugins may augment their
+implementation of the L<Dist::Zilla::Role::ConfigDumper> role methods to add
+more data to this dump.
+
+=cut
+
 sub metadata {
   my ($self) = @_;
 

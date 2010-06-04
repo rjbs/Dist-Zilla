@@ -32,9 +32,12 @@ This defines what command to run after building the dist in the dist dir.
 
 Any value that works with L<C<system>|perlfunc/system> is accepted.
 
-If not specified, calls
+If not specified, calls (roughly):
 
     perl -MCPAN -einstall "."
+
+For more information, look at the L<install|Dist::Zilla/install> method in
+Dist::Zilla.
 
 =cut
 
