@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.101550  2010-06-04 11:16:13 America/New_York
           a number of minor changes to documentation
 
           a few improvements to use of type constraints in Zilla.pm
