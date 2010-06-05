@@ -61,7 +61,7 @@ BEGIN {
 }
 |;
 
-  $file->content(join "\n", @lines);
+  $file->content(join "\n", @lines, '');
 }
 
 __PACKAGE__->meta->make_immutable;
