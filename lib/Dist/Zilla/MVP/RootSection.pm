@@ -3,7 +3,7 @@ use Moose;
 extends 'Config::MVP::Section';
 # ABSTRACT: a standard section in Dist::Zilla's configuration sequence
 
-=head DESCRIPTION
+=head1 DESCRIPTION
 
 This is a subclass of L<Config::MVP::Section>, used as the starting section by
 L<Dist::Zilla::MVP::Assembler::Zilla>.  It has a number of useful defaults, as
