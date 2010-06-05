@@ -9,14 +9,14 @@ use Dist::Zilla::App -command;
 This command does nothing.  It initializes Dist::Zill, then exits.  This is
 useful to see the logging output of plugin initialization.
 
-    dzil nop -v
+  dzil nop -v
+
+Seriously, this command is almost entirely for diagnostic purposes.  Don't
+overthink it, okay?
 
 =cut
 
 sub abstract { 'do nothing: initialize dzil, then exit' }
-
-sub opt_spec {
-}
 
 sub execute {
   my ($self, $opt, $arg) = @_;

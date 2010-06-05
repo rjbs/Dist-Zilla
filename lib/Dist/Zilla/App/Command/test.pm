@@ -8,24 +8,19 @@ use Moose::Autobox;
 
 =head1 SYNOPSIS
 
-Test your distribution:
-
   dzil test
 
-This runs with AUTHOR_TESTING and RELEASE_TESTING environment variables turned
-on, so it's like doing this:
+This command is a thin wrapper around the C<L<test|Dist::Zilla/test>> method in
+Dist::Zilla.  It builds your dist and runs the tests with AUTHOR_TESTING and
+RELEASE_TESTING environment variables turned on, so it's like doing this:
 
   export AUTHOR_TESTING=1
   export RELEASE_TESTING=1
-  dzil build
-  rsync -avp My-Project-Version/ .build/
-  cd .build;
+  dzil build --no-tgz
+  cd $BUILD_DIRECTORY
   perl Makefile.PL
   make
   make test
-
-Except for the fact it's built directly in a subdir of .build (like
-F<.build/ASDF123>).
 
 A build that fails tests will be left behind for analysis, and F<dzil> will
 exit a non-zero value.  If the tests are successful, the build directory will

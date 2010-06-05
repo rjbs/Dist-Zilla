@@ -8,20 +8,12 @@ use File::Find::Rule;
 
 =head1 SYNOPSIS
 
-Removes some files that are created during build, test, and install.
+  dzil clean
 
-    dzil clean
-
-=head1 REMOVED FILES
-
-    ^.build
-    ^<distribution-name>-*
-
-ie:
-
-    removing .build
-    removing Foo-Bar-1.09010
-    removing Foo-Bar-1.09010.tar.gz
+This command removes some files that are created during build, test, and
+install.  It's a very thin layer over the C<L<clean|Dist::Zilla/clean>> method
+on the Dist::Zilla object.  The documentation for that method gives more
+information about the files that will be removed.
 
 =cut
 

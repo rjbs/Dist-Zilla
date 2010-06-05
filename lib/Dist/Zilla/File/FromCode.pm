@@ -7,6 +7,11 @@ use Moose;
 This represents a file whose contents will be generated on demand from a
 callback or method name.
 
+It has one attribute, C<code>, which may be a method name (string) or a
+coderef.  When the file's C<content> method is called, the code is used to
+generate the content.  This content is I<not> cached.  It is recomputed every
+time the content is requested.
+
 =cut
 
 has code => (

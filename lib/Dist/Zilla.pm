@@ -924,6 +924,11 @@ sub release {
 
 =method clean
 
+This method removes temporary files and directories suspected to have been
+produced by the Dist::Zilla build process.  Specifically, it deletes the
+F<.build> directory and any entity that starts with the dist name and a hyphen,
+like matching the glob C<Your-Dist-*>.
+
 =cut
 
 sub clean {

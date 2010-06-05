@@ -5,7 +5,8 @@ use Moose;
 =head1 DESCRIPTION
 
 This represents a file created in memory -- it's not much more than a glorified
-string.
+string.  It has a read/write C<content> attribute that holds the octets that
+will be written to disk.
 
 =cut
 

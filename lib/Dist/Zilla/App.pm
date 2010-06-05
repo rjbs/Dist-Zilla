@@ -23,9 +23,9 @@ sub global_opt_spec {
 sub _build_global_stashes {
   my ($self) = @_;
 
-  return $self->{__global_stash__} if $self->{__global_stash__};
+  return $self->{__global_stashes__} if $self->{__global_stashes__};
 
-  my $stash = $self->{__global_stash__} = {};
+  my $stash_registry = $self->{__global_stashes__} = {};
 
   my $homedir = File::HomeDir->my_home
     or Carp::croak("couldn't determine home directory");
@@ -40,8 +40,8 @@ sub _build_global_stashes {
   require Dist::Zilla::MVP::Section;
   my $assembler = Dist::Zilla::MVP::Assembler::GlobalConfig->new({
     chrome => $self->chrome,
-    stash  => $stash,
-    section_class => 'Dist::Zilla::MVP::Section', # make this DZMA default
+    stash_registry => $stash_registry,
+    section_class  => 'Dist::Zilla::MVP::Section', # make this DZMA default
   });
 
   try {
@@ -59,7 +59,7 @@ sub _build_global_stashes {
       . "[!release] with [%PAUSE] and deleting any [!new] stanza.\n";
   };
 
-  return $stash;
+  return $stash_registry;
 }
 
 =method zilla

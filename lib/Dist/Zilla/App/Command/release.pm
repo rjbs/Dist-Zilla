@@ -6,12 +6,14 @@ use Dist::Zilla::App -command;
 
 =head1 SYNOPSIS
 
-Use ReleasePlugin(s) to release your distribution in many ways.
+  dzil release
 
-    dzil release
+  dzil release --trial
 
-Put some plugins in your F<dist.ini> that perform
-L<Dist::Zilla::Role::Releaser>, such as L<Dist::Zilla::Plugin::UploadToCPAN>
+This command is a very, very thin wrapper around the
+C<L<release|Dist::Zilla/release>> method on the Dist::Zilla object.  It will
+build, archive, and release your distribution using your Releaser plugins.  The
+only option, C<--trial>, will cause it to build a trial build.
 
 =cut
 

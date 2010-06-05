@@ -3,6 +3,22 @@ use Moose;
 extends 'Config::MVP::Section';
 # ABSTRACT: a standard section in Dist::Zilla's configuration sequence
 
+=head DESCRIPTION
+
+This is a subclass of L<Config::MVP::Section>, used as the starting section by
+L<Dist::Zilla::MVP::Assembler::Zilla>.  It has a number of useful defaults, as
+well as a C<zilla> attribute which will, after section finalization, contain a
+Dist::Zilla object with which subsequent plugin sections may register.
+
+Those useful defaults are:
+
+=for :list
+* name defaults to _
+* aliases defaults to { author => 'authors' }
+* multivalue_args defaults to [ 'authors' ]
+
+=cut
+
 use MooseX::LazyRequire;
 use MooseX::SetOnce;
 use Moose::Util::TypeConstraints;
