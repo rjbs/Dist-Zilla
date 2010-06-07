@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.101570  2010-06-06 23:36:58 America/New_York
           validate distmeta before writing to disk
 
           changes to Dist-Zilla's distribution metadata to validate
