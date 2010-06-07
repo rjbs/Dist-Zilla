@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.101582  2010-06-07 18:23:04 America/New_York
           improve tests to work with new CPAN::Meta
 
           fix incorrect type constraint in UploadToCPAN
