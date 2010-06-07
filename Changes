@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          make UploadToCPAN look at the right stash by default
 
 4.101570  2010-06-06 23:36:58 America/New_York
           validate distmeta before writing to disk

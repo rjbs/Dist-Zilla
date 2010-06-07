@@ -47,7 +47,7 @@ C<~/.pause>, in the same format that L<cpan-upload> requires:
 has credentials_stash => (
   is  => 'ro',
   isa => 'Str',
-  default => 'PAUSE'
+  default => '%PAUSE'
 );
 
 has _credentials_stash_obj => (
