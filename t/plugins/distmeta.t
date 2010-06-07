@@ -62,10 +62,10 @@ use YAML::Tiny;
         configure => { requires => { 'Build::Foo' => '0.12' } },
       },
 
-      license   => 'perl_5',
+      license   => [ 'perl_5' ],
       resources => {
         homepage => 'http://bana.na/phone',
-        license  => 'http://b.sd/license',
+        license  => [ 'http://b.sd/license' ],
       },
       version   => '0.001',
     );

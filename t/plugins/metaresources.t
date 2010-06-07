@@ -5,13 +5,16 @@ use Test::More 0.88;
 use lib 't/lib';
 
 use Test::DZil;
+use Test::Deep;
 use CPAN::Meta::Converter;
 
 my $generated_by = 'Dist::Zilla::Tester version '
   . (Dist::Zilla::Tester->VERSION || '(undef)');
 
-my $converted_by = "$generated_by, CPAN::Meta::Converter version "
+my $converted_by = "CPAN::Meta::Converter version "
                  . CPAN::Meta::Converter->VERSION;
+
+my $generated_by_re = qr/\A\Q$generated_by\E(?:, \Q$converted_by\E)?\z/;
 
 {
   my $tzil = Dist::Zilla::Tester->from_config(
@@ -44,7 +47,7 @@ my $converted_by = "$generated_by, CPAN::Meta::Converter version "
       author         => ['E. Xavier Ample <example@example.org>'],
       build_requires => {},
       dynamic_config => 0,
-      generated_by   => $converted_by,
+      generated_by   => re($generated_by_re),
       license        => 'perl',
       'meta-spec'    => {
         url     => 'http://module-build.sourceforge.net/META-spec-v1.4.html',
@@ -67,10 +70,10 @@ my $converted_by = "$generated_by, CPAN::Meta::Converter version "
       abstract       => 'Sample DZ Dist',
       author         => ['E. Xavier Ample <example@example.org>'],
       dynamic_config => 0,
-      generated_by   => $generated_by,
-      license        => 'perl_5',
+      generated_by   => re($generated_by_re),
+      license        => [ 'perl_5' ],
       'meta-spec'    => {
-        url     => 'http://github.com/dagolden/cpan-meta/',
+        url     => 'http://search.cpan.org/perldoc?CPAN::Meta::Spec',
         version => 2
       },
       name      => 'DZT-Sample',
@@ -79,7 +82,7 @@ my $converted_by = "$generated_by, CPAN::Meta::Converter version "
       resources => {
         bugtracker => { web => 'http://bugs.example.com' },
         homepage   => 'http://example.com',
-        repository => { url => 'git://example.com/project.git' }
+        repository => superhashof({ url => 'git://example.com/project.git' }),
       },
       version => '0.001'
     },
@@ -121,7 +124,7 @@ my $converted_by = "$generated_by, CPAN::Meta::Converter version "
       author         => ['E. Xavier Ample <example@example.org>'],
       build_requires => {},
       dynamic_config => 0,
-      generated_by   => $converted_by,
+      generated_by   => re($generated_by_re),
       license        => 'perl',
       'meta-spec'    => {
         url     => 'http://module-build.sourceforge.net/META-spec-v1.4.html',
@@ -144,10 +147,10 @@ my $converted_by = "$generated_by, CPAN::Meta::Converter version "
       abstract       => 'Sample DZ Dist',
       author         => ['E. Xavier Ample <example@example.org>'],
       dynamic_config => 0,
-      generated_by   => $generated_by,
-      license        => 'perl_5',
+      generated_by   => re($generated_by_re),
+      license        => [ 'perl_5' ],
       'meta-spec'    => {
-        url     => 'http://github.com/dagolden/cpan-meta/',
+        url     => 'http://search.cpan.org/perldoc?CPAN::Meta::Spec',
         version => 2
       },
       name      => 'DZT-Sample',

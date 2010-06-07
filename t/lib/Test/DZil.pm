@@ -5,6 +5,7 @@ package Test::DZil;
 use Dist::Zilla::Tester;
 use Params::Util qw(_HASH0);
 use JSON 2;
+use Test::Deep ();
 use YAML::Tiny;
 
 use Sub::Exporter -setup => {
@@ -33,7 +34,7 @@ sub is_yaml {
   my $have = YAML::Tiny->read_string($yaml)
     or die "Cannot decode YAML";
 
-  Test::More::is_deeply($have->[0], $want, $comment);
+  Test::Deep::cmp_deeply($have->[0], $want, $comment);
 }
 
 sub is_json {
@@ -42,7 +43,7 @@ sub is_json {
   my $have = JSON->new->ascii(1)->decode($json)
     or die "Cannot decode JSON";
 
-  Test::More::is_deeply($have, $want, $comment);
+  Test::Deep::cmp_deeply($have, $want, $comment);
 }
 
 sub _build_ini_builder {

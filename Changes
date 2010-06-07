@@ -1,8 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          improve tests to work with new CPAN::Meta
 
-4.101581  2010-06-07 16:50:14 America/New_York
+          fix incorrect type constraint in UploadToCPAN
 
 4.101580  2010-06-07 10:21:51 America/New_York
           make UploadToCPAN look at the right stash by default
