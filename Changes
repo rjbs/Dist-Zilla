@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.101580  2010-06-07 10:21:51 America/New_York
           make UploadToCPAN look at the right stash by default
 
 4.101570  2010-06-06 23:36:58 America/New_York
