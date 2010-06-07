@@ -52,7 +52,7 @@ has credentials_stash => (
 
 has _credentials_stash_obj => (
   is   => 'ro',
-  isa  => maybe_type( role_type('Dist::Zilla::Stash::PAUSE') ),
+  isa  => maybe_type( class_type('Dist::Zilla::Stash::PAUSE') ),
   lazy => 1,
   init_arg => undef,
   default  => sub { $_[0]->zilla->stash_named( $_[0]->credentials_stash ) },
