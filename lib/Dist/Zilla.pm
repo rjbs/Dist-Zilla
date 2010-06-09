@@ -897,6 +897,12 @@ sub _write_out_file {
   Carp::croak("attempted to write $to multiple times") if -e $to;
 
   open my $out_fh, '>', "$to" or die "couldn't open $to to write: $!";
+
+  # This is needed, or \n is translated to \r\n on win32.
+  # Maybe :raw:utf8 is needed, but not sure.
+  #     -- Kentnl - 2010-06-10
+  binmode( $out_fh , ":raw" );
+
   print { $out_fh } $file->content;
   close $out_fh or die "error closing $to: $!";
   chmod $file->mode, "$to" or die "couldn't chmod $to: $!";

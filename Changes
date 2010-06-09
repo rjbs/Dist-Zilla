@@ -1,6 +1,11 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          
+          Fix win32 \r\n emission. \r\n is only emitted now if 
+            its there in the original code. Tests included to 
+            make sure DZil doesn't sufer the problem under itself
+            on windows. ( Kent Fredric ).
 
           Fix Tar permissions. ( Kent Fredric , stolen from Module::Build )
 
