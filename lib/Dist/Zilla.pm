@@ -832,6 +832,14 @@ sub build_archive {
     '.tar.gz',
   ));
 
+  # Fix up the CHMOD on the archived files,
+  # to inhibit 'withoutworldwritables' behaviour 
+  # on win32.
+
+  for my $f ( $archive->get_files ) {
+    $f->mode( $f->mode & ~022 );
+  }
+
   $self->log("writing archive to $file");
   $archive->write("$file", 9);
 
