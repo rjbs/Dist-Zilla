@@ -44,6 +44,9 @@ sub make_module {
 
   if ($self->has_template) {
     open my $fh, '<', $self->template;
+
+    # Win32
+    binmode $fh, ':raw';
     $template = do { local $/; <$fh> };
   } else {
     $template = ${ $self->section_data('Module.pm') };

@@ -83,6 +83,9 @@ sub after_release {
     local $/;
     open my $in_fh, '<', $filename
       or Carp::croak("can't open $filename for reading: $!");
+
+    # Win32
+    binmode $in_fh, ':raw';
     <$in_fh>
   };
 
@@ -98,6 +101,9 @@ sub after_release {
   # and finally rewrite the changelog on disk
   open my $out_fh, '>', $update_fn
     or Carp::croak("can't open $update_fn for writing: $!");
+
+  # Win32.
+  binmode $out_fh, ':raw';
   print $out_fh $content or Carp::croak("error writing to $update_fn: $!");
   close $out_fh or Carp::croak("error closing $update_fn: $!");
 }

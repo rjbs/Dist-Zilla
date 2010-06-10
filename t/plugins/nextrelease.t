@@ -43,6 +43,12 @@ END_CHANGES
     "new version does not yet appear in source Changes file",
   );
 
+  unlike( 
+    $tzil->slurp_file('build/Changes'),
+    qr{\r},
+    "no \\r added to build Changelog",
+  );
+
   $tzil->release;
 
   like(
@@ -54,6 +60,12 @@ END_CHANGES
   ok(
     grep({ /fake release happen/i } @{ $tzil->log_messages }),
     "we log a fake release when we fake release",
+  );
+
+  unlike( 
+    $tzil->slurp_file('source/Changes'),
+    qr{\r},
+    "No new \\r's added to post-release changelog",
   );
 }
 
