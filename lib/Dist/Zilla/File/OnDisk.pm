@@ -38,7 +38,7 @@ sub _read_file {
   # Maybe :raw:utf8, not sure.
   #     -- Kentnl - 2010-06-10
   binmode $fh, ':raw';
- 
+
   my $content = do { local $/; <$fh> };
 }
 

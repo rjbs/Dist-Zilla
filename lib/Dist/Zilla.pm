@@ -832,10 +832,8 @@ sub build_archive {
     '.tar.gz',
   ));
 
-  # Fix up the CHMOD on the archived files,
-  # to inhibit 'withoutworldwritables' behaviour 
-  # on win32.
-
+  # Fix up the CHMOD on the archived files, to inhibit 'withoutworldwritables'
+  # behaviour on win32.
   for my $f ( $archive->get_files ) {
     $f->mode( $f->mode & ~022 );
   }
@@ -1281,7 +1279,7 @@ sub mint_dist {
     my $minter = $self->plugin_named(
       $module->{minter_name} || ':DefaultModuleMaker'
     );
-    
+
     $minter->make_module({ name => $module->{name} })
   }
 

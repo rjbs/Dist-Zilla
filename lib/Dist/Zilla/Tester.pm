@@ -45,7 +45,7 @@ around from_config => sub {
       my $fn = $tempdir->file($name);
       $fn->dir->mkpath;
       open my $fh, '>', $fn;
-      
+
       # Win32 fix for crlf translation.
       #   maybe :raw:utf8? -- Kentnl - 2010-06-10
       binmode $fh, ':raw';
