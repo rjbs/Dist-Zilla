@@ -40,12 +40,6 @@ package
 1;
 ';
 
-sub version_re {
-  my ($mod, $ver) = @_;
-  my $V = "${mod}::VERSION";
-  return qr|^BEGIN {\s+\$\Q$V = '$ver';\E } \$\Q$V = \E\$\Q$V;\E$|m,
-}
-
 my $tzil = Dist::Zilla::Tester->from_config(
   { dist_root => 'corpus/DZT' },
   {
@@ -64,27 +58,27 @@ $tzil->build;
 my $dzt_sample = $tzil->slurp_file('build/lib/DZT/Sample.pm');
 like(
   $dzt_sample,
-  version_re('DZT::Sample', '0.001'),
+  qr{^\s*\$\QDZT::Sample::VERSION = '0.001';\E$}m,
   "added version to DZT::Sample",
 );
 
 my $dzt_tp1 = $tzil->slurp_file('build/lib/DZT/TP1.pm');
 like(
   $dzt_tp1,
-  version_re('DZT::TP1', '0.001'),
+  qr{^\s*\$\QDZT::TP1::VERSION = '0.001';\E$}m,
   "added version to DZT::TP1",
 );
 
 like(
   $dzt_tp1,
-  version_re('DZT::TP2', '0.001'),
+  qr{^\s*\$\QDZT::TP2::VERSION = '0.001';\E$}m,
   "added version to DZT::TP2",
 );
 
 my $dzt_wver = $tzil->slurp_file('build/lib/DZT/WVer.pm');
 unlike(
   $dzt_wver,
-  version_re('DZT::WVer', '0.001'),
+  qr{^\s*\$\QDZT::WVer::VERSION = '0.001';\E$}m,
   "*not* added to DZT::WVer; we have one already",
 );
 

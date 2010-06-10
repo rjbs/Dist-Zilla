@@ -89,11 +89,10 @@ sub munge_perl {
     # the \x20 hack is here so that when we scan *this* document we don't find
     # an assignment to version; it shouldn't be needed, but it's been annoying
     # enough in the past that I'm keeping it here until tests are better
-    my $perl = "BEGIN { \$$package\::VERSION\x20=\x20'$version'; } "
-             .         "\$$package\::VERSION = \$$package\::VERSION;\n";
+    my $perl = "BEGIN {\n  \$$package\::VERSION\x20=\x20'$version';\n}\n";
 
     my $version_doc = PPI::Document->new(\$perl);
-    my @children = $version_doc->children;
+    my @children = $version_doc->schildren;
 
     $self->log_debug([
       'adding $VERSION assignment to %s in %s',
@@ -101,12 +100,8 @@ sub munge_perl {
       $file->name,
     ]);
 
-    my $ok;
-    $ok += $stmt->insert_after($_->clone) for reverse @children;
-    $stmt->insert_after($version_doc);
-
     Carp::carp("error inserting version in " . $file->name)
-      unless $ok == @children
+      unless $stmt->insert_after($children[0]->clone)
       and    $stmt->insert_after( PPI::Token::Whitespace->new("\n") );
   }
 

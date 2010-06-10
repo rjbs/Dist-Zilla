@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          The PAUSE indexer will not be pleased. The 4.101610 PkgVersion
+          changes are entirely reverted.
 
 4.101611  2010-06-10 11:37:52 America/New_York
           added nonsensical $VERSION = $VERSION to appease the PAUSE indexer
