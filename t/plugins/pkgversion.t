@@ -42,7 +42,8 @@ package
 
 sub version_re {
   my ($mod, $ver) = @_;
-  return qr|^BEGIN {\s+\$\Q${mod}::VERSION = '$ver';\E }$|m,
+  my $V = "${mod}::VERSION";
+  return qr|^BEGIN {\s+\$\Q$V = '$ver';\E } \$\Q$V = \E\$\Q$V;\E$|m,
 }
 
 my $tzil = Dist::Zilla::Tester->from_config(

@@ -1,6 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          added nonsensical $VERSION = $VERSION to appease the PAUSE indexer
+          and other garbage code that evals a single line to guess at the
+          version's value
 
 4.101610  2010-06-10 10:01:37 America/New_York
           Fix Win32 \r\n emission. \r\n is only emitted now if its there in
