@@ -58,9 +58,9 @@ is already taken, in which case an exception is raised.
 sub register_stash {
   my ($self, $name, $object) = @_;
   $self->log_fatal("tried to register $name stash entry twice")
-    if $self->zilla->_local_stash->{ $name };
+    if $self->zilla->_local_stashes->{ $name };
 
-  $self->zilla->_local_stash->{ $name } = $object;
+  $self->zilla->_local_stashes->{ $name } = $object;
   return;
 }
 
