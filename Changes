@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.101611  2010-06-10 11:37:52 America/New_York
           added nonsensical $VERSION = $VERSION to appease the PAUSE indexer
           and other garbage code that evals a single line to guess at the
           version's value
