@@ -68,7 +68,7 @@ sub register_prereqs {
     'ExtUtils::MakeMaker' => $self->eumm_version,
   );
 
-  return unless $self->zilla->_share_dir;
+  return unless keys %{ $self->zilla->_share_dir_map };
 
   $self->zilla->register_prereqs(
     { phase => 'configure' },
@@ -97,10 +97,25 @@ sub setup_installer {
 
   my @share_dir_block = (q{}, q{});
 
-  if (my $share_dir = $self->zilla->_share_dir) {
-    my $share_dir = quotemeta $share_dir;
+
+  my $share_dir_map = $self->zilla->_share_dir_map;
+  if ( keys %$share_dir_map ) {
+    my $preamble = qq{use File::ShareDir::Install;\n};
+
+    if ( my $dist_share_dir = $share_dir_map->{dist} ) {
+      $dist_share_dir = quotemeta $dist_share_dir;
+      $preamble .= qq{install_share dist => "$dist_share_dir";\n};
+    }
+
+    if ( my $mod_map = $share_dir_map->{module} ) {
+      for my $mod ( %$mod_map ) {
+        my $mod_share_dir = quotemeta $mod_map->{$mod};
+        $preamble .= qq{install_share module => "$mod", "$mod_share_dir;\n};
+      }
+    }
+
     @share_dir_block = (
-      qq{use File::ShareDir::Install;\ninstall_share "$share_dir";\n},
+      $preamble,
       qq{package\nMY;\nuse File::ShareDir::Install qw(postamble);\n},
     );
   }

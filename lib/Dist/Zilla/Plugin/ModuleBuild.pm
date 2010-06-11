@@ -119,7 +119,7 @@ sub setup_installer {
     dist_version  => $self->zilla->version,
     dist_author   => [ $self->zilla->authors->flatten ],
     script_files  => \@exe_files,
-    ($self->zilla->_share_dir ? (share_dir => $self->zilla->_share_dir) : ()),
+    ( keys %{$self->zilla->_share_dir_map} ? (share_dir => $self->zilla->_share_dir_map) : ()),
 
     (map {; $_ => $prereqs{$_}->as_string_hash } keys %prereqs),
     recursive_test_files => 1,

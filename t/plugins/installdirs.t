@@ -38,7 +38,7 @@ test_this(
   sub {
     my $tzil = shift;
     my $makefile = $tzil->slurp_file('build/Makefile.PL');
-    unlike($makefile, qr/install_share .share./, "not going to install share");
+    unlike($makefile, qr/install_share dist => .share./, "not going to install share");
   },
 );
 
@@ -48,7 +48,7 @@ test_this(
   sub {
     my $tzil = shift;
     my $makefile = $tzil->slurp_file('build/Makefile.PL');
-    unlike($makefile, qr/install_share .share./, "not going to install share");
+    unlike($makefile, qr/install_share dist => .share./, "not going to install share");
   },
 );
 
@@ -61,7 +61,7 @@ test_this(
     my $makefile = $tzil->slurp_file('build/Makefile.PL');
     unlike(
       $makefile,
-      qr/install_share .share./,
+      qr/install_share dist => .share./,
       "files in ./share, but no ShareDir, so we will not install_share"
     );
   },
@@ -75,7 +75,7 @@ test_this(
     my $makefile = $tzil->slurp_file('build/Makefile.PL');
     like(
       $makefile,
-      qr/install_share .share./,
+      qr/install_share dist => .share./,
       "files in ./share, ShareDir, so we will install_share"
     );
   },
@@ -88,7 +88,7 @@ test_this(
     my $tzil = shift;
     my $modulebuild = $tzil->plugin_named('ModuleBuild');
     is(
-      $modulebuild->__module_build_args->{share_dir},
+      $modulebuild->__module_build_args->{share_dir}{dist},
       'share',
       "files in ./share, ShareDir, so we have a Build.PL share_dir"
     );
