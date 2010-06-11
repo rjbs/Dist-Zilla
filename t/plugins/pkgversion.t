@@ -60,7 +60,6 @@ my $tzil = Dist::Zilla::Tester->from_config(
       'source/lib/DZT/WVer.pm'   => $with_version,
       'source/lib/DZT/R1.pm'     => $repeated_packages,
       'source/lib/DZT/Monkey.pm' => $monkey_patched,
-      'source/dist.ini' => simple_ini('GatherDir', 'PkgVersion'),
       'source/bin/script_pkg.pl' => $script_pkg,
       'source/bin/script_ver.pl' => $script_pkg . "our \$VERSION = 1.234;\n",
       'source/bin/script.pl'     => $script,
