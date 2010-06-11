@@ -15,7 +15,6 @@ use Dist::Zilla::Types qw(License);
 use Archive::Tar;
 use File::Find::Rule;
 use File::pushd ();
-use File::ShareDir ();
 use Hash::Merge::Simple ();
 use List::MoreUtils qw(uniq);
 use List::Util qw(first);
@@ -1187,7 +1186,7 @@ sub stash_named {
 #####################################
 
 sub _new_from_profile {
-  my ($class, $profile_name, $arg) = @_;
+  my ($class, $profile_data, $arg) = @_;
   $arg ||= {};
 
   my $config_class =
@@ -1215,20 +1214,18 @@ sub _new_from_profile {
       if $arg->{_global_stashes};
   }
 
-  my $profile_dir = dir( File::HomeDir->my_home )->subdir(qw(.dzil profiles));
-
-  my $seq;
-
-  if ($profile_name eq 'default' and ! -e $profile_dir->subdir('default')) {
-    $profile_dir = dir( File::ShareDir::dist_dir('Dist-Zilla') )
-                 ->subdir('profiles');
-  }
-
-  $assembler->sequence->section_named('_')->add_value(
-    root => $profile_dir->subdir($profile_name)
+  my $module = String::RewritePrefix->rewrite(
+    { '' => 'Dist::Zilla::MintingProfile::', '=', => '' },
+    $profile_data->[0],
   );
-  $seq = $config_class->read_config(
-    $profile_dir->subdir($profile_name)->file('profile'),
+  Class::MOP::load_class($module);
+
+  my $profile_dir = $module->profile_dir($profile_data->[1]);
+
+  $assembler->sequence->section_named('_')->add_value(root => $profile_dir);
+
+  my $seq = $config_class->read_config(
+    $profile_dir->file('profile'),
     {
       assembler => $assembler
     },

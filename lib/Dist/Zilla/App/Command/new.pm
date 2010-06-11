@@ -31,7 +31,12 @@ sub abstract { 'mint a new dist' }
 sub usage_desc { '%c %o <ModuleName>' }
 
 sub opt_spec {
-  [ 'profile|p=s', 'name of the profile to use', { default => 'default' } ],
+  [ 'profile|p=s',  'name of the profile to use',
+    { default => 'default' }  ],
+
+  [ 'provider|P=s', 'name of the profile provider to use',
+    { default => 'Default' }  ],
+
   # [ 'module|m=s@', 'module(s) to create; may be given many times'         ],
 }
 
@@ -57,7 +62,8 @@ sub execute {
 
   require Dist::Zilla;
   my $minter = Dist::Zilla->_new_from_profile(
-    $opt->profile => {
+    [ $opt->provider, $opt->profile ],
+    {
       chrome  => $self->app->chrome,
       name    => $dist,
       _global_stashes => $self->app->_build_global_stashes,
