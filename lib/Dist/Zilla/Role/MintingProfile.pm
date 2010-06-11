@@ -10,28 +10,17 @@ use Path::Class;
 Plugins implementing this role should provide C<profile_dir> method, which,
 given a minting profile name, should return it's directory.
 
-The minting profile is a directory, containing arbitrary files used during 
-creation of new distribution. Among other things notably, it should
-contain the 'profile.ini' file, listing the plugins used for minter initialization.
+The minting profile is a directory, containing arbitrary files used during
+creation of new distribution. Among other things notably, it should contain the
+'profile.ini' file, listing the plugins used for minter initialization.
 
-The default implementation C<profile_dir> looks in the module's 
+The default implementation C<profile_dir> looks in the module's
 L<ShareDir|File::ShareDir>.
-
-To publish a minting profile with your plugin on CPAN, and make it available
-for other users, do the following:
-
-- Include a C<Dist::Zilla::MintingProfile::YourProfile> module in the 
-distribution, and add a 'Dist::Zilla::Role::MintingProfile' role to it.
-
-- Add a shared dir for that module, containing a profile's files:
-
-    [ShareDir/Module]
-    Dist::Zilla::MintingProfile::YourProfile = share/profiles
 
 After installing your profile, users will be able to start a new distribution,
 based on your profile with the:
 
-    $ dzil new -P YourProfile -p profile_name Distribution::Name
+  $ dzil new -P YourProfile -p profile_name Distribution::Name
 
 =cut
 

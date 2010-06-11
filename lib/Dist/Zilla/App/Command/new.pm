@@ -13,8 +13,9 @@ Creates a new Dist-Zilla based distribution under the current directory.
 There are two arguments, C<-p> and C<-P>. C<-P> specify the minting profile
 provider and C<-p> - the profile name.
 
-The default profile provider first looks in the F<~/.dzil/profiles/$profile_name>
-and then among standard profiles, shipped with Dist::Zilla. For example:
+The default profile provider first looks in the
+F<~/.dzil/profiles/$profile_name> and then among standard profiles, shipped
+with Dist::Zilla. For example:
 
   $ dzil new -p work Corporate::Library
 
@@ -25,8 +26,8 @@ exists, it will use a very simple configuration shipped with Dist::Zilla.
 
   $ dzil new -P Foo Corporate::Library
 
-This command would instruct C<dzil> to consult the Foo provider about the directory
-of 'default' profile.
+This command would instruct C<dzil> to consult the Foo provider about the
+directory of 'default' profile.
 
 
 =cut
