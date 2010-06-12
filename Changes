@@ -5,6 +5,10 @@ Revision history for {{$dist->name}}
 
           fix PkgVersion and PodVersion to work on scripts (M. Gardner)
 
+          add PkgDist plugin for questionable reasons
+
+          add MintingProfile, `dzil new -P` (rjbs and SamuraiJack)
+
 4.101612  2010-06-10 12:12:00 America/New_York
           The PAUSE indexer will not be pleased. The 4.101610 PkgVersion
           changes are entirely reverted.
