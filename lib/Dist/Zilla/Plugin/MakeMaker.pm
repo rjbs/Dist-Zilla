@@ -30,7 +30,7 @@ my $template = q|
 use strict;
 use warnings;
 
-{{ $perl_prereq ? qq{ BEGIN { require $perl_prereq; } } : ''; }}
+{{ $perl_prereq ? qq[BEGIN { require $perl_prereq; }] : ''; }}
 
 use ExtUtils::MakeMaker {{ $eumm_version }};
 
