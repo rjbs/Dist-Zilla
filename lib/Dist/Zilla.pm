@@ -23,6 +23,7 @@ use Params::Util qw(_HASHLIKE);
 use Path::Class;
 use Software::License 0.101370; # meta2_name
 use String::RewritePrefix;
+use Try::Tiny;
 
 use Dist::Zilla::Prereqs;
 use Dist::Zilla::File::OnDisk;
@@ -337,7 +338,21 @@ has authors => (
   isa  => ArrayRef[Str],
   lazy => 1,
   required => 1,
-  default  => sub { [ $_[0]->copyright_holder ] },
+  default  => sub {
+    my ($self) = @_;
+
+    if (my $stash  = $self->stash_named('%User')) {
+      return [ sprintf "%s <%s>", $stash->name, $stash->email ];
+    }
+
+    my $author = try { $_[0]->copyright_holder };
+    return [ $author ] if defined $author and length $author;
+
+    $self->log_fatal(
+      "No %User stash and no copyright holder;",
+      "can't determine dist author; configure author or a %User section",
+    );
+  },
 );
 
 =attr files
