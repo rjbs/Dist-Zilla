@@ -1,6 +1,8 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
+package
+  dzil;
 use Dist::Zilla::App;
 # ABSTRACT: do stuff with your dist
 Dist::Zilla::App->run;
