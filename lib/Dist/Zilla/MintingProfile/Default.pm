@@ -1,7 +1,7 @@
 package Dist::Zilla::MintingProfile::Default;
 # ABSTRACT: Default minting profile provider
 use Moose;
-with 'Dist::Zilla::Role::MintingProfile';
+with 'Dist::Zilla::Role::MintingProfile::ShareDir';
 
 use File::ShareDir;
 use Path::Class;
