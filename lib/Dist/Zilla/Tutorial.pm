@@ -110,7 +110,7 @@ F<Makefile.PL>.  All the
 L<InstallTool|Dist::Zilla::Role::InstallTool>-performing plugins are used to
 do whatever is needed to make the dist installable.
 
-Everything is just about done.  The files are all written out to disk and the 
+Everything is just about done.  The files are all written out to disk and the
 L<AfterBuild|Dist::Zilla::Role::AfterBuild> plugins do their thing.
 
 =head1 THE GLORIOUS FUTURE

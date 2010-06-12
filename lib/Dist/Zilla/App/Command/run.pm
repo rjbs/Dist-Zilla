@@ -19,7 +19,7 @@ like doing this:
   rsync -avp My-Project-version/ .build/
   cd .build
   perl Makefile.PL            # or perl Build.PL
-  make                        # or ./Build        
+  make                        # or ./Build
   export PERL5LIB=$PWD/blib/lib:$PWD/blib/arch
   <your command as defined by rest of params>
 

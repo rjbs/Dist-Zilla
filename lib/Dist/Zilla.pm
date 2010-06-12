@@ -720,14 +720,14 @@ sub _build_share_dir_map {
     next unless my $sub_map = $plugin->share_dir_map;
 
     if ( $sub_map->{dist} ) {
-      $self->log_fatal("can't install more than one distribution ShareDir") 
+      $self->log_fatal("can't install more than one distribution ShareDir")
         if $share_dir_map->{dist};
       $share_dir_map->{dist} = $sub_map->{dist};
     }
 
     if ( my $mod_map = $sub_map->{module} ) {
       for my $mod ( keys %$mod_map ) {
-        $self->log_fatal("can't install more than one ShareDir for $mod") 
+        $self->log_fatal("can't install more than one ShareDir for $mod")
           if $share_dir_map->{module}{$mod};
         $share_dir_map->{module}{$mod} = $mod_map->{$mod};
       }

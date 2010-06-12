@@ -20,4 +20,4 @@ _dzil()
         return 0
     fi
 }
-complete -F _dzil dzil 
+complete -F _dzil dzil

@@ -32,7 +32,7 @@ use String::RewritePrefix 0.002; # better string context behavior
     }
 
     return unless $self->{in_name};
-    
+
     if (
       $event->{type} eq 'text'
       and $event->{content} =~ /^\S+\s+-+\s+(.+)$/
@@ -57,7 +57,7 @@ sub abstract_from_file {
   return $e->{abstract};
 }
 
-=method expand_config_package_name 
+=method expand_config_package_name
 
   my $pkg_name = Util->expand_config_package_name($string);
 

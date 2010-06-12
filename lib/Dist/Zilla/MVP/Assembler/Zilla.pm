@@ -6,7 +6,7 @@ extends 'Dist::Zilla::MVP::Assembler';
 =head1 OVERVIEW
 
 This is a subclass of L<Dist::Zilla::MVP::Assembler> used when assembling the
-Dist::Zilla object.  
+Dist::Zilla object.
 
 It has a C<zilla_class> attribute, which is used to determine what class of
 Dist::Zilla object to create.  (This isn't very useful now, but will be in the

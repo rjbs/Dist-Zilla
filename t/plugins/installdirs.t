@@ -134,7 +134,7 @@ test_this(
 );
 
 test_this(
-  [ 
+  [
     'MakeMaker',
     ['ModuleShareDirs' => { 'DZT::Simple' => 'share' } ],
   ],
@@ -149,11 +149,11 @@ test_this(
 );
 
 test_this(
-  [ 
+  [
     'MakeMaker',
     ['ModuleShareDirs' => { 'DZT::Simple' => 'share', 'DZT::Other' => 'other' } ],
   ],
-  { 
+  {
     'source/share/stupid-share.txt' => "This is a sharedir file.\n",
     'source/other/stupid-other.txt' => "This is another sharedir file.\n",
   },
@@ -170,11 +170,11 @@ test_this(
 );
 
 test_this(
-  [ 
+  [
     'MakeMaker', 'ShareDir',
     ['ModuleShareDirs' => { 'DZT::Simple' => 'simple', 'DZT::Other' => 'other' } ],
   ],
-  { 
+  {
     'source/share/stupid-share.txt' => "This is a sharedir file.\n",
     'source/other/stupid-other.txt' => "This is another sharedir file.\n",
     'source/simple/stupid-other.txt' => "This is another simple sharedir file.\n",
@@ -195,7 +195,7 @@ test_this(
 );
 
 test_this(
-  [ 
+  [
     'ModuleBuild',
     ['ModuleShareDirs' => { 'DZT::Simple' => 'share' } ],
   ],
@@ -212,11 +212,11 @@ test_this(
 );
 
 test_this(
-  [ 
+  [
     'ModuleBuild', 'ShareDir',
     ['ModuleShareDirs' => { 'DZT::Simple' => 'simple', 'DZT::Other' => 'other' } ],
   ],
-  { 
+  {
     'source/share/stupid-share.txt' => "This is a sharedir file.\n",
     'source/other/stupid-other.txt' => "This is another sharedir file.\n",
     'source/simple/stupid-other.txt' => "This is another simple sharedir file.\n",
@@ -246,7 +246,7 @@ test_this(
   sub {
     my $tzil = shift;
     my $makemaker = $tzil->plugin_named('MakeMaker');
-    
+
     is_deeply(
       $makemaker->__write_makefile_args->{EXE_FILES},
       [],

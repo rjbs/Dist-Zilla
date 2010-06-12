@@ -33,7 +33,7 @@ sub munge_pod {
   my ($self, $file) = @_;
 
   my @content = split /\n/, $file->content;
-  
+
   require List::MoreUtils;
   if (List::MoreUtils::any(sub { $_ =~ /^=head1 VERSION\b/ }, @content)) {
     $self->log($file->name . ' already has a VERSION section in POD');

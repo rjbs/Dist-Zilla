@@ -138,7 +138,7 @@ Revision history for {{$dist->name}}
 
 3.101400  2010-05-20 11:30:41 America/New_York
           ModuleBuild now uses $^X to run Build (Christian Walde)
-          
+
           MakeMaker now uses the "make" program found in Config (Christian
           Walde)
 
@@ -301,7 +301,7 @@ Revision history for {{$dist->name}}
           ConfirmRelease plugin added and made part of @Classic (dagolden)
 
           MakeMaker-produced Makefile.PL will produce warnings less often
-          
+
           MakeMaker-produced Makefile.PL will require v6.31 for INSTALL_BASE
 
           Prereq plugin can target config_requires, build_requires, etc
@@ -519,7 +519,7 @@ Revision history for {{$dist->name}}
           do not barf if there's no dzil config (thanks, ILMARI)
 
 1.003     2008-10-13
-          add "dzil new" to create a new dist.ini, etc         
+          add "dzil new" to create a new dist.ini, etc
           add "dzil release" to upload to the CPAN
           both of these commands are really sketchy right now
 
