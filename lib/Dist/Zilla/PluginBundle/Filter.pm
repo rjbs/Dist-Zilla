@@ -36,12 +36,12 @@ sub bundle_config {
 
   my $has_filter_args = $section->{payload}->keys->grep(sub { /^-/ })->length;
   for my $key ($section->{payload}->keys->flatten) {
-      my $val = $section->{payload}->{$key};
-      my $target = $has_filter_args && ($key !~ /^-/)
-        ? 'bundle'
-        : 'filter';
-      $key =~ s/^-// if $target eq 'filter';
-      $config->{$target}->{$key} = $val;
+    my $val = $section->{payload}->{$key};
+    my $target = $has_filter_args && ($key !~ /^-/)
+      ? 'bundle'
+      : 'filter';
+    $key =~ s/^-// if $target eq 'filter';
+    $config->{$target}->{$key} = $val;
   }
 
   Carp::croak("no bundle given for bundle filter")
