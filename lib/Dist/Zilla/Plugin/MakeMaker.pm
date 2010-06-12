@@ -108,9 +108,9 @@ sub setup_installer {
     }
 
     if ( my $mod_map = $share_dir_map->{module} ) {
-      for my $mod ( %$mod_map ) {
+      for my $mod ( keys %$mod_map ) {
         my $mod_share_dir = quotemeta $mod_map->{$mod};
-        $preamble .= qq{install_share module => "$mod", "$mod_share_dir;\n};
+        $preamble .= qq{install_share module => "$mod", "$mod_share_dir";\n};
       }
     }
 
