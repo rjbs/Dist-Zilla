@@ -345,7 +345,7 @@ has authors => (
       return [ sprintf "%s <%s>", $stash->name, $stash->email ];
     }
 
-    my $author = try { $_[0]->copyright_holder };
+    my $author = try { $self->copyright_holder };
     return [ $author ] if defined $author and length $author;
 
     $self->log_fatal(
