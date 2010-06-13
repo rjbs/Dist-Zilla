@@ -65,7 +65,11 @@ sub _credential {
   return $stash->$name;
 }
 
-has user => (
+sub mvp_aliases {
+  return { user => 'username' };
+}
+
+has username => (
   is   => 'ro',
   isa  => 'Str',
   lazy => 1,
@@ -123,12 +127,9 @@ has uploader => (
   default => sub {
     my ($self) = @_;
 
-    my $user     = $self->user;
-    my $password = $self->password;
-
     my $uploader = Dist::Zilla::Plugin::UploadToCPAN::_Uploader->new({
-      user     => $user,
-      password => $password,
+      user     => $self->username,
+      password => $self->password,
     });
 
     $uploader->{'Dist::Zilla'}{plugin} = $self;
