@@ -32,6 +32,10 @@ sub before_build {
   $self->zilla->version("$version");
 }
 
+before register_component => sub {
+  warn "!!! $_[0] will be removed in Dist::Zilla v5; remove it from your config\n";
+};
+
 __PACKAGE__->meta->make_immutable;
 no Moose;
 1;
