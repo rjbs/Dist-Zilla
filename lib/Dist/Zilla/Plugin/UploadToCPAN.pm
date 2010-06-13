@@ -21,7 +21,7 @@ This plugin looks for configuration in your C<dist.ini> or (more
 likely) C<~/.dzil/config.ini>:
 
   [%PAUSE]
-  user     = YOUR-PAUSE-ID
+  username = YOUR-PAUSE-ID
   password = YOUR-PAUSE-PASSWORD
 
 If this configuration does not exist, it can read the configuration from
@@ -72,7 +72,7 @@ has user => (
   required => 1,
   default  => sub {
     my ($self) = @_;
-    return $self->_credential('user') || $self->pause_cfg->{user};
+    return $self->_credential('username') || $self->pause_cfg->{user};
   },
 );
 

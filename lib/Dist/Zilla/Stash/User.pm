@@ -1,6 +1,5 @@
 package Dist::Zilla::Stash::User;
 use Moose;
-with 'Dist::Zilla::Role::Stash';
 # ABSTRACT: a stash of user name and email
 
 has name => (
@@ -15,4 +14,10 @@ has email => (
   required => 1,
 );
 
+sub authors {
+  my ($self) = @_;
+  return [ sprintf "%s <%s>", $self->name, $self->email ];
+}
+
+with 'Dist::Zilla::Role::Stash::Authors';
 1;

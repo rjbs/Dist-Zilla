@@ -1,9 +1,12 @@
 package Dist::Zilla::Stash::PAUSE;
 use Moose;
-with 'Dist::Zilla::Role::Stash';
 # ABSTRACT: a stash of your PAUSE credentials
 
-has user => (
+sub mvp_aliases {
+  return { user => 'username' };
+}
+
+has username => (
   is  => 'ro',
   isa => 'Str',
   required => 1,
@@ -15,4 +18,5 @@ has password => (
   required => 1,
 );
 
+with 'Dist::Zilla::Role::Stash::Login';
 1;

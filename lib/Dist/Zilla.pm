@@ -342,7 +342,7 @@ has authors => (
     my ($self) = @_;
 
     if (my $stash  = $self->stash_named('%User')) {
-      return [ sprintf "%s <%s>", $stash->name, $stash->email ];
+      return $stash->authors;
     }
 
     my $author = try { $self->copyright_holder };
