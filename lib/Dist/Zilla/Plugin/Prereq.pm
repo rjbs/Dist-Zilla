@@ -63,8 +63,8 @@ sub __from_name {
   # relationship such as C<requires>, C<prefers>, or C<recommends>.  The
 
   my ($phase, $type) = $name =~ /\A
-    (Build|Test|Runtime|Configure)
-    (Requires|Prefers|Recommends)
+    (Build|Test|Runtime|Configure|Develop)
+    (Requires|Recommends|Suggests|Conflicts)
   \z/x;
 
   return ($phase, $type);
