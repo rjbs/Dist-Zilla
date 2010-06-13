@@ -3,8 +3,6 @@ package Dist::Zilla::Plugin::Prereq;
 use Moose;
 with 'Dist::Zilla::Role::PrereqSource';
 
-=encoding utf8
-
 =head1 SYNOPSIS
 
 In your F<dist.ini>:
@@ -17,12 +15,12 @@ In your F<dist.ini>:
 Which is equivalent to specifying prerequisites for the C<Runtime>
 phase:
 
-  [Prereq / Runtime]
+  [Prereq / RuntimeRequires]
   Foo::Bar = 1.002
   MRO::Compat = 10
   Sub::Exporter = 0
 
-See L</Phases> for the full ist of supported phases.
+See L</Phases> for the full list of supported phases.
 
 =head1 DESCRIPTION
 
@@ -30,35 +28,30 @@ This module adds "fixed" prerequisites to your distribution.  These are prereqs
 with a known, fixed minimum version that doens't change based on platform or
 other conditions.
 
-=head1 Phases
+You can specify prerequisites for different phases and kinds of relationships.
+In C<RuntimeRequires>, the phase is Runtime and the relationship is Requires.
+These are described in more detail in the L<CPAN::Meta
+specification|CPAN::Meta::Spec/PREREQUISITES>.
 
-You can specify prerequisites for different phases:
+The phases are:
 
-=over
+=for :list
+* configure
+* build
+* test
+* runtime
+* develop
 
-=item * Build
+The relationship types are:
 
-=item * Test
+=for :list
+* requires
+* recommends
+* suggests
+* conflicts
 
-=item * Runtime
-
-=item * Configure
-
-=item * Requires
-
-=item * Prefers
-
-=item * Recommends
-
-=back
-
-Currently this isn't terribly useful as L<the current META.yml
-spec|http://module-build.sourceforge.net/META-spec-current.html>
-doesn't know about all of these so they'll get squashed into a more
-naïve list of prerequisites.
-
-This'll be supported properly once the toolchain upgrades to version
-2.0 of the META spec.
+Not all of these phases are useful for all tools, especially tools that only
+understand version 1.x CPAN::Meta files.
 
 =cut
 
