@@ -23,7 +23,9 @@ has skipfile => (is => 'ro', required => 1, default => 'MANIFEST.SKIP');
 sub prune_files {
   my ($self) = @_;
 
-  my $skip = ExtUtils::Manifest::maniskip($self->skipfile);
+  my $skipfile = $self->zilla->root->file( $self->skipfile );
+  return unless -f $skipfile;
+  my $skip = ExtUtils::Manifest::maniskip($skipfile);
 
   my $files = $self->zilla->files;
   @$files = grep {
