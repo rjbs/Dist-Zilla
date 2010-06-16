@@ -1,12 +1,7 @@
 package Dist::Zilla::Role::BuildRunner;
+# ABSTRACT: something used as a delegating agent during 'dzil run'
 use Moose::Role;
 with 'Dist::Zilla::Role::Plugin';
-# ABSTRACT: something used as a delegating agent during 'dzil run'
-
-requires 'build';
-
-no Moose::Role;
-1;
 
 =head1 DESCRIPTION
 
@@ -19,3 +14,9 @@ C<dzil run>.  It's passed the root directory of the build test dir.
 
 This method will throw an exception on failure.
 
+=cut
+
+requires 'build';
+
+no Moose::Role;
+1;

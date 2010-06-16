@@ -1,7 +1,7 @@
 package Dist::Zilla::Role::ShareDir;
+# ABSTRACT: something that picks a directory to install as shared files
 use Moose::Role;
 with 'Dist::Zilla::Role::FileFinder';
-# ABSTRACT: something that picks a directory to install as shared files
 
 # Must return a hashref with any of the keys 'dist' and 'module'.  The 'dist'
 # must be a scalar with a directory to include and 'module' must be a hashref

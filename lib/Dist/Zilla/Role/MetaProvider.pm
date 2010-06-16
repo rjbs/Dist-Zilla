@@ -9,8 +9,9 @@ This role provides data to merge into the distribution metadata.
 
 =method metadata
 
-This method returns a hashref of data to be (deeply) merged together with
-pre-existing metadata.
+This method (which must be provided by classes implementing this role)
+returns a hashref of data to be (deeply) merged together with pre-existing
+metadata.
 
 =cut
 

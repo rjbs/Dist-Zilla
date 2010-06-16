@@ -1,7 +1,7 @@
 package Dist::Zilla::Role::TestRunner;
+# ABSTRACT: something used as a delegating agent to 'dzil test'
 use Moose::Role;
 with 'Dist::Zilla::Role::Plugin';
-# ABSTRACT: something used as a delegating agent to 'dzil test'
 
 =head1 DESCRIPTION
 

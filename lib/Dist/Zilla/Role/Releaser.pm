@@ -1,6 +1,7 @@
 package Dist::Zilla::Role::Releaser;
 # ABSTRACT: something that makes a release of the dist
 use Moose::Role;
+with 'Dist::Zilla::Role::Plugin';
 
 =head1 DESCRIPTION
 
@@ -9,7 +10,6 @@ releasing.  It's passed the distribution tarball to be released.
 
 =cut
 
-with 'Dist::Zilla::Role::Plugin';
 requires 'release';
 
 no Moose::Role;

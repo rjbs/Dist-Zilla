@@ -1,6 +1,7 @@
 package Dist::Zilla::Role::VersionProvider;
 # ABSTRACT: something that provides a version number for the dist
 use Moose::Role;
+with 'Dist::Zilla::Role::Plugin';
 
 =head1 DESCRIPTION
 
@@ -13,7 +14,6 @@ ignored.
 
 =cut
 
-with 'Dist::Zilla::Role::Plugin';
 requires 'provide_version';
 
 no Moose::Role;

@@ -1,6 +1,10 @@
 package Dist::Zilla::Role::ModuleMaker;
 # ABSTRACT: something that injects module files into the dist
 use Moose::Role;
+with qw(
+  Dist::Zilla::Role::Plugin
+  Dist::Zilla::Role::FileInjector
+);
 
 =head1 DESCRIPTION
 
@@ -16,7 +20,6 @@ file for the module being created.
 
 =cut
 
-with qw(Dist::Zilla::Role::Plugin Dist::Zilla::Role::FileInjector);
 requires 'make_module';
 
 no Moose::Role;

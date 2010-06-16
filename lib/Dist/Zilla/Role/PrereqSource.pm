@@ -1,6 +1,7 @@
 package Dist::Zilla::Role::PrereqSource;
 # ABSTRACT: something that registers prerequisites
 use Moose::Role;
+with 'Dist::Zilla::Role::Plugin';
 
 =head1 DESCRIPTION
 
@@ -9,7 +10,6 @@ prereqs with the Dist::Zilla object.
 
 =cut
 
-with 'Dist::Zilla::Role::Plugin';
 requires 'register_prereqs';
 
 no Moose::Role;

@@ -6,8 +6,6 @@ use Moose::Util::TypeConstraints;
 
 use namespace::autoclean;
 
-requires 'content';
-
 =head1 DESCRIPTION
 
 This role describes a file that may be written into the shipped distribution.
@@ -54,6 +52,8 @@ has mode => (
   isa     => $safe_file_mode,
   default => 0644,
 );
+
+requires 'content';
 
 no Moose::Role;
 1;

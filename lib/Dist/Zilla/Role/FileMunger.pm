@@ -1,6 +1,8 @@
 package Dist::Zilla::Role::FileMunger;
 # ABSTRACT: something that alters a file's destination or content
 use Moose::Role;
+with 'Dist::Zilla::Role::Plugin';
+
 use Moose::Autobox;
 
 =head1 DESCRIPTION
@@ -14,8 +16,6 @@ This method is expected to change attributes about the file before it is
 written out to the built distribution.
 
 =cut
-
-with 'Dist::Zilla::Role::Plugin';
 
 sub munge_files {
   my ($self) = @_;

@@ -1,7 +1,9 @@
 package Dist::Zilla::Role::FileFinder;
-use Moose::Autobox;
 # ABSTRACT: something that finds files within the distribution
 use Moose::Role;
+with 'Dist::Zilla::Role::Plugin';
+
+use Moose::Autobox;
 
 =head1 DESCRIPTION
 
@@ -35,7 +37,6 @@ C<find_files> as the files in the distribution may have changed.
 
 =cut
 
-with 'Dist::Zilla::Role::Plugin';
 requires 'find_files';
 
 no Moose::Role;

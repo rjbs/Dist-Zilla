@@ -1,7 +1,8 @@
 package Dist::Zilla::Role::FileInjector;
-use Moose::Autobox;
 # ABSTRACT: something that can add files to the distribution
 use Moose::Role;
+
+use Moose::Autobox;
 
 =head1 DESCRIPTION
 
