@@ -13,9 +13,9 @@ sub execute {
   my ($self, $opt, $arg) = @_;
 
   require Data::Dumper;
-  for my $name ($self->zilla->_global_config->section_names) {
+  for my $name (keys %{ $self->zilla->_global_stashes }) {
     print "[ $name ]\n";
-    print Data::Dumper::Dumper($self->zilla->_global_config_for($name));
+    print Data::Dumper::Dumper($self->zilla->_global_stashes->{ $name });
   }
 }
 
