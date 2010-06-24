@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.101740  2010-06-23 22:56:51 America/New_York
           fix assembly of local stashes (Jesse Luehrs)
 
           fix PkgVersion and PodVersion to work on scripts (M. Gardner)
