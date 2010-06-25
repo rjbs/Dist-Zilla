@@ -20,6 +20,15 @@ sub global_opt_spec {
   );
 }
 
+sub _config_root {
+  return dir($ENV{DZIL_GLOBAL_CONFIG_ROOT}) if $ENV{DZIL_GLOBAL_CONFIG_ROOT};
+
+  my $homedir = File::HomeDir->my_home
+    or Carp::croak("couldn't determine home directory");
+
+  return dir($homedir)->subdir('.dzil');
+}
+
 sub _build_global_stashes {
   my ($self) = @_;
 
@@ -27,12 +36,7 @@ sub _build_global_stashes {
 
   my $stash_registry = $self->{__global_stashes__} = {};
 
-  my $homedir = File::HomeDir->my_home
-    or Carp::croak("couldn't determine home directory");
-
-  my $config_dir  = $ENV{DZIL_GLOBAL_CONFIG_ROOT}
-                  ? dir($ENV{DZIL_GLOBAL_CONFIG_ROOT})
-                  : dir($homedir)->subdir('.dzil');
+  my $config_dir  = $self->_config_root;
 
   my $config_base = $config_dir->file('config');
 
@@ -46,17 +50,28 @@ sub _build_global_stashes {
 
   try {
     my $reader = Dist::Zilla::MVP::Reader::Finder->new({
-      if_none => sub { return $_[2]->{assembler}->sequence },
+      if_none => sub {
+        warn <<'END_WARN';
+WARNING: No global configuration file was found in ~/.dzil -- this limits the
+ability of Dist::Zilla to perform some tasks.  You can run "dzil setup" to
+create a simple first-pass configuration file, or you can touch the file
+~/.dzil/config.ini to suppress this message in the future.
+END_WARN
+        return $_[2]->{assembler}->sequence
+      },
     });
 
     my $seq = $reader->read_config($config_base, { assembler => $assembler });
   } catch {
-    die "\n"
-      . "Your global configuration file couldn't be loaded.  It's a file\n"
-      . "matching ~/.dzil/config.*\n\n"
-      . "You can try deleting the file or you might need to upgrade from\n"
-      . "pre-version 4 format.  In most cases, this will just mean replacing\n"
-      . "[!release] with [%PAUSE] and deleting any [!new] stanza.\n";
+    die <<'END_DIE';
+
+Your global configuration file couldn't be loaded.  It's a file matching
+~/.dzil/config.*
+
+You can try deleting the file or you might need to upgrade from pre-version 4
+format.  In most cases, this will just mean replacing [!release] with [%PAUSE]
+and deleting any [!new] stanza.
+END_DIE
   };
 
   return $stash_registry;

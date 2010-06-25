@@ -50,7 +50,9 @@ sub prompt_str {
     (defined $default ? (default => $default) : ()),
   );
 
-  return $default;
+  chomp $input;
+
+  return $input;
 }
 
 sub prompt_yn {
