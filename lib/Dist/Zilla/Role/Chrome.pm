@@ -4,4 +4,9 @@ use Moose::Role;
 
 requires 'logger';
 
+requires 'prompt_str';
+requires 'prompt_yn';
+requires 'prompt_any_key';
+
+
 1;
