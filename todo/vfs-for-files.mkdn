@@ -1,0 +1,10 @@
+
+# VIRTUAL FILESYSTEM TO REPLACE "FILES" ARRAY
+
+Right now, files are simple objects stored in an array.  This is nice and
+simple, but also a bit of a mess.  It allows duplicate filenames forces us to
+use regex to find files in a given directory, and so on.  Instead, we should
+use Path::Resolver (or something) to build a simple virtual filesystem.
+
+Then we could have filename changes detect conflicts immediately, we could have
+$file->replace_with( $other_file ), and other nice improvements.

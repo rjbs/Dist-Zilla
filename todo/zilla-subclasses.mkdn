@@ -1,0 +1,18 @@
+
+# TASK-SPECIFIC DIST::ZILLA SUBCLASSES
+
+There should be something like Dist::Zilla::Minter and Dist::Zilla::Builder.
+This will allow us to drop the ridiculous __is_minter attribute, to have better
+type constraints on plugins, and so on.  Possibly the names shoudl be
+Dist::Zilla::Dist::Minter, etc.
+
+The biggest issue here is making Dist::Zilla::Tester still work.  One possible
+workaround is to write:
+
+  Dist::Zilla::Tester->from_config(...)     # old way, gets Builder
+  Dist::Zilla::Tester->builder->from_config # new way, gets Builder
+  Dist::Zilla::Tester->minter->from_config  # new way, gets Minter
+
+It would be great if we can do this mostly by applying a role to the DZ
+subclass dynamically.
+
