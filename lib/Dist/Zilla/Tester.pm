@@ -202,7 +202,16 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
 
     local @INC = map {; ref($_) ? $_ : File::Spec->rel2abs($_) } @INC;
 
-    my $zilla = $self->$orig($arg);
+    my $zilla = $self->$orig($profile_data, $arg);
+
+    # my $minter = Dist::Zilla::Dist::Minter->_new_from_profile(
+    #   [ $opt->provider, $opt->profile ],
+    #   {
+    #     chrome  => $self->app->chrome,
+    #     name    => $dist,
+    #     _global_stashes => $self->app->_build_global_stashes,
+    #   },
+    # );
 
     $zilla->_set_tempdir($tempdir);
 
