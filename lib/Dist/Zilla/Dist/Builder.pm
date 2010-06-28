@@ -4,31 +4,12 @@ use Moose 0.92; # role composition fixes
 extends 'Dist::Zilla';
 
 use Moose::Autobox 0.09; # ->flatten
-use MooseX::LazyRequire;
-use MooseX::Types::Moose qw(ArrayRef Bool HashRef Object Str);
-use MooseX::Types::Perl qw(DistName LaxVersionStr);
+use MooseX::Types::Moose qw(HashRef);
 use MooseX::Types::Path::Class qw(Dir File);
-use Moose::Util::TypeConstraints;
-
-use Dist::Zilla::Types qw(License);
 
 use Archive::Tar;
-use File::Find::Rule;
 use File::pushd ();
-use Hash::Merge::Simple ();
-use List::MoreUtils qw(uniq);
-use List::Util qw(first);
-use Log::Dispatchouli 1.100712; # proxy_loggers, quiet_fatal
-use Params::Util qw(_HASHLIKE);
 use Path::Class;
-use Software::License 0.101370; # meta2_name
-use String::RewritePrefix;
-use Try::Tiny;
-
-use Dist::Zilla::Prereqs;
-use Dist::Zilla::File::OnDisk;
-use Dist::Zilla::Role::Plugin;
-use Dist::Zilla::Util;
 
 use namespace::autoclean;
 
@@ -143,7 +124,7 @@ sub _setup_default_plugins {
 
 has _share_dir_map => (
   is   => 'ro',
-  isa  => 'HashRef',
+  isa  => HashRef,
   init_arg  => undef,
   lazy      => 1,
   builder   => '_build_share_dir_map',
