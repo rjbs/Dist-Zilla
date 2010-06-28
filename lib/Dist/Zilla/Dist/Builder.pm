@@ -20,7 +20,7 @@ use namespace::autoclean;
 This routine returns a new Zilla from the configuration in the current working
 directory.
 
-This method should not be relied upon, yet.  Its semantics are likely to
+This method should not be relied upon, yet.  Its semantics are B<certain> to
 change.
 
 Valid arguments are:
