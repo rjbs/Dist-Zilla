@@ -22,7 +22,7 @@ END_TEST
 
 my @xt_types = qw(smoke author release);
 
-my $tzil = Dist::Zilla::Tester->from_config(
+my $tzil = Builder->from_config(
   { dist_root => 'corpus/DZT' },
   {
     add_files => {

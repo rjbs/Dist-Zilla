@@ -6,7 +6,7 @@ use lib 't/lib';
 
 use Test::DZil;
 
-my $tzil = Dist::Zilla::Tester->from_config(
+my $tzil = Builder->from_config(
   { dist_root => 'corpus/DZT' },
   {
     add_files => {

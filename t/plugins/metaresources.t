@@ -9,7 +9,7 @@ use Test::Deep;
 use CPAN::Meta::Converter;
 
 my $generated_by = 'Dist::Zilla::Tester version '
-  . (Dist::Zilla::Tester->VERSION || '(undef)');
+  . (Builder->VERSION || '(undef)');
 
 my $converted_by = "CPAN::Meta::Converter version "
                  . CPAN::Meta::Converter->VERSION;
@@ -17,7 +17,7 @@ my $converted_by = "CPAN::Meta::Converter version "
 my $generated_by_re = qr/\A\Q$generated_by\E(?:, \Q$converted_by\E)?\z/;
 
 {
-  my $tzil = Dist::Zilla::Tester->from_config(
+  my $tzil = Builder->from_config(
     { dist_root => 'corpus/DZT' },
     {
       add_files => {
@@ -91,7 +91,7 @@ my $generated_by_re = qr/\A\Q$generated_by\E(?:, \Q$converted_by\E)?\z/;
 }
 
 {
-  my $tzil = Dist::Zilla::Tester->from_config(
+  my $tzil = Builder->from_config(
     { dist_root => 'corpus/DZT' },
     {
       add_files => {

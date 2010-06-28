@@ -9,7 +9,7 @@ use Test::DZil;
 sub test_this {
   my ($plugins, $add_files, $assertion) = @_;
 
-  my $tzil = Dist::Zilla::Tester->from_config(
+  my $tzil = Builder->from_config(
     { dist_root => 'corpus/DZT' },
     {
       add_files => {

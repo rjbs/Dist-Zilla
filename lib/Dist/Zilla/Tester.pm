@@ -9,6 +9,25 @@ use File::pushd ();
 use File::Spec;
 use File::Temp;
 
+use Sub::Exporter::Util ();
+use Sub::Exporter -setup => {
+  exports => [
+    Builder => sub { $_[0]->can('builder') },
+    Minter  => sub { $_[0]->can('minter')  },
+  ],
+
+  groups  => [ default => [ qw(Builder Minter) ] ],
+};
+
+sub from_config {
+  my ($self, @arg) = @_;
+  $self->builder->from_config(@arg);
+}
+
+sub builder { 'Dist::Zilla::Tester::_Builder' }
+
+sub minter { 'Dist::Zilla::Tester::_Minter' }
+
 {
   package Dist::Zilla::Tester::_Role;
   use Moose::Role;
@@ -51,15 +70,6 @@ use File::Temp;
 
   no Moose::Role;
 }
-
-sub from_config {
-  my ($self, @arg) = @_;
-  $self->builder->from_config(@arg);
-}
-
-sub builder { 'Dist::Zilla::Tester::_Builder' }
-
-sub minter { 'Dist::Zilla::Tester::_Minter' }
 
 {
   package Dist::Zilla::Tester::_Builder;
