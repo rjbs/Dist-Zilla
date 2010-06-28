@@ -184,6 +184,28 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
     return $dir;
   }
 
+  sub _setup_global_config {
+    my ($self, $dir, $arg) = @_;
+
+    my $config_base = $dir->file('config');
+
+    my $stash_registry = {};
+
+    require Dist::Zilla::MVP::Assembler::GlobalConfig;
+    require Dist::Zilla::MVP::Section;
+    my $assembler = Dist::Zilla::MVP::Assembler::GlobalConfig->new({
+      chrome => $arg->{chrome},
+      stash_registry => $stash_registry,
+      section_class  => 'Dist::Zilla::MVP::Section', # make this DZMA default
+    });
+
+    my $reader = Dist::Zilla::MVP::Reader::Finder->new;
+
+    my $seq = $reader->read_config($config_base, { assembler => $assembler });
+
+    return $stash_registry;
+  }
+
   around _new_from_profile => sub {
     my ($orig, $self, $profile_data, $arg, $tester_arg) = @_;
 
@@ -202,16 +224,14 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
 
     local @INC = map {; ref($_) ? $_ : File::Spec->rel2abs($_) } @INC;
 
-    my $zilla = $self->$orig($profile_data, $arg);
+    my $global_stashes = $self->_setup_global_config(
+      $tester_arg->{config_root},
+      { chrome => $arg->{chrome} },
+    );
 
-    # my $minter = Dist::Zilla::Dist::Minter->_new_from_profile(
-    #   [ $opt->provider, $opt->profile ],
-    #   {
-    #     chrome  => $self->app->chrome,
-    #     name    => $dist,
-    #     _global_stashes => $self->app->_build_global_stashes,
-    #   },
-    # );
+    local $arg->{_global_stashes} = $global_stashes;
+
+    my $zilla = $self->$orig($profile_data, $arg);
 
     $zilla->_set_tempdir($tempdir);
 
