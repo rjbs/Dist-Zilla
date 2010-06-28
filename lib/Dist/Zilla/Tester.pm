@@ -154,4 +154,50 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
   no Moose;
 }
 
+{
+  package Dist::Zilla::Tester::_Minter;
+  use Moose;
+  extends 'Dist::Zilla::Dist::Minter';
+  with 'Dist::Zilla::Tester::_Role';
+
+  use File::Copy::Recursive qw(dircopy);
+  use Path::Class;
+
+  sub _mint_target_dir {
+    my ($self) = @_;
+
+    my $name = $self->name;
+    my $dir  = $self->tempdir->subdir(mint => $name)->absolute;
+
+    $self->log_fatal("$dir already exists") if -e $dir;
+
+    return $dir;
+  }
+
+  around _new_from_profile => sub {
+    my ($orig, $self, $profile_data, $arg, $tester_arg) = @_;
+
+    my $tempdir_root = exists $tester_arg->{tempdir_root}
+                     ? $tester_arg->{tempdir_root}
+                     : 'tmp';
+
+    mkdir $tempdir_root if defined $tempdir_root and not -d $tempdir_root;
+
+    my $tempdir = dir( File::Temp::tempdir(
+        CLEANUP => 1,
+        (defined $tempdir_root ? (DIR => $tempdir_root) : ()),
+    ))->absolute;
+
+    local $arg->{chrome} = Dist::Zilla::Chrome::Test->new;
+
+    local @INC = map {; ref($_) ? $_ : File::Spec->rel2abs($_) } @INC;
+
+    my $zilla = $self->$orig($arg);
+
+    $zilla->_set_tempdir($tempdir);
+
+    return $zilla;
+  };
+}
+
 1;

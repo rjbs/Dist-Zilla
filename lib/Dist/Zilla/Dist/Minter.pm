@@ -74,14 +74,21 @@ sub _new_from_profile {
   return $self;
 }
 
-sub mint_dist {
-  my ($self, $arg) = @_;
+sub _mint_target_dir {
+  my ($self) = @_;
 
   my $name = $self->name;
   my $dir  = dir($name);
   $self->log_fatal("./$name already exists") if -e $dir;
 
-  $dir = $dir->absolute;
+  return $dir = $dir->absolute;
+}
+
+sub mint_dist {
+  my ($self, $arg) = @_;
+
+  my $name = $self->name;
+  my $dir  = $self->_mint_target_dir;
 
   # XXX: We should have a way to get more than one module name in, and to
   # supply plugin names for the minter to use. -- rjbs, 2010-05-03
@@ -90,7 +97,7 @@ sub mint_dist {
     ({ name => $module_name });
   };
 
-  $self->log("making directory ./$name");
+  $self->log("making target dir $dir");
   $dir->mkpath;
 
   my $wd = File::pushd::pushd($self->root);
