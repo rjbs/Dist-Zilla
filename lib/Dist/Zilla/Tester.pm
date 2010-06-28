@@ -47,13 +47,19 @@ use File::Temp;
     };
   }
 
+  sub _metadata_generator_id { 'Dist::Zilla::Tester' }
+
   no Moose::Role;
 }
 
 sub from_config {
   my ($self, @arg) = @_;
-  Dist::Zilla::Tester::_Builder->from_config(@arg);
+  $self->builder->from_config(@arg);
 }
+
+sub builder { 'Dist::Zilla::Tester::_Builder' }
+
+sub minter { 'Dist::Zilla::Tester::_Minter' }
 
 {
   package Dist::Zilla::Tester::_Builder;
@@ -63,8 +69,6 @@ sub from_config {
 
   use File::Copy::Recursive qw(dircopy);
   use Path::Class;
-
-  sub _metadata_generator_id { 'Dist::Zilla::Tester' }
 
   around from_config => sub {
     my ($orig, $self, $arg, $tester_arg) = @_;
