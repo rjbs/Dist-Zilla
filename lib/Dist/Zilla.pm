@@ -400,7 +400,7 @@ has is_trial => (
 This is an arrayref of plugins that have been plugged into this Dist::Zilla
 object.
 
-Non-core code should not alter this arrayref.
+Non-core code B<must not> alter this arrayref.
 
 =cut
 
