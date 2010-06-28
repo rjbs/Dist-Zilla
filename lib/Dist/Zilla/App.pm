@@ -106,7 +106,7 @@ sub chrome {
 sub zilla {
   my ($self) = @_;
 
-  require Dist::Zilla;
+  require Dist::Zilla::Dist::Builder;
 
   return $self->{'' . __PACKAGE__}{zilla} ||= do {
     my @v_plugins = $self->global_options->verbose
@@ -119,7 +119,7 @@ sub zilla {
 
     my $core_debug = grep { m/\A[-_]\z/ } @v_plugins;
 
-    my $zilla = Dist::Zilla->from_config({
+    my $zilla = Dist::Zilla::Dist::Builder->from_config({
       chrome => $self->chrome,
       _global_stashes => $self->_build_global_stashes,
     });
