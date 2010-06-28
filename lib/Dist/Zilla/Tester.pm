@@ -177,7 +177,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
     my ($self) = @_;
 
     my $name = $self->name;
-    my $dir  = $self->tempdir->subdir(mint => $name)->absolute;
+    my $dir  = $self->tempdir->subdir('mint')->absolute;
 
     $self->log_fatal("$dir already exists") if -e $dir;
 

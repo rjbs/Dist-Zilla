@@ -17,7 +17,7 @@ my $tzil = Minter->_new_from_profile(
 
 $tzil->mint_dist;
 
-my $pm = $tzil->slurp_file('mint/DZT-Minty/lib/DZT/Minty.pm');
+my $pm = $tzil->slurp_file('mint/lib/DZT/Minty.pm');
 
 like(
   $pm,
