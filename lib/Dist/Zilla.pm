@@ -452,7 +452,7 @@ sub _build_distmeta {
                     : 'stable',
 
     dynamic_config => 0, # problematic, I bet -- rjbs, 2010-06-04
-    generated_by   => (ref $self)
+    generated_by   => $self->_metadata_generator_id
                     . ' version '
                     . (defined $self->VERSION ? $self->VERSION : '(undef)')
   };
@@ -462,6 +462,8 @@ sub _build_distmeta {
 
   return $meta;
 }
+
+sub _metadata_generator_id { 'Dist::Zilla' }
 
 =attr prereqs
 

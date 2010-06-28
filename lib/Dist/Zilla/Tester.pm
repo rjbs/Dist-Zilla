@@ -5,125 +5,149 @@ extends 'Dist::Zilla::Dist::Builder';
 
 use autodie;
 use Dist::Zilla::Chrome::Test;
-use File::Copy::Recursive qw(dircopy);
 use File::pushd ();
 use File::Spec;
 use File::Temp;
-use Path::Class;
 
-around from_config => sub {
-  my ($orig, $self, $arg, $tester_arg) = @_;
+{
+  package Dist::Zilla::Tester::_Role;
+  use Moose::Role;
 
-  confess "dist_root required for from_config" unless $arg->{dist_root};
+  has tempdir => (
+    is   => 'ro',
+    writer   => '_set_tempdir',
+    init_arg => undef,
+  );
 
-  my $source = $arg->{dist_root};
-
-  my $tempdir_root = exists $tester_arg->{tempdir_root}
-                   ? $tester_arg->{tempdir_root}
-                   : 'tmp';
-
-  mkdir $tempdir_root if defined $tempdir_root and not -d $tempdir_root;
-
-  my $tempdir = dir( File::Temp::tempdir(
-      CLEANUP => 1,
-      (defined $tempdir_root ? (DIR => $tempdir_root) : ()),
-  ))->absolute;
-
-  my $root = $tempdir->subdir('source');
-  $root->mkpath;
-
-  dircopy($source, $root);
-
-  if ($tester_arg->{also_copy}) {
-    while (my ($src, $dest) = each %{ $tester_arg->{also_copy} }) {
-      dircopy($src, $tempdir->subdir($dest));
-    }
+  sub clear_log_events {
+    my ($self) = @_;
+    $self->chrome->logger->clear_events;
   }
 
-  if (my $files = $tester_arg->{add_files}) {
-    while (my ($name, $content) = each %$files) {
-      my $fn = $tempdir->file($name);
-      $fn->dir->mkpath;
-      open my $fh, '>', $fn;
+  sub log_events {
+    my ($self) = @_;
+    $self->chrome->logger->events;
+  }
 
-      # Win32 fix for crlf translation.
-      #   maybe :raw:utf8? -- Kentnl - 2010-06-10
+  sub log_messages {
+    my ($self) = @_;
+    [ map {; $_->{message} } @{ $self->chrome->logger->events } ];
+  }
+
+  sub slurp_file {
+    my ($self, $filename) = @_;
+
+    return scalar do {
+      local $/;
+      open my $fh, '<', $self->tempdir->file($filename);
+
+      # Win32.
       binmode $fh, ':raw';
-      print { $fh } $content;
-      close $fh;
-    }
+      <$fh>;
+    };
   }
 
-  local $arg->{dist_root} = "$root";
-  local $arg->{chrome} = Dist::Zilla::Chrome::Test->new;
+  no Moose::Role;
+}
 
-  local @INC = map {; ref($_) ? $_ : File::Spec->rel2abs($_) } @INC;
+sub from_config {
+  my ($self, @arg) = @_;
+  Dist::Zilla::Tester::_Builder->from_config(@arg);
+}
 
-  my $zilla = $self->$orig($arg);
+{
+  package Dist::Zilla::Tester::_Builder;
+  use Moose;
+  extends 'Dist::Zilla::Dist::Builder';
+  with 'Dist::Zilla::Tester::_Role';
 
-  $zilla->_set_tempdir($tempdir);
+  use File::Copy::Recursive qw(dircopy);
+  use Path::Class;
 
-  return $zilla;
-};
+  sub _metadata_generator_id { 'Dist::Zilla::Tester' }
 
-around build_in => sub {
-  my ($orig, $self, $target) = @_;
+  around from_config => sub {
+    my ($orig, $self, $arg, $tester_arg) = @_;
 
-  # XXX: We *must eliminate* the need for this!  It's only here because right
-  # now building a dist with (root <> cwd) doesn't work. -- rjbs, 2010-03-08
-  my $wd = File::pushd::pushd($self->root);
+    confess "dist_root required for from_config" unless $arg->{dist_root};
 
-  $target ||= do {
-    my $target = dir($self->tempdir)->subdir('build');
-    $target->mkpath;
-    $target;
+    my $source = $arg->{dist_root};
+
+    my $tempdir_root = exists $tester_arg->{tempdir_root}
+                     ? $tester_arg->{tempdir_root}
+                     : 'tmp';
+
+    mkdir $tempdir_root if defined $tempdir_root and not -d $tempdir_root;
+
+    my $tempdir = dir( File::Temp::tempdir(
+        CLEANUP => 1,
+        (defined $tempdir_root ? (DIR => $tempdir_root) : ()),
+    ))->absolute;
+
+    my $root = $tempdir->subdir('source');
+    $root->mkpath;
+
+    dircopy($source, $root);
+
+    if ($tester_arg->{also_copy}) {
+      while (my ($src, $dest) = each %{ $tester_arg->{also_copy} }) {
+        dircopy($src, $tempdir->subdir($dest));
+      }
+    }
+
+    if (my $files = $tester_arg->{add_files}) {
+      while (my ($name, $content) = each %$files) {
+        my $fn = $tempdir->file($name);
+        $fn->dir->mkpath;
+        open my $fh, '>', $fn;
+
+        # Win32 fix for crlf translation.
+        #   maybe :raw:utf8? -- Kentnl - 2010-06-10
+        binmode $fh, ':raw';
+        print { $fh } $content;
+        close $fh;
+      }
+    }
+
+    local $arg->{dist_root} = "$root";
+    local $arg->{chrome} = Dist::Zilla::Chrome::Test->new;
+
+    local @INC = map {; ref($_) ? $_ : File::Spec->rel2abs($_) } @INC;
+
+    my $zilla = $self->$orig($arg);
+
+    $zilla->_set_tempdir($tempdir);
+
+    return $zilla;
   };
 
-  return $self->$orig($target);
-};
+  around build_in => sub {
+    my ($orig, $self, $target) = @_;
 
-around release => sub {
-  my ($orig, $self) = @_;
+    # XXX: We *must eliminate* the need for this!  It's only here because right
+    # now building a dist with (root <> cwd) doesn't work. -- rjbs, 2010-03-08
+    my $wd = File::pushd::pushd($self->root);
 
-  # XXX: We *must eliminate* the need for this!  It's only here because right
-  # now building a dist with (root <> cwd) doesn't work. -- rjbs, 2010-03-08
-  my $wd = File::pushd::pushd($self->root);
+    $target ||= do {
+      my $target = dir($self->tempdir)->subdir('build');
+      $target->mkpath;
+      $target;
+    };
 
-  return $self->$orig;
-};
-
-has tempdir => (
-  is   => 'ro',
-  writer   => '_set_tempdir',
-  init_arg => undef,
-);
-
-sub clear_log_events {
-  my ($self) = @_;
-  $self->chrome->logger->clear_events;
-}
-
-sub log_events {
-  my ($self) = @_;
-  $self->chrome->logger->events;
-}
-
-sub log_messages {
-  my ($self) = @_;
-  [ map {; $_->{message} } @{ $self->chrome->logger->events } ];
-}
-
-sub slurp_file {
-  my ($self, $filename) = @_;
-
-  return scalar do {
-    local $/;
-    open my $fh, '<', $self->tempdir->file($filename);
-
-    # Win32.
-    binmode $fh, ':raw';
-    <$fh>;
+    return $self->$orig($target);
   };
+
+  around release => sub {
+    my ($orig, $self) = @_;
+
+    # XXX: We *must eliminate* the need for this!  It's only here because right
+    # now building a dist with (root <> cwd) doesn't work. -- rjbs, 2010-03-08
+    my $wd = File::pushd::pushd($self->root);
+
+    return $self->$orig;
+  };
+
+  no Moose;
 }
 
 1;
