@@ -1,7 +1,7 @@
 package Dist::Zilla::Tester;
 use Moose;
 extends 'Dist::Zilla';
-# ABSTRACT: a testing-enabling stand-in for  Dist::Zilla
+# ABSTRACT: a testing-enabling stand-in for Dist::Zilla
 
 use autodie;
 use Dist::Zilla::Chrome::Test;

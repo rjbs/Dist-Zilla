@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          during dist minting, ModuleMaker occurs before FileGatherer
 
 4.101780  2010-06-27 14:30:55 America/New_York
           the Chrome role now requires three input methods: prompt_any_key,

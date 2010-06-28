@@ -1314,7 +1314,6 @@ sub mint_dist {
   my $wd = File::pushd::pushd($self->root);
 
   $_->before_mint  for $self->plugins_with(-BeforeMint)->flatten;
-  $_->gather_files for $self->plugins_with(-FileGatherer)->flatten;
 
   for my $module (@modules) {
     my $minter = $self->plugin_named(
@@ -1324,6 +1323,7 @@ sub mint_dist {
     $minter->make_module({ name => $module->{name} })
   }
 
+  $_->gather_files for $self->plugins_with(-FileGatherer)->flatten;
   $_->prune_files  for $self->plugins_with(-FilePruner)->flatten;
   $_->munge_files  for $self->plugins_with(-FileMunger)->flatten;
 
