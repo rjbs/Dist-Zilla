@@ -357,7 +357,7 @@ will, if left in this arrayref, be built into the dist.
 
 Non-core code should avoid altering this arrayref, but sometimes there is not
 other way to change the list of files.  In the future, the representation used
-for storing files will be changed.
+for storing files B<will be changed>.
 
 =cut
 
@@ -368,6 +368,19 @@ has files => (
   init_arg => undef,
   default  => sub { [] },
 );
+
+sub prune_file {
+  my ($self, $file) = @_;
+  my @files = @{ $self->files };
+
+  for my $i (0 .. $#files) {
+    next unless $file == $files[ $i ];
+    splice @{ $self->files }, $i, 1;
+    return;
+  }
+
+  return;
+}
 
 =attr root
 
@@ -400,7 +413,8 @@ has is_trial => (
 This is an arrayref of plugins that have been plugged into this Dist::Zilla
 object.
 
-Non-core code B<must not> alter this arrayref.
+Non-core code B<must not> alter this arrayref.  Public access to this attribute
+B<may go away> in the future.
 
 =cut
 

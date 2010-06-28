@@ -4,6 +4,7 @@ use Moose;
 with 'Dist::Zilla::Role::FilePruner';
 
 use ExtUtils::Manifest 1.54; # public maniskip routine
+use Moose::Autobox;
 
 =head1 DESCRIPTION
 
@@ -27,12 +28,13 @@ sub prune_files {
   return unless -f $skipfile;
   my $skip = ExtUtils::Manifest::maniskip($skipfile);
 
-  my $files = $self->zilla->files;
-  @$files = grep {
-    $skip->($_->name)
-    ? do { $self->log_debug([ 'pruning %s', $_->name ]); 0 }
-    : 1
-  } @$files;
+  for my $file ($self->zilla->files->flatten) {
+    next unless $skip->($file->name);
+
+    $self->log_debug([ 'pruning %s', $file->name ]);
+
+    $self->zilla->prune_file($file);
+  }
 
   return;
 }

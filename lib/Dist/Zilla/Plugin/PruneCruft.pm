@@ -34,13 +34,13 @@ sub exclude_file {
 sub prune_files {
   my ($self) = @_;
 
-  my $files = $self->zilla->files;
+  for my $file ($self->zilla->files->flatten) {
+    next unless $self->exclude_file($file);
 
-  @$files = grep {
-    $self->exclude_file($_)
-    ? do { $self->log_debug([ 'pruning %s', $_->name ]); 0 }
-    : 1
-  } @$files;
+    $self->log_debug([ 'pruning %s', $file->name ]);
+
+    $self->zilla->prune_file($file);
+  }
 
   return;
 }

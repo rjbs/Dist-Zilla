@@ -35,14 +35,16 @@ has filenames => (
 sub prune_files {
   my ($self) = @_;
 
-  my $files = $self->zilla->files;
+  my %file = map {; $_->name => $_ } $self->zilla->files->flatten;
 
-  for my $filename ($self->filenames->flatten) {
-    @$files = $files->grep(sub {
-      (($_->name ne $filename) && ($_->name !~ m{\A\Q$filename\E/}))
-      ? 1
-      : do { $self->log_debug([ 'pruning %s', $_->name ]); 0 }
-    })->flatten;
+  for my $exclude ($self->filenames->flatten) {
+    for my $name (keys %file) {
+      next unless $name eq $exclude || $name =~ m{\A\Q$exclude\E/};
+
+      $self->log_debug([ 'pruning %s', $name ]);
+
+      $self->zilla->prune_file($file{$name});
+    }
   }
 
   return;
