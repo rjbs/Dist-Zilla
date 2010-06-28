@@ -17,6 +17,12 @@ my $tzil = Minter->_new_from_profile(
 
 $tzil->mint_dist;
 
-pass("didn't die!");
+my $pm = $tzil->slurp_file('mint/DZT-Minty/lib/DZT/Minty.pm');
+
+like(
+  $pm,
+  qr/package DZT::Minty;/,
+  "our new module has the package declaration we want",
+);
 
 done_testing;
