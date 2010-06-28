@@ -3,7 +3,7 @@ package Dist::Zilla::MintingProfile::Default;
 use Moose;
 with 'Dist::Zilla::Role::MintingProfile::ShareDir';
 
-use File::ShareDir;
+use File::HomeDir ();
 use Path::Class;
 
 use namespace::autoclean;
