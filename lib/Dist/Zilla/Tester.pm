@@ -199,6 +199,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
       section_class  => 'Dist::Zilla::MVP::Section', # make this DZMA default
     });
 
+    require Dist::Zilla::MVP::Reader::Finder;
     my $reader = Dist::Zilla::MVP::Reader::Finder->new;
 
     my $seq = $reader->read_config($config_base, { assembler => $assembler });
@@ -225,7 +226,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
     local @INC = map {; ref($_) ? $_ : File::Spec->rel2abs($_) } @INC;
 
     my $global_stashes = $self->_setup_global_config(
-      $tester_arg->{config_root},
+      $tester_arg->{global_config_root},
       { chrome => $arg->{chrome} },
     );
 
