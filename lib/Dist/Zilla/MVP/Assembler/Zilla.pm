@@ -28,9 +28,9 @@ sub BUILD {
 }
 
 has zilla_class => (
-  is      => 'ro',
-  isa     => PackageName,
-  default => 'Dist::Zilla',
+  is       => 'ro',
+  isa      => PackageName,
+  required => 1
 );
 
 =method zilla
