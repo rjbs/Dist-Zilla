@@ -16,9 +16,9 @@ sub test_this {
         'source/dist.ini' => simple_ini(
           'GatherDir',
           @$plugins,
-          [ Prereq => { 'Foo::Bar' => '1.20' } ],
-          [ Prereq => BuildRequires => { 'Builder::Bob' => '9.901' } ],
-          [ Prereq => TestRequires  => { 'Test::Deet'   => '7'     } ],
+          [ Prereqs => { 'Foo::Bar' => '1.20' } ],
+          [ Prereqs => BuildRequires => { 'Builder::Bob' => '9.901' } ],
+          [ Prereqs => TestRequires  => { 'Test::Deet'   => '7'     } ],
         ),
         %$add_files,
       },
