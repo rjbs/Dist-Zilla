@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.101800  2010-06-29 10:29:38 America/New_York
           during dist minting, ModuleMaker occurs before FileGatherer
 
           ModuleBuild's module_build argument generation is now a method
