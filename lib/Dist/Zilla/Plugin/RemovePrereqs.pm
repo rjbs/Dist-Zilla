@@ -1,5 +1,5 @@
-package Dist::Zilla::Plugin::ClearPrereqs;
-# ABSTRACT: a plugin to clear gathered prereqs
+package Dist::Zilla::Plugin::RemovePrereqs;
+# ABSTRACT: a plugin to remove gathered prereqs
 use Moose;
 with 'Dist::Zilla::Role::PrereqSource';
 
@@ -12,22 +12,22 @@ use MooseX::Types::Perl  qw(ModuleName);
 
 In your F<dist.ini>:
 
-  [ClearPrereq]
-  clear = Foo::Bar
-  clear = MRO::Compat
+  [RemovePrereqs]
+  remove = Foo::Bar
+  remove = MRO::Compat
 
 This will remove any prerequisite of any type from any prereq phase.  This is
 useful for eliminating incorrectly detected prereqs.
 
 =cut
 
-sub mvp_multivalue_args { qw(modules_to_clear) }
+sub mvp_multivalue_args { qw(modules_to_remove) }
 
 sub mvp_aliases {
-  return { clear => 'modules_to_clear' }
+  return { remove => 'modules_to_remove' }
 }
 
-has modules_to_clear => (
+has modules_to_remove => (
   is  => 'ro',
   isa => ArrayRef[ ModuleName ],
   required => 1,
@@ -38,7 +38,7 @@ around dump_config => sub {
   my $config = $self->$orig;
 
   my $this_config = {
-    modules_to_clear  => $self->modules_to_clear,
+    modules_to_remove  => $self->modules_to_remove,
   };
 
   $config->{'' . __PACKAGE__} = $this_config;
@@ -56,7 +56,7 @@ sub register_prereqs {
 
   for my $p (@phases) {
     for my $t (@types) {
-      for my $m ($self->modules_to_clear->flatten) {
+      for my $m ($self->modules_to_remove->flatten) {
         $prereqs->requirements_for($p, $t)->clear_requirement($m);
       }
     }

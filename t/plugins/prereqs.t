@@ -53,7 +53,7 @@ use Test::DZil;
           [ Prereqs => RuntimeRequires => { A => 2, B => 3 } ],
           [ Prereqs => DevelopSuggests => { C => 4 }         ],
           [ Prereqs => TestConflicts   => { C => 5, D => 6 } ],
-          [ ClearPrereqs => { clear => [ qw(B C) ] } ],
+          [ RemovePrereqs => { remove => [ qw(B C) ] } ],
         ),
       },
     },
