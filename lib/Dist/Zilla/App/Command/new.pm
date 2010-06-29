@@ -70,8 +70,8 @@ sub execute {
 
   my $dist = $arg->[0];
 
-  require Dist::Zilla;
-  my $minter = Dist::Zilla->_new_from_profile(
+  require Dist::Zilla::Dist::Minter;
+  my $minter = Dist::Zilla::Dist::Minter->_new_from_profile(
     [ $opt->provider, $opt->profile ],
     {
       chrome  => $self->app->chrome,

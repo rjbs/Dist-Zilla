@@ -15,8 +15,10 @@ use Sub::Exporter -setup => {
     is_json     =>
     dist_ini    => \'_dist_ini',
     simple_ini  => \'_simple_ini',
+    Builder     =>
+    Minter      =>
   ],
-  groups  => [ default => [ qw(dist_ini simple_ini is_filelist is_yaml is_json) ] ],
+  groups  => [ default => [ qw(-all) ] ],
 };
 
 sub is_filelist {

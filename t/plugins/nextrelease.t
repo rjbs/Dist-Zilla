@@ -19,7 +19,7 @@ Revision history for {{$dist->name}}
 END_CHANGES
 
 {
-  my $tzil = Dist::Zilla::Tester->from_config(
+  my $tzil = Builder->from_config(
     { dist_root => 'corpus/DZT' },
     {
       add_files => {
@@ -70,7 +70,7 @@ END_CHANGES
 }
 
 {
-  my $tzil = Dist::Zilla::Tester->from_config(
+  my $tzil = Builder->from_config(
     { dist_root => 'corpus/DZT' },
     {
       add_files => {
@@ -113,7 +113,7 @@ END_CHANGES
 }
 
 {
-  my $tzil = Dist::Zilla::Tester->from_config(
+  my $tzil = Builder->from_config(
     { dist_root => 'corpus/DZT' },
     {
       add_files => {
@@ -137,7 +137,7 @@ END_CHANGES
 }
 
 {
-  my $tzil = Dist::Zilla::Tester->from_config(
+  my $tzil = Builder->from_config(
     { dist_root => 'corpus/DZT' },
     {
       add_files => {

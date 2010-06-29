@@ -8,7 +8,7 @@ use Test::DZil;
 use Try::Tiny;
 
 {
-  my $tzil = Dist::Zilla::Tester->from_config(
+  my $tzil = Builder->from_config(
     { dist_root => 'corpus/DZT' },
     {
       add_files => {
@@ -26,7 +26,7 @@ use Try::Tiny;
 }
 
 {
-  my $tzil = Dist::Zilla::Tester->from_config(
+  my $tzil = Builder->from_config(
     { dist_root => 'corpus/DZT' },
     {
       add_files => {
@@ -50,7 +50,7 @@ use Try::Tiny;
 
 {
   try {
-    my $tzil = Dist::Zilla::Tester->from_config(
+    my $tzil = Builder->from_config(
       { dist_root => 'corpus/DZT' },
       {
         add_files => {

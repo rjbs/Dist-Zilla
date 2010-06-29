@@ -52,7 +52,7 @@ my $script_pkg = '
 package DZT::Script;
 ';
 
-my $tzil = Dist::Zilla::Tester->from_config(
+my $tzil = Builder->from_config(
   { dist_root => 'corpus/DZT' },
   {
     add_files => {

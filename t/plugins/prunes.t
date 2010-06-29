@@ -7,7 +7,7 @@ use lib 't/lib';
 use Test::DZil;
 
 for my $skip_skip (0, 1) {
-  my $tzil = Dist::Zilla::Tester->from_config(
+  my $tzil = Builder->from_config(
     { dist_root => 'corpus/DZT' },
     {
       add_files => {
@@ -43,7 +43,7 @@ for my $skip_skip (0, 1) {
 }
 
 {
-  my $tzil = Dist::Zilla::Tester->from_config(
+  my $tzil = Builder->from_config(
     { dist_root => 'corpus/DZT' },
     {
       add_files => {
@@ -65,7 +65,7 @@ for my $skip_skip (0, 1) {
 }
 
 {
-  my $tzil = Dist::Zilla::Tester->from_config(
+  my $tzil = Builder->from_config(
     { dist_root => 'corpus/DZT' },
     {
       add_files => {
@@ -87,7 +87,7 @@ for my $skip_skip (0, 1) {
 }
 
 for my $arg (qw(filename filenames)) {
-  my $tzil = Dist::Zilla::Tester->from_config(
+  my $tzil = Builder->from_config(
     { dist_root => 'corpus/DZT' },
     {
       add_files => {

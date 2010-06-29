@@ -9,7 +9,7 @@ use Try::Tiny;
 
 {
   try {
-    my $tzil = Dist::Zilla::Tester->from_config(
+    my $tzil = Builder->from_config(
       { dist_root => 'corpus/DZT' },
       {
         add_files => {
@@ -34,7 +34,7 @@ use Try::Tiny;
 
 for my $no (qw(n no)) {
   try {
-    my $tzil = Dist::Zilla::Tester->from_config(
+    my $tzil = Builder->from_config(
       { dist_root => 'corpus/DZT' },
       {
         add_files => {
@@ -59,7 +59,7 @@ for my $no (qw(n no)) {
 }
 
 for my $yes (qw(y yes)) {
-  my $tzil = Dist::Zilla::Tester->from_config(
+  my $tzil = Builder->from_config(
     { dist_root => 'corpus/DZT' },
     {
       add_files => {

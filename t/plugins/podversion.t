@@ -53,7 +53,7 @@ script.pl - a podded script!
 print "hello world\n";
 ';
 
-my $tzil = Dist::Zilla::Tester->from_config(
+my $tzil = Builder->from_config(
   { dist_root => 'corpus/DZT' },
   {
     add_files => {
