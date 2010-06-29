@@ -3,6 +3,22 @@ Revision history for {{$dist->name}}
 {{$NEXT}}
           during dist minting, ModuleMaker occurs before FileGatherer
 
+          Dist::Zilla is now an abstract base class, basically
+
+          * Dist::Zilla::Dist::Builder and ::Minter perform the real work
+
+          * Dist::Zilla::Tester has been updated to work with these
+
+          a very basic test for minting, now possible, has been added
+
+          added prune_file method to Dist::Zilla to eliminate the need for
+          altering the ->files arrayref directly
+
+          added the ClearPrereqs plugin
+
+          [Prereq] is now called [Prereqs], but [Prereq] will continue to work
+          until v6 or v7 or so
+
 4.101780  2010-06-27 14:30:55 America/New_York
           the Chrome role now requires three input methods: prompt_any_key,
           prompt_yn, and prompt_str
