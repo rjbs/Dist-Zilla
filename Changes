@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.101801  2010-06-29 21:17:15 America/New_York
           rename ClearPrereqs to RemovePrereqs
 
           the Zilla assembler no longer provides a default zilla_class
