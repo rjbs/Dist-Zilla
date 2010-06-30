@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.101811  2010-06-30 09:51:43 America/New_York
           load File::pushd in Minter, where it is needed
 
 4.101810  2010-06-30 09:41:59 America/New_York
