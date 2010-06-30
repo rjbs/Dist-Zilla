@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          correctly set local global config root variable (Dave Rolsky)
 
 4.101811  2010-06-30 09:51:43 America/New_York
           load File::pushd in Minter, where it is needed
