@@ -2,6 +2,11 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+4.101810  2010-06-30 09:41:59 America/New_York
+          internal reorganization of test data
+
+          tests should no longer fail if you have personal config in $HOME
+
 4.101801  2010-06-29 21:17:15 America/New_York
           rename ClearPrereqs to RemovePrereqs
 
