@@ -6,6 +6,8 @@ Revision history for {{$dist->name}}
           the Zilla assembler no longer provides a default zilla_class
           (because doing so had lost any meaning)
 
+          update minter.t to work when *not* logged in as rjbs to his laptop
+
 4.101800  2010-06-29 10:29:38 America/New_York
           during dist minting, ModuleMaker occurs before FileGatherer
 
