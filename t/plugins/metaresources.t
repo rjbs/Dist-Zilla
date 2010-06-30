@@ -18,7 +18,7 @@ my $generated_by_re = qr/\A\Q$generated_by\E(?:, \Q$converted_by\E)?\z/;
 
 {
   my $tzil = Builder->from_config(
-    { dist_root => 'corpus/DZT' },
+    { dist_root => 'corpus/dist/DZT' },
     {
       add_files => {
         'source/dist.ini' => simple_ini(
@@ -92,7 +92,7 @@ my $generated_by_re = qr/\A\Q$generated_by\E(?:, \Q$converted_by\E)?\z/;
 
 {
   my $tzil = Builder->from_config(
-    { dist_root => 'corpus/DZT' },
+    { dist_root => 'corpus/dist/DZT' },
     {
       add_files => {
         'source/dist.ini' => simple_ini(

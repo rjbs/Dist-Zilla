@@ -53,7 +53,7 @@ package DZT::Script;
 ';
 
 my $tzil = Builder->from_config(
-  { dist_root => 'corpus/DZT' },
+  { dist_root => 'corpus/dist/DZT' },
   {
     add_files => {
       'source/lib/DZT/TP1.pm'    => $two_packages,

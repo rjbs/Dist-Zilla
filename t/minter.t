@@ -13,7 +13,7 @@ use YAML::Tiny;
 my $tzil = Minter->_new_from_profile(
   [ Default => 'default' ],
   { name => 'DZT-Minty', },
-  { global_config_root => dir('t/global')->absolute },
+  { global_config_root => dir('corpus/global')->absolute },
 );
 
 $tzil->mint_dist;

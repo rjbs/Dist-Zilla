@@ -9,7 +9,7 @@ use lib 't/lib';
 use Test::DZil;
 
 my $tzil = Builder->from_config(
-  { dist_root => 'corpus/DZT' },
+  { dist_root => 'corpus/dist/DZT' },
   {
     add_files => {
       q{source/file with spaces.txt}        => "foo\n",

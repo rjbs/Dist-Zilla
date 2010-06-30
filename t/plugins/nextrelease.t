@@ -20,7 +20,7 @@ END_CHANGES
 
 {
   my $tzil = Builder->from_config(
-    { dist_root => 'corpus/DZT' },
+    { dist_root => 'corpus/dist/DZT' },
     {
       add_files => {
         'source/Changes' => $changes,
@@ -71,7 +71,7 @@ END_CHANGES
 
 {
   my $tzil = Builder->from_config(
-    { dist_root => 'corpus/DZT' },
+    { dist_root => 'corpus/dist/DZT' },
     {
       add_files => {
         'source/Changes' => $changes,
@@ -114,7 +114,7 @@ END_CHANGES
 
 {
   my $tzil = Builder->from_config(
-    { dist_root => 'corpus/DZT' },
+    { dist_root => 'corpus/dist/DZT' },
     {
       add_files => {
         'source/Changes' => $changes,
@@ -138,7 +138,7 @@ END_CHANGES
 
 {
   my $tzil = Builder->from_config(
-    { dist_root => 'corpus/DZT' },
+    { dist_root => 'corpus/dist/DZT' },
     {
       add_files => {
         'source/Changes' => $changes,

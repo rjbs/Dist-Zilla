@@ -8,7 +8,7 @@ use Test::DZil;
 
 for my $skip_skip (0, 1) {
   my $tzil = Builder->from_config(
-    { dist_root => 'corpus/DZT' },
+    { dist_root => 'corpus/dist/DZT' },
     {
       add_files => {
         'source/dist.ini' => simple_ini(
@@ -44,7 +44,7 @@ for my $skip_skip (0, 1) {
 
 {
   my $tzil = Builder->from_config(
-    { dist_root => 'corpus/DZT' },
+    { dist_root => 'corpus/dist/DZT' },
     {
       add_files => {
         'source/Build'    => "This file is cruft.\n",
@@ -66,7 +66,7 @@ for my $skip_skip (0, 1) {
 
 {
   my $tzil = Builder->from_config(
-    { dist_root => 'corpus/DZT' },
+    { dist_root => 'corpus/dist/DZT' },
     {
       add_files => {
         'source/Build'    => "This file is cruft.\n",
@@ -88,7 +88,7 @@ for my $skip_skip (0, 1) {
 
 for my $arg (qw(filename filenames)) {
   my $tzil = Builder->from_config(
-    { dist_root => 'corpus/DZT' },
+    { dist_root => 'corpus/dist/DZT' },
     {
       add_files => {
         'source/dist.ini' => simple_ini(

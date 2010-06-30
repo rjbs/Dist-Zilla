@@ -10,7 +10,7 @@ sub test_this {
   my ($plugins, $add_files, $assertion) = @_;
 
   my $tzil = Builder->from_config(
-    { dist_root => 'corpus/DZT' },
+    { dist_root => 'corpus/dist/DZT' },
     {
       add_files => {
         'source/dist.ini' => simple_ini(

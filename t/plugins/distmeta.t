@@ -12,7 +12,7 @@ use YAML::Tiny;
 {
   # 2.0
   my $tzil = Builder->from_config(
-    { dist_root => 'corpus/DZT' },
+    { dist_root => 'corpus/dist/DZT' },
     {
       add_files => {
         'source/dist.ini' => simple_ini(
@@ -83,7 +83,7 @@ use YAML::Tiny;
 {
   # 1.4
   my $tzil = Builder->from_config(
-    { dist_root => 'corpus/DZT' },
+    { dist_root => 'corpus/dist/DZT' },
     {
       add_files => {
         'source/dist.ini' => simple_ini(

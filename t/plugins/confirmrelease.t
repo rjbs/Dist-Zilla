@@ -10,7 +10,7 @@ use Try::Tiny;
 {
   try {
     my $tzil = Builder->from_config(
-      { dist_root => 'corpus/DZT' },
+      { dist_root => 'corpus/dist/DZT' },
       {
         add_files => {
           'source/dist.ini' => simple_ini(
@@ -35,7 +35,7 @@ use Try::Tiny;
 for my $no (qw(n no)) {
   try {
     my $tzil = Builder->from_config(
-      { dist_root => 'corpus/DZT' },
+      { dist_root => 'corpus/dist/DZT' },
       {
         add_files => {
           'source/dist.ini' => simple_ini(
@@ -60,7 +60,7 @@ for my $no (qw(n no)) {
 
 for my $yes (qw(y yes)) {
   my $tzil = Builder->from_config(
-    { dist_root => 'corpus/DZT' },
+    { dist_root => 'corpus/dist/DZT' },
     {
       add_files => {
         'source/dist.ini' => simple_ini(

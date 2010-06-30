@@ -10,7 +10,7 @@ use Test::DZil;
 use YAML::Tiny;
 
 my $tzil = Builder->from_config(
-  { dist_root => 'corpus/AutoPrereq' },
+  { dist_root => 'corpus/dist/AutoPrereq' },
   { },
 );
 

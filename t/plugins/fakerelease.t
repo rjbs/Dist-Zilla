@@ -9,7 +9,7 @@ use Try::Tiny;
 
 {
   my $tzil = Builder->from_config(
-    { dist_root => 'corpus/DZT' },
+    { dist_root => 'corpus/dist/DZT' },
     {
       add_files => {
         'source/dist.ini' => simple_ini(qw(GatherDir FakeRelease)),
@@ -27,7 +27,7 @@ use Try::Tiny;
 
 {
   my $tzil = Builder->from_config(
-    { dist_root => 'corpus/DZT' },
+    { dist_root => 'corpus/dist/DZT' },
     {
       add_files => {
         'source/dist.ini' => simple_ini(
@@ -51,7 +51,7 @@ use Try::Tiny;
 {
   try {
     my $tzil = Builder->from_config(
-      { dist_root => 'corpus/DZT' },
+      { dist_root => 'corpus/dist/DZT' },
       {
         add_files => {
           'source/dist.ini' => simple_ini(qw(GatherDir FakeRelease)),

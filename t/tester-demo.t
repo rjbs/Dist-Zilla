@@ -11,7 +11,7 @@ use Test::DZil;
 
 $ENV{DZIL_GLOBAL_CONFIG_ROOT} = 't';
 
-my $result = test_dzil('corpus/DZ1', [ qw(build) ]);
+my $result = test_dzil('corpus/dist/DZ1', [ qw(build) ]);
 
 is($result->exit_code, 0, "dzil would have exited 0");
 
@@ -24,7 +24,7 @@ ok(
 ## SIMPLE TEST WITH DZIL TESTER
 
 my $tester = Dist::Zilla::Tester->from_config(
-  { dist_root => 'corpus/DZT' },
+  { dist_root => 'corpus/dist/DZT' },
   {
     add_files => { 'source/dist.ini' => simple_ini('@Classic') },
   }

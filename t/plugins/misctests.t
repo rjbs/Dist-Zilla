@@ -8,7 +8,7 @@ use autodie;
 use Test::DZil;
 
 my $tzil = Builder->from_config(
-  { dist_root => 'corpus/DZT' },
+  { dist_root => 'corpus/dist/DZT' },
   {
     add_files => {
       'source/dist.ini' => simple_ini(

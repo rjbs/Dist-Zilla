@@ -54,7 +54,7 @@ print "hello world\n";
 ';
 
 my $tzil = Builder->from_config(
-  { dist_root => 'corpus/DZT' },
+  { dist_root => 'corpus/dist/DZT' },
   {
     add_files => {
       'source/lib/DZT/WPFP.pm' => $with_place_for_pod,
