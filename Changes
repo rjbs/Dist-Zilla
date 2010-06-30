@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          load File::pushd in Minter, where it is needed
 
 4.101810  2010-06-30 09:41:59 America/New_York
           internal reorganization of test data

@@ -3,6 +3,7 @@ package Dist::Zilla::Dist::Minter;
 use Moose 0.92; # role composition fixes
 extends 'Dist::Zilla';
 
+use File::pushd ();
 use Moose::Autobox;
 use Path::Class;
 
