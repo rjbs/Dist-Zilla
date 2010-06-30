@@ -6,7 +6,7 @@ use App::Cmd::Setup 0.307 -app; # need ->app in Result of Tester, GLD vers
 
 use Carp ();
 use Dist::Zilla::MVP::Reader::Finder;
-use File::HomeDir ();
+use Dist::Zilla::Util;
 use Moose::Autobox;
 use Path::Class;
 use Try::Tiny;
@@ -20,15 +20,6 @@ sub global_opt_spec {
   );
 }
 
-sub _config_root {
-  return dir($ENV{DZIL_GLOBAL_CONFIG_ROOT}) if $ENV{DZIL_GLOBAL_CONFIG_ROOT};
-
-  my $homedir = File::HomeDir->my_home
-    or Carp::croak("couldn't determine home directory");
-
-  return dir($homedir)->subdir('.dzil');
-}
-
 sub _build_global_stashes {
   my ($self) = @_;
 
@@ -36,7 +27,7 @@ sub _build_global_stashes {
 
   my $stash_registry = $self->{__global_stashes__} = {};
 
-  my $config_dir  = $self->_config_root;
+  my $config_dir  = Dist::Zilla::Util->_global_config_root;
 
   my $config_base = $config_dir->file('config');
 

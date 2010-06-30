@@ -3,7 +3,7 @@ package Dist::Zilla::MintingProfile::Default;
 use Moose;
 with 'Dist::Zilla::Role::MintingProfile::ShareDir';
 
-use File::HomeDir ();
+use Dist::Zilla::Util;
 use Path::Class;
 
 use namespace::autoclean;
@@ -22,8 +22,8 @@ around profile_dir => sub {
 
   $profile_name ||= 'default';
 
-  my $profile_dir = dir( File::HomeDir->my_home )
-                  ->subdir('.dzil', 'profiles', $profile_name);
+  my $profile_dir = Dist::Zilla::Util->_global_config_root
+                  ->subdir('profiles', $profile_name);
 
   return $profile_dir if -d $profile_dir;
 
