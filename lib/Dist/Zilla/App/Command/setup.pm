@@ -32,7 +32,7 @@ sub execute {
 
   my $chrome = $self->app->chrome;
 
-  my $config_root = $self->app->_config_root;
+  my $config_root = Dist::Zilla::Util->_global_config_root;
 
   if (
     my @files = grep { -f and $_->basename =~ /\Aconfig\./ }

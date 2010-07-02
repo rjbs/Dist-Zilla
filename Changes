@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          correctly apply another patch from LA.pm that had been misapplied
+          earlier
 
 4.101830  2010-07-02 10:27:24 America/New_York
           remove the internal-only VersionBootstrap plugin; no longer needed
