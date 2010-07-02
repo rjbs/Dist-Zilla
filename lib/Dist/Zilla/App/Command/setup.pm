@@ -38,7 +38,7 @@ sub execute {
     my @files = grep { -f and $_->basename =~ /\Aconfig\./ }
     $config_root->children
   ) {
-    $chrome->log_fatal([
+    $chrome->logger->log_fatal([
       "per-user configuration files already exist in %s: %s",
       "$config_root",
       join(q{, }, @files),
