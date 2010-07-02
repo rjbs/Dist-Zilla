@@ -5,6 +5,8 @@ Revision history for {{$dist->name}}
 
           fix a bad logging call in global config setup (LA.pm)
 
+          tweak to allow tests to pass on 5.8.7 and earlier
+
 4.101812  2010-06-30 23:02:15 America/New_York
           correctly set local global config root variable (Dave Rolsky)
 

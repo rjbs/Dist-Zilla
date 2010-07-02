@@ -99,26 +99,26 @@ unlike(
 
 my $dzt_script_pkg = $tzil->slurp_file('build/bin/script_pkg.pl');
 like(
-    $dzt_script_pkg,
-    qr{^\s*\$\QDZT::Script::VERSION = '0.001';\E\s*$}m,
-    "added version to DZT::Script",
+  $dzt_script_pkg,
+  qr{^\s*\$\QDZT::Script::VERSION = '0.001';\E\s*$}m,
+  "added version to DZT::Script",
 );
 
 TODO: {
-    local $TODO = 'only scanning for packages right now';
-    my $dzt_script = $tzil->slurp_file('build/bin/script.pl');
-    like(
-        $dzt_script,
-        qr{^\s*\$\QDZT::Script::VERSION = '0.001';\E\s*$}m,
-        "added version to plain script",
-    );
+  local $TODO = 'only scanning for packages right now';
+  my $dzt_script = $tzil->slurp_file('build/bin/script.pl');
+  like(
+    $dzt_script,
+    qr{^\s*\$\QDZT::Script::VERSION = '0.001';\E\s*$}m,
+    "added version to plain script",
+  );
 };
 
 my $script_wver = $tzil->slurp_file('build/bin/script_ver.pl');
 unlike(
-    $script_wver,
-    qr{^\s*\$\QDZT::WVer::VERSION = '0.001';\E\s*$}m,
-    "*not* added to versioned DZT::Script; we have one already",
+  $script_wver,
+  qr{^\s*\$\QDZT::WVer::VERSION = '0.001';\E\s*$}m,
+  "*not* added to versioned DZT::Script; we have one already",
 );
 
 ok(
