@@ -73,34 +73,34 @@ $tzil->build;
 my $dzt_sample = $tzil->slurp_file('build/lib/DZT/Sample.pm');
 like(
   $dzt_sample,
-  qr{^\s*\$\QDZT::Sample::VERSION = '0.001';\E$}m,
+  qr{^\s*\$\QDZT::Sample::VERSION = '0.001';\E\s*$}m,
   "added version to DZT::Sample",
 );
 
 my $dzt_tp1 = $tzil->slurp_file('build/lib/DZT/TP1.pm');
 like(
   $dzt_tp1,
-  qr{^\s*\$\QDZT::TP1::VERSION = '0.001';\E$}m,
+  qr{^\s*\$\QDZT::TP1::VERSION = '0.001';\E\s*$}m,
   "added version to DZT::TP1",
 );
 
 like(
   $dzt_tp1,
-  qr{^\s*\$\QDZT::TP2::VERSION = '0.001';\E$}m,
+  qr{^\s*\$\QDZT::TP2::VERSION = '0.001';\E\s*$}m,
   "added version to DZT::TP2",
 );
 
 my $dzt_wver = $tzil->slurp_file('build/lib/DZT/WVer.pm');
 unlike(
   $dzt_wver,
-  qr{^\s*\$\QDZT::WVer::VERSION = '0.001';\E$}m,
+  qr{^\s*\$\QDZT::WVer::VERSION = '0.001';\E\s*$}m,
   "*not* added to DZT::WVer; we have one already",
 );
 
 my $dzt_script_pkg = $tzil->slurp_file('build/bin/script_pkg.pl');
 like(
     $dzt_script_pkg,
-    qr{^\s*\$\QDZT::Script::VERSION = '0.001';\E$}m,
+    qr{^\s*\$\QDZT::Script::VERSION = '0.001';\E\s*$}m,
     "added version to DZT::Script",
 );
 
@@ -109,7 +109,7 @@ TODO: {
     my $dzt_script = $tzil->slurp_file('build/bin/script.pl');
     like(
         $dzt_script,
-        qr{^\s*\$\QDZT::Script::VERSION = '0.001';\E$}m,
+        qr{^\s*\$\QDZT::Script::VERSION = '0.001';\E\s*$}m,
         "added version to plain script",
     );
 };
@@ -117,7 +117,7 @@ TODO: {
 my $script_wver = $tzil->slurp_file('build/bin/script_ver.pl');
 unlike(
     $script_wver,
-    qr{^\s*\$\QDZT::WVer::VERSION = '0.001';\E$}m,
+    qr{^\s*\$\QDZT::WVer::VERSION = '0.001';\E\s*$}m,
     "*not* added to versioned DZT::Script; we have one already",
 );
 
