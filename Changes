@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.101830  2010-07-02 10:27:24 America/New_York
           remove the internal-only VersionBootstrap plugin; no longer needed
 
           fix a bad logging call in global config setup (LA.pm)
