@@ -42,12 +42,12 @@ sub _build_global_stashes {
   try {
     my $reader = Dist::Zilla::MVP::Reader::Finder->new({
       if_none => sub {
-        warn <<'END_WARN';
-WARNING: No global configuration file was found in ~/.dzil -- this limits the
-ability of Dist::Zilla to perform some tasks.  You can run "dzil setup" to
-create a simple first-pass configuration file, or you can touch the file
-~/.dzil/config.ini to suppress this message in the future.
-END_WARN
+#         warn <<'END_WARN';
+# WARNING: No global configuration file was found in ~/.dzil -- this limits the
+# ability of Dist::Zilla to perform some tasks.  You can run "dzil setup" to
+# create a simple first-pass configuration file, or you can touch the file
+# ~/.dzil/config.ini to suppress this message in the future.
+# END_WARN
         return $_[2]->{assembler}->sequence
       },
     });
@@ -61,7 +61,8 @@ Your global configuration file couldn't be loaded.  It's a file matching
 
 You can try deleting the file or you might need to upgrade from pre-version 4
 format.  In most cases, this will just mean replacing [!release] with [%PAUSE]
-and deleting any [!new] stanza.
+and deleting any [!new] stanza.  You can also delete the existing file and run
+"dzil setup"
 END_DIE
   };
 
