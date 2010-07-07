@@ -35,6 +35,8 @@ sub execute {
   my $config_root = Dist::Zilla::Util->_global_config_root;
 
   if (
+    -d $config_root
+    and
     my @files = grep { -f and $_->basename =~ /\Aconfig\./ }
     $config_root->children
   ) {
