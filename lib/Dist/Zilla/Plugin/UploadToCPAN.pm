@@ -120,6 +120,12 @@ has pause_cfg => (
   },
 );
 
+has subdir => (
+    is        => 'ro',
+    isa       => 'Str',
+    predicate => 'has_subdir',
+);
+
 has uploader => (
   is   => 'ro',
   isa  => 'CPAN::Uploader',
@@ -130,6 +136,8 @@ has uploader => (
     my $uploader = Dist::Zilla::Plugin::UploadToCPAN::_Uploader->new({
       user     => $self->username,
       password => $self->password,
+      ($self->has_subdir
+           ? (subdir => $self->subdir) : ()),
     });
 
     $uploader->{'Dist::Zilla'}{plugin} = $self;
