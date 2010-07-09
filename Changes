@@ -2,6 +2,9 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+4.101900  2010-07-09 09:05:25 America/New_York
+          add a "subdir" directory to UploadToCPAN
+
 4.101880  2010-07-07 09:25:41 America/New_York
           stop being so pushy about running dzil setup (reported by AVAR)
 
