@@ -28,6 +28,25 @@ use Version::Requirements;
 
 sub abstract { "print your distribution's prerequisites" }
 
+sub extract_dependencies {
+  my ($ignored, $zilla) = @_;
+
+  $_->before_build for $zilla->plugins_with(-BeforeBuild)->flatten;
+  $_->gather_files for $zilla->plugins_with(-FileGatherer)->flatten;
+  $_->prune_files  for $zilla->plugins_with(-FilePruner)->flatten;
+  $_->munge_files  for $zilla->plugins_with(-FileMunger)->flatten;
+  $_->register_prereqs for $zilla->plugins_with(-PrereqSource)->flatten;
+
+  my $req = Version::Requirements->new;
+  my $prereqs = $zilla->prereqs;
+
+  for my $phase (qw(build test configure runtime)) {
+      $req->add_requirements( $prereqs->requirements_for($phase, 'requires') );
+  }
+
+  return sort { lc $a cmp lc $b } grep { $_ ne 'perl' } $req->required_modules;
+}
+
 sub execute {
   my ($self, $opt, $arg) = @_;
 
@@ -37,22 +56,7 @@ sub execute {
     Log::Dispatchouli->new({ ident => 'Dist::Zilla' }),
   );
 
-  $_->before_build for $self->zilla->plugins_with(-BeforeBuild)->flatten;
-  $_->gather_files for $self->zilla->plugins_with(-FileGatherer)->flatten;
-  $_->prune_files  for $self->zilla->plugins_with(-FilePruner)->flatten;
-  $_->munge_files  for $self->zilla->plugins_with(-FileMunger)->flatten;
-  $_->register_prereqs for $self->zilla->plugins_with(-PrereqSource)->flatten;
-
-  my $req = Version::Requirements->new;
-  my $prereqs = $self->zilla->prereqs;
-
-  for my $phase (qw(build test configure runtime)) {
-    $req->add_requirements( $prereqs->requirements_for($phase, 'requires') );
-  }
-
-  print "$_\n" for sort { lc $a cmp lc $b }
-                   grep { $_ ne 'perl' }
-                   $req->required_modules;
+  print "$_" for $self->extract_dependencies($self->zilla);
 }
 
 1;
