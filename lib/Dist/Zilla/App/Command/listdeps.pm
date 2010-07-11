@@ -30,7 +30,26 @@ use Version::Requirements;
 sub abstract { "print your distribution's prerequisites" }
 
 sub opt_spec {
-    [ 'author', 'include author dependencies' ],
+  [ 'author', 'include author dependencies' ],
+}
+
+sub extract_dependencies {
+  my ($self, $zilla, $phases) = @_;
+
+  $_->before_build for $zilla->plugins_with(-BeforeBuild)->flatten;
+  $_->gather_files for $zilla->plugins_with(-FileGatherer)->flatten;
+  $_->prune_files  for $zilla->plugins_with(-FilePruner)->flatten;
+  $_->munge_files  for $zilla->plugins_with(-FileMunger)->flatten;
+  $_->register_prereqs for $zilla->plugins_with(-PrereqSource)->flatten;
+
+  my $req = Version::Requirements->new;
+  my $prereqs = $zilla->prereqs;
+
+  for my $phase (@$phases) {
+    $req->add_requirements( $prereqs->requirements_for($phase, 'requires') );
+  }
+
+  return sort { lc $a cmp lc $b } grep { $_ ne 'perl' } $req->required_modules;
 }
 
 sub execute {
@@ -38,25 +57,10 @@ sub execute {
 
   $self->app->chrome->logger->mute;
 
-  $_->before_build for $self->zilla->plugins_with(-BeforeBuild)->flatten;
-  $_->gather_files for $self->zilla->plugins_with(-FileGatherer)->flatten;
-  $_->prune_files  for $self->zilla->plugins_with(-FilePruner)->flatten;
-  $_->munge_files  for $self->zilla->plugins_with(-FileMunger)->flatten;
-  $_->register_prereqs for $self->zilla->plugins_with(-PrereqSource)->flatten;
-
-  my $req = Version::Requirements->new;
-  my $prereqs = $self->zilla->prereqs;
-
   my @phases = qw(build test configure runtime);
   push @phases, 'develop' if $opt->author;
 
-  for my $phase (@phases) {
-    $req->add_requirements( $prereqs->requirements_for($phase, 'requires') );
-  }
-
-  print "$_\n" for sort { lc $a cmp lc $b }
-                   grep { $_ ne 'perl' }
-                   $req->required_modules;
+  print "$_\n" for $self->extract_dependencies($self->zilla, \@phases);
 }
 
 1;
