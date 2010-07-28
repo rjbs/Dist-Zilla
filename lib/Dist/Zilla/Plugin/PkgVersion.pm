@@ -13,12 +13,23 @@ use MooseX::Types::Perl qw(LaxVersionStr);
 
 use namespace::autoclean;
 
+=head1 SYNOPSIS
+
+in dist.ini
+
+  [PkgVersion]
+
 =head1 DESCRIPTION
 
-This plugin will add a line like the following to each package in each Perl
+This plugin will add a lines like the following to each package in each Perl
 module or program (more or less) within the distribution:
 
-  our $VERSION = 0.001; # where 0.001 is the version of the dist
+  BEGIN {
+    $MyModule::VERSION = 0.001;
+  }
+
+note: where 0.001 is the version of the dist, and $MyModule is the name of
+your modules
 
 It will skip any package declaration that includes a newline between the
 C<package> keyword and the package name, like:
