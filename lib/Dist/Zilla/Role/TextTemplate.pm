@@ -48,6 +48,7 @@ sub fill_in_string {
     $string,
     HASH       => $stash,
     DELIMITERS => $self->delim,
+    BROKEN => sub { my %hash = @_; die $hash{error}; },
     %$arg,
   );
 }
