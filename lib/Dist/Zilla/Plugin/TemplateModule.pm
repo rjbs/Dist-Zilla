@@ -55,6 +55,7 @@ sub make_module {
   my $content = $self->fill_in_string(
     $template,
     {
+      dist => \($self->zilla),
       name => $arg->{name},
     },
   );

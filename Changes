@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          pass a $dist var to TemplateModule templates
 
 4.101900  2010-07-09 09:05:25 America/New_York
           add a "subdir" directory to UploadToCPAN
