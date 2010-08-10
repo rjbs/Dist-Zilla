@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.102220  2010-08-10 07:46:27 America/New_York
           pass a $dist var to TemplateModule templates
 
 4.101900  2010-07-09 09:05:25 America/New_York
