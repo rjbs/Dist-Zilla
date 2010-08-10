@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.102221  2010-08-10 11:35:00 America/New_York
           use the new "mute" feature of Log::Dispatchouli to simplify listdeps
           make TextTemplate rendering errors fatal
           document the changes made in 4.102220
