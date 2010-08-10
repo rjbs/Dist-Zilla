@@ -31,11 +31,7 @@ sub abstract { "print your distribution's prerequisites" }
 sub execute {
   my ($self, $opt, $arg) = @_;
 
-  # ...more proof that we need a ->mute setting for Log::Dispatchouli.
-  # -- rjbs, 2010-04-29
-  $self->app->chrome->_set_logger(
-    Log::Dispatchouli->new({ ident => 'Dist::Zilla' }),
-  );
+  $self->app->chrome->logger->mute;
 
   $_->before_build for $self->zilla->plugins_with(-BeforeBuild)->flatten;
   $_->gather_files for $self->zilla->plugins_with(-FileGatherer)->flatten;

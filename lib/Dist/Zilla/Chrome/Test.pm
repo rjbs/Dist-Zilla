@@ -3,7 +3,7 @@ use Moose;
 # ABSTRACT: the chrome used by Dist::Zilla::Tester
 
 use Dist::Zilla::Types qw(OneZero);
-use Log::Dispatchouli;
+use Log::Dispatchouli 1.102220;
 
 has logger => (
   is => 'ro',

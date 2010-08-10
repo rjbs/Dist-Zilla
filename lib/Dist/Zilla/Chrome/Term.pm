@@ -10,7 +10,7 @@ terminal environment.  It's the default chrome used by L<Dist::Zilla::App>.
 =cut
 
 use Dist::Zilla::Types qw(OneZero);
-use Log::Dispatchouli;
+use Log::Dispatchouli 1.102220;
 use Term::ReadLine;
 use Term::ReadKey;
 use Term::UI;
