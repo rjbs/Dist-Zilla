@@ -559,7 +559,7 @@ sub run_in_build {
     $builders[0]->build;
     local $ENV{PERL5LIB} =
       join $Config::Config{path_sep},
-      map { $abstarget->subdir('blib', $_) } qw{ arch lib };
+      (map { $abstarget->subdir('blib', $_) } qw(arch lib)), $ENV{PERL5LIB};
     system(@$cmd) and die "error while running: @$cmd";
     1;
   };
