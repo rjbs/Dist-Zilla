@@ -319,7 +319,7 @@ sub build_archive {
   $_->before_archive for $self->plugins_with(-BeforeArchive)->flatten;
 
   my %seen_dir;
-  for my $distfile ($self->files->flatten) {
+  for my $distfile (sort { length($a->name) <=> length($b->name) } $self->files->flatten) {
     my $in = file($distfile->name)->dir;
     $archive->add_files( $built_in->subdir($in) ) unless $seen_dir{ $in }++;
     $archive->add_files( $built_in->file( $distfile->name ) );
