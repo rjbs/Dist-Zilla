@@ -2,6 +2,14 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+4.102340  2010-08-22 15:47:51 America/New_York
+          add files to archive in name-length order (thanks, Jonathan Scott
+          Duff)
+
+          improve permissions of created files on Win32 (thanks, Curtis Jewell)
+
+          do not clobber PERL5LIB during build (thanks, John Napiorkowski)
+
 4.102221  2010-08-10 11:35:00 America/New_York
           use the new "mute" feature of Log::Dispatchouli to simplify listdeps
           make TextTemplate rendering errors fatal
