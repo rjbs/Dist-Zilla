@@ -86,6 +86,31 @@ for my $skip_skip (0, 1) {
   );
 }
 
+{
+  my $tzil = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/Build'    => "This file is cruft.\n",
+        'source/dist.ini' => simple_ini(
+            'GatherDir',
+            [ 'PruneCruft' => { except => 'Build' } ],
+        ),
+      },
+    },
+  );
+
+  $tzil->build;
+
+  my @files = map {; $_->name } @{ $tzil->files };
+
+  is_filelist(
+    [ @files ],
+    [ qw(dist.ini lib/DZT/Sample.pm t/basic.t Build) ],
+    "...but /Build isn't  pruned by PruneCruft if we exclude it",
+  );
+}
+
 for my $arg (qw(filename filenames)) {
   my $tzil = Builder->from_config(
     { dist_root => 'corpus/dist/DZT' },
