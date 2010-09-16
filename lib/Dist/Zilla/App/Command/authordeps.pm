@@ -17,6 +17,7 @@ sub abstract { "list your distribution's author dependencies" }
 sub opt_spec {
   return (
     [ 'root=s' => 'the root of the dist; defaults to .' ],
+    [ 'missing' => 'list only the missing dependencies' ],
   );
 }
 
@@ -27,6 +28,7 @@ sub execute {
     $self->format_author_deps(
       $self->extract_author_deps(
         dir(defined $opt->root ? $opt->root : '.'),
+        $opt->missing,
       ),
     ),
   );
@@ -40,7 +42,7 @@ sub format_author_deps {
 }
 
 sub extract_author_deps {
-  my ($self, $root) = @_;
+  my ($self, $root, $missing) = @_;
 
   my $ini = $root->file('dist.ini');
 
@@ -54,7 +56,9 @@ sub extract_author_deps {
                       grep { $_ ne '_' }
                       keys %{$config};
 
-  return map {; Dist::Zilla::Util->expand_config_package_name($_) } @sections;
+  return
+    grep { $missing ? (! eval "require $_; 1;") : 1 }
+    map {; Dist::Zilla::Util->expand_config_package_name($_) } @sections;
 }
 
 1;
