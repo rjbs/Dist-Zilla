@@ -1,12 +1,12 @@
 package Dist::Zilla::Plugin::BumpVersion;
-# ABSTRACT: bump the configured version number by one before building
+# ABSTRACT: (DEPRECATED) bump the version number by one before building
 use Moose;
 with 'Dist::Zilla::Role::BeforeBuild';
 
 =head1 SYNOPSIS
 
 B<WARNING>  This plugin is deprecated and will be removed.  It is generally
-useless.
+useless.  It does not do what you think it does.
 
 If loaded, this plugin will ensure that the distribution's version number is
 bumped up by one (in the smallest already-defined version units) before
