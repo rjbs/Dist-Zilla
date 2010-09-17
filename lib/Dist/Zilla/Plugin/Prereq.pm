@@ -11,6 +11,8 @@ Prereqs, and will be removed in a few versions.
 =cut
 
 before register_component => sub {
+  die "Dist::Zilla::Plugin::Prereq is incompatible with Dist::Zilla >= v5"
+    if Dist::Zilla->VERSION >= 5;
   warn "!!! [Prereq] will be removed in Dist::Zilla v5; replace it with [Prereqs] (note the 's')\n";
 };
 
