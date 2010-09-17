@@ -1,6 +1,11 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          add the "authordeps" command
+
+          avoid clobbering PERL5LIB env var when building
+
+          add append_file parameter to DistINI plugin
 
 4.102340  2010-08-22 15:47:51 America/New_York
           add files to archive in name-length order (thanks, Jonathan Scott
