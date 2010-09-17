@@ -1,11 +1,17 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          ANNOYANCES: [AutoPrereq] and [Prereq] will now complain that you
+          should be using [AutoPrereqs] and [Prereqs];  the irregularly named
+          plugins will be removed in Dist-Zilla v5
+
           add the "authordeps" command
 
           avoid clobbering PERL5LIB env var when building
 
-          add append_file parameter to DistINI plugin
+          add "append_file" parameter to DistINI plugin
+
+          add "except" parameter to PruneCruft
 
 4.102340  2010-08-22 15:47:51 America/New_York
           add files to archive in name-length order (thanks, Jonathan Scott
