@@ -36,7 +36,8 @@ sub before_build {
 }
 
 before register_component => sub {
-  die "Dist::Zilla::Plugin::BumpVersion is incompatible with Dist::Zilla >= v5"
+  die "Dist::Zilla::Plugin::BumpVersion is incompatible with Dist::Zilla >=
+  v5\n"
     if Dist::Zilla->VERSION >= 5;
 
   warn "!!! $_[0] will be removed in Dist::Zilla v5; remove it from your config\n";
