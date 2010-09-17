@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.102341  2010-09-17 19:14:41 America/New_York
           ANNOYANCES: [AutoPrereq] and [Prereq] will now complain that you
           should be using [AutoPrereqs] and [Prereqs];  the irregularly named
           plugins will be removed in Dist-Zilla v5
