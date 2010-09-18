@@ -10,6 +10,7 @@ use MooseX::Types::Path::Class qw(Dir File);
 use Archive::Tar;
 use File::pushd ();
 use Path::Class;
+use Try::Tiny;
 
 use namespace::autoclean;
 
@@ -188,12 +189,31 @@ sub _load_config {
       if $arg->{_global_stashes};
   }
 
-  my $seq = $config_class->read_config(
-    $root->file('dist'),
-    {
-      assembler => $assembler
-    },
-  );
+  my $seq;
+  try {
+    $seq = $config_class->read_config(
+      $root->file('dist'),
+      {
+        assembler => $assembler
+      },
+    );
+  }
+  catch {
+    if ( /couldn't load package (\S+)/i ) {
+    die <<"END_DIE";
+Couldn't load plugin $1
+
+Run 'dzil authordeps' to see a list of all required plugins.
+You can pipe the list to your CPAN client to install or update them:
+
+    dzil authordeps | cpanm
+
+END_DIE
+    }
+    else {
+      die "Your configuration file couldn't be loaded.\n$_\n";
+    }
+  };
 
   return $seq;
 }
