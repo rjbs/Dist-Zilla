@@ -26,11 +26,20 @@ use namespace::autoclean;
 
 use Dist::Zilla::File::InMemory;
 
+sub mvp_multivalue_args { qw(preamble) }
+has preamble => (
+  is   => 'ro',
+  isa  => 'ArrayRef',
+);
+
+
 my $template = q|
 use strict;
 use warnings;
 
 {{ $perl_prereq ? qq[BEGIN { require $perl_prereq; }] : ''; }}
+
+{{ $preamble ? join("\n",@$preamble) : ''; }}
 
 use ExtUtils::MakeMaker {{ $eumm_version }};
 
@@ -169,6 +178,7 @@ sub setup_installer {
       perl_prereq       => \$perl_prereq,
       share_dir_block   => \@share_dir_block,
       WriteMakefileArgs => \($makefile_args_dumper->Dump),
+      preamble          => \($self->preamble),
     },
   );
 
