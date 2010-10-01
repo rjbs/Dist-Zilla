@@ -170,6 +170,7 @@ has main_module => (
 
     my $file;
     my $guessing = q{};
+    my $guess;
 
     if ( $self->_has_main_module_override ) {
        $file = first { $_->name eq $self->_main_module_override }
@@ -177,7 +178,7 @@ has main_module => (
     } else {
        $guessing = 'guessing '; # We're having to guess
 
-       (my $guess = $self->name) =~ s{-}{/}g;
+       ($guess = $self->name) =~ s{-}{/}g;
        $guess = "lib/$guess.pm";
 
        $file = (first { $_->name eq $guess } $self->files->flatten)
