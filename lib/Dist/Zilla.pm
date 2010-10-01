@@ -187,8 +187,20 @@ has main_module => (
              ->head;
     }
 
-    $self->log_fatal("Unable to find main_module in dist") unless $file;
-
+    if ( not $file ){
+        $self->log("Unable to find main_module in the distribution");
+        if ( $self->_has_main_module_override ) {
+            $self->log("'main_module' was specified in dist.ini but the file '" . $self->_main_module_override . "' is not to be found in our dist. ( Did you add it? )");
+        } else {
+            $self->log("We tried to guess '$guess' but no file like that existed");
+        }
+        if ( not $self->files->flatten ) {
+            $self->log("Upon further inspection we didn't find any files in your dist, did you add any?");
+        } elsif ( not $self->files->grep(sub{ $_->name =~ m{\.pm\z} }) ){
+            $self->log("We didn't find any .pm files in your dist, this is probably a problem.");
+        }
+        $self->log_fatal("Cannot continue without a main_module");
+    }
     $self->log("${guessing}dist's main_module is " . $file->name);
 
     return $file;
