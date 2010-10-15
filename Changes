@@ -2,8 +2,14 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+4.102342  2010-10-14 23:28:20 America/New_York
           Improved diagnostics for various 'main_module could not be found'
-          conditions, with tests. ( Kent Fredric )
+          conditions. ( Kent Fredric )
+
+          Improved diagnostics for apparently missing plugins (thanks, David
+          Golden)
+
+          add --missing to authordeps (thanks, Danijel Tasov)
 
 4.102341  2010-09-17 19:14:41 America/New_York
           ANNOYANCES: [AutoPrereq] and [Prereq] will now complain that you
