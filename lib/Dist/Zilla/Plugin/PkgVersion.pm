@@ -9,6 +9,9 @@ with(
 );
 
 use PPI;
+use MooseX::Types::Perl qw(LaxVersionStr);
+
+use namespace::autoclean;
 
 =head1 DESCRIPTION
 
@@ -50,7 +53,9 @@ sub munge_perl {
   my ($self, $file) = @_;
 
   my $version = $self->zilla->version;
-  Carp::croak("invalid characters in version") if $version !~ /\A[.0-9_]+\z/;
+
+  Carp::croak("invalid characters in version")
+    unless LaxVersionStr->check($version);
 
   my $content = $file->content;
 
