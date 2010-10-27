@@ -6,19 +6,26 @@ with 'Dist::Zilla::Role::FilePruner';
 
 =head1 SYNOPSIS
 
-This plugin allows you to specify filenames to explicitly prune from your
-distribution.  This is useful if another plugin (maybe a FileGatherer) adds a
+This plugin allows you to explicitly prune some files from your
+distribution. You can either specify the exact set of files (with the
+"filenames" parameter) or provide the regular expressions to
+check (using "match").
+
+This is useful if another plugin (maybe a FileGatherer) adds a
 bunch of files, and you only want a subset of them.
 
 In your F<dist.ini>:
 
   [PruneFiles]
   filenames = xt/release/pod-coverage.t ; pod coverage tests are for jerks
+  
+  match     = ^test_data/*
+  match     = ^test.cvs$                 
 
 =cut
 
-sub mvp_multivalue_args { qw(filenames) }
-sub mvp_aliases { return { filename => 'filenames' } }
+sub mvp_multivalue_args { qw(filenames matches) }
+sub mvp_aliases { return { filename => 'filenames', match => 'matches' } }
 
 =attr filenames
 
@@ -29,22 +36,41 @@ This is an arrayref of filenames to be pruned from the distribution.
 has filenames => (
   is   => 'ro',
   isa  => 'ArrayRef',
-  required => 1,
+  default => sub { [] },
+);
+
+=attr matches
+
+This is an arrayref of regular expressions and files matching any of them, 
+will be pruned from the distribution.
+
+=cut
+
+has matches => (
+  is   => 'ro',
+  isa  => 'ArrayRef',
+  default => sub { [] },
 );
 
 sub prune_files {
   my ($self) = @_;
 
-  my %file = map {; $_->name => $_ } $self->zilla->files->flatten;
+  # never match (at least the filename characters)
+  my $matches_regex = qr/\000/; 
+  
+  $matches_regex = qr/$matches_regex|$_/ for ($self->matches->flatten);
+  
+  # \A\Q$_\E should also handle the `eq` check
+  $matches_regex = qr/$matches_regex|\A\Q$_\E/ for ($self->filenames->flatten);
+  
 
-  for my $exclude ($self->filenames->flatten) {
-    for my $name (keys %file) {
-      next unless $name eq $exclude || $name =~ m{\A\Q$exclude\E/};
+  for my $file ($self->zilla->files->flatten) {
+      
+    next unless $file->name =~ $matches_regex;
 
-      $self->log_debug([ 'pruning %s', $name ]);
+    $self->log_debug([ 'pruning %s', $file->name ]);
 
-      $self->zilla->prune_file($file{$name});
-    }
+    $self->zilla->prune_file($file);
   }
 
   return;
