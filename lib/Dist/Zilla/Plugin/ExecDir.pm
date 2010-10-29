@@ -11,6 +11,8 @@ In your F<dist.ini>:
   [ExecDir]
   dir = scripts
 
+If no C<dir> is provided, the default is F<bin>.
+
 =cut
 
 has dir => (
