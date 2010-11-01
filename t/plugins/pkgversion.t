@@ -39,6 +39,15 @@ package
 
 1;
 ';
+my $hide_me_comment = '
+package DZT::HMC;
+
+package # hide me from toolchain
+ DZT::TP2;
+
+1;
+';
+
 
 my $script = '
 #!/usr/bin/perl
@@ -60,6 +69,7 @@ my $tzil = Builder->from_config(
       'source/lib/DZT/WVer.pm'   => $with_version,
       'source/lib/DZT/R1.pm'     => $repeated_packages,
       'source/lib/DZT/Monkey.pm' => $monkey_patched,
+      'source/lib/DZT/HideMe.pm' => $hide_me_comment,
       'source/bin/script_pkg.pl' => $script_pkg,
       'source/bin/script_ver.pl' => $script_pkg . "our \$VERSION = 1.234;\n",
       'source/bin/script.pl'     => $script,
@@ -141,6 +151,13 @@ unlike(
 ok(
   grep({ m(skipping .+ DZT::TP2) } @{ $tzil->log_messages }),
   "we report the reason for not updating Monkey",
+);
+
+my $dzt_hideme = $tzil->slurp_file('build/lib/DZT/HideMe.pm');
+unlike(
+  $dzt_hideme,
+  qr{\$DZT::TP2::VERSION},
+  "no version for DZT::TP2 when it was hidden with a comment"
 );
 
 done_testing;
