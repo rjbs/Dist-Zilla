@@ -2,6 +2,9 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+          private packages in PkgVersion can have comments after 'package'
+          before a newline (David Golden)
+
 4.102342  2010-10-14 23:28:20 America/New_York
           Improved diagnostics for various 'main_module could not be found'
           conditions. ( Kent Fredric )
