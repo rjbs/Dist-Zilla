@@ -76,7 +76,7 @@ my $prompt = "*** Preparing to upload DZT-Sample-0.001.tar.gz to CPAN ***\n"
 for my $no (qw(n no)) {
   my $tzil = new_tzil;
 
-  $tzil->chrome->response_for->{$prompt} = $no;
+  $tzil->chrome->set_response_for($prompt, $no);
 
   like(
     exception { $tzil->release },
@@ -90,7 +90,7 @@ for my $no (qw(n no)) {
 for my $yes (qw(y yes)) {
   my $tzil = new_tzil;
 
-  $tzil->chrome->response_for->{$prompt} = $yes;
+  $tzil->chrome->set_response_for($prompt, $yes);
 
   is(
     exception { $tzil->release },

@@ -30,21 +30,27 @@ is returned.
 
 Since you can't pass arguments to the Chrome constructor, response_for
 is initialized to an empty hash, and you can add entries after
-construction.
+construction with the C<set_response_for> method:
+
+  $chrome->set_response_for($prompt => $response);
 
 =cut
 
 has response_for => (
-  is      => 'ro',
   isa     => HashRef[ ArrayRef | Str ],
+  traits  => [ 'Hash' ],
   default => sub { {} },
+  handles => {
+    response_for     => 'get',
+    set_response_for => 'set',
+  },
 );
 
 sub prompt_str {
   my ($self, $prompt, $arg) = @_;
   $arg ||= {};
 
-  my $response = $self->response_for->{$prompt};
+  my $response = $self->response_for($prompt);
 
   $response = shift @$response if ref $response;
 
