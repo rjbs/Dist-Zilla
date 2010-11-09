@@ -18,9 +18,9 @@ In your F<dist.ini>:
 
   [PruneFiles]
   filenames = xt/release/pod-coverage.t ; pod coverage tests are for jerks
-  
+
   match     = ^test_data/*
-  match     = ^test.cvs$                 
+  match     = ^test.cvs$
 
 =cut
 
@@ -41,7 +41,7 @@ has filenames => (
 
 =attr matches
 
-This is an arrayref of regular expressions and files matching any of them, 
+This is an arrayref of regular expressions and files matching any of them,
 will be pruned from the distribution.
 
 =cut
@@ -56,16 +56,14 @@ sub prune_files {
   my ($self) = @_;
 
   # never match (at least the filename characters)
-  my $matches_regex = qr/\000/; 
-  
+  my $matches_regex = qr/\000/;
+
   $matches_regex = qr/$matches_regex|$_/ for ($self->matches->flatten);
-  
+
   # \A\Q$_\E should also handle the `eq` check
   $matches_regex = qr/$matches_regex|\A\Q$_\E/ for ($self->filenames->flatten);
-  
 
   for my $file ($self->zilla->files->flatten) {
-      
     next unless $file->name =~ $matches_regex;
 
     $self->log_debug([ 'pruning %s', $file->name ]);
