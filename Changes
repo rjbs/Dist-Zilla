@@ -2,8 +2,18 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+4.102343  2010-11-09 07:49:50 America/New_York
           private packages in PkgVersion can have comments after 'package'
           before a newline (David Golden)
+
+          PruneFiles now accepts regex via the "match" parameter (thanks,
+          Nickolay Platonov)
+
+          Test chrome can be given canned responses to expected prompts
+          (thanks, Christopher J. Madsen)
+
+          version strings now checked against LaxVersionStr type in
+          PkgVersion, rather than our own regex
 
 4.102342  2010-10-14 23:28:20 America/New_York
           Improved diagnostics for various 'main_module could not be found'
