@@ -94,7 +94,8 @@ sub munge_perl {
     # the \x20 hack is here so that when we scan *this* document we don't find
     # an assignment to version; it shouldn't be needed, but it's been annoying
     # enough in the past that I'm keeping it here until tests are better
-    my $perl = "BEGIN {\n  \$$package\::VERSION\x20=\x20'$version';\n}\n";
+    my $trial = $self->zilla->is_trial ? ' # TRIAL' : '';
+    my $perl = "BEGIN {\n  \$$package\::VERSION\x20=\x20'$version';$trial\n}\n";
 
     my $version_doc = PPI::Document->new(\$perl);
     my @children = $version_doc->schildren;
