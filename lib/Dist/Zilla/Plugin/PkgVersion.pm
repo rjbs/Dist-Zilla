@@ -21,7 +21,7 @@ in dist.ini
 
 =head1 DESCRIPTION
 
-This plugin will add a lines like the following to each package in each Perl
+This plugin will add lines like the following to each package in each Perl
 module or program (more or less) within the distribution:
 
   BEGIN {
