@@ -51,7 +51,17 @@ sub exclude_file {
   return 1 if index($file->name, $self->zilla->name . '-') == 0;
   return 1 if $file->name =~ /\A\./;
   return 1 if $file->name =~ /\A(?:Build|Makefile)\z/;
+  return 1 if $file->name =~ /\Ablib/;
+  return 1 if $file->name =~ /\.(?:o|bs)$/;
   return 1 if $file->name eq 'MYMETA.yml';
+  return 1 if $file->name eq 'pm_to_blib';
+
+  if ((my $file = $file->name) =~ s/\.c$//) {
+      for my $other ($self->zilla->files->flatten) {
+          return 1 if $other->name eq "${file}.xs";
+      }
+  }
+
   return;
 }
 
