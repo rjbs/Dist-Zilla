@@ -1,6 +1,10 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          PruneCruft now prunes XS-related and build files:
+          blib, pm_to_blib, .o, .bs, and .c files generated from .xs files
+
+          PkgVersion now include a "TRIAL" comment for trial dists
 
 4.102343  2010-11-09 07:49:50 America/New_York
           private packages in PkgVersion can have comments after 'package'
