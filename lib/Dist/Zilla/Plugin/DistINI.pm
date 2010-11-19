@@ -5,7 +5,7 @@ with qw(Dist::Zilla::Role::FileGatherer);
 
 use Dist::Zilla::File::FromCode;
 
-use Moose::Autobox;
+use Moose::Autobox 0.10; # for ->each_value
 use MooseX::Types::Moose qw(ArrayRef Str);
 
 use namespace::autoclean;
