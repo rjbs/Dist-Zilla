@@ -28,8 +28,9 @@ module or program (more or less) within the distribution:
     $MyModule::VERSION = 0.001;
   }
 
-note: where 0.001 is the version of the dist, and $MyModule is the name of
-your modules
+...where 0.001 is the version of the dist, and MyModule is the name of the
+package being given a version.  (In other words, it always uses fully-qualified
+names to assign versions.)
 
 It will skip any package declaration that includes a newline between the
 C<package> keyword and the package name, like:
