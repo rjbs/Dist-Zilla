@@ -59,7 +59,13 @@ sub _setup_default_plugins {
       plugin_name => ':InstallModules',
       zilla       => $self,
       style       => 'grep',
-      code        => sub { local $_ = $_->name; m{\Alib/} and m{\.(pm|pod)$} },
+      code        => sub {
+        my ($file, $self) = @_;
+        local $_ = $file->name;
+        return 1 if m{\Alib/} and m{\.(pm|pod)$};
+        return 1 if $_ eq $self->zilla->main_module;
+        return;
+      },
     });
 
     $self->plugins->push($plugin);

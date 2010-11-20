@@ -30,7 +30,8 @@ sub find_files {
 sub _find_via_grep {
   my ($self) = @_;
 
-  $self->zilla->files->grep($self->code);
+  my @files = grep { $self->code->($_, $self) } $self->zilla->files->flatten;
+  return \@files;
 }
 
 sub _find_via_list {
