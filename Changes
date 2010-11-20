@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.102344  2010-11-19 19:34:21 America/New_York
           PruneCruft now prunes XS-related and build files:
           blib, pm_to_blib, .o, .bs, and .c files generated from .xs files
 
