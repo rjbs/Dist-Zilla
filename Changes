@@ -6,6 +6,9 @@ Revision history for {{$dist->name}}
 
           PkgVersion now include a "TRIAL" comment for trial dists
 
+          :InstallModules finder will now include main_modules, even if it was
+          not otherwise found as a .pm in ./lib
+
 4.102343  2010-11-09 07:49:50 America/New_York
           private packages in PkgVersion can have comments after 'package'
           before a newline (David Golden)
