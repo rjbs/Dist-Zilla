@@ -2,7 +2,7 @@ use strict;
 use warnings;
 package Dist::Zilla::App;
 # ABSTRACT: Dist::Zilla's App::Cmd
-use App::Cmd::Setup 0.307 -app; # need ->app in Result of Tester, GLD vers
+use App::Cmd::Setup 0.309 -app; # better compilation error detection
 
 use Carp ();
 use Dist::Zilla::MVP::Reader::Finder;
