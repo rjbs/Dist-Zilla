@@ -44,13 +44,26 @@ C<fill_in_string> routine.
 sub fill_in_string {
   my ($self, $string, $stash, $arg) = @_;
 
-  return Text::Template->fill_this_in(
-    $string,
-    HASH       => $stash,
+  die "Cannot use undef as a template string"
+    unless defined $string;
+
+  my $tmpl = Text::Template->new(
+    TYPE       => 'STRING',
+    SOURCE     => $string,
     DELIMITERS => $self->delim,
-    BROKEN => sub { my %hash = @_; die $hash{error}; },
+    BROKEN     => sub { my %hash = @_; die $hash{error}; },
     %$arg,
   );
+
+  die "Could not create a Text::Template object from:\n$string"
+    unless $tmpl;
+
+  my $content = $tmpl->fill_in(HASH => $stash);
+
+  die "Filling in the template returned undef for:\n$string"
+    unless defined $content;
+
+  return $content;
 }
 
 no Moose::Role;
