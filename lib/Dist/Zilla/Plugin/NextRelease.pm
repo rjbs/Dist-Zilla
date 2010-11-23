@@ -102,17 +102,20 @@ sub munge_files {
   my ($file) = grep { $_->name eq $self->filename } @{ $self->zilla->files };
   return unless $file;
 
-  my $content = $self->fill_in_string(
-    $file->content,
-    {
-      dist    => \($self->zilla),
-      version => \($self->zilla->version),
-      NEXT    => \($self->section_header),
-    },
-  );
+  $file->munge(sub{
+    my( $selffile, $content ) = @_;
+    $content = $self->fill_in_string(
+      $content,
+      {
+        dist    => \($self->zilla),
+        version => \($self->zilla->version),
+        NEXT    => \($self->section_header),
+      },
+    );
 
-  $self->log_debug([ 'updating contents of %s in memory', $file->name ]);
-  $file->content($content);
+    $self->log_debug([ 'updating contents of %s in memory', $file->name ]);
+    return $content;
+  });
 }
 
 # new release is part of distribution history, let's record that.

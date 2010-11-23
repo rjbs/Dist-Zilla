@@ -35,42 +35,45 @@ sub munge_file {
 sub munge_pod {
   my ($self, $file) = @_;
 
-  my @content = split /\n/, $file->content;
+  $file->munge(sub{
+    my  ($selffile, $content ) = @_;
+    my @content = split /\n/, $content;
 
-  require List::MoreUtils;
-  if (List::MoreUtils::any(sub { $_ =~ /^=head1 VERSION\b/ }, @content)) {
-    $self->log($file->name . ' already has a VERSION section in POD');
-    return;
-  }
+    require List::MoreUtils;
+    if (List::MoreUtils::any(sub { $_ =~ /^=head1 VERSION\b/ }, @content)) {
+      $self->log($file->name . ' already has a VERSION section in POD');
+      return;
+    }
 
-  for (0 .. $#content) {
-    next until $content[$_] =~ /^=head1 NAME/;
+    for (0 .. $#content) {
+      next until $content[$_] =~ /^=head1 NAME/;
 
-    $_++; # move past the =head1 line itself
-    $_++ while $content[$_] =~ /^\s*$/;
+      $_++; # move past the =head1 line itself
+      $_++ while $content[$_] =~ /^\s*$/;
 
-    $_++ while $content[$_] !~ /^\s*$/; # move past the abstract
-    $_++ while $content[$_] =~ /^\s*$/;
+      $_++ while $content[$_] !~ /^\s*$/; # move past the abstract
+      $_++ while $content[$_] =~ /^\s*$/;
 
-    splice @content, $_ - 1, 0, (
-      q{},
-      "=head1 VERSION",
-      q{},
-      "version " . $self->zilla->version . q{},
-    );
+      splice @content, $_ - 1, 0, (
+        q{},
+        "=head1 VERSION",
+        q{},
+        "version " . $self->zilla->version . q{},
+      );
 
-    $self->log_debug([ 'adding VERSION Pod section to %s', $file->name ]);
+      $self->log_debug([ 'adding VERSION Pod section to %s', $file->name ]);
+      my $content = join "\n", @content;
+      $content .= "\n" if length $content;
+      return $content;
+    }
 
-    my $content = join "\n", @content;
-    $content .= "\n" if length $content;
-    $file->content($content);
-    return;
-  }
-
-  $self->log([
+    $self->log([
     "couldn't find '=head1 NAME' in %s, not adding '=head1 VERSION'",
-    $file->name,
-  ]);
+      $file->name,
+    ]);
+
+    return $content;
+  });
 }
 
 __PACKAGE__->meta->make_immutable;
