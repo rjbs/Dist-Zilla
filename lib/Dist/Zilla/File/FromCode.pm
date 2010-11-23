@@ -3,7 +3,8 @@ package Dist::Zilla::File::FromCode;
 
 use Moose;
 use Moose::Util::TypeConstraints;
-
+use Params::Util qw( _CODELIKE );
+use Carp qw();
 use namespace::autoclean;
 
 =head1 DESCRIPTION
@@ -103,9 +104,10 @@ sub _set_added_by {
 
 sub munge {
   my ( $self, $munger ) = @_ ;
+  Carp::croak('->munge( munger )  was not passed a coderef' ) unless _CODELIKE($munger);
   my $orig = $self->code;
   $self->code(sub {
-    return $self->$munger( $self->$orig );
+    return $munger->( $self, $self->$orig );
   });
 }
 
