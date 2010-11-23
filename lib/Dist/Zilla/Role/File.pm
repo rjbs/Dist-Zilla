@@ -5,7 +5,8 @@ use Moose::Role;
 
 use Moose::Util::TypeConstraints;
 use Try::Tiny;
-
+use Params::Util qw( _CODELIKE );
+use Carp qw();
 use namespace::autoclean;
 
 with 'Dist::Zilla::Role::StubBuild';
@@ -157,8 +158,9 @@ sub _throw {
 
 sub munge {
   my ( $self, $code ) = @_;
+  Carp::croak("->munge( code ) was not passed a coderef") unless _CODELIKE($code);
   my $content = $self->content;
-  $self->content( $self->$code( $content ) );
+  $self->content( $code->($self,$content ) );
 }
 
 1;
