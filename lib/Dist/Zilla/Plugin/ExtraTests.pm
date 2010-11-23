@@ -52,10 +52,11 @@ sub _rewrite {
   (my $name = $file->name) =~ s{^xt/([^/]+)/}{t/$1-};
 
   $file->name($name);
-
-  my @lines = split /\n/, $file->content;
-  my $after = $lines[0] =~ /\A#!/ ? 1 : 0;
-  splice @lines, $after, 0, qq|
+  $file->munge(sub{
+    my( $self, $content ) = @_ ;
+    my @lines = split /\n/, $content;
+    my $after = $lines[0] =~ /\A#!/ ? 1 : 0;
+    splice @lines, $after, 0, qq|
 BEGIN {
   unless (\$ENV{$env}) {
     require Test::More;
@@ -63,8 +64,8 @@ BEGIN {
   }
 }
 |;
-
-  $file->content(join "\n", @lines, '');
+    return join "\n", @lines, '';
+  });
 }
 
 __PACKAGE__->meta->make_immutable;

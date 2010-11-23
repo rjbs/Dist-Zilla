@@ -101,5 +101,13 @@ sub _set_added_by {
   return $self->_push_added_by(sprintf("%s from coderef added by %s", $self->code_return_type, $value));
 };
 
+sub munge {
+  my ( $self, $munger ) = @_ ;
+  my $orig = $self->code;
+  $self->code(sub {
+    return $self->$munger( $self->$orig );
+  });
+}
+
 __PACKAGE__->meta->make_immutable;
 1;

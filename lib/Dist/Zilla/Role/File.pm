@@ -155,4 +155,10 @@ sub _throw {
   );
 }
 
+sub munge {
+  my ( $self, $code ) = @_;
+  my $content = $self->content;
+  $self->content( $self->$code( $content ) );
+}
+
 1;
