@@ -11,7 +11,7 @@ Here's an example of a finder: ( taken from AutoPrereqs )
 
   with 'Dist::Zilla::Role::FileFinderUser' => {
       default_finders  => [ ':InstallModules', ':ExecFiles' ],
-  } );
+  };
 
 Then you use it in your code like this:
 
