@@ -3,10 +3,8 @@ package Dist::Zilla::Plugin::MakeMaker;
 # ABSTRACT: build a Makefile.PL that uses ExtUtils::MakeMaker
 use Moose;
 use Moose::Autobox;
-with 'Dist::Zilla::Role::BuildRunner';
 with 'Dist::Zilla::Role::PrereqSource';
 with 'Dist::Zilla::Role::InstallTool';
-with 'Dist::Zilla::Role::TestRunner';
 with 'Dist::Zilla::Role::TextTemplate';
 
 =head1 DESCRIPTION
@@ -19,12 +17,36 @@ plugin should also be loaded.
 
 use Config;
 
+has 'make_path' => (
+  isa => 'Str',
+  is  => 'ro',
+  default => $Config{make} || 'make',
+);
+
+has '_runner' => (
+  is   => 'ro',
+  lazy => 1,
+  handles => [qw(build test)],
+  default => sub {
+    my ($self) = @_;
+    Dist::Zilla::Plugin::MakeMaker::Runner->new({
+      zilla       => $self->zilla,
+      plugin_name => $self->plugin_name . '::Runner',
+      make_path   => $self->make_path,
+    });
+  },
+);
+
+with 'Dist::Zilla::Role::BuildRunner';
+with 'Dist::Zilla::Role::TestRunner';
+
 use Data::Dumper ();
 use List::MoreUtils qw(any uniq);
 
 use namespace::autoclean;
 
 use Dist::Zilla::File::InMemory;
+use Dist::Zilla::Plugin::MakeMaker::Runner;
 
 my $template = q|
 use strict;
@@ -186,32 +208,6 @@ has __write_makefile_args => (
   is   => 'rw',
   isa  => 'HashRef',
 );
-
-has 'make_path' => (
-  isa => 'Str',
-  is  => 'ro',
-  default => $Config{make} || 'make',
-);
-
-sub build {
-  my $self = shift;
-
-  my $make = $self->make_path;
-  system($^X => 'Makefile.PL') and die "error with Makefile.PL\n";
-  system($make)                and die "error running $make\n";
-
-  return;
-}
-
-sub test {
-  my ( $self, $target ) = @_;
-
-  my $make = $self->make_path;
-  $self->build;
-  system($make, 'test') and die "error running $make test\n";
-
-  return;
-}
 
 has 'eumm_version' => (
   isa => 'Str',
