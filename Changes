@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.102346  2010-12-11 13:19:08 America/New_York
           make errors during TextTemplate rendering fatal (thanks, Dave Rolsky)
 
           provide MakeMaker::Runner if you want to provide your own Makefile.PL
