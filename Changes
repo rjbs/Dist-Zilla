@@ -1,6 +1,10 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          make errors during TextTemplate rendering fatal (thanks, Dave Rolsky)
+
+          provide MakeMaker::Runner if you want to provide your own Makefile.PL
+          (thanks, Florian Ragwitz)
 
 4.102345  2010-11-20 21:28:01 America/New_York
           add somewhat obscure missing prereq
