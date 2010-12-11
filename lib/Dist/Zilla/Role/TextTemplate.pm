@@ -44,7 +44,7 @@ C<fill_in_string> routine.
 sub fill_in_string {
   my ($self, $string, $stash, $arg) = @_;
 
-  die "Cannot use undef as a template string"
+  $self->log_fatal("Cannot use undef as a template string")
     unless defined $string;
 
   my $tmpl = Text::Template->new(
@@ -55,12 +55,12 @@ sub fill_in_string {
     %$arg,
   );
 
-  die "Could not create a Text::Template object from:\n$string"
+  $self->log_fatal("Could not create a Text::Template object from:\n$string")
     unless $tmpl;
 
   my $content = $tmpl->fill_in(HASH => $stash);
 
-  die "Filling in the template returned undef for:\n$string"
+  $self->log_fatal("Filling in the template returned undef for:\n$string")
     unless defined $content;
 
   return $content;
