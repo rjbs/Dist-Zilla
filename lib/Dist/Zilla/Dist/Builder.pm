@@ -74,13 +74,13 @@ sub _setup_default_plugins {
   unless ($self->plugin_named(':IncModules')) {
     require Dist::Zilla::Plugin::FinderCode;
     my $plugin = Dist::Zilla::Plugin::FinderCode->new({
-      plugin_name => ':InstallModules',
+      plugin_name => ':IncModules',
       zilla       => $self,
       style       => 'grep',
       code        => sub {
         my ($file, $self) = @_;
         local $_ = $file->name;
-        return 1 if m{\Ainc/} and m{\.(pm|pl)$};
+        return 1 if m{\Ainc/} and m{\.pm$};
         return;
       },
     });

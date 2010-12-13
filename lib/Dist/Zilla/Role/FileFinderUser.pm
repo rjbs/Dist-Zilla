@@ -50,13 +50,17 @@ The default finders are:
 
 =for :list
 * InstallModules
-Searches your lib/ directory for pm/pod files
+Searches your lib/ directory for pm/pod files.
 * IncModules
-Searches your inc/ directory for pm/pl files
+Searches your inc/ directory for pm files.
+* TestFiles
+Searches your t/ directory and lists the files in it.
 * ExecFiles
-Searches your root for any executable files
+Searches your distribution for executable files.
+Hint: Use the L<Dist::Zilla::Plugin::ExecDir> plugin to mark those files as executables.
 * ShareFiles
-Searches your ShareDir directory and lists the files in it
+Searches your ShareDir directory and lists the files in it.
+Hint: Use the L<Dist::Zilla::Plugin::ShareDir> plugin to setup the sharedir.
 
 =cut
 
