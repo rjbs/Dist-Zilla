@@ -2,6 +2,9 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+4.200000  2010-12-13 12:25:38 America/New_York
+          bump version to be easier to skim, until v5
+
 4.102346  2010-12-11 13:19:08 America/New_York
           make errors during TextTemplate rendering fatal (thanks, Dave Rolsky)
 
