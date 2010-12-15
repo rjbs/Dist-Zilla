@@ -28,7 +28,9 @@ sub test {
 
   my $make = $self->make_path;
   $self->build;
-  system($make, 'test') and die "error running $make test\n";
+  system($make, 'test',
+    ( $self->zilla->logger->get_debug ? 'TEST_VERBOSE=1' : () ),
+  ) and die "error running $make test\n";
 
   return;
 }
