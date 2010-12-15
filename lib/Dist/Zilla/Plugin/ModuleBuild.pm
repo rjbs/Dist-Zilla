@@ -176,7 +176,9 @@ sub test {
   my ($self, $target) = @_;
 
   $self->build;
-  system($^X, 'Build', 'test') and die "error running $^X Build test\n";
+  system($^X, 'Build', 'test',
+    ( $self->zilla->logger->get_debug ? 'verbose=1' : () ),
+  ) and die "error running $^X Build test\n";
 
   return;
 }
