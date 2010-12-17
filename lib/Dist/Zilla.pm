@@ -122,11 +122,12 @@ has abstract => (
       die "no abstract given and no main_module found; make sure your main module is in ./lib\n";
     }
 
-    my $filename = $self->main_module->name;
-    $self->log("extracting distribution abstract from $filename");
-    my $abstract = Dist::Zilla::Util->abstract_from_file($filename);
+    my $file = $self->main_module;
+    $self->log("extracting distribution abstract from " . $file->name);
+    my $abstract = Dist::Zilla::Util->abstract_from_file($file);
 
     if (!defined($abstract)) {
+        my $filename = $file->name;
         die "Unable to extract an abstract from $filename. Please add the following comment to the file with your abstract:
     # ABSTRACT: turns baubles into trinkets
 ";
