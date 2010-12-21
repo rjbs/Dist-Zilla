@@ -1,13 +1,14 @@
 package Dist::Zilla::Plugin::UploadToCPAN;
 # ABSTRACT: upload the dist to CPAN
 use Moose;
-with 'Dist::Zilla::Role::Releaser';
+with qw(Dist::Zilla::Role::BeforeRelease Dist::Zilla::Role::Releaser);
 
 use CPAN::Uploader 0.101550; # ua string
 use File::HomeDir;
 use File::Spec;
 use Moose::Util::TypeConstraints;
 use Scalar::Util qw(weaken);
+use Try::Tiny;
 
 use namespace::autoclean;
 
@@ -195,6 +196,22 @@ has uploader => (
     return $uploader;
   }
 );
+
+sub before_release
+{
+  my $self = shift;
+
+  my $problem;
+  try {
+    for my $attr (qw(username password)) {
+      $problem = $attr;
+      my $test = $self->$attr;
+    }
+    undef $problem;
+  };
+
+  $self->log_fatal(['You need to supply a %s', $problem]) if $problem;
+}
 
 sub release {
   my ($self, $archive) = @_;
