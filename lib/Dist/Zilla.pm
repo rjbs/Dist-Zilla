@@ -60,7 +60,9 @@ double colons (C<::>) replaced with dashes.  For example: C<Dist-Zilla>.
 has name => (
   is   => 'ro',
   isa  => DistName,
-  lazy_required => 1,
+  required => 1,
+  lazy => 1,
+  builder => '_build_name',
 );
 
 =attr version
@@ -84,6 +86,23 @@ has version => (
   required  => 1,
   builder   => '_build_version',
 );
+
+sub _build_name {
+  my ($self) = @_;
+
+  my $name;
+  for my $plugin ($self->plugins_with(-NameProvider)->flatten) {
+    next unless defined(my $this_name = $plugin->provide_name);
+
+    $self->log_fatal('attempted to set name twice') if defined $name;
+
+    $name = $this_name;
+  }
+
+  $self->log_fatal('no name was ever set') unless defined $name;
+
+  $name;
+}
 
 sub _build_version {
   my ($self) = @_;
