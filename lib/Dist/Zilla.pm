@@ -265,6 +265,17 @@ sub _build_license {
   my $copyright_holder = $self->_copyright_holder;
   my $copyright_year   = $self->_copyright_year;
 
+  my $provided_license;
+
+  for my $plugin ($self->plugins_with(-LicenseProvider)->flatten) {
+    next unless defined(my $this_license = $plugin->provide_license($copyright_holder, $copyright_year));
+
+    $self->log_fatal('attempted to set license twice') if defined $provided_license;
+
+    $provided_license = $this_license;
+  }
+  return $provided_license if defined $provided_license;
+
   if ($license_class) {
     $license_class = String::RewritePrefix->rewrite(
       {
