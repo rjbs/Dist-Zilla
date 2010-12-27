@@ -99,7 +99,7 @@ sub munge_perl {
     }
 
     if ($stmt->content =~ /package\s*(?:#.*)?\n\s*\Q$package/) {
-      $self->log([ 'skipping private package %s', $package ]);
+      $self->log([ 'skipping private package %s in %s', $package, $file->name ]);
       next;
     }
 
