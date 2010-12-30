@@ -19,6 +19,7 @@ use List::Util qw(first);
 use Software::License 0.101370; # meta2_name
 use String::RewritePrefix;
 use Try::Tiny;
+use Scalar::Util qw();
 
 use Dist::Zilla::Prereqs;
 use Dist::Zilla::File::OnDisk;
@@ -90,6 +91,7 @@ sub _build_version {
 
   my $version = $self->_version_override;
 
+  $self->learning_phase('Version Provider', { plugins_with => '-VersionProvider' });
   for my $plugin ($self->plugins_with(-VersionProvider)->flatten) {
     next unless defined(my $this_version = $plugin->provide_version);
 
@@ -670,6 +672,42 @@ sub stash_named {
 
   return $self->_local_stashes->{ $name } if $self->_local_stashes->{$name};
   return $self->_global_stashes->{ $name };
+}
+
+has 'learning_mode' => (
+  isa => Bool,
+  is => 'rw',
+  default => sub { $ENV{LEARNING_DZIL} ? 1 : 0 }
+);
+
+=method learning_phase
+
+  $zilla->learning_phase( 'BeforeRelease' );
+  $zilla->learning_phase( 'Release', { message => 'Note: If there are more than one plugins registered for this phase, they\'ll all run' });
+  $zilla->learning_phase( 'Release', { plugins_with => -Release } );
+
+=cut
+
+sub learning_phase {
+  my ($self, $phase, $extra) = @_;
+  return if not $self->learning_mode;
+  my $prompt = "*** [LEARNING] About to execute the $phase phase.\n";
+  if( $extra and $extra->{message} ){
+    $prompt .= "*** " . $extra->{message} . "\n";
+  }
+  if( $extra and $extra->{plugins_with} ){
+    my @plugins = map { $_->plugin_name . '( ' . Scalar::Util::blessed($_) . ' )' } $self->plugins_with( $extra->{plugins_with} )->flatten;
+    $prompt .= "*** Plugins called in this phase are: [ " . (  join q{, }, @plugins ) . " ]\n";
+  }
+  $prompt .= "Do you wish to continue?";
+
+  my $confirmed = $self->chrome->prompt_yn(
+    $prompt,
+    { default => 1 }
+  );
+
+  $self->log_fatal("User abort at phase $phase") unless $confirmed;
+
 }
 
 __PACKAGE__->meta->make_immutable;
