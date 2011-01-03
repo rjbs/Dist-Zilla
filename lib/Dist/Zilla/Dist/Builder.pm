@@ -206,8 +206,12 @@ sub _load_config {
   }
   catch {
     if ( /couldn't load package (\S+)/i ) {
-    die <<"END_DIE";
-Couldn't load plugin $1
+        my $mod = $1;
+        my $reason = /Can't locate.*in \@INC/
+            ? "Module $mod isn't installed."
+            : $_;
+        die <<"END_DIE";
+Couldn't load plugin $mod because: $reason
 
 Run 'dzil authordeps' to see a list of all required plugins.
 You can pipe the list to your CPAN client to install or update them:
