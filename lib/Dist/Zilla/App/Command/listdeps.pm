@@ -13,7 +13,8 @@ use Dist::Zilla::App -command;
 This is a command plugin for L<Dist::Zilla>. It provides the C<listdeps>
 command, which prints your distribution's prerequisites. You could pipe that
 list to a CPAN client like L<cpan> to install all of the dependecies in one
-quick go.
+quick go. This will include author dependencies (those listed under
+C<develop_requires>) if the C<--author> flag is passed.
 
 =head1 ACKNOWLEDGEMENTS
 
@@ -27,6 +28,10 @@ use Moose::Autobox;
 use Version::Requirements;
 
 sub abstract { "print your distribution's prerequisites" }
+
+sub opt_spec {
+    [ 'author', 'include author dependencies' ],
+}
 
 sub execute {
   my ($self, $opt, $arg) = @_;
@@ -42,7 +47,10 @@ sub execute {
   my $req = Version::Requirements->new;
   my $prereqs = $self->zilla->prereqs;
 
-  for my $phase (qw(build test configure runtime)) {
+  my @phases = qw(build test configure runtime);
+  push @phases, 'develop' if $opt->author;
+
+  for my $phase (@phases) {
     $req->add_requirements( $prereqs->requirements_for($phase, 'requires') );
   }
 
