@@ -406,8 +406,8 @@ sub release {
 
   Carp::croak("you can't release without any Releaser plugins")
     unless my @releasers = $self->plugins_with(-Releaser)->flatten;
-    
-  $ENV{ DZIL_RELEASING } = 1;
+
+  $ENV{DZIL_RELEASING} = 1;
 
   my $tgz = $self->build_archive;
 
