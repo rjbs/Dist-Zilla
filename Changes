@@ -9,6 +9,8 @@ Revision history for {{$dist->name}}
 
           UploadToCPAN now takes a "upload_uri" option
 
+          add follow_symlinks to GatherDir (thanks, Luc St-Louis)
+
 4.200008  2011-06-23 11:53:56 America/New_York
           PodVersion no longer drops the file's last newline
 

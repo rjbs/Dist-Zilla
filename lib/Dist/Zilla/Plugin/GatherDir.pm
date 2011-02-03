@@ -84,6 +84,20 @@ has include_dotfiles => (
   default => 0,
 );
 
+=attr follow_symlinks
+
+By default, directories that are symlinks will not be followed. Note on the
+other hand that in all followed directories, files which are symlinks are
+always gathered.
+
+=cut
+
+has follow_symlinks => (
+  is  => 'ro',
+  isa => 'Bool',
+  default => 0,
+);
+
 sub gather_files {
   my ($self) = @_;
 
@@ -92,7 +106,9 @@ sub gather_files {
   $root = Path::Class::dir($root);
 
   my @files;
-  FILE: for my $filename (File::Find::Rule->file->in($root)) {
+  my $rule = File::Find::Rule->new();
+  $rule->extras({follow => $self->follow_symlinks});
+  FILE: for my $filename ($rule->file->in($root)) {
     unless ($self->include_dotfiles) {
       my $file = file($filename)->relative($root);
       next FILE if $file->basename =~ qr/^\./;
