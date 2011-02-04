@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          Test::DZil is now installed and available to other dist
 
 4.200001  2011-01-19 21:59:18 America/New_York
           add --author to listdeps (Jesse Luehrs)
