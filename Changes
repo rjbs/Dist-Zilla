@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.200002  2011-02-04 18:02:16 America/New_York
           Test::DZil is now installed and available to other dist
 
 4.200001  2011-01-19 21:59:18 America/New_York
