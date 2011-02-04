@@ -7,24 +7,21 @@ use lib 't/lib';
 
 use Test::DZil;
 
-sub new_tzil
-{
+sub new_tzil {
   my $tzil = Builder->from_config(
     { dist_root => 'corpus/dist/DZT' },
     {
       add_files => {
-        'source/dist.ini' => simple_ini(
-          qw(GatherDir ConfirmRelease FakeRelease)
-        ),
+        'source/dist.ini' =>
+          simple_ini(qw(GatherDir ConfirmRelease FakeRelease)),
       },
     },
   );
-} # end new_tzil
+}
 
-sub release_happened
-{
-  scalar grep({ /Fake release happening/i } @{ shift->log_messages }),
-} # end release_happened
+sub release_happened {
+  scalar grep({/Fake release happening/i} @{ shift->log_messages }),;
+}
 
 my $release_aborted = qr/aborting release/i;
 
@@ -51,8 +48,10 @@ for my $no (qw(n no)) {
     "ConfirmRelease aborts when DZIL_CONFIRMRELEASE_DEFAULT=$no",
   );
 
-  ok(!release_happened($tzil),
-     "release did not happen when DZIL_CONFIRMRELEASE_DEFAULT=$no");
+  ok(
+    !release_happened($tzil),
+    "release did not happen when DZIL_CONFIRMRELEASE_DEFAULT=$no",
+  );
 }
 
 for my $yes (qw(y yes)) {
@@ -63,11 +62,13 @@ for my $yes (qw(y yes)) {
   is(
     exception { $tzil->release },
     undef,
-    "DZIL_CONFIRMRELEASE_DEFAULT=$yes no exception"
+    "DZIL_CONFIRMRELEASE_DEFAULT=$yes no exception",
   );
 
-  ok(release_happened($tzil),
-     "DZIL_CONFIRMRELEASE_DEFAULT=$yes allows release");
+  ok(
+    release_happened($tzil),
+    "DZIL_CONFIRMRELEASE_DEFAULT=$yes allows release",
+  );
 }
 
 my $prompt = "*** Preparing to upload DZT-Sample-0.001.tar.gz to CPAN ***\n"
