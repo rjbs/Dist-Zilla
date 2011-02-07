@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          avoid test failures on systems where time zone can't be determined
 
 4.200002  2011-02-04 18:02:16 America/New_York
           Test::DZil is now installed and available to other dist

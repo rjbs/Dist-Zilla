@@ -7,6 +7,8 @@ use lib 't/lib';
 use Test::DZil;
 use Try::Tiny;
 
+local $ENV{TZ} = 'America/New_York';
+
 my $changes = <<'END_CHANGES';
 Revision history for {{$dist->name}}
 
