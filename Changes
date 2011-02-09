@@ -2,7 +2,8 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
-          MetaNoIndex, originally by J.T. Smith, is now included
+          MetaNoIndex, originally by J.T. Smith and Mark Gardner, is now
+          included
 
 4.200003  2011-02-06 21:37:45 America/New_York
           avoid test failures on systems where time zone can't be determined
