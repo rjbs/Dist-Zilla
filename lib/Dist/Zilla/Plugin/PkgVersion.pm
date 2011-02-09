@@ -120,11 +120,15 @@ sub munge_perl {
     my $perl = "BEGIN {\n  \$$package\::VERSION\x20=\x20'$version';$trial\n}\n";
 
     if ($self->critic_workaround) {
+        # Surround the version declaration in special comments that
+        # prevent perl critic from complaining. Without these, perl
+        # critic will complain if the package declaration comes before
+        # "use strict".
         $perl = join("\n", (
             "## no critic",
             $perl,
             "## use critic"
-        ))
+        ));
     }
 
     my $version_doc = PPI::Document->new(\$perl);
