@@ -84,7 +84,7 @@ sub {
   my ( $died, $error ) = @_;
   subtest "Not::A::Plugin" => sub {
     ok( $died, "Failure occurs when a plugin is missing" );
-    like( $error, qr{Not::A::Plugin.*does not appear to be installed}, "Exception explains that the plugin is not installed" );
+    like( $error, qr{Not::A::Plugin.*isn't installed}, "Exception explains that the plugin is not installed" );
     like( $error, qr{dzil authordeps}, "Exception suggests using authordeps" );
 
   };
