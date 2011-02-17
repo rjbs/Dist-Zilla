@@ -2,6 +2,10 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+4.200004  2011-02-11 16:17:37 America/New_York
+
+          Add Tests for Config::MVP 2.200 changes. ( Kent Fredric )
+
           MetaNoIndex, originally by J.T. Smith and Mark Gardner, is now
           included
 

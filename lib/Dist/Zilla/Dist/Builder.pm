@@ -203,15 +203,16 @@ sub _load_config {
         assembler => $assembler
       },
     );
-  }
-  catch {
-    if ( /couldn't load package (\S+)/i ) {
-        my $mod = $1;
-        my $reason = /Can't locate.*in \@INC/
-            ? "Module $mod isn't installed."
-            : $_;
-        die <<"END_DIE";
-Couldn't load plugin $mod because: $reason
+  } catch {
+    die $_ unless try {
+      $_->isa('Config::MVP::Error')
+      and $_->ident eq 'package not installed'
+    };
+
+    my $package = $_->package;
+
+    die <<"END_DIE";
+Required plugin $package isn't installed.
 
 Run 'dzil authordeps' to see a list of all required plugins.
 You can pipe the list to your CPAN client to install or update them:
@@ -219,10 +220,7 @@ You can pipe the list to your CPAN client to install or update them:
     dzil authordeps | cpanm
 
 END_DIE
-    }
-    else {
-      die "Your configuration file couldn't be loaded.\n$_\n";
-    }
+
   };
 
   return $seq;
