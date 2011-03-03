@@ -3,31 +3,64 @@ use warnings;
 package Dist::Zilla::App::Command::smoke;
 # ABSTRACT: smoke your dist
 use Dist::Zilla::App -command;
-require Dist::Zilla::App::Command::test;
 
 =head1 SYNOPSIS
 
-This command builds and tests distribution in "smoke testing mode."
+  dzil smoke [ --release ] [ --author ] [ --no-automated ]
 
-  dzil smoke
+=head1 DESCRIPTION
 
-Otherwise identical to
+This command builds and tests the distribution in "smoke testing mode."
 
-  AUTOMATED_TESTING=1 dzil test
+This command is a thin wrapper around the L<test|Dist::Zilla::Dist::Builder/test> method in
+Dist::Zilla.  It builds your dist and runs the tests with the AUTOMATED_TESTING
+environment variable turned on, so it's like doing this:
 
-See L<Dist::Zilla::App::Command::test> for more.
+  export AUTOMATED_TESTING=1
+  dzil build --no-tgz
+  cd $BUILD_DIRECTORY
+  perl Makefile.PL
+  make
+  make test
+
+A build that fails tests will be left behind for analysis, and F<dzil> will
+exit a non-zero value.  If the tests are successful, the build directory will
+be removed and F<dzil> will exit with status 0.
+
+=cut
+
+sub opt_spec {
+  [ 'release'   => 'enables the RELEASE_TESTING env variable', { default => 0 } ],
+  [ 'automated!' => 'enables the AUTOMATED_TESTING env variable (default behavior)', { default => 1 } ],
+  [ 'author' => 'enables the AUTHOR_TESTING env variable', { default => 0 } ]
+}
+
+=head1 OPTIONS
+
+=head2 --release
+
+This will run the testsuite with RELEASE_TESTING=1
+
+=head2 --no-automated
+
+This will run the testsuite without setting AUTOMATED_TESTING
+
+=head2 --author
+
+This will run the testsuite with AUTHOR_TESTING=1
 
 =cut
 
 sub abstract { 'smoke your dist' }
 
 sub execute {
-  my $self = shift;
+  my ($self, $opt, $arg) = @_;
 
-  local $ENV{AUTOMATED_TESTING} = 1;
-  local @ARGV = qw(test);
+  local $ENV{RELEASE_TESTING} = 1 if $opt->release;
+  local $ENV{AUTHOR_TESTING} = 1 if $opt->author;
+  local $ENV{AUTOMATED_TESTING} = 1 if $opt->automated;
 
-  return $self->app->run;
+  $self->zilla->test;
 }
 
 1;

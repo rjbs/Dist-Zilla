@@ -11,6 +11,9 @@ tests.  If the tests fail, the release is aborted and the temporary directory
 is left in place.  If the tests pass, the temporary directory is cleaned up and
 the release process continues.
 
+This will set the RELEASE_TESTING and AUTHOR_TESTING env vars while running the
+testsuite.
+
 =head1 CREDITS
 
 This plugin was originally contributed by Christopher J. Madsen.
@@ -45,6 +48,7 @@ sub before_release {
   my $target = $tmpdir->subdir( $self->zilla->built_in->dir_list(-1) );
 
   local $ENV{RELEASE_TESTING} = 1;
+  local $ENV{AUTHOR_TESTING} = 1;
   $self->zilla->run_tests_in($target);
 
   $self->log("all's well; removing $tmpdir");

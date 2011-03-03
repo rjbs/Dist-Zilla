@@ -514,9 +514,6 @@ sub test {
   my $target = dir( File::Temp::tempdir(DIR => $build_root) );
   $self->log("building test distribution under $target");
 
-  local $ENV{AUTHOR_TESTING} = 1;
-  local $ENV{RELEASE_TESTING} = 1;
-
   $self->ensure_built_in($target);
 
   my $error = $self->run_tests_in($target);
