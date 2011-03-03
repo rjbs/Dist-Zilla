@@ -4,20 +4,26 @@ package Dist::Zilla::App::Command::setup;
 # ABSTRACT: set up a basic global config file
 use Dist::Zilla::App -command;
 
+use autodie;
+use Path::Class;
+
 =head1 SYNOPSIS
 
-  $ dzil setup
-  Enter your name> Ricardo Signes
-  ...
+  dzil setup
+
+=head1 DESCRIPTION
 
 Dist::Zilla looks for per-user configuration in F<~/.dzil/config.ini>.  This
 command prompts the user for some basic information that can be used to produce
 the most commonly needed F<config.ini> sections.
 
-=cut
+=head1 EXAMPLE
 
-use autodie;
-use Path::Class;
+  $ dzil setup
+  Enter your name> Ricardo Signes
+  ...
+
+=cut
 
 sub abstract { 'set up a basic global config file' }
 

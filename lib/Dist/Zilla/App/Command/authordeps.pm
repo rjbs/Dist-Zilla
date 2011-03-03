@@ -1,8 +1,8 @@
 use strict;
 use warnings;
 package Dist::Zilla::App::Command::authordeps;
-use Dist::Zilla::App -command;
 # ABSTRACT: List your distribution's author dependencies
+use Dist::Zilla::App -command;
 
 use Dist::Zilla::Util ();
 use Moose;
@@ -11,6 +11,37 @@ use List::MoreUtils qw(uniq);
 use Config::INI::Reader;
 
 use namespace::autoclean;
+
+=head1 SYNOPSIS
+
+  dzil authordeps [ --missing ] [ --root=/path/to/dist ]
+
+=head1 DESCRIPTION
+
+This command prints the dependencies to build your distribution. You could
+pipe that list to a CPAN client like L<cpan> to install all of the dependecies
+in one quick go.
+
+=head1 EXAMPLE
+
+  $ dzil authordeps
+  $ dzil authordeps | cpan
+  $ dzil authordeps --missing
+  $ dzil authordeps --root=/home/rjbs/acme-foobar
+
+=head1 OPTIONS
+
+=head2 --missing
+
+List only the missing dependencies on your system.
+
+=head2 --root=/path/to/dist
+
+Specify the path of the dist to introspect.
+
+Defaults to the current path.
+
+=cut
 
 sub abstract { "list your distribution's author dependencies" }
 

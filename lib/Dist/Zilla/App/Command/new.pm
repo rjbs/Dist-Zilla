@@ -6,6 +6,10 @@ use Dist::Zilla::App -command;
 
 =head1 SYNOPSIS
 
+  dzil new Module::Name
+
+=head1 DESCRIPTION
+
 Creates a new Dist-Zilla based distribution under the current directory.
 
   $ dzil new Main::Module::Name
@@ -28,7 +32,6 @@ exists, it will use a very simple configuration shipped with Dist::Zilla.
 
 This command would instruct C<dzil> to consult the Foo provider about the
 directory of 'default' profile.
-
 
 =cut
 

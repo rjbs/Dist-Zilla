@@ -6,23 +6,17 @@ use Dist::Zilla::App -command;
 
 =head1 SYNOPSIS
 
-Installs your distribution using a specified command.
+  dzil install [ --install-command="cmd" ]
 
-    dzil install [--install-command="cmd"]
+=head1 DESCRIPTION
 
-=cut
-sub abstract { 'install your dist' }
+This command is a thin wrapper around the L<install|Dist::Zilla::Dist::Builder/install>
+method in Dist::Zilla. It installs your distribution using a specified command.
 
 =head1 EXAMPLE
 
     $ dzil install
     $ dzil install --install-command="cpan ."
-
-=cut
-
-sub opt_spec {
-  [ 'install-command=s', 'command to run to install (e.g. "cpan .")' ],
-}
 
 =head1 OPTIONS
 
@@ -36,10 +30,13 @@ If not specified, calls (roughly):
 
     perl -MCPAN -einstall "."
 
-For more information, look at the L<install|Dist::Zilla/install> method in
-Dist::Zilla.
-
 =cut
+
+sub abstract { 'install your dist' }
+
+sub opt_spec {
+  [ 'install-command=s', 'command to run to install (e.g. "cpan .")' ],
+}
 
 sub execute {
   my ($self, $opt, $arg) = @_;

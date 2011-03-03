@@ -6,14 +6,24 @@ use Dist::Zilla::App -command;
 
 =head1 SYNOPSIS
 
-  dzil release
+  dzil release [ --trial ]
 
-  dzil release --trial
+=head1 DESCRIPTION
 
-This command is a very, very thin wrapper around the
-C<L<release|Dist::Zilla/release>> method on the Dist::Zilla object.  It will
-build, archive, and release your distribution using your Releaser plugins.  The
-only option, C<--trial>, will cause it to build a trial build.
+This command is a thin wrapper around the L<release|Dist::Zilla::Dist::Builder/release>
+method in Dist::Zilla.  It will build, archive, and release your distribution using
+your Releaser plugins.
+
+=head1 EXAMPLE
+
+  $ dzil release
+  $ dzil release --trial
+
+=head1 OPTIONS
+
+=head2 --trial
+
+Releases your distribution as a TRIAL release that PAUSE will not index.
 
 =cut
 

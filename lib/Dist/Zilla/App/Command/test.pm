@@ -6,7 +6,7 @@ use Dist::Zilla::App -command;
 
 =head1 SYNOPSIS
 
-  dzil test [ --release ] [ --no-author ] [ --automated ]
+  dzil test [ --release ] [ --automated ] [ --author | --no-author ]
 
 =head1 DESCRIPTION
 
@@ -25,13 +25,11 @@ A build that fails tests will be left behind for analysis, and F<dzil> will
 exit a non-zero value.  If the tests are successful, the build directory will
 be removed and F<dzil> will exit with status 0.
 
-=cut
+=head1 EXAMPLE
 
-sub opt_spec {
-  [ 'release'   => 'enables the RELEASE_TESTING env variable', { default => 0 } ],
-  [ 'automated' => 'enables the AUTOMATED_TESTING env variable', { default => 0 } ],
-  [ 'author!' => 'enables the AUTHOR_TESTING env variable (default behavior)', { default => 1 } ]
-}
+  $ dzil test
+  $ dzil test --release
+  $ dzil test --release --no-author
 
 =head1 OPTIONS
 
@@ -43,11 +41,19 @@ This will run the testsuite with RELEASE_TESTING=1
 
 This will run the testsuite with AUTOMATED_TESTING=1
 
-=head2 --no-author
+=head2 --author | --no-author
 
-This will run the testsuite without setting AUTHOR_TESTING
+This will run the testsuite with AUTHOR_TESTING=1
+
+--author behavior is by default, use --no-author to disable it.
 
 =cut
+
+sub opt_spec {
+  [ 'release'   => 'enables the RELEASE_TESTING env variable', { default => 0 } ],
+  [ 'automated' => 'enables the AUTOMATED_TESTING env variable', { default => 0 } ],
+  [ 'author!' => 'enables the AUTHOR_TESTING env variable (default behavior)', { default => 1 } ]
+}
 
 sub abstract { 'test your dist' }
 

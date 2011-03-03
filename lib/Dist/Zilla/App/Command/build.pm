@@ -10,28 +10,16 @@ use Dist::Zilla::App -command;
 
 =head1 DESCRIPTION
 
-This command is a very thin layer over the Dist::Zilla C<build> method, which
-does all the things required to build your distribution.  By default, it will
-also archive your distribution and leave you with a complete, ready-to-release
-distribution tarball.
-
-=cut
-
-sub abstract { 'build your dist' }
+This command is a thin wrapper around the L<build|Dist::Zilla::Dist::Builder/build>
+method in Dist::Zilla. It does all the things required to build your distribution.
+By default, it will also archive your distribution and leave you with a complete,
+ready-to-release distribution tarball.
 
 =head1 EXAMPLE
 
   $ dzil build
   $ dzil build --no-tgz
   $ dzil build --in /path/to/build/dir
-
-=cut
-
-sub opt_spec {
-  [ 'trial'  => 'build a trial release that PAUSE will not index'      ],
-  [ 'tgz!'   => 'build a tarball (default behavior)', { default => 1 } ],
-  [ 'in=s'   => 'the directory in which to build the distribution'     ]
-}
 
 =head1 OPTIONS
 
@@ -52,6 +40,14 @@ Specifies the directory into which the distribution should be built.  If
 necessary, the directory will be created.  An archive will not be created.
 
 =cut
+
+sub abstract { 'build your dist' }
+
+sub opt_spec {
+  [ 'trial'  => 'build a trial release that PAUSE will not index'      ],
+  [ 'tgz!'   => 'build a tarball (default behavior)', { default => 1 } ],
+  [ 'in=s'   => 'the directory in which to build the distribution'     ]
+}
 
 sub execute {
   my ($self, $opt, $args) = @_;

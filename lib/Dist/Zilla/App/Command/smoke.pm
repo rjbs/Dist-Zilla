@@ -6,11 +6,9 @@ use Dist::Zilla::App -command;
 
 =head1 SYNOPSIS
 
-  dzil smoke [ --release ] [ --author ] [ --no-automated ]
+  dzil smoke [ --release ] [ --author ] [ --automated | --no-automated ]
 
 =head1 DESCRIPTION
-
-This command builds and tests the distribution in "smoke testing mode."
 
 This command is a thin wrapper around the L<test|Dist::Zilla::Dist::Builder/test> method in
 Dist::Zilla.  It builds your dist and runs the tests with the AUTOMATED_TESTING
@@ -27,13 +25,11 @@ A build that fails tests will be left behind for analysis, and F<dzil> will
 exit a non-zero value.  If the tests are successful, the build directory will
 be removed and F<dzil> will exit with status 0.
 
-=cut
+=head1 EXAMPLE
 
-sub opt_spec {
-  [ 'release'   => 'enables the RELEASE_TESTING env variable', { default => 0 } ],
-  [ 'automated!' => 'enables the AUTOMATED_TESTING env variable (default behavior)', { default => 1 } ],
-  [ 'author' => 'enables the AUTHOR_TESTING env variable', { default => 0 } ]
-}
+  $ dzil smoke
+  $ dzil smoke --release
+  $ dzil smoke --release --no-automated
 
 =head1 OPTIONS
 
@@ -41,15 +37,23 @@ sub opt_spec {
 
 This will run the testsuite with RELEASE_TESTING=1
 
-=head2 --no-automated
-
-This will run the testsuite without setting AUTOMATED_TESTING
-
 =head2 --author
 
 This will run the testsuite with AUTHOR_TESTING=1
 
+=head2 --automated | --no-automated
+
+This will run the testsuite with AUTOMATED_TESTING=1
+
+--automated behavior is by default, use --no-automated to disable it.
+
 =cut
+
+sub opt_spec {
+  [ 'release'   => 'enables the RELEASE_TESTING env variable', { default => 0 } ],
+  [ 'automated!' => 'enables the AUTOMATED_TESTING env variable (default behavior)', { default => 1 } ],
+  [ 'author' => 'enables the AUTHOR_TESTING env variable', { default => 0 } ]
+}
 
 sub abstract { 'smoke your dist' }
 

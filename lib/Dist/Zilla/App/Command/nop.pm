@@ -6,13 +6,19 @@ use Dist::Zilla::App -command;
 
 =head1 SYNOPSIS
 
+  dzil nop
+
+=head1 DESCRIPTION
+
 This command does nothing.  It initializes Dist::Zill, then exits.  This is
 useful to see the logging output of plugin initialization.
 
-  dzil nop -v
-
 Seriously, this command is almost entirely for diagnostic purposes.  Don't
 overthink it, okay?
+
+=head1 EXAMPLE
+
+  $ dzil nop -v
 
 =cut
 

@@ -2,12 +2,11 @@ use strict;
 use warnings;
 package Dist::Zilla::App::Command::run;
 # ABSTRACT: run stuff in a dir where your dist is built
+use Dist::Zilla::App -command;
 
 =head1 SYNOPSIS
 
-  $ dzil run ./bin/myscript
-  $ dzil run prove -bv t/mytest.t
-  $ dzil run bash
+    dzil run @args
 
 =head1 DESCRIPTION
 
@@ -30,10 +29,13 @@ A command returning with an non-zero error code will left the build directory
 behind for analysis, and C<dzil> will exit with a non-zero status.  Otherwise,
 the build directory will be removed and dzil will exit with status zero.
 
-=cut
+=head1 EXAMPLE
 
-use Dist::Zilla::App -command;
-use Moose::Autobox;
+  $ dzil run ./bin/myscript
+  $ dzil run prove -bv t/mytest.t
+  $ dzil run bash
+
+=cut
 
 sub abstract { 'run stuff in a dir where your dist is built' }
 

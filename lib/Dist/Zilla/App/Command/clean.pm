@@ -10,10 +10,16 @@ use File::Find::Rule;
 
   dzil clean
 
-This command removes some files that are created during build, test, and
-install.  It's a very thin layer over the C<L<clean|Dist::Zilla/clean>> method
-on the Dist::Zilla object.  The documentation for that method gives more
-information about the files that will be removed.
+=head1 DESCRIPTION
+
+This command is a thin wrapper around the L<clean|Dist::Zilla::Dist::Builder/clean>
+method in Dist::Zilla. It removes some files that are created during build, test, and
+install.  The documentation for that method gives more information about the files
+that will be removed.
+
+=head1 EXAMPLE
+
+  $ dzil clean
 
 =cut
 

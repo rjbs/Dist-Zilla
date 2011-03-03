@@ -1,20 +1,33 @@
 use strict;
 use warnings;
 package Dist::Zilla::App::Command::listdeps;
-use Dist::Zilla::App -command;
 # ABSTRACT: print your distribution's prerequisites
+use Dist::Zilla::App -command;
+
+use Moose::Autobox;
+use Version::Requirements;
 
 =head1 SYNOPSIS
 
-  $ dzil listdeps | cpan
+  dzil listdeps [ --author ]
 
 =head1 DESCRIPTION
 
-This is a command plugin for L<Dist::Zilla>. It provides the C<listdeps>
-command, which prints your distribution's prerequisites. You could pipe that
-list to a CPAN client like L<cpan> to install all of the dependecies in one
-quick go. This will include author dependencies (those listed under
-C<develop_requires>) if the C<--author> flag is passed.
+This command prints the prerequisites of your distribution. You could
+pipe that list to a CPAN client like L<cpan> to install all of the dependecies
+in one quick go.
+
+=head1 EXAMPLE
+
+  $ dzil listdeps
+  $ dzil listdeps | cpan
+  $ dzil listdeps --author
+
+=head1 OPTIONS
+
+=head2 --author
+
+This will include author dependencies. (those listed under C<develop_requires>)
 
 =head1 ACKNOWLEDGEMENTS
 
@@ -23,9 +36,6 @@ Dist::Zilla::App::Command::prereqs, updated to work with the Dist::Zilla v2
 API.
 
 =cut
-
-use Moose::Autobox;
-use Version::Requirements;
 
 sub abstract { "print your distribution's prerequisites" }
 
