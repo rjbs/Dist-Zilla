@@ -3,8 +3,13 @@ package Dist::Zilla::Plugin::ModuleBuild;
 use List::MoreUtils qw(any uniq);
 use Moose;
 use Moose::Autobox;
-with 'Dist::Zilla::Role::BuildPL';
-with 'Dist::Zilla::Role::TextTemplate';
+with qw(
+  Dist::Zilla::Role::BuildRunner
+  Dist::Zilla::Role::PrereqSource
+  Dist::Zilla::Role::InstallTool
+  Dist::Zilla::Role::TextTemplate
+  Dist::Zilla::Role::TestRunner
+);
 
 use Dist::Zilla::File::InMemory;
 use List::MoreUtils qw(any uniq);
