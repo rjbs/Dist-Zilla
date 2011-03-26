@@ -2,8 +2,7 @@ package Dist::Zilla::Plugin::MakeMaker::Runner;
 # ABSTRACT: Test and build dists with a Makefile.PL
 
 use Moose;
-with 'Dist::Zilla::Role::BuildRunner';
-with 'Dist::Zilla::Role::TestRunner';
+with qw/Dist::Zilla::Role::BuildRunner Dist::Zilla::Role::TestRunner/;
 
 use Config;
 

@@ -3,9 +3,6 @@ package Dist::Zilla::Plugin::MakeMaker;
 # ABSTRACT: build a Makefile.PL that uses ExtUtils::MakeMaker
 use Moose;
 use Moose::Autobox;
-with 'Dist::Zilla::Role::PrereqSource';
-with 'Dist::Zilla::Role::InstallTool';
-with 'Dist::Zilla::Role::TextTemplate';
 
 =head1 DESCRIPTION
 
@@ -37,8 +34,7 @@ has '_runner' => (
   },
 );
 
-with 'Dist::Zilla::Role::BuildRunner';
-with 'Dist::Zilla::Role::TestRunner';
+with qw/Dist::Zilla::Role::PrereqSource Dist::Zilla::Role::InstallTool Dist::Zilla::Role::TextTemplate Dist::Zilla::Role::BuildRunner Dist::Zilla::Role::TestRunner/;
 
 use Data::Dumper ();
 use List::MoreUtils qw(any uniq);

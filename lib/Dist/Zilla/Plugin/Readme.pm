@@ -2,8 +2,7 @@ package Dist::Zilla::Plugin::Readme;
 # ABSTRACT: build a README file
 use Moose;
 use Moose::Autobox;
-with 'Dist::Zilla::Role::FileGatherer';
-with 'Dist::Zilla::Role::TextTemplate';
+with qw/Dist::Zilla::Role::FileGatherer Dist::Zilla::Role::TextTemplate/;
 
 =head1 DESCRIPTION
 
