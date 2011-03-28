@@ -118,6 +118,18 @@ sub munge_perl {
       $file->name,
     ]);
 
+    # skip 'use strict' and 'use warnings' pragmas;  this is mostly for
+    # compatibility with TestingAndDebugging::RequireUseStrict perlcritic
+    # policy.
+    while (my $next_stmt = $stmt->snext_sibling) {
+        if ($next_stmt->content =~ /use\s+(?:strict|warnings)\b/) {
+            $stmt = $next_stmt;
+        }
+        else {
+            last;
+        }
+    }
+
     Carp::carp("error inserting version in " . $file->name)
       unless $stmt->insert_after($children[0]->clone)
       and    $stmt->insert_after( PPI::Token::Whitespace->new("\n") );
