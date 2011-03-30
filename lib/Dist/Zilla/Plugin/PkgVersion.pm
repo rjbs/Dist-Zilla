@@ -41,6 +41,12 @@ C<package> keyword and the package name, like:
 This sort of declaration is also ignored by the CPAN toolchain, and is
 typically used when doing monkey patching or other tricky things.
 
+C<no_critic> option can be used to add C< ## no critic (...) >> comments to
+the generated code (this option can be specified multiple times):
+
+    [PkgVersion]
+    no_critic = RequireUseStrict
+
 =cut
 
 sub mvp_multivalue_args { return ('no_critic') }
