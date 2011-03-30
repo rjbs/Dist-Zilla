@@ -17,7 +17,8 @@ bunch of files, and you only want a subset of them.
 In your F<dist.ini>:
 
   [PruneFiles]
-  filenames = xt/release/pod-coverage.t ; pod coverage tests are for jerks
+  filename = xt/release/pod-coverage.t ; pod coverage tests are for jerks
+  filename = todo-list.txt             ; keep our secret plans to ourselves
 
   match     = ^test_data/*
   match     = ^test.cvs$
