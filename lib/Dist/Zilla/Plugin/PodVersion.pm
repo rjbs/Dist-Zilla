@@ -62,7 +62,7 @@ sub munge_pod {
   }
 
   $self->log([
-    "couldn't find '=head1 VERSION' in %s, not adding '=head1 VERSION'",
+    "couldn't find '=head1 NAME' in %s, not adding '=head1 VERSION'",
     $file->name,
   ]);
 }
