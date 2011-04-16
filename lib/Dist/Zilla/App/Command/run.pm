@@ -37,8 +37,14 @@ use Moose::Autobox;
 
 sub abstract { 'run stuff in a dir where your dist is built' }
 
+sub usage_desc {
+  return '%c %o run command [ arg1 arg2 ... ]';
+}
+
 sub execute {
   my ($self, $opts, $args) = @_;
+
+  $self->usage_error("no command to run supplied!") unless @$args;
 
   $self->zilla->run_in_build($args);
 }

@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          error message if "dzil run" is run without a command to run
+
           some minor refactoring in listdeps (Jon Rockway)
 
 4.200004  2011-02-11 16:17:37 America/New_York
