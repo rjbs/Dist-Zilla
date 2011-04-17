@@ -6,27 +6,27 @@ with 'Dist::Zilla::Role::PluginBundle::Easy';
 sub configure {
   my ($self) = @_;
 
-  $self->add_plugins(qw(
-    GatherDir
-    PruneCruft
-    ManifestSkip
-    MetaYAML
-    License
-    Readme
-    PkgVersion
-    PodVersion
-    PodCoverageTests
-    PodSyntaxTests
-    ExtraTests
-    ExecDir
-    ShareDir
+  $self->add_plugins(
+    'GatherDir',
+    'PruneCruft',
+    'ManifestSkip',
+    'MetaYAML',
+    'License',
+    'Readme',
+    'PkgVersion',
+    'PodVersion',
+    'Test::Pod::Coverage',
+    'Test::Pod',
+    'ExtraTests',
+    'ExecDir',
+    'ShareDir',
 
-    MakeMaker
-    Manifest
+    'MakeMaker',
+    'Manifest',
 
-    ConfirmRelease
-    UploadToCPAN
-  ));
+    'ConfirmRelease',
+    'UploadToCPAN',
+  );
 }
 
 __PACKAGE__->meta->make_immutable;
@@ -54,8 +54,8 @@ It includes the following plugins with their default configuration:
 * L<Dist::Zilla::Plugin::Readme>
 * L<Dist::Zilla::Plugin::PkgVersion>
 * L<Dist::Zilla::Plugin::PodVersion>
-* L<Dist::Zilla::Plugin::PodCoverageTests>
-* L<Dist::Zilla::Plugin::PodSyntaxTests>
+* L<Dist::Zilla::Plugin::Test::Pod::Coverage>
+* L<Dist::Zilla::Plugin::Test::Pod>
 * L<Dist::Zilla::Plugin::ExtraTests>
 * L<Dist::Zilla::Plugin::ExecDir>
 * L<Dist::Zilla::Plugin::ShareDir>

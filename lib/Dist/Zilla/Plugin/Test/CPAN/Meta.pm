@@ -1,4 +1,4 @@
-package Dist::Zilla::Plugin::MetaTests;
+package Dist::Zilla::Plugin::Test::CPAN::Meta;
 # ABSTRACT: common extra tests for META.yml
 use Moose;
 extends 'Dist::Zilla::Plugin::InlineFiles';

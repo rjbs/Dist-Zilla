@@ -12,7 +12,7 @@ my $tzil = Builder->from_config(
   {
     add_files => {
       'source/dist.ini' => simple_ini(
-        qw(GatherDir MetaTests PodSyntaxTests PodCoverageTests)
+        ('GatherDir', 'Test::CPAN::Meta', 'Test::Pod', 'Test::Pod::Coverage')
       ),
     },
   },
