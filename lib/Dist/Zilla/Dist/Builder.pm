@@ -338,11 +338,18 @@ tarball of the build directory in the current directory.
 =cut
 
 sub build_archive {
-  my ($self, $file) = @_;
+  my ($self) = @_;
 
   my $built_in = $self->ensure_built;
 
   my $archive = Archive::Tar->new;
+
+  my $basename = file(join(q{},
+    $self->name,
+    '-',
+    $self->version,
+    ($self->is_trial ? '-TRIAL' : ''),
+  ));
 
   $_->before_archive for $self->plugins_with(-BeforeArchive)->flatten;
 
@@ -353,23 +360,16 @@ sub build_archive {
     $archive->add_files( $built_in->file( $distfile->name ) );
   }
 
-  ## no critic
-  $file ||= file(join(q{},
-    $self->name,
-    '-',
-    $self->version,
-    ($self->is_trial ? '-TRIAL' : ''),
-    '.tar.gz',
-  ));
-
   # Fix up the CHMOD on the archived files, to inhibit 'withoutworldwritables'
   # behaviour on win32.
   for my $f ( $archive->get_files ) {
     $f->mode( $f->mode & ~022 );
   }
 
+  my $file = "$basename.tar.gz";
+
   $self->log("writing archive to $file");
-  $archive->write("$file", 9);
+  $archive->write("$file.tar.gz", 9);
 
   return $file;
 }
