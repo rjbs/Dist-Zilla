@@ -189,7 +189,7 @@ has main_module => (
              ->head;
     }
 
-    if ( not $file ){
+    if (not $file) {
         my @errorlines;
 
         push @errorlines, "Unable to find main_module in the distribution";
