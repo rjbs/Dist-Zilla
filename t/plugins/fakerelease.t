@@ -23,6 +23,13 @@ use Try::Tiny;
     grep({ /fake release happen/i } @{ $tzil->log_messages }),
     "we log a fake release when we fake release",
   );
+  ok(
+    grep(
+      $_ eq 'This is a fake release; nothing will be uploaded to CPAN',
+      @{ $tzil->log_messages }
+    ),
+    'fake release noted'
+  );
 }
 
 {
@@ -45,6 +52,13 @@ use Try::Tiny;
   ok(
     grep({ /fake release happen/i } @{ $tzil->log_messages }),
     "we log a fake release when we fake release",
+  );
+  ok(
+    grep(
+      $_ eq 'This is a fake release; nothing will be uploaded to CPAN',
+      @{ $tzil->log_messages }
+    ),
+    'fake release noted'
   );
 }
 
