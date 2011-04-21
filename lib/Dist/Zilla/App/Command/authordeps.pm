@@ -57,6 +57,7 @@ sub extract_author_deps {
                       keys %{$config};
 
   return
+    grep { !/^inc::/ }
     grep { $missing ? (! eval "require $_; 1;") : 1 }
     map {; Dist::Zilla::Util->expand_config_package_name($_) } @sections;
 }
