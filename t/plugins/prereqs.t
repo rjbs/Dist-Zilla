@@ -19,6 +19,7 @@ use Test::DZil;
           [ Prereqs => RuntimeRequires => { A => 2, B => 3 } ],
           [ Prereqs => DevelopSuggests => { C => 4 }         ],
           [ Prereqs => TestConflicts   => { C => 5, D => 6 } ],
+          [ Prereqs => Recommends      => { E => 7 }         ],
         ),
       },
     },
@@ -34,7 +35,10 @@ use Test::DZil;
     $meta->{prereqs},
     {
       develop => { suggests  => { C => 4 } },
-      runtime => { requires  => { A => 2, B => 3 } },
+      runtime => {
+        requires   => { A => 2, B => 3 },
+        recommends => { E => 7 },
+      },
       test    => { conflicts => { C => 5, D => 6 } },
     },
     "prereqs merged",
