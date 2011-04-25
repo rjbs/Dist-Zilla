@@ -6,10 +6,16 @@ use ExtUtils::MakeMaker ();
 use Moose;
 with 'Dist::Zilla::Role::BeforeRelease';
 
+use Moose::Autobox;
+
 sub before_release {
   my ($self, $tgz) = @_;
 
-  my $prompt = "*** Preparing to upload $tgz to CPAN ***\n"
+  my $releasers = join q{, },
+                  map {; $_->plugin_name }
+                  $self->zilla->plugins_with(-Releaser)->flatten;
+
+  my $prompt = "*** Preparing to release $tgz with $releasers ***\n"
              . "Do you want to continue the release process?";
 
   my $default = exists $ENV{DZIL_CONFIRMRELEASE_DEFAULT}

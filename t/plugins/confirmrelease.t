@@ -71,7 +71,7 @@ for my $yes (qw(y yes)) {
   );
 }
 
-my $prompt = "*** Preparing to upload DZT-Sample-0.001.tar.gz to CPAN ***\n"
+my $prompt = "*** Preparing to release DZT-Sample-0.001.tar.gz with FakeRelease ***\n"
            . "Do you want to continue the release process?";
 
 for my $no (qw(n no)) {
