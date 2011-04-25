@@ -366,10 +366,10 @@ sub build_archive {
     $f->mode( $f->mode & ~022 );
   }
 
-  my $file = "$basename.tar.gz";
+  my $file = file("$basename.tar.gz");
 
   $self->log("writing archive to $file");
-  $archive->write("$file.tar.gz", 9);
+  $archive->write("$file", 9);
 
   return $file;
 }
