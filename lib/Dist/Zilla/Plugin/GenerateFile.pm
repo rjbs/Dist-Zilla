@@ -2,8 +2,7 @@ package Dist::Zilla::Plugin::GenerateFile;
 # ABSTRACT: build a custom file from only the plugin configuration
 use Moose;
 use Moose::Autobox;
-with 'Dist::Zilla::Role::FileGatherer';
-with 'Dist::Zilla::Role::TextTemplate';
+with qw/Dist::Zilla::Role::FileGatherer Dist::Zilla::Role::TextTemplate/;
 
 use Dist::Zilla::File::InMemory;
 

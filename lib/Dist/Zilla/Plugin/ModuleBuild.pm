@@ -3,11 +3,7 @@ package Dist::Zilla::Plugin::ModuleBuild;
 use List::MoreUtils qw(any uniq);
 use Moose;
 use Moose::Autobox;
-with 'Dist::Zilla::Role::BuildRunner';
-with 'Dist::Zilla::Role::PrereqSource';
-with 'Dist::Zilla::Role::InstallTool';
-with 'Dist::Zilla::Role::TextTemplate';
-with 'Dist::Zilla::Role::TestRunner';
+with qw/Dist::Zilla::Role::BuildPL Dist::Zilla::Role::TextTemplate/;
 
 use Dist::Zilla::File::InMemory;
 use List::MoreUtils qw(any uniq);
@@ -162,26 +158,6 @@ has __module_build_args => (
   is   => 'rw',
   isa  => 'HashRef',
 );
-
-sub build {
-  my $self = shift;
-
-  system($^X => 'Build.PL') and die "error with Build.PL\n";
-  system($^X, 'Build')      and die "error running $^X Build\n";
-
-  return;
-}
-
-sub test {
-  my ($self, $target) = @_;
-
-  $self->build;
-  system($^X, 'Build', 'test',
-    ( $self->zilla->logger->get_debug ? 'verbose=1' : () ),
-  ) and die "error running $^X Build test\n";
-
-  return;
-}
 
 __PACKAGE__->meta->make_immutable;
 no Moose;

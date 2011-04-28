@@ -2,9 +2,7 @@ package Dist::Zilla::Plugin::NextRelease;
 # ABSTRACT: update the next release number in your changelog
 
 use Moose;
-with 'Dist::Zilla::Role::FileMunger';
-with 'Dist::Zilla::Role::TextTemplate';
-with 'Dist::Zilla::Role::AfterRelease';
+with qw/Dist::Zilla::Role::FileMunger Dist::Zilla::Role::TextTemplate Dist::Zilla::Role::AfterRelease/;
 
 use DateTime 0.44; # CLDR fixes
 use String::Formatter 0.100680 stringf => {
