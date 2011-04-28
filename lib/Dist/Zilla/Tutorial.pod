@@ -1,11 +1,5 @@
-use strict;
-use warnings;
-package Dist::Zilla::Tutorial;
+# PODNAME: Dist::Zilla::Tutorial
 # ABSTRACT: how to use this "Dist::Zilla" thing
-use Carp ();
-Carp::confess "you're not meant to use the tutorial, just read it!";
-1;
-__END__
 
 =head1 SYNOPSIS
 
@@ -115,12 +109,16 @@ L<AfterBuild|Dist::Zilla::Role::AfterBuild> plugins do their thing.
 
 =head1 THE GLORIOUS FUTURE
 
-In the glorious future of Dist::Zilla, another phase in the process will exist:
-C<release>.  By running C<dzil release>, you'll be able to test your
-distribution, build a tarball of it, and upload it to the CPAN.  Plugins will
-be able to do things like check your version control system to make sure you're
-releasing a new version and that you tag the version you've just uploaded.  It
-will update your Changelog file, too, making sure that you don't need to know
-what your next version number will be before releasing.
+In the glorious future you now inhabit with Dist::Zilla, another phase exists:
+C<release>.  By running C<dzil release>, you can test your distribution, build
+a tarball of it, and upload it to the CPAN.  Plugins can do things like check
+your version control system to make sure you're releasing a new version and
+that you tag the version you've just uploaded.  They can update your Changelog
+file, too, making sure that you don't need to know what your next version number
+will be before releasing.
+
+=head1 SEE ALSO
+
+L<http://dzil.org>
 
 =cut
