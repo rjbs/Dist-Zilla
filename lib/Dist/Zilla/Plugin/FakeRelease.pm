@@ -2,6 +2,7 @@ package Dist::Zilla::Plugin::FakeRelease;
 # ABSTRACT: fake plugin to test release
 
 use Moose;
+with 'Dist::Zilla::Role::BeforeRelease';
 with 'Dist::Zilla::Role::Releaser';
 
 has user => (
@@ -10,6 +11,12 @@ has user => (
   required => 1,
   default  => 'AUTHORID',
 );
+
+sub before_release {
+  my $self = shift;
+
+  $self->log('This is a fake release; nothing will be uploaded to CPAN');
+}
 
 sub release {
   my $self = shift;
