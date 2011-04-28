@@ -4,6 +4,9 @@ Revision history for {{$dist->name}}
 
           phase defaults to Runtime if omitted (Jonathan Yu)
 
+          extract the *Runner role implementations from ModuleBuild to
+          Role::BuildPL (Leon Timmermans)
+
 4.200005  2011-04-25 12:20:59 America/New_York
 
           provide actual name of releaser(s) in ConfirmRelease
