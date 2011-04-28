@@ -63,7 +63,7 @@ sub _setup_default_plugins {
         my ($file, $self) = @_;
         local $_ = $file->name;
         return 1 if m{\Alib/} and m{\.(pm|pod)$};
-        return 1 if $_ eq $self->zilla->main_module;
+        return 1 if $_ eq $self->zilla->main_module->name;
         return;
       },
     });
@@ -125,6 +125,23 @@ sub _setup_default_plugins {
       },
     });
 
+    $self->plugins->push($plugin);
+  }
+  
+  unless ($self->plugin_named(':MainModule')) {
+    require Dist::Zilla::Plugin::FinderCode;
+    my $plugin = Dist::Zilla::Plugin::FinderCode->new({
+      plugin_name => ':MainModule',
+      zilla       => $self,
+      style       => 'grep',
+      code        => sub {
+        my ($file, $self) = @_;
+        local $_ = $file->name;
+        return 1 if $_ eq $self->zilla->main_module->name;
+        return;
+      },
+    });
+    
     $self->plugins->push($plugin);
   }
 }
