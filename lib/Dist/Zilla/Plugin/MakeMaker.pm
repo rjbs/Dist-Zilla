@@ -208,7 +208,7 @@ has __write_makefile_args => (
 has 'eumm_version' => (
   isa => 'Str',
   is  => 'rw',
-  default => '6.31',
+  default => '6.30',
 );
 
 __PACKAGE__->meta->make_immutable;

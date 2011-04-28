@@ -2,6 +2,9 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+          MakeMaker-generated Makefile.PL now only has configure_requires of
+          6.30 so dists can be installed on RHEL5
+
           improve consistency and options of *_TESTING env vars (Apocalypse)
 
           improve FileFinder-related documentation (thanks, Apocalypse)
