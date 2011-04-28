@@ -39,28 +39,42 @@ parameter finder_arg_names => (
 
 =attr default_finders
 
-Utilize the predefined finders for this finder. You can use multiple finders and combine their
-results into one resultset.
+This attribute is an arrayref of plugin names for the default plugins the
+consuming plugin will use as finder.s
 
-This is an ArrayRef.
-
-Example: [ qw( :InstallModules :ExecFiles ) ]
+Example: C<< [ qw( :InstallModules :ExecFiles ) ] >>
 
 The default finders are:
 
-=for :list
-* InstallModules
-Searches your lib/ directory for pm/pod files.
-* IncModules
-Searches your inc/ directory for pm files.
-* TestFiles
+=begin :list
+
+= :InstallModules
+
+Searches your lib/ directory for pm/pod files
+
+= :IncModules
+
+Searches your inc/ directory for pm files
+
+= :MainModule
+
+Finds the C<main_module> of your dist
+
+= :TestFiles
+
 Searches your t/ directory and lists the files in it.
-* ExecFiles
-Searches your distribution for executable files.
-Hint: Use the L<Dist::Zilla::Plugin::ExecDir> plugin to mark those files as executables.
-* ShareFiles
+
+= :ExecFiles
+
+Searches your distribution for executable files.  Hint: Use the
+L<Dist::Zilla::Plugin::ExecDir> plugin to mark those files as executables.
+
+= :ShareFiles
+
 Searches your ShareDir directory and lists the files in it.
 Hint: Use the L<Dist::Zilla::Plugin::ShareDir> plugin to setup the sharedir.
+
+=end :list
 
 =cut
 
@@ -71,8 +85,8 @@ parameter default_finders => (
 
 =attr method
 
-This will be the name of the subroutine installed in your package for this finder. Be sure to specify
-different names if you have multiple finders!  
+This will be the name of the subroutine installed in your package for this
+finder.  Be sure to specify different names if you have multiple finders!
 
 Default: found_files
 

@@ -4,6 +4,10 @@ Revision history for {{$dist->name}}
 
           improve consistency and options of *_TESTING env vars (Apocalypse)
 
+          improve FileFinder-related documentation (thanks, Apocalypse)
+
+          add a default file finder called :IncModules (thanks, Apocalypse)
+
           add a default file finder called :MainModule (thanks, Mateu X.
           Hunter)
 
