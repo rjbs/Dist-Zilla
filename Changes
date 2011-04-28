@@ -2,7 +2,10 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
-          phase defaults to Runtime if omitted (Jonathan Yu)
+          add a default file finder called :MainModule (thanks, Mateu X.
+          Hunter)
+
+          phase for named Prereqs defaults to Runtime if omitted (Jonathan Yu)
 
           extract the *Runner role implementations from ModuleBuild to
           Role::BuildPL (Leon Timmermans)
