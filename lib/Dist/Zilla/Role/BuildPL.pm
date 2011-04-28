@@ -2,7 +2,11 @@ package Dist::Zilla::Role::BuildPL;
 
 use Moose::Role;
 
-with qw/Dist::Zilla::Role::BuildRunner Dist::Zilla::Role::PrereqSource Dist::Zilla::Role::InstallTool Dist::Zilla::Role::TestRunner/;
+with qw(
+  Dist::Zilla::Role::InstallTool
+  Dist::Zilla::Role::BuildRunner
+  Dist::Zilla::Role::TestRunner
+);
 
 sub build {
   my $self = shift;

@@ -4,11 +4,9 @@ use List::MoreUtils qw(any uniq);
 use Moose;
 use Moose::Autobox;
 with qw(
-  Dist::Zilla::Role::BuildRunner
+  Dist::Zilla::Role::BuildPL
   Dist::Zilla::Role::PrereqSource
-  Dist::Zilla::Role::InstallTool
   Dist::Zilla::Role::TextTemplate
-  Dist::Zilla::Role::TestRunner
 );
 
 use Dist::Zilla::File::InMemory;
