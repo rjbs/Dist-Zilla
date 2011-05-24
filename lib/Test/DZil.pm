@@ -131,7 +131,7 @@ sub _build_ini_builder {
                    ? @{ $payload->{ $key } }
                    : $payload->{ $key };
 
-        $config .= "$key = $_\n" for @values;
+        $config .= "$key = $_\n" for grep {defined} @values;
       }
 
       $config .= "\n";
