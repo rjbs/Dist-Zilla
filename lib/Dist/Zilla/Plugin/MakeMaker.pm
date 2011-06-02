@@ -48,7 +48,7 @@ my $template = q|
 use strict;
 use warnings;
 
-{{ $perl_prereq ? qq[BEGIN { require $perl_prereq; }] : ''; }}
+{{ $perl_prereq ? qq[use $perl_prereq;] : ''; }}
 
 use ExtUtils::MakeMaker {{ $eumm_version }};
 
@@ -115,7 +115,6 @@ sub setup_installer {
 
   my @share_dir_block = (q{}, q{});
 
-
   my $share_dir_map = $self->zilla->_share_dir_map;
   if ( keys %$share_dir_map ) {
     my $preamble = qq{use File::ShareDir::Install;\n};
@@ -141,6 +140,8 @@ sub setup_installer {
   my $prereqs = $self->zilla->prereqs;
   my $perl_prereq = $prereqs->requirements_for(qw(runtime requires))
                   ->as_string_hash->{perl};
+
+  $perl_prereq = version->parse($perl_prereq)->numify if $perl_prereq;
 
   my $prereqs_dump = sub {
     $prereqs->requirements_for(@_)
