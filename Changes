@@ -2,6 +2,8 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+4.200007  2011-06-01 21:52:00 America/New_York
+
           always numify the version use in "use VERSION" in Makefile.PL
 
 4.200006  2011-04-28 21:14:04 America/New_York
