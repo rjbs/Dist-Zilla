@@ -41,7 +41,21 @@ C<package> keyword and the package name, like:
 This sort of declaration is also ignored by the CPAN toolchain, and is
 typically used when doing monkey patching or other tricky things.
 
+C<no_critic> option can be used to add C< ## no critic (...) >> comments to
+the generated code (this option can be specified multiple times):
+
+    [PkgVersion]
+    no_critic = RequireUseStrict
+
 =cut
+
+sub mvp_multivalue_args { return ('no_critic') }
+
+has 'no_critic' => (
+    is       => 'ro',
+    isa      => 'ArrayRef[Str]',
+    predicate => "_has_no_critic",
+);
 
 sub munge_files {
   my ($self) = @_;
@@ -107,7 +121,11 @@ sub munge_perl {
     # an assignment to version; it shouldn't be needed, but it's been annoying
     # enough in the past that I'm keeping it here until tests are better
     my $trial = $self->zilla->is_trial ? ' # TRIAL' : '';
-    my $perl = "BEGIN {\n  \$$package\::VERSION\x20=\x20'$version';$trial\n}\n";
+    my $no_critic = '';
+    if ($self->_has_no_critic) {
+        $no_critic = ' ## no critic ('.join(', ', @{ $self->no_critic }).')';
+    }
+    my $perl = "BEGIN {$no_critic\n  \$$package\::VERSION\x20=\x20'$version';$trial\n}\n";
 
     my $version_doc = PPI::Document->new(\$perl);
     my @children = $version_doc->schildren;

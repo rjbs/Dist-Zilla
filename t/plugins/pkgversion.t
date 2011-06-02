@@ -182,5 +182,34 @@ unlike(
   );
 }
 
+{
+  my $tzil_custom = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/dist.ini' => simple_ini(
+          ['GatherDir'],
+          [
+            'PkgVersion' => {
+              no_critic => ['RequireUseStrict', 'SomeOtherPolicy' ],
+            },
+          ],
+          ['ExecDir'],
+        ),
+        'source/lib/DZT/TP1.pm'   => $with_version,
+      },
+    },
+  );
+
+  $tzil_custom->build;
+
+  my $dzt_sample = $tzil_custom->slurp_file('build/lib/DZT/Sample.pm');
+  like(
+    $dzt_sample,
+    qr{^BEGIN\s*\{\s*\Q## no critic (RequireUseStrict, SomeOtherPolicy)\E\s*\n\s*\$\QDZT::Sample::VERSION = '0.001';\E\s*$}m,
+    "added 'no critic' comment with policies from config",
+  );
+}
+
 done_testing;
 
