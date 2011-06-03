@@ -57,7 +57,10 @@ sub munge_pod {
     );
 
     $self->log_debug([ 'adding VERSION Pod section to %s', $file->name ]);
-    $file->content(join "\n", @content);
+
+    my $content = join "\n", @content;
+    $content .= "\n" if length $content;
+    $file->content($content);
     return;
   }
 

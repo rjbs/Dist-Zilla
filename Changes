@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          PodVersion no longer drops the file's last newline
 
 4.200007  2011-06-01 21:52:00 America/New_York
 
