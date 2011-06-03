@@ -4,5 +4,8 @@ use warnings;
 package
   dzil;
 use Dist::Zilla::App;
+# Let dzil --version know what to report:
+$main::VERSION = $Dist::Zilla::App::VERSION;
+
 # ABSTRACT: do stuff with your dist
 Dist::Zilla::App->run;
