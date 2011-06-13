@@ -8,6 +8,22 @@ use autodie;
 use Data::Section 0.004 -setup; # fixed header_re
 use Dist::Zilla::File::InMemory;
 
+=head1 MINTING CONFIGURATION
+
+This module is part of the standard configuration of the default L<Dist::Zilla>
+Minting Profile, and all profiles that don't set a custom ':DefaultModuleMaker'
+so you don't need to normally do anything to configure it.
+
+  dzil new Some::Module
+  # creates ./Some-Module/*
+  # creates ./Some-Module/lib/Some/Module.pm
+
+However, for those who wish to configure this ( or any subclasses ) this is
+presently required:
+
+  [TemplateModule / :DefaultModuleMaker]
+  ; template  = SomeFile.pm
+
 =head1 DESCRIPTION
 
 This is a L<ModuleMaker|Dist::Zilla::Role::ModuleMaker> used for creating new
@@ -28,7 +44,10 @@ By default, the template looks something like this:
 =attr template
 
 The C<template> parameter may be given to the plugin to provide a different
-filename, absolute or relative to the build root.
+filename, absolute or relative to the build/profile directory.
+
+If this parameter is not specified, this module will use the boilerplate module
+template included in this module.
 
 =cut
 
