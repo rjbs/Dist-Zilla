@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.200008  2011-06-23 11:53:56 America/New_York
           PodVersion no longer drops the file's last newline
 
           listdeps now includes recommended prereqs as well as required
