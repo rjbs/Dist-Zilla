@@ -50,6 +50,7 @@ sub extract_dependencies {
 
   for my $phase (@$phases) {
     $req->add_requirements( $prereqs->requirements_for($phase, 'requires') );
+    $req->add_requirements( $prereqs->requirements_for($phase, 'recommends') );
   }
 
   my @required = grep { $_ ne 'perl' } $req->required_modules;

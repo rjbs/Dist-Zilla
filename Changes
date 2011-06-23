@@ -3,6 +3,8 @@ Revision history for {{$dist->name}}
 {{$NEXT}}
           PodVersion no longer drops the file's last newline
 
+          listdeps now includes recommended prereqs as well as required
+
 4.200007  2011-06-01 21:52:00 America/New_York
 
           always numify the version use in "use VERSION" in Makefile.PL
