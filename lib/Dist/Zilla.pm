@@ -367,6 +367,34 @@ has authors => (
   },
 );
 
+=attr keywords
+
+This is an arrayref of keywords (tags) that describe the distribution, like this:
+
+  [
+    'app',
+    'cpan',
+    'admin',
+  ]
+
+=cut
+
+has keywords => (
+  is   => 'ro',
+  isa  => ArrayRef[Str],
+  init_arg => undef,
+  lazy => 1,
+  builder   => '_build_keywords',
+);
+
+sub _build_keywords {
+  my ($self) = @_;
+
+  # TODO: Somehow get $keywords from dist.ini and return [split(/\s+/, $keywords)] here.
+  return [];
+}
+
+
 =attr files
 
 This is an arrayref of objects implementing L<Dist::Zilla::Role::File> that
@@ -471,6 +499,7 @@ sub _build_distmeta {
     abstract => $self->abstract,
     author   => $self->authors,
     license  => $self->license->meta2_name,
+    keywords => $self->keywords,
 
     # XXX: what about unstable?
     release_status => ($self->is_trial or $self->version =~ /_/)
