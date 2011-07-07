@@ -14,6 +14,7 @@ with(
 
 # ABSTRACT: automatically extract prereqs from your modules
 
+use Moose::Autobox;
 use Perl::PrereqScanner 0.100830; # bugfixes
 use PPI;
 use Version::Requirements 0.100630;  # merge with 0-min bug
@@ -36,10 +37,10 @@ L<Dist::Zilla::Plugin::Prereqs> plugin.
 
 This plugin will skip the modules shipped within your dist.
 
-=attr skip
+=attr skips
 
-This string will be used as a regular expression.  Any module names matching
-this regex will not be registered as prerequisites.
+This is an arrayref of regular expressions.  Any module names matching
+any of theseregex will not be registered as prerequisites.
 
 =head1 CREDITS
 
@@ -47,10 +48,15 @@ This plugin was originally contributed by Jerome Quelin.
 
 =cut
 
-# skiplist - a regex
-has skip => (
-  is => 'ro',
-  predicate => 'has_skip',
+sub mvp_multivalue_args { qw(skips) }
+sub mvp_aliases { return { skip => 'skips' } }
+
+has skips => (
+  is  => 'ro',
+  isa => 'ArrayRef[Str]',
+  handles => {
+     has_skips => 'count',
+  },
 );
 
 sub register_prereqs {
@@ -93,8 +99,7 @@ sub register_prereqs {
     $req->clear_requirement($_) for @modules;
 
     # remove prereqs from skiplist
-    if ($self->has_skip && $self->skip) {
-      my $skip = $self->skip;
+    for my $skip (($self->skips || [])->flatten) {
       my $re   = qr/$skip/;
 
       foreach my $k ($req->required_modules) {
