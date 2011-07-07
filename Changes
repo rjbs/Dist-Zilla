@@ -5,6 +5,8 @@ Revision history for {{$dist->name}}
 
           authordeps now makes a rough attempt to deal with [@Filter]
 
+          catch and simplify "no dist.ini" errors from MVP
+
 4.200008  2011-06-23 11:53:56 America/New_York
           PodVersion no longer drops the file's last newline
 
