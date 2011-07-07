@@ -7,5 +7,14 @@ use Dist::Zilla::App;
 # Let dzil --version know what to report:
 $main::VERSION = $Dist::Zilla::App::VERSION;
 
+# PODNAME:  dzil
 # ABSTRACT: do stuff with your dist
 Dist::Zilla::App->run;
+
+=head1 OVERVIEW
+
+For help with Dist::Zilla, start with http://dzil.org/ or by running "dzil
+commands"
+
+=cut
+
