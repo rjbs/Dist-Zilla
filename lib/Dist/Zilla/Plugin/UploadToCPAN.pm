@@ -83,7 +83,9 @@ has username => (
   required => 1,
   default  => sub {
     my ($self) = @_;
-    return $self->_credential('username') || $self->pause_cfg->{user};
+    return $self->_credential('username')
+        || $self->pause_cfg->{user}
+        || $self->zilla->chrome->prompt_str("PAUSE username: ");
   },
 );
 
@@ -101,7 +103,9 @@ has password => (
   required => 1,
   default  => sub {
     my ($self) = @_;
-    return $self->_credential('password') || $self->pause_cfg->{password};
+    return $self->_credential('password')
+        || $self->pause_cfg->{password}
+        || $self->zilla->chrome->prompt_str("PAUSE password (will echo): ");
   },
 );
 
