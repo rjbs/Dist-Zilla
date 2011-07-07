@@ -70,7 +70,7 @@ sub extract_author_deps {
     map  {; Dist::Zilla::Util->expand_config_package_name($_) }
     map  { s/\s.*//; $_ }
     grep { $_ ne '_' }
-    keys %{$config};
+    keys %$config;
 
   seek $fh, 0, 0;
 
@@ -78,6 +78,18 @@ sub extract_author_deps {
     chomp;
     next unless /\A\s*;\s*authordep\s*(\S+)\s*\z/;
     push @packages, $1;
+  }
+
+  seek $fh, 0, 0;
+
+  my $in_filter = 0;
+  while (<$fh>) {
+    next unless $in_filter or /^\[\s*\@Filter/;
+    $in_filter = 0, next if /^\[/ and ! /^\[\s*\@Filter/;
+    $in_filter = 1;
+
+    next unless /\A-bundle\s*=\s*([^;]+)/;
+    push @packages, Dist::Zilla::Util->expand_config_package_name($1);
   }
 
   return
