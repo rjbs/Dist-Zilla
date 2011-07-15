@@ -402,21 +402,17 @@ sub build_archive {
       )
     }
 
+    my $filename = $built_in->file( $distfile->name );
     $archive->add_data(
       $basedir->file( $distfile->name ),
       do {
         use autodie;
         local $/;
-        open my $fh, '<', $built_in->file( $distfile->name );
+        open my $fh, '<', $filename;
         <$fh>;
       },
+      { mode => (stat $filename)[2] & ~022 },
     );
-  }
-
-  # Fix up the CHMOD on the archived files, to inhibit 'withoutworldwritables'
-  # behaviour on win32.
-  for my $f ( $archive->get_files ) {
-    $f->mode( $f->mode & ~022 );
   }
 
   my $file = file("$basename.tar.gz");
