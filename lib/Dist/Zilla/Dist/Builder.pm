@@ -378,20 +378,39 @@ sub build_archive {
 
   my $archive = Archive::Tar->new;
 
-  my $basename = file(join(q{},
+  my $basename = join(q{},
     $self->name,
     '-',
     $self->version,
     ($self->is_trial ? '-TRIAL' : ''),
-  ));
+  );
 
   $_->before_archive for $self->plugins_with(-BeforeArchive)->flatten;
 
+  my $basedir = dir($basename);
   my %seen_dir;
-  for my $distfile (sort { length($a->name) <=> length($b->name) } $self->files->flatten) {
+  for my $distfile (
+    sort { length($a->name) <=> length($b->name) } $self->files->flatten
+  ) {
     my $in = file($distfile->name)->dir;
-    $archive->add_files( $built_in->subdir($in) ) unless $seen_dir{ $in }++;
-    $archive->add_files( $built_in->file( $distfile->name ) );
+
+    unless ($seen_dir{ $in }++) {
+      $archive->add_data(
+        $basedir->subdir($in),
+        '',
+        { type => Archive::Tar::Constant::DIR(), mode => 0755 },
+      )
+    }
+
+    $archive->add_data(
+      $basedir->file( $distfile->name ),
+      do {
+        use autodie;
+        local $/;
+        open my $fh, '<', $built_in->file( $distfile->name );
+        <$fh>;
+      },
+    );
   }
 
   # Fix up the CHMOD on the archived files, to inhibit 'withoutworldwritables'

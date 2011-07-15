@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          fix [rt.cpan.org #68223] -- Test::Dzil built tarballs with bad root
+          dirs;  test and code mostly provided by Rob Hoelz
 
 4.200009  2011-07-06 23:26:09 America/New_York
           the "skip" argument to AutoPrereqs can now be given multiple times
