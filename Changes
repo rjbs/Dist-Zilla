@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.200011  2011-07-14 22:53:34 America/New_York
           move the file mode setting into the tar creation, not a fixup step
 
 4.200010  2011-07-14 22:27:46 America/New_York
