@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.200010  2011-07-14 22:27:46 America/New_York
           fix [rt.cpan.org #68223] -- Test::Dzil built tarballs with bad root
           dirs;  test and code mostly provided by Rob Hoelz
 
