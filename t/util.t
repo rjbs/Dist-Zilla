@@ -11,7 +11,8 @@ sub abstract_from_string {
     return $e->{abstract};
 }
 
-my $pod = <<'EOP';
+{
+    my $pod = <<'EOP';
 =head1 NAME
 
 Term::ReadLine - Perl interface to various C<readline> packages.
@@ -21,7 +22,20 @@ If no real package is found, substitutes stubs instead of basic functions.
 =head1 SYNOPSIS
 EOP
 
-is abstract_from_string($pod), 'Perl interface to various C<readline> packages.
+    is abstract_from_string($pod), 'Perl interface to various C<readline> packages.
 If no real package is found, substitutes stubs instead of basic functions.';
+}
+
+{
+    my $pod = <<'EOP';
+=head1 NAME
+
+Search::Dict, look - search for key in dictionary file
+
+=head1 SYNOPSIS
+EOP
+
+    is abstract_from_string($pod), 'search for key in dictionary file';
+}
 
 done_testing;

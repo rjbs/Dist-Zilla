@@ -37,7 +37,7 @@ use String::RewritePrefix 0.002; # better string context behavior
 
     if (
       $event->{type} eq 'text'
-      and $event->{content} =~ /^\S+\s+-+\s+(.+)\n$/s
+      and $event->{content} =~ /^(?:\S+\s+)+?-+\s+(.+)\n$/s
     ) {
       $self->{abstract} = $1;
     }
