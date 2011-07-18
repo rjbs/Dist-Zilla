@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.200012  2011-07-18 09:02:09 America/New_York
           allow abstracts of more than one line, or with more than one word
           before the dash, to be properly extracted (Florian Ragwitz)
 
