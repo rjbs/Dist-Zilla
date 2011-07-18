@@ -25,7 +25,7 @@ my $basename = join(q{},
 my $tarball = "$basename.tar.gz";
 
 $tarball = $tzil->built_in->parent->subdir('source')->file($tarball);
-$tarball = Archive::Tar->new($tarball);
+$tarball = Archive::Tar->new($tarball->stringify);
 
 my $makefile_pl = File::Spec->catfile($basename, 'Makefile.PL');
 
