@@ -55,9 +55,19 @@ sub extract_dependencies {
 
   my @required = grep { $_ ne 'perl' } $req->required_modules;
   if ($missing) {
-    @required = grep { !( try { Class::MOP::load_class($_); 1 }
-                       && $req->accepts_module($_ => $_->VERSION) ) }
-                     @required;
+    my $is_required = sub {
+      my $mod = shift;
+      # it is required if it's not already installed
+      return 1 if !try { Class::MOP::load_class($mod); 1 };
+      # it is required if the version can't be parsed
+      # right now $_->VERSION by itself will die if the version can't
+      # be parsed, but this may change in the future to only die in that
+      # way if an arg is passed
+      return 1 if !try { $mod->VERSION(0); 1 };
+      # it is required if the version doesn't meet the requirement
+      return !$req->accepts_module($mod => $mod->VERSION);
+    };
+    @required = grep { $is_required->($_) } @required;
   }
 
   return sort { lc $a cmp lc $b } @required;
