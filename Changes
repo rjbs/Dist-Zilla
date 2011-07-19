@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          "dzil listdeps --missing" no longer dies if it encounters an invalid
+          $VERSION (Jesse Luehrs)
 
 4.200012  2011-07-18 09:02:09 America/New_York
           allow abstracts of more than one line, or with more than one word
