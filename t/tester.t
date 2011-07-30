@@ -18,12 +18,9 @@ my $tzil = Builder->from_config(
 
 $tzil->release;
 
-my $basename = join(q{},
-  $tzil->name, '-', $tzil->version,
-  ($tzil->is_trial ? '-TRIAL' : ()),
-);
+my $basename = $tzil->_dist_basename;
 
-my $tarball = "$basename.tar.gz";
+my $tarball = $tzil->_dist_tar_basename;
 
 $tarball = $tzil->built_in->parent->subdir('source')->file($tarball);
 $tarball = Archive::Tar->new($tarball->stringify);
