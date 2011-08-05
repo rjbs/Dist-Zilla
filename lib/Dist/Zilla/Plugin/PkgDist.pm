@@ -88,7 +88,7 @@ sub munge_perl {
     # the \x20 hack is here so that when we scan *this* document we don't find
     # an assignment to version; it shouldn't be needed, but it's been annoying
     # enough in the past that I'm keeping it here until tests are better
-    my $perl = "BEGIN {\n  \$$package\::DIST\x20=\x20'$dist_name';\n}\n";
+    my $perl = "{\n  \$$package\::DIST\x20=\x20'$dist_name';\n}\n";
 
     my $dist_doc = PPI::Document->new(\$perl);
     my @children = $dist_doc->schildren;

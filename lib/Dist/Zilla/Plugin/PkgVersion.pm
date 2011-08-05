@@ -24,7 +24,7 @@ in dist.ini
 This plugin will add lines like the following to each package in each Perl
 module or program (more or less) within the distribution:
 
-  BEGIN {
+  {
     $MyModule::VERSION = 0.001;
   }
 
@@ -107,7 +107,7 @@ sub munge_perl {
     # an assignment to version; it shouldn't be needed, but it's been annoying
     # enough in the past that I'm keeping it here until tests are better
     my $trial = $self->zilla->is_trial ? ' # TRIAL' : '';
-    my $perl = "BEGIN {\n  \$$package\::VERSION\x20=\x20'$version';$trial\n}\n";
+    my $perl = "{\n  \$$package\::VERSION\x20=\x20'$version';$trial\n}\n";
 
     my $version_doc = PPI::Document->new(\$perl);
     my @children = $version_doc->schildren;
