@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.200013  2011-08-05 09:30:01 America/New_York
           "dzil listdeps --missing" no longer dies if it encounters an invalid
           $VERSION (Jesse Luehrs)
 
