@@ -382,7 +382,6 @@ sub build_archive {
     $self->name,
     '-',
     $self->version,
-    ($self->is_trial ? '-TRIAL' : ''),
   );
 
   $_->before_archive for $self->plugins_with(-BeforeArchive)->flatten;
@@ -415,7 +414,11 @@ sub build_archive {
     );
   }
 
-  my $file = file("$basename.tar.gz");
+  my $file = file(
+    sprintf '%s%s.tar.gz',
+    $basename,
+    ($self->is_trial ? '-TRIAL' : ''),
+  );
 
   $self->log("writing archive to $file");
   $archive->write("$file", 9);
