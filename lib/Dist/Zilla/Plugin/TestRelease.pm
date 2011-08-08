@@ -47,7 +47,7 @@ sub before_release {
     unless @files;
 
   # Run tests on the extracted tarball:
-  my $target = $tmpdir->subdir( $self->zilla->built_in->dir_list(-1) );
+  my $target = $tmpdir->subdir( $self->zilla->_dist_basename );
 
   local $ENV{RELEASE_TESTING} = 1;
   local $ENV{AUTHOR_TESTING} = 1;
