@@ -2,6 +2,11 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+4.200015  2011-08-12 13:45:42 America/New_York
+          don't build the dist in a directory with -TRIAL in the name; this
+          should fix bugs in "dzil release --trial" and probably other related
+          bugs
+
 4.200014  2011-08-07 18:18:01 America/New_York
           add documentation for TemplateModule (thanks, Kent Fredric)
 
