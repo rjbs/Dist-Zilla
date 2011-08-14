@@ -1,6 +1,5 @@
 package Dist::Zilla::Plugin::GatherDir;
 # ABSTRACT: gather all the files in a directory
-use List::Util qw(first);
 use Moose;
 use Moose::Autobox;
 use MooseX::Types::Path::Class qw(Dir File);
@@ -99,6 +98,8 @@ has follow_symlinks => (
   default => 0,
 );
 
+sub mvp_multivalue_args { qw(exclude exclude_match) }
+
 =attr exclude 
 
 To exclude certain files from being gathered, use the C<exclude> option.
@@ -106,9 +107,21 @@ This may be used multiple times to specify multiple files to exclude.
 
 =cut
 
-sub mvp_multivalue_args { qw(exclude) }
-
 has exclude => (
+  is   => 'ro',
+  isa  => 'ArrayRef',
+  default => sub { [] },
+);
+
+=attr exclude_match
+
+This is just like C<exclude> but provides a regular expression pattern.  Files
+matching the pattern are not gathered.  This may be used multiple times to
+specify multiple patterns to exclude.
+
+=cut
+
+has exclude_match => (
   is   => 'ro',
   isa  => 'ArrayRef',
   default => sub { [] },
@@ -125,16 +138,18 @@ sub gather_files {
   my $rule = File::Find::Rule->new();
   $rule->extras({follow => $self->follow_symlinks});
   FILE: for my $filename ($rule->file->in($root)) {
+    my $file = file($filename)->relative($root);
+
     unless ($self->include_dotfiles) {
-      my $file = file($filename)->relative($root);
       next FILE if $file->basename =~ qr/^\./;
       next FILE if grep { /^\.[^.]/ } $file->dir->dir_list;
     }
 
-    if ( my @excludes = $self->exclude->flatten ) {
-      my $file = file($filename)->relative($root);
-      next FILE if first { $file->basename eq $_ } @excludes;
-    }
+    my $exclude_regex = qr/\000/;
+    $exclude_regex = qr/$exclude_regex|$_/ for ($self->exclude_match->flatten);
+    # \b\Q$_\E\b should also handle the `eq` check
+    $exclude_regex = qr/$exclude_regex|\b\Q$_\E\b/ for ($self->exclude->flatten);
+    next if $file =~ $exclude_regex;
 
     push @files, $self->_file_from_filename($filename);
   }

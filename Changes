@@ -1,7 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
-          add 'excludes' option to GatherDir plugin (David Golden)
+          add options to exclude files from GatherDir (David Golden)
 
 4.200015  2011-08-12 13:45:42 America/New_York
           don't build the dist in a directory with -TRIAL in the name; this

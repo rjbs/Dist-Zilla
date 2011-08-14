@@ -26,6 +26,11 @@ my $tzil = Builder->from_config(
           prefix => 'some',
           exclude => 'notme.txt',
         } ],
+        [ GatherDir => SelectiveMatch => {
+          root   => '../corpus/extra',
+          prefix => 'xmatch',
+          exclude_match => 'notme\.*',
+        } ],
         'Manifest',
       ),
       'source/.profile' => "Bogus dotfile.\n",
@@ -46,6 +51,7 @@ is_filelist(
     bonus/subdir/index.html bonus/vader.txt bonus/notme.txt
     dotty/subdir/index.html dotty/vader.txt dotty/.dotfile dotty/notme.txt
     some/subdir/index.html some/vader.txt
+    xmatch/subdir/index.html xmatch/vader.txt
     dist.ini lib/DZT/Sample.pm t/basic.t
     MANIFEST
   ) ],
