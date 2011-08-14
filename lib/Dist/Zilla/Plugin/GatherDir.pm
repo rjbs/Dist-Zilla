@@ -98,16 +98,16 @@ has follow_symlinks => (
   default => 0,
 );
 
-sub mvp_multivalue_args { qw(exclude exclude_match) }
+sub mvp_multivalue_args { qw(exclude_filename exclude_match) }
 
-=attr exclude 
+=attr exclude_filename
 
-To exclude certain files from being gathered, use the C<exclude> option.
-This may be used multiple times to specify multiple files to exclude.
+To exclude certain files from being gathered, use the C<exclude_filename>
+option. This may be used multiple times to specify multiple files to exclude.
 
 =cut
 
-has exclude => (
+has exclude_filename => (
   is   => 'ro',
   isa  => 'ArrayRef',
   default => sub { [] },
@@ -115,9 +115,9 @@ has exclude => (
 
 =attr exclude_match
 
-This is just like C<exclude> but provides a regular expression pattern.  Files
-matching the pattern are not gathered.  This may be used multiple times to
-specify multiple patterns to exclude.
+This is just like C<exclude_filename> but provides a regular expression
+pattern.  Files matching the pattern are not gathered.  This may be used
+multiple times to specify multiple patterns to exclude.
 
 =cut
 
@@ -146,9 +146,11 @@ sub gather_files {
     }
 
     my $exclude_regex = qr/\000/;
-    $exclude_regex = qr/$exclude_regex|$_/ for ($self->exclude_match->flatten);
+    $exclude_regex = qr/$exclude_regex|$_/
+      for ($self->exclude_match->flatten);
     # \b\Q$_\E\b should also handle the `eq` check
-    $exclude_regex = qr/$exclude_regex|\b\Q$_\E\b/ for ($self->exclude->flatten);
+    $exclude_regex = qr/$exclude_regex|\b\Q$_\E\b/
+      for ($self->exclude_filename->flatten);
     next if $file =~ $exclude_regex;
 
     push @files, $self->_file_from_filename($filename);

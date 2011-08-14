@@ -24,7 +24,7 @@ my $tzil = Builder->from_config(
         [ GatherDir => Selective => {
           root   => '../corpus/extra',
           prefix => 'some',
-          exclude => 'notme.txt',
+          exclude_filename => 'notme.txt',
         } ],
         [ GatherDir => SelectiveMatch => {
           root   => '../corpus/extra',
