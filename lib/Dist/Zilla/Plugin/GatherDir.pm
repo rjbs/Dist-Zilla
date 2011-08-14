@@ -1,5 +1,6 @@
 package Dist::Zilla::Plugin::GatherDir;
 # ABSTRACT: gather all the files in a directory
+use List::Util qw(first);
 use Moose;
 use Moose::Autobox;
 use MooseX::Types::Path::Class qw(Dir File);
@@ -98,6 +99,21 @@ has follow_symlinks => (
   default => 0,
 );
 
+=attr exclude 
+
+To exclude certain files from being gathered, use the C<exclude> option.
+This may be used multiple times to specify multiple files to exclude.
+
+=cut
+
+sub mvp_multivalue_args { qw(exclude) }
+
+has exclude => (
+  is   => 'ro',
+  isa  => 'ArrayRef',
+  default => sub { [] },
+);
+
 sub gather_files {
   my ($self) = @_;
 
@@ -113,6 +129,11 @@ sub gather_files {
       my $file = file($filename)->relative($root);
       next FILE if $file->basename =~ qr/^\./;
       next FILE if grep { /^\.[^.]/ } $file->dir->dir_list;
+    }
+
+    if ( my @excludes = $self->exclude->flatten ) {
+      my $file = file($filename)->relative($root);
+      next FILE if first { $file->basename eq $_ } @excludes;
     }
 
     push @files, $self->_file_from_filename($filename);
