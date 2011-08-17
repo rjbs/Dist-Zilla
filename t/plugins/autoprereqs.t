@@ -37,8 +37,11 @@ my %wanted = (
   'DZPA::NotInDist'       => 0,
   'DZPA::Role'            => 0,
   'DZPA::ScriptUse'       => 0,
+  'base'                  => 0,
   'parent'                => 0,
   'perl'                  => 5.008,
+  'strict'                => 0,
+  'warnings'              => 0,
 );
 
 is_deeply(

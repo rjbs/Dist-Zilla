@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          require and adapt to the new Perl::PrereqScanner, which does not
+          prune out prereqs just because they're core and common
 
 4.200016  2011-08-17 18:07:21 America/New_York
           add options to exclude files from GatherDir (David Golden)
