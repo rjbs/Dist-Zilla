@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.200017  2011-08-17 18:54:07 America/New_York
           require and adapt to the new Perl::PrereqScanner, which does not
           prune out prereqs just because they're core and common
 
