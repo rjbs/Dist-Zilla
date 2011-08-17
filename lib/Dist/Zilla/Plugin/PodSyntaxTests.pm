@@ -1,27 +1,15 @@
 package Dist::Zilla::Plugin::PodSyntaxTests;
-# ABSTRACT: a release test for Pod syntax
 use Moose;
-extends 'Dist::Zilla::Plugin::InlineFiles';
+extends 'Dist::Zilla::Plugin::Test::Pod';
+# ABSTRACT: (DEPRECATED) the old name for Dist::Zilla::Plugin::Test::Pod
 
-=head1 DESCRIPTION
+before register_component => sub {
+  die "[PodSyntaxTests] will be removed in Dist::Zilla v6; replace it with [Test::Pod]\n"
+    if Dist::Zilla->VERSION >= 6;
 
-This is an extension of L<Dist::Zilla::Plugin::InlineFiles>, providing the
-following files:
+  warn "!!! [PodSyntaxTests] will be removed in Dist::Zilla v6; replace it with [Test::Pod]\n";
+};
 
-  xt/release/pod-syntax.t   - a standard Test::Pod test
-
-=cut
-
-__PACKAGE__->meta->make_immutable;
 no Moose;
+__PACKAGE__->meta->make_immutable;
 1;
-
-__DATA__
-___[ xt/release/pod-syntax.t ]___
-#!perl
-use Test::More;
-
-eval "use Test::Pod 1.41";
-plan skip_all => "Test::Pod 1.41 required for testing POD" if $@;
-
-all_pod_files_ok();
