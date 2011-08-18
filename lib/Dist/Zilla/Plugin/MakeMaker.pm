@@ -180,6 +180,7 @@ sub setup_installer {
   );
   $makefile_args_dumper->Sortkeys( 1 );
   $makefile_args_dumper->Indent( 1 );
+  $makefile_args_dumper->Useqq( 1 );
 
   my $content = $self->fill_in_string(
     $template,

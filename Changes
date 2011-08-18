@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          turn on Useqq option for Dumper, to get unicode string literals set
+          properly in Makefile.PL and Build.PL without using utf8.pm
 
 4.200018  2011-08-18 11:13:03 America/New_York
           correct Perl::PrereqScanner version requirement, which was too low
