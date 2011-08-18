@@ -15,7 +15,7 @@ with(
 # ABSTRACT: automatically extract prereqs from your modules
 
 use Moose::Autobox;
-use Perl::PrereqScanner 0.105; # do not prune common libs
+use Perl::PrereqScanner 1.005; # do not prune common libs
 use PPI;
 use Version::Requirements 0.100630;  # merge with 0-min bug
 use version;
