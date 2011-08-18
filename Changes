@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.200018  2011-08-18 11:13:03 America/New_York
           correct Perl::PrereqScanner version requirement, which was too low
 
 4.200017  2011-08-17 18:54:07 America/New_York
