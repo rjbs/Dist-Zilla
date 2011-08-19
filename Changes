@@ -8,6 +8,9 @@ Revision history for {{$dist->name}}
 
           decode user input from Chrome::Term as UTF-8
 
+          during `dzil setup`, the config.ini file is now created with an added
+          umask of 077 to avoid other users reading your PAUSE credentials
+
           update almost all Moose code to use make_immutable and
           namespace::autoclean
 
@@ -597,7 +600,9 @@ Revision history for {{$dist->name}}
           huge update to logging system; uses Log::Dispatchouli::Proxy
 
           UploadToCPAN, FakeRelease now log via the standard logger
-          App::Cmd layer'Zilla is shared between commands
+          App::Cmd layer
+
+          Zilla is shared between commands
 
           bump up some prereqs to avoid bugs fixed upstream
 
