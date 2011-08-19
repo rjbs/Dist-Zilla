@@ -112,6 +112,9 @@ sub execute {
   }
 
   $config_root->mkpath unless -d $config_root;
+
+  my $umask = umask;
+  umask( $umask | 077 ); # this file might contain PAUSE pw; make it go-r
   open my $fh, '>', $config_root->file('config.ini');
 
   $fh->print("[%User]\n");
@@ -132,6 +135,8 @@ sub execute {
   }
 
   close $fh;
+
+  umask $umask;
 
   $self->log("config.ini file created!");
 }
