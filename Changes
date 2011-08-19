@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.300000  2011-08-19 10:12:36 America/New_York
           turn on Useqq option for Dumper, to get unicode string literals set
           properly in Makefile.PL and Build.PL without using utf8.pm
 
