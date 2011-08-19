@@ -3,6 +3,8 @@ use Moose;
 with 'Dist::Zilla::Role::BeforeRelease';
 # ABSTRACT: extract archive and run tests before releasing the dist
 
+use namespace::autoclean;
+
 =head1 DESCRIPTION
 
 This plugin runs before a release happens.  It will extract the to-be-released
@@ -55,6 +57,5 @@ sub before_release {
   $tmpdir->rmtree;
 }
 
-no Moose;
 __PACKAGE__->meta->make_immutable;
 1;

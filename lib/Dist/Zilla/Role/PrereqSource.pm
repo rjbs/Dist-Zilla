@@ -3,6 +3,8 @@ package Dist::Zilla::Role::PrereqSource;
 use Moose::Role;
 with 'Dist::Zilla::Role::Plugin';
 
+use namespace::autoclean;
+
 =head1 DESCRIPTION
 
 PrereqSource plugins have a C<register_prereqs> method that should register
@@ -12,5 +14,4 @@ prereqs with the Dist::Zilla object.
 
 requires 'register_prereqs';
 
-no Moose::Role;
 1;

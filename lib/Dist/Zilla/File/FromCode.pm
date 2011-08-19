@@ -2,6 +2,8 @@ package Dist::Zilla::File::FromCode;
 # ABSTRACT: a file whose content is (re-)built on demand
 use Moose;
 
+use namespace::autoclean;
+
 =head1 DESCRIPTION
 
 This represents a file whose contents will be generated on demand from a
@@ -31,5 +33,4 @@ sub content {
 
 with 'Dist::Zilla::Role::File';
 __PACKAGE__->meta->make_immutable;
-no Moose;
 1;

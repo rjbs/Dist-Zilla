@@ -3,6 +3,8 @@ package Dist::Zilla::Role::MetaProvider;
 use Moose::Role;
 with 'Dist::Zilla::Role::Plugin';
 
+use namespace::autoclean;
+
 =head1 DESCRIPTION
 
 This role provides data to merge into the distribution metadata.
@@ -17,5 +19,4 @@ metadata.
 
 requires 'metadata';
 
-no Moose::Role;
 1;

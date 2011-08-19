@@ -2,7 +2,12 @@ package Dist::Zilla::Plugin::GenerateFile;
 # ABSTRACT: build a custom file from only the plugin configuration
 use Moose;
 use Moose::Autobox;
-with qw/Dist::Zilla::Role::FileGatherer Dist::Zilla::Role::TextTemplate/;
+with (
+  'Dist::Zilla::Role::FileGatherer',
+  'Dist::Zilla::Role::TextTemplate',
+);
+
+use namespace::autoclean;
 
 use Dist::Zilla::File::InMemory;
 
@@ -100,5 +105,4 @@ sub gather_files {
 }
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
 1;

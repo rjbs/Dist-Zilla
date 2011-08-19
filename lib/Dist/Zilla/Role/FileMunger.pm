@@ -3,6 +3,8 @@ package Dist::Zilla::Role::FileMunger;
 use Moose::Role;
 with 'Dist::Zilla::Role::Plugin';
 
+use namespace::autoclean;
+
 use Moose::Autobox;
 
 =head1 DESCRIPTION
@@ -26,5 +28,4 @@ sub munge_files {
   $self->munge_file($_) for $self->zilla->files->flatten;
 }
 
-no Moose::Role;
 1;

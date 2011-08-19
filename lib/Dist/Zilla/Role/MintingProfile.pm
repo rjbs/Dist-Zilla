@@ -2,6 +2,8 @@ package Dist::Zilla::Role::MintingProfile;
 # ABSTRACT: something that can find a minting profile dir
 use Moose::Role;
 
+use namespace::autoclean;
+
 use File::ShareDir;
 use Path::Class;
 
@@ -26,5 +28,4 @@ based on your profile with the:
 
 requires 'profile_dir';
 
-no Moose::Role;
 1;

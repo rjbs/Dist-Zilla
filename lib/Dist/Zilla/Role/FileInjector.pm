@@ -2,6 +2,8 @@ package Dist::Zilla::Role::FileInjector;
 # ABSTRACT: something that can add files to the distribution
 use Moose::Role;
 
+use namespace::autoclean;
+
 use Moose::Autobox;
 
 =head1 DESCRIPTION
@@ -32,5 +34,4 @@ sub add_file {
   $self->zilla->files->push($file);
 }
 
-no Moose::Role;
 1;

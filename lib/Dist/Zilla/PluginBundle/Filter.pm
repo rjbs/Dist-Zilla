@@ -4,6 +4,8 @@ use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::PluginBundle';
 
+use namespace::autoclean;
+
 use Dist::Zilla::Util;
 
 =head1 SYNOPSIS
@@ -70,5 +72,4 @@ sub bundle_config {
 }
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
 1;

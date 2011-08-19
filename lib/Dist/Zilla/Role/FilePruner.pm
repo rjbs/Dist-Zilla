@@ -3,6 +3,8 @@ package Dist::Zilla::Role::FilePruner;
 use Moose::Role;
 with 'Dist::Zilla::Role::Plugin';
 
+use namespace::autoclean;
+
 =head1 DESCRIPTION
 
 Plugins implementing FilePruner have their C<prune_files> method called once
@@ -14,5 +16,4 @@ to be included in the distribution.
 
 requires 'prune_files';
 
-no Moose::Role;
 1;

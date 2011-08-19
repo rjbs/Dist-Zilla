@@ -12,6 +12,8 @@ with(
   },
 );
 
+use namespace::autoclean;
+
 # ABSTRACT: automatically extract prereqs from your modules
 
 use Moose::Autobox;
@@ -121,7 +123,5 @@ sub register_prereqs {
   }
 }
 
-no Moose;
 __PACKAGE__->meta->make_immutable;
 1;
-

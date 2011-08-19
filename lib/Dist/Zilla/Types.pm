@@ -1,6 +1,8 @@
 package Dist::Zilla::Types;
 # ABSTRACT: dzil-specific type library
 
+use namespace::autoclean;
+
 =head1 OVERVIEW
 
 This library provides L<MooseX::Types> types for use by Dist::Zilla.  These

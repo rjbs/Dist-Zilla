@@ -3,6 +3,8 @@ package Dist::Zilla::Plugin::License;
 use Moose;
 with 'Dist::Zilla::Role::FileGatherer';
 
+use namespace::autoclean;
+
 =head1 DESCRIPTION
 
 This plugin adds a F<LICENSE> file containing the full text of the
@@ -26,5 +28,4 @@ sub gather_files {
 }
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
 1;

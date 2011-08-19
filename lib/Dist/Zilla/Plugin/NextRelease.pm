@@ -1,8 +1,14 @@
 package Dist::Zilla::Plugin::NextRelease;
 # ABSTRACT: update the next release number in your changelog
 
+use namespace::autoclean;
+
 use Moose;
-with qw/Dist::Zilla::Role::FileMunger Dist::Zilla::Role::TextTemplate Dist::Zilla::Role::AfterRelease/;
+with (
+  'Dist::Zilla::Role::FileMunger',
+  'Dist::Zilla::Role::TextTemplate',
+  'Dist::Zilla::Role::AfterRelease',
+);
 
 use DateTime 0.44; # CLDR fixes
 use String::Formatter 0.100680 stringf => {
@@ -107,7 +113,6 @@ sub after_release {
 }
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
 1;
 __END__
 

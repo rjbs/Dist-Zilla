@@ -3,6 +3,8 @@ package Dist::Zilla::Role::ExecFiles;
 use Moose::Role;
 with 'Dist::Zilla::Role::FileFinder';
 
+use namespace::autoclean;
+
 requires 'dir';
 
 sub find_files {

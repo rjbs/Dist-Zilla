@@ -4,6 +4,8 @@ package Dist::Zilla::Plugin::MetaResources;
 use Moose;
 with 'Dist::Zilla::Role::MetaProvider';
 
+use namespace::autoclean;
+
 =head1 DESCRIPTION
 
 This plugin adds resources entries to the distribution's metadata.
@@ -61,6 +63,5 @@ sub metadata {
   return { resources => $self->resources };
 }
 
-no Moose;
 __PACKAGE__->meta->make_immutable;
 1;

@@ -5,6 +5,8 @@ use Moose::Autobox;
 use Moose::Util::TypeConstraints;
 with 'Dist::Zilla::Role::FilePruner';
 
+use namespace::autoclean;
+
 =head1 SYNOPSIS
 
 This plugin tries to compensate for the stupid crap that turns up in your
@@ -80,5 +82,4 @@ sub prune_files {
 }
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
 1;

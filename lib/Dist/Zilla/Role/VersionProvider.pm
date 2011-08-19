@@ -3,6 +3,8 @@ package Dist::Zilla::Role::VersionProvider;
 use Moose::Role;
 with 'Dist::Zilla::Role::Plugin';
 
+use namespace::autoclean;
+
 =head1 DESCRIPTION
 
 Plugins implementing this role must provide a C<provide_version> method that
@@ -16,5 +18,4 @@ ignored.
 
 requires 'provide_version';
 
-no Moose::Role;
 1;

@@ -3,6 +3,8 @@ package Dist::Zilla::Role::BuildRunner;
 use Moose::Role;
 with 'Dist::Zilla::Role::Plugin';
 
+use namespace::autoclean;
+
 =head1 DESCRIPTION
 
 Plugins implementing this role have their C<build> method called during
@@ -18,5 +20,4 @@ This method will throw an exception on failure.
 
 requires 'build';
 
-no Moose::Role;
 1;

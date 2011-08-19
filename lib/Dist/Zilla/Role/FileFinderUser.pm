@@ -2,6 +2,8 @@ package Dist::Zilla::Role::FileFinderUser;
 # ABSTRACT: something that uses FileFinder plugins
 use MooseX::Role::Parameterized;
 
+use namespace::autoclean;
+
 =head1 DESCRIPTION
 
 This role enables you to search for files in the dist. This makes it easy to find specific

@@ -2,6 +2,8 @@ package Dist::Zilla::Role::TextTemplate;
 # ABSTRACT: something that renders a Text::Template template string
 use Moose::Role;
 
+use namespace::autoclean;
+
 =head1 DESCRIPTION
 
 Plugins implementing TextTemplate may call their own C<L</fill_in_string>>
@@ -66,5 +68,4 @@ sub fill_in_string {
   return $content;
 }
 
-no Moose::Role;
 1;

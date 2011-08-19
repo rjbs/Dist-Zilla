@@ -5,6 +5,8 @@ use Moose::Autobox;
 use MooseX::Types::Path::Class qw(Dir File);
 with 'Dist::Zilla::Role::FileGatherer';
 
+use namespace::autoclean;
+
 =head1 DESCRIPTION
 
 This is a very, very simple L<FileGatherer|Dist::Zilla::Role::FileGatherer>
@@ -178,5 +180,4 @@ sub _file_from_filename {
 }
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
 1;

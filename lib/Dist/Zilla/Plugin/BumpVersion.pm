@@ -3,6 +3,8 @@ package Dist::Zilla::Plugin::BumpVersion;
 use Moose;
 with 'Dist::Zilla::Role::BeforeBuild';
 
+use namespace::autoclean;
+
 =head1 SYNOPSIS
 
 B<WARNING>  This plugin is deprecated and will be removed.  It is generally
@@ -44,5 +46,4 @@ before register_component => sub {
 };
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
 1;

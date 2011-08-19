@@ -3,6 +3,8 @@ package Dist::Zilla::Plugin::MetaConfig;
 use Moose;
 with 'Dist::Zilla::Role::MetaProvider';
 
+use namespace::autoclean;
+
 =head1 DESCRIPTION
 
 This plugin adds a top-level C<x_Dist_Zilla> key to the
@@ -43,6 +45,5 @@ sub metadata {
   return { x_Dist_Zilla => $dump };
 }
 
-no Moose;
 __PACKAGE__->meta->make_immutable;
 1;

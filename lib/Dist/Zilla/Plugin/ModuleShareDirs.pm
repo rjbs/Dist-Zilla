@@ -2,6 +2,8 @@ package Dist::Zilla::Plugin::ModuleShareDirs;
 # ABSTRACT: install a directory's contents as module-based "ShareDir" content
 use Moose;
 
+use namespace::autoclean;
+
 use Moose::Autobox;
 
 =head1 SYNOPSIS
@@ -60,5 +62,4 @@ sub BUILDARGS {
 
 with 'Dist::Zilla::Role::ShareDir';
 __PACKAGE__->meta->make_immutable;
-no Moose;
 1;

@@ -3,6 +3,8 @@ use Moose;
 extends 'Config::MVP::Section';
 # ABSTRACT: a standard section in Dist::Zilla's configuration sequence
 
+use namespace::autoclean;
+
 =head1 DESCRIPTION
 
 This is a subclass of L<Config::MVP::Section>, used as the starting section by
@@ -47,4 +49,5 @@ after finalize => sub {
   $self->set_zilla($zilla);
 };
 
+__PACKAGE__->meta->make_immutable;
 1;

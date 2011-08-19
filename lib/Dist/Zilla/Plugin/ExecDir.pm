@@ -2,6 +2,8 @@ package Dist::Zilla::Plugin::ExecDir;
 # ABSTRACT: install a directory's contents as executables
 use Moose;
 
+use namespace::autoclean;
+
 use Moose::Autobox;
 
 =head1 SYNOPSIS
@@ -30,5 +32,4 @@ sub find_files {
 
 with 'Dist::Zilla::Role::ExecFiles';
 __PACKAGE__->meta->make_immutable;
-no Moose;
 1;

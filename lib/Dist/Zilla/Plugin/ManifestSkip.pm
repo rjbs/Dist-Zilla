@@ -3,6 +3,8 @@ package Dist::Zilla::Plugin::ManifestSkip;
 use Moose;
 with 'Dist::Zilla::Role::FilePruner';
 
+use namespace::autoclean;
+
 use ExtUtils::Manifest 1.54; # public maniskip routine
 use Moose::Autobox;
 
@@ -40,5 +42,4 @@ sub prune_files {
 }
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
 1;

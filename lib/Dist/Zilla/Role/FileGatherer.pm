@@ -3,6 +3,8 @@ package Dist::Zilla::Role::FileGatherer;
 use Moose::Role;
 with qw/Dist::Zilla::Role::Plugin Dist::Zilla::Role::FileInjector/;
 
+use namespace::autoclean;
+
 use Moose::Autobox;
 
 =head1 DESCRIPTION
@@ -19,5 +21,4 @@ will be called during the build process.
 
 requires 'gather_files';
 
-no Moose::Role;
 1;

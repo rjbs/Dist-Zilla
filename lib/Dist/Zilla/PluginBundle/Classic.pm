@@ -3,6 +3,8 @@ package Dist::Zilla::PluginBundle::Classic;
 use Moose;
 with 'Dist::Zilla::Role::PluginBundle::Easy';
 
+use namespace::autoclean;
+
 sub configure {
   my ($self) = @_;
 
@@ -30,7 +32,6 @@ sub configure {
 }
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
 1;
 __END__
 

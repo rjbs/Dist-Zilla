@@ -4,10 +4,11 @@ use Moose;
 extends 'Dist::Zilla::Plugin::GatherDir';
 with 'Dist::Zilla::Role::TextTemplate';
 
+use namespace::autoclean;
+
 use autodie;
 use Moose::Autobox;
 use Dist::Zilla::File::FromCode;
-use namespace::autoclean;
 
 =head1 DESCRIPTION
 
@@ -47,5 +48,4 @@ sub _file_from_filename {
 }
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
 1;

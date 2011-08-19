@@ -4,6 +4,8 @@ package Dist::Zilla::Plugin::MetaNoIndex;
 use Moose;
 with 'Dist::Zilla::Role::MetaProvider';
 
+use namespace::autoclean;
+
 =encoding utf8
 
 =head1 SYNOPSIS
@@ -109,5 +111,4 @@ sub metadata {
 }
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
 1;

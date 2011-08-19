@@ -3,6 +3,8 @@ package Dist::Zilla::Role::FileFinder;
 use Moose::Role;
 with 'Dist::Zilla::Role::Plugin';
 
+use namespace::autoclean;
+
 use Moose::Autobox;
 
 =head1 DESCRIPTION
@@ -39,5 +41,4 @@ C<find_files> as the files in the distribution may have changed.
 
 requires 'find_files';
 
-no Moose::Role;
 1;

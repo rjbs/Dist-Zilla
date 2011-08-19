@@ -4,6 +4,8 @@ use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::FileGatherer';
 
+use namespace::autoclean;
+
 =head1 DESCRIPTION
 
 This plugin exists only to be extended, and gathers all files contained in its
@@ -12,7 +14,10 @@ L<Data::Section|Data::Section>.
 
 =cut
 
-use Data::Section 0.004 -setup; # fixed header_re
+use Sub::Exporter::ForMethods;
+use Data::Section 0.004 # fixed header_re
+  { installer => Sub::Exporter::ForMethods::method_installer },
+  '-setup';
 use Dist::Zilla::File::InMemory;
 
 sub gather_files {
@@ -34,5 +39,4 @@ sub gather_files {
 }
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
 1;

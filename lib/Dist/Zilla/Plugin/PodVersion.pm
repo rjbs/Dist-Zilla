@@ -8,6 +8,8 @@ with(
   },
 );
 
+use namespace::autoclean;
+
 =head1 DESCRIPTION
 
 This plugin adds a C<=head1 VERSION> section to most perl files in the
@@ -71,5 +73,4 @@ sub munge_pod {
 }
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
 1;

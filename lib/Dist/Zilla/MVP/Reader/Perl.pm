@@ -4,6 +4,8 @@ extends 'Config::MVP::Reader';
 with qw(Config::MVP::Reader::Findable::ByExtension);
 # ABSTRACT: the reader for dist.pl files
 
+use namespace::autoclean;
+
 =head1 DESCRIPTION
 
 Dist::Zilla::Config reads in the F<dist.pl> file for a distribution.
@@ -45,6 +47,5 @@ sub read_into_assembler {
   return $self->assembler->sequence;
 }
 
-no Moose;
 __PACKAGE__->meta->make_immutable;
 1;

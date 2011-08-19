@@ -3,6 +3,10 @@ use Moose;
 extends 'Dist::Zilla::Dist::Builder';
 # ABSTRACT: a testing-enabling stand-in for Dist::Zilla
 
+# XXX: Adding this autoclean causes problem.  "Builder" and "Minter" do not
+# show in in tests.  I'm really not sure why. -- rjbs, 2011-08-19
+# use namespace::autoclean;
+
 use autodie;
 use Dist::Zilla::Chrome::Test;
 use File::pushd ();
@@ -242,4 +246,6 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
   };
 }
 
+no Moose; # XXX: namespace::autoclean caused problems -- rjbs, 2011-08-19
+__PACKAGE__->meta->make_immutable;
 1;

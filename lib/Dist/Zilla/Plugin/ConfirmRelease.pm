@@ -1,11 +1,11 @@
 package Dist::Zilla::Plugin::ConfirmRelease;
-# ABSTRACT: prompt for confirmation before releasing
-
-use ExtUtils::MakeMaker ();
-
 use Moose;
 with 'Dist::Zilla::Role::BeforeRelease';
+# ABSTRACT: prompt for confirmation before releasing
 
+use namespace::autoclean;
+
+use ExtUtils::MakeMaker ();
 use Moose::Autobox;
 
 sub before_release {
@@ -30,7 +30,6 @@ sub before_release {
   $self->log_fatal("Aborting release") unless $confirmed;
 }
 
-no Moose;
 __PACKAGE__->meta->make_immutable;
 1;
 

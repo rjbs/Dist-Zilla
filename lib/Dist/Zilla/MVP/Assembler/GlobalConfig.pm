@@ -3,6 +3,8 @@ use Moose;
 extends 'Dist::Zilla::MVP::Assembler';
 # ABSTRACT: Dist::Zilla::MVP::Assembler for global configuration
 
+use namespace::autoclean;
+
 =head1 OVERVIEW
 
 This is a subclass of L<Dist::Zilla::MVP::Assembler> used when assembling the
@@ -41,5 +43,5 @@ sub register_stash {
   return;
 }
 
-no Moose;
+__PACKAGE__->meta->make_immutable;
 1;

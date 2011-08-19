@@ -3,6 +3,8 @@ package Dist::Zilla::Role::TestRunner;
 use Moose::Role;
 with 'Dist::Zilla::Role::Plugin';
 
+use namespace::autoclean;
+
 =head1 DESCRIPTION
 
 Plugins implementing this role have their C<test> method called when
@@ -16,5 +18,4 @@ This method should throw an exception on failure.
 
 requires 'test';
 
-no Moose::Role;
 1;

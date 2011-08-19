@@ -3,6 +3,8 @@ package Dist::Zilla::Role::AfterRelease;
 use Moose::Role;
 with 'Dist::Zilla::Role::Plugin';
 
+use namespace::autoclean;
+
 =head1 DESCRIPTION
 
 Plugins implementing this role have their C<after_release> method called
@@ -12,5 +14,4 @@ once the release is done.
 
 requires 'after_release';
 
-no Moose::Role;
 1;

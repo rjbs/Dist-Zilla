@@ -3,6 +3,8 @@ use Moose;
 extends 'Config::MVP::Section';
 # ABSTRACT: a standard section in Dist::Zilla's configuration sequence
 
+use namespace::autoclean;
+
 use Config::MVP::Section 2.200001; # for not-installed error
 
 use Moose::Autobox;
@@ -45,4 +47,5 @@ after finalize => sub {
   return;
 };
 
+__PACKAGE__->meta->make_immutable;
 1;

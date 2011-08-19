@@ -3,6 +3,8 @@ package Dist::Zilla::Plugin::Prereqs;
 use Moose;
 with 'Dist::Zilla::Role::PrereqSource';
 
+use namespace::autoclean;
+
 =head1 SYNOPSIS
 
 In your F<dist.ini>:
@@ -160,6 +162,5 @@ sub register_prereqs {
   );
 }
 
-no Moose;
 __PACKAGE__->meta->make_immutable;
 1;

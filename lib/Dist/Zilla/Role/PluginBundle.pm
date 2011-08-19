@@ -2,6 +2,8 @@ package Dist::Zilla::Role::PluginBundle;
 # ABSTRACT: something that bundles a bunch of plugins
 use Moose::Role;
 
+use namespace::autoclean;
+
 =head1 DESCRIPTION
 
 When loading configuration, if the config reader encounters a PluginBundle, it
@@ -19,5 +21,4 @@ sub register_component {
 
 requires 'bundle_config';
 
-no Moose::Role;
 1;

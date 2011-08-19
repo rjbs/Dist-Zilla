@@ -3,6 +3,8 @@ package Dist::Zilla::Plugin::PodCoverageTests;
 use Moose;
 extends 'Dist::Zilla::Plugin::InlineFiles';
 
+use namespace::autoclean;
+
 =head1 DESCRIPTION
 
 This is an extension of L<Dist::Zilla::Plugin::InlineFiles>, providing the
@@ -19,7 +21,6 @@ documentation can be found, you can add:
 =cut
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
 1;
 
 __DATA__

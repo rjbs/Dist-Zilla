@@ -4,6 +4,8 @@ extends 'Config::MVP::Assembler';
 with 'Config::MVP::Assembler::WithBundles';
 # ABSTRACT: Dist::Zilla-specific subclass of Config::MVP::Assembler
 
+use namespace::autoclean;
+
 use Dist::Zilla::Util;
 
 =head1 DESCRIPTION
@@ -66,5 +68,5 @@ before add_value => sub {
   );
 };
 
-no Moose;
+__PACKAGE__->meta->make_immutable;
 1;

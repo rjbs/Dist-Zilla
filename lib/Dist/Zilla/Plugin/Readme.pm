@@ -4,6 +4,8 @@ use Moose;
 use Moose::Autobox;
 with qw/Dist::Zilla::Role::FileGatherer Dist::Zilla::Role::TextTemplate/;
 
+use namespace::autoclean;
+
 =head1 DESCRIPTION
 
 This plugin adds a very simple F<README> file to the distribution, citing the
@@ -43,5 +45,4 @@ version {{ $dist->version }}:
 }
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
 1;

@@ -3,9 +3,14 @@ package Dist::Zilla::Plugin::TemplateModule;
 use Moose;
 with qw(Dist::Zilla::Role::ModuleMaker Dist::Zilla::Role::TextTemplate);
 
+use namespace::autoclean;
+
 use autodie;
 
-use Data::Section 0.004 -setup; # fixed header_re
+use Sub::Exporter::ForMethods;
+use Data::Section 0.004 # fixed header_re
+  { installer => Sub::Exporter::ForMethods::method_installer },
+  '-setup';
 use Dist::Zilla::File::InMemory;
 
 =head1 MINTING CONFIGURATION
@@ -91,7 +96,6 @@ sub make_module {
 }
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
 1;
 __DATA__
 __[ Module.pm ]__

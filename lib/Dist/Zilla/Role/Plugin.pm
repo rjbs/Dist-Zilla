@@ -88,5 +88,4 @@ sub register_component {
   return;
 }
 
-no Moose::Role;
 1;

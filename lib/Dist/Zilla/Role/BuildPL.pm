@@ -1,5 +1,4 @@
 package Dist::Zilla::Role::BuildPL;
-
 use Moose::Role;
 
 with qw(
@@ -7,6 +6,8 @@ with qw(
   Dist::Zilla::Role::BuildRunner
   Dist::Zilla::Role::TestRunner
 );
+
+use namespace::autoclean;
 
 sub build {
   my $self = shift;

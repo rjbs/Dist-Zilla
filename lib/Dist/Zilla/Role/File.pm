@@ -55,5 +55,4 @@ has mode => (
 
 requires 'content';
 
-no Moose::Role;
 1;

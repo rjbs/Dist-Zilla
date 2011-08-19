@@ -3,6 +3,8 @@ package Dist::Zilla::Role::MintingProfile::ShareDir;
 use Moose::Role;
 with 'Dist::Zilla::Role::MintingProfile';
 
+use namespace::autoclean;
+
 use File::ShareDir;
 use Path::Class;
 
@@ -24,5 +26,4 @@ sub profile_dir {
   confess "Can't find profile $profile_name via $self";
 }
 
-no Moose::Role;
 1;

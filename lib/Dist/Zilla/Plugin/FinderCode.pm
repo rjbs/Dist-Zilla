@@ -3,9 +3,10 @@ use Moose;
 with 'Dist::Zilla::Role::FileFinder';
 # ABSTRACT: a callback-based FileFinder plugin
 
+use namespace::autoclean;
+
 use Moose::Autobox;
 use Moose::Util::TypeConstraints;
-use namespace::autoclean;
 
 has code => (
   is  => 'ro',
@@ -41,4 +42,5 @@ sub _find_via_list {
   $self->$code;
 }
 
+__PACKAGE__->meta->make_immutable;
 1;

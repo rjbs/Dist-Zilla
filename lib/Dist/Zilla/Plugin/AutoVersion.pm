@@ -6,6 +6,8 @@ with(
   'Dist::Zilla::Role::TextTemplate',
 );
 
+use namespace::autoclean;
+
 use DateTime 0.44 (); # CLDR fixes
 
 =head1 DESCRIPTION
@@ -82,5 +84,4 @@ sub provide_version {
 }
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
 1;

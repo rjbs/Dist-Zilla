@@ -3,6 +3,8 @@ package Dist::Zilla::Plugin::RemovePrereqs;
 use Moose;
 with 'Dist::Zilla::Role::PrereqSource';
 
+use namespace::autoclean;
+
 use Moose::Autobox;
 
 use MooseX::Types::Moose qw(ArrayRef);
@@ -63,6 +65,5 @@ sub register_prereqs {
   }
 }
 
-no Moose;
 __PACKAGE__->meta->make_immutable;
 1;

@@ -2,6 +2,9 @@ package Dist::Zilla::PluginBundle::FakeClassic;
 # ABSTRACT: build something more or less like a "classic" CPAN dist
 use Moose;
 extends 'Dist::Zilla::PluginBundle::Classic';
+
+use namespace::autoclean;
+
 use Moose::Autobox;
 
 around bundle_config => sub {
@@ -24,5 +27,4 @@ around bundle_config => sub {
 };
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
 1;

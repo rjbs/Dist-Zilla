@@ -4,6 +4,8 @@ package Dist::Zilla::Role::PluginBundle::Easy;
 use Moose::Role;
 with 'Dist::Zilla::Role::PluginBundle';
 
+use namespace::autoclean;
+
 =head1 SYNOPSIS
 
   package Dist::Zilla::PluginBundle::Example;

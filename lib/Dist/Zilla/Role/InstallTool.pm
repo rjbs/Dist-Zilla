@@ -6,6 +6,8 @@ with qw(
   Dist::Zilla::Role::FileInjector
 );
 
+use namespace::autoclean;
+
 use Moose::Autobox;
 
 =head1 DESCRIPTION
@@ -21,5 +23,4 @@ composed by this role.
 
 requires 'setup_installer';
 
-no Moose::Role;
 1;

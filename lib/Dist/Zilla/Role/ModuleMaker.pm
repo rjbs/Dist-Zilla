@@ -6,6 +6,8 @@ with qw(
   Dist::Zilla::Role::FileInjector
 );
 
+use namespace::autoclean;
+
 =head1 DESCRIPTION
 
 Plugins implementing this role have their C<make_module> method called for each
@@ -22,5 +24,4 @@ file for the module being created.
 
 requires 'make_module';
 
-no Moose::Role;
 1;

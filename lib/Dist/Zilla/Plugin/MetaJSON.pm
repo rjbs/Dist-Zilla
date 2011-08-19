@@ -4,6 +4,8 @@ use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::FileGatherer';
 
+use namespace::autoclean;
+
 use CPAN::Meta::Converter 2.101550; # improved downconversion
 use CPAN::Meta::Validator 2.101550; # improved downconversion
 use Dist::Zilla::File::FromCode;
@@ -76,6 +78,5 @@ sub gather_files {
   return;
 }
 
-no Moose;
 __PACKAGE__->meta->make_immutable;
 1;

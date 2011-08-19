@@ -3,6 +3,8 @@ use Moose::Role;
 with 'Dist::Zilla::Role::Stash';
 # ABSTRACT: a stash with username/password credentials
 
+use namespace::autoclean;
+
 =head1 OVERVIEW
 
 A Login stash must provide a C<username> and C<password> method.

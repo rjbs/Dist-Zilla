@@ -3,6 +3,8 @@ package Dist::Zilla::Role::ShareDir;
 use Moose::Role;
 with 'Dist::Zilla::Role::FileFinder';
 
+use namespace::autoclean;
+
 # Must return a hashref with any of the keys 'dist' and 'module'.  The 'dist'
 # must be a scalar with a directory to include and 'module' must be a hashref
 # mapping module names to directories to include.  If there are no directories

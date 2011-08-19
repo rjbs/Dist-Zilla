@@ -3,6 +3,8 @@ package Dist::Zilla::Plugin::Prereq;
 use Moose;
 extends 'Dist::Zilla::Plugin::Prereqs';
 
+use namespace::autoclean;
+
 =head1 SYNOPSIS
 
 This plugin extends C<[Prereqs]> and adds nothing.  It is the old name for
@@ -17,6 +19,5 @@ before register_component => sub {
   warn "!!! [Prereq] will be removed in Dist::Zilla v5; replace it with [Prereqs] (note the 's')\n";
 };
 
-no Moose;
 __PACKAGE__->meta->make_immutable;
 1;

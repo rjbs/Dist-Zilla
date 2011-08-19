@@ -8,6 +8,8 @@ with(
   },
 );
 
+use namespace::autoclean;
+
 use PPI;
 
 =head1 DESCRIPTION
@@ -108,5 +110,4 @@ sub munge_perl {
 }
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
 1;

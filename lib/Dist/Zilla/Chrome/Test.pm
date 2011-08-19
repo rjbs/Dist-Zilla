@@ -71,4 +71,5 @@ sub prompt_yn {
 sub prompt_any_key { return }
 
 with 'Dist::Zilla::Role::Chrome';
+__PACKAGE__->meta->make_immutable;
 1;

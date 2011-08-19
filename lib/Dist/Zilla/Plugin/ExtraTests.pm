@@ -3,6 +3,8 @@ package Dist::Zilla::Plugin::ExtraTests;
 use Moose;
 with 'Dist::Zilla::Role::FileMunger';
 
+use namespace::autoclean;
+
 =head1 DESCRIPTION
 
 This plugin rewrites tests found in the following directories:
@@ -65,5 +67,4 @@ BEGIN {
 }
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
 1;

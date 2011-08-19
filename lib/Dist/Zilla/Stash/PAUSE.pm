@@ -2,6 +2,8 @@ package Dist::Zilla::Stash::PAUSE;
 use Moose;
 # ABSTRACT: a stash of your PAUSE credentials
 
+use namespace::autoclean;
+
 =head1 OVERVIEW
 
 The PAUSE stash is a L<Login|Dist::Zilla::Role::Stash::Login> stash generally
@@ -26,4 +28,5 @@ has password => (
 );
 
 with 'Dist::Zilla::Role::Stash::Login';
+__PACKAGE__->meta->make_immutable;
 1;

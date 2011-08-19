@@ -3,11 +3,13 @@ package Dist::Zilla::Plugin::ModuleBuild;
 use List::MoreUtils qw(any uniq);
 use Moose;
 use Moose::Autobox;
-with qw(
-  Dist::Zilla::Role::BuildPL
-  Dist::Zilla::Role::PrereqSource
-  Dist::Zilla::Role::TextTemplate
+with (
+  'Dist::Zilla::Role::BuildPL',
+  'Dist::Zilla::Role::PrereqSource',
+  'Dist::Zilla::Role::TextTemplate',
 );
+
+use namespace::autoclean;
 
 use Dist::Zilla::File::InMemory;
 use List::MoreUtils qw(any uniq);
@@ -165,5 +167,4 @@ has __module_build_args => (
 );
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
 1;

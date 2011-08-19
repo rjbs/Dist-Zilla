@@ -3,6 +3,8 @@ use Moose;
 with 'Dist::Zilla::Role::Stash';
 # ABSTRACT: a stash of your default licensing terms
 
+use namespace::autoclean;
+
 has license_class => (
   is  => 'ro',
   isa => 'Str',
@@ -20,4 +22,5 @@ has copyright_year => (
   isa => 'Int',
 );
 
+__PACKAGE__->meta->make_immutable;
 1;

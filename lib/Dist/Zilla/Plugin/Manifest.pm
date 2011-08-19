@@ -4,6 +4,8 @@ use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::FileGatherer';
 
+use namespace::autoclean;
+
 use Dist::Zilla::File::FromCode;
 
 =head1 DESCRIPTION
@@ -40,5 +42,4 @@ sub gather_files {
 }
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
 1;

@@ -3,6 +3,8 @@ package Dist::Zilla::Role::BeforeMint;
 use Moose::Role;
 with 'Dist::Zilla::Role::Plugin';
 
+use namespace::autoclean;
+
 =head1 DESCRIPTION
 
 Plugins implementing this role have their C<before_mint> method called
@@ -12,5 +14,4 @@ before any other plugins are consulted.
 
 requires 'before_mint';
 
-no Moose::Role;
 1;

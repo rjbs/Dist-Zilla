@@ -2,6 +2,8 @@ package Dist::Zilla::Stash::User;
 use Moose;
 # ABSTRACT: a stash of user name and email
 
+use namespace::autoclean;
+
 has name => (
   is  => 'ro',
   isa => 'Str',
@@ -20,4 +22,5 @@ sub authors {
 }
 
 with 'Dist::Zilla::Role::Stash::Authors';
+__PACKAGE__->meta->make_immutable;
 1;

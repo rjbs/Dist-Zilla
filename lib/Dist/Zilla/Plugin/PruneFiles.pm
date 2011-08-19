@@ -4,6 +4,8 @@ use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::FilePruner';
 
+use namespace::autoclean;
+
 =head1 SYNOPSIS
 
 This plugin allows you to explicitly prune some files from your
@@ -76,5 +78,4 @@ sub prune_files {
 }
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
 1;

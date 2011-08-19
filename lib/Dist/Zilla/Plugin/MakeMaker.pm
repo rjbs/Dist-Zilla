@@ -4,6 +4,8 @@ package Dist::Zilla::Plugin::MakeMaker;
 use Moose;
 use Moose::Autobox;
 
+use namespace::autoclean;
+
 =head1 DESCRIPTION
 
 This plugin will produce an L<ExtUtils::MakeMaker>-powered F<Makefile.PL> for
@@ -214,5 +216,4 @@ has 'eumm_version' => (
 );
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
 1;

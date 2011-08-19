@@ -4,6 +4,8 @@ package Dist::Zilla::Plugin::FakeRelease;
 use Moose;
 with 'Dist::Zilla::Role::Releaser';
 
+use namespace::autoclean;
+
 has user => (
   is   => 'ro',
   isa  => 'Str',
@@ -24,7 +26,6 @@ sub release {
   $self->log('Fake release happening (nothing was really done)');
 }
 
-no Moose;
 __PACKAGE__->meta->make_immutable;
 1;
 

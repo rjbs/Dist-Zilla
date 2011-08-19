@@ -3,10 +3,10 @@ package Dist::Zilla::MintingProfile::Default;
 use Moose;
 with 'Dist::Zilla::Role::MintingProfile::ShareDir';
 
+use namespace::autoclean;
+
 use Dist::Zilla::Util;
 use Path::Class;
-
-use namespace::autoclean;
 
 =head1 DESCRIPTION
 
@@ -30,4 +30,5 @@ around profile_dir => sub {
   return $self->$orig($profile_name);
 };
 
+__PACKAGE__->meta->make_immutable;
 1;

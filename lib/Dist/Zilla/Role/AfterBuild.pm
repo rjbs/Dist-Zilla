@@ -3,6 +3,8 @@ package Dist::Zilla::Role::AfterBuild;
 use Moose::Role;
 with 'Dist::Zilla::Role::Plugin';
 
+use namespace::autoclean;
+
 =head1 DESCRIPTION
 
 Plugins implementing this role have their C<after_build> method called once all
@@ -15,5 +17,4 @@ data:
 
 requires 'after_build';
 
-no Moose::Role;
 1;

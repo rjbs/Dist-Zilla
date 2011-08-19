@@ -2,7 +2,12 @@ package Dist::Zilla::Plugin::MakeMaker::Runner;
 # ABSTRACT: Test and build dists with a Makefile.PL
 
 use Moose;
-with qw/Dist::Zilla::Role::BuildRunner Dist::Zilla::Role::TestRunner/;
+with(
+  'Dist::Zilla::Role::BuildRunner',
+  'Dist::Zilla::Role::TestRunner',
+);
+
+use namespace::autoclean;
 
 use Config;
 
@@ -34,4 +39,5 @@ sub test {
   return;
 }
 
+__PACKAGE__->meta->make_immutable;
 1;

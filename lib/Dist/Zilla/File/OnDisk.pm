@@ -2,6 +2,8 @@ package Dist::Zilla::File::OnDisk;
 # ABSTRACT: a file that comes from your filesystem
 use Moose;
 
+use namespace::autoclean;
+
 =head1 DESCRIPTION
 
 This represents a file stored on disk.  Its C<content> attribute is read from
@@ -45,5 +47,4 @@ sub _read_file {
 with 'Dist::Zilla::Role::File';
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
 1;
