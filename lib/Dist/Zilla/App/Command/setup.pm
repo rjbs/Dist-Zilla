@@ -115,7 +115,7 @@ sub execute {
 
   my $umask = umask;
   umask( $umask | 077 ); # this file might contain PAUSE pw; make it go-r
-  open my $fh, '>', $config_root->file('config.ini');
+  open my $fh, '>:encoding(UTF-8)', $config_root->file('config.ini');
 
   $fh->print("[%User]\n");
   $fh->print("name  = $realname\n");
