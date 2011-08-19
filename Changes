@@ -4,6 +4,11 @@ Revision history for {{$dist->name}}
           turn on Useqq option for Dumper, to get unicode string literals set
           properly in Makefile.PL and Build.PL without using utf8.pm
 
+          decode user input from Chrome::Term as UTF-8
+
+          update almost all Moose code to use make_immutable and
+          namespace::autoclean
+
 4.200018  2011-08-18 11:13:03 America/New_York
           correct Perl::PrereqScanner version requirement, which was too low
 
