@@ -100,6 +100,23 @@ has follow_symlinks => (
   default => 0,
 );
 
+
+=attr follow_skip
+
+Is only meaningful if "follow_symlinks" is enabled. Will be passed to 
+File::Find and affect the way in which repeating files and directories
+will be processed. Please consult File::Find docs about the 
+"follow_skip" option. 
+
+=cut
+
+has follow_skip => (
+  is  => 'ro',
+  isa => 'Num',
+  default => 1,
+);
+
+
 sub mvp_multivalue_args { qw(exclude_filename exclude_match) }
 
 =attr exclude_filename
@@ -138,7 +155,7 @@ sub gather_files {
 
   my @files;
   my $rule = File::Find::Rule->new();
-  $rule->extras({follow => $self->follow_symlinks});
+  $rule->extras({follow => $self->follow_symlinks, follow_skip => $self->follow_skip});
   FILE: for my $filename ($rule->file->in($root)) {
     my $file = file($filename)->relative($root);
 
