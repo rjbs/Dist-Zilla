@@ -42,7 +42,7 @@ This plugin will skip the modules shipped within your dist.
 =attr skips
 
 This is an arrayref of regular expressions.  Any module names matching
-any of theseregex will not be registered as prerequisites.
+any of these regex will not be registered as prerequisites.
 
 =head1 CREDITS
 
