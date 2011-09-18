@@ -52,7 +52,8 @@ sub code_only_ppi_document {
     return 1 if any { $_[1]->isa($_) } @prune;
     return 0;
   };
-  $code_only->prune($wanted);
+  my $rv = $code_only->prune($wanted);
+  Carp::croak( $code_only->errstr ) unless defined $rv;
 
   return $code_only;
 }
