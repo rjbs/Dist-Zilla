@@ -6,6 +6,7 @@ with(
   'Dist::Zilla::Role::FileFinderUser' => {
     default_finders => [ ':InstallModules', ':ExecFiles' ],
   },
+  'Dist::Zilla::Role::PPI',
 );
 
 use PPI;
@@ -69,21 +70,11 @@ sub munge_perl {
   Carp::croak("invalid characters in version")
     unless LaxVersionStr->check($version);
 
-  my $content = $file->content;
+  my $document = $self->ppi_document_for_file($file);
 
-  my $document = PPI::Document->new(\$content)
-    or Carp::croak( PPI::Document->errstr );
-
-  {
-    # This is sort of stupid.  We want to see if we assign to $VERSION already.
-    # I'm sure there's got to be a better way to do this, but what the heck --
-    # this should work and isn't too slow for me. -- rjbs, 2009-11-29
-    my $code_only = $document->clone;
-    $code_only->prune("PPI::Token::$_") for qw(Comment Pod Quote Regexp);
-    if ($code_only->serialize =~ /\$VERSION\s*=/sm) {
-      $self->log([ 'skipping %s: assigns to $VERSION', $file->name ]);
-      return;
-    }
+  if ($self->document_assigns_to_variable($document, '$VERSION')) {
+    $self->log([ 'skipping %s: assigns to $VERSION', $file->name ]);
+    return;
   }
 
   return unless my $package_stmts = $document->find('PPI::Statement::Package');
