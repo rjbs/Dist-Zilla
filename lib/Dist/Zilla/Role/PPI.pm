@@ -6,6 +6,8 @@ use Moose::Util::TypeConstraints;
 
 use namespace::autoclean;
 
+use Digest::MD5 qw(md5);
+
 =head1 DESCRIPTION
 
 This role provides some common utilities for plugins which use PPI
@@ -27,14 +29,39 @@ document for the same file, this avoids reparsing it.
   sub ppi_document_for_file {
     my ($self, $file) = @_;
 
-    return $cache{$file->name} if $cache{$file->name};
-
     my $content = $file->content;
+
+    # We cache on the MD5 checksum to detect if the document has been modified
+    # by some other plugin since it was last parsed, our document is invalid.
+    my $md5 = md5($content);
+    return $cache{$md5} if $cache{$md5};
 
     my $document = PPI::Document->new(\$content)
       or Carp::croak(PPI::Document->errstr);
 
-    return $cache{$file->name} = $document;
+    return $cache{$md5} = $document;
+  }
+
+=method save_ppi_document_to_file
+
+  my $document = $self->save_ppi_document_to_file($document,$file);
+
+Given a L<PPI::Document> and a dzil file object (anything that does
+L<Dist::Zilla::Role::File>), this method saves the serialized document in the
+file.
+
+It also updates the internal PPI document cache with the new document.
+
+=cut
+
+  sub save_ppi_document_to_file {
+    my ($self, $document, $file) = @_;
+
+    my $new_content = $document->serialize;
+
+    $cache{ md5($new_content) } = $document;
+
+    $file->content($new_content);
   }
 }
 

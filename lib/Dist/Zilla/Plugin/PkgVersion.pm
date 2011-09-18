@@ -114,7 +114,7 @@ sub munge_perl {
       and    $stmt->insert_after( PPI::Token::Whitespace->new("\n") );
   }
 
-  $file->content($document->serialize);
+  $self->save_ppi_document_to_file($document, $file);
 }
 
 __PACKAGE__->meta->make_immutable;
