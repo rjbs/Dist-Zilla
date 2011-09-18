@@ -4,6 +4,8 @@ use Moose::Role;
 
 use namespace::autoclean;
 
+use List::MoreUtils qw( any );
+
 =method ppi_document_for_file
 
   my $document = $self->ppi_document_for_file($file);
@@ -45,10 +47,9 @@ sub code_only_ppi_document {
   # Every call to ->prune iterates through the _entire document_, so calling
   # it four times in a row is really really really slow. Any time we want to
   # prune a document, we should go to great lengths to call ->prune just once.
-  my %prune = map { ("PPI::Token::$_" => 1) } qw(Comment Pod Quote Regexp);
+  my @prune = map { ("PPI::Token::$_" => 1) } qw(Comment Pod Quote Regexp);
   my $wanted = sub {
-    my $node_class = blessed($_[1]);
-    return 1 if $prune{$node_class};
+    return 1 if any { $_[1]->isa($_) } @prune;
     return 0;
   };
   $code_only->prune($wanted);
