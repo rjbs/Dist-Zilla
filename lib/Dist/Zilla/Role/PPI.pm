@@ -19,15 +19,20 @@ method returns a new L<PPI::Document> for that file's content.
 
 =cut
 
-sub ppi_document_for_file {
-  my ($self, $file) = @_;
+{
+  my %cache;
+  sub ppi_document_for_file {
+    my ($self, $file) = @_;
 
-  my $content = $file->content;
+    return $cache{$file->name} if $cache{$file->name};
 
-  my $document = PPI::Document->new(\$content)
-    or Carp::croak(PPI::Document->errstr);
+    my $content = $file->content;
 
-  return $document;
+    my $document = PPI::Document->new(\$content)
+      or Carp::croak(PPI::Document->errstr);
+
+    return $cache{$file->name} = $document;
+  }
 }
 
 sub document_assigns_to_variable {
