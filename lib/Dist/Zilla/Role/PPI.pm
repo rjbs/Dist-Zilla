@@ -17,6 +17,9 @@ This role provides some common utilities for plugins which use PPI
 Given a dzil file object (anything that does L<Dist::Zilla::Role::File>), this
 method returns a new L<PPI::Document> for that file's content.
 
+Internally, this method caches these documents. If multiple plugins want a
+document for the same file, this avoids reparsing it.
+
 =cut
 
 {
@@ -34,6 +37,14 @@ method returns a new L<PPI::Document> for that file's content.
     return $cache{$file->name} = $document;
   }
 }
+
+=method document_assigns_to_variable
+
+  if( $self->ppi_document_for_file($document, '$FOO')) { ... }
+
+This method returns true if the document assigns to the given variable.
+
+=cut
 
 sub document_assigns_to_variable {
   my ($self, $document, $variable) = @_;
