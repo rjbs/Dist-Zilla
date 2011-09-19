@@ -1,6 +1,12 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          Several improvements to how PPI is used should speed up the
+          performance of Perl file munging and scanning.  The PPI role was
+          added.  (Thanks, Dave Rolsky!)
+
+          We now use Archive::Tar::Wrapper if available, to speed up archive
+          building.  (Thanks, Dave Rolsky!)
 
 4.300000  2011-08-19 10:12:36 America/New_York
           turn on Useqq option for Dumper, to get unicode string literals set
