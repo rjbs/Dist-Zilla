@@ -13,6 +13,13 @@ our $VERSION = 1.234;
 1;
 ';
 
+my $with_version_two_lines = '
+package DZT::WVer;
+our $VERSION;
+$VERSION = 1.234;
+1;
+';
+
 my $two_packages = '
 package DZT::TP1;
 
@@ -67,6 +74,7 @@ my $tzil = Builder->from_config(
     add_files => {
       'source/lib/DZT/TP1.pm'    => $two_packages,
       'source/lib/DZT/WVer.pm'   => $with_version,
+      'source/lib/DZT/WVerTwoLines.pm' => $with_version_two_lines,
       'source/lib/DZT/R1.pm'     => $repeated_packages,
       'source/lib/DZT/Monkey.pm' => $monkey_patched,
       'source/lib/DZT/HideMe.pm' => $hide_me_comment,
@@ -105,6 +113,13 @@ unlike(
   $dzt_wver,
   qr{^\s*\$\QDZT::WVer::VERSION = '0.001';\E\s*$}m,
   "*not* added to DZT::WVer; we have one already",
+);
+
+my $dzt_wver_two_lines = $tzil->slurp_file('build/lib/DZT/WVerTwoLines.pm');
+unlike(
+  $dzt_wver,
+  qr{^\s*\$\QDZT::WVer::VERSION = '0.001';\E\s*$}m,
+  "*not* added to DZT::WVerTwoLines; we have one already",
 );
 
 my $dzt_script_pkg = $tzil->slurp_file('build/bin/script_pkg.pl');
