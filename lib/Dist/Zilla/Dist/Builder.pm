@@ -376,17 +376,41 @@ sub build_archive {
 
   my $built_in = $self->ensure_built;
 
-  my $archive = Archive::Tar->new;
-
   my $basename = join(q{},
     $self->name,
     '-',
     $self->version,
   );
 
+  my $basedir = dir($basename);
+
   $_->before_archive for $self->plugins_with(-BeforeArchive)->flatten;
 
-  my $basedir = dir($basename);
+  my $method
+    = Class::Load::load_optional_class('Archive::Tar::Wrapper')
+    ? '_build_archive_with_wrapper'
+    : '_build_archive';
+
+  my $archive = $self->$method($built_in, $basename, $basedir);
+
+  my $file = file(
+    sprintf '%s%s.tar.gz',
+    $basename,
+    ($self->is_trial ? '-TRIAL' : ''),
+  );
+
+  $self->log("writing archive to $file");
+  $archive->write("$file", 9);
+
+  return $file;
+}
+
+sub _build_archive {
+  my ($self, $built_in, $basename, $basedir) = @_;
+
+  $self->log("using Archive::Tar - installing Archive::Tar::Wrapper will make archive building faster");
+
+  my $archive = Archive::Tar->new;
   my %seen_dir;
   for my $distfile (
     sort { length($a->name) <=> length($b->name) } $self->files->flatten
@@ -414,16 +438,30 @@ sub build_archive {
     );
   }
 
-  my $file = file(
-    sprintf '%s%s.tar.gz',
-    $basename,
-    ($self->is_trial ? '-TRIAL' : ''),
-  );
+  return $archive;
+}
 
-  $self->log("writing archive to $file");
-  $archive->write("$file", 9);
+sub _build_archive_with_wrapper {
+  my ($self, $built_in, $basename, $basedir) = @_;
 
-  return $file;
+  $self->log("using Archive::Tar::Wrapper");
+
+  my $archive = Archive::Tar::Wrapper->new;
+
+  for my $distfile (
+    sort { length($a->name) <=> length($b->name) } $self->files->flatten
+  ) {
+    my $in = file($distfile->name)->dir;
+
+    my $filename = $built_in->file( $distfile->name );
+    $archive->add(
+      $basedir->file( $distfile->name )->stringify,
+      $filename->stringify,
+      { perm => (stat $filename)[2] & ~022 },
+    );
+  }
+
+  return $archive;
 }
 
 sub _prep_build_root {
