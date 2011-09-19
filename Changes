@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.300001  2011-09-19 15:46:18 America/New_York
           Several improvements to how PPI is used should speed up the
           performance of Perl file munging and scanning.  The PPI role was
           added.  (Thanks, Dave Rolsky!)
