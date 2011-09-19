@@ -24,23 +24,23 @@ document for the same file, this avoids reparsing it.
 
 =cut
 
-{
-  my %cache;
-  sub ppi_document_for_file {
-    my ($self, $file) = @_;
+my %CACHE;
 
-    my $content = $file->content;
+sub ppi_document_for_file {
+  my ($self, $file) = @_;
 
-    # We cache on the MD5 checksum to detect if the document has been modified
-    # by some other plugin since it was last parsed, our document is invalid.
-    my $md5 = md5($content);
-    return $cache{$md5} if $cache{$md5};
+  my $content = $file->content;
 
-    my $document = PPI::Document->new(\$content)
-      or Carp::croak(PPI::Document->errstr);
+  # We cache on the MD5 checksum to detect if the document has been modified
+  # by some other plugin since it was last parsed, our document is invalid.
+  my $md5 = md5($content);
+  return $CACHE{$md5} if $CACHE{$md5};
 
-    return $cache{$md5} = $document;
-  }
+  my $document = PPI::Document->new(\$content)
+    or Carp::croak(PPI::Document->errstr);
+
+  return $CACHE{$md5} = $document;
+}
 
 =method save_ppi_document_to_file
 
@@ -54,15 +54,14 @@ It also updates the internal PPI document cache with the new document.
 
 =cut
 
-  sub save_ppi_document_to_file {
-    my ($self, $document, $file) = @_;
+sub save_ppi_document_to_file {
+  my ($self, $document, $file) = @_;
 
-    my $new_content = $document->serialize;
+  my $new_content = $document->serialize;
 
-    $cache{ md5($new_content) } = $document;
+  $CACHE{ md5($new_content) } = $document;
 
-    $file->content($new_content);
-  }
+  $file->content($new_content);
 }
 
 =method document_assigns_to_variable
