@@ -386,10 +386,9 @@ sub build_archive {
 
   $_->before_archive for $self->plugins_with(-BeforeArchive)->flatten;
 
-  my $method
-    = Class::Load::load_optional_class('Archive::Tar::Wrapper')
-    ? '_build_archive_with_wrapper'
-    : '_build_archive';
+  my $method = Class::Load::load_optional_class('Archive::Tar::Wrapper')
+             ? '_build_archive_with_wrapper'
+             : '_build_archive';
 
   my $archive = $self->$method($built_in, $basename, $basedir);
 
@@ -408,7 +407,7 @@ sub build_archive {
 sub _build_archive {
   my ($self, $built_in, $basename, $basedir) = @_;
 
-  $self->log("using Archive::Tar - installing Archive::Tar::Wrapper will make archive building faster");
+  $self->log("building archive with Archive::Tar; install Archive::Tar::Wrapper for improved speed");
 
   my $archive = Archive::Tar->new;
   my %seen_dir;
@@ -444,7 +443,7 @@ sub _build_archive {
 sub _build_archive_with_wrapper {
   my ($self, $built_in, $basename, $basedir) = @_;
 
-  $self->log("using Archive::Tar::Wrapper");
+  $self->log("building archive with Archive::Tar::Wrapper");
 
   my $archive = Archive::Tar::Wrapper->new;
 
