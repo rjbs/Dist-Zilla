@@ -425,14 +425,15 @@ sub _build_archive {
     }
 
     my $filename = $built_in->file( $distfile->name );
+    my $content = do {
+      use autodie;
+      local $/;
+      open my $fh, '<', $filename;
+      <$fh>;
+    };
     $archive->add_data(
       $basedir->file( $distfile->name ),
-      do {
-        use autodie;
-        local $/;
-        open my $fh, '<', $filename;
-        <$fh>;
-      },
+      $content,
       { mode => (stat $filename)[2] & ~022 },
     );
   }

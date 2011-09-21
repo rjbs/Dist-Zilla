@@ -38,4 +38,10 @@ my ($file) = $tarball->get_files( $makefile_pl );
 
 like($file->get_content, qr{ExtUtils}, "the file contains the real content");
 
+my $zero_byte = File::Spec::Unix->catfile($basename, 'zero');
+
+my ($zero_byte_file) = $tarball->get_files( $zero_byte );
+
+is($zero_byte_file->get_content, "", "zero byte file is empty");
+
 done_testing;
