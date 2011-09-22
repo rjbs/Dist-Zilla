@@ -8,6 +8,7 @@ use Test::DZil;
 my $tzil = Builder->from_config(
     { dist_root => 'corpus/dist/DZT' },
     { add_files => {
+        'source/zero'     => '',
         'source/dist.ini' => simple_ini({
             name => 'DZT',
         }, 'GatherDir', 'MakeMaker', 'FakeRelease')
