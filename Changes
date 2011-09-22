@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.300002  2011-09-22 09:43:45 America/New_York
           fix a bug that does Weird Stuff when a 0b file exists (thanks,
           Christian Walde!)
 
