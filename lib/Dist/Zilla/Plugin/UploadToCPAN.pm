@@ -31,12 +31,17 @@ C<~/.pause>, in the same format that L<cpan-upload> requires:
   user YOUR-PAUSE-ID
   password YOUR-PAUSE-PASSWORD
 
+If neither configuration exists, it will prompt you to enter your
+username and password during the BeforeRelease phase.  Entering a
+blank username or password will abort the release.
+
 =cut
 
 {
   package
     Dist::Zilla::Plugin::UploadToCPAN::_Uploader;
   use base 'CPAN::Uploader';
+  # Report CPAN::Uploader's version, not ours:
   sub _ua_string { CPAN::Uploader->_ua_string }
 
   sub log {
@@ -205,7 +210,7 @@ sub before_release
   try {
     for my $attr (qw(username password)) {
       $problem = $attr;
-      my $test = $self->$attr;
+      die unless length $self->$attr;
     }
     undef $problem;
   };
