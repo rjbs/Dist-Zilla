@@ -141,7 +141,9 @@ sub setup_installer {
 
   my $prereqs = $self->zilla->prereqs;
   my $perl_prereq = $prereqs->requirements_for(qw(runtime requires))
-                  ->as_string_hash->{perl};
+    ->clone
+    ->add_requirements($prereqs->requirements_for(qw(build requires)))
+    ->as_string_hash->{perl};
 
   $perl_prereq = version->parse($perl_prereq)->numify if $perl_prereq;
 
@@ -156,6 +158,7 @@ sub setup_installer {
     = $prereqs->requirements_for(qw(build requires))
     ->clone
     ->add_requirements($prereqs->requirements_for(qw(test requires)))
+    ->clear_requirement('perl')
     ->as_string_hash;
 
   my %write_makefile_args = (

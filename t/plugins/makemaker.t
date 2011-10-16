@@ -14,9 +14,10 @@ use Test::DZil;
         'source/dist.ini' => simple_ini(
           'GatherDir',
           'MakeMaker',
-          [ Prereqs => { 'Foo::Bar' => '1.20' } ],
+          [ Prereqs => { 'Foo::Bar' => '1.20',      perl => '5.008' } ],
           [ Prereqs => BuildRequires => { 'Builder::Bob' => '9.901' } ],
-          [ Prereqs => TestRequires  => { 'Test::Deet'   => '7'     } ],
+          [ Prereqs => TestRequires  => { 'Test::Deet'   => '7',
+                                          perl           => '5.008' } ],
         ),
       },
     },
