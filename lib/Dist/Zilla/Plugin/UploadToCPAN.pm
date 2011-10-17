@@ -1,13 +1,14 @@
 package Dist::Zilla::Plugin::UploadToCPAN;
 # ABSTRACT: upload the dist to CPAN
 use Moose;
-with 'Dist::Zilla::Role::Releaser';
+with qw(Dist::Zilla::Role::BeforeRelease Dist::Zilla::Role::Releaser);
 
 use CPAN::Uploader 0.101550; # ua string
 use File::HomeDir;
 use File::Spec;
 use Moose::Util::TypeConstraints;
 use Scalar::Util qw(weaken);
+use Try::Tiny;
 
 use namespace::autoclean;
 
@@ -30,12 +31,17 @@ C<~/.pause>, in the same format that L<cpan-upload> requires:
   user YOUR-PAUSE-ID
   password YOUR-PAUSE-PASSWORD
 
+If neither configuration exists, it will prompt you to enter your
+username and password during the BeforeRelease phase.  Entering a
+blank username or password will abort the release.
+
 =cut
 
 {
   package
     Dist::Zilla::Plugin::UploadToCPAN::_Uploader;
   use base 'CPAN::Uploader';
+  # Report CPAN::Uploader's version, not ours:
   sub _ua_string { CPAN::Uploader->_ua_string }
 
   sub log {
@@ -195,6 +201,22 @@ has uploader => (
     return $uploader;
   }
 );
+
+sub before_release
+{
+  my $self = shift;
+
+  my $problem;
+  try {
+    for my $attr (qw(username password)) {
+      $problem = $attr;
+      die unless length $self->$attr;
+    }
+    undef $problem;
+  };
+
+  $self->log_fatal(['You need to supply a %s', $problem]) if $problem;
+}
 
 sub release {
   my ($self, $archive) = @_;
