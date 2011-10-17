@@ -202,6 +202,7 @@ The starter config may change slightly over time, but is something like this:
     author   => 'E. Xavier Ample <example@example.org>',
     license  => 'Perl_5',
     copyright_holder => 'E. Xavier Ample',
+    keywords => 'app cpan admin',
   }
 
 =cut
@@ -214,6 +215,7 @@ sub _simple_ini {
     author   => 'E. Xavier Ample <example@example.org>',
     license  => 'Perl_5',
     copyright_holder => 'E. Xavier Ample',
+    keywords => 'app cpan admin',
   });
 }
 

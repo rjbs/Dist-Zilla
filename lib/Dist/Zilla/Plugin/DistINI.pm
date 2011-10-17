@@ -76,7 +76,7 @@ sub gather_files {
   });
 
   my $code = sub {
-    my @core_attrs = qw(name authors copyright_holder);
+    my @core_attrs = qw(name authors copyright_holder keywords);
 
     my $license = ref $zilla->license;
     if ($license =~ /^Software::License::(.+)$/) {
@@ -91,6 +91,7 @@ sub gather_files {
     $content .= sprintf "license = %s\n", $license;
     $content .= sprintf "copyright_holder = %s\n", $zilla->copyright_holder;
     $content .= sprintf "copyright_year   = %s\n", (localtime)[5] + 1900;
+    $content .= sprintf "keywords = %s\n", join(' ', @{ $zilla->keywords });
     $content .= "\n";
 
     $content .= $postlude;

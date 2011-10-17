@@ -135,6 +135,7 @@ use YAML::Tiny;
         license  => 'http://b.sd/license',
       },
       version   => '0.001',
+      keywords  => [qw[ app cpan admin ]],
     );
 
     for my $key (sort keys %want) {
