@@ -10,9 +10,16 @@ use String::RewritePrefix 0.002; # better string context behavior
 {
   package
     Dist::Zilla::Util::PEA;
-  use Pod::Eventual 0.091480; # better nonpod/blank events
-  use base 'Pod::Eventual';
-  sub _new  { bless {} => shift; }
+  @Dist::Zilla::Util::PEA::ISA = ('Pod::Eventual');
+  sub _new  {
+    # Load Pod::Eventual only when used (and not yet loaded)
+    unless (exists $INC{'Pod/Eventual.pm'}) {
+      require Pod::Eventual;
+      Pod::Eventual->VERSION(0.091480); # better nonpod/blank events
+    }
+
+    bless {} => shift;
+  }
   sub handle_nonpod {
     my ($self, $event) = @_;
     return if $self->{abstract};
