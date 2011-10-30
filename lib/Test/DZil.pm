@@ -53,6 +53,7 @@ sub is_filelist {
   my @want = sort @$want;
   my @have = sort map { my $str = $_; $str =~ s{\\}{/}g; $str } @$have;
 
+  local $Test::Builder::Level = $Test::Builder::Level + 1;
   Test::More::is_deeply(\@have, \@want, $comment);
 }
 
@@ -71,6 +72,7 @@ sub is_yaml {
   my $have = YAML::Tiny->read_string($yaml)
     or die "Cannot decode YAML";
 
+  local $Test::Builder::Level = $Test::Builder::Level + 1;
   Test::Deep::cmp_deeply($have->[0], $want, $comment);
 }
 
@@ -89,6 +91,7 @@ sub is_json {
   my $have = JSON->new->ascii(1)->decode($json)
     or die "Cannot decode JSON";
 
+  local $Test::Builder::Level = $Test::Builder::Level + 1;
   Test::Deep::cmp_deeply($have, $want, $comment);
 }
 
