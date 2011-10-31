@@ -6,6 +6,7 @@ package Test::DZil;
 use Dist::Zilla::Tester;
 use Params::Util qw(_HASH0);
 use JSON 2;
+use Scalar::Util qw(blessed);
 use Test::Deep ();
 use YAML::Tiny;
 
@@ -43,7 +44,8 @@ behavior added.
   is_filelist( \@files_we_have, \@files_we_want, $desc );
 
 This test assertion compares two arrayrefs of filenames, taking care of slash
-normalization and sorting.
+normalization and sorting.  C<@files_we_have> may also contain objects that
+do L<Dist::Zilla::Role::File>.
 
 =cut
 
@@ -51,7 +53,11 @@ sub is_filelist {
   my ($have, $want, $comment) = @_;
 
   my @want = sort @$want;
-  my @have = sort map { my $str = $_; $str =~ s{\\}{/}g; $str } @$have;
+  my @have = sort map { my $str = (blessed $_ and
+                                   $_->DOES('Dist::Zilla::Role::File'))
+                            ? $_->name
+                            : $_;
+                        $str =~ s{\\}{/}g; $str } @$have;
 
   local $Test::Builder::Level = $Test::Builder::Level + 1;
   Test::More::is_deeply(\@have, \@want, $comment);
