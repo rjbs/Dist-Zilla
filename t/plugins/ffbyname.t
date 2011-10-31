@@ -140,4 +140,27 @@ is_found(Synopsis => [qw(
   lib/Dist/Zilla/Role/ModuleInfo.pm
 )]);
 
+#---------------------------------------------------------------------
+make_tzil([ 'FileFinder::ByName' => 'Everything' ],
+          [ 'FileFinder::ByName' => 'EverythingButPerl' =>
+            {skip => [qw( \.t$ (?i)\.p[lm]$ )]} ]);
+
+is_found(Everything => [ map { $_->name } @dist_files ]);
+
+is_found(EverythingButPerl => [qw(
+  Changes
+  LICENSE
+  MANIFEST
+  META.json
+  META.yml
+  README
+  Template_strict.patch
+  corpus/DZT/README
+  corpus/README
+  corpus/archives/DZT-Sample-0.01.tar.gz
+  corpus/archives/DZT-Sample-0.02.tar.gz
+  corpus/archives/DZT-Sample-0.03.tar.gz
+  corpus/gitvercheck.git
+)]);
+
 done_testing;
