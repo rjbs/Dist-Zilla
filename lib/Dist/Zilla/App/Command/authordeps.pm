@@ -6,7 +6,6 @@ use Dist::Zilla::App -command;
 
 use Dist::Zilla::Util ();
 use Moose;
-use Path::Class qw(dir);
 use List::MoreUtils qw(uniq);
 use Config::INI::Reader;
 
@@ -37,10 +36,12 @@ sub opt_spec {
 sub execute {
   my ($self, $opt, $arg) = @_;
 
+  require Path::Class;
+
   $self->log(
     $self->format_author_deps(
       $self->extract_author_deps(
-        dir(defined $opt->root ? $opt->root : '.'),
+        Path::Class::dir(defined $opt->root ? $opt->root : '.'),
         $opt->missing,
       ),
     ),
