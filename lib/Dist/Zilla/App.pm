@@ -8,7 +8,6 @@ use Carp ();
 use Dist::Zilla::MVP::Reader::Finder;
 use Dist::Zilla::Util;
 use Moose::Autobox;
-use Path::Class;
 use Try::Tiny;
 
 sub global_opt_spec {
