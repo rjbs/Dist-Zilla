@@ -176,6 +176,8 @@ sub _build_share_dir_map {
 
   my $share_dir_map = {};
 
+  $self->learning_phase('Build ShareDir Map', { plugins_with => '-ShareDir' } );
+
   for my $plugin ( $self->plugins_with(-ShareDir)->flatten ) {
     next unless my $sub_map = $plugin->share_dir_map;
 
@@ -287,13 +289,25 @@ sub build_in {
   $self->log_fatal("attempted to build " . $self->name . " a second time")
     if $self->built_in;
 
+  $self->learning_phase('Before Build', { plugins_with => '-BeforeBuild' } );
+
   $_->before_build for $self->plugins_with(-BeforeBuild)->flatten;
 
   $self->log("beginning to build " . $self->name);
 
+  $self->learning_phase('Gather Files', { plugins_with => '-FileGatherer' } );
+
   $_->gather_files     for $self->plugins_with(-FileGatherer)->flatten;
+
+  $self->learning_phase('Prune Files', { plugins_with => '-FilePruner' } );
+
   $_->prune_files      for $self->plugins_with(-FilePruner)->flatten;
+
+  $self->learning_phase('Munge Files', { plugins_with => '-FileMunger' } );
+
   $_->munge_files      for $self->plugins_with(-FileMunger)->flatten;
+
+  $self->learning_phase('Register Prerequisites', { plugins_with => '-PrereqSource' } );
 
   $_->register_prereqs for $self->plugins_with(-PrereqSource)->flatten;
 
@@ -301,6 +315,8 @@ sub build_in {
 
   # Barf if someone has already set up a prereqs entry? -- rjbs, 2010-04-13
   $self->distmeta->{prereqs} = $self->prereqs->as_string_hash;
+
+  $self->learning_phase('Install Tool Creation', { plugins_with => '-InstallTool' } );
 
   $_->setup_installer for $self->plugins_with(-InstallTool)->flatten;
 
@@ -313,6 +329,8 @@ sub build_in {
   for my $file ($self->files->flatten) {
     $self->_write_out_file($file, $build_root);
   }
+
+  $self->learning_phase('After Build', { plugins_with => '-AfterBuild' } );
 
   $_->after_build({ build_root => $build_root })
     for $self->plugins_with(-AfterBuild)->flatten;
@@ -375,6 +393,8 @@ sub build_archive {
   my ($self) = @_;
 
   my $built_in = $self->ensure_built;
+
+  $self->learning_phase('Before_Archive', { plugins_with => '-BeforeArchive' } );
 
   my $basename = join(q{},
     $self->name,
@@ -492,6 +512,7 @@ by the loaded plugins.
 sub release {
   my $self = shift;
 
+
   Carp::croak("you can't release without any Releaser plugins")
     unless my @releasers = $self->plugins_with(-Releaser)->flatten;
 
@@ -499,11 +520,17 @@ sub release {
 
   my $tgz = $self->build_archive;
 
+  $self->learning_phase('Before Release', { plugins_with => '-BeforeRelease' } );
+
   # call all plugins implementing BeforeRelease role
   $_->before_release($tgz) for $self->plugins_with(-BeforeRelease)->flatten;
 
+  $self->learning_phase('Release', { plugins_with => '-Releaser' } );
+
   # do the actual release
   $_->release($tgz) for @releasers;
+
+  $self->learning_phase('After Release', { plugins_with => '-AfterRelease' } );
 
   # call all plugins implementing AfterRelease role
   $_->after_release($tgz) for $self->plugins_with(-AfterRelease)->flatten;
@@ -628,6 +655,8 @@ does it clean up C<$directory> afterwards.
 sub run_tests_in {
   my ($self, $target) = @_;
 
+  $self->learning_phase('Run Tests', { plugins_with => '-TestRunner' } );
+
   Carp::croak("you can't test without any TestRunner plugins")
     unless my @testers = $self->plugins_with(-TestRunner)->flatten;
 
@@ -650,6 +679,8 @@ non-zero, the directory will be left in place.
 
 sub run_in_build {
   my ($self, $cmd) = @_;
+
+  $self->learning_phase('Build Runner', { plugins_with => '-BuildRunner' } );
 
   # The sort below is a cheap hack to get ModuleBuild ahead of
   # ExtUtils::MakeMaker. -- rjbs, 2010-01-05
