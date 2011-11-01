@@ -9,15 +9,22 @@ use lib 't/lib';
 use Test::DZil;
 use YAML::Tiny;
 
+sub build_meta
+{
+  my $tzil = shift;
+
+  $tzil->build;
+
+  YAML::Tiny->new->read($tzil->tempdir->file('build/META.yml'))->[0];
+} # end build_meta
+
 my $tzil = Builder->from_config(
   { dist_root => 'corpus/dist/AutoPrereqs' },
   { },
 );
 
-$tzil->build;
-
 # check found prereqs
-my $meta = YAML::Tiny->new->read($tzil->tempdir->file('build/META.yml'))->[0];
+my $meta = build_meta($tzil);
 
 my %wanted = (
   # DZPA::Main should not be extracted
@@ -48,6 +55,40 @@ is_deeply(
   $meta->{prereqs}{runtime}{requires},
   \%wanted,
   'all requires found, but no more',
+);
+
+# Try again with a customized scanner list:
+$tzil = Builder->from_config(
+  { dist_root => 'corpus/dist/AutoPrereqs' },
+  {
+    add_files => {
+      'source/dist.ini' => simple_ini(
+        qw(GatherDir ExecDir),
+        [ AutoPrereqs => { scanner => 'Perl5', extra_scanner => 'Aliased' } ],
+        [ MetaYAML => { version => 2 } ],
+      ),
+      'source/lib/DZPA/Aliased.pm' => "use aliased 'Long::Class::Name';\n",
+    },
+  },
+);
+
+# check found prereqs
+$meta = build_meta($tzil);
+
+# Moose-style prereqs should not be recognized this time:
+delete $wanted{'DZPA::Base::Moose1'};
+delete $wanted{'DZPA::Base::Moose2'};
+delete $wanted{'DZPA::Role'};
+
+$wanted{'DZPA::Skip::Blah'}  = 0; # not skipping anymore
+$wanted{'DZPA::Skip::Foo'}   = 0;
+$wanted{'aliased'}           = 0;
+$wanted{'Long::Class::Name'} = 0;
+
+is_deeply(
+  $meta->{prereqs}{runtime}{requires},
+  \%wanted,
+  'custom scanner list',
 );
 
 done_testing;
