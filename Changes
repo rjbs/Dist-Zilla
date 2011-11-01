@@ -1,6 +1,19 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          UploadToCPAN will now prompt for credentials during release, if none
+          can be found on disk (Thanks, Christopher J. Madsen!)
+
+          AutoPrereqs can now be told what scanners or extra_scanners args to
+          pass to Perl::PrereqScanner (Thanks, Christopher J. Madsen!)
+
+          Prune perl prereqs out of BUILD_REQUIRES for EU::MM, and pick the
+          highest required perl of either runtime or built requires.  (Thanks,
+          Christopher J. Madsen!)
+
+          Test routines should now properly report the calling line for
+          failures ($Test::Builder::Level is being set) (Thanks, Christopher J.
+          Madsen!)
 
 4.300002  2011-09-22 09:43:45 America/New_York
           fix a bug that does Weird Stuff when a 0b file exists (thanks,
