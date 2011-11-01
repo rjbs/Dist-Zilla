@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.300003  2011-10-31 23:58:19 America/New_York
           UploadToCPAN will now prompt for credentials during release, if none
           can be found on disk (Thanks, Christopher J. Madsen!)
 
