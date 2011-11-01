@@ -10,18 +10,16 @@ use Test::Fatal qw(exception);
 
 #---------------------------------------------------------------------
 # Install a fake upload_file method for testing purposes:
-sub Dist::Zilla::Plugin::UploadToCPAN::_Uploader::upload_file
-{
+sub Dist::Zilla::Plugin::UploadToCPAN::_Uploader::upload_file {
   my ($self, $archive) = @_;
 
   $self->log("PAUSE $_ is $self->{$_}") for qw(user password);
   $self->log("Uploading $archive") if -f $archive;
-} # end upload_file
+}
 
 #---------------------------------------------------------------------
 # Create a Builder with a simple configuration:
-sub build_tzil
-{
+sub build_tzil {
   Builder->from_config(
     { dist_root => 'corpus/dist/DZT' },
     {
@@ -30,16 +28,15 @@ sub build_tzil
       },
     },
   );
-} # end build_tzil
+}
 
 #---------------------------------------------------------------------
 # Set responses for the username and password prompts:
-sub set_responses
-{
+sub set_responses {
   my $chrome = shift->chrome;
   $chrome->set_response_for("PAUSE username: ",             shift);
   $chrome->set_response_for("PAUSE password (will echo): ", shift);
-} # end set_responses
+}
 
 #---------------------------------------------------------------------
 # Pass invalid upload_uri to UploadToCPAN as an extra precaution,

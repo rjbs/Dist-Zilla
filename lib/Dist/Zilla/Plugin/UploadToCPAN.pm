@@ -202,8 +202,7 @@ has uploader => (
   }
 );
 
-sub before_release
-{
+sub before_release {
   my $self = shift;
 
   my $problem;

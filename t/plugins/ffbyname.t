@@ -47,11 +47,10 @@ my @dist_files = map { Dist::Zilla::File::InMemory->new(
   t/release-pod-syntax.t
   t/template.t
   t/vermod.t
-); # end @dist_files
+);
 
 #---------------------------------------------------------------------
-sub is_found
-{
+sub is_found {
   my ($plugin, $want, $comment) = @_;
 
   my $have = $tzil->plugin_named($plugin)->find_files;
@@ -60,11 +59,10 @@ sub is_found
 
   local $Test::Builder::Level = $Test::Builder::Level + 1;
   is_filelist($have, $want, $comment || $plugin);
-} # end is_found
+}
 
 #---------------------------------------------------------------------
-sub make_tzil
-{
+sub make_tzil {
   $tzil = Builder->from_config(
     { dist_root => 'corpus/DZT' },
     {
@@ -76,7 +74,7 @@ sub make_tzil
 
   # Don't bother building anything, we just need a list of filenames:
   @{ $tzil->files } = @dist_files;
-} # end make_tzil
+}
 
 #---------------------------------------------------------------------
 make_tzil([ 'FileFinder::ByName' => {qw(dir corpus  skip archives)}]);

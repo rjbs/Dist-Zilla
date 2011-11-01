@@ -9,14 +9,13 @@ use lib 't/lib';
 use Test::DZil;
 use YAML::Tiny;
 
-sub build_meta
-{
+sub build_meta {
   my $tzil = shift;
 
   $tzil->build;
 
   YAML::Tiny->new->read($tzil->tempdir->file('build/META.yml'))->[0];
-} # end build_meta
+}
 
 my $tzil = Builder->from_config(
   { dist_root => 'corpus/dist/AutoPrereqs' },

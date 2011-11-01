@@ -92,8 +92,7 @@ sub mvp_aliases { +{ qw(
 
 sub mvp_multivalue_args { qw(dirs files matches skips) }
 
-sub _join_re
-{
+sub _join_re {
   my $list = shift;
 
   return undef if @$list == 0;
@@ -105,10 +104,9 @@ sub _join_re
   }
 
   $re;
-} # end _join_re
+}
 
-sub find_files
-{
+sub find_files {
   my $self = shift;
 
   my $skip  = _join_re($self->skips);
@@ -132,9 +130,8 @@ sub find_files
   $self->log_debug("Found " . $_->name) for @$files;
 
   $files;
-} # end find_files
+}
 
-#=====================================================================
 __PACKAGE__->meta->make_immutable;
 1;
 
