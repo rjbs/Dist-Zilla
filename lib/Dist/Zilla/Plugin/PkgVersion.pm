@@ -44,6 +44,16 @@ typically used when doing monkey patching or other tricky things.
 
 =cut
 
+has critic_workaround => (
+  is   => 'ro',
+  isa  => 'Bool',
+  lazy => 1,
+  required  => 1,
+  default => 0,
+);
+
+)
+
 sub munge_files {
   my ($self) = @_;
 
@@ -99,6 +109,18 @@ sub munge_perl {
     # enough in the past that I'm keeping it here until tests are better
     my $trial = $self->zilla->is_trial ? ' # TRIAL' : '';
     my $perl = "{\n  \$$package\::VERSION\x20=\x20'$version';$trial\n}\n";
+
+    if ($self->critic_workaround) {
+        # Surround the version declaration in special comments that
+        # prevent perl critic from complaining. Without these, perl
+        # critic will complain if the package declaration comes before
+        # "use strict".
+        $perl = join("\n", (
+            "## no critic",
+            $perl,
+            "## use critic"
+        ));
+    }
 
     my $version_doc = PPI::Document->new(\$perl);
     my @children = $version_doc->schildren;
