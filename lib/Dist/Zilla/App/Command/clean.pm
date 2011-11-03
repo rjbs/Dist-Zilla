@@ -4,8 +4,6 @@ package Dist::Zilla::App::Command::clean;
 # ABSTRACT: clean up after build, test, or install
 use Dist::Zilla::App -command;
 
-use File::Find::Rule;
-
 =head1 SYNOPSIS
 
   dzil clean
