@@ -32,9 +32,6 @@ directory of 'default' profile.
 
 =cut
 
-use MooseX::Types::Perl qw(DistName ModuleName);
-use Moose::Autobox;
-
 sub abstract { 'mint a new dist' }
 
 sub usage_desc { '%c %o <ModuleName>' }
@@ -52,14 +49,17 @@ sub opt_spec {
 sub validate_args {
   my ($self, $opt, $args) = @_;
 
+  require MooseX::Types::Perl;
+
   $self->usage_error('dzil new takes exactly one argument') if @$args != 1;
 
   my $name = $args->[0];
 
-  $name =~ s/::/-/g if is_ModuleName($name) and not is_DistName($name);
+  $name =~ s/::/-/g if MooseX::Types::Perl::is_ModuleName($name)
+               and not MooseX::Types::Perl::is_DistName($name);
 
   $self->usage_error("$name is not a valid distribution name")
-    unless is_DistName($name);
+    unless MooseX::Types::Perl::is_DistName($name);
 
   $args->[0] = $name;
 }
