@@ -4,13 +4,6 @@ package Dist::Zilla::App::Command::authordeps;
 use Dist::Zilla::App -command;
 # ABSTRACT: List your distribution's author dependencies
 
-use Dist::Zilla::Util ();
-use Moose;
-use List::MoreUtils qw(uniq);
-use Config::INI::Reader;
-
-use namespace::autoclean;
-
 =head1 SYNOPSIS
 
   $ dzil authordeps
@@ -37,6 +30,7 @@ sub execute {
   my ($self, $opt, $arg) = @_;
 
   require Path::Class;
+  require Dist::Zilla::Util;
 
   $self->log(
     $self->format_author_deps(
@@ -63,11 +57,14 @@ sub extract_author_deps {
   die "dzil authordeps only works on dist.ini files, and you don't have one\n"
     unless -e $ini;
 
-  my $fh     = $ini->openr;
+  my $fh = $ini->openr;
+
+  require Config::INI::Reader;
   my $config = Config::INI::Reader->read_handle($fh);
 
+  require List::MoreUtils;
   my @packages =
-    uniq
+    List::MoreUtils::uniq
     map  {; Dist::Zilla::Util->expand_config_package_name($_) }
     map  { s/\s.*//; $_ }
     grep { $_ ne '_' }
