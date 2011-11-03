@@ -42,6 +42,24 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
     init_arg => undef,
   );
 
+  has _orig_failure_count => (
+    is        => 'rw',
+    init_arg  => undef,
+  );
+
+  sub _current_failure_count {
+    scalar grep { !$_ } Test::Builder->new->summary;
+  } # end _current_failure_count
+
+  sub DEMOLISH {
+    my ($self) = @_;
+
+    my $orig_failures = $self->_orig_failure_count;
+
+    $self->diag_log if defined $orig_failures
+        and $self->_current_failure_count > $orig_failures;
+  }
+
   sub clear_log_events {
     my ($self) = @_;
     $self->chrome->logger->clear_events;
@@ -55,6 +73,14 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
   sub log_messages {
     my ($self) = @_;
     [ map {; $_->{message} } @{ $self->chrome->logger->events } ];
+  }
+
+  sub diag_log {
+    my ($self) = @_;
+
+    Test::Builder->new->diag(
+      map { "$_->{message}\n" } @{ $self->chrome->logger->events }
+    );
   }
 
   sub slurp_file {
@@ -135,6 +161,8 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
     my $zilla = $self->$orig($arg);
 
     $zilla->_set_tempdir($tempdir);
+    $zilla->_orig_failure_count($zilla->_current_failure_count)
+        if $tester_arg->{auto_diag};
 
     return $zilla;
   };
@@ -241,6 +269,8 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
     my $zilla = $self->$orig($profile_data, $arg);
 
     $zilla->_set_tempdir($tempdir);
+    $zilla->_orig_failure_count($zilla->_current_failure_count)
+        if $tester_arg->{auto_diag};
 
     return $zilla;
   };
