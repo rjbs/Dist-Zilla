@@ -34,7 +34,6 @@ directory of 'default' profile.
 
 use MooseX::Types::Perl qw(DistName ModuleName);
 use Moose::Autobox;
-use Path::Class;
 
 sub abstract { 'mint a new dist' }
 

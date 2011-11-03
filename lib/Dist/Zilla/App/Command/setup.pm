@@ -17,7 +17,6 @@ the most commonly needed F<config.ini> sections.
 =cut
 
 use autodie;
-use Path::Class;
 
 sub abstract { 'set up a basic global config file' }
 
