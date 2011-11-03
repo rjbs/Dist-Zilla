@@ -25,9 +25,7 @@ API.
 
 =cut
 
-use Moose::Autobox;
 use Try::Tiny;
-use Version::Requirements;
 
 sub abstract { "print your distribution's prerequisites" }
 
@@ -39,12 +37,13 @@ sub opt_spec {
 sub extract_dependencies {
   my ($self, $zilla, $phases, $missing) = @_;
 
-  $_->before_build for $zilla->plugins_with(-BeforeBuild)->flatten;
-  $_->gather_files for $zilla->plugins_with(-FileGatherer)->flatten;
-  $_->prune_files  for $zilla->plugins_with(-FilePruner)->flatten;
-  $_->munge_files  for $zilla->plugins_with(-FileMunger)->flatten;
-  $_->register_prereqs for $zilla->plugins_with(-PrereqSource)->flatten;
+  $_->before_build for @{ $zilla->plugins_with(-BeforeBuild) };
+  $_->gather_files for @{ $zilla->plugins_with(-FileGatherer) };
+  $_->prune_files  for @{ $zilla->plugins_with(-FilePruner) };
+  $_->munge_files  for @{ $zilla->plugins_with(-FileMunger) };
+  $_->register_prereqs for @{ $zilla->plugins_with(-PrereqSource) };
 
+  require Version::Requirements;
   my $req = Version::Requirements->new;
   my $prereqs = $zilla->prereqs;
 
@@ -53,17 +52,19 @@ sub extract_dependencies {
     $req->add_requirements( $prereqs->requirements_for($phase, 'recommends') );
   }
 
+  require Class::Load;
+
   my @required = grep { $_ ne 'perl' } $req->required_modules;
   if ($missing) {
     my $is_required = sub {
       my $mod = shift;
       # it is required if it's not already installed
-      return 1 if !try { Class::MOP::load_class($mod); 1 };
+      return 1 unless Class::Load::try_load_class($mod);
       # it is required if the version can't be parsed
       # right now $_->VERSION by itself will die if the version can't
       # be parsed, but this may change in the future to only die in that
       # way if an arg is passed
-      return 1 if !try { $mod->VERSION(0); 1 };
+      return 1 if ! try { $mod->VERSION(0); 1 };
       # it is required if the version doesn't meet the requirement
       return !$req->accepts_module($mod => $mod->VERSION);
     };
