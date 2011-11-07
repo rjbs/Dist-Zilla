@@ -197,5 +197,29 @@ unlike(
   );
 }
 
-done_testing;
+{
+    my $tzil_nocritic = Builder->from_config(
+        { dist_root => 'corpus/dist/DZT' },
+        {
+            add_files => {
+                'source/dist.ini' => simple_ini(
+                    'GatherDir', 'ExecDir',
+                    ['PkgVersion' => {
+                        no_critic => 1,
+                    }]
+                ),
+            },
+        },
+    );
 
+    $tzil_nocritic->build;
+
+    my $dzt_sample_nocritic = $tzil_nocritic->slurp_file('build/lib/DZT/Sample.pm');
+    like(
+        $dzt_sample_nocritic,
+        qr{^\Q## no critic\E\s*?\n.*^\s*\$\QDZT::Sample::VERSION = '0.001';\E\s*?\n.*^\Q## use critic\E\s*$}sm,
+        "added version with surrounding 'no critic'/'use critic' comments when no_critic=1",
+    );
+}
+
+done_testing;
