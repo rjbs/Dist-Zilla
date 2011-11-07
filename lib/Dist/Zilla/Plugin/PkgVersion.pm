@@ -123,11 +123,7 @@ sub munge_perl {
         # prevent perl critic from complaining. Without these,
         # Perl::Critic will complain if the package declaration comes
         # before "use strict".
-        $perl = join("\n", (
-            "## no critic",
-            $perl,
-            "## use critic"
-        ));
+        $perl = "## no critic\n" . $perl . "## use critic\n";
     }
 
     my $version_doc = PPI::Document->new(\$perl);
