@@ -42,9 +42,20 @@ C<package> keyword and the package name, like:
 This sort of declaration is also ignored by the CPAN toolchain, and is
 typically used when doing monkey patching or other tricky things.
 
+=head2 PERL CRITIC WORKAROUND
+
+Since this plugin adds the version declaration right after the package
+declaration and before any other code, the version will probably
+declared before <use strict;>. This will cause Perl::Critic to
+complain. If this happens to you, you can set the <no_critic> option
+to tell Critic to ignore the version declaration:
+
+  [PkgVersion]
+  no_critic = 1
+
 =cut
 
-has critic_workaround => (
+has no_critic => (
   is   => 'ro',
   isa  => 'Bool',
   lazy => 1,
@@ -107,20 +118,17 @@ sub munge_perl {
     my $trial = $self->zilla->is_trial ? ' # TRIAL' : '';
     my $perl = "{\n  \$$package\::VERSION\x20=\x20'$version';$trial\n}\n";
 
-    if ($self->critic_workaround) {
+    if ($self->no_critic) {
         # Surround the version declaration in special comments that
-        # prevent perl critic from complaining. Without these, perl
-        # critic will complain if the package declaration comes before
-        # "use strict".
-        $perl = join("\n", (
-            "## no critic",
-            $perl,
-            "## use critic"
-        ));
+        # prevent perl critic from complaining. Without these,
+        # Perl::Critic will complain if the package declaration comes
+        # before "use strict".
+        $perl = "## no critic\n" . $perl . "## use critic\n";
     }
 
     my $version_doc = PPI::Document->new(\$perl);
-    my @children = $version_doc->schildren;
+    my @children = $version_doc->children;
+    unshift @children, PPI::Token::Whitespace->new("\n");
 
     $self->log_debug([
       'adding $VERSION assignment to %s in %s',
@@ -128,9 +136,10 @@ sub munge_perl {
       $file->name,
     ]);
 
-    Carp::carp("error inserting version in " . $file->name)
-      unless $stmt->insert_after($children[0]->clone)
-      and    $stmt->insert_after( PPI::Token::Whitespace->new("\n") );
+    for my $child (reverse @children)  {
+        Carp::carp("error inserting version in " . $file->name)
+          unless $stmt->insert_after($child->clone);
+    }
   }
 
   $self->save_ppi_document_to_file($document, $file);
