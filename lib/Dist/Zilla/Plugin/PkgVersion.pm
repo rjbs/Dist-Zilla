@@ -44,7 +44,7 @@ typically used when doing monkey patching or other tricky things.
 
 =cut
 
-has critic_workaround => (
+has no_critic => (
   is   => 'ro',
   isa  => 'Bool',
   lazy => 1,
@@ -107,7 +107,7 @@ sub munge_perl {
     my $trial = $self->zilla->is_trial ? ' # TRIAL' : '';
     my $perl = "{\n  \$$package\::VERSION\x20=\x20'$version';$trial\n}\n";
 
-    if ($self->critic_workaround) {
+    if ($self->no_critic) {
         # Surround the version declaration in special comments that
         # prevent perl critic from complaining. Without these, perl
         # critic will complain if the package declaration comes before
