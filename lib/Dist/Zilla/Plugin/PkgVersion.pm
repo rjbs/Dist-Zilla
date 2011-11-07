@@ -109,9 +109,9 @@ sub munge_perl {
 
     if ($self->no_critic) {
         # Surround the version declaration in special comments that
-        # prevent perl critic from complaining. Without these, perl
-        # critic will complain if the package declaration comes before
-        # "use strict".
+        # prevent perl critic from complaining. Without these,
+        # Perl::Critic will complain if the package declaration comes
+        # before "use strict".
         $perl = join("\n", (
             "## no critic",
             $perl,
