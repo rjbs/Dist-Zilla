@@ -1,5 +1,5 @@
 #!perl
-# Test the FileFinder::ByName plugin
+# Test the FileFinder::ByName and FileFinder::Filter plugins
 use strict;
 use warnings;
 
@@ -77,7 +77,8 @@ sub make_tzil {
 }
 
 #---------------------------------------------------------------------
-make_tzil([ 'FileFinder::ByName' => {qw(dir corpus  skip archives)}]);
+make_tzil([ 'FileFinder::ByName' => {qw(dir corpus  skip archives)}],
+          [ 'FileFinder::Filter' => {qw(finder FileFinder::ByName  skip DZT)}]);
 
 is_found('FileFinder::ByName' => [qw(
   corpus/DZT/README
@@ -86,6 +87,11 @@ is_found('FileFinder::ByName' => [qw(
   corpus/README
   corpus/gitvercheck.git
 )], 'dir corpus skip archives');
+
+is_found('FileFinder::Filter' => [qw(
+  corpus/README
+  corpus/gitvercheck.git
+)], 'filter DZT');
 
 #---------------------------------------------------------------------
 make_tzil(
@@ -96,6 +102,10 @@ make_tzil(
                                           dir  => [qw(bin lib)],
                                           match => '\.pm$',
                                           skip  => '(?i)version' }],
+  [ 'FileFinder::Filter' => Everything =>
+    { finder => [qw(InBin AllPerl Plugins Synopsis)] }],
+  [ 'FileFinder::Filter' => NoPluginM =>
+    { finder => 'AllPerl', skip => 'Plugin/M' }],
 );
 
 is_found(InBin => [qw(
@@ -135,6 +145,32 @@ is_found(Synopsis => [qw(
   lib/Dist/Zilla/Plugin/Metadata.pm
   lib/Dist/Zilla/Plugin/ModuleBuild/Custom.pm
   lib/Dist/Zilla/Plugin/TemplateCJM.pm
+  lib/Dist/Zilla/Role/ModuleInfo.pm
+)]);
+
+is_found(Everything => [qw(
+  bin/foo.pl
+  bin/.hidden/foo.pl
+  corpus/DZT/lib/DZT/Sample.pm
+  lib/Dist/Zilla/Plugin/ArchiveRelease.pm
+  lib/Dist/Zilla/Plugin/FindFiles.pm
+  lib/Dist/Zilla/Plugin/GitVersionCheckCJM.pm
+  lib/Dist/Zilla/Plugin/Metadata.pm
+  lib/Dist/Zilla/Plugin/ModuleBuild/Custom.pm
+  lib/Dist/Zilla/Plugin/TemplateCJM.pm
+  lib/Dist/Zilla/Plugin/VersionFromModule.pm
+  lib/Dist/Zilla/Role/ModuleInfo.pm
+)]);
+
+is_found(NoPluginM => [qw(
+  bin/foo.pl
+  bin/.hidden/foo.pl
+  corpus/DZT/lib/DZT/Sample.pm
+  lib/Dist/Zilla/Plugin/ArchiveRelease.pm
+  lib/Dist/Zilla/Plugin/FindFiles.pm
+  lib/Dist/Zilla/Plugin/GitVersionCheckCJM.pm
+  lib/Dist/Zilla/Plugin/TemplateCJM.pm
+  lib/Dist/Zilla/Plugin/VersionFromModule.pm
   lib/Dist/Zilla/Role/ModuleInfo.pm
 )]);
 
