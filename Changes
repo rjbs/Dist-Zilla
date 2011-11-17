@@ -4,6 +4,9 @@ Revision history for {{$dist->name}}
           a new FileFinder plugin has been added, FileFinder::Filter
           (Thanks, Christopher J. Madsen!)
 
+          Your PAUSE password will now no be echoed if entered at the
+          prompt (Mike Doherty)
+
 4.300003  2011-10-31 23:58:19 America/New_York
           If no credentials are found on disk, UploadToCPAN will now prompt for
           credentials during the BeforeRelease phase, not during release
