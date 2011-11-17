@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::More 0.88;
+use Test::More 0.88 tests => 16;
 
 use lib 't/lib';
 
@@ -34,8 +34,8 @@ sub build_tzil {
 # Set responses for the username and password prompts:
 sub set_responses {
   my $chrome = shift->chrome;
-  $chrome->set_response_for("PAUSE username: ",             shift);
-  $chrome->set_response_for("PAUSE password (will echo): ", shift);
+  $chrome->set_response_for('PAUSE username: ', shift);
+  $chrome->set_response_for('PAUSE password: ', shift);
 }
 
 #---------------------------------------------------------------------
@@ -141,6 +141,3 @@ my %safety_first = (qw(upload_uri http://bogus.example.com/do/not/upload/),
     "no release without password"
   );
 }
-
-#---------------------------------------------------------------------
-done_testing;
