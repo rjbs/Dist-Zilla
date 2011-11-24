@@ -70,14 +70,6 @@ sub extract_author_deps {
 
   seek $fh, 0, 0;
 
-  while (<$fh>) {
-    chomp;
-    next unless /\A\s*;\s*authordep\s*(\S+)\s*\z/;
-    push @packages, $1;
-  }
-
-  seek $fh, 0, 0;
-
   my $in_filter = 0;
   while (<$fh>) {
     next unless $in_filter or /^\[\s*\@Filter/;
@@ -87,6 +79,21 @@ sub extract_author_deps {
     next unless /\A-bundle\s*=\s*([^;]+)/;
     push @packages, Dist::Zilla::Util->expand_config_package_name($1);
   }
+
+  seek $fh, 0, 0;
+  my @manual;
+
+  while (<$fh>) {
+    chomp;
+    next unless /\A\s*;\s*authordep\s*(\S+)\s*\z/;
+    push @manual, $1;
+  }
+
+  # Any "; authordep " is inserted at the beginning of the list
+  # in the file order so the user can control the order of at least a part of
+  # the plugin list
+  splice(@packages, 0, 0, @manual);
+
 
   require List::MoreUtils;
 
