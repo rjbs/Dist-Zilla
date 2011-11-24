@@ -62,9 +62,7 @@ sub extract_author_deps {
   require Config::INI::Reader;
   my $config = Config::INI::Reader->read_handle($fh);
 
-  require List::MoreUtils;
   my @packages =
-    List::MoreUtils::uniq
     map  {; Dist::Zilla::Util->expand_config_package_name($_) }
     map  { s/\s.*//; $_ }
     grep { $_ ne '_' }
@@ -90,9 +88,12 @@ sub extract_author_deps {
     push @packages, Dist::Zilla::Util->expand_config_package_name($1);
   }
 
+  require List::MoreUtils;
+
   return
     grep { !/^inc::/ }
     grep { $missing ? (! eval "require $_; 1;") : 1 }
+    List::MoreUtils::uniq
     @packages;
 }
 
