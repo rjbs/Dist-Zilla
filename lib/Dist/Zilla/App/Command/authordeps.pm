@@ -94,6 +94,14 @@ sub extract_author_deps {
   # the plugin list
   splice(@packages, 0, 0, @manual);
 
+  # Move inc:: first in list as they may impact the loading of other
+  # plugins (in particular local ones).
+  # Also order inc:: so that thoses that want to hack @INC with inc:: plugins
+  # can have a consistant playground.
+  # We don't sort the others packages to preserve the same (random) ordering
+  # for the common case (no inc::, no '; authordep') as in previous dzil
+  # releases.
+  @packages = ((sort grep /^inc::/, @packages), (grep !/^inc::/, @packages));
 
   require List::MoreUtils;
 
