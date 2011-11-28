@@ -10,7 +10,32 @@ with(
     finder_arg_names => [ 'test_finder' ],
     default_finders  => [ ':TestFiles' ],
   },
+  'Dist::Zilla::Role::FileFinderUser' => {
+    method           => 'found_configure_files',
+    finder_arg_names => [ 'configure_finder' ],
+    default_finders  => [],
+  },
 );
+
+=attr finder
+
+This is the name of a L<FileFinder|Dist::Zilla::Role::FileFinder>
+whose files will be scanned to determine runtime prerequisites.  It
+may be specified multiple times.  The default value is
+C<:InstallModules> and C<:ExecFiles>.
+
+=attr test_finder
+
+Just like C<finder>, but for test-phase prerequisites.  The default
+value is C<:TestFiles>.
+
+=attr configure_finder
+
+Just like C<finder>, but for configure-phase prerequisites.  There is
+no default value; AutoPrereqs will not determine configure-phase
+prerequisites unless you set configure_finder.
+
+=cut
 
 use namespace::autoclean;
 
@@ -86,7 +111,6 @@ has skips => (
 sub register_prereqs {
   my $self  = shift;
 
-  my $req = Version::Requirements->new;
   my @modules;
 
   my $scanner = Perl::PrereqScanner->new(
@@ -95,6 +119,7 @@ sub register_prereqs {
   );
 
   my @sets = (
+    [ configure => 'found_configure_files' ], # must come before runtime
     [ runtime => 'found_files'      ],
     [ test    => 'found_test_files' ],
   );
@@ -104,6 +129,7 @@ sub register_prereqs {
   for my $fileset (@sets) {
     my ($phase, $method) = @$fileset;
 
+    my $req   = Version::Requirements->new;
     my $files = $self->$method;
 
     foreach my $file (@$files) {
