@@ -20,6 +20,18 @@ Revision history for {{$dist->name}}
 
 END_CHANGES
 
+my $changes_with_delimeter_configured = <<'END_CHANGES';
+Revision history for {{$dist->name}}
+
+{{{$NEXT}}}
+          got included in an awesome test suite
+          added URL shorcut {{cpan $module}}
+
+0.000     2009-01-02
+          finally left home, proving to mom I can make it!
+
+END_CHANGES
+
 {
   my $tzil = Builder->from_config(
     { dist_root => 'corpus/dist/DZT' },
@@ -159,6 +171,30 @@ END_CHANGES
     $tzil->slurp_file('build/Changes'),
     qr{UTC},
     "setting a custom time_zone works",
+  );
+}
+
+{
+  my $tzil = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/Changes' => $changes_with_delimeter_configured,
+        'source/dist.ini' => simple_ini(
+                'GatherDir',
+                [ NextRelease => { delimeter => '{{{ }}}', } ],
+                'FakeRelease',
+        ),
+      },
+    },
+  );
+
+  $tzil->build;
+
+  like(
+    $tzil->slurp_file('build/Changes'),
+    qr({{cpan\s+\$module}}),
+    "setting a custom delimeter works",
   );
 }
 
