@@ -11,6 +11,9 @@ use Moose::Autobox;
 In your F<dist.ini>:
 
   [ShareDir]
+  dir = share
+
+  If no C<dir> is provided, the default is F<share>.
 
 =cut
 
