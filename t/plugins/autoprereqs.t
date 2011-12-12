@@ -56,6 +56,42 @@ is_deeply(
   'all requires found, but no more',
 );
 
+# Try again with configure_finder:
+$tzil = Builder->from_config(
+  { dist_root => 'corpus/dist/AutoPrereqs' },
+  {
+    add_files => {
+      'source/dist.ini' => simple_ini(
+        qw(GatherDir ExecDir),
+        [ AutoPrereqs => { skip             => '^DZPA::Skip',
+                           configure_finder => ':IncModules' } ],
+        [ MetaYAML => { version => 2 } ],
+      ),
+      'source/inc/DZPA.pm' => "use DZPA::NotInDist;\n use DZPA::Configure;\n",
+    },
+  },
+);
+
+# check found prereqs
+$meta = build_meta($tzil);
+
+is_deeply(
+  $meta->{prereqs}{runtime}{requires},
+  \%wanted,
+  'configure_finder did not change requires',
+);
+
+my %want_configure = (
+  'DZPA::Configure'       => 0,
+  'DZPA::NotInDist'       => 0,
+);
+
+is_deeply(
+  $meta->{prereqs}{configure}{requires},
+  \%want_configure,
+  'configure_requires is correct',
+);
+
 # Try again with a customized scanner list:
 $tzil = Builder->from_config(
   { dist_root => 'corpus/dist/AutoPrereqs' },
