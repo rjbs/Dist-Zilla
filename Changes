@@ -1,6 +1,11 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          Dist::Zilla::Tester objects now have a diag_log method to
+          dump the log messages to Test::Builder's diag function.
+          Adding "auto_log => 1" to the tester parameters does this
+          automatically during destruction if any tests failed since
+          the object was constructed (Thanks, Christopher J. Madsen!)
 
 4.300009  2012-02-21 19:38:29 America/New_York
           PruneCruft also excludes the _Inline/ directory and MYMETA.json
