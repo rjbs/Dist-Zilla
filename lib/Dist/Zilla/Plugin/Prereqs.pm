@@ -33,11 +33,12 @@ added like this:
   Fitz::Fotz    = 1.23
   Text::SoundEx = 3
 
-If the name is the CamelCase concatenation of a phase and relationship, it will
-set those parameters implicitly.  Doing this is convenient, unless you make a
-typo which causes the name to have no meaning and your prereqs to be confused.
-Because of that, you should consider always giving the phase and type
-explicitly.
+If the name is the CamelCase concatenation of a phase and relationship
+(or just a relationship), it will set those parameters implicitly.  If
+you use a custom name, but it does not specify the relationship, and
+you didn't specify either C<-phase> or C<-relationship>, it throws the
+error C<No -phase or -relationship specified>.  This is to prevent a
+typo that makes the name meaningless from slipping by unnoticed.
 
 The example below is equivalent to the example above, except for the name of
 the resulting plugin:
@@ -82,34 +83,12 @@ understand version 1.x CPAN::Meta files.
 
 =cut
 
-sub __from_name {
-  my ($self) = @_;
-  my $name = $self->plugin_name;
-
-  # such as C<configure>, C<build>, C<test> and C<runtime>.  Values are
-  # relationship such as C<requires>, C<prefers>, or C<recommends>.  The
-  # phase component is optional and will default to Runtime.
-
-  my ($phase, $type) = $name =~ /\A
-    (Build|Test|Runtime|Configure|Develop)?
-    (Requires|Recommends|Suggests|Conflicts)
-  \z/x;
-
-  return ($phase, $type);
-}
-
 has prereq_phase => (
   is   => 'ro',
   isa  => 'Str',
   lazy => 1,
   init_arg => 'phase',
-  default  => sub {
-    my ($self) = @_;
-    my ($phase, $type) = $self->__from_name;
-    $phase ||= 'runtime';
-    $phase = lc $phase;
-    return $phase;
-  },
+  default  => 'runtime',
 );
 
 has prereq_type => (
@@ -117,13 +96,7 @@ has prereq_type => (
   isa  => 'Str',
   lazy => 1,
   init_arg => 'type',
-  default  => sub {
-    my ($self) = @_;
-    my ($phase, $type) = $self->__from_name;
-    $type ||= 'requires';
-    $type = lc $type;
-    return $type;
-  },
+  default  => 'requires',
 );
 
 around dump_config => sub {
@@ -165,6 +138,25 @@ sub BUILDARGS {
   }
 
   confess "don't try to pass -_prereq as a build arg!" if $other{_prereq};
+
+  # Handle magic plugin names:
+  unless (($other{phase} and $other{type})
+          or $name =~ m! (?: \A | / ) Prereqs? \z !x) {
+
+    my ($phase, $type) = $name =~ /\A
+      (Build|Test|Runtime|Configure|Develop)?
+      (Requires|Recommends|Suggests|Conflicts)
+    \z/x;
+
+    if ($type) {
+      $other{phase} ||= lc $phase if defined $phase;
+      $other{type}  ||= lc $type;
+    } else {
+      $zilla->chrome->logger->log_fatal({ prefix => "[$name] " },
+                                      "No -phase or -relationship specified")
+        unless $other{phase} or $other{type};
+    }
+  }
 
   return {
     zilla => $zilla,
