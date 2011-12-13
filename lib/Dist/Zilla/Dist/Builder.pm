@@ -362,6 +362,22 @@ sub ensure_built_in {
   $self->build_in($root);
 }
 
+# What the directory will be called for built source trees.
+sub _dist_basename {
+  my ($self) = @_;
+  return sprintf( "%s-%s",
+    $self->name, $self->version,
+  );
+}
+
+# what the .tar.gz will be called
+sub _dist_tar_basename {
+  my ($self) = @_;
+  return sprintf( "%s-%s%s.tar.gz",
+    $self->name, $self->version, ( $self->is_trial ? '-TRIAL' : '' )
+  );
+}
+
 =method build_archive
 
   $zilla->build_archive;
@@ -376,27 +392,15 @@ sub build_archive {
 
   my $built_in = $self->ensure_built;
 
-  my $basename = join(q{},
-    $self->name,
-    '-',
-    $self->version,
-  );
-
-  my $basedir = dir($basename);
-
   $_->before_archive for $self->plugins_with(-BeforeArchive)->flatten;
 
   my $method = Class::Load::load_optional_class('Archive::Tar::Wrapper')
              ? '_build_archive_with_wrapper'
              : '_build_archive';
 
-  my $archive = $self->$method($built_in, $basename, $basedir);
+  my $archive = $self->$method($built_in, $self->_dist_basename, dir( $self->_dist_basename ) );
 
-  my $file = file(
-    sprintf '%s%s.tar.gz',
-    $basename,
-    ($self->is_trial ? '-TRIAL' : ''),
-  );
+  my $file = file( $self->_dist_tar_basename );
 
   $self->log("writing archive to $file");
   $archive->write("$file", 9);
@@ -467,7 +471,7 @@ sub _build_archive_with_wrapper {
 sub _prep_build_root {
   my ($self, $build_root) = @_;
 
-  my $default_name = $self->name . q{-} . $self->version;
+  my $default_name = $self->_dist_basename;
   $build_root = dir($build_root || $default_name);
 
   $build_root->mkpath unless -d $build_root;
