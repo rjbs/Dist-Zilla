@@ -56,11 +56,16 @@ sub prompt_str {
   my $default = $arg->{default};
   my $check   = $arg->{check};
 
+  if ($arg->{noecho}) {
+    require Term::ReadKey;
+    Term::ReadKey::ReadMode('noecho');
+  }
   my $input_bytes = $self->term_ui->get_reply(
     prompt => $prompt,
     allow  => $check || sub { defined $_[0] and length $_[0] },
     (defined $default ? (default => $default) : ()),
   );
+  Term::ReadKey::ReadMode('normal') if $arg->{noecho};
 
   my $input = decode_utf8( $input_bytes );
   chomp $input;

@@ -111,7 +111,7 @@ has password => (
     my ($self) = @_;
     return $self->_credential('password')
         || $self->pause_cfg->{password}
-        || $self->zilla->chrome->prompt_str("PAUSE password (will echo): ");
+        || $self->zilla->chrome->prompt_str('PAUSE password: ', { noecho => 1 });
   },
 );
 
