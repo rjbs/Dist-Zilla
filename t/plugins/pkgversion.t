@@ -197,11 +197,26 @@ unlike(
   );
 }
 
+# nocritic section
 {
+
+    my $nocritic_src = '
+package DZT::NoCritic;
+use strict;
+1;
+';
+
+    my $nocritic_trial_src = '
+package DZT::NoCriticTrial;
+use strict;
+1;
+';
+
     my $tzil_nocritic = Builder->from_config(
         { dist_root => 'corpus/dist/DZT' },
         {
             add_files => {
+                'source/lib/DZT/NoCritic.pm' => $nocritic_src,
                 'source/dist.ini' => simple_ini(
                     'GatherDir', 'ExecDir',
                     ['PkgVersion' => {
@@ -212,37 +227,39 @@ unlike(
         },
     );
 
-    $tzil_nocritic->build;
+    my $tzil_nocritic_trial = do {
+        local $ENV{TRIAL} = 1;
+        Builder->from_config(
+            { dist_root => 'corpus/dist/DZT' },
+            {
+                add_files => {
+                    'source/lib/DZT/NoCriticTrial.pm' => $nocritic_trial_src,
+                    'source/dist.ini' => simple_ini(
+                        'GatherDir', 'ExecDir',
+                        ['PkgVersion' => {
+                            no_critic => 1,
+                        }]
+                    ),
+                },
+            },
+        );
+    };
 
-    my $dzt_sample_nocritic = $tzil_nocritic->slurp_file('build/lib/DZT/Sample.pm');
+    $tzil_nocritic->build;
+    $tzil_nocritic_trial->build;
+
+    my $nocritic_built = $tzil_nocritic->slurp_file('build/lib/DZT/NoCritic.pm');
+    my $nocritic_trial_built = $tzil_nocritic_trial->slurp_file('build/lib/DZT/NoCriticTrial.pm');
+
     like(
-        $dzt_sample_nocritic,
-        qr{^\s*\$\QDZT::Sample::VERSION = '0.001'; ## no critic\E\s*$}m,
+        $nocritic_built,
+        qr{^\s*\$\QDZT::NoCritic::VERSION = '0.001'; ## no critic\E\s*$}m,
         "added version with 'no critic' comment when no_critic=1",
     );
 
-    local $ENV{TRIAL} = 1;
-
-    my $tzil_nocritic_trial = Builder->from_config(
-        { dist_root => 'corpus/dist/DZT' },
-        {
-            add_files => {
-                'source/dist.ini' => simple_ini(
-                    'GatherDir', 'ExecDir',
-                    ['PkgVersion' => {
-                        no_critic => 1,
-                    }]
-                ),
-            },
-        },
-    );
-
-    $tzil_nocritic_trial->build;
-
-    my $dzt_sample_nocritic_trial = $tzil_nocritic_trial->slurp_file('build/lib/DZT/Sample.pm');
     like(
-        $dzt_sample_nocritic_trial,
-        qr{^\s*\Q## no critic\E\s*?\n\s*\$\QDZT::Sample::VERSION = '0.001'; # TRIAL\E\s*?\n\s*\Q## use critic\E\s*$}m,
+        $nocritic_trial_built,
+        qr{^\s*\Q## no critic\E\s*?\n\s*\$\QDZT::NoCriticTrial::VERSION = '0.001'; # TRIAL\E\s*?\n\s*\Q## use critic\E\s*$}m,
         "added version with 'TRIAL' comment and surrounding 'no critic'/'use critic' comments when no_critic=1 and \$ENV{TRIAL}=1",
     );
 }
