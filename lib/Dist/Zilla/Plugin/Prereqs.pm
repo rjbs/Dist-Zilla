@@ -146,6 +146,8 @@ has _prereq => (
   default => sub { {} },
 );
 
+sub mvp_aliases { return { -relationship => '-type' } }
+
 sub BUILDARGS {
   my ($class, @arg) = @_;
   my %copy = ref $arg[0] ? %{$arg[0]} : @arg;
