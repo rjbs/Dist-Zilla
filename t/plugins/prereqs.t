@@ -79,4 +79,46 @@ use Test::DZil;
   );
 }
 
+{
+  my $tzil = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/dist.ini' => simple_ini(
+          [ GatherDir => ],
+          [ MetaJSON  => ],
+          [ Prereqs => { A => 1 } ],
+          [ Prereqs => P1
+            => { qw(-phase runtime -type requires), A => 2, B => 3 } ],
+          [ Prereqs => P2
+            => { qw(-phase develop -type suggests), C => 4 }         ],
+          [ Prereqs => P3
+            => { qw(-phase test -relationship conflicts), C => 5, D => 6 } ],
+          [ Prereqs => P4
+            => { qw(-type recommends),              E => 7 }         ],
+        ),
+      },
+    },
+  );
+
+  $tzil->build;
+
+  my $json = $tzil->slurp_file('build/META.json');
+
+  my $meta = JSON->new->decode($json);
+
+  is_deeply(
+    $meta->{prereqs},
+    {
+      develop => { suggests  => { C => 4 } },
+      runtime => {
+        requires   => { A => 2, B => 3 },
+        recommends => { E => 7 },
+      },
+      test    => { conflicts => { C => 5, D => 6 } },
+    },
+    "-phase, -type, & -relationship",
+  );
+}
+
 done_testing;
