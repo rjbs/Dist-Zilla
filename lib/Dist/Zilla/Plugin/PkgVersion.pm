@@ -115,16 +115,27 @@ sub munge_perl {
     # the \x20 hack is here so that when we scan *this* document we don't find
     # an assignment to version; it shouldn't be needed, but it's been annoying
     # enough in the past that I'm keeping it here until tests are better
-    my $trial = $self->zilla->is_trial ? ' # TRIAL' : '';
-    my $perl = "{\n  \$$package\::VERSION\x20=\x20'$version';$trial\n}\n";
-
-    if ($self->no_critic) {
-        # Surround the version declaration in special comments that
-        # prevent perl critic from complaining. Without these,
-        # Perl::Critic will complain if the package declaration comes
-        # before "use strict".
-        $perl = "## no critic\n" . $perl . "## use critic\n";
+    my ($eol_comment, $pre_comment, $post_comment) = ('','','');
+    if ($self->zilla->is_trial) {
+       $eol_comment = ' # TRIAL';
+       # If the end-of-line comment is already being used to specify a
+       # trial version, use pre- and post-comments to turn off critic.
+       if ($self->no_critic) {
+           ($pre_comment, $post_comment) = ('## no critic', '## use critic');
+       }
     }
+    elsif ($self->no_critic) {
+        $eol_comment = " ## no critic";
+    }
+    my $perl = join "\n", (
+        '{',
+        "  $pre_comment",
+        "  \$$package\::VERSION\x20=\x20'$version';$eol_comment",
+        "  $post_comment",
+        '}'
+    );
+    # Eliminate blank lines
+    $perl =~ s{\n[\t ]*$}{}mg;
 
     my $version_doc = PPI::Document->new(\$perl);
     my @children = (
