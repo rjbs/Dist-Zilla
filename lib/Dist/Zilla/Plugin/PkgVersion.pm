@@ -127,8 +127,10 @@ sub munge_perl {
     }
 
     my $version_doc = PPI::Document->new(\$perl);
-    my @children = $version_doc->children;
-    unshift @children, PPI::Token::Whitespace->new("\n");
+    my @children = (
+        PPI::Token::Whitespace->new("\n"),
+        $version_doc->children
+    );
 
     $self->log_debug([
       'adding $VERSION assignment to %s in %s',
