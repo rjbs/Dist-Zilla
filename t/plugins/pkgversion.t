@@ -311,7 +311,7 @@ use strict;
 
         my @violations_trial = $critic->critique(\$nocritic_trial_built);
         # Should have zero violations
-        ok( scalar @violations_trial == 0, "Perl::Critic does not complain about critic-protected trial version declaration.");
+        ok(scalar @violations_trial == 0, "Perl::Critic does not complain about critic-protected trial version declaration.");
     }
 }
 
