@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.300005  2011-12-13 08:49:19 America/New_York
           Prereqs now actually understands -relationship as documented
           in 4.300004.  Also, it throws an error if you give it a
           plugin name that does not specify a relationship (Thanks,
