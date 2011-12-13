@@ -13,6 +13,14 @@ Revision history for {{$dist->name}}
           - inc:: plugins are checked first and in ASCII order
           (Thanks, Olivier Mengué!)
 
+          Many slow-to-load modules are now loaded opportunistically to improve
+          startup time.  (Thanks Olivier Mengué and rjbs)
+
+          ShareDir documentation has been improved (thanks, Karen
+          Etheridge)
+
+          Prereqs documentation has been improved
+
 4.300003  2011-10-31 23:58:19 America/New_York
           If no credentials are found on disk, UploadToCPAN will now prompt for
           credentials during the BeforeRelease phase, not during release
