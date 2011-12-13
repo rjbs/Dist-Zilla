@@ -51,14 +51,14 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
     scalar grep { !$_ } Test::Builder->new->summary;
   } # end _current_failure_count
 
-  sub DEMOLISH {
+  before 'DESTROY' => sub {
     my ($self) = @_;
 
     my $orig_failures = $self->_orig_failure_count;
 
     $self->diag_log if defined $orig_failures
         and $self->_current_failure_count > $orig_failures;
-  }
+  };
 
   sub clear_log_events {
     my ($self) = @_;
