@@ -200,6 +200,14 @@ unlike(
 # nocritic section
 {
 
+    # Three dists:
+    # 1. nocritic = 1, trial = 0
+    # 2. nocritic = 1, trial = 1
+    # 3. nocritic = 0, trial = 0
+
+    # Number 3 is the "positive control". Perl::Critic *should*
+    # complain about it.
+
     my $nocritic_src = '
 package DZT::NoCritic;
 use strict;
@@ -208,6 +216,12 @@ use strict;
 
     my $nocritic_trial_src = '
 package DZT::NoCriticTrial;
+use strict;
+1;
+';
+
+    my $yescritic_src = '
+package DZT::YesCritic;
 use strict;
 1;
 ';
@@ -245,6 +259,21 @@ use strict;
         );
     };
 
+    my $tzil_yescritic = Builder->from_config(
+                { dist_root => 'corpus/dist/DZT' },
+                {
+                    add_files => {
+                        'source/lib/DZT/YesCritic.pm' => $yescritic_src,
+                        'source/dist.ini' => simple_ini(
+                            'GatherDir', 'ExecDir',
+                            ['PkgVersion' => {
+                                no_critic => 0,
+                            }]
+                        ),
+                    },
+                },
+            );
+
     $tzil_nocritic->build;
     $tzil_nocritic_trial->build;
 
@@ -262,6 +291,28 @@ use strict;
         qr{^\s*\Q## no critic\E\s*?\n\s*\$\QDZT::NoCriticTrial::VERSION = '0.001'; # TRIAL\E\s*?\n\s*\Q## use critic\E\s*$}m,
         "added version with 'TRIAL' comment and surrounding 'no critic'/'use critic' comments when no_critic=1 and \$ENV{TRIAL}=1",
     );
+
+  SKIP:
+    {
+        eval { require Perl::Critic };
+        skip "Perl::Critic not installed, skipping stricture criticism tests", 3 if $@;
+
+        $tzil_yescritic->build;
+        my $yescritic_built = $tzil_yescritic->slurp_file('build/lib/DZT/YesCritic.pm');
+
+        my $critic = Perl::Critic->new();
+
+        my @violations_yescritic = $critic->critique(\$yescritic_built);
+        ok(scalar @violations_yescritic > 0, "Perl::Critic complains about unprotected version declaration.");
+
+        my @violations_nocritic = $critic->critique(\$nocritic_built);
+        # Should have zero violations
+        ok(scalar @violations_nocritic == 0, "Perl::Critic does not complain about critic-protected version declaration.");
+
+        my @violations_trial = $critic->critique(\$nocritic_trial_built);
+        # Should have zero violations
+        ok( scalar @violations_trial == 0, "Perl::Critic does not complain about critic-protected trial version declaration.");
+    }
 }
 
 done_testing;
