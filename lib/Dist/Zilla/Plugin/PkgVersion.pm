@@ -128,11 +128,9 @@ sub munge_perl {
         $eol_comment = " ## no critic";
     }
     my $perl = join "\n", (
-        '{',
-        "  $pre_comment",
-        "  \$$package\::VERSION\x20=\x20'$version';$eol_comment",
-        "  $post_comment",
-        '}'
+        "$pre_comment",
+        "\$$package\::VERSION\x20=\x20'$version';$eol_comment",
+        "$post_comment",
     );
     # Eliminate blank lines
     $perl =~ s{\n[\t ]*$}{}mg;
