@@ -1,6 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          New methods dist_basename & archive_filename allow plugins
+          to reliably get that information.  This makes TestRelease
+          testable. (Thanks, Kent Fredric & Christopher J. Madsen!)
 
 4.300005  2011-12-13 08:49:19 America/New_York
           Prereqs now actually understands -relationship as documented
