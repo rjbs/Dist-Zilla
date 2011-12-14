@@ -3,8 +3,6 @@ use warnings;
 use Test::More 0.88;
 use Test::Fatal;
 
-use lib 't/lib';
-use Carp::Always;
 use Test::DZil;
 use File::Temp qw( tempdir );
 
