@@ -45,14 +45,17 @@ typically used when doing monkey patching or other tricky things.
 
 =head2 PERL CRITIC WORKAROUND
 
-Since this plugin adds the version declaration right after the package
-declaration and before any other code, the version will probably
-declared before <use strict;>. This will cause Perl::Critic to
-complain. If this happens to you, you can set the <no_critic> option
-to tell Critic to ignore the version declaration:
+If a plugin such as Test::Perl::Critic complains about your version
+declarations, you can set no_critic to 1, which will add special
+comments that tell Perl::Critic to ignore the version declaration:
 
   [PkgVersion]
   no_critic = 1
+
+This should happen automatically for known Critic-using plugins (in
+particular, Test::Perl::Critic), so you should never need to set
+no_critic manually unless you are using a custom testing module that
+uses Perl::Critic.
 
 =cut
 
