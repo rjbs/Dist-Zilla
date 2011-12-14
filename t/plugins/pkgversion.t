@@ -302,15 +302,15 @@ use strict;
         my $critic = Perl::Critic->new();
 
         my @violations_yescritic = $critic->critique(\$yescritic_built);
-        ok(scalar @violations_yescritic > 0, "Perl::Critic complains about unprotected version declaration.");
+        cmp_ok(scalar @violations_yescritic, '>', 0, "Perl::Critic complains about unprotected version declaration.");
 
         my @violations_nocritic = $critic->critique(\$nocritic_built);
         # Should have zero violations
-        ok(scalar @violations_nocritic == 0, "Perl::Critic does not complain about critic-protected version declaration.");
+        cmp_ok(scalar @violations_nocritic, '==', 0, "Perl::Critic does not complain about critic-protected version declaration.");
 
         my @violations_trial = $critic->critique(\$nocritic_trial_built);
         # Should have zero violations
-        ok(scalar @violations_trial == 0, "Perl::Critic does not complain about critic-protected trial version declaration.");
+        cmp_ok(scalar @violations_trial, '==', 0, "Perl::Critic does not complain about critic-protected trial version declaration.");
     }
 }
 
