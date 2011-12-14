@@ -197,8 +197,7 @@ unlike(
   );
 }
 
-# nocritic section
-{
+NOCRITIC: {
 
     # Three dists:
     # 1. nocritic = 1, trial = 0
