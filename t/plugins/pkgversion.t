@@ -7,6 +7,8 @@ use lib 't/lib';
 use autodie;
 use Test::DZil;
 
+use Moose::Autobox;
+
 my $with_version = '
 package DZT::WVer;
 our $VERSION = 1.234;
@@ -311,6 +313,44 @@ use strict;
         my @violations_trial = $critic->critique(\$nocritic_trial_built);
         # Should have zero violations
         cmp_ok(scalar @violations_trial, '==', 0, "Perl::Critic does not complain about critic-protected trial version declaration.");
+    }
+
+    my $tzil_uncriticized = Builder->from_config(
+        { dist_root => 'corpus/dist/DZT' },
+        {
+            add_files => {
+                'source/dist.ini' => simple_ini(
+                    'GatherDir', 'ExecDir', 'PkgVersion',
+                ),
+            },
+        },
+    );
+
+    my $uncriticized_pkgversion = $tzil_uncriticized->plugins
+        ->grep(sub {$_->isa("Dist::Zilla::Plugin::PkgVersion")})->first;
+    isa_ok($uncriticized_pkgversion ,"Dist::Zilla::Plugin::PkgVersion", "Selected plugin");
+    ok(! $uncriticized_pkgversion->no_critic, "no_critic was auto-disabled when no critic-using plugins were used");
+
+  SKIP: {
+        eval { require Dist::Zilla::Plugin::Test::Perl::Critic };
+        skip "Dist::Zilla::Plugin::Test::Perl::Critic not installed, skipping critic auto-enable test", 2 if $@;
+
+        my $tzil_criticized = Builder->from_config(
+            { dist_root => 'corpus/dist/DZT' },
+            {
+                add_files => {
+                    'source/dist.ini' => simple_ini(
+                        'GatherDir', 'ExecDir', 'PkgVersion',
+                        # Add a critic-using module
+                        'Test::Perl::Critic',
+                    ),
+                },
+            },
+        );
+        my $criticized_pkgversion = $tzil_criticized->plugins
+            ->grep(sub {$_->isa("Dist::Zilla::Plugin::PkgVersion")})->first;
+        isa_ok($criticized_pkgversion ,"Dist::Zilla::Plugin::PkgVersion", "Selected plugin");
+        ok($criticized_pkgversion->no_critic, "no_critic was auto-enabled when a critic-using plugin was used");
     }
 }
 
