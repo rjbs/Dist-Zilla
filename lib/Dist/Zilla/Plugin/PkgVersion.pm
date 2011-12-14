@@ -11,6 +11,7 @@ with(
 
 use PPI;
 use MooseX::Types::Perl qw(LaxVersionStr);
+use Moose::Autobox;
 
 use namespace::autoclean;
 
@@ -59,8 +60,30 @@ has no_critic => (
   is   => 'ro',
   isa  => 'Bool',
   lazy => 1,
-  default => 0,
+  builder => '_build_no_critic',
 );
+
+my @known_critic_plugins = qw(CriticTests Test::Perl::Critic);
+my @known_critic_roles = ();
+
+# Returns true if the dist has any known Critic-using plugins enabled,
+# false otherwise
+sub _build_no_critic {
+    my ($self) = @_;
+    for my $plugin ($self->zilla->plugins->flatten()) {
+        for my $critic_plugin (@known_critic_plugins) {
+            if ($plugin->isa("Dist::Zilla::Plugin::$critic_plugin")) {
+                return 1;
+            }
+        }
+        for my $critic_role (@known_critic_roles) {
+            if ($plugin->does("Dist::Zilla::Role::$critic_role")) {
+                return 1;
+            }
+        }
+    }
+    return;
+}
 
 sub munge_files {
   my ($self) = @_;
