@@ -1,6 +1,7 @@
 Dist-Zilla-*
 .build
 tmp
+*.patch
 
 # avoid temp and backup files
 *~
