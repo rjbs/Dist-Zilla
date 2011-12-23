@@ -101,19 +101,18 @@ has follow_symlinks => (
 );
 
 
-=attr follow_skip
+=attr allow_symlink_cycles
 
-Is only meaningful if "follow_symlinks" is enabled. Will be passed to 
-File::Find and affect the way in which repeating files and directories
-will be processed. Please consult File::Find docs about the 
-"follow_skip" option. 
+Is only meaningful if "follow_symlinks" is enabled. When set to "true" will allow
+you to have symlink cycles in files being gathered by this plugin. Default value
+is "false" meaning the plugin will die with diagnostic message.
 
 =cut
 
-has follow_skip => (
+has allow_symlink_cycles => (
   is  => 'ro',
-  isa => 'Num',
-  default => 1,
+  isa => 'Bool',
+  default => 0,
 );
 
 
@@ -155,7 +154,10 @@ sub gather_files {
 
   my @files;
   my $rule = File::Find::Rule->new();
-  $rule->extras({follow => $self->follow_symlinks, follow_skip => $self->follow_skip});
+  # for `allow_symlink_cycles=true` we set the "follow_skip" to 2
+  # for `allow_symlink_cycles=false` we set the "follow_skip" to 1 (default value)
+  # for details refer to: http://search.cpan.org/~jesse/perl-5.14.1/lib/File/Find.pm#follow_skip 
+  $rule->extras({follow => $self->follow_symlinks, follow_skip => $self->allow_symlink_cycles ? 2 : 1 });
   FILE: for my $filename ($rule->file->in($root)) {
     my $file = file($filename)->relative($root);
 
