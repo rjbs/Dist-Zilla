@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.300006  2011-12-30 15:28:34 America/New_York
           New methods dist_basename & archive_filename allow plugins
           to reliably get that information.  This makes TestRelease
           testable. (Thanks, Kent Fredric & Christopher J. Madsen!)
