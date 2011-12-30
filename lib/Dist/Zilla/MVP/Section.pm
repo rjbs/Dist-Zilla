@@ -24,8 +24,8 @@ after finalize => sub {
   $dzil{$_} = delete $payload{":$_"} for grep { s/\A:// } keys %payload;
 
   if (defined $dzil{version}) {
-    require Version::Requirements;
-    my $req = Version::Requirements->from_string_hash({
+    require CPAN::Meta::Requirements;
+    my $req = CPAN::Meta::Requirements->from_string_hash({
       $plugin_class => $dzil{version}
     });
 

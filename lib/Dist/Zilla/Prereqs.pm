@@ -8,7 +8,7 @@ use CPAN::Meta::Prereqs 2.101390;
 use Hash::Merge::Simple ();
 use Path::Class ();
 use String::RewritePrefix;
-use Version::Requirements;
+use CPAN::Meta::Requirements;
 
 use namespace::autoclean;
 

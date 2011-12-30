@@ -44,7 +44,7 @@ use namespace::autoclean;
 use Moose::Autobox;
 use Perl::PrereqScanner 1.005; # do not prune common libs
 use PPI;
-use Version::Requirements 0.100630;  # merge with 0-min bug
+use CPAN::Meta::Requirements;
 use version;
 
 =head1 SYNOPSIS
@@ -129,7 +129,7 @@ sub register_prereqs {
   for my $fileset (@sets) {
     my ($phase, $method) = @$fileset;
 
-    my $req   = Version::Requirements->new;
+    my $req   = CPAN::Meta::Requirements->new;
     my $files = $self->$method;
 
     foreach my $file (@$files) {

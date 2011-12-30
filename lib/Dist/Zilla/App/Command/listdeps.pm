@@ -43,8 +43,8 @@ sub extract_dependencies {
   $_->munge_files  for @{ $zilla->plugins_with(-FileMunger) };
   $_->register_prereqs for @{ $zilla->plugins_with(-PrereqSource) };
 
-  require Version::Requirements;
-  my $req = Version::Requirements->new;
+  require CPAN::Meta::Requirements;
+  my $req = CPAN::Meta::Requirements->new;
   my $prereqs = $zilla->prereqs;
 
   for my $phase (@$phases) {

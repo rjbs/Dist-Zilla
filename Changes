@@ -8,6 +8,8 @@ Revision history for {{$dist->name}}
           Your PAUSE password will now no be echoed if entered at the
           prompt, on most operating systems (Thanks, Mike Doherty!)
 
+          replace use of Version::Requirements with CPAN::Meta::Requirements,
+          its replacement
 
 4.300005  2011-12-13 08:49:19 America/New_York
           Prereqs now actually understands -relationship as documented
