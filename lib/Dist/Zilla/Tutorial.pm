@@ -9,6 +9,9 @@ __END__
 
 =head1 SYNOPSIS
 
+B<BEFORE YOU GET STARTED>:  Maybe you should be looking at the web-based
+tutorial instead.  It's more complete.  L<http://dzil.org/tutorial/start.html>
+
 Dist::Zilla builds distributions to be uploaded to the CPAN.  That means that
 the first thing you'll need is some code.
 
