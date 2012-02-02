@@ -45,7 +45,7 @@ implementing C<BeforeRelease> and C<AfterRelease>.
 When this plugin does the release, it will just log a message and finish.
 
 If you set the environment variable C<DZIL_FAKERELEASE_FAIL> to a true value,
-the plugin will die instead of doing nothing. This can be usefulfor
+the plugin will die instead of doing nothing. This can be useful for
 authors wanting to test reliably that release failed.
 
 You can optionally provide the 'user' parameter, which defaults to 'AUTHORID',
