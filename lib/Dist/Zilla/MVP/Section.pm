@@ -18,10 +18,8 @@ after finalize => sub {
     $self->payload,
   );
 
-  my %payload = %{ $self->payload };
-
   my %dzil;
-  $dzil{$_} = delete $payload{":$_"} for grep { s/\A:// } keys %payload;
+  $dzil{$_} = delete $arg->{":$_"} for grep { s/\A:// } keys %$arg;
 
   if (defined $dzil{version}) {
     require CPAN::Meta::Requirements;
