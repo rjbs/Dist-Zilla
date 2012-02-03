@@ -1,6 +1,10 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          Remove configs beginning with ':' from argument list before
+          constructing that config; fixes issue where :version was
+          being passed to a plugin that had a strict constructor. (Karen
+          Etheridge)
 
 4.300007  2012-02-02 22:23:05 America/New_York
           Remove configs beginning with ':' from argument list before

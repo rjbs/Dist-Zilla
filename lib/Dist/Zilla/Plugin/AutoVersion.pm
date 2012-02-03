@@ -74,7 +74,7 @@ sub provide_version {
     $self->format,
     {
       major => \( $self->major ),
-      cldr  => sub { $now->format_cldr($_[0]) },
+      cldr  => sub($) { $now->format_cldr($_[0]) },
     },
   );
 
