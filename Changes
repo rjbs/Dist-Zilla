@@ -1,6 +1,10 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          Remove configs beginning with ':' from argument list before
+          constructing that config; fixes issue where :version was
+          being passed to a plugin that had a strict constructor. (Karen
+          Etheridge)
 
 4.300006  2011-12-30 15:28:34 America/New_York
           New methods dist_basename & archive_filename allow plugins
