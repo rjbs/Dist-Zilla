@@ -42,7 +42,7 @@ after finalize => sub {
     }
   }
 
-  $plugin_class->register_component($name, $arg, $self);
+  $plugin_class->register_component($name, \%payload, $self);
 
   return;
 };
