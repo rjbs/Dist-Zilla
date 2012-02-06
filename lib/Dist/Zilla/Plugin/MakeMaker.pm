@@ -29,6 +29,21 @@ plugin should also be loaded.
 
 =cut
 
+=attr eumm_version
+
+This option declares the version of ExtUtils::MakeMaker required to configure
+and build the distribution.  It defaults to 6.30, which ensures a working
+C<INSTALL_BASE>.  It can be safely set to earlier versions, although I<no
+testing has been done to determine the minimum version actually required>.
+
+=cut
+
+has eumm_version => (
+  isa => 'Str',
+  is  => 'rw',
+  default => '6.30',
+);
+
 =attr make_path
 
 This option sets the path to F<make>, used to build your dist and run tests.
@@ -223,12 +238,6 @@ sub setup_installer {
 has __write_makefile_args => (
   is   => 'rw',
   isa  => 'HashRef',
-);
-
-has 'eumm_version' => (
-  isa => 'Str',
-  is  => 'rw',
-  default => '6.30',
 );
 
 __PACKAGE__->meta->make_immutable;
