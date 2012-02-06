@@ -54,7 +54,23 @@ version string has no underscore in it, "_0" will be appended.
 has trial_underscore => (
   is  => 'ro',
   isa => 'Bool',
-  defult => 1,
+  default => 1,
+);
+
+=attr auto_eval
+
+If true (which it is by default) then if the dist's effective version string
+(after considering C<L<trial_underscore>>) contains an underscore, the
+C<$VERSION>-assigning line will be followed by another line in the form:
+
+  $Pkg::VERSION = eval $Pkg::VERSION;
+
+=cut
+
+has auto_eval => (
+  is  => 'ro',
+  isa => 'Bool',
+  default => 1,
 );
 
 sub munge_files {
@@ -116,6 +132,11 @@ sub munge_perl {
     # enough in the past that I'm keeping it here until tests are better
     my $trial = $self->zilla->is_trial ? ' # TRIAL' : '';
     my $perl = "{\n  \$$package\::VERSION\x20=\x20'$version';$trial\n}\n";
+
+    if ($self->auto_eval && $version =~ /_/) {
+      $perl =~ s<}\n\z>
+                <  \$$package\::VERSION = eval \$$package\::VERSION;\n}\n>;
+    }
 
     my $version_doc = PPI::Document->new(\$perl);
     my @children = $version_doc->schildren;
