@@ -16,6 +16,16 @@ plugin should also be loaded.
 
 use Config;
 
+=attr make_path
+
+This option sets the path to F<make>, used to build your dist and run tests.
+It defaults to the value for C<make> in L<Config>, or to C<make> if that isn't
+set.
+
+You probably won't need to set this option.
+
+=cut
+
 has 'make_path' => (
   isa => 'Str',
   is  => 'ro',
