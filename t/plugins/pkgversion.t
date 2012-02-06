@@ -192,7 +192,7 @@ unlike(
   my $dzt_sample_trial = $tzil_trial->slurp_file('build/lib/DZT/Sample.pm');
   like(
     $dzt_sample_trial,
-    qr{^\s*\$\QDZT::Sample::VERSION = '0.001'; # TRIAL\E\s*$}m,
+    qr{^\s*\$\QDZT::Sample::VERSION = '0.001_0'; # TRIAL\E\s*$}m,
     "added version with 'TRIAL' comment when \$ENV{TRIAL}=1",
   );
 }

@@ -44,6 +44,19 @@ typically used when doing monkey patching or other tricky things.
 
 =cut
 
+=attr trial_underscore
+
+If true (which it is by default) then if the dist is a trial dist, and if the
+version string has no underscore in it, "_0" will be appended.
+
+=cut
+
+has trial_underscore => (
+  is  => 'ro',
+  isa => 'Bool',
+  defult => 1,
+);
+
 sub munge_files {
   my ($self) = @_;
 
@@ -66,6 +79,10 @@ sub munge_perl {
   my ($self, $file) = @_;
 
   my $version = $self->zilla->version;
+
+  if ($self->zilla->is_trial && $self->trial_underscore && $version !~ /_/) {
+    $version .= '_0';
+  }
 
   Carp::croak("invalid characters in version")
     unless LaxVersionStr->check($version);
