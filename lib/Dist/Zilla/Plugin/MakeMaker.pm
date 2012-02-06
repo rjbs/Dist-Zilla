@@ -6,6 +6,21 @@ use Moose::Autobox;
 
 use namespace::autoclean;
 
+with qw(
+  Dist::Zilla::Role::BuildRunner
+  Dist::Zilla::Role::InstallTool
+  Dist::Zilla::Role::PrereqSource
+  Dist::Zilla::Role::TestRunner
+  Dist::Zilla::Role::TextTemplate
+);
+
+use Config;
+use Data::Dumper ();
+use List::MoreUtils qw(any uniq);
+
+use Dist::Zilla::File::InMemory;
+use Dist::Zilla::Plugin::MakeMaker::Runner;
+
 =head1 DESCRIPTION
 
 This plugin will produce an L<ExtUtils::MakeMaker>-powered F<Makefile.PL> for
@@ -13,8 +28,6 @@ the distribution.  If loaded, the L<Manifest|Dist::Zilla::Plugin::Manifest>
 plugin should also be loaded.
 
 =cut
-
-use Config;
 
 =attr make_path
 
@@ -45,16 +58,6 @@ has '_runner' => (
     });
   },
 );
-
-with qw/Dist::Zilla::Role::PrereqSource Dist::Zilla::Role::InstallTool Dist::Zilla::Role::TextTemplate Dist::Zilla::Role::BuildRunner Dist::Zilla::Role::TestRunner/;
-
-use Data::Dumper ();
-use List::MoreUtils qw(any uniq);
-
-use namespace::autoclean;
-
-use Dist::Zilla::File::InMemory;
-use Dist::Zilla::Plugin::MakeMaker::Runner;
 
 my $template = q|
 use strict;
