@@ -16,8 +16,9 @@ use Dist::Zilla::File::InMemory;
 In your F<dist.ini>:
 
   [GenerateFile]
-  filename    = todo/master-plan.txt
-  is_template = 1
+  filename    = todo/{{ $dist->name =~ s/::/-/r }}_master-plan.txt
+  name_is_template = 1
+  content_is_template = 1
   content = # Outlines the plan for world domination by {{$dist->name}}
   content =
   content = Item 1: Think of an idea!
@@ -29,16 +30,23 @@ In your F<dist.ini>:
 This plugin adds a file to the distribution.
 
 You can specify the content, as a sequence of lines, in your configuration.
-The specified content might be literal, or might be a Text::Template template.
+The specified filename and content might be literals, or might be Text::Template templates.
 
 =head2 Templating of the content
 
-If you provide a C<is_template> parameter of "1", The content will also be run
+If you provide a C<is_template> or C<content_is_template> parameter of "1", the
+content will be run through Text::Template.  The variables C<$plugin> and
+C<$dist> will be provided, set to the GenerateFile plugin and the Dist::Zilla
+object respectively.
+
+If you provide a C<name_is_template> parameter of "1", the filename will be run
 through Text::Template.  The variables C<$plugin> and C<$dist> will be
 provided, set to the GenerateFile plugin and the Dist::Zilla object
 respectively.
 
 =cut
+
+sub mvp_aliases { +{ is_template => 'content_is_template' } }
 
 sub mvp_multivalue_args { qw(content) }
 
@@ -66,14 +74,29 @@ has content => (
   isa => 'ArrayRef',
 );
 
-=attr is_template
+=attr content_is_template, is_template
 
 This attribute is a bool indicating whether or not the content should be
 treated as a Text::Template template.  By default, it is false.
 
 =cut
 
-has is_template => (
+has content_is_template => (
+  is  => 'ro',
+  isa => 'Bool',
+  default => 0,
+);
+
+=cut
+
+=attr name_is_template
+
+This attribute is a bool indicating whether or not the filename should be
+treated as a Text::Template template.  By default, it is false.
+
+=cut
+
+has name_is_template => (
   is  => 'ro',
   isa => 'Bool',
   default => 0,
@@ -82,10 +105,23 @@ has is_template => (
 sub gather_files {
   my ($self, $arg) = @_;
 
+  my $file = Dist::Zilla::File::InMemory->new({
+    name    => $self->_filename,
+    content => $self->_content,
+  });
+
+  $self->add_file($file);
+  return;
+}
+
+sub _content
+{
+  my $self = shift;
+
   my $content = join "\n", $self->content->flatten;
   $content .= qq{\n};
 
-  if ($self->is_template) {
+  if ($self->content_is_template) {
     $content = $self->fill_in_string(
       $content,
       {
@@ -95,13 +131,26 @@ sub gather_files {
     );
   }
 
-  my $file = Dist::Zilla::File::InMemory->new({
-    name    => $self->filename,
-    content => $content,
-  });
+  return $content;
+}
 
-  $self->add_file($file);
-  return;
+sub _filename
+{
+  my $self = shift;
+
+  my $filename = $self->filename;
+
+  if ($self->name_is_template) {
+    $filename = $self->fill_in_string(
+      $filename,
+      {
+        dist   => \($self->zilla),
+        plugin => \($self),
+      },
+    );
+  }
+
+  return $filename;
 }
 
 __PACKAGE__->meta->make_immutable;
