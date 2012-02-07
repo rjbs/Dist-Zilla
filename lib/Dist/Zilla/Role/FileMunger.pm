@@ -19,6 +19,8 @@ written out to the built distribution.
 
 =cut
 
+requires 'munge_file';
+
 sub munge_files {
   my ($self) = @_;
 
