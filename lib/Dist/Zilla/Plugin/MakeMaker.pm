@@ -6,17 +6,6 @@ use Moose::Autobox;
 
 use namespace::autoclean;
 
-sub build;
-sub test;
-
-with qw(
-  Dist::Zilla::Role::BuildRunner
-  Dist::Zilla::Role::InstallTool
-  Dist::Zilla::Role::PrereqSource
-  Dist::Zilla::Role::TestRunner
-  Dist::Zilla::Role::TextTemplate
-);
-
 use Config;
 use Data::Dumper ();
 use List::MoreUtils qw(any uniq);
@@ -75,6 +64,18 @@ has '_runner' => (
       make_path   => $self->make_path,
     });
   },
+);
+
+# This is here, rather than at the top, so that the "build" and "test" methods
+# will exist, as they are required by BuildRunner and TestRunner respectively.
+# I had originally fixed this with stub methods, but stub methods to not behave
+# properly with this use case until Moose 2.0300. -- rjbs, 2012-02-08
+with qw(
+  Dist::Zilla::Role::BuildRunner
+  Dist::Zilla::Role::InstallTool
+  Dist::Zilla::Role::PrereqSource
+  Dist::Zilla::Role::TestRunner
+  Dist::Zilla::Role::TextTemplate
 );
 
 my $template = q|
