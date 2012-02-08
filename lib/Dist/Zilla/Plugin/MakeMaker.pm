@@ -6,6 +6,9 @@ use Moose::Autobox;
 
 use namespace::autoclean;
 
+sub build;
+sub test;
+
 with qw(
   Dist::Zilla::Role::BuildRunner
   Dist::Zilla::Role::InstallTool
