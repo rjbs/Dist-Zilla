@@ -3,6 +3,9 @@ Revision history for {{$dist->name}}
 {{$NEXT}}
           work around qr//m bug in 5.8.8 and earlier (thanks, Randy Stauner!)
 
+          Fix to MakeMaker plugin: use separate scope for code that changes
+          namespace, when inserting ShareDir code. (RT#74788) (Karen Etheridge)
+
 4.300007  2012-02-02 22:23:05 America/New_York
           Remove configs beginning with ':' from argument list before
           constructing that config; fixes issue where :version was
