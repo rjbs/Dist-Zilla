@@ -74,7 +74,7 @@ use Test::DZil;
 
   my $content = $tzil->slurp_file('build/Makefile.PL');
 
-  like($content, qr/^use 5\.008001;$/m, "normalized the perl version needed");
+  like($content, qr/^use 5\.008001;\s*$/m, "normalized the perl version needed");
 }
 
 done_testing;
