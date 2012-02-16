@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          work around qr//m bug in 5.8.8 and earlier (thanks, Randy Stauner!)
 
 4.300007  2012-02-02 22:23:05 America/New_York
           Remove configs beginning with ':' from argument list before
