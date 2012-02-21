@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          PruneCruft also excludes the _Inline/ directory
 
 4.300008  2012-02-16 17:28:34 America/New_York
           work around qr//m bug in 5.8.8 and earlier (thanks, Randy Stauner!)
