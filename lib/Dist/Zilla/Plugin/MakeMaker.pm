@@ -128,24 +128,8 @@ sub register_prereqs {
   );
 }
 
-sub setup_installer {
-  my ($self, $arg) = @_;
-
-  (my $name = $self->zilla->name) =~ s/-/::/g;
-
-  my @exe_files =
-    $self->zilla->find_files(':ExecFiles')->map(sub { $_->name })->flatten;
-
-  $self->log_fatal("can't install files with whitespace in their names")
-    if grep { /\s/ } @exe_files;
-
-  my %test_dirs;
-  for my $file ($self->zilla->files->flatten) {
-    next unless $file->name =~ m{\At/.+\.t\z};
-    (my $dir = $file->name) =~ s{/[^/]+\.t\z}{/*.t}g;
-
-    $test_dirs{ $dir } = 1;
-  }
+sub share_dir_blocks {
+  my ($self) = @_;
 
   my @share_dir_block = (q{}, q{});
 
@@ -169,6 +153,28 @@ sub setup_installer {
       $preamble,
       qq{\{\npackage\nMY;\nuse File::ShareDir::Install qw(postamble);\n\}\n},
     );
+  }
+
+  return \@share_dir_block;
+}
+
+sub write_makefile_args {
+  my ($self) = @_;
+
+  (my $name = $self->zilla->name) =~ s/-/::/g;
+
+  my @exe_files =
+    $self->zilla->find_files(':ExecFiles')->map(sub { $_->name })->flatten;
+
+  $self->log_fatal("can't install files with whitespace in their names")
+    if grep { /\s/ } @exe_files;
+
+  my %test_dirs;
+  for my $file ($self->zilla->files->flatten) {
+    next unless $file->name =~ m{\At/.+\.t\z};
+    (my $dir = $file->name) =~ s{/[^/]+\.t\z}{/*.t}g;
+
+    $test_dirs{ $dir } = 1;
   }
 
   my $prereqs = $self->zilla->prereqs;
@@ -209,10 +215,22 @@ sub setup_installer {
     test => { TESTS => join q{ }, sort keys %test_dirs },
   );
 
-  $self->__write_makefile_args(\%write_makefile_args);
+  $write_makefile_args{MIN_PERL_VERSION} = $perl_prereq if $perl_prereq;
+
+  return \%write_makefile_args;
+}
+
+sub setup_installer {
+  my ($self, $arg) = @_;
+
+  my $write_makefile_args = $self->write_makefile_args;
+
+  $self->__write_makefile_args($write_makefile_args); # save for testing
+
+  my $perl_prereq = delete $write_makefile_args->{MIN_PERL_VERSION};
 
   my $makefile_args_dumper = Data::Dumper->new(
-    [ \%write_makefile_args ],
+    [ $write_makefile_args ],
     [ '*WriteMakefileArgs' ],
   );
   $makefile_args_dumper->Sortkeys( 1 );
@@ -224,7 +242,7 @@ sub setup_installer {
     {
       eumm_version      => \($self->eumm_version),
       perl_prereq       => \$perl_prereq,
-      share_dir_block   => \@share_dir_block,
+      share_dir_block   => $self->share_dir_blocks,
       WriteMakefileArgs => \($makefile_args_dumper->Dump),
     },
   );
