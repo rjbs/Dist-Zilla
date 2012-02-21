@@ -78,7 +78,7 @@ with qw(
   Dist::Zilla::Role::TextTemplate
 );
 
-my $template = q|
+my $template = q!
 use strict;
 use warnings;
 
@@ -86,7 +86,7 @@ use warnings;
 
 use ExtUtils::MakeMaker {{ $eumm_version }};
 
-{{ $share_dir_block[0] }}
+{{ $share_dir_code{preamble} || '' }}
 
 my {{ $WriteMakefileArgs }}
 
@@ -108,9 +108,9 @@ delete $WriteMakefileArgs{CONFIGURE_REQUIRES}
 
 WriteMakefile(%WriteMakefileArgs);
 
-{{ $share_dir_block[1] }}
+{{ $share_dir_code{postamble} || '' }}
 
-|;
+!;
 
 sub register_prereqs {
   my ($self) = @_;
@@ -128,10 +128,10 @@ sub register_prereqs {
   );
 }
 
-sub share_dir_blocks {
+sub share_dir_code {
   my ($self) = @_;
 
-  my @share_dir_block = (q{}, q{});
+  my $share_dir_code = {};
 
   my $share_dir_map = $self->zilla->_share_dir_map;
   if ( keys %$share_dir_map ) {
@@ -149,13 +149,12 @@ sub share_dir_blocks {
       }
     }
 
-    @share_dir_block = (
-      $preamble,
-      qq{\{\npackage\nMY;\nuse File::ShareDir::Install qw(postamble);\n\}\n},
-    );
+    $share_dir_code->{preamble} = $preamble;
+    $share_dir_code->{postamble}
+      = qq{\{\npackage\nMY;\nuse File::ShareDir::Install qw(postamble);\n\}\n};
   }
 
-  return \@share_dir_block;
+  return $share_dir_code;
 }
 
 sub write_makefile_args {
@@ -242,7 +241,7 @@ sub setup_installer {
     {
       eumm_version      => \($self->eumm_version),
       perl_prereq       => \$perl_prereq,
-      share_dir_block   => $self->share_dir_blocks,
+      share_dir_code    => $self->share_dir_code,
       WriteMakefileArgs => \($makefile_args_dumper->Dump),
     },
   );
