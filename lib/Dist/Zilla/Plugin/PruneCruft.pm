@@ -57,6 +57,7 @@ sub exclude_file {
   return 1 if $file->name =~ /\.(?:o|bs)$/;
   return 1 if $file->name =~ /\A_Inline/;
   return 1 if $file->name eq 'MYMETA.yml';
+  return 1 if $file->name eq 'MYMETA.json';
   return 1 if $file->name eq 'pm_to_blib';
 
   if ((my $file = $file->name) =~ s/\.c$//) {
