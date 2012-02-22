@@ -1,6 +1,10 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          Depend on a more recent version of Config::MVP, which requires a fix
+          in Class::Load to fix detection of plugin compilation errors on
+          perl5.8.8 (see Class::Load Changes file for details.)  (Karen
+          Etheridge)
 
 4.300009  2012-02-21 19:38:29 America/New_York
           PruneCruft also excludes the _Inline/ directory and MYMETA.json
