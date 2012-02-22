@@ -5,7 +5,7 @@ extends 'Config::MVP::Section';
 
 use namespace::autoclean;
 
-use Config::MVP::Section 2.200001; # for not-installed error
+use Config::MVP::Section 2.200002; # for not-installed error
 
 use Moose::Autobox;
 
