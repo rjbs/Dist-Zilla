@@ -80,7 +80,7 @@ sub register_prereqs {
   my $req = $self->requirements_for($phase, $type);
 
   while (my ($package, $version) = each %prereq) {
-    $req->add_minimum($package, $version);
+    $req->add_string_requirement($package, $version);
   }
 
   return;
