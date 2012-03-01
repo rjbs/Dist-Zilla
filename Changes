@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          The GatherDir::Template documentation has been improved
+          (Thanks, Christopher J. Madsen!)
 
 4.300009  2012-02-21 19:38:29 America/New_York
           PruneCruft also excludes the _Inline/ directory and MYMETA.json

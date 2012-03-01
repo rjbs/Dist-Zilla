@@ -12,10 +12,13 @@ use Dist::Zilla::File::FromCode;
 
 =head1 DESCRIPTION
 
-This is a very, very simple L<FileGatherer|Dist::Zilla::FileGatherer> plugin.
-It looks in the directory named in the L</root> attribute and adds all the
-files it finds there.  If the root begins with a tilde, the tilde is replaced
-with the current user's home directory according to L<File::HomeDir>.
+This is a subclass of the L<GatherDir|Dist::Zilla::Plugin::GatherDir>
+plugin.  It works just like its parent class, except that each
+gathered file is processed through L<Text::Template>.
+
+The variables C<$plugin> and C<$dist> will be provided to the
+template, set to the GatherDir::Template plugin and the Dist::Zilla
+object, respectively.
 
 It is meant to be used when minting dists with C<dzil new>, but could be used
 in building existing dists, too.
