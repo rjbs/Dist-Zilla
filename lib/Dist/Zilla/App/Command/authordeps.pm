@@ -17,12 +17,15 @@ results by using special comments in the form:
 
 =cut
 
+use CPAN::Meta::Requirements;
+
 sub abstract { "list your distribution's author dependencies" }
 
 sub opt_spec {
   return (
     [ 'root=s' => 'the root of the dist; defaults to .' ],
     [ 'missing' => 'list only the missing dependencies' ],
+    [ 'versions', 'include required version numbers in listing' ]
   );
 }
 
@@ -37,7 +40,7 @@ sub execute {
       $self->extract_author_deps(
         Path::Class::dir(defined $opt->root ? $opt->root : '.'),
         $opt->missing,
-      ),
+      ), $opt->versions
     ),
   );
 
@@ -45,8 +48,15 @@ sub execute {
 }
 
 sub format_author_deps {
-  my ($self, @deps) = @_;
-  return join qq{\n} => @deps;
+  my ($self, $reqs, $versions) = @_;
+
+  my $formatted = '';
+  foreach my $rec (@{ $reqs }) {
+    my ($mod, $ver) = each(%{ $rec });
+    $formatted .= $versions ? "$mod = $ver\n" : "$mod\n";
+  }
+  chomp($formatted);
+  return $formatted;
 }
 
 sub extract_author_deps {
@@ -62,11 +72,22 @@ sub extract_author_deps {
   require Config::INI::Reader;
   my $config = Config::INI::Reader->read_handle($fh);
 
-  my @packages =
-    map  {; Dist::Zilla::Util->expand_config_package_name($_) }
+  my $reqs = CPAN::Meta::Requirements->new;
+
+  my @packs =
     map  { s/\s.*//; $_ }
     grep { $_ ne '_' }
     keys %$config;
+
+  foreach my $pack (@packs) {
+
+    my $version = 0;
+    if(exists $config->{$pack} && exists $config->{$pack}->{':version'}) {
+      $version = $config->{$pack}->{':version'};
+    }
+    my $realname = Dist::Zilla::Util->expand_config_package_name($pack);
+    $reqs->add_minimum($realname => $version);
+  }
 
   seek $fh, 0, 0;
 
@@ -77,22 +98,27 @@ sub extract_author_deps {
     $in_filter = 1;
 
     next unless /\A-bundle\s*=\s*([^;]+)/;
-    push @packages, Dist::Zilla::Util->expand_config_package_name($1);
+    $reqs->add_minimum(Dist::Zilla::Util->expand_config_package_name($1) => 0)
   }
 
   seek $fh, 0, 0;
-  my @manual;
 
+  my @packages;
   while (<$fh>) {
     chomp;
-    next unless /\A\s*;\s*authordep\s*(\S+)\s*\z/;
-    push @manual, $1;
+    next unless /\A\s*;\s*authordep\s*(\S+)\s*(=\s*(\S+))?\s*\z/;
+    my $ver = defined $3 ? $3 : "0";
+    # Any "; authordep " is inserted at the beginning of the list
+    # in the file order so the user can control the order of at least a part of
+    # the plugin list
+    push @packages, $1;
+    # And added to the requirements so we can use it later
+    $reqs->add_minimum($1 => $ver);
   }
 
-  # Any "; authordep " is inserted at the beginning of the list
-  # in the file order so the user can control the order of at least a part of
-  # the plugin list
-  splice(@packages, 0, 0, @manual);
+  my $vermap = $reqs->as_string_hash;
+  # Add the other requirements
+  push(@packages, sort keys %{ $vermap });
 
   # Move inc:: first in list as they may impact the loading of other
   # plugins (in particular local ones).
@@ -103,13 +129,18 @@ sub extract_author_deps {
   # releases.
   @packages = ((sort grep /^inc::/, @packages), (grep !/^inc::/, @packages));
 
+  # Now that we have a sorted list of packages, use that to build an array of
+  # hashrefs for display.
   require List::MoreUtils;
-
-  return
-    grep { !/^inc::/ }
-    grep { $missing ? (! eval "require $_; 1;") : 1 }
+  require Class::Load;
+  
+  my @final =
+    map { { $_ => $vermap->{$_} } }
+    grep { $missing ? (! Class::Load::try_load_class($_)) : 1 }
     List::MoreUtils::uniq
     @packages;
+    
+  return \@final;
 }
 
 1;
