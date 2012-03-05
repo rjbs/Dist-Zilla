@@ -711,6 +711,10 @@ sub run_in_build {
       (map { $abstarget->subdir('blib', $_) } qw(arch lib)),
       (defined $ENV{PERL5LIB} ? $ENV{PERL5LIB} : ());
 
+    local $ENV{PATH} = join $Config::Config{path_sep},
+      (map { $_->dir } $self->plugins_with(-ExecFiles)->flatten),
+      (defined $ENV{PATH} ? $ENV{PATH} : ());
+
     system(@$cmd) and die "error while running: @$cmd";
     1;
   };

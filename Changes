@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          'dzil run' also edits $PATH to include ExecDir directories (Karen
+          Etheridge)
 
 4.300020  2012-06-21 11:17:40 America/New_York
           properly set the working directory when testing (thanks, Jesse
