@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          'dzil run' also edits $PATH to include ExecDir directories (Karen
+          Etheridge)
 
 4.300021  2012-07-31 23:20:50 America/New_York
           plugins can now provide a MANIFEST.SKIP that can be processed by
