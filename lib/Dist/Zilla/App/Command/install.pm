@@ -36,7 +36,7 @@ If not specified, calls (roughly):
 
     perl -MCPAN -einstall "."
 
-For more information, look at the L<install|Dist::Zilla/install> method in
+For more information, look at the L<install|Dist::Zilla::Dist::Builder/install> method in
 Dist::Zilla.
 
 =cut
