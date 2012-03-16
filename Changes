@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.300010  2012-03-15 21:38:58 America/New_York
           The GatherDir::Template documentation has been improved
           (Thanks, Christopher J. Madsen!)
 
