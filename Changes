@@ -9,6 +9,10 @@ Revision history for {{$dist->name}}
           perl5.8.8 (see Class::Load Changes file for details.)  (Karen
           Etheridge)
 
+          Add --versions support to listdeps and authordeps (Cory G Watson)
+
+          Documentation fixes
+
 4.300009  2012-02-21 19:38:29 America/New_York
           PruneCruft also excludes the _Inline/ directory and MYMETA.json
 
