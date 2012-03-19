@@ -17,8 +17,6 @@ results by using special comments in the form:
 
 =cut
 
-use CPAN::Meta::Requirements;
-
 sub abstract { "list your distribution's author dependencies" }
 
 sub opt_spec {
@@ -72,6 +70,7 @@ sub extract_author_deps {
   require Config::INI::Reader;
   my $config = Config::INI::Reader->read_handle($fh);
 
+  require CPAN::Meta::Requirements;
   my $reqs = CPAN::Meta::Requirements->new;
 
   my @packs =
