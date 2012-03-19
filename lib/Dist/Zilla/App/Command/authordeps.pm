@@ -25,7 +25,7 @@ sub opt_spec {
   return (
     [ 'root=s' => 'the root of the dist; defaults to .' ],
     [ 'missing' => 'list only the missing dependencies' ],
-    [ 'versions', 'include required version numbers in listing' ]
+    [ 'versions' => 'include required version numbers in listing' ],
   );
 }
 
