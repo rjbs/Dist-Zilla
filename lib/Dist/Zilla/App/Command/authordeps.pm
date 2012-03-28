@@ -97,7 +97,9 @@ sub extract_author_deps {
     $in_filter = 0, next if /^\[/ and ! /^\[\s*\@Filter/;
     $in_filter = 1;
 
-    next unless /\A-bundle\s*=\s*([^;]+)/;
+    next unless /\A-bundle\s*=\s*([^;\s]+)/;
+    my $pname = $1;
+    chomp($pname);
     $reqs->add_minimum(Dist::Zilla::Util->expand_config_package_name($1) => 0)
   }
 
