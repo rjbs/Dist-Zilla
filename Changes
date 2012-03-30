@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          add 0 and never <undef> to the prereqs (thanks, David Golden)
 
 4.300011  2012-03-30 11:42:44 Europe/Paris
           do not claim that a dep is missing in "listdeps" when it is present
