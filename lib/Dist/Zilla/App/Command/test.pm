@@ -6,7 +6,7 @@ use Dist::Zilla::App -command;
 
 =head1 SYNOPSIS
 
-  dzil test [ --release ] [ --no-author ] [ --automated ]
+  dzil test [ --release ] [ --no-author ] [ --automated ] [ --all ]
 
 =head1 DESCRIPTION
 
@@ -31,6 +31,7 @@ sub opt_spec {
   [ 'release'   => 'enables the RELEASE_TESTING env variable', { default => 0 } ],
   [ 'automated' => 'enables the AUTOMATED_TESTING env variable', { default => 0 } ],
   [ 'author!' => 'enables the AUTHOR_TESTING env variable (default behavior)', { default => 1 } ]
+  [ 'all' => 'enables the RELEASE_TESTING, AUTOMATED_TESTING and AUTHOR_TESTING env variables', { default => 0 } ]
 }
 
 =head1 OPTIONS
@@ -47,6 +48,10 @@ This will run the test suite with AUTOMATED_TESTING=1
 
 This will run the test suite without setting AUTHOR_TESTING
 
+=head2 --all
+
+Equivalent to --release --automated --author
+
 =cut
 
 sub abstract { 'test your dist' }
@@ -54,9 +59,9 @@ sub abstract { 'test your dist' }
 sub execute {
   my ($self, $opt, $arg) = @_;
 
-  local $ENV{RELEASE_TESTING} = 1 if $opt->release;
-  local $ENV{AUTHOR_TESTING} = 1 if $opt->author;
-  local $ENV{AUTOMATED_TESTING} = 1 if $opt->automated;
+  local $ENV{RELEASE_TESTING} = 1 if $opt->release or $opt->all;
+  local $ENV{AUTHOR_TESTING} = 1 if $opt->author or $opt->all;
+  local $ENV{AUTOMATED_TESTING} = 1 if $opt->automated or $opt->all;
 
   $self->zilla->test;
 }

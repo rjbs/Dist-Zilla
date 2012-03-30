@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          dzil test has a new option, --all, which is the equivalent of
+          --release --automated --author.
 
 4.300012  2012-03-30 14:31:56 Europe/Paris
           add 0 and never <undef> to the prereqs (thanks, David Golden)
