@@ -14,7 +14,7 @@ is left in place.  If the tests pass, the temporary directory is cleaned up and
 the release process continues.
 
 This will set the RELEASE_TESTING and AUTHOR_TESTING env vars while running the
-testsuite.
+test suite.
 
 =head1 CREDITS
 
