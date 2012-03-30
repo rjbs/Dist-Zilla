@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.300012  2012-03-30 14:31:56 Europe/Paris
           add 0 and never <undef> to the prereqs (thanks, David Golden)
 
 4.300011  2012-03-30 11:42:44 Europe/Paris
