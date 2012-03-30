@@ -39,15 +39,15 @@ sub opt_spec {
 
 =head2 --release
 
-This will run the testsuite with RELEASE_TESTING=1
+This will run the test suite with RELEASE_TESTING=1
 
 =head2 --no-automated
 
-This will run the testsuite without setting AUTOMATED_TESTING
+This will run the test suite without setting AUTOMATED_TESTING
 
 =head2 --author
 
-This will run the testsuite with AUTHOR_TESTING=1
+This will run the test suite with AUTHOR_TESTING=1
 
 =cut
 
