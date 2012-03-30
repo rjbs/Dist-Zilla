@@ -1,6 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          do not claim that a dep is missing in "listdeps" when it is present
+          with an undef $VERSION and we only require version 0 (reported by
+          Matthew Horsfall)
 
 4.300010  2012-03-15 21:38:58 America/New_York
           The GatherDir::Template documentation has been improved
