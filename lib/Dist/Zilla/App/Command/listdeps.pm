@@ -62,7 +62,7 @@ sub extract_dependencies {
       # it is required if it's not already installed
       return 1 unless Class::Load::try_load_class($mod);
 
-      # guard against $VERSION = -1 and other insanity
+      # guard against libs with -1 in $VERSION and other insanity
       my $version;
       return unless try { $version = $mod->VERSION; 1; };
 
