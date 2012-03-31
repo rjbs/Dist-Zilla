@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.300013  2012-03-31 15:55:47 Europe/Paris
           dzil test has a new option, --all, which is the equivalent of
           --release --automated --author.
 
