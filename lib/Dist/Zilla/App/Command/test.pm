@@ -30,7 +30,7 @@ be removed and F<dzil> will exit with status 0.
 sub opt_spec {
   [ 'release'   => 'enables the RELEASE_TESTING env variable', { default => 0 } ],
   [ 'automated' => 'enables the AUTOMATED_TESTING env variable', { default => 0 } ],
-  [ 'author!' => 'enables the AUTHOR_TESTING env variable (default behavior)', { default => 1 } ]
+  [ 'author!' => 'enables the AUTHOR_TESTING env variable (default behavior)', { default => 1 } ],
   [ 'all' => 'enables the RELEASE_TESTING, AUTOMATED_TESTING and AUTHOR_TESTING env variables', { default => 0 } ]
 }
 
