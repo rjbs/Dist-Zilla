@@ -12,6 +12,9 @@ following files:
 
   xt/release/meta-yaml.t - a standard Test::CPAN::Meta test
 
+Note that this test doesn't actually do anything unless you have
+Test::CPAN::Meta installed.
+
 =cut
 
 __PACKAGE__->meta->make_immutable;
