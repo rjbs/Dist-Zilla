@@ -25,7 +25,8 @@ ___[ xt/release/distmeta.t ]___
 #!perl
 
 use Test::More;
+use Class::Load;
 
-eval "use Test::CPAN::Meta";
-plan skip_all => "Test::CPAN::Meta required for testing META.yml" if $@;
+plan skip_all => "Test::CPAN::Meta required for testing META.yml"
+    unless Class::Load::try_load_class('Test::CPAN::Meta');
 meta_yaml_ok();
