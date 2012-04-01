@@ -33,14 +33,14 @@ sub execute {
   require Path::Class;
   require Dist::Zilla::Util;
 
-  $self->log(
+  my $deps =
     $self->format_author_deps(
       $self->extract_author_deps(
         Path::Class::dir(defined $opt->root ? $opt->root : '.'),
         $opt->missing,
       ), $opt->versions
-    ),
-  );
+    );
+  $self->log($deps) if $deps;
 
   return;
 }
