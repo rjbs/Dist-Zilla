@@ -3,7 +3,7 @@
 
 _dzil_actions()
 {
-   COMPREPLY=( $( compgen -W 'build clean install new release smoke test help' \
+   COMPREPLY=( $( compgen -W 'commands help authordeps build clean install listdeps new nop release run setup smoke test' \
         -- $cur ) )
 }
 
