@@ -3,6 +3,9 @@ Revision history for {{$dist->name}}
 {{$NEXT}}
           added the CPANFile plugin to create "cpanfile" prereq format
 
+          stop emitting an empty line in authordeps output (thanks, Olivier
+          Mengué!)
+
 4.300013  2012-03-31 15:55:47 Europe/Paris
           dzil test has a new option, --all, which is the equivalent of
           --release --automated --author.
