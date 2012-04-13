@@ -138,7 +138,7 @@ sub register_prereqs {
 
     foreach my $file (@$files) {
       # parse only perl files
-      next unless $file->name =~ /\.(?:pm|pl|t)$/i
+      next unless $file->name =~ /\.(?:pm|pl|t|psgi)$/i
                || $file->content =~ /^#!(?:.*)perl(?:$|\s)/;
 
       # store module name, to trim it from require list later on
