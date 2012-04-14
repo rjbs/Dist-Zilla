@@ -31,16 +31,21 @@ A command returning with an non-zero error code will left the build directory
 behind for analysis, and C<dzil> will exit with a non-zero status.  Otherwise,
 the build directory will be removed and dzil will exit with status zero.
 
+If no run command is provided, a new default shell is invoked. This can be
+useful for testing your distribution as if it were installed.
+
 =cut
 
 sub abstract { 'run stuff in a dir where your dist is built' }
 
 sub usage_desc {
-  return '%c %o run command [ arg1 arg2 ... ]';
+  return '%c %o [ run command [ arg1 arg2 ... ] ]';
 }
 
 sub execute {
   my ($self, $opts, $args) = @_;
+
+  $args = [ $ENV{SHELL} ] unless @$args;
 
   $self->usage_error("no command to run supplied!") unless @$args;
 
