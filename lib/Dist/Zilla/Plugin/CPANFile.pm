@@ -7,6 +7,7 @@ with 'Dist::Zilla::Role::FileGatherer';
 use namespace::autoclean;
 
 use Dist::Zilla::File::FromCode;
+use CPAN::Meta::Requirements 2.120920;
 
 =head1 DESCRIPTION
 
