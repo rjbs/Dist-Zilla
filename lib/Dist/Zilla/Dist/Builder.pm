@@ -547,12 +547,16 @@ like matching the glob C<Your-Dist-*>.
 =cut
 
 sub clean {
-  my ($self) = @_;
+  my ($self, $dry_run) = @_;
 
   require File::Path;
   for my $x (grep { -e } '.build', glob($self->name . '-*')) {
-    $self->log("clean: removing $x");
-    File::Path::rmtree($x);
+    if ($dry_run) {
+      $self->log("clean: would remove $x");
+    } else {
+      $self->log("clean: removing $x");
+      File::Path::rmtree($x);
+    }
   };
 }
 
