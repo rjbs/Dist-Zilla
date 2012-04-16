@@ -24,6 +24,16 @@ can be specified multiple times):
   except = \.gitignore
   except = t/.*/\.keep$
 
+This plugin is included in the L<@Basic|Dist::Zilla::PluginBundle::Basic>
+bundle.
+
+=head1 SEE ALSO
+
+Dist::Zilla plugins:
+L<@Basic|Dist::Zilla::PluginBundle::Basic>,
+L<PruneFiles|Dist::Zilla::Plugin::PruneFiles>,
+L<ManifestSkip|Dist::Zilla::Plugin::ManifestSkip>.
+
 =cut
 
 {

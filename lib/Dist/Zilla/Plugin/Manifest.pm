@@ -14,6 +14,17 @@ If included, this plugin will produce a F<MANIFEST> file for the distribution,
 listing all of the files it contains.  For obvious reasons, it should be
 included as close to last as possible.
 
+This plugin is included in the L<@Basic|Dist::Zilla::PluginBundle::Basic>
+bundle.
+
+=head1 SEE ALSO
+
+Dist::Zilla core plugins:
+L<@Basic|Dist::Zilla::PluginBundle::Manifest>,
+L<ManifestSkip|Dist::Zilla::Plugin::ManifestSkip>.
+
+Other modules: L<ExtUtils::Manifest>.
+
 =cut
 
 sub __fix_filename {

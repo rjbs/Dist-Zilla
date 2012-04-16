@@ -79,3 +79,13 @@ sub prune_files {
 
 __PACKAGE__->meta->make_immutable;
 1;
+__END__
+
+=head1 SEE ALSO
+
+Dist::Zilla plugins:
+L<PruneCruft|Dist::Zilla::Plugin::PruneCruft>,
+L<GatherDir|Dist::Zilla::Plugin::GatherDir>,
+L<ManifestSkip|Dist::Zilla::Plugin::ManifestSkip>.
+
+=cut
