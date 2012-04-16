@@ -10,6 +10,10 @@ use namespace::autoclean;
 This plugin extends C<[Prereqs]> and adds nothing.  It is the old name for
 Prereqs, and will be removed in a few versions.
 
+=head1 SEE ALSO
+
+Dist::Zilla plugins: L<Prereqs|Dist::Zilla::Plugin::Prereqs>.
+
 =cut
 
 before register_component => sub {

@@ -21,6 +21,12 @@ In your F<dist.ini>:
 This will remove any prerequisite of any type from any prereq phase.  This is
 useful for eliminating incorrectly detected prereqs.
 
+=head1 SEE ALSO
+
+Dist::Zilla plugins:
+L<Prereqs|Dist::Zilla::Plugin::Prereqs>,
+L<AutoPrereqs|Dist::Zilla::Plugin::AutoPrereqs>.
+
 =cut
 
 sub mvp_multivalue_args { qw(modules_to_remove) }
