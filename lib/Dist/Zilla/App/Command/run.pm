@@ -45,7 +45,7 @@ sub usage_desc {
 sub execute {
   my ($self, $opts, $args) = @_;
 
-  $args = [ $ENV{SHELL} ] unless @$args;
+  $args = [ $^O eq 'MSWin32' ? $ENV{COMSPEC} : $ENV{SHELL} ] unless @$args;
 
   $self->usage_error("no command to run supplied!") unless @$args;
 
