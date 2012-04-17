@@ -30,6 +30,8 @@ Options not prefixed with C<-> will be passed to the bundle to be filtered.
 
 Core Dist::Zilla plugins: L<@Basic|Dist::Zilla::PluginBundle::Basic>.
 
+Dist::Zilla roles: L<PluginBundle|Dist::Zilla::Role::PluginBundle>.
+
 =cut
 
 sub mvp_multivalue_args { qw(remove -remove) }
