@@ -168,3 +168,18 @@ has __module_build_args => (
 
 __PACKAGE__->meta->make_immutable;
 1;
+__END__
+
+=head1 SEE ALSO
+
+Core Dist::Zilla plugins:
+L<@Basic|Dist::Zilla::PluginBundle::Basic>,
+L<@Filter|Dist::Zilla::PluginBundle::Filter>,
+L<MakeMaker|Dist::Zilla::Plugin::MakeMaker>,
+L<Manifest|Dist::Zilla::Plugin::Manifest>.
+
+Dist::Zilla roles:
+L<BuildPL|Dist::Zilla::Role::BuildPL>.
+
+=cut
+

@@ -263,3 +263,16 @@ has __write_makefile_args => (
 
 __PACKAGE__->meta->make_immutable;
 1;
+__END__
+
+=head1 SEE ALSO
+
+Core Dist::Zilla plugins:
+L<@Basic|Dist::Zilla::PluginBundle::Basic>,
+L<ModuleBuild|Dist::Zilla::Plugin::ModuleBuild>,
+L<Manifest|Dist::Zilla::Plugin::Manifest>.
+
+Dist::Zilla roles:
+L<BuildRunner>, L<InstallTool>, L<PrereqSource>, L<TestRunner>.
+
+=cut
