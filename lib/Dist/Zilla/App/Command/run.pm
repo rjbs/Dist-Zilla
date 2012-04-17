@@ -45,9 +45,14 @@ sub usage_desc {
 sub execute {
   my ($self, $opts, $args) = @_;
 
-  $args = [ $^O eq 'MSWin32' ? $ENV{COMSPEC} : $ENV{SHELL} ] unless @$args;
-
-  $self->usage_error("no command to run supplied!") unless @$args;
+  unless (@$args) {
+    my $envname = $^O eq 'MSWin32' ? 'COMSPEC' : 'SHELL';
+    unless ($ENV{$envname}) {
+      $self->usage_error("no command supplied to run and no \$$envname set");
+    }
+    $args = [ $ENV{$envname} ];
+    $self->log("no command supplied to run so using \$$envname: $args->[0]");
+  }
 
   $self->zilla->run_in_build($args);
 }
