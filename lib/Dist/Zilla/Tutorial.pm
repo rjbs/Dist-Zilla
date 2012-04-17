@@ -24,7 +24,7 @@ F<dist.ini>:
   license = Perl_5
   copyright_holder = Alan Smithee
 
-  [@Classic]
+  [@Basic]
 
   [Prereq]
   App::Cmd          = 0.013
@@ -43,7 +43,8 @@ entries it expects:
   copyright_holder - (required) the entity holding copyright on the dist
 
 Some of the required values above may actually be provided by means other than
-the top-level section of the config.  For example, VersionProvider plugins can
+the top-level section of the config.  For example,
+L<VersionProvider|Dist::Zilla::Role::VersionProvider> plugins can
 set the version, and a line like this in the "main module" of the dist will set
 the abstract:
 
@@ -54,18 +55,18 @@ general.
 
 Named sections load plugins, with the following rules:
 
-If a section name begins with an equals sign, the rest of the section name is
-left intact and not expanded.  If the section name begins with an at sign, it
-is prepended with 'Dist::Zilla::PluginBundle::'.  Otherwise, it is prepended
-with 'Dist::Zilla::Plugin::'.
+If a section name begins with an equals sign (C<=>), the rest of the section
+name is left intact and not expanded.  If the section name begins with an at
+sign (C<@>), it is prepended with C<Dist::Zilla::PluginBundle::>.  Otherwise,
+it is prepended with C<Dist::Zilla::Plugin::>.
 
 The values inside a section are given as configuration to the plugin.  Consult
 each plugin's documentation for more information.
 
-The "Classic" bundle, seen above, builds a fairly normal distribution.  It
+The "Basic" bundle, seen above, builds a fairly normal distribution.  It
 rewrites tests from F<./xt>, adds some information to POD, and builds a
 F<Makefile.PL>.  For more information, you can look at the docs for
-L<Dist::Zilla::PluginBundle::Classic> and see the plugins it includes.
+L<@Basic|Dist::Zilla::PluginBundle::Basic> and see the plugins it includes.
 
 =head1 BUILDING YOUR DIST
 
@@ -116,14 +117,21 @@ do whatever is needed to make the dist installable.
 Everything is just about done.  The files are all written out to disk and the
 L<AfterBuild|Dist::Zilla::Role::AfterBuild> plugins do their thing.
 
-=head1 THE GLORIOUS FUTURE
+=head1 RELEASING YOUR DIST
 
-In the glorious future of Dist::Zilla, another phase in the process will exist:
-C<release>.  By running C<dzil release>, you'll be able to test your
-distribution, build a tarball of it, and upload it to the CPAN.  Plugins will
-be able to do things like check your version control system to make sure you're
+By running C<dzil release>, you'll can test your
+distribution, build a tarball of it, and upload it to the CPAN.  Plugins are
+able to do things like check your version control system to make sure you're
 releasing a new version and that you tag the version you've just uploaded.  It
-will update your Changelog file, too, making sure that you don't need to know
-what your next version number will be before releasing.
+can also update your Changelog file, too, making sure that you don't need to
+know what your next version number will be before releasing.
+
+The final CPAN release process is implemented by the
+L<UploadToCPAN|Dist::Zilla::Plugin::UploadToCPAN> plugin. However you can
+replace it by your own to match your own (company?) process.
+
+=head1 SEE ALSO
+
+L<dzil>
 
 =cut
