@@ -10,6 +10,9 @@ Revision history for {{$dist->name}}
           dzil clean now has has a "dry run" option.  (thanks, Karen
           Etheridge!)
 
+          add more links in plugins documentation to help discoverability
+          of other plugins.  (thanks, Olivier Mengué!)
+
 4.300014  2012-04-05 12:46:33 America/New_York
           added the CPANFile plugin to create "cpanfile" prereq format
 
