@@ -26,6 +26,10 @@ but removes all the entries whose package is given in the C<-remove> attributes.
 
 Options not prefixed with C<-> will be passed to the bundle to be filtered.
 
+=head1 SEE ALSO
+
+Core Dist::Zilla plugins: L<@Basic|Dist::Zilla::PluginBundle::Basic>.
+
 =cut
 
 sub mvp_multivalue_args { qw(remove -remove) }

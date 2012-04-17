@@ -56,5 +56,9 @@ It includes the following plugins with their default configuration:
 * L<Dist::Zilla::Plugin::ConfirmRelease>
 * L<Dist::Zilla::Plugin::UploadToCPAN>
 
+=head1 SEE ALSO
+
+Core Dist::Zilla plugins: L<@Filter|Dist::Zilla::PluginBundle::Filter>.
+
 =cut
 
