@@ -245,13 +245,18 @@ sub _load_config {
 
     my $package = $_->package;
 
+    # Figure out what the user actually has
+    my $cmdline = ( eval { require App::cpanminus; 1; } ) ? 'dzil authordeps | cpanm' :  # if cpanm is installed
+                  $ENV{SHELL} ? 'cpan `dzil authordeps`' :  # if any sort of backtick shell is installed (non-MSWin32)
+                  'dzil authordeps | perl -pe "s/\n/ / and $c++ or s/\A/install /" | cpan';  # long but still worksc
+
     die <<"END_DIE";
 Required plugin $package isn't installed.
 
 Run 'dzil authordeps' to see a list of all required plugins.
 You can pipe the list to your CPAN client to install or update them:
 
-    dzil authordeps | cpanm
+    $cmdline
 
 END_DIE
 
