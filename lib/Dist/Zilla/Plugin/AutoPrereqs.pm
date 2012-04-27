@@ -53,6 +53,7 @@ In your F<dist.ini>:
 
   [AutoPrereqs]
   skip = ^Foo|Bar$
+  skip = ^Other::Dist
 
 =head1 DESCRIPTION
 
@@ -78,8 +79,9 @@ of scanners.
 
 =attr skips
 
-This is an arrayref of regular expressions.  Any module names matching
-any of these regex will not be registered as prerequisites.
+This is an arrayref of regular expressions, derived from all the 'skip' lines
+in the configuration.  Any module names matching any of these regexes will not
+be registered as prerequisites.
 
 =head1 SEE ALSO
 
