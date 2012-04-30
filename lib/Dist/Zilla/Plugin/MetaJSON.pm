@@ -80,3 +80,19 @@ sub gather_files {
 
 __PACKAGE__->meta->make_immutable;
 1;
+__END__
+
+=head1 SEE ALSO
+
+Core Dist::Zilla plugins:
+L<@Basic|Dist::Zilla::PluginBundle::Basic>,
+L<Manifest|Dist::Zilla::Plugin::Manifest>.
+
+Dist::Zilla roles:
+L<FileGatherer|Dist::Zilla::Role::FileGatherer>.
+
+Other modules:
+L<CPAN::Meta>,
+L<CPAN::Meta::Spec>, L<JSON>.
+
+=cut
