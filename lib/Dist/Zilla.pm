@@ -688,3 +688,48 @@ There is a mailing list to discuss Dist::Zilla.  You can L<join the
 list|http://www.listbox.com/subscribe/?list_id=139292> or L<browse the
 archives|http://listbox.com/member/archive/139292>.
 
+=head1 SEE ALSO
+
+=over 4
+
+=item *
+
+In the Dist::Zilla distribution:
+
+=over 4
+
+=item *
+
+Plugin bundles:
+L<@Basic|Dist::Zilla::PluginBundle::Basic>,
+L<@Filter|Dist::Zilla::PluginBundle::Filter>.
+
+=item *
+
+Major plugins:
+L<GatherDir|Dist::Zilla::Plugin::GatherDir>,
+L<Prereqs|Dist::Zilla::Plugin::Prereqs>,
+L<AutoPrereqs|Dist::Zilla::Plugin::AutoPrereqs>,
+L<MetaYAML|Dist::Zilla::Plugin::MetaYAML>,
+L<MetaYAML|Dist::Zilla::Plugin::MetaJSON>,
+...
+
+=back
+
+=item *
+
+On the CPAN:
+
+=over 4
+
+=item *
+
+Search for plugins: L<https://metacpan.org/search?q=Dist::Zilla::Plugin::>
+
+=item *
+
+Search for plugin bundles: L<https://metacpan.org/search?q=Dist::Zilla::PluginBundle::>
+
+=back
+
+=back
