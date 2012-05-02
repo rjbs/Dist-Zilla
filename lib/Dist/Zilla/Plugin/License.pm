@@ -29,3 +29,28 @@ sub gather_files {
 
 __PACKAGE__->meta->make_immutable;
 1;
+__END__
+
+=head1 SEE ALSO
+
+=over 4
+
+=item *
+
+the C<license> attribute of the L<Dist::Zilla> object to select the license
+to use.
+
+=item *
+
+Dist::Zilla roles:
+L<FileGatherer|Dist::Zilla::Role::FileGatherer>.
+
+=item *
+
+Other modules:
+L<Software::License>,
+L<Software::License::Artistic_2_0>.
+
+=back
+
+=cut
