@@ -40,3 +40,13 @@ sub gather_files {
 
 __PACKAGE__->meta->make_immutable;
 1;
+__END__
+
+=head1 SEE ALSO
+
+Core Dist::Zilla plugins inheriting from L<InlineFiles>:
+L<MetaTests|Dist::Zilla::Plugin::MetaTests>,
+L<PodCoverageTests|Dist::Zilla::Plugin::PodCoverageTests>,
+L<PodSyntaxTests|Dist::Zilla::Plugin::PodSyntaxTests>.
+
+=cut
