@@ -20,3 +20,15 @@ metadata.
 requires 'metadata';
 
 1;
+__END__
+
+=head1 SEE ALSO
+
+Core Dist::Zilla plugins implementing this role:
+L<ConfigMeta|Dist::Zilla::Plugin::ConfigMeta>.
+L<MetaNoIndex|Dist::Zilla::Plugin::MetaNoIndex>.
+
+Dist::Zilla plugins on the CPAN:
+L<GithubMeta|Dist::Zilla::Plugin::GithubMeta>...
+
+=cut
