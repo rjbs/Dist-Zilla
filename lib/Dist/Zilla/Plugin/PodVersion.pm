@@ -74,3 +74,13 @@ sub munge_pod {
 
 __PACKAGE__->meta->make_immutable;
 1;
+__END__
+
+=head1 SEE ALSO
+
+Core Dist::Zilla plugins:
+L<PkgVersion|Dist::Zilla::Plugin::PkgVersion>,
+L<AutoVersion|Dist::Zilla::Plugin::AutoVersion>,
+L<NextRelease|Dist::Zilla::Plugin::NextRelease>.
+
+=cut

@@ -19,3 +19,11 @@ ignored.
 requires 'provide_version';
 
 1;
+__END__
+
+=head1 SEE ALSO
+
+Core Dist::Zilla plugins implementing this role:
+L<AutoVersion|Dist::Zilla::Plugin::AutoVersion>.
+
+=cut

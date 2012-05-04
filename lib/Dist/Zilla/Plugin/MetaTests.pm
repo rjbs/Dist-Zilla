@@ -13,7 +13,16 @@ following files:
   xt/release/meta-yaml.t - a standard Test::CPAN::Meta test
 
 Note that this test doesn't actually do anything unless you have
-Test::CPAN::Meta installed.
+L<Test::CPAN::Meta> installed.
+
+=head1 SEE ALSO
+
+Core Dist::Zilla plugins:
+L<MetaResources|Dist::Zilla::Plugin::MetaResources>,
+L<MetaNoIndex|Dist::Zilla::Plugin::MetaNoIndex>,
+L<MetaYAML|Dist::Zilla::Plugin::MetaYAML>,
+L<MetaJSON|Dist::Zilla::Plugin::MetaJSON>,
+L<MetaConfig|Dist::Zilla::Plugin::MetaConfig>.
 
 =cut
 

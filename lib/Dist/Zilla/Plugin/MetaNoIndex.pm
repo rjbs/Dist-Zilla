@@ -112,3 +112,10 @@ sub metadata {
 
 __PACKAGE__->meta->make_immutable;
 1;
+__END__
+
+=head1 SEE ALSO
+
+Dist::Zilla roles: L<MetaProvider|Dist::Zilla::Role::MetaProvider>.
+
+=cut

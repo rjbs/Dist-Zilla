@@ -273,6 +273,9 @@ L<ModuleBuild|Dist::Zilla::Plugin::ModuleBuild>,
 L<Manifest|Dist::Zilla::Plugin::Manifest>.
 
 Dist::Zilla roles:
-L<BuildRunner>, L<InstallTool>, L<PrereqSource>, L<TestRunner>.
+L<BuildRunner|Dist::Zilla::Role::FileGatherer>,
+L<InstallTool|Dist::Zilla::Role::InstallTool>,
+L<PrereqSource|Dist::Zilla::Role::PrereqSource>,
+L<TestRunner|Dist::Zilla::Role::TestRunner>.
 
 =cut
