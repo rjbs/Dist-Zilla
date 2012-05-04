@@ -6,6 +6,7 @@ use lib 't/lib';
 
 use autodie;
 use Test::DZil;
+use Test::Deep;
 
 my $generic_test = <<'END_TEST';
 #!perl
@@ -14,6 +15,8 @@ use strict;
 use warnings;
 
 use Test::More 0.88;
+
+use Foo::%s 392;
 
 ok(0, "stop building me!");
 
@@ -26,8 +29,8 @@ my $tzil = Builder->from_config(
   { dist_root => 'corpus/dist/DZT' },
   {
     add_files => {
-      'source/dist.ini' => simple_ini('GatherDir', 'ExtraTests'),
-      (map {; "source/xt/$_/huffer.t" => $generic_test }
+      'source/dist.ini' => simple_ini(qw<GatherDir ExtraTests AutoPrereqs MetaJSON>),
+      (map {; "source/xt/$_/huffer.t" => sprintf($generic_test, $_) }
            @xt_types, qw(blort))
     },
   },
@@ -40,6 +43,7 @@ my @files = map {; $_->name } @{ $tzil->files };
 is_deeply(
   [ sort @files ],
   [ sort qw(
+    META.json
     dist.ini lib/DZT/Sample.pm t/basic.t
     t/smoke-huffer.t
     t/author-huffer.t
@@ -59,5 +63,31 @@ for my $type (@xt_types) {
     "we mention $env in the rewritten $type test",
   );
 }
+
+my $meta = $tzil->slurp_file('build/META.json');
+
+is_json(
+  $meta,
+  superhashof({
+    prereqs => {
+      runtime => {
+        requires => {
+          strict => 0,
+          warnings => 0,
+        },
+      },
+      test => {
+        requires => {
+          'Test::More' => '0.88',
+          'Foo::author' => '392',
+          'Foo::release' => '392',
+          'Foo::smoke' => '392',
+        },
+      },
+    },
+  }),
+  'dependencies ok',
+) or diag $meta;
+
 
 done_testing;
