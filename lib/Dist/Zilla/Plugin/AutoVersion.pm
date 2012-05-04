@@ -85,3 +85,17 @@ sub provide_version {
 
 __PACKAGE__->meta->make_immutable;
 1;
+__END__
+
+=head1 SEE ALSO
+
+Core Dist::Zilla plugins:
+L<PkgVersion|Dist::Zilla::Plugin::PkgVersion>,
+L<PodVersion|Dist::Zilla::Plugin::PodVersion>,
+L<NextRelease|Dist::Zilla::Plugin::NextRelease>.
+
+Dist::Zilla roles:
+L<VersionProvider|Dist::Zilla::Role::VersionProvider>,
+L<TextTemplate|Dist::Zilla::Role::TextTemplate>.
+
+=cut
