@@ -181,3 +181,15 @@ The module allows the following sprintf-like format codes in the format:
 * n - a newline
 * t - a tab
 
+=head1 SEE ALSO
+
+Core Dist::Zilla plugins:
+L<AutoVersion|Dist::Zilla::Plugin::AutoVersion>,
+L<PkgVersion|Dist::Zilla::Plugin::PkgVersion>,
+L<PodVersion|Dist::Zilla::Plugin::PodVersion>.
+
+Dist::Zilla roles:
+L<AfterRelease|Dist::Zilla::Plugin::AfterRelease>,
+L<FileMunger|Dist::Zilla::Role::FileMunger>,
+L<TextTemplate|Dist::Zilla::Role::TextTemplate>.
+
