@@ -79,9 +79,10 @@ is_json(
       test => {
         requires => {
           'Test::More' => '0.88',
-          'Foo::author' => '392',
-          'Foo::release' => '392',
           'Foo::smoke' => '392',
+          # Foo::author and Foo::release are
+          # not here because they are not required by the end user
+          # (See RT#76305)
         },
       },
     },

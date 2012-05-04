@@ -142,6 +142,8 @@ sub register_prereqs {
       # parse only perl files
       next unless $file->name =~ /\.(?:pm|pl|t|psgi)$/i
                || $file->content =~ /^#!(?:.*)perl(?:$|\s)/;
+      # RT#76305 skip extra tests produced by ExtraTests plugin
+      next if $file->name =~ m{^t/(?:author|release)-[^/]*\.t$};
 
       # store module name, to trim it from require list later on
       my $module = $file->name;
