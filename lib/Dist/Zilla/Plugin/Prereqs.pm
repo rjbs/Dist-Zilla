@@ -180,3 +180,22 @@ sub register_prereqs {
 
 __PACKAGE__->meta->make_immutable;
 1;
+__END__
+
+=head1 SEE ALSO
+
+=over 4
+
+=item *
+
+Core Dist::Zilla plugins:
+L<@Basic|Dist::Zilla::PluginBundle::Basic>,
+L<AutoPrereqs|Dist::Zilla::Plugin::AutoPrereqs>.
+
+=item *
+
+The CPAN Meta specification: L<CPAN::Meta/PREREQUISITES>.
+
+=back
+
+=cut
