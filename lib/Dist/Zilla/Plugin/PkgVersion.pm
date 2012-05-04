@@ -119,3 +119,13 @@ sub munge_perl {
 
 __PACKAGE__->meta->make_immutable;
 1;
+__END__
+
+=head1 SEE ALSO
+
+Core Dist::Zilla plugins:
+L<PodVersion|Dist::Zilla::Plugin::PodVersion>,
+L<AutoVersion|Dist::Zilla::Plugin::AutoVersion>,
+L<NextRelease|Dist::Zilla::Plugin::NextRelease>.
+
+=cut
