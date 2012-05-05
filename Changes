@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          make AutoPrereqs treat .psgi files as scannable (thanks, Jakob Voss!)
 
 4.300015  2012-04-23 21:38:21 America/New_York
           require a CPAN::Meta::Requirements 2.121 to get the
