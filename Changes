@@ -3,6 +3,9 @@ Revision history for {{$dist->name}}
 {{$NEXT}}
           make AutoPrereqs treat .psgi files as scannable (thanks, Jakob Voss!)
 
+          add yet more links in plugins documentation to help discoverability
+          of other plugins.  (thanks, Olivier Mengué!)
+
 4.300015  2012-04-23 21:38:21 America/New_York
           require a CPAN::Meta::Requirements 2.121 to get the
           requirements_for_module (thanks, Olivier Mengué!)
