@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.300016  2012-05-04 22:09:10 America/New_York
           make AutoPrereqs treat .psgi files as scannable (thanks, Jakob Voss!)
 
           add yet more links in plugins documentation to help discoverability
