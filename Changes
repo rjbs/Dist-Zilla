@@ -8,6 +8,9 @@ Revision history for {{$dist->name}}
           add yet more links in plugins documentation to help discoverability
           of other plugins.  (thanks, Olivier Mengué!)
 
+          AutoPrereqs: skip author and release tests when scanning (RT#76305).
+          (thanks, Olivier Mengué!)
+
 4.300015  2012-04-23 21:38:21 America/New_York
           require a CPAN::Meta::Requirements 2.121 to get the
           requirements_for_module (thanks, Olivier Mengué!)
