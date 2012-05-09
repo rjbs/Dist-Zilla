@@ -14,6 +14,7 @@ use YAML::Tiny;
   my $tzil = Builder->from_config(
     { dist_root => 'corpus/dist/DZT' },
     {
+      auto_diag => 1,
       add_files => {
         'source/dist.ini' => simple_ini(
           'GatherDir',
@@ -85,6 +86,7 @@ use YAML::Tiny;
   my $tzil = Builder->from_config(
     { dist_root => 'corpus/dist/DZT' },
     {
+      auto_diag => 1,
       add_files => {
         'source/dist.ini' => simple_ini(
           'GatherDir',
