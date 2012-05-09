@@ -23,7 +23,7 @@ C<}}>.
 
 # XXX: Later, add a way to set this in config. -- rjbs, 2008-06-02
 has delim => (
-  is   => 'ro',
+  is   => 'rw',
   isa  => 'ArrayRef',
   lazy => 1,
   init_arg => undef,

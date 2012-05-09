@@ -27,6 +27,13 @@ use String::Formatter 0.100680 stringf => {
   },
 };
 
+# Allow delim to be set from a configuration delimeter
+has delimeter => (
+  is  => 'ro',
+  isa => 'Str',
+  predicate => 'has_delimeter',
+);
+
 has time_zone => (
   is => 'ro',
   isa => 'Str', # should be more validated later -- apocal
@@ -60,6 +67,17 @@ sub section_header {
 
 sub munge_files {
   my ($self) = @_;
+
+  # Use configured delimeter if available
+  if ($self->has_delimeter and $self->delimeter) {
+    my @delims = split /\s+/, $self->delimeter;
+    die "Must define a start and stop delimeter (separated by whitespace)
+in your dist.ini [NextRelease] section.  For example:
+    [NextRelease]
+    delimeter =  {{{ }}}"
+      if (scalar @delims != 2);
+    $self->delim(\@delims);
+  }
 
   my ($file) = grep { $_->name eq $self->filename } @{ $self->zilla->files };
   return unless $file;
@@ -170,6 +188,13 @@ defaults to C<%-9v %{yyyy-MM-dd HH:mm:ss VVVV}d>
 
 = time_zone
 the timezone to use when generating the date;  defaults to I<local>
+
+= delimeter
+a custom marker to wrap around $NEXT
+
+To use {{{$NEXT}}} instead of {{$NEXT}} then add the option:
+  delimeter = {{{ }}}
+Whitespace is required as the separator
 
 =end :list
 
