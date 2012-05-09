@@ -28,6 +28,17 @@ package DZT::TP2;
 1;
 ';
 
+my $with_strict = '
+package DZT::Strict;
+
+use strict;
+use warnings;
+
+use Foo;
+
+1;
+';
+
 my $repeated_packages = '
 package DZT::R1;
 
@@ -78,6 +89,7 @@ my $tzil = Builder->from_config(
       'source/lib/DZT/R1.pm'     => $repeated_packages,
       'source/lib/DZT/Monkey.pm' => $monkey_patched,
       'source/lib/DZT/HideMe.pm' => $hide_me_comment,
+      'source/lib/DZT/Strict.pm'    => $with_strict,
       'source/bin/script_pkg.pl' => $script_pkg,
       'source/bin/script_ver.pl' => $script_pkg . "our \$VERSION = 1.234;\n",
       'source/bin/script.pl'     => $script,
@@ -174,6 +186,14 @@ unlike(
   qr{\$DZT::TP2::VERSION},
   "no version for DZT::TP2 when it was hidden with a comment"
 );
+
+my $dzt_strict = $tzil->slurp_file('build/lib/DZT/Strict.pm');
+like(
+  $dzt_strict,
+  qr{^use strict;\nuse warnings;\nBEGIN\s*\{\n\s*\$\QDZT::Strict::VERSION = '0.001';\E\s*$}m,
+  "added version to DZT::Strict after strict/warnings pragmas",
+);
+
 
 {
   local $ENV{TRIAL} = 1;
