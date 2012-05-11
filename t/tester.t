@@ -41,4 +41,19 @@ my ($zero_byte_file) = $tarball->get_files( $zero_byte );
 
 is($zero_byte_file->get_content, "", "zero byte file is empty");
 
+my $tzil2 = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    { add_files => {
+        'source/zero'     => '',
+        'source/dist.ini' => simple_ini({
+            name => 'DZT',
+        }, 'GatherDir', 'MakeMaker', 'FakeRelease')
+      },
+    },
+);
+
+$tzil2->test;
+ok((grep { /all's well/ } @{ $tzil2->log_messages }),
+   "tester can run the test method");
+
 done_testing;

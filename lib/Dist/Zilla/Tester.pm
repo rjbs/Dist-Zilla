@@ -155,7 +155,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
     return $self->$orig($target);
   };
 
-  around release => sub {
+  around ['test', 'release'] => sub {
     my ($orig, $self) = @_;
 
     # XXX: We *must eliminate* the need for this!  It's only here because right
