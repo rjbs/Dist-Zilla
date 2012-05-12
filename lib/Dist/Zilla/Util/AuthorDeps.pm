@@ -5,6 +5,7 @@ package Dist::Zilla::Util::AuthorDeps;
 
 use Dist::Zilla::Util;
 use Path::Class;
+use List::MoreUtils ();
 
 
 sub format_author_deps {
