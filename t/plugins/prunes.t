@@ -44,6 +44,44 @@ for my $skip_skip (0..3) {
 }
 
 {
+local $TODO = 'fix RT#76036';
+
+# Test ManifestSkip with InlineFiles-generated files
+for my $skip_skip (0..1) {
+  my $tzil = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/dist.ini' => simple_ini(
+          [ GatherDir => ],
+          [ GatherDir => BonusFiles => {
+            root   => '../corpus/extra',
+            prefix => 'bonus',
+          } ],
+          'JustForManifestSkipTests',
+          ($skip_skip & 1 ? [ ManifestSkip => { skipfile => 'FOO.SKIP' } ] : ()),
+        ),
+      },
+      also_copy => { 'corpus/extra' => 'corpus/extra' },
+    },
+  );
+
+  $tzil->build;
+
+  my @files = map {; $_->name } @{ $tzil->files };
+
+  is_filelist(
+    $tzil->files,
+    [ qw(bonus/subdir/index.html lib/DZT/Sample.pm t/basic.t),
+      ($skip_skip & 1 ? () : (qw(foo.txt dist.ini bonus/vader.txt FOO.SKIP))),
+    ],
+    "ManifestSkip prunes files from generated FOO.SKIP ($skip_skip)",
+  );
+}
+
+} # $TODO
+
+{
   my $tzil = Builder->from_config(
     { dist_root => 'corpus/dist/DZT' },
     {
