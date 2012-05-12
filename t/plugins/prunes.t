@@ -43,10 +43,7 @@ for my $skip_skip (0..3) {
   );
 }
 
-{
-local $TODO = 'fix RT#76036';
-
-# Test ManifestSkip with InlineFiles-generated files
+# Test ManifestSkip with InlineFiles-generated files RT#76036
 for my $skip_skip (0..1) {
   my $tzil = Builder->from_config(
     { dist_root => 'corpus/dist/DZT' },
@@ -78,8 +75,6 @@ for my $skip_skip (0..1) {
     "ManifestSkip prunes files from generated FOO.SKIP ($skip_skip)",
   );
 }
-
-} # $TODO
 
 {
   my $tzil = Builder->from_config(
