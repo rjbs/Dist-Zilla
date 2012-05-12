@@ -1,6 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          plugins can now provide a MANIFEST.SKIP that can be processed by
+          ManifestSkip. Previously generated content was just ignored.
+          (thanks, Olivier Mengué!)
 
 4.300016  2012-05-04 22:09:10 America/New_York
           make AutoPrereqs treat .psgi files as scannable (thanks, Jakob Voss!)
