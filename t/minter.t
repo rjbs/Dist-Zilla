@@ -6,8 +6,10 @@ use Test::More 0.88;
 
 use lib 't/lib';
 
+use File::pushd qw/pushd/;
 use Path::Class;
 use Test::DZil;
+use Dist::Zilla::App::Tester;
 use YAML::Tiny;
 
 my $tzil = Minter->_new_from_profile(
@@ -33,5 +35,16 @@ like(
   qr/copyright_holder = A. U. Thor/,
   "copyright_holder in dist.ini",
 );
+
+{
+  my $result = test_dzil( $tzil->tempdir->subdir('mint')->absolute, [qw(add Foo::Bar)] );
+  my $pm = dir($result->{tempdir})->file('source/lib/Foo/Bar.pm')->slurp;
+
+  like(
+    $pm,
+    qr/package Foo::Bar;/,
+    "our second module has the package declaration we want",
+  );
+}
 
 done_testing;
