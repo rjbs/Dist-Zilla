@@ -4,7 +4,10 @@ Revision history for {{$dist->name}}
           also check plugin version requirements in dzil authordeps --missing
           (Karen Etheridge)
 
-          add 'dzil add' to add new modules to an existing dist
+          add 'dzil add' to add new modules to an existing dist (thanks, David
+          Golden!)
+
+          misc. bugfixes (thanks, Karen Etheridge and Olivier Mengué!)
 
 4.300016  2012-05-04 22:09:10 America/New_York
           make AutoPrereqs treat .psgi files as scannable (thanks, Jakob Voss!)
