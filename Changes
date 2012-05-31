@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.300017  2012-05-31 12:17:45 America/New_York
           also check plugin version requirements in dzil authordeps --missing
           (Karen Etheridge)
 
