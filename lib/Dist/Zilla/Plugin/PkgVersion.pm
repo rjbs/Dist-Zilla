@@ -127,4 +127,8 @@ L<PodVersion|Dist::Zilla::Plugin::PodVersion>,
 L<AutoVersion|Dist::Zilla::Plugin::AutoVersion>,
 L<NextRelease|Dist::Zilla::Plugin::NextRelease>.
 
+Other Dist::Zilla plugins:
+L<OurPkgVersion|Dist::Zilla::Plugin::OurPkgVersion> inserts version
+numbers using C<our $VERSION = '...';> and without changing line numbers
+
 =cut
