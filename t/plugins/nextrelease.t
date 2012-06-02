@@ -212,4 +212,87 @@ END_CHANGES
   );
 }
 
+{
+  my $tzil = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/Changes' => $changes,
+        'source/dist.ini' => simple_ini(
+                'GatherDir',
+                [ NextRelease => { format => "%v %U %E", } ],
+                'FakeRelease',
+        ),
+      },
+    },
+  );
+
+  like(
+    exception { $tzil->build },
+    qr{\QYou must enter your name in the [%User] section\E},
+    "complains about missing name",
+  );
+}
+
+{
+  my $tzil = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/Changes' => $changes,
+        'source/dist.ini' => simple_ini(
+                'GatherDir',
+                [ NextRelease => { format => "%v %U <%E>", } ],
+                'FakeRelease',
+                [ '%User' => { name  => 'E.X. Ample',
+                               email => 'me@example.com' } ],
+        ),
+      },
+    },
+  );
+
+  is(
+    exception { $tzil->build },
+    undef,
+    "build successfully with name & email",
+  );
+
+  like(
+    $tzil->slurp_file('build/Changes'),
+    qr{^0\.001 E\.X\. Ample <me\@example\.com>}m,
+    "adding name and email works",
+  );
+}
+
+{
+  my $tzil = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/Changes' => $changes,
+        'source/dist.ini' => simple_ini(
+                'GatherDir',
+                [ NextRelease => { format => "%v %U <%E>",
+                                   user_stash => '%Info' } ],
+                'FakeRelease',
+                [ '%User' => '%Info' => { name  => 'E.X. Ample',
+                                          email => 'me@example.com' } ],
+        ),
+      },
+    },
+  );
+
+  is(
+    exception { $tzil->build },
+    undef,
+    "build successfully with %Info stash",
+  );
+
+  like(
+    $tzil->slurp_file('build/Changes'),
+    qr{^0\.001 E\.X\. Ample <me\@example\.com>}m,
+    "adding name and email from %Info works",
+  );
+}
+
 done_testing;
