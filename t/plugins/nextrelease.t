@@ -5,7 +5,7 @@ use Test::More 0.88;
 use lib 't/lib';
 
 use Test::DZil;
-use Try::Tiny;
+use Test::Fatal;
 
 local $ENV{TZ} = 'America/New_York';
 
@@ -96,16 +96,14 @@ END_CHANGES
     "new version does not yet appear in source Changes file",
   );
 
-  try {
-    local $ENV{DZIL_FAKERELEASE_FAIL} = 1;
-    $tzil->release;
-  } catch {
-    like(
-      $_,
-      qr/DZIL_FAKERELEASE_FAIL set, aborting/i,
-      "we can make FakeRelease fail when we want!"
-    );
-  };
+  like(
+    exception {
+      local $ENV{DZIL_FAKERELEASE_FAIL} = 1;
+      $tzil->release;
+    },
+    qr/DZIL_FAKERELEASE_FAIL set, aborting/i,
+    "we can make FakeRelease fail when we want!"
+  );
 
   unlike(
     $tzil->slurp_file('source/Changes'),
