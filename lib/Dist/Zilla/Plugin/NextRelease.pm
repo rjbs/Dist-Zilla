@@ -11,6 +11,7 @@ with (
 );
 
 use DateTime 0.44; # CLDR fixes
+use Moose::Util::TypeConstraints;
 use String::Formatter 0.100680 stringf => {
   -as => '_format_version',
 
@@ -24,6 +25,8 @@ use String::Formatter 0.100680 stringf => {
     },
     t => sub { "\t" },
     n => sub { "\n" },
+    E => sub { $_[0]->_user_info('email') },
+    U => sub { $_[0]->_user_info('name')  },
     T => sub { $_[0]->zilla->is_trial
                    ? (defined $_[1] ? $_[1] : '-TRIAL') : '' },
     V => sub { $_[0]->zilla->version
@@ -56,6 +59,33 @@ has update_filename => (
   lazy    => 1,
   default => sub { $_[0]->filename },
 );
+
+has user_stash => (
+  is      => 'ro',
+  isa     => 'Str',
+  default => '%User'
+);
+
+has _user_stash_obj => (
+  is       => 'ro',
+  isa      => maybe_type( class_type('Dist::Zilla::Stash::User') ),
+  lazy     => 1,
+  init_arg => undef,
+  default  => sub { $_[0]->zilla->stash_named( $_[0]->user_stash ) },
+);
+
+sub _user_info {
+  my ($self, $field) = @_;
+
+  my $stash = $self->_user_stash_obj;
+
+  $self->log_fatal([
+    "You must enter your %s in the [%s] section in ~/.dzil/config.ini",
+    $field, $self->user_stash
+  ]) unless $stash and defined(my $value = $stash->$field);
+
+  return $value;
+}
 
 sub section_header {
   my ($self) = @_;
@@ -119,7 +149,6 @@ sub after_release {
 
 __PACKAGE__->meta->make_immutable;
 1;
-__END__
 
 =head1 SYNOPSIS
 
@@ -176,42 +205,45 @@ defaults to C<%-9v %{yyyy-MM-dd HH:mm:ss VVVV}d>
 = time_zone
 the timezone to use when generating the date;  defaults to I<local>
 
+= user_stash
+the name of the stash where the user's name and email address can be found;
+defaults to C<%User>
+
 =end :list
 
-The module allows the following sprintf-like format codes in the format:
+The module allows the following sprintf-like format codes in the C<format>:
 
-=over 4
+=begin :list
 
-The module allows the following sprintf-like format codes in the format:
-
-=item C<%v>
-
+= C<%v>
 The distribution version
 
-=item C<%{-TRIAL}T>
+= C<%{-TRIAL}T>
+Expands to -TRIAL (or any other supplied string) if this
+is a trial release, or the empty string if not.  A bare C<%T> means
+C<%{-TRIAL}T>.
 
-Expands to -TRIAL (or any other supplied string) if this is a trial
-release, or the empty string if not.  A bare C<%T> means C<%{-TRIAL}T>.
-
-=item C<%{-TRIAL}V>
-
+= C<%{-TRIAL}V>
 Equivalent to C<%v%{-TRIAL}T>, to allow for the application of modifiers such
 as space padding to the entire version string produced.
 
-=item C<%d>
-
+= C<%{CLDR format}d>
 The date of the release.  You can use any CLDR format supported by
-L<DateTime>.
+L<DateTime>.  You must specify the format; there is no default.
 
-=item C<%n>
+= C<%U>
+The name of the user making this release (from C<user_stash>).
 
-a newline
+= C<%E>
+The email address of the user making this release (from C<user_stash>).
 
-=item C<%t>
+= C<%n>
+A newline
 
-a tab
+= C<%t>
+A tab
 
-=back
+=end :list
 
 =head1 SEE ALSO
 

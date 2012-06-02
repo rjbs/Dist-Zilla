@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          format codes %E, %T, %U, & %V added to NextRelease (thanks,
+          Karen Etheridge & Christopher J. Madsen!)
 
 4.300017  2012-05-31 12:17:45 America/New_York
           also check plugin version requirements in dzil authordeps --missing
