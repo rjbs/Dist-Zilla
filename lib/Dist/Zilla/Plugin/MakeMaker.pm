@@ -263,7 +263,6 @@ has __write_makefile_args => (
 
 __PACKAGE__->meta->make_immutable;
 1;
-__END__
 
 =head1 SEE ALSO
 

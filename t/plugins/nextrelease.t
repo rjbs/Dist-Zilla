@@ -5,7 +5,7 @@ use Test::More 0.88;
 use lib 't/lib';
 
 use Test::DZil;
-use Try::Tiny;
+use Test::Fatal;
 
 local $ENV{TZ} = 'America/New_York';
 
@@ -96,16 +96,14 @@ END_CHANGES
     "new version does not yet appear in source Changes file",
   );
 
-  try {
-    local $ENV{DZIL_FAKERELEASE_FAIL} = 1;
-    $tzil->release;
-  } catch {
-    like(
-      $_,
-      qr/DZIL_FAKERELEASE_FAIL set, aborting/i,
-      "we can make FakeRelease fail when we want!"
-    );
-  };
+  like(
+    exception {
+      local $ENV{DZIL_FAKERELEASE_FAIL} = 1;
+      $tzil->release;
+    },
+    qr/DZIL_FAKERELEASE_FAIL set, aborting/i,
+    "we can make FakeRelease fail when we want!"
+  );
 
   unlike(
     $tzil->slurp_file('source/Changes'),
@@ -159,6 +157,141 @@ END_CHANGES
     $tzil->slurp_file('build/Changes'),
     qr{UTC},
     "setting a custom time_zone works",
+  );
+}
+
+{
+  local $ENV{TRIAL} = 1;
+
+  my $tzil_trial = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/Changes' => $changes,
+        'source/dist.ini' => simple_ini(
+                'GatherDir',
+                [ NextRelease => { format => "%v%T", } ],
+                'FakeRelease',
+        ),
+      },
+    },
+  );
+
+  $tzil_trial->build;
+
+  like(
+    $tzil_trial->slurp_file('build/Changes'),
+    qr{0.001-TRIAL},
+    "adding -TRIAL works",
+  );
+}
+
+{
+  local $ENV{TRIAL} = 1;
+
+  my $tzil_trial = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/Changes' => $changes,
+        'source/dist.ini' => simple_ini(
+                'GatherDir',
+                [ NextRelease => { format => "%-12V ohhai", } ],
+                'FakeRelease',
+        ),
+      },
+    },
+  );
+
+  $tzil_trial->build;
+
+  like(
+    $tzil_trial->slurp_file('build/Changes'),
+    qr{0.001-TRIAL  ohhai},
+    "adding -TRIAL with padding works",
+  );
+}
+
+{
+  my $tzil = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/Changes' => $changes,
+        'source/dist.ini' => simple_ini(
+                'GatherDir',
+                [ NextRelease => { format => "%v %U %E", } ],
+                'FakeRelease',
+        ),
+      },
+    },
+  );
+
+  like(
+    exception { $tzil->build },
+    qr{\QYou must enter your name in the [%User] section\E},
+    "complains about missing name",
+  );
+}
+
+{
+  my $tzil = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/Changes' => $changes,
+        'source/dist.ini' => simple_ini(
+                'GatherDir',
+                [ NextRelease => { format => "%v %U <%E>", } ],
+                'FakeRelease',
+                [ '%User' => { name  => 'E.X. Ample',
+                               email => 'me@example.com' } ],
+        ),
+      },
+    },
+  );
+
+  is(
+    exception { $tzil->build },
+    undef,
+    "build successfully with name & email",
+  );
+
+  like(
+    $tzil->slurp_file('build/Changes'),
+    qr{^0\.001 E\.X\. Ample <me\@example\.com>}m,
+    "adding name and email works",
+  );
+}
+
+{
+  my $tzil = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/Changes' => $changes,
+        'source/dist.ini' => simple_ini(
+                'GatherDir',
+                [ NextRelease => { format => "%v %U <%E>",
+                                   user_stash => '%Info' } ],
+                'FakeRelease',
+                [ '%User' => '%Info' => { name  => 'E.X. Ample',
+                                          email => 'me@example.com' } ],
+        ),
+      },
+    },
+  );
+
+  is(
+    exception { $tzil->build },
+    undef,
+    "build successfully with %Info stash",
+  );
+
+  like(
+    $tzil->slurp_file('build/Changes'),
+    qr{^0\.001 E\.X\. Ample <me\@example\.com>}m,
+    "adding name and email from %Info works",
   );
 }
 

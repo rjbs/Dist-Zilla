@@ -119,7 +119,6 @@ sub munge_perl {
 
 __PACKAGE__->meta->make_immutable;
 1;
-__END__
 
 =head1 SEE ALSO
 
@@ -127,5 +126,9 @@ Core Dist::Zilla plugins:
 L<PodVersion|Dist::Zilla::Plugin::PodVersion>,
 L<AutoVersion|Dist::Zilla::Plugin::AutoVersion>,
 L<NextRelease|Dist::Zilla::Plugin::NextRelease>.
+
+Other Dist::Zilla plugins:
+L<OurPkgVersion|Dist::Zilla::Plugin::OurPkgVersion> inserts version
+numbers using C<our $VERSION = '...';> and without changing line numbers
 
 =cut

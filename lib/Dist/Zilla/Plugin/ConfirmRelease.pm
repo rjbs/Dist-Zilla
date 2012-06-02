@@ -33,8 +33,6 @@ sub before_release {
 __PACKAGE__->meta->make_immutable;
 1;
 
-__END__
-
 =head1 DESCRIPTION
 
 This plugin prompts the author whether or not to continue before releasing

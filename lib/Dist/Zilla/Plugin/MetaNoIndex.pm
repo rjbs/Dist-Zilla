@@ -44,7 +44,7 @@ my %ATTR_ALIAS = (
 
 sub mvp_aliases {
   my %alias_for;
-  
+
   for my $key (keys %ATTR_ALIAS) {
     $alias_for{ $_ } = $key for @{ $ATTR_ALIAS{$key} };
   }
@@ -112,7 +112,6 @@ sub metadata {
 
 __PACKAGE__->meta->make_immutable;
 1;
-__END__
 
 =head1 SEE ALSO
 
