@@ -5,7 +5,6 @@ package Dist::Zilla::Tutorial;
 use Carp ();
 Carp::confess "you're not meant to use the tutorial, just read it!";
 1;
-__END__
 
 =head1 SYNOPSIS
 

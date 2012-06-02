@@ -135,8 +135,6 @@ sub find_files {
 __PACKAGE__->meta->make_immutable;
 1;
 
-__END__
-
 =head1 DESCRIPTION
 
 FileFinder::ByName is a L<FileFinder|Dist::Zilla::Role::FileFinder> that
