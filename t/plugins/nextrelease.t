@@ -162,4 +162,56 @@ END_CHANGES
   );
 }
 
+{
+  local $ENV{TRIAL} = 1;
+
+  my $tzil_trial = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/Changes' => $changes,
+        'source/dist.ini' => simple_ini(
+                'GatherDir',
+                [ NextRelease => { format => "%v%T", } ],
+                'FakeRelease',
+        ),
+      },
+    },
+  );
+
+  $tzil_trial->build;
+
+  like(
+    $tzil_trial->slurp_file('build/Changes'),
+    qr{0.001-TRIAL},
+    "adding -TRIAL works",
+  );
+}
+
+{
+  local $ENV{TRIAL} = 1;
+
+  my $tzil_trial = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/Changes' => $changes,
+        'source/dist.ini' => simple_ini(
+                'GatherDir',
+                [ NextRelease => { format => "%-12V ohhai", } ],
+                'FakeRelease',
+        ),
+      },
+    },
+  );
+
+  $tzil_trial->build;
+
+  like(
+    $tzil_trial->slurp_file('build/Changes'),
+    qr{0.001-TRIAL  ohhai},
+    "adding -TRIAL with padding works",
+  );
+}
+
 done_testing;

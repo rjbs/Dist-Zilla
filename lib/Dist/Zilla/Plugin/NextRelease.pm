@@ -24,6 +24,11 @@ use String::Formatter 0.100680 stringf => {
     },
     t => sub { "\t" },
     n => sub { "\n" },
+    T => sub { $_[0]->zilla->is_trial
+                   ? (defined $_[1] ? $_[1] : '-TRIAL') : '' },
+    V => sub { $_[0]->zilla->version
+                . ($_[0]->zilla->is_trial
+                   ? (defined $_[1] ? $_[1] : '-TRIAL') : '') },
   },
 };
 
@@ -175,11 +180,38 @@ the timezone to use when generating the date;  defaults to I<local>
 
 The module allows the following sprintf-like format codes in the format:
 
-=for :list
-* v - the version of the dist
-* d - the CLDR format for L<DateTime>
-* n - a newline
-* t - a tab
+=over 4
+
+The module allows the following sprintf-like format codes in the format:
+
+=item C<%v>
+
+The distribution version
+
+=item C<%{-TRIAL}T>
+
+Expands to -TRIAL (or any other supplied string) if this is a trial
+release, or the empty string if not.  A bare C<%T> means C<%{-TRIAL}T>.
+
+=item C<%{-TRIAL}V>
+
+Equivalent to C<%v%{-TRIAL}T>, to allow for the application of modifiers such
+as space padding to the entire version string produced.
+
+=item C<%d>
+
+The date of the release.  You can use any CLDR format supported by
+L<DateTime>.
+
+=item C<%n>
+
+a newline
+
+=item C<%t>
+
+a tab
+
+=back
 
 =head1 SEE ALSO
 
