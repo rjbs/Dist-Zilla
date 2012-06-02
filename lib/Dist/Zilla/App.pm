@@ -24,6 +24,9 @@ sub _build_global_stashes {
 
   return $self->{__global_stashes__} if $self->{__global_stashes__};
 
+  # tests shouldn't depend on the user's configuration
+  return {} if $ENV{DZIL_TESTING};
+
   my $stash_registry = $self->{__global_stashes__} = {};
 
   my $config_dir  = Dist::Zilla::Util->_global_config_root;
