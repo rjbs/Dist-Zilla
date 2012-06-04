@@ -42,6 +42,7 @@ like(
 
 {
   my $result = test_dzil( $tzil->tempdir->subdir('mint')->absolute, [qw(add Foo::Bar)] );
+  ok(!$result->{exit_code}) || diag($result->{error});
   my $pm = dir($result->{tempdir})->file('source/lib/Foo/Bar.pm')->slurp;
 
   like(
