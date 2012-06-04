@@ -12,6 +12,10 @@ use Test::DZil;
 use Dist::Zilla::App::Tester;
 use YAML::Tiny;
 
+use Test::File::ShareDir -share => {
+  -module => { 'Dist::Zilla::MintingProfile::Default' => 'profiles' },
+};
+
 my $tzil = Minter->_new_from_profile(
   [ Default => 'default' ],
   { name => 'DZT-Minty', },
