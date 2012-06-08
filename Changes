@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.300018  2012-06-07 22:25:03 America/New_York
           format codes %E, %T, %U, & %V added to NextRelease (thanks,
           Karen Etheridge & Christopher J. Madsen!)
 
