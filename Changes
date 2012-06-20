@@ -2,6 +2,9 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+4.300019  2012-06-20 15:36:01 America/New_York
+          avoid looking outside the dist during testing (thanks, Jesse Luehrs!)
+
 4.300018  2012-06-07 22:25:03 America/New_York
           format codes %E, %T, %U, & %V added to NextRelease (thanks,
           Karen Etheridge & Christopher J. Madsen!)
