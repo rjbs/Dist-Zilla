@@ -2,6 +2,10 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+4.300020  2012-06-21 11:17:40 America/New_York
+          properly set the working directory when testing (thanks, Jesse
+          Luehrs!)
+
 4.300019  2012-06-20 15:36:01 America/New_York
           avoid looking outside the dist during testing (thanks, Jesse Luehrs!)
 
