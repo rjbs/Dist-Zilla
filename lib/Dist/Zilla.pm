@@ -710,7 +710,7 @@ L<GatherDir|Dist::Zilla::Plugin::GatherDir>,
 L<Prereqs|Dist::Zilla::Plugin::Prereqs>,
 L<AutoPrereqs|Dist::Zilla::Plugin::AutoPrereqs>,
 L<MetaYAML|Dist::Zilla::Plugin::MetaYAML>,
-L<MetaYAML|Dist::Zilla::Plugin::MetaJSON>,
+L<MetaJSON|Dist::Zilla::Plugin::MetaJSON>,
 ...
 
 =back
