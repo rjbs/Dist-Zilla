@@ -7,6 +7,14 @@ with 'Dist::Zilla::Role::PrereqSource';
 
 use namespace::autoclean;
 
+=head1 SYNTAX
+
+    # Add this to your dist.ini.
+    [PodSyntaxTests]
+
+    # To test for POD validity, run this in the shell:
+    $ dzil test --release
+
 =head1 DESCRIPTION
 
 This is an extension of L<Dist::Zilla::Plugin::InlineFiles>, providing the
@@ -15,6 +23,8 @@ following files:
   xt/author/pod-syntax.t   - a standard Test::Pod test
 
 L<Test::Pod> C<1.41> will be added as a C<develop requires> dependency.
+
+One can run the release tests by invoking C<dzil test --release>.
 
 =cut
 
