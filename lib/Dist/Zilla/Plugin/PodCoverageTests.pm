@@ -6,6 +6,14 @@ with 'Dist::Zilla::Role::PrereqSource';
 
 use namespace::autoclean;
 
+=head1 SYNOPSIS
+
+    # Add this line to dist.ini
+    [PodCoverageTests]
+
+    # Run this in the command line to test for POD coverage:
+    $ dzil test --release
+
 =head1 DESCRIPTION
 
 This is an extension of L<Dist::Zilla::Plugin::InlineFiles>, providing the
@@ -18,6 +26,8 @@ means that to indicate that some subs should be treated as covered, even if no
 documentation can be found, you can add:
 
   =for Pod::Coverage sub_name other_sub this_one_too
+
+One can run the release tests by invoking C<dzil test --release>.
 
 =cut
 
