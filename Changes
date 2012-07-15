@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          GenerateFile can now also template its filename, with the
+          name_is_template option (Thanks, Karen Etheridge!)
 
 4.300020  2012-06-21 11:17:40 America/New_York
           properly set the working directory when testing (thanks, Jesse
