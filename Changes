@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          new default file finder called :PSGI (Karen Etheridge)
 
 4.300020  2012-06-21 11:17:40 America/New_York
           properly set the working directory when testing (thanks, Jesse
