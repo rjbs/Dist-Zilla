@@ -6,7 +6,7 @@ use lib 't/lib';
 
 use Test::DZil;
 
-for my $skip_skip (0, 1) {
+for my $skip_skip (0..3) {
   my $tzil = Builder->from_config(
     { dist_root => 'corpus/dist/DZT' },
     {
@@ -17,12 +17,12 @@ for my $skip_skip (0, 1) {
             root   => '../corpus/extra',
             prefix => 'bonus',
           } ],
-          'ManifestSkip',
+          ($skip_skip > 1 ? 'ManifestSkip' : ()),
         ),
         'source/MANIFEST.SKIP' => join('', map {; "$_\n" } (
           'dist.ini',
           '.*\.txt',
-          ($skip_skip ? 'MANIFEST.SKIP' : ()),
+          ($skip_skip & 1 ? 'MANIFEST.SKIP' : ()),
         )),
       },
       also_copy => { 'corpus/extra' => 'corpus/extra' },
@@ -34,11 +34,45 @@ for my $skip_skip (0, 1) {
   my @files = map {; $_->name } @{ $tzil->files };
 
   is_filelist(
-    [ @files ],
+    $tzil->files,
     [ qw(bonus/subdir/index.html lib/DZT/Sample.pm t/basic.t),
-      ($skip_skip ? () : 'MANIFEST.SKIP'),
+      ($skip_skip >= 2 ? () : ('dist.ini', 'bonus/vader.txt')),
+      ($skip_skip == 3 ? () : 'MANIFEST.SKIP'),
     ],
-    "ManifestSkip prunes files from MANIFEST.SKIP",
+    "ManifestSkip prunes files from MANIFEST.SKIP ($skip_skip)",
+  );
+}
+
+# Test ManifestSkip with InlineFiles-generated files RT#76036
+for my $skip_skip (0..1) {
+  my $tzil = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/dist.ini' => simple_ini(
+          [ GatherDir => ],
+          [ GatherDir => BonusFiles => {
+            root   => '../corpus/extra',
+            prefix => 'bonus',
+          } ],
+          'JustForManifestSkipTests',
+          ($skip_skip & 1 ? [ ManifestSkip => { skipfile => 'FOO.SKIP' } ] : ()),
+        ),
+      },
+      also_copy => { 'corpus/extra' => 'corpus/extra' },
+    },
+  );
+
+  $tzil->build;
+
+  my @files = map {; $_->name } @{ $tzil->files };
+
+  is_filelist(
+    $tzil->files,
+    [ qw(bonus/subdir/index.html lib/DZT/Sample.pm t/basic.t),
+      ($skip_skip & 1 ? () : (qw(foo.txt dist.ini bonus/vader.txt FOO.SKIP))),
+    ],
+    "ManifestSkip prunes files from generated FOO.SKIP ($skip_skip)",
   );
 }
 
