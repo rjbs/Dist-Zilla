@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.300021  2012-07-31 23:20:50 America/New_York
           plugins can now provide a MANIFEST.SKIP that can be processed by
           ManifestSkip. Previously generated content was just ignored.
           (thanks, Olivier Mengué!)
