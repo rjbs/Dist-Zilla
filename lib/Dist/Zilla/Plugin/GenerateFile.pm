@@ -30,11 +30,12 @@ In your F<dist.ini>:
 This plugin adds a file to the distribution.
 
 You can specify the content, as a sequence of lines, in your configuration.
-The specified filename and content might be literals, or might be Text::Template templates.
+The specified filename and content might be literals or might be Text::Template
+templates.
 
 =head2 Templating of the content
 
-If you provide a C<is_template> or C<content_is_template> parameter of "1", the
+If you provide C<content_is_template> (or C<is_template>) parameter of "1", the
 content will be run through Text::Template.  The variables C<$plugin> and
 C<$dist> will be provided, set to the GenerateFile plugin and the Dist::Zilla
 object respectively.
@@ -114,8 +115,7 @@ sub gather_files {
   return;
 }
 
-sub _content
-{
+sub _content {
   my $self = shift;
 
   my $content = join "\n", $self->content->flatten;
@@ -134,8 +134,7 @@ sub _content
   return $content;
 }
 
-sub _filename
-{
+sub _filename {
   my $self = shift;
 
   my $filename = $self->filename;
