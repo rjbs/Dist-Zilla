@@ -5,12 +5,22 @@ extends 'Dist::Zilla::Plugin::InlineFiles';
 
 use namespace::autoclean;
 
+=head1 SYNTAX
+
+    # Add this to your dist.ini.
+    [PodSyntaxTests]
+
+    # To test for POD validity, run this in the shell:
+    $ dzil test --release
+
 =head1 DESCRIPTION
 
 This is an extension of L<Dist::Zilla::Plugin::InlineFiles>, providing the
 following files:
 
   xt/release/pod-syntax.t   - a standard Test::Pod test
+
+One can run the release tests by invoking C<dzil test --release>.
 
 =cut
 
