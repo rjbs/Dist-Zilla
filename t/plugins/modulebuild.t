@@ -80,8 +80,35 @@ use Test::DZil;
 
   is(
     $modulebuild->_use_custom_class,
-    q{use lib 'inc'; use Foo::Build;},
+    q{use lib qw{inc}; use Foo::Build;},
     'loads custom class from inc'
+  );
+
+  my $build = $tzil->slurp_file('build/Build.PL');
+
+  like($build, qr/\QFoo::Build->new/, 'Build.PL calls ->new on Foo::Build');
+}
+
+{
+  my $tzil = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/dist.ini' => simple_ini(
+          'GatherDir', [ 'ModuleBuild' => { mb_class => 'Foo::Build', mb_lib => 'inc,priv,something' } ],
+        ),
+      },
+    },
+  );
+
+  $tzil->build;
+
+  my $modulebuild = $tzil->plugin_named('ModuleBuild');
+
+  is(
+    $modulebuild->_use_custom_class,
+    q{use lib qw{inc priv something}; use Foo::Build;},
+    'loads custom class from items specificed in mb_lib'
   );
 
   my $build = $tzil->slurp_file('build/Build.PL');
