@@ -339,7 +339,7 @@ has built_in => (
 This method behaves like C<L</build_in>>, but if the dist is already built in
 C<$root> (or the default root, if no root is given), no exception is raised.
 
-=method ensure_built_in
+=method ensure_built
 
 This method just calls C<ensure_built_in> with no arguments.  It gets you the
 default behavior without the weird-looking formulation of C<ensure_built_in>
