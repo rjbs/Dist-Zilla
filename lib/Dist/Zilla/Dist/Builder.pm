@@ -560,6 +560,47 @@ sub clean {
   };
 }
 
+=method ensure_built_in_tmpdir
+
+  $zilla->ensure_built_in_tmpdir;
+
+This method will consistently build the distribution in a temporary
+subdirectory. It will return the path for the temporary build location.
+
+=cut
+
+sub ensure_built_in_tmpdir {
+  my $self = shift;
+
+  require File::Temp;
+
+  my $build_root = dir('.build');
+  $build_root->mkpath unless -d $build_root;
+
+  my $target = dir( File::Temp::tempdir(DIR => $build_root) );
+  $self->log("building distribution under $target for installation");
+
+  my $os_has_symlinks = sub { eval { symlink('',''); 1 }; return ! $@ }->();
+  if( $os_has_symlinks ) {
+    my $previous = file( $build_root, 'previous' );
+    my $latest   = file( $build_root, 'latest'   );
+    if( -l $previous ) {
+      $previous->remove
+        or $self->log("cannot remove old .build/previous link");
+    }
+    if( -l $latest ) {
+      rename $latest, $previous
+        or $self->log("cannot move .build/latest link to .build/previous");
+    }
+    symlink $target, $latest
+      or $self->log('cannot create link .build/latest');
+  }
+
+  $self->ensure_built_in($target);
+
+  return ($target, $latest, $previous);
+}
+
 =method install
 
   $zilla->install( \%arg );
@@ -581,14 +622,7 @@ sub install {
   my ($self, $arg) = @_;
   $arg ||= {};
 
-  require File::Temp;
-
-  my $build_root = dir('.build');
-  $build_root->mkpath unless -d $build_root;
-
-  my $target = dir( File::Temp::tempdir(DIR => $build_root) );
-  $self->log("building distribution under $target for installation");
-  $self->ensure_built_in($target);
+  my ($target, $latest) = $self->ensure_built_in_tmpdir;
 
   eval {
     ## no critic Punctuation
@@ -608,6 +642,7 @@ sub install {
   } else {
     $self->log("all's well; removing $target");
     $target->rmtree;
+    $latest->remove;
   }
 
   return;
@@ -628,20 +663,12 @@ sub test {
   Carp::croak("you can't test without any TestRunner plugins")
     unless my @testers = $self->plugins_with(-TestRunner)->flatten;
 
-  require File::Temp;
-
-  my $build_root = dir('.build');
-  $build_root->mkpath unless -d $build_root;
-
-  my $target = dir( File::Temp::tempdir(DIR => $build_root) );
-  $self->log("building test distribution under $target");
-
-  $self->ensure_built_in($target);
-
-  my $error = $self->run_tests_in($target);
+  my ($target,$latest) = $self->ensure_built_in_tmpdir;
+  my $error  = $self->run_tests_in($target);
 
   $self->log("all's well; removing $target");
   $target->rmtree;
+  $latest->remove;
 }
 
 =method run_tests_in
@@ -690,17 +717,9 @@ sub run_in_build {
     $self->plugins_with(-BuildRunner)->sort->reverse->flatten;
 
   require "Config.pm"; # skip autoprereq
-  require File::Temp;
 
-  # dzil-build the dist
-  my $build_root = dir('.build');
-  $build_root->mkpath unless -d $build_root;
-
-  my $target    = dir( File::Temp::tempdir(DIR => $build_root) );
+  my ($target, $latest) = $self->ensure_built_in_tmpdir;
   my $abstarget = $target->absolute;
-  $self->log("building test distribution under $target");
-
-  $self->ensure_built_in($target);
 
   # building the dist for real
   my $ok = eval {
@@ -722,6 +741,7 @@ sub run_in_build {
   if ($ok) {
     $self->log("all's well; removing $target");
     $target->rmtree;
+    $latest->remove;
   } else {
     my $error = $@ || '(unknown error)';
     $self->log($error);
