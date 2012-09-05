@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.300022  2012-09-05 08:35:27 America/New_York
           do not detect an escaped "\$VERSION =" as an assignment to a variable
           (this is sort of a half-measure)
 
