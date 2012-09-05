@@ -77,7 +77,7 @@ sub document_assigns_to_variable {
 
   my $finder = sub {
     my $node = $_[1];
-    return 1 if $node->isa('PPI::Statement') && $node->content =~ /\Q$variable\E\s*=/sm;
+    return 1 if $node->isa('PPI::Statement') && $node->content =~ /(?<!\\)\Q$variable\E\s*=/sm;
     return 0;
   };
 

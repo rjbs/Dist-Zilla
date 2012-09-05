@@ -1,6 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          do not detect an escaped "\$VERSION =" as an assignment to a variable
+          (this is sort of a half-measure)
+
           'dzil run' also edits $PATH to include ExecDir directories (Karen
           Etheridge)
 
