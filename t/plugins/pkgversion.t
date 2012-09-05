@@ -14,7 +14,7 @@ our $VERSION = 1.234;
 ';
 
 my $with_version_two_lines = '
-package DZT::WVer;
+package DZT::WVerTwoLines;
 our $VERSION;
 $VERSION = 1.234;
 1;
@@ -117,8 +117,8 @@ unlike(
 
 my $dzt_wver_two_lines = $tzil->slurp_file('build/lib/DZT/WVerTwoLines.pm');
 unlike(
-  $dzt_wver,
-  qr{^\s*\$\QDZT::WVer::VERSION = '0.001';\E\s*$}m,
+  $dzt_wver_two_lines,
+  qr{^\s*\$\QDZT::WVerTwoLines::VERSION = '0.001';\E\s*$}m,
   "*not* added to DZT::WVerTwoLines; we have one already",
 );
 
