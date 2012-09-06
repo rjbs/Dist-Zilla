@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.300023  2012-09-06 09:01:12 America/New_York
           do not use ">" in a filename; fixes the build on Win32 (thanks,
           djgoku!)
 
