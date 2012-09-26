@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.300024  2012-09-26 12:01:45 America/New_York
           include $] in MetaConfig data
 
 4.300023  2012-09-06 09:01:12 America/New_York
