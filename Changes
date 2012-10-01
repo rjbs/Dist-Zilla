@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          add the LicenseProvider and NameProvider roles (thanks, Vyacheslav
+          Matjukhin!)
 
 4.300024  2012-09-26 12:01:45 America/New_York
           include $] in MetaConfig data
