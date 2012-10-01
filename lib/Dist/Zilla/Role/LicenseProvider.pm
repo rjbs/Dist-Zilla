@@ -16,11 +16,14 @@ ignored.
 
 =head2 C<< provide_license($copyright_holder, $copyright_year) >>
 
-Generate license object. Returned object should be an instance of L<Software::License>.
+Generate license object. Returned object should be an instance of
+L<Software::License>.
 
-Plugins are responsible for injecting C<$copyright_holder> and C<$copyright_year> arguments into the license if these arguments are defined.
+Plugins are responsible for injecting C<$copyright_holder> and
+C<$copyright_year> arguments into the license if these arguments are defined.
 
 =cut
+
 requires 'provide_license';
 
 no Moose::Role;

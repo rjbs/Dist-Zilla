@@ -1,5 +1,5 @@
 package Dist::Zilla::Role::NameProvider;
-# ABSTRACT: something that provides a distr name for the dist
+# ABSTRACT: something that provides a name for the dist
 use Moose::Role;
 with 'Dist::Zilla::Role::Plugin';
 
