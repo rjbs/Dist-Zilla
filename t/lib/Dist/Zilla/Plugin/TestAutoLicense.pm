@@ -8,10 +8,10 @@ with(
 use Software::License::None;
 
 sub provide_license {
-  my ($self, $copyright_holder, $copyright_year) = @_;
+  my ($self, $arg) = @_;
   return Software::License::None->new({
-    holder => $copyright_holder || 'Vyacheslav Matjukhin',
-    year => $copyright_year || 2010,
+    holder => $arg->{copyright_holder} || 'Vyacheslav Matjukhin',
+    year   => $arg->{copyright_year}   || 2010,
   });
 }
 
