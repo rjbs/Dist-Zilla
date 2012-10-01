@@ -60,7 +60,6 @@ double colons (C<::>) replaced with dashes.  For example: C<Dist-Zilla>.
 has name => (
   is   => 'ro',
   isa  => DistName,
-  required => 1,
   lazy => 1,
   builder => '_build_name',
 );
@@ -83,7 +82,6 @@ has version => (
   isa  => LaxVersionStr,
   lazy => 1,
   init_arg  => undef,
-  required  => 1,
   builder   => '_build_version',
 );
 
@@ -133,7 +131,6 @@ has abstract => (
   is   => 'rw',
   isa  => 'Str',
   lazy => 1,
-  required => 1,
   default  => sub {
     my ($self) = @_;
 
@@ -183,7 +180,6 @@ has main_module => (
   isa  => 'Dist::Zilla::Role::File',
   lazy => 1,
   init_arg => undef,
-  required => 1,
   default  => sub {
 
     my ($self) = @_;
@@ -379,7 +375,6 @@ has authors => (
   is   => 'ro',
   isa  => ArrayRef[Str],
   lazy => 1,
-  required => 1,
   default  => sub {
     my ($self) = @_;
 
