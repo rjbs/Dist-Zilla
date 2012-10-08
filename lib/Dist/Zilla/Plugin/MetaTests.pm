@@ -2,6 +2,7 @@ package Dist::Zilla::Plugin::MetaTests;
 # ABSTRACT: common extra tests for META.yml
 use Moose;
 extends 'Dist::Zilla::Plugin::InlineFiles';
+with 'Dist::Zilla::Role::PrereqSource';
 
 use namespace::autoclean;
 
@@ -25,6 +26,19 @@ L<MetaJSON|Dist::Zilla::Plugin::MetaJSON>,
 L<MetaConfig|Dist::Zilla::Plugin::MetaConfig>.
 
 =cut
+
+# Register the release test prereq as a "develop requires"
+# so it will be listed in "dzil listdeps --author"
+sub register_prereqs {
+  my ($self) = @_;
+
+  $self->zilla->register_prereqs(
+    {
+      phase => 'develop', type  => 'requires',
+    },
+    'Test::CPAN::Meta'     => 0,
+  );
+}
 
 __PACKAGE__->meta->make_immutable;
 1;
