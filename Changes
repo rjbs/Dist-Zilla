@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.300025  2012-10-07 23:02:33 America/New_York
           add the LicenseProvider and NameProvider roles (thanks, Vyacheslav
           Matjukhin!)
 
