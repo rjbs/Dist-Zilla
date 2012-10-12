@@ -25,6 +25,10 @@ Include author dependencies (those listed under C<develop_requires>).
 
 List only dependencies which are unsatisfied.
 
+=head2 --versions
+
+Also display the required versions of listed modules.
+
 =head1 ACKNOWLEDGEMENTS
 
 This code is more or less a direct copy of Marcel Gruenauer (hanekomu)
