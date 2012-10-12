@@ -13,9 +13,21 @@ use Dist::Zilla::App -command;
 This is a command plugin for L<Dist::Zilla>. It provides the C<listdeps>
 command, which prints your distribution's prerequisites. You could pipe that
 list to a CPAN client like L<cpan> to install all of the dependecies in one
-quick go. This will include author dependencies (those listed under
-C<develop_requires>) if the C<--author> flag is passed. You can also pass the
-C<--missing> flag to list only dependencies which are unsatisfied.
+quick go.
+
+=head1 OPTIONS
+
+=head2 --author
+
+Include author dependencies (those listed under C<develop_requires>).
+
+=head2 --missing
+
+List only dependencies which are unsatisfied.
+
+=head2 --versions
+
+Also display the required versions of listed modules.
 
 =head1 ACKNOWLEDGEMENTS
 
