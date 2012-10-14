@@ -4,6 +4,15 @@ Revision history for {{$dist->name}}
           PodSyntaxTests, PodCoverageTests and MetaTests now add the right
           develop/requires prereqs (thanks, Olivier Mengué and Ricardo Signes!)
 
+          ModuleBuild now takes an mb_lib argument that can override the
+          default of "inc" (thanks, ben hengst)
+
+          create .build/latest symlink when a build in .build is built (thanks,
+          Alexei Znamensky!)
+
+          allow "-version" arg to [@Filter] to specify the version of the
+          bundle required (thanks, Rob Hoelz)
+
 4.300025  2012-10-07 23:02:33 America/New_York
           add the LicenseProvider and NameProvider roles (thanks, Vyacheslav
           Matjukhin!)
