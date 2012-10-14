@@ -581,9 +581,12 @@ sub ensure_built_in_tmpdir {
   $self->log("building distribution under $target for installation");
 
   my $os_has_symlinks = sub { eval { symlink('',''); 1 }; return ! $@ }->();
+  my $previous;
+  my $latest;
+
   if( $os_has_symlinks ) {
-    my $previous = file( $build_root, 'previous' );
-    my $latest   = file( $build_root, 'latest'   );
+    $previous = file( $build_root, 'previous' );
+    $latest   = file( $build_root, 'latest'   );
     if( -l $previous ) {
       $previous->remove
         or $self->log("cannot remove old .build/previous link");
@@ -663,7 +666,7 @@ sub test {
   Carp::croak("you can't test without any TestRunner plugins")
     unless my @testers = $self->plugins_with(-TestRunner)->flatten;
 
-  my ($target,$latest) = $self->ensure_built_in_tmpdir;
+  my ($target, $latest) = $self->ensure_built_in_tmpdir;
   my $error  = $self->run_tests_in($target);
 
   $self->log("all's well; removing $target");
