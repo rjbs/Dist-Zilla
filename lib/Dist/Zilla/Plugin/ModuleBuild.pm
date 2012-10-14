@@ -38,7 +38,7 @@ to the generated Build.PL file.
 =attr mb_lib
 
 B<Optional:> Specify the list of directories to be passed to lib when using 
-mb_class. Defaults to C<'lib'>. 
+mb_class. Defaults to C<inc>. 
 
 =cut
 
