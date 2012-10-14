@@ -31,8 +31,14 @@ Defaults to 0.3601
 =attr mb_class
 
 B<Optional:> Specify the class to use to create the build object.  Defaults
-to C<Module::Build> itself.  If another class is specified, C<use lib 'inc'>
-is also added to the Build.PL file.
+to C<Module::Build> itself.  If another class is specified, then the value
+of mb_lib will be used to generate a line like C<use lib 'inc'> to be added
+to the generated Build.PL file.
+
+=attr mb_lib
+
+B<Optional:> Specify the list of directories to be passed to lib when using 
+mb_class. Defaults to C<'lib'>. 
 
 =cut
 
@@ -46,6 +52,12 @@ has 'mb_class' => (
   isa => 'Str',
   is  => 'rw',
   default => 'Module::Build',
+);
+
+has 'mb_lib' => (
+  isa => 'Str',
+  is  => 'rw',
+  default => 'inc'
 );
 
 my $template = q|
@@ -69,7 +81,7 @@ sub _use_custom_class {
     return "";
   }
   else {
-    return "use lib 'inc'; use $class;";
+    return sprintf "use lib qw{%s}; use $class;", join ' ', split ',', $self->mb_lib;
   }
 }
 
