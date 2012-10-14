@@ -580,7 +580,7 @@ sub ensure_built_in_tmpdir {
   my $target = dir( File::Temp::tempdir(DIR => $build_root) );
   $self->log("building distribution under $target for installation");
 
-  my $os_has_symlinks = sub { eval { symlink('',''); 1 }; return ! $@ }->();
+  my $os_has_symlinks = eval { symlink("",""); 1 };
   my $previous;
   my $latest;
 
