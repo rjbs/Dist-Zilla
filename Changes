@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.300026  2012-10-13 22:21:17 America/New_York
           PodSyntaxTests, PodCoverageTests and MetaTests now add the right
           develop/requires prereqs (thanks, Olivier Mengué and Ricardo Signes!)
 
