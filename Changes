@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          the "latest" symlink code broke Dist::Zilla on win32; fixed now!
+          (thanks, Brendan Byrd!)
 
 4.300026  2012-10-13 22:21:17 America/New_York
           PodSyntaxTests, PodCoverageTests and MetaTests now add the right
