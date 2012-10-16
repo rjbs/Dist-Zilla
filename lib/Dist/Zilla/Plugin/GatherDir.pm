@@ -156,14 +156,12 @@ sub gather_files {
     next if $file =~ $exclude_regex;
 
     # _file_from_filename is overloaded in GatherDir::Template
-    $file = $self->_file_from_filename($filename);
+    my $fileobj = $self->_file_from_filename($filename);
 
-    (my $newname = $file->name) =~ s{\A\Q$root\E[\\/]}{}g;
-    $newname = File::Spec->catdir($self->prefix, $newname) if $self->prefix;
-    $newname = Path::Class::dir($newname)->as_foreign('Unix')->stringify;
+    $file = Path::Class::file($self->prefix, $file) if $self->prefix;
 
-    $file->name($newname);
-    $self->add_file($file);
+    $fileobj->name($file->as_foreign('Unix')->stringify);
+    $self->add_file($fileobj);
   }
 
   return;
