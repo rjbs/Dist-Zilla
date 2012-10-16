@@ -645,7 +645,7 @@ sub install {
   } else {
     $self->log("all's well; removing $target");
     $target->rmtree;
-    $latest->remove;
+    $latest->remove if $latest;
   }
 
   return;
@@ -671,7 +671,7 @@ sub test {
 
   $self->log("all's well; removing $target");
   $target->rmtree;
-  $latest->remove;
+  $latest->remove if $latest;
 }
 
 =method run_tests_in
@@ -744,7 +744,7 @@ sub run_in_build {
   if ($ok) {
     $self->log("all's well; removing $target");
     $target->rmtree;
-    $latest->remove;
+    $latest->remove if $latest;
   } else {
     my $error = $@ || '(unknown error)';
     $self->log($error);
