@@ -143,7 +143,6 @@ sub gather_files {
   $root =~ s{^~([\\/])}{File::HomeDir->my_home . $1}e;
   $root = Path::Class::dir($root);
 
-  my @files;
   my $rule = File::Find::Rule->new();
   $rule->extras({follow => $self->follow_symlinks});
   FILE: for my $filename ($rule->file->in($root)) {
@@ -156,10 +155,9 @@ sub gather_files {
 
     next if $file =~ $exclude_regex;
 
-    push @files, $self->_file_from_filename($filename);
-  }
+    # _file_from_filename is overloaded in GatherDir::Template
+    $file = $self->_file_from_filename($filename);
 
-  for my $file (@files) {
     (my $newname = $file->name) =~ s{\A\Q$root\E[\\/]}{}g;
     $newname = File::Spec->catdir($self->prefix, $newname) if $self->prefix;
     $newname = Path::Class::dir($newname)->as_foreign('Unix')->stringify;
