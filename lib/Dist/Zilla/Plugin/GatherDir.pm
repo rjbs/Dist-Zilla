@@ -132,6 +132,13 @@ has exclude_match => (
 sub gather_files {
   my ($self) = @_;
 
+  my $exclude_regex = qr/\000/;
+  $exclude_regex = qr/$exclude_regex|$_/
+    for ($self->exclude_match->flatten);
+  # \b\Q$_\E\b should also handle the `eq` check
+  $exclude_regex = qr/$exclude_regex|\b\Q$_\E\b/
+    for ($self->exclude_filename->flatten);
+
   my $root = "" . $self->root;
   $root =~ s{^~([\\/])}{File::HomeDir->my_home . $1}e;
   $root = Path::Class::dir($root);
@@ -147,12 +154,6 @@ sub gather_files {
       next FILE if grep { /^\.[^.]/ } $file->dir->dir_list;
     }
 
-    my $exclude_regex = qr/\000/;
-    $exclude_regex = qr/$exclude_regex|$_/
-      for ($self->exclude_match->flatten);
-    # \b\Q$_\E\b should also handle the `eq` check
-    $exclude_regex = qr/$exclude_regex|\b\Q$_\E\b/
-      for ($self->exclude_filename->flatten);
     next if $file =~ $exclude_regex;
 
     push @files, $self->_file_from_filename($filename);
