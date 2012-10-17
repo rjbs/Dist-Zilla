@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.300027  2012-10-16 21:07:06 America/New_York
           the "latest" symlink code broke Dist::Zilla on win32; fixed now!
           (thanks, Brendan Byrd!)
 
