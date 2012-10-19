@@ -41,6 +41,7 @@ use namespace::autoclean;
 
 # ABSTRACT: automatically extract prereqs from your modules
 
+use List::AllUtils 'uniq';
 use Moose::Autobox;
 use Perl::PrereqScanner 1.005; # do not prune common libs
 use PPI;
@@ -146,11 +147,18 @@ sub register_prereqs {
       next if $file->name =~ m{^t/(?:author|release)-[^/]*\.t$};
 
       # store module name, to trim it from require list later on
-      my $module = $file->name;
-      $module =~ s{^(?:t/)?lib/}{};
-      $module =~ s{\.pm$}{};
-      $module =~ s{/}{::}g;
-      push @modules, $module;
+      my @this_thing = $file->name;
+      if ($this_thing[0] =~ /^t/) {
+        push @this_thing, ($this_thing[0]) x 2;
+        $this_thing[1] =~ s{^t/}{};
+        $this_thing[2] =~ s{^t/lib/}{};
+      } else {
+        $this_thing[0] =~ s{^lib/}{};
+      }
+      @this_thing = uniq @this_thing;
+      s{\.pm$}{} for @this_thing;
+      s{/}{::}g for @this_thing;
+      push @modules, @this_thing;
 
       # parse a file, and merge with existing prereqs
       my $file_req = $scanner->scan_string($file->content);

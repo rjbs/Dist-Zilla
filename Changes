@@ -1,6 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          when picking modules to treat as "part of the dist," be more lax in
+          understanding libraries under ./t:  ./t/lib/Foo.pm is now treated as
+          providing t::lib::Foo, lib::Foo, and Foo
 
 4.300027  2012-10-16 21:07:06 America/New_York
           the "latest" symlink code broke Dist::Zilla on win32; fixed now!
