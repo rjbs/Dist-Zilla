@@ -82,4 +82,11 @@ L<PkgVersion|Dist::Zilla::Plugin::PkgVersion>,
 L<AutoVersion|Dist::Zilla::Plugin::AutoVersion>,
 L<NextRelease|Dist::Zilla::Plugin::NextRelease>.
 
+Implemented roles:
+L<FileMunger|Dist::Zilla::Role::FileMunger>.
+
+Consummed roles:
+L<ExecFiles|Dist::Zilla::Role::ExecFiles>,
+L<InstallModules|Dist::Zilla::Role::InstallModules>.
+
 =cut

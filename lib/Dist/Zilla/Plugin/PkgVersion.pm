@@ -125,10 +125,18 @@ __PACKAGE__->meta->make_immutable;
 Core Dist::Zilla plugins:
 L<PodVersion|Dist::Zilla::Plugin::PodVersion>,
 L<AutoVersion|Dist::Zilla::Plugin::AutoVersion>,
-L<NextRelease|Dist::Zilla::Plugin::NextRelease>.
+L<NextRelease|Dist::Zilla::Plugin::NextRelease>,
+L<PkgVersion|Dist::Zilla::Plugin::PkgVersion>.
 
 Other Dist::Zilla plugins:
 L<OurPkgVersion|Dist::Zilla::Plugin::OurPkgVersion> inserts version
 numbers using C<our $VERSION = '...';> and without changing line numbers
+
+Implemented roles:
+L<FileMunger|Dist::Zilla::Role::FileMunger>.
+
+Consummed roles:
+L<ExecFiles|Dist::Zilla::Role::ExecFiles>,
+L<InstallModules|Dist::Zilla::Role::InstallModules>.
 
 =cut

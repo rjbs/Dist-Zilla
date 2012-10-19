@@ -29,6 +29,19 @@ C<package> keyword and the package name, like:
 This sort of declaration is also ignored by the CPAN toolchain, and is
 typically used when doing monkey patching or other tricky things.
 
+=head1 SEE ALSO
+
+Related core Dist::Zilla modules:
+L<PkgVersion|Dist::Zilla::Plugin::PkgVersion>,
+L<PodVersion|Dist::Zilla::Plugin::PodVersion>.
+
+Implemented roles:
+L<FileMunger|Dist::Zilla::Role::FileMunger>.
+
+Consummed roles:
+L<ExecFiles|Dist::Zilla::Role::ExecFiles>,
+L<InstallModules|Dist::Zilla::Role::InstallModules>.
+
 =cut
 
 sub munge_files {
