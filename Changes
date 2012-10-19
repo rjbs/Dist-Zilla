@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.300028  2012-10-19 10:50:42 America/New_York
           when picking modules to treat as "part of the dist," be more lax in
           understanding libraries under ./t:  ./t/lib/Foo.pm is now treated as
           providing t::lib::Foo, lib::Foo, and Foo
