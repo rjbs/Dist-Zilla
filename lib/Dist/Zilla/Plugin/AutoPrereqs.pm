@@ -86,7 +86,22 @@ be registered as prerequisites.
 
 =head1 SEE ALSO
 
-L<Prereqs|Dist::Zilla::Plugin::Prereqs>, L<Perl::PrereqScanner>.
+Related core Dist::Zilla plugins:
+L<Prereqs|Dist::Zilla::Plugin::Prereqs>,
+L<RemovePrereqs|Dist::Zilla::Plugin::RemovePrereqs>.
+
+Implemented roles:
+L<PrereqSource|Dist::Zilla::Role::PrereqSource>.
+
+Consummed roles:
+L<FileFinder|Dist::Zilla::Role::FileFinder>
+(through L<FileFinderUser|Dist::Zilla::Role::FileFinderUser>),
+L<ExecFiles|Dist::Zilla::Role::ExecFiles>,
+L<InstallModules|Dist::Zilla::Role::InstallModules>,
+L<TestFiles|Dist::Zilla::Role::TestFiles>.
+
+Modules used by AutoPrereqs:
+L<Perl::PrereqScanner>, L<CPAN::Meta::Requirements>.
 
 =head1 CREDITS
 
