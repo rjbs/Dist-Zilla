@@ -271,8 +271,9 @@ L<@Basic|Dist::Zilla::PluginBundle::Basic>,
 L<ModuleBuild|Dist::Zilla::Plugin::ModuleBuild>,
 L<Manifest|Dist::Zilla::Plugin::Manifest>.
 
-Dist::Zilla roles:
-L<BuildRunner|Dist::Zilla::Role::FileGatherer>,
+Implemented roles:
+L<BuildRunner|Dist::Zilla::Role::BuildRunner>,
+L<FileGatherer|Dist::Zilla::Role::FileGatherer>,
 L<InstallTool|Dist::Zilla::Role::InstallTool>,
 L<PrereqSource|Dist::Zilla::Role::PrereqSource>,
 L<TestRunner|Dist::Zilla::Role::TestRunner>.
