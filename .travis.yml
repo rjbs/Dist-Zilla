@@ -9,7 +9,6 @@ perl:
 install:
     - cpanm Dist::Zilla
     - dzil authordeps --missing | cpanm || { cat ~/.cpanm/build.log ; false ; }
-    - dzil listdeps --author --missing | cpanm || { cat ~/.cpanm/build.log ; fal
-se ; }
+    - dzil listdeps --author --missing | cpanm || { cat ~/.cpanm/build.log ; false ; }
 script:
     - dzil test --author --release
