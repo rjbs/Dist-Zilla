@@ -278,4 +278,11 @@ L<InstallTool|Dist::Zilla::Role::InstallTool>,
 L<PrereqSource|Dist::Zilla::Role::PrereqSource>,
 L<TestRunner|Dist::Zilla::Role::TestRunner>.
 
+Consummed roles:
+L<ExecFiles|Dist::Zilla::Role::ExecFiles>.
+
+Dependencies injected in the distribution: L<ExtUtils::MakeMaker>,
+L<File::ShareDir::Install> (if using
+the L<ShareDir|Dist::Zilla::Plugin::ShareDir> plugin).
+
 =cut
