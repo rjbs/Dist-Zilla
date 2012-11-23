@@ -295,7 +295,8 @@ sub _build_license {
     if (@guess != 1) {
       $self->log_fatal(
         "no license data in config, no %Rights stash,",
-        "couldn't make a good guess at license from Pod; giving up"
+        "couldn't make a good guess at license from Pod; giving up. ",
+        "Perhaphs you need set global config file (dzil setup)?"
       );
     }
 
