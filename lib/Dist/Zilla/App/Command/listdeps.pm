@@ -2,6 +2,7 @@ use strict;
 use warnings;
 package Dist::Zilla::App::Command::listdeps;
 use Dist::Zilla::App -command;
+use Dist::Zilla::Util::CPANFile;
 # ABSTRACT: print your distribution's prerequisites
 
 =head1 SYNOPSIS
@@ -44,7 +45,8 @@ sub abstract { "print your distribution's prerequisites" }
 sub opt_spec {
   [ 'author', 'include author dependencies' ],
   [ 'missing', 'list only the missing dependencies' ],
-  [ 'versions', 'include required version numbers in listing' ]
+  [ 'versions', 'include required version numbers in listing' ],
+  [ 'cpanfile', 'update [create] cpanfile' ],
 }
 
 sub extract_dependencies {
@@ -97,7 +99,10 @@ sub execute {
 
   my %modules = $self->extract_dependencies($self->zilla, \@phases, $opt->missing);
 
-  if($opt->versions) {
+  if ($opt->cpanfile) {
+      my $prereqs = $self->zilla->prereqs;
+      Dist::Zilla::Util::CPANFile::write_file($prereqs, "cpanfile");
+  } elsif ($opt->versions) {
     for(sort { lc $a cmp $b } keys %modules) {
       print "$_ = ".$modules{$_}."\n";
     }

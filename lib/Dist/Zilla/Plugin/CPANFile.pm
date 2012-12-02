@@ -7,6 +7,7 @@ with 'Dist::Zilla::Role::FileGatherer';
 use namespace::autoclean;
 
 use Dist::Zilla::File::FromCode;
+use Dist::Zilla::Util::CPANFile;
 
 =head1 DESCRIPTION
 
@@ -25,18 +26,6 @@ has filename => (
   default => 'cpanfile',
 );
 
-sub _hunkify_hunky_hunk_hunks {
-  my ($self, $indent, $type, $req) = @_;
-
-  my $str = '';
-  for my $module (sort $req->required_modules) {
-    my $vstr = $req->requirements_for_module($module);
-    $str .= qq{$type "$module" => "$vstr";\n};
-  }
-  $str =~ s/^/'  ' x $indent/egm;
-  return $str;
-}
-
 sub gather_files {
   my ($self, $arg) = @_;
 
@@ -46,25 +35,7 @@ sub gather_files {
     name => $self->filename,
     code => sub {
       my $prereqs = $zilla->prereqs;
-
-      my @types  = qw(requires recommends suggests conflicts);
-      my @phases = qw(runtime build test configure develop);
-
-      my $str = '';
-      for my $phase (@phases) {
-        for my $type (@types) {
-          my $req = $prereqs->requirements_for($phase, $type);
-          next unless $req->required_modules;
-          $str .= qq[\non '$phase' => sub {\n] unless $phase eq 'runtime';
-          $str .= $self->_hunkify_hunky_hunk_hunks(
-            ($phase eq 'runtime' ? 0 : 1),
-            $type,
-            $req,
-          );
-          $str .= qq[};\n]                     unless $phase eq 'runtime';
-        }
-      }
-
+      my $str = Dist::Zilla::Util::CPANFile::str_from_prereqs($prereqs);
       return $str;
     },
   });
