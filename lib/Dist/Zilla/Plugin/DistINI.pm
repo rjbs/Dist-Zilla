@@ -42,7 +42,6 @@ like this:
   author  = E. Xavier Ample <example@example.com>
   license = Perl_5
   copyright_holder = E. Xavier Ample
-  copyright_year   = 2010
 
   [@Basic]
   [NextRelease]
@@ -90,7 +89,6 @@ sub gather_files {
     $content .= sprintf "author  = %s\n", $_ for @{ $zilla->authors };
     $content .= sprintf "license = %s\n", $license;
     $content .= sprintf "copyright_holder = %s\n", $zilla->copyright_holder;
-    $content .= sprintf "copyright_year   = %s\n", (localtime)[5] + 1900;
     $content .= "\n";
 
     $content .= $postlude;
