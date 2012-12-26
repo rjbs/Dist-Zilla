@@ -422,7 +422,7 @@ has _copyright_holder => (
 
 has _copyright_year => (
   is        => 'ro',
-  isa       => 'Int',
+  isa       => 'Str',
   lazy      => 1,
   init_arg  => 'copyright_year',
   clearer   => '_clear_copyright_year',
