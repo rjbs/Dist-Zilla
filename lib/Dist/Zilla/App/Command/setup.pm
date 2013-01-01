@@ -36,7 +36,7 @@ sub execute {
   if (
     -d $config_root
     and
-    my @files = grep { -f and $_->basename =~ /\Aconfig\./ }
+    my @files = grep { -f and $_->basename =~ /\Aconfig\.[^.]+\z/ }
     $config_root->children
   ) {
     $chrome->logger->log_fatal([
