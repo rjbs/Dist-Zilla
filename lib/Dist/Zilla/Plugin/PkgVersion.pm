@@ -61,7 +61,20 @@ sub munge_file {
   return $self->munge_perl($file) if $file->content =~ /^#!(?:.*)perl(?:$|\s)/;
   return;
 }
+sub _make_version_declaration {
+  my ($self,$package) = @_;
+  my $version = $self->zilla->version;
+  # the \x20 hack is here so that when we scan *this* document we don't find
+  # an assignment to version; it shouldn't be needed, but it's been annoying
+  # enough in the past that I'm keeping it here until tests are better
+  my $trial = $self->zilla->is_trial ? ' # TRIAL' : '';
+  my $perl = "{\n  \$$package\::VERSION\x20=\x20'$version';$trial\n}\n";
 
+  my $version_doc = PPI::Document->new(\$perl);
+  my @children = $version_doc->schildren;
+
+  return $children[0]->clone();
+}
 sub munge_perl {
   my ($self, $file) = @_;
 
@@ -94,23 +107,22 @@ sub munge_perl {
       next;
     }
 
-    # the \x20 hack is here so that when we scan *this* document we don't find
-    # an assignment to version; it shouldn't be needed, but it's been annoying
-    # enough in the past that I'm keeping it here until tests are better
-    my $trial = $self->zilla->is_trial ? ' # TRIAL' : '';
-    my $perl = "{\n  \$$package\::VERSION\x20=\x20'$version';$trial\n}\n";
-
-    my $version_doc = PPI::Document->new(\$perl);
-    my @children = $version_doc->schildren;
-
-    $self->log_debug([
-      'adding $VERSION assignment to %s in %s',
-      $package,
-      $file->name,
-    ]);
+    if ( my $block = $stmt->find_first('PPI::Structure::Block' ) ) {
+      # 5.14+ package <version> BLOCK;
+      $self->log_debug([
+        'adding version to a package NAME BLOCK: package %s in %s',
+          $package,
+          $file->name
+      ]);
+      unshift $block->{children},
+              PPI::Token::Whitespace->new("\n"),
+              $self->_make_version_declaration($package),
+              PPI::Token::Whitespace->new("\n");
+      next;
+    }
 
     Carp::carp("error inserting version in " . $file->name)
-      unless $stmt->insert_after($children[0]->clone)
+      unless $stmt->insert_after($self->_make_version_declaration($package))
       and    $stmt->insert_after( PPI::Token::Whitespace->new("\n") );
   }
 
