@@ -72,6 +72,25 @@ has die_on_existing_version => (
   default => 0,
 );
 
+sub _make_version_declaration {
+  my ($self,$package) = @_;
+  my $version = $self->zilla->version;
+  # the \x20 hack is here so that when we scan *this* document we don't find
+  # an assignment to version; it shouldn't be needed, but it's been annoying
+  # enough in the past that I'm keeping it here until tests are better
+  my $trial = $self->zilla->is_trial ? ' # TRIAL' : '';
+  my $perl = "\n\$$package\::VERSION\x20=\x20'$version';$trial\n";
+
+  $self->log("non-ASCII package name is likely to cause problems")
+    if $package =~ /\P{ASCII}/;
+
+  $self->log("non-ASCII version is likely to cause problems")
+    if $version =~ /\P{ASCII}/;
+
+  # Why can't I use PPI::Token::Unknown? -- rjbs, 2014-01-11
+  my $bogus_token = PPI::Token::Comment->new($perl);
+  return $bogus_token;
+}
 sub munge_perl {
   my ($self, $file) = @_;
 
@@ -108,30 +127,20 @@ sub munge_perl {
       next;
     }
 
-    # the \x20 hack is here so that when we scan *this* document we don't find
-    # an assignment to version; it shouldn't be needed, but it's been annoying
-    # enough in the past that I'm keeping it here until tests are better
-    my $trial = $self->zilla->is_trial ? ' # TRIAL' : '';
-    my $perl = "\n\$$package\::VERSION\x20=\x20'$version';$trial\n";
-
-    $self->log("non-ASCII package name is likely to cause problems")
-      if $package =~ /\P{ASCII}/;
-
-    $self->log("non-ASCII version is likely to cause problems")
-      if $version =~ /\P{ASCII}/;
-
-    # Why can't I use PPI::Token::Unknown? -- rjbs, 2014-01-11
-    my $bogus_token = PPI::Token::Comment->new($perl);
-
-    $self->log_debug([
-      'adding $VERSION assignment to %s in %s',
-      $package,
-      $file->name,
-    ]);
-
+    if ( my $block = $stmt->find_first('PPI::Structure::Block' ) ) {
+      # 5.14+ package <version> BLOCK;
+      $self->log_debug([
+        'adding version to a package NAME BLOCK: package %s in %s',
+          $package,
+          $file->name
+      ]);
+      unshift @{$block->{children}},
+              PPI::Token::Whitespace->new("\n"),
+              $self->_make_version_declaration($package);
+      next;
+    }
     Carp::carp("error inserting version in " . $file->name)
-      unless $stmt->insert_after($bogus_token);
-
+      unless $stmt->insert_after($self->_make_version_declaration($package));
     $munged = 1;
   }
 
