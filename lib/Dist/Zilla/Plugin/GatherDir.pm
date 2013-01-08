@@ -136,7 +136,7 @@ sub gather_files {
   $exclude_regex = qr/$exclude_regex|$_/
     for ($self->exclude_match->flatten);
   # ^\Q$_\E$ should also handle the `eq` check
-  $exclude_regex = qr/$exclude_regex|^\Q$_\E$/
+  $exclude_regex = qr/$exclude_regex|\A\Q$_\E\z/
     for ($self->exclude_filename->flatten);
 
   my $root = "" . $self->root;
