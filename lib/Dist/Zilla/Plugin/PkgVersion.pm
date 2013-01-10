@@ -103,6 +103,12 @@ sub munge_perl {
     my $version_doc = PPI::Document->new(\$perl);
     my @children = $version_doc->schildren;
 
+    while (my $next = $stmt->snext_sibling) {
+      last if ! $next->isa('PPI::Statement::Include')
+           or   $next->module !~ /\A(?:strict|warnings)\z/;;
+      $stmt = $next;
+    }
+
     $self->log_debug([
       'adding $VERSION assignment to %s in %s',
       $package,

@@ -74,11 +74,19 @@ my $script_pkg = '
 package DZT::Script;
 ';
 
+my $with_import_version = '
+package DZT::WIVer;
+use strict 1; # This comment should not move off the "use strict 1" line.
+1;
+';
+
+
 my $tzil = Builder->from_config(
   { dist_root => 'corpus/dist/DZT' },
   {
     add_files => {
       'source/lib/DZT/TP1.pm'    => $two_packages,
+      'source/lib/DZT/WIVer.pm'  => $with_import_version,
       'source/lib/DZT/WVer.pm'   => $with_version,
       'source/lib/DZT/WVerTwoLines.pm' => $with_version_two_lines,
       'source/lib/DZT/WStrEscaped.pm'  => $in_a_string_escaped,
@@ -188,6 +196,8 @@ unlike(
   qr{\$DZT::TP2::VERSION},
   "no version for DZT::TP2 when it was hidden with a comment"
 );
+
+diag "-----", $tzil->slurp_file('build/lib/DZT/WIVer.pm');
 
 {
   local $ENV{TRIAL} = 1;
