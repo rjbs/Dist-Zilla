@@ -104,8 +104,7 @@ sub munge_perl {
     my @children = $version_doc->schildren;
 
     while (my $next = $stmt->snext_sibling) {
-      last if ! $next->isa('PPI::Statement::Include')
-           or   $next->module !~ /\A(?:strict|warnings)\z/;;
+      last if ! $next->isa('PPI::Statement::Include');
       $stmt = $next;
     }
 
