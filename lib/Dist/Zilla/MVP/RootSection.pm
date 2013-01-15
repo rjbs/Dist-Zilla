@@ -44,7 +44,19 @@ after finalize => sub {
 
   my $assembler = $self->sequence->assembler;
 
-  my $zilla = $assembler->zilla_class->new( $self->payload );
+  my %payload = %{ $self->payload };
+
+  my %dzil;
+  $dzil{$_} = delete $payload{":$_"} for grep { s/\A:// } keys %payload;
+
+  my $zilla = $assembler->zilla_class->new( \%payload );
+
+  if (defined $dzil{version}) {
+    Dist::Zilla::Util->_assert_loaded_class_version_ok(
+      'Dist::Zilla',
+      $dzil{version},
+    );
+  }
 
   $self->set_zilla($zilla);
 };

@@ -24,22 +24,10 @@ after finalize => sub {
   $dzil{$_} = delete $payload{":$_"} for grep { s/\A:// } keys %payload;
 
   if (defined $dzil{version}) {
-    require CPAN::Meta::Requirements;
-    my $req = CPAN::Meta::Requirements->from_string_hash({
-      $plugin_class => $dzil{version}
-    });
-
-    my $version = $plugin_class->VERSION;
-    unless ($req->accepts_module($plugin_class => $version)) {
-      # $self->assembler->log_fatal([
-      confess sprintf
-        "%s version (%s) not match required version: %s",
-        $plugin_class,
-        $version,
-        $dzil{version},
-      ;
-      # ]);
-    }
+    Dist::Zilla::Util->_assert_loaded_class_version_ok(
+      $plugin_class,
+      $dzil{version},
+    );
   }
 
   $plugin_class->register_component($name, \%payload, $self);

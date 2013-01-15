@@ -1,6 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          allow :version directive in root section to require a given version
+          of Dist::Zilla
+
           simply and speedify some of GatherDir (Thanks, Olivier Mengué!)
 
 4.300028  2012-10-19 10:50:42 America/New_York
