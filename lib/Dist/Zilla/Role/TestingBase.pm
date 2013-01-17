@@ -14,12 +14,17 @@ So for example, one can set it to C<runtest> to test using L<Test::Run::CmdLine>
 Defaults to "test".
 =cut
 
-# XXX: Later, add a way to set this in config. -- rjbs, 2008-06-02
+around mvp_multivalue_args => sub {
+  my ($orig, $self) = @_;
+
+  my @start = $self->$orig;
+  return (@start, qw(testing_command));
+};
+
 has testing_command => (
   is   => 'rw',
-  isa  => 'ArrayRef',
+  isa  => 'ArrayRef[Str]',
   lazy => 1,
-  init_arg => undef,
   default  => sub { [ qw( test ) ] },
 );
 
