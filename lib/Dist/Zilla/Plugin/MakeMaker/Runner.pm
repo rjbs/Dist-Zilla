@@ -5,6 +5,7 @@ use Moose;
 with(
   'Dist::Zilla::Role::BuildRunner',
   'Dist::Zilla::Role::TestRunner',
+  'Dist::Zilla::Role::TestingBase',
 );
 
 use namespace::autoclean;
@@ -32,7 +33,7 @@ sub test {
 
   my $make = $self->make_path;
   $self->build;
-  system($make, 'test',
+  system($make, @{$self->testing_command},
     ( $self->zilla->logger->get_debug ? 'TEST_VERBOSE=1' : () ),
   ) and die "error running $make test\n";
 
