@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          listdeps --versions now sorts properly (Karen Etheridge)
 
 4.300028  2012-10-19 10:50:42 America/New_York
           when picking modules to treat as "part of the dist," be more lax in
