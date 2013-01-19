@@ -5,6 +5,7 @@ with qw(
   Dist::Zilla::Role::InstallTool
   Dist::Zilla::Role::BuildRunner
   Dist::Zilla::Role::TestRunner
+  Dist::Zilla::Role::TestingBase
 );
 
 use namespace::autoclean;
@@ -23,7 +24,7 @@ sub test {
 
   $self->build;
   my @testing = $self->zilla->logger->get_debug ? '--verbose' : ();
-  system $^X, 'Build', 'test', @testing and die "error running $^X Build test\n";
+  system $^X, 'Build', @{$self->testing_command}, @testing and die "error running $^X Build test\n";
 
   return;
 }
