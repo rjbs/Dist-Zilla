@@ -135,9 +135,8 @@ sub gather_files {
   my $exclude_regex = qr/\000/;
   $exclude_regex = qr/$exclude_regex|$_/
     for ($self->exclude_match->flatten);
-  # \b\Q$_\E\b should also handle the `eq` check
-  $exclude_regex = qr/$exclude_regex|\b\Q$_\E\b/
-    for ($self->exclude_filename->flatten);
+
+  my %is_excluded = map {; $_ => 1 } $self->exclude_filename->flatten;
 
   my $root = "" . $self->root;
   $root =~ s{^~([\\/])}{File::HomeDir->my_home . $1}e;
@@ -154,6 +153,7 @@ sub gather_files {
     }
 
     next if $file =~ $exclude_regex;
+    next if $is_excluded{ $file };
 
     # _file_from_filename is overloaded in GatherDir::Template
     my $fileobj = $self->_file_from_filename($filename);
