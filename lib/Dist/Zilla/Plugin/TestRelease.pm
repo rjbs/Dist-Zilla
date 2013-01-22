@@ -22,7 +22,6 @@ This plugin was originally contributed by Christopher J. Madsen.
 
 =cut
 
-use Archive::Tar;
 use File::pushd ();
 use Moose::Autobox;
 use Path::Class ();
@@ -37,6 +36,8 @@ sub before_release {
   my $tmpdir = Path::Class::dir( File::Temp::tempdir(DIR => $build_root) );
 
   $self->log("Extracting $tgz to $tmpdir");
+
+  require Archive::Tar;
 
   my @files = do {
     my $wd = File::pushd::pushd($tmpdir);
