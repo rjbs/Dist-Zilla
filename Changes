@@ -1,7 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
-          listdeps --versions now sorts properly (Karen Etheridge)
+          listdeps --versions now sorts properly (thanks, Karen Etheridge!)
+
+          delay loading more libraries until needed (thanks, Olivier Mengué!)
 
 4.300029  2013-01-14 20:03:15 America/New_York
           allow :version directive in root section to require a given version
