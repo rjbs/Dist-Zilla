@@ -98,7 +98,7 @@ sub execute {
   my %modules = $self->extract_dependencies($self->zilla, \@phases, $opt->missing);
 
   if($opt->versions) {
-    for(sort { lc $a cmp $b } keys %modules) {
+    for(sort { lc $a cmp lc $b } keys %modules) {
       print "$_ = ".$modules{$_}."\n";
     }
   } else {
