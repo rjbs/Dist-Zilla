@@ -7,7 +7,6 @@ use Moose::Autobox;
 use namespace::autoclean;
 
 use Config;
-use Data::Dumper ();
 use List::MoreUtils qw(any uniq);
 
 use Dist::Zilla::File::InMemory;
@@ -228,6 +227,7 @@ sub setup_installer {
 
   my $perl_prereq = delete $write_makefile_args->{MIN_PERL_VERSION};
 
+  require Data::Dumper;
   my $makefile_args_dumper = Data::Dumper->new(
     [ $write_makefile_args ],
     [ '*WriteMakefileArgs' ],
