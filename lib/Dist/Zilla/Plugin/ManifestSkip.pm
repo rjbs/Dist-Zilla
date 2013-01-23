@@ -5,7 +5,6 @@ with 'Dist::Zilla::Role::FilePruner';
 
 use namespace::autoclean;
 
-use ExtUtils::Manifest 1.54; # public maniskip routine
 use Moose::Autobox;
 
 =head1 DESCRIPTION
@@ -59,6 +58,9 @@ sub prune_files {
     print $fh $content;
     close $fh;
   }
+
+  require ExtUtils::Manifest;
+  ExtUtils::Manifest->VERSION('1.54');
 
   my $skip = ExtUtils::Manifest::maniskip($skipfile_name);
 
