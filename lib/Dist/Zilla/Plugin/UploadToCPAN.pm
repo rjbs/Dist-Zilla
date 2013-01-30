@@ -40,7 +40,7 @@ blank username or password will abort the release.
 {
   package
     Dist::Zilla::Plugin::UploadToCPAN::_Uploader;
-  use base 'CPAN::Uploader';
+  use parent 'CPAN::Uploader';
   # Report CPAN::Uploader's version, not ours:
   sub _ua_string { CPAN::Uploader->_ua_string }
 

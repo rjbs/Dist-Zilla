@@ -1,6 +1,6 @@
 use strict;
 package Dist::Zilla::App::Tester;
-use base 'App::Cmd::Tester::CaptureExternal';
+use parent 'App::Cmd::Tester::CaptureExternal';
 use App::Cmd::Tester 0.306 (); # result_class, ->app
 # ABSTRACT: testing library for Dist::Zilla::App
 
