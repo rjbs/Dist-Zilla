@@ -39,11 +39,11 @@ useful for testing your distribution as if it were installed.
 sub abstract { 'run stuff in a dir where your dist is built' }
 
 sub usage_desc {
-  return '%c %o [ run command [ arg1 arg2 ... ] ]';
+  return '%c run %o [ run command [ arg1 arg2 ... ] ]';
 }
 
 sub execute {
-  my ($self, $opts, $args) = @_;
+  my ($self, $opt, $args) = @_;
 
   unless (@$args) {
     my $envname = $^O eq 'MSWin32' ? 'COMSPEC' : 'SHELL';
