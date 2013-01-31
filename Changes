@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.300030  2013-01-30 22:25:27 America/New_York
           listdeps --versions now sorts properly (thanks, Karen Etheridge!)
 
           delay loading more libraries until needed (thanks, Olivier Mengué!)
