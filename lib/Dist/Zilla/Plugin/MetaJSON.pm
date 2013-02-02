@@ -7,7 +7,6 @@ with 'Dist::Zilla::Role::FileGatherer';
 use namespace::autoclean;
 
 use Dist::Zilla::File::FromCode;
-use Hash::Merge::Simple ();
 
 =head1 DESCRIPTION
 
