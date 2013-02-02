@@ -6,11 +6,8 @@ with 'Dist::Zilla::Role::FileGatherer';
 
 use namespace::autoclean;
 
-use CPAN::Meta::Converter 2.101550; # improved downconversion
-use CPAN::Meta::Validator 2.101550; # improved downconversion
 use Dist::Zilla::File::FromCode;
 use Hash::Merge::Simple ();
-use JSON 2;
 
 =head1 DESCRIPTION
 
@@ -52,6 +49,13 @@ sub gather_files {
   my ($self, $arg) = @_;
 
   my $zilla = $self->zilla;
+
+  require JSON;
+  JSON->VERSION(2);
+  require CPAN::Meta::Converter;
+  CPAN::Meta::Converter->VERSION(2.101550); # improved downconversion
+  require CPAN::Meta::Validator;
+  CPAN::Meta::Validator->VERSION(2.101550); # improved downconversion
 
   my $file  = Dist::Zilla::File::FromCode->new({
     name => $self->filename,
