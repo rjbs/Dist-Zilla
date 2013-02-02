@@ -3,9 +3,6 @@ package Dist::Zilla::Plugin::UploadToCPAN;
 use Moose;
 with qw(Dist::Zilla::Role::BeforeRelease Dist::Zilla::Role::Releaser);
 
-use CPAN::Uploader 0.101550; # ua string
-use File::HomeDir;
-use File::Spec;
 use Moose::Util::TypeConstraints;
 use Scalar::Util qw(weaken);
 use Try::Tiny;
@@ -36,19 +33,6 @@ username and password during the BeforeRelease phase.  Entering a
 blank username or password will abort the release.
 
 =cut
-
-{
-  package
-    Dist::Zilla::Plugin::UploadToCPAN::_Uploader;
-  use parent 'CPAN::Uploader';
-  # Report CPAN::Uploader's version, not ours:
-  sub _ua_string { CPAN::Uploader->_ua_string }
-
-  sub log {
-    my $self = shift;
-    $self->{'Dist::Zilla'}{plugin}->log(@_);
-  }
-}
 
 has credentials_stash => (
   is  => 'ro',
@@ -120,6 +104,8 @@ has pause_cfg_file => (
   isa     => 'Str',
   lazy    => 1,
   default => sub {
+    require File::Spec;
+    require File::HomeDir;
     File::Spec->catfile(File::HomeDir->my_home, '.pause');
   },
 );
@@ -186,6 +172,7 @@ has uploader => (
   default => sub {
     my ($self) = @_;
 
+    require Dist::Zilla::Plugin::UploadToCPAN::_Uploader;
     my $uploader = Dist::Zilla::Plugin::UploadToCPAN::_Uploader->new({
       user     => $self->username,
       password => $self->password,
