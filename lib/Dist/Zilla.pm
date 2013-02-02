@@ -11,7 +11,6 @@ use Moose::Util::TypeConstraints;
 
 use Dist::Zilla::Types qw(License);
 
-use Hash::Merge::Simple ();
 use Log::Dispatchouli 1.100712; # proxy_loggers, quiet_fatal
 use Path::Class;
 use List::Util qw(first);
@@ -515,6 +514,7 @@ sub _build_distmeta {
                     . (defined $self->VERSION ? $self->VERSION : '(undef)')
   };
 
+  require Hash::Merge::Simple;
   $meta = Hash::Merge::Simple::merge($meta, $_->metadata)
     for $self->plugins_with(-MetaProvider)->flatten;
 

@@ -6,8 +6,6 @@ with 'Dist::Zilla::Role::FileGatherer';
 
 use namespace::autoclean;
 
-use Hash::Merge::Simple ();
-
 =head1 DESCRIPTION
 
 This plugin will add a F<META.yml> file to the distribution.
