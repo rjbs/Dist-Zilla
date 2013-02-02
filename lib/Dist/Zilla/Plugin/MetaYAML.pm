@@ -6,8 +6,6 @@ with 'Dist::Zilla::Role::FileGatherer';
 
 use namespace::autoclean;
 
-use CPAN::Meta::Converter 2.101550; # improved downconversion
-use CPAN::Meta::Validator 2.101550; # improved downconversion
 use Hash::Merge::Simple ();
 
 =head1 DESCRIPTION
@@ -53,6 +51,10 @@ sub gather_files {
 
   require Dist::Zilla::File::FromCode;
   require YAML::Tiny;
+  require CPAN::Meta::Converter;
+  CPAN::Meta::Converter->VERSION(2.101550); # improved downconversion
+  require CPAN::Meta::Validator;
+  CPAN::Meta::Validator->VERSION(2.101550); # improved downconversion
 
   my $zilla = $self->zilla;
 
