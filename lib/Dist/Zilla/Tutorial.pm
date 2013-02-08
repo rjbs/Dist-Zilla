@@ -118,7 +118,7 @@ L<AfterBuild|Dist::Zilla::Role::AfterBuild> plugins do their thing.
 
 =head1 RELEASING YOUR DIST
 
-By running C<dzil release>, you'll can test your
+By running C<dzil release>, you'll test your
 distribution, build a tarball of it, and upload it to the CPAN.  Plugins are
 able to do things like check your version control system to make sure you're
 releasing a new version and that you tag the version you've just uploaded.  It
