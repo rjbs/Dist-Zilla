@@ -91,7 +91,7 @@ has username => (
     my ($self) = @_;
     return $self->_credential('username')
         || $self->pause_cfg->{user}
-        || $self->zilla->chrome->prompt_str("PAUSE username: ");
+        || $self->zilla->chrome->prompt_str(($self->has_target ? $self->target : 'PAUSE')." username: ");
   },
 );
 
@@ -111,7 +111,7 @@ has password => (
     my ($self) = @_;
     return $self->_credential('password')
         || $self->pause_cfg->{password}
-        || $self->zilla->chrome->prompt_str('PAUSE password: ', { noecho => 1 });
+        || $self->zilla->chrome->prompt_str(($self->has_target ? $self->target : 'PAUSE').' password: ', { noecho => 1 });
   },
 );
 
@@ -174,9 +174,25 @@ is not recommended in most cases.
 =cut
 
 has upload_uri => (
-  is => 'ro',
-  isa => 'Str',
+  is        => 'ro',
+  isa       => 'Str',
   predicate => 'has_upload_uri',
+);
+
+=attr target
+
+This option allows setting an alternative text shown as target for the upload.
+If not supplied, the default of L<CPAN::Uploader> will be used. Exception here
+is the username and password prompt, which will get a hardcoded text B<PAUSE>
+if no special target is given.  Using this option is not recommended in most
+cases.
+
+=cut
+
+has target => (
+  is        => 'ro',
+  isa       => 'Str',
+  predicate => 'has_target',
 );
 
 has uploader => (
@@ -193,6 +209,8 @@ has uploader => (
            ? (subdir => $self->subdir) : ()),
       ($self->has_upload_uri
            ? (upload_uri => $self->upload_uri) : ()),
+      ($self->has_target
+           ? (target => $self->target) : ()),
     });
 
     $uploader->{'Dist::Zilla'}{plugin} = $self;

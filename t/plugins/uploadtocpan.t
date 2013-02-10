@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::More 0.88 tests => 16;
+use Test::More 0.88 tests => 18;
 
 use lib 't/lib';
 
@@ -13,7 +13,7 @@ use Test::Fatal qw(exception);
 sub Dist::Zilla::Plugin::UploadToCPAN::_Uploader::upload_file {
   my ($self, $archive) = @_;
 
-  $self->log("PAUSE $_ is $self->{$_}") for qw(user password);
+  $self->log(( defined $self->{target} ? $self->{target} : "PAUSE")." $_ is $self->{$_}") for qw(user password);
   $self->log("Uploading $archive") if -f $archive;
 }
 
@@ -66,6 +66,29 @@ my %safety_first = (qw(upload_uri http://bogus.example.com/do/not/upload/),
   ok(
     grep({ /fake release happen/i } @$msgs),
     "releasing continues after upload",
+  );
+}
+
+#---------------------------------------------------------------------
+# custom target in dist.ini:
+{
+  my $tzil = build_tzil(
+    [ UploadToCPAN => { %safety_first, target => 'othercpan' } ],
+    'FakeRelease',
+    [ '%PAUSE' => {qw(
+      username  user
+      password  password
+    )}],
+  );
+
+  $tzil->release;
+
+  my $msgs = $tzil->log_messages;
+
+  ok(grep({ /othercpan user is user/ } @$msgs), "seeing custom target");
+  ok(
+    grep({ /fake release happen/i } @$msgs),
+    "releasing continues after upload with custom target",
   );
 }
 
