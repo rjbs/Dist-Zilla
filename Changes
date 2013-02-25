@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          new default file finder called :TestModules (Karen Etheridge)
 
 4.300030  2013-01-30 22:25:27 America/New_York
           listdeps --versions now sorts properly (thanks, Karen Etheridge!)
