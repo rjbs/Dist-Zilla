@@ -112,8 +112,8 @@ sub _assert_loaded_class_version_ok {
 
   my $have_version = $pkg->VERSION;
   unless ($req->accepts_module($pkg => $have_version)) {
-    Carp::confess( sprintf
-      "%s version (%s) not match required version: %s",
+    die( sprintf
+      "%s version (%s) not match required version: %s\n",
       $pkg,
       $have_version,
       $version,
