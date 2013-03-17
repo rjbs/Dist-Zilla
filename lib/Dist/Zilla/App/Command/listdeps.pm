@@ -31,7 +31,7 @@ Also display the required versions of listed modules.
 
 =head1 ACKNOWLEDGEMENTS
 
-This code is more or less a direct copy of Marcel Gruenauer (hanekomu)
+This code was originally more or less a direct copy of Marcel Gruenauer (hanekomu)
 Dist::Zilla::App::Command::prereqs, updated to work with the Dist::Zilla v2
 API.
 
