@@ -42,7 +42,7 @@ parameter finder_arg_names => (
 =attr default_finders
 
 This attribute is an arrayref of plugin names for the default plugins the
-consuming plugin will use as finder.s
+consuming plugin will use as finders.
 
 Example: C<< [ qw( :InstallModules :ExecFiles ) ] >>
 

@@ -12,7 +12,7 @@ use Dist::Zilla::App -command;
 
 This is a command plugin for L<Dist::Zilla>. It provides the C<listdeps>
 command, which prints your distribution's prerequisites. You could pipe that
-list to a CPAN client like L<cpan> to install all of the dependecies in one
+list to a CPAN client like L<cpan> to install all of the dependencies in one
 quick go.
 
 =head1 OPTIONS
