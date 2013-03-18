@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.300031  2013-03-17 21:47:31 America/New_York
           stacktrace removed from exception when a plugin's minimum version
           check fails (thanks, Karen Etheridge!)
 
