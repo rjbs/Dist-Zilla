@@ -7,6 +7,12 @@ Revision history for {{$dist->name}}
           add 'dzil listdeps --json', which lists all prerequisites broken up
           by phase and type, in readable JSON format (thanks, Karen Etheridge!)
 
+          improve errors when there's not enough configuration and no global
+          config file can be found (thanks, Dimitar Petrov)
+
+          delay loading yet more libraries until needed (thanks, Olivier
+          Mengué!)
+
 4.300030  2013-01-30 22:25:27 America/New_York
           listdeps --versions now sorts properly (thanks, Karen Etheridge!)
 
