@@ -158,6 +158,20 @@ sub _setup_default_plugins {
       },
     });
 
+  unless ($self->plugin_named(':PSGI')) {
+    require Dist::Zilla::Plugin::FinderCode;
+    my $plugin = Dist::Zilla::Plugin::FinderCode->new({
+      plugin_name => ':PSGI',
+      zilla       => $self,
+      style       => 'grep',
+      code        => sub {
+        my ($file, $self) = @_;
+        local $_ = $file->name;
+        return 1 if m{\.psgi$};
+        return;
+      },
+    });
+
     $self->plugins->push($plugin);
   }
 }

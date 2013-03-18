@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          new default file finder called :PSGI (Karen Etheridge)
 
 4.300031  2013-03-17 21:47:31 America/New_York
           stacktrace removed from exception when a plugin's minimum version

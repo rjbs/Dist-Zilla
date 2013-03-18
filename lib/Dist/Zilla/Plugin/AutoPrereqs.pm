@@ -24,6 +24,9 @@ whose files will be scanned to determine runtime prerequisites.  It
 may be specified multiple times.  The default value is
 C<:InstallModules> and C<:ExecFiles>.
 
+(You can find the list of all internal FileFinders in
+L<Dist::Zilla::Role::FileFinderUser/default_finders>.)
+
 =attr test_finder
 
 Just like C<finder>, but for test-phase prerequisites.  The default

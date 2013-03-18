@@ -37,6 +37,9 @@ use MooseX::Types::Moose qw(ArrayRef RegexpRef Str);
 A FileFinder to supply the initial list of files.
 May occur multiple times.
 
+(You can find the list of all internal FileFinders in
+L<Dist::Zilla::Role::FileFinderUser/default_finders>.)
+
 =attr skip
 
 The pathname must I<not> match any of these regular expressions.

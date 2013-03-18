@@ -76,6 +76,10 @@ L<Dist::Zilla::Plugin::ExecDir> plugin to mark those files as executables.
 Searches your ShareDir directory and lists the files in it.
 Hint: Use the L<Dist::Zilla::Plugin::ShareDir> plugin to setup the sharedir.
 
+= :PSGI
+
+Finds C<*.psgi> files in your dist
+
 =end :list
 
 =cut
