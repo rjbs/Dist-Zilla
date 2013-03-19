@@ -129,27 +129,44 @@ has abstract => (
   is   => 'rw',
   isa  => 'Str',
   lazy => 1,
-  default  => sub {
-    my ($self) = @_;
+  builder => '_build_abstract',
+);
 
-    unless ($self->main_module) {
-      die "no abstract given and no main_module found; make sure your main module is in ./lib\n";
-    }
+sub _build_abstract {
+  my ($self) = @_;
 
-    my $file = $self->main_module;
-    $self->log("extracting distribution abstract from " . $file->name);
-    my $abstract = Dist::Zilla::Util->abstract_from_file($file);
+  my $abstract;
+  for my $plugin ($self->plugins_with(-AbstractProvider)->flatten) {
+    next unless defined(my $this_abstract = $plugin->provide_abstract);
+    $self->log_fatal('attempted to set abstract twice') if defined $abstract;
+    $abstract = $this_abstract;
+  }
 
-    if (!defined($abstract)) {
-        my $filename = $file->name;
-        die "Unable to extract an abstract from $filename. Please add the following comment to the file with your abstract:
+  $abstract = $self->_extract_abstract_default unless defined $abstract;
+
+  $abstract;
+}
+
+sub _extract_abstract_default {
+  my ($self) = @_;
+
+  unless ($self->main_module) {
+    die "no abstract given and no main_module found; make sure your main module is in ./lib\n";
+  }
+
+  my $file = $self->main_module;
+  $self->log("extracting distribution abstract from " . $file->name);
+  my $abstract = Dist::Zilla::Util->abstract_from_file($file);
+
+  if (!defined($abstract)) {
+      my $filename = $file->name;
+      die "Unable to extract an abstract from $filename. Please add the following comment to the file with your abstract:
     # ABSTRACT: turns baubles into trinkets
 ";
-    }
-
-    return $abstract;
   }
-);
+
+  return $abstract;
+}
 
 =attr main_module
 
