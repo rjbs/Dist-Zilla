@@ -40,6 +40,8 @@ use Test::DZil;
     },
     BUILD_REQUIRES     => {
       'Builder::Bob' => '9.901',
+    },
+    TEST_REQUIRES      => {
       'Test::Deet'   => '7',
     },
     CONFIGURE_REQUIRES => {
