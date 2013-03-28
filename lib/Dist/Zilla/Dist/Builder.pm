@@ -596,7 +596,7 @@ sub ensure_built_in_tmpdir {
       rename $latest, $previous
         or $self->log("cannot move .build/latest link to .build/previous");
     }
-    symlink $target, $latest
+    symlink $target->basename, $latest
       or $self->log('cannot create link .build/latest');
   }
 
