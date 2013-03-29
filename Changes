@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.300032  2013-03-29 16:41:11 America/New_York
           test_requires support for ModuleBuild and MakeMaker (thanks,
           Tatsuhiko Miyagawa!)
 
