@@ -44,6 +44,8 @@ use Test::DZil;
     build_requires => {
       'Builder::Bob'  => '9.901',
       'Module::Build' => '0.3601',
+    },
+    test_requires => {
       'Test::Deet'    => '7',
     },
     'configure_requires' => {
