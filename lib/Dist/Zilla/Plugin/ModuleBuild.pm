@@ -69,6 +69,19 @@ use Module::Build {{ $plugin->mb_version }};
 
 my {{ $module_build_args }}
 
+unless ( eval { Module::Build->VERSION(0.4004) } ) {
+  my $tr = delete $module_build_args{test_requires};
+  my $br = $module_build_args{build_requires};
+  for my $mod ( keys %$tr ) {
+    if ( exists $br->{$mod} ) {
+      $br->{$mod} = $tr->{$mod} if $tr->{$mod} > $br->{$mod};
+    }
+    else {
+      $br->{$mod} = $tr->{$mod};
+    }
+  }
+}
+
 my $build = {{ $plugin->mb_class }}->new(%module_build_args);
 
 $build->create_build_script;
@@ -112,12 +125,9 @@ sub module_build_args {
   my %prereqs = (
     configure_requires => $prereqs->requirements_for(qw(configure requires)),
     build_requires     => $prereqs->requirements_for(qw(build     requires)),
+    test_requires      => $prereqs->requirements_for(qw(test      requires)),
     requires           => $prereqs->requirements_for(qw(runtime   requires)),
     recommends         => $prereqs->requirements_for(qw(runtime   recommends)),
-  );
-
-  $prereqs{build_requires} = $prereqs{build_requires}->clone->add_requirements(
-    $prereqs->requirements_for(qw(test requires))
   );
 
   (my $name = $self->zilla->name) =~ s/-/::/g;
