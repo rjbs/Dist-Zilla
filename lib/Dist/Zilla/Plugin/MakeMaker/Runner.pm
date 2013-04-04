@@ -21,8 +21,9 @@ sub build {
   my $self = shift;
 
   my $make = $self->make_path;
-  system($^X => 'Makefile.PL') and die "error with Makefile.PL\n";
-  system($make)                and die "error running $make\n";
+  my $perl = $ENV{DZIL_PERL} ? $ENV{DZIL_PERL} : $^X;
+  system($perl => 'Makefile.PL') and die "error with Makefile.PL\n";
+  system($make)                  and die "error running $make\n";
 
   return;
 }

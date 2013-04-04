@@ -631,9 +631,10 @@ sub install {
   eval {
     ## no critic Punctuation
     my $wd = File::pushd::pushd($target);
+    my $perl = $ENV{DZIL_PERL} ? $ENV{DZIL_PERL} : $^X;
     my @cmd = $arg->{install_command}
             ? @{ $arg->{install_command} }
-            : ($^X => '-MCPAN' =>
+            : ($perl => '-MCPAN' =>
                 $^O eq 'MSWin32' ? q{-e"install '.'"} : '-einstall "."');
 
     $self->log_debug([ 'installing via %s', \@cmd ]);
