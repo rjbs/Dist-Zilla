@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.300033  2013-04-05 15:00:37 America/New_York
           fix .build/latest (thanks, Karen Etheridge!)
 
           doc fixes (thanks, Randy Stauner!)
