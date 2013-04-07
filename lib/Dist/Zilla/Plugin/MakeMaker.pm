@@ -8,6 +8,7 @@ use namespace::autoclean;
 
 use Config;
 use List::MoreUtils qw(any uniq);
+use Module::Metadata;
 
 use Dist::Zilla::File::InMemory;
 use Dist::Zilla::Plugin::MakeMaker::Runner;
@@ -169,10 +170,21 @@ sub share_dir_code {
   return $share_dir_code;
 }
 
+sub main_module_name {
+  my $self = shift;
+
+  my $meta = Module::Metadata->new_from_file($self->zilla->main_module->name);
+  my $name = (grep { $_ ne 'main' } $meta->packages_inside)[0];
+
+  unless ($name) {
+    ($name = $self->zilla->name) =~ s/-/::/g;
+  }
+
+  $name;
+}
+
 sub write_makefile_args {
   my ($self) = @_;
-
-  (my $name = $self->zilla->name) =~ s/-/::/g;
 
   my @exe_files =
     $self->zilla->find_files(':ExecFiles')->map(sub { $_->name })->flatten;
@@ -217,7 +229,7 @@ sub write_makefile_args {
 
   my %write_makefile_args = (
     DISTNAME  => $self->zilla->name,
-    NAME      => $name,
+    NAME      => $self->main_module_name,
     AUTHOR    => $self->zilla->authors->join(q{, }),
     ABSTRACT  => $self->zilla->abstract,
     VERSION   => $self->zilla->version,
