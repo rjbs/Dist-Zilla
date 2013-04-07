@@ -173,11 +173,22 @@ sub share_dir_code {
 sub main_module_name {
   my $self = shift;
 
-  my $meta = Module::Metadata->new_from_file($self->zilla->main_module->name);
-  my $name = (grep { $_ ne 'main' } $meta->packages_inside)[0];
+  my $file = $self->zilla->main_module->name;
+
+  my $match = sub {
+    my $pkg = shift;
+    return if $pkg eq 'main' or $pkg eq 'DB';
+    $pkg =~ s!::!/!g;
+    $file =~ /\b$pkg\.pm$/;
+  };
+
+  # per MakeMaker's spec, NAME must be a package and matching .pm file should exist
+  my $meta = Module::Metadata->new_from_file($file);
+  my $name = (grep $match->($_), $meta->packages_inside)[0];
 
   unless ($name) {
     ($name = $self->zilla->name) =~ s/-/::/g;
+    $self->log(["Matching package not found for %s. Falling back to %s", $file, $name]);
   }
 
   $name;
