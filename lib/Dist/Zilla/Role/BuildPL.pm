@@ -47,7 +47,7 @@ sub test {
   my $ho = "HARNESS_OPTIONS";
   local $ENV{$ho} = $ENV{$ho} ? "$ENV{$ho}:$jobs" : $jobs;
 
-  my @testing = $self->zilla->logger->get_debug ? '--verbose' : ();
+  my @testing = $self->zilla->logger->get_debug || $arg->{test_verbose} ? '--verbose' : ();
 
   $self->log_debug('running ' . join(' ', $^X, 'Build', 'test', @testing));
   system $^X, 'Build', 'test', @testing and die "error running $^X Build test\n";

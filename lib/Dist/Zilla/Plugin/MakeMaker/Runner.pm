@@ -52,7 +52,7 @@ sub test {
 
   $self->log_debug(join(' ', "running $make test", ( $self->zilla->logger->get_debug ? 'TEST_VERBOSE=1' : () )));
   system($make, 'test',
-    ( $self->zilla->logger->get_debug ? 'TEST_VERBOSE=1' : () ),
+    ( $self->zilla->logger->get_debug || $arg->{test_verbose} ? 'TEST_VERBOSE=1' : () ),
   ) and die "error running $make test\n";
 
   return;
