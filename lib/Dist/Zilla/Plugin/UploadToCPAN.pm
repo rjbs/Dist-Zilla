@@ -3,7 +3,6 @@ package Dist::Zilla::Plugin::UploadToCPAN;
 use Moose;
 with qw(Dist::Zilla::Role::BeforeRelease Dist::Zilla::Role::Releaser);
 
-use CPAN::Uploader 0.101550; # ua string
 use File::HomeDir;
 use File::Spec;
 use Moose::Util::TypeConstraints;
@@ -40,7 +39,8 @@ blank username or password will abort the release.
 {
   package
     Dist::Zilla::Plugin::UploadToCPAN::_Uploader;
-  use parent 'CPAN::Uploader';
+  # CPAN::Uploader will be loaded later if used
+  our @ISA = 'CPAN::Uploader';
   # Report CPAN::Uploader's version, not ours:
   sub _ua_string { CPAN::Uploader->_ua_string }
 
@@ -185,6 +185,10 @@ has uploader => (
   lazy => 1,
   default => sub {
     my ($self) = @_;
+
+    # Load the module lazily
+    require CPAN::Uploader;
+    CPAN::Uploader->VERSION('0.101550');  # ua_string
 
     my $uploader = Dist::Zilla::Plugin::UploadToCPAN::_Uploader->new({
       user     => $self->username,
