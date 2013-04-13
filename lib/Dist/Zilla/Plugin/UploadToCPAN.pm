@@ -188,7 +188,7 @@ has uploader => (
 
     # Load the module lazily
     require CPAN::Uploader;
-    CPAN::Uploader->VERSION('0.101550');  # ua_string
+    CPAN::Uploader->VERSION('0.103004');  # require HTTPS
 
     my $uploader = Dist::Zilla::Plugin::UploadToCPAN::_Uploader->new({
       user     => $self->username,
