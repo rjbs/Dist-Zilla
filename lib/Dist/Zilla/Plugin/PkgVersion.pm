@@ -100,6 +100,25 @@ sub munge_perl {
       $file->name,
     ]);
 
+    # walk forward across the *significant siblings* until the next sibling
+    # is not a P::S::Include (stop just before first thing that's not a "use"
+    # or "require" or ...)
+    while ( my $next = $stmt->snext_sibling ) {
+      last if !$next->isa('PPI::Statement::Include');
+      $stmt = $next;
+    }
+
+    # walk forward a bit more, stopping when the next sibling (significant or
+    # not) is something significant or a PPI::Token::{Whitespace,Comment} that
+    # ends in a newline
+    while ( my $next = $stmt->next_sibling ) {
+      last if $next->significant;
+      last if ( ( $stmt->isa('PPI::Token::Whitespace')
+                      || $stmt->isa('PPI::Token::Comment') )
+                    && $stmt->content =~ qr{.*\n$} );
+      $stmt = $next;
+    }
+
     # the \x20 hack is here so that when we scan *this* document we don't find
     # an assignment to version; it shouldn't be needed, but it's been annoying
     # enough in the past that I'm keeping it here until tests are better
@@ -109,9 +128,28 @@ sub munge_perl {
     my $version_doc = PPI::Document->new(\$perl);
     my @children = $version_doc->schildren;
 
-    Carp::carp("error inserting version in " . $file->name)
-      unless $stmt->insert_after($children[0]->clone)
-      and    $stmt->insert_after( PPI::Token::Whitespace->new("\n") );
+    # PPI::Statement::insert_after wants to insert a Statement
+    # PPI::Token::insert_after wants to insert a Structure
+    # sigh...
+    my $insertable =
+      ( $stmt->isa('PPI::Statement') ) ?
+          $children[0]->clone                         # the Statement part
+              : ( $children[0]->children )[0]->clone; # the Structure part
+
+    if ( $stmt->content =~ qr{.*\n} ) {
+      # if the thing we're inserting after includes a newline then don't
+      # include another one.
+      Carp::carp( "error inserting version in " . $file->name )
+          unless $stmt->insert_after( PPI::Token::Whitespace->new("\n") )
+          and $stmt->insert_after($insertable);
+    }
+    else {
+      # otherwise, stick a newline in too.
+      Carp::carp( "error inserting version in " . $file->name )
+          unless $stmt->insert_after( PPI::Token::Whitespace->new("\n") )
+          and $stmt->insert_after($insertable)
+          and $stmt->insert_after( PPI::Token::Whitespace->new("\n") );
+    }
   }
 
   $self->save_ppi_document_to_file($document, $file);
