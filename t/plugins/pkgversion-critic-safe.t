@@ -1,3 +1,5 @@
+#!perl
+
 use strict;
 use warnings;
 use Test::More 0.88;
@@ -83,6 +85,7 @@ my $var = 42;
 1;
 EOR
     ],
+
     # package then space then stmt
     [   <<'EOC'
 package Doh; my $x = 42;
@@ -100,6 +103,7 @@ my $x = 42;
 1;
 EOR
     ],
+
     # package then stmt, no space!
     [   <<'EOC'
 package Doh;my $x = 42;
@@ -118,12 +122,93 @@ my $x = 42;
 EOR
     ],
 
+    # should insert before BEGIN containing require
+    [   << 'EOC'
+package Ape; # meaningful comment here
+
+use Moose 2.0; # frobnicator support
+BEGIN {
+    unless (\$ENV{$env}) {
+        require Test::More;
+        Test::More::plan(skip_all => 'these tests are for $msg');
+    }
+}
+
+1;
+EOC
+        ,
+        <<'EOR'
+package Ape; # meaningful comment here
+
+use Moose 2.0; # frobnicator support
+{
+  $Ape::VERSION = '0.001';
+}
+BEGIN {
+    unless (\$ENV{$env}) {
+        require Test::More;
+        Test::More::plan(skip_all => 'these tests are for $msg');
+    }
+}
+
+1;
+EOR
+    ],
+
+    # should insert before the require
+    [   << 'EOC'
+package Tarzan; # meaningful comment here
+
+use Moose 2.0; # frobnicator support
+require Test::More;
+
+1;
+EOC
+        ,
+        <<'EOR'
+package Tarzan; # meaningful comment here
+
+use Moose 2.0; # frobnicator support
+{
+  $Tarzan::VERSION = '0.001';
+}
+require Test::More;
+
+1;
+EOR
+    ],
+
+    # should insert before the 'no' statement
+    [   << 'EOC'
+package Jane; # meaningful comment here
+
+use Moose 2.0; # frobnicator support
+no Poodle;
+
+1;
+EOC
+        ,
+        <<'EOR'
+package Jane; # meaningful comment here
+
+use Moose 2.0; # frobnicator support
+{
+  $Jane::VERSION = '0.001';
+}
+no Poodle;
+
+1;
+EOR
+    ],
+
 ];
+
 
 sub dzt_it {
     my $input = shift;
 
     my $tzil = Builder->from_config(
+
         # waste, ends up processing DZT/Sample every time....
         { dist_root => 'corpus/dist/DZT' },
         {   add_files => {

@@ -100,11 +100,14 @@ sub munge_perl {
       $file->name,
     ]);
 
-    # walk forward across the *significant siblings* until the next sibling
-    # is not a P::S::Include (stop just before first thing that's not a "use"
-    # or "require" or ...)
+    # walk forward across the *significant siblings* until the next sibling is
+    # not a 'use' statement (P::S::Include, type eq 'use').  This stops before
+    # ...::Include of type 'require' and 'no'.  Type can apparently return
+    # undef...
     while ( my $next = $stmt->snext_sibling ) {
-      last if !$next->isa('PPI::Statement::Include');
+      last if ( !( $next->isa('PPI::Statement::Include') &&
+                   $next->type &&
+                   $next->type eq 'use') );
       $stmt = $next;
     }
 
