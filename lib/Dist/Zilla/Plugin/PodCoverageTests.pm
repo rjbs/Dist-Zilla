@@ -19,6 +19,9 @@ documentation can be found, you can add:
 
   =for Pod::Coverage sub_name other_sub this_one_too
 
+L<Test::Pod::Coverage> C<1.08> and L<Pod::Coverage::TrustPod> will be added as
+C<develop requires> dependencies.
+
 =cut
 
 # Register the release test prereq as a "develop requires"
