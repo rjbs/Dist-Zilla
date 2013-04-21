@@ -16,6 +16,8 @@ following files:
 Note that this test doesn't actually do anything unless you have
 L<Test::CPAN::Meta> installed.
 
+L<Test::CPAN::Meta> will be added as a C<develop requires> dependency.
+
 =head1 SEE ALSO
 
 Core Dist::Zilla plugins:
