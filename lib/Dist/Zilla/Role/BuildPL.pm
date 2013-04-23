@@ -12,8 +12,9 @@ use namespace::autoclean;
 sub build {
   my $self = shift;
 
-  system $^X, 'Build.PL' and die "error with Build.PL\n";
-  system $^X, 'Build'    and die "error running $^X Build\n";
+  my $perl = $ENV{DZIL_PERL} ? $ENV{DZIL_PERL} : $^X;
+  system $perl, 'Build.PL' and die "error with Build.PL\n";
+  system $perl, 'Build'    and die "error running $^X Build\n";
 
   return;
 }
@@ -23,7 +24,9 @@ sub test {
 
   $self->build;
   my @testing = $self->zilla->logger->get_debug ? '--verbose' : ();
-  system $^X, 'Build', 'test', @testing and die "error running $^X Build test\n";
+  my $perl = $ENV{DZIL_PERL} ? $ENV{DZIL_PERL} : $^X;
+  system $perl, 'Build', 'test', @testing
+    and die "error running $^X Build test\n";
 
   return;
 }
