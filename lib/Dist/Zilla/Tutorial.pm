@@ -25,7 +25,7 @@ F<dist.ini>:
 
   [@Basic]
 
-  [Prereq]
+  [Prereqs]
   App::Cmd          = 0.013
   Number::Nary      = 0
   Sub::Exporter     = 0.981
