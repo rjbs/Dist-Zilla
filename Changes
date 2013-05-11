@@ -4,6 +4,9 @@ Revision history for {{$dist->name}}
           fix docs to not suggest obsolete "Prereq" name (thanks, Ivan
           Bessarabov!)
 
+          the zilla object gets a register_stash method, making it easier for
+          plugins and podweaver sections to share data (Karen Etheridge)
+
 4.300034  2013-04-13 16:56:48 Europe/London
           delay loading of CPAN::Uploader, and require a newer version to
           require HTTPS (thanks, Olivier Mengué!)

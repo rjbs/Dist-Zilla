@@ -59,11 +59,7 @@ is already taken, in which case an exception is raised.
 
 sub register_stash {
   my ($self, $name, $object) = @_;
-  $self->log_fatal("tried to register $name stash entry twice")
-    if $self->zilla->_local_stashes->{ $name };
-
-  $self->zilla->_local_stashes->{ $name } = $object;
-  return;
+  $self->zilla->register_stash($name, $object);
 }
 
 __PACKAGE__->meta->make_immutable;

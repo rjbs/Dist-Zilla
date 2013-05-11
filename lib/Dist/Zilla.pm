@@ -704,6 +704,24 @@ sub stash_named {
   return $self->_global_stashes->{ $name };
 }
 
+=method register_stash
+
+  $zilla->register_stash($name => $stash_object);
+
+This adds a stash to zilla's stash registry -- unless the name
+is already taken, in which case an exception is raised.
+
+=cut
+
+sub register_stash {
+  my ($self, $name, $object) = @_;
+  $self->log_fatal("tried to register $name stash entry twice")
+    if $self->_local_stashes->{ $name };
+
+  $self->_local_stashes->{ $name } = $object;
+  return;
+}
+
 __PACKAGE__->meta->make_immutable;
 1;
 
