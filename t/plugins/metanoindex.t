@@ -4,6 +4,7 @@ use warnings;
 
 use Test::More;
 use Test::Deep;
+use Test::Deep::JSON;
 use Test::DZil;
 
 my %TEST_ATTR = (
@@ -60,14 +61,14 @@ $tzil->build;
 
 my $meta = $tzil->slurp_file('build/META.json');
 
-is_json(
+cmp_deeply(
   $meta,
-  superhashof({ no_index => {
+  json(superhashof({ no_index => {
     file      => bag(qw(file-1.txt file-2.txt)),
     directory => bag(qw(dir-1 dir-2 dir-3 dir-4)),
     package   => bag(qw(Package::1 Package::2 Class::1 Module::1)),
     namespace => bag(qw(Namespace::1 Namespaces::1)),
-  }}),
+  }})),
   "we generated the no_index entry we expected",
 );
 

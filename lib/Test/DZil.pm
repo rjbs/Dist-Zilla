@@ -70,6 +70,9 @@ sub is_filelist {
 This test assertion deserializes the given YAML string and does a
 C<L<cmp_deeply|Test::Deep/cmp_deeply>>.
 
+This function is deprecated - you are recommended to use L<Test::Deep::YAML>
+instead.
+
 =cut
 
 sub is_yaml {
@@ -88,6 +91,9 @@ sub is_yaml {
 
 This test assertion deserializes the given JSON string and does a
 C<L<cmp_deeply|Test::Deep/cmp_deeply>>.
+
+This function is deprecated - you are recommended to use L<Test::Deep::JSON>
+instead.
 
 =cut
 

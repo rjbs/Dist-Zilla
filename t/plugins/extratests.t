@@ -7,6 +7,7 @@ use lib 't/lib';
 use autodie;
 use Test::DZil;
 use Test::Deep;
+use Test::Deep::JSON;
 
 my $generic_test = <<'END_TEST';
 #!perl
@@ -66,9 +67,9 @@ for my $type (@xt_types) {
 
 my $meta = $tzil->slurp_file('build/META.json');
 
-is_json(
+cmp_deeply(
   $meta,
-  superhashof({
+  json(superhashof({
     prereqs => {
       runtime => {
         requires => {
@@ -86,7 +87,7 @@ is_json(
         },
       },
     },
-  }),
+  })),
   'dependencies ok',
 ) or diag $meta;
 

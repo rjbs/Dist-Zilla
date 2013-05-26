@@ -2,10 +2,11 @@ use strict;
 use warnings;
 use Test::More 0.88;
 use Test::Fatal qw(exception);
+use Test::Deep;
+use Test::Deep::JSON;
 
 use lib 't/lib';
 
-use JSON 2;
 use Test::DZil;
 
 {
@@ -30,18 +31,18 @@ use Test::DZil;
 
   my $json = $tzil->slurp_file('build/META.json');
 
-  my $meta = JSON->new->decode($json);
-
-  is_deeply(
-    $meta->{prereqs},
-    {
-      develop => { suggests  => { C => 4 } },
-      runtime => {
-        requires   => { A => 2, B => 3 },
-        recommends => { E => 7 },
-      },
-      test    => { conflicts => { C => 5, D => 6 } },
-    },
+  cmp_deeply(
+    $json,
+    json(superhashof({
+      prereqs => {
+        develop => { suggests  => { C => 4 } },
+        runtime => {
+          requires   => { A => 2, B => 3 },
+          recommends => { E => 7 },
+        },
+        test    => { conflicts => { C => 5, D => 6 } },
+      }
+    })),
     "prereqs merged",
   );
 }
@@ -109,14 +110,17 @@ use Test::DZil;
 
   my $json = $tzil->slurp_file('build/META.json');
 
-  my $meta = JSON->new->decode($json);
-
-  is_deeply(
-    $meta->{prereqs},
-    {
-      runtime => { requires  => { A => 2 } },
-      test    => { conflicts => { D => 6 } },
-    },
+  cmp_deeply(
+    $json,
+    json(superhashof(
+      {
+        prereqs =>
+        {
+          runtime => { requires  => { A => 2 } },
+          test    => { conflicts => { D => 6 } },
+        },
+      }
+    )),
     "prereqs merged and pruned",
   );
 }
@@ -147,18 +151,21 @@ use Test::DZil;
 
   my $json = $tzil->slurp_file('build/META.json');
 
-  my $meta = JSON->new->decode($json);
-
-  is_deeply(
-    $meta->{prereqs},
-    {
-      develop => { suggests  => { C => 4 } },
-      runtime => {
-        requires   => { A => 2, B => 3 },
-        recommends => { E => 7 },
-      },
-      test    => { conflicts => { C => 5, D => 6 } },
-    },
+  cmp_deeply(
+    $json,
+    json(superhashof(
+      {
+        prereqs =>
+        {
+          develop => { suggests  => { C => 4 } },
+          runtime => {
+            requires   => { A => 2, B => 3 },
+            recommends => { E => 7 },
+          },
+          test    => { conflicts => { C => 5, D => 6 } },
+        },
+      }
+    )),
     "-phase, -type, & -relationship",
   );
 }

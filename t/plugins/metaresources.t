@@ -6,6 +6,8 @@ use lib 't/lib';
 
 use Test::DZil;
 use Test::Deep;
+use Test::Deep::JSON;
+use Test::Deep::YAML;
 use CPAN::Meta::Converter;
 
 my $generated_by = 'Dist::Zilla::Tester version '
@@ -40,9 +42,9 @@ my $generated_by_re = qr/\A\Q$generated_by\E(?:, \Q$converted_by\E)?\z/;
   ok(!$@,
     'no errors from old-style bugtracker and repository for MetaResources');
 
-  is_yaml(
+  cmp_deeply(
     $tzil->slurp_file('build/META.yml'),
-    {
+    yaml({
       abstract       => 'Sample DZ Dist',
       author         => ['E. Xavier Ample <example@example.org>'],
       build_requires => {},
@@ -60,13 +62,13 @@ my $generated_by_re = qr/\A\Q$generated_by\E(?:, \Q$converted_by\E)?\z/;
         repository => 'git://example.com/project.git',
       },
       version => '0.001'
-    },
+    }),
     'META.yml matches expected 1.4 spec output'
   );
 
-  is_json(
+  cmp_deeply(
     $tzil->slurp_file('build/META.json'),
-    {
+    json({
       abstract       => 'Sample DZ Dist',
       author         => ['E. Xavier Ample <example@example.org>'],
       dynamic_config => 0,
@@ -85,7 +87,7 @@ my $generated_by_re = qr/\A\Q$generated_by\E(?:, \Q$converted_by\E)?\z/;
         repository => superhashof({ url => 'git://example.com/project.git' }),
       },
       version => '0.001'
-    },
+    }),
     'META.json was 2.0 output, old-style resources were upgraded'
   );
 }
@@ -117,9 +119,9 @@ my $generated_by_re = qr/\A\Q$generated_by\E(?:, \Q$converted_by\E)?\z/;
   ok(!$@,
     'no errors from new-style bugtracker and repository for MetaResources');
 
-  is_yaml(
+  cmp_deeply(
     $tzil->slurp_file('build/META.yml'),
-    {
+    yaml({
       abstract       => 'Sample DZ Dist',
       author         => ['E. Xavier Ample <example@example.org>'],
       build_requires => {},
@@ -137,13 +139,13 @@ my $generated_by_re = qr/\A\Q$generated_by\E(?:, \Q$converted_by\E)?\z/;
         repository => 'git://example.com/project.git',
       },
       version => '0.001'
-    },
+    }),
     'META.yml matches expected 1.4 spec output, new style resources were down-graded'
   );
 
-  is_json(
+  cmp_deeply(
     $tzil->slurp_file('build/META.json'),
-    {
+    json({
       abstract       => 'Sample DZ Dist',
       author         => ['E. Xavier Ample <example@example.org>'],
       dynamic_config => 0,
@@ -169,7 +171,7 @@ my $generated_by_re = qr/\A\Q$generated_by\E(?:, \Q$converted_by\E)?\z/;
         }
       },
       version => '0.001'
-    },
+    }),
     'META.json was 2.0 output'
   );
 }
