@@ -1,6 +1,7 @@
 use strict;
 use warnings;
 use Test::More 0.88;
+use Test::Deep;
 
 use ExtUtils::Manifest;
 
@@ -28,9 +29,9 @@ $tzil->build;
 
 my $manihash = ExtUtils::Manifest::maniread($tzil->built_in->file('MANIFEST'));
 
-is_deeply(
-  [ sort keys %$manihash ],
-  [ sort(
+cmp_deeply(
+  [ keys %$manihash ],
+  bag(
     'MANIFEST',
     q{file with spaces.txt},
     # q{file\\with some\\whacks.txt},
@@ -39,16 +40,16 @@ is_deeply(
     'dist.ini',
     'lib/DZT/Sample.pm',
     't/basic.t',
-  ) ],
+  ),
   'manifest quotes files with spaces'
 );
 
 my @manilines = split /\n/, $tzil->slurp_file('build/MANIFEST');
 chomp @manilines;
 
-is_deeply(
-  [ sort @manilines ],
-  [ sort(
+cmp_deeply(
+  \@manilines,
+  bag(
     'MANIFEST',
     q{'file with spaces.txt'},
     # q{'file\\\\with some\\\\whacks.txt'},
@@ -57,7 +58,7 @@ is_deeply(
     'dist.ini',
     'lib/DZT/Sample.pm',
     't/basic.t',
-  ) ],
+  ),
   'manifest quotes files with spaces'
 );
 

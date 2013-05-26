@@ -1,6 +1,7 @@
 use strict;
 use warnings;
 use Test::More 0.88;
+use Test::Deep;
 use utf8;
 
 use lib 't/lib';
@@ -71,13 +72,11 @@ use YAML::Tiny;
       version   => '0.001',
     );
 
-    for my $key (sort keys %want) {
-      is_deeply(
-        $meta->{ $key },
-        $want{ $key },
-        "$key is what we want in 2.0 $type",
-      );
-    }
+    cmp_deeply(
+      $meta,
+      superhashof(\%want),
+      "2.0 $type data",
+    );
   }
 }
 
@@ -138,13 +137,11 @@ use YAML::Tiny;
       version   => '0.001',
     );
 
-    for my $key (sort keys %want) {
-      is_deeply(
-        $meta->{ $key },
-        $want{ $key },
-        "$key is what we want in 1.4 $type",
-      );
-    }
+    cmp_deeply(
+      $meta,
+      superhashof(\%want),
+      "1.4 $type data",
+    );
   }
 }
 
