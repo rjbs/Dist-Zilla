@@ -30,7 +30,6 @@ my $tzil = Builder->from_config(
   {
     add_files => {
       'source/dist.ini' => simple_ini(
-        'MetaJSON',
         [
           MetaNoIndex => {
             file  => 'file-1.txt',
@@ -57,10 +56,8 @@ my $tzil = Builder->from_config(
 
 $tzil->build;
 
-my $meta = $tzil->slurp_file('build/META.json');
-
-is_json(
-  $meta,
+cmp_deeply(
+  $tzil->distmeta,
   superhashof({ no_index => {
     file      => bag(qw(file-1.txt file-2.txt)),
     directory => bag(qw(dir-1 dir-2 dir-3 dir-4)),

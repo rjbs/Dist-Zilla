@@ -27,7 +27,7 @@ my $tzil = Builder->from_config(
   { dist_root => 'corpus/dist/DZT' },
   {
     add_files => {
-      'source/dist.ini' => simple_ini(qw<GatherDir ExtraTests AutoPrereqs MetaJSON>),
+      'source/dist.ini' => simple_ini(qw<GatherDir ExtraTests AutoPrereqs>),
       (map {; "source/xt/$_/huffer.t" => sprintf($generic_test, $_) }
            @xt_types, qw(blort))
     },
@@ -41,7 +41,6 @@ my @files = map {; $_->name } @{ $tzil->files };
 cmp_deeply(
   \@files,
   bag(qw(
-    META.json
     dist.ini lib/DZT/Sample.pm t/basic.t
     t/smoke-huffer.t
     t/author-huffer.t
@@ -62,10 +61,8 @@ for my $type (@xt_types) {
   );
 }
 
-my $meta = $tzil->slurp_file('build/META.json');
-
-is_json(
-  $meta,
+cmp_deeply(
+  $tzil->distmeta,
   superhashof({
     prereqs => {
       runtime => {
@@ -86,7 +83,6 @@ is_json(
     },
   }),
   'dependencies ok',
-) or diag $meta;
-
+) or diag $tzil->distmeta;
 
 done_testing;
