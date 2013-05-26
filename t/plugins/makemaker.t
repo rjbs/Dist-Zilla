@@ -1,8 +1,8 @@
 use strict;
 use warnings;
 use Test::More 0.88;
-
 use Test::Deep;
+
 use Test::DZil;
 
 {
@@ -55,7 +55,10 @@ use Test::DZil;
     CONFIGURE_REQUIRES => {
       'ExtUtils::MakeMaker' => '0'
     },
+    EXE_FILES => [],
+    test => { TESTS => 't/*.t' },
   );
+
   cmp_deeply(
     $makemaker->__write_makefile_args,
     \%want,
