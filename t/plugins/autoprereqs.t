@@ -44,6 +44,7 @@ my %wanted = (
   'DZPA::Role'            => 0,
   'DZPA::ScriptUse'       => 0,
   'base'                  => 0,
+  'lib'                   => 0,
   'parent'                => 0,
   'perl'                  => 5.008,
   'strict'                => 0,
