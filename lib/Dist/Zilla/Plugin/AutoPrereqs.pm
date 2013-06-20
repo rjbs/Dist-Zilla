@@ -43,7 +43,7 @@ use namespace::autoclean;
 
 use List::AllUtils 'uniq';
 use Moose::Autobox;
-use Perl::PrereqScanner 1.005; # do not prune common libs
+use Perl::PrereqScanner 1.016; # don't skip "lib"
 use PPI;
 use CPAN::Meta::Requirements;
 use version;
