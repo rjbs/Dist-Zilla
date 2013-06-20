@@ -1,6 +1,12 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.300035  2013-06-19 21:37:28 America/New_York
+          update for new Perl::PrereqScanner, which will find "lib"
+
+          update AutoPrereqs to skip Config and Errno
+
           fix docs to not suggest obsolete "Prereq" name (thanks, Ivan
           Bessarabov!)
 
