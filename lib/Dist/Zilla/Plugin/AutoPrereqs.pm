@@ -169,6 +169,8 @@ sub register_prereqs {
     # remove prereqs shipped with current dist
     $req->clear_requirement($_) for @modules;
 
+    $req->clear_requirement($_) for qw(Config Errno); # never indexed
+
     # remove prereqs from skiplist
     for my $skip (($self->skips || [])->flatten) {
       my $re   = qr/$skip/;
