@@ -138,17 +138,13 @@ has pause_cfg => (
   lazy    => 1,
   default => sub {
     my $self = shift;
-    open my $fh, '<', $self->pause_cfg_file
-      or return {};
-    my %ret;
-    # basically taken from the parsing code used by cpan-upload
-    # (maybe this should be part of the CPAN::Uploader api?)
-    while (<$fh>) {
-      next if /^\s*(?:#.*)?$/;
-      my ($k, $v) = /^\s*(\w+)\s+(.+)$/;
-      $ret{$k} = $v;
-    }
-    return \%ret;
+    require CPAN::Uploader;
+    my $cfg = try {
+      CPAN::Uploader->read_config_file( $self->pause_cfg_file );
+    } catch {
+      {};
+    };
+    return $cfg;
   },
 );
 
