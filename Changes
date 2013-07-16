@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          read CPAN::Uploader config with CPAN::Uploader, to work with new
+          trial releases supporting encrypted credential (thanks, Mike Doherty)
 
 4.300035  2013-06-19 21:37:28 America/New_York
           update for new Perl::PrereqScanner, which will find "lib"
