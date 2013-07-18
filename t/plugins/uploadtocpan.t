@@ -2,8 +2,6 @@ use strict;
 use warnings;
 use Test::More 0.88 tests => 16;
 
-use lib 't/lib';
-
 use File::Spec ();
 use Test::DZil qw(Builder simple_ini);
 use Test::Fatal qw(exception);

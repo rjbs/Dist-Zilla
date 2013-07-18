@@ -4,8 +4,6 @@ use Test::More 0.88;
 use Test::Deep;
 use utf8;
 
-use lib 't/lib';
-
 use Test::DZil;
 
 use JSON 2;

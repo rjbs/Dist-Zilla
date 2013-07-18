@@ -3,8 +3,6 @@ use warnings;
 use Test::More 0.88;
 use Test::Fatal qw(exception);
 
-use lib 't/lib';
-
 use JSON 2;
 use Test::DZil;
 

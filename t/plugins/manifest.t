@@ -5,8 +5,6 @@ use Test::Deep;
 
 use ExtUtils::Manifest 1.66; # or maniread can't cope with quoting properly
 
-use lib 't/lib';
-
 use Test::DZil;
 
 my $tzil = Builder->from_config(
