@@ -168,7 +168,7 @@ sub fallback_build_requires {
 }
 
 sub setup_installer {
-  my ($self, $arg) = @_;
+  my ($self) = @_;
 
   $self->log_fatal("can't build Build.PL; license has no known META.yml value")
     unless $self->zilla->license->meta_yml_name;

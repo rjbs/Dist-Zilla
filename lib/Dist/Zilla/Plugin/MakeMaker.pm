@@ -261,7 +261,7 @@ sub fallback_prereq_pm {
 }
 
 sub setup_installer {
-  my ($self, $arg) = @_;
+  my ($self) = @_;
 
   my $write_makefile_args = $self->write_makefile_args;
 
