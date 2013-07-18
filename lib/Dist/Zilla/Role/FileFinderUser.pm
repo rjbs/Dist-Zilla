@@ -67,6 +67,10 @@ Finds the C<main_module> of your dist
 
 Searches your t/ directory and lists the files in it.
 
+= :ExtraTestFiles
+
+Searches your xt/ directory and lists the files in it.
+
 = :ExecFiles
 
 Searches your distribution for executable files.  Hint: Use the

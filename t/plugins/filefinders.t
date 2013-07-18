@@ -5,6 +5,14 @@ use Test::More 0.88;
 use ExtUtils::Manifest 'maniread';
 use Test::DZil;
 
+my $generic_test = <<'END_TEST';
+use strict;
+use warnings;
+use Test::More 0.88;
+ok(0, "stop building me!");
+done_testing;
+END_TEST
+
 my $tzil = Builder->from_config(
   { dist_root => 'corpus/dist/DZT' },
   {
@@ -27,6 +35,8 @@ my $tzil = Builder->from_config(
         [ ShareDir => ],
         'Manifest',
       ),
+      (map {; "source/xt${_}more.t" => $generic_test }
+           qw(/author/ /smoke/ /release/ /)),
     },
     also_copy => { 'corpus/dist/DZT_Inc' => 'corpus/dist/DZT_Inc',
                    'corpus/dist/DZT_Bin' => 'corpus/dist/DZT_Bin',
@@ -45,6 +55,7 @@ is_filelist(
     dist.ini lib/DZT/Sample.pm
     share/my_data.dat
     t/basic.t
+    xt/author/more.t xt/smoke/more.t xt/release/more.t xt/more.t
     MANIFEST
     inc/Foo.pm inc/Foo/Bar.pm
     bin/test.pl
@@ -84,6 +95,15 @@ is_filelist(
     t/basic.t
   ) ],
   "TestFiles finds all files",
+);
+
+$files = $tzil->find_files(':ExtraTestFiles');
+is_filelist(
+  [ map {; $_->name } @$files ],
+  [ qw(
+    xt/author/more.t xt/smoke/more.t xt/release/more.t xt/more.t
+  ) ],
+  "ExtraTestFiles finds all files in xt",
 );
 
 $files = $tzil->find_files(':ExecFiles');
