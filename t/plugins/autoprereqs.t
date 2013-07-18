@@ -129,6 +129,51 @@ cmp_deeply(
 );
 
 
+# Try again with extra tests added to the dist:
+$tzil = Builder->from_config(
+  { dist_root => 'corpus/dist/AutoPrereqs' },
+  {
+    add_files => {
+      'source/dist.ini' => simple_ini(
+        qw(GatherDir ExecDir),
+        [ AutoPrereqs => { skip             => '^DZPA::Skip',
+                           configure_finder => ':IncModules' } ],
+        [ MetaYAML => { version => 2 } ],
+      ),
+      'source/inc/DZPA.pm' => "use DZPA::NotInDist;\n use DZPA::Configure;\n",
+      'source/t/basic.t' => "use Test::Foo;\n",
+      'source/xt/author/more1.t' => "use Test::Bar;\n",
+      'source/xt/smoke/more2.t' => "use Test::Baz;\n",
+      'source/xt/release/more3.t' => "use Test::Qux;\n",
+      'source/xt/more4.t' => "use Test::Norf;\n",
+    },
+  },
+);
+
+# check found prereqs
+$meta = build_meta($tzil);
+
+my %want_develop = (
+  'Test::Bar'  => '0',
+  'Test::Baz'  => '0',
+  'Test::Qux'  => '0',
+  'Test::Norf' => '0',
+);
+
+cmp_deeply(
+  $meta,
+  superhashof({
+    prereqs => {
+      runtime => { requires => \%want_runtime },
+      configure => { requires => \%want_configure },
+      test => { requires => \%want_test },
+      develop => { requires => \%want_develop },
+    },
+  }),
+  'develop_finder did not change runtime, configure, test requires; develop requires is correct',
+);
+
+
 # Try again with a customized scanner list:
 $tzil = Builder->from_config(
   { dist_root => 'corpus/dist/AutoPrereqs' },
