@@ -2,6 +2,7 @@ use strict;
 use warnings;
 
 use Test::More 0.88;
+use Test::Deep;
 
 use Test::DZil;
 use YAML::Tiny;
@@ -22,7 +23,7 @@ my $tzil = Builder->from_config(
 # check found prereqs
 my $meta = build_meta($tzil);
 
-my %wanted = (
+my %want_runtime = (
   # DZPA::Main should not be extracted
   'DZPA::Base::Moose1'    => 0,
   'DZPA::Base::Moose2'    => 0,
@@ -50,7 +51,7 @@ my %wanted = (
 
 is_deeply(
   $meta->{prereqs}{runtime}{requires},
-  \%wanted,
+  \%want_runtime,
   'all requires found, but no more',
 );
 
@@ -75,8 +76,8 @@ $meta = build_meta($tzil);
 
 is_deeply(
   $meta->{prereqs}{runtime}{requires},
-  \%wanted,
-  'configure_finder did not change requires',
+  \%want_runtime,
+  'configure_finder did not change runtime requires',
 );
 
 my %want_configure = (
@@ -89,6 +90,44 @@ is_deeply(
   \%want_configure,
   'configure_requires is correct',
 );
+
+
+# Try again with tests added to the dist:
+$tzil = Builder->from_config(
+  { dist_root => 'corpus/dist/AutoPrereqs' },
+  {
+    add_files => {
+      'source/dist.ini' => simple_ini(
+        qw(GatherDir ExecDir),
+        [ AutoPrereqs => { skip             => '^DZPA::Skip',
+                           configure_finder => ':IncModules' } ],
+        [ MetaYAML => { version => 2 } ],
+      ),
+      'source/inc/DZPA.pm' => "use DZPA::NotInDist;\n use DZPA::Configure;\n",
+      'source/t/basic.t' => "use Test::Foo;\n",
+    },
+  },
+);
+
+# check found prereqs
+$meta = build_meta($tzil);
+
+my %want_test = (
+  'Test::Foo'  => '0',
+);
+
+cmp_deeply(
+  $meta,
+  superhashof({
+    prereqs => {
+      runtime => { requires => \%want_runtime },
+      configure => { requires => \%want_configure },
+      test => { requires => \%want_test },
+    },
+  }),
+  'test_finder did not change runtime, configure requires; test requires is correct',
+);
+
 
 # Try again with a customized scanner list:
 $tzil = Builder->from_config(
@@ -109,18 +148,18 @@ $tzil = Builder->from_config(
 $meta = build_meta($tzil);
 
 # Moose-style prereqs should not be recognized this time:
-delete $wanted{'DZPA::Base::Moose1'};
-delete $wanted{'DZPA::Base::Moose2'};
-delete $wanted{'DZPA::Role'};
+delete $want_runtime{'DZPA::Base::Moose1'};
+delete $want_runtime{'DZPA::Base::Moose2'};
+delete $want_runtime{'DZPA::Role'};
 
-$wanted{'DZPA::Skip::Blah'}  = 0; # not skipping anymore
-$wanted{'DZPA::Skip::Foo'}   = 0;
-$wanted{'aliased'}           = 0;
-$wanted{'Long::Class::Name'} = 0;
+$want_runtime{'DZPA::Skip::Blah'}  = 0; # not skipping anymore
+$want_runtime{'DZPA::Skip::Foo'}   = 0;
+$want_runtime{'aliased'}           = 0;
+$want_runtime{'Long::Class::Name'} = 0;
 
 is_deeply(
   $meta->{prereqs}{runtime}{requires},
-  \%wanted,
+  \%want_runtime,
   'custom scanner list',
 );
 
