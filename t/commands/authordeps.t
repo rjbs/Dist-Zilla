@@ -2,8 +2,6 @@ use strict;
 use warnings;
 use Test::More 0.88 tests => 1;
 
-use lib 't/lib';
-
 use autodie;
 
 use Dist::Zilla::Util::AuthorDeps;

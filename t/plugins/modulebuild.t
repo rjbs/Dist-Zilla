@@ -3,8 +3,6 @@ use warnings;
 use Test::More 0.88;
 use Test::Deep;
 
-use lib 't/lib';
-
 use Test::DZil;
 
 {

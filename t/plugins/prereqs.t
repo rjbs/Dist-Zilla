@@ -5,8 +5,6 @@ use Test::Fatal qw(exception);
 use Test::Deep;
 use Test::Deep::JSON;
 
-use lib 't/lib';
-
 use Test::DZil;
 
 {
