@@ -54,7 +54,6 @@ has root => (
   isa  => Dir,
   lazy => 1,
   coerce   => 1,
-  required => 1,
   default  => sub { shift->zilla->root },
 );
 

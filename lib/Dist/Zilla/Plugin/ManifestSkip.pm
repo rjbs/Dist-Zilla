@@ -32,7 +32,7 @@ Other modules: L<ExtUtils::Manifest>.
 
 =cut
 
-has skipfile => (is => 'ro', required => 1, default => 'MANIFEST.SKIP');
+has skipfile => (is => 'ro', default => 'MANIFEST.SKIP');
 
 sub prune_files {
   my ($self) = @_;

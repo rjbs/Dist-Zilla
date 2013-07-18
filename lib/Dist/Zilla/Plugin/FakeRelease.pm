@@ -9,7 +9,6 @@ use namespace::autoclean;
 has user => (
   is   => 'ro',
   isa  => 'Str',
-  required => 1,
   default  => 'AUTHORID',
 );
 
