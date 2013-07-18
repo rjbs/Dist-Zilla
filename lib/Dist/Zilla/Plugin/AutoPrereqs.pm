@@ -18,6 +18,11 @@ with(
     finder_arg_names => [ 'configure_finder' ],
     default_finders  => [],
   },
+  'Dist::Zilla::Role::FileFinderUser' => {
+    method           => 'found_develop_files',
+    finder_arg_names => [ 'develop_finder' ],
+    default_finders  => [ ':ExtraTestFiles' ],
+  },
 );
 
 =attr finder
@@ -37,6 +42,11 @@ value is C<:TestFiles>.
 Just like C<finder>, but for configure-phase prerequisites.  There is
 no default value; AutoPrereqs will not determine configure-phase
 prerequisites unless you set configure_finder.
+
+=attr develop_finder
+
+Just like C<finder>, but for develop-phase prerequisites.  The default value
+is C<:ExtraTestFiles>.
 
 =cut
 
@@ -133,10 +143,13 @@ sub register_prereqs {
     extra_scanners => $self->extra_scanners,
   );
 
+  # not a hash, because order is important
   my @sets = (
+    # phase => file finder method
     [ configure => 'found_configure_files' ], # must come before runtime
     [ runtime => 'found_files'      ],
     [ test    => 'found_test_files' ],
+    [ develop => 'found_develop_files' ],
   );
 
   my %runtime_final;
@@ -204,6 +217,7 @@ sub register_prereqs {
     if ($phase eq 'runtime') {
       %runtime_final = %got;
     } else {
+      # do not test-require things required for runtime
       delete $got{$_} for
         grep { exists $got{$_} and $runtime_final{$_} ge $got{$_} }
         keys %runtime_final;

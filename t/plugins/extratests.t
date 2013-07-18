@@ -80,6 +80,13 @@ cmp_deeply(
           # (See RT#76305)
         },
       },
+      develop => {
+        requires => {
+          # remaining xt/ files were moved aside and not scanned
+          'Foo::blort' => '392',
+          'Test::More' => '0.88',
+        },
+      },
     },
   }),
   'dependencies ok',
