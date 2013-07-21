@@ -10,8 +10,6 @@ with(
   'Dist::Zilla::Role::PPI',
 );
 
-use PPI;
-
 use namespace::autoclean;
 
 =head1 SYNOPSIS
