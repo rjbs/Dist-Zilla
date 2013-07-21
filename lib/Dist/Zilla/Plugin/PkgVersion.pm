@@ -10,7 +10,6 @@ with(
 );
 
 use PPI;
-use MooseX::Types::Perl qw(LaxVersionStr);
 
 use namespace::autoclean;
 
@@ -79,8 +78,9 @@ sub munge_perl {
 
   my $version = $self->zilla->version;
 
+  require version;
   Carp::croak("invalid characters in version")
-    unless LaxVersionStr->check($version);
+    unless version::is_lax($version);
 
   my $document = $self->ppi_document_for_file($file);
 
