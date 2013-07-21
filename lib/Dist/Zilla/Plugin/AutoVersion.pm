@@ -72,13 +72,20 @@ sub provide_version {
   require DateTime;
   DateTime->VERSION('0.44'); # CLDR fixes
 
-  my $now = DateTime->now(time_zone => $self->time_zone);
+  my $now;
 
   my $version = $self->fill_in_string(
     $self->format,
     {
       major => \( $self->major ),
-      cldr  => sub { $now->format_cldr($_[0]) },
+      cldr  => sub {
+        $now ||= do {
+          require DateTime;
+          DateTime->VERSION('0.44'); # CLDR fixes
+          DateTime->now(time_zone => $self->time_zone);
+        };
+        $now->format_cldr($_[0])
+      },
     },
   );
 
