@@ -515,8 +515,14 @@ sub _build_distmeta {
   };
 
   require Hash::Merge::Simple;
-  $meta = Hash::Merge::Simple::merge($meta, $_->metadata)
-    for $self->plugins_with(-MetaProvider)->flatten;
+  my $dynamic;
+  for ($self->plugins_with(-MetaProvider)->flatten) {
+    my $plugin_meta = $_->metadata;
+    $meta = Hash::Merge::Simple::merge($meta, $plugin_meta);
+    $dynamic = 1 if $plugin_meta->{dynamic_config};
+  }
+
+  $meta->{dynamic_config} = 1 if $dynamic;
 
   return $meta;
 }
