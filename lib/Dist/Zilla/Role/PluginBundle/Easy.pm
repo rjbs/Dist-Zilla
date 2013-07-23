@@ -165,7 +165,7 @@ sub add_bundle {
   if( my $v = $payload->{':version'} ){
     $load_opts->{'-version'} = $v;
   }
-  Class::MOP::load_class($package, $load_opts);
+  Class::Load::load_class($package, $load_opts);
 
   $bundle = "\@$bundle" unless $bundle =~ /^@/;
 

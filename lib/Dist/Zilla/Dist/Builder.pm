@@ -204,7 +204,7 @@ sub _load_config {
   my $config_class =
     $arg->{config_class} ||= 'Dist::Zilla::MVP::Reader::Finder';
 
-  Class::MOP::load_class($config_class);
+  Class::Load::load_class($config_class);
 
   $arg->{chrome}->logger->log_debug(
     { prefix => '[DZ] ' },

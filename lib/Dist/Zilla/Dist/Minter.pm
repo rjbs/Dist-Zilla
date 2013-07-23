@@ -29,7 +29,7 @@ sub _new_from_profile {
 
   my $config_class =
     $arg->{config_class} ||= 'Dist::Zilla::MVP::Reader::Finder';
-  Class::MOP::load_class($config_class);
+  Class::Load::load_class($config_class);
 
   $arg->{chrome}->logger->log_debug(
     { prefix => '[DZ] ' },
@@ -55,7 +55,7 @@ sub _new_from_profile {
     { '' => 'Dist::Zilla::MintingProfile::', '=', => '' },
     $profile_data->[0],
   );
-  Class::MOP::load_class($module);
+  Class::Load::load_class($module);
 
   my $profile_dir = $module->profile_dir($profile_data->[1]);
 

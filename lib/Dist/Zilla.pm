@@ -304,7 +304,7 @@ sub _build_license {
     $self->log("based on POD in $filename, guessing license is $guess[0]");
   }
 
-  Class::MOP::load_class($license_class);
+  Class::Load::load_class($license_class);
 
   my $license = $license_class->new({
     holder => $self->_copyright_holder,
