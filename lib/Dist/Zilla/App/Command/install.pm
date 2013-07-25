@@ -34,7 +34,7 @@ Any value that works with L<C<system>|perlfunc/system> is accepted.
 
 If not specified, calls (roughly):
 
-    perl -MCPAN -einstall "."
+    cpanm .
 
 For more information, look at the L<install|Dist::Zilla::Dist::Builder/install> method in
 Dist::Zilla.
