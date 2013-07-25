@@ -62,6 +62,12 @@ sub munge_file {
   return;
 }
 
+has die_on_existing_version => (
+  is  => 'ro',
+  isa => 'Bool',
+  default => 0,
+);
+
 sub munge_perl {
   my ($self, $file) = @_;
 
@@ -73,6 +79,10 @@ sub munge_perl {
   my $document = $self->ppi_document_for_file($file);
 
   if ($self->document_assigns_to_variable($document, '$VERSION')) {
+    if ($self->die_on_existing_version) {
+      $self->log_fatal([ 'existing assignment to $VERSION in %s', $file->name ]);
+    }
+
     $self->log([ 'skipping %s: assigns to $VERSION', $file->name ]);
     return;
   }
