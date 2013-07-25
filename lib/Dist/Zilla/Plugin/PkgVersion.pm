@@ -91,6 +91,7 @@ sub munge_perl {
 
   my %seen_pkg;
 
+  my $munged = 0;
   for my $stmt (@$package_stmts) {
     my $package = $stmt->namespace;
 
@@ -122,9 +123,10 @@ sub munge_perl {
     Carp::carp("error inserting version in " . $file->name)
       unless $stmt->insert_after($children[0]->clone)
       and    $stmt->insert_after( PPI::Token::Whitespace->new("\n") );
+    $munged = 1;
   }
 
-  $self->save_ppi_document_to_file($document, $file);
+  $self->save_ppi_document_to_file($document, $file) if $munged;
 }
 
 __PACKAGE__->meta->make_immutable;
