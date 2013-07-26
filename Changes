@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - dzil listdeps --develop now exists as an alias for dzil listdeps
+          --author (Karen Etheridge)
 
 5.034     2015-03-20 10:57:07-04:00 America/New_York
         - require new Config::MVP for better exceptions (that we rely on)

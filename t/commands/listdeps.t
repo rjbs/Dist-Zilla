@@ -50,12 +50,13 @@ my %prereqs = (
     );
 }
 
+foreach my $arg (qw(--author --develop))
 {
-    my $output = test_dzil('corpus/dist/AutoPrereqs', [ qw(listdeps --author)])->output;
+    my $output = test_dzil('corpus/dist/AutoPrereqs', [ 'listdeps', $arg])->output;
     cmp_deeply(
         [ split("\n", $output) ],
         bag('String::Formatter', grep { $_ ne 'perl' } keys %prereqs),
-        'develop prereqs included in output for --author',
+        'develop prereqs included in output for ' . $arg,
     );
 }
 
