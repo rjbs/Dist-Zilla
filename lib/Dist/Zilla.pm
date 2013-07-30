@@ -534,6 +534,11 @@ sub _metadata_generator_id { 'Dist::Zilla' }
 This is a L<Dist::Zilla::Prereqs> object, which is a thin layer atop
 L<CPAN::Meta::Prereqs>, and describes the distribution's prerequisites.
 
+=method register_prereqs
+
+Allows registration of prerequisites; delegates to
+L<Dist::Zilla::Prereqs/register_prereqs> via our L</prereqs> attribute.
+
 =cut
 
 has prereqs => (
