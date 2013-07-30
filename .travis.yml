@@ -8,6 +8,10 @@ perl:
     - "5.16"
     - "5.18"
 
+matrix:
+    allow_failures:
+        - perl: "5.8"
+
 install:
     - cpanm Dist::Zilla
     - dzil authordeps --missing | cpanm || { cat ~/.cpanm/build.log ; false ; }
