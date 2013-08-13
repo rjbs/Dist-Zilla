@@ -72,7 +72,8 @@ sub gather_files {
       my $converter = CPAN::Meta::Converter->new($distmeta);
       my $output    = $converter->convert(version => $self->version);
 
-      YAML::Tiny::Dump($output);
+      utf8::encode( my $guts = YAML::Tiny::Dump($output) );
+      return $guts;
     },
   });
 
