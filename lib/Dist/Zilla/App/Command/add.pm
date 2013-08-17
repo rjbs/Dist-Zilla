@@ -8,7 +8,7 @@ use File::pushd ();
 
 =head1 SYNOPSIS
 
-Adds a a new module to a Dist::Zilla-based distribution
+Adds a new module to a Dist::Zilla-based distribution
 
   $ dzil add Some::New::Module
 
