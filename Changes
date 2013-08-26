@@ -1,8 +1,26 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.300036  2013-08-25 21:41:21 America/New_York
           read CPAN::Uploader config with CPAN::Uploader, to work with new
           trial releases supporting encrypted credential (thanks, Mike Doherty)
+
+          improve tester tests (thanks, Dave O'Neill!)
+
+          use Class::Load instead of Class::MOP
+
+          better error messages when a bundle can't be loaded by @Filter
+
+          make dynamic_config distmeta sticky; once one plugin sets it, it
+          stays stuck
+
+          add a die_on_existing_version option to PkgVersion
+
+          switch (for now?) "dzil install" to use cpanm
+
+          PkgVersion won't rewrite file contents if nothing was changed
+          (thanks, Mike Doherty!)
 
 4.300035  2013-06-19 21:37:28 America/New_York
           update for new Perl::PrereqScanner, which will find "lib"
