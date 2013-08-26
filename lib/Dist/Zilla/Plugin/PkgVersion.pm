@@ -42,6 +42,12 @@ C<package> keyword and the package name, like:
 This sort of declaration is also ignored by the CPAN toolchain, and is
 typically used when doing monkey patching or other tricky things.
 
+=attr die_on_existing_version
+
+If true, then when PkgVersion sees an existing C<$VERSION> assignment, it will
+throw an exception rather than skip the file.  This attribute defaults to
+false.
+
 =cut
 
 sub munge_files {
