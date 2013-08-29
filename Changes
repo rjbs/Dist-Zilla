@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          update repo and bugtacker URLs
 
 4.300036  2013-08-25 21:41:21 America/New_York
           read CPAN::Uploader config with CPAN::Uploader, to work with new
