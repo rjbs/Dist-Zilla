@@ -8,8 +8,6 @@ with(
 
 use namespace::autoclean;
 
-use DateTime 0.44 (); # CLDR fixes
-
 =head1 DESCRIPTION
 
 This plugin automatically produces a version string, generally based on the
@@ -68,13 +66,20 @@ has format => (
 sub provide_version {
   my ($self) = @_;
 
-  my $now = DateTime->now(time_zone => $self->time_zone);
+  my $now;
 
   my $version = $self->fill_in_string(
     $self->format,
     {
       major => \( $self->major ),
-      cldr  => sub { $now->format_cldr($_[0]) },
+      cldr  => sub {
+        $now ||= do {
+          require DateTime;
+          DateTime->VERSION('0.44'); # CLDR fixes
+          DateTime->now(time_zone => $self->time_zone);
+        };
+        $now->format_cldr($_[0])
+      },
     },
   );
 

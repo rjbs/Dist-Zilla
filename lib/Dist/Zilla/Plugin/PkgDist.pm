@@ -11,8 +11,6 @@ with(
 
 use namespace::autoclean;
 
-use PPI;
-
 =head1 DESCRIPTION
 
 This plugin will add a line like the following to each package in each Perl

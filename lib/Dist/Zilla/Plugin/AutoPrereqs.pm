@@ -41,12 +41,7 @@ use namespace::autoclean;
 
 # ABSTRACT: automatically extract prereqs from your modules
 
-use List::AllUtils 'uniq';
 use Moose::Autobox;
-use Perl::PrereqScanner 1.016; # don't skip "lib"
-use PPI;
-use CPAN::Meta::Requirements;
-use version;
 
 =head1 SYNOPSIS
 
@@ -118,6 +113,11 @@ has skips => (
 sub register_prereqs {
   my $self  = shift;
 
+  require Perl::PrereqScanner;
+  Perl::PrereqScanner->VERSION('1.016'); # don't skip "lib"
+  require CPAN::Meta::Requirements;
+  require List::MoreUtils;  # uniq
+
   my @modules;
 
   my $scanner = Perl::PrereqScanner->new(
@@ -155,7 +155,7 @@ sub register_prereqs {
       } else {
         $this_thing[0] =~ s{^lib/}{};
       }
-      @this_thing = uniq @this_thing;
+      @this_thing = List::MoreUtils::uniq @this_thing;
       s{\.pm$}{} for @this_thing;
       s{/}{::}g for @this_thing;
       push @modules, @this_thing;
