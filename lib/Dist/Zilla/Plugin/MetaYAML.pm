@@ -117,7 +117,6 @@ sub gather_files {
           $yaml = encode_utf8($yaml);
         } else {
           # It's already valid UTF-8.  Emit it as is.
-          $yaml = encode_utf8($yaml);
         }
       }
 
