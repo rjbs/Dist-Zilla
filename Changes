@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.300038  2013-09-08 09:18:34 America/New_York
         - add horrible hack to avoid generating non-UTF-8 META.yml; seriously,
           don't look at the code!  Thanks, David Golden, whose code was simple
           and probably much, much saner, but didn't cover as many cases as rjbs
