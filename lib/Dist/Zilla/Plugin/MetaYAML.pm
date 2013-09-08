@@ -102,7 +102,15 @@ sub gather_files {
         if (
           $yaml =~ /[^\x00-\xFF]/
           or
-          ! eval { decode_utf8($yaml, FB_CROAK); 1 }
+          ! eval {
+            # Why do I need to do this completely idiotic thing??
+            # No other cajoling got the croak to occur on Latin-1-but-not-UTF-8
+            # input, including manual diddling of the utf8 flag.  Probably I
+            # missed something, but this works, and the whole mess is
+            # temporary. -- rjbs, 2013-09-08
+            my $copy = join q{}, map {; chr ord } (split '', $yaml);
+            decode_utf8($copy, FB_CROAK); 1
+          }
         ) {
           # Characters over \xFF or not a valid UTF-8 buffer:
           # assume it's all text.
