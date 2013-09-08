@@ -495,7 +495,7 @@ sub _build_distmeta {
   my $meta = {
     'meta-spec' => {
       version => 2,
-      url     => 'http://github.com/dagolden/cpan-meta/',
+      url     => 'http://search.cpan.org/perldoc?CPAN::Meta::Spec',
     },
     name     => $self->name,
     version  => $self->version,
