@@ -69,6 +69,9 @@ sub exclude_file {
   return 1 if $file->name eq 'MYMETA.yml';
   return 1 if $file->name eq 'MYMETA.json';
   return 1 if $file->name eq 'pm_to_blib';
+  # Avoid bundling fatlib/ dir created by App::FatPacker
+  # https://github.com/andk/pause/pull/65
+  return 1 if substr($file->name, 0, 7) eq 'fatlib/';
 
   if ((my $file = $file->name) =~ s/\.c$//) {
       for my $other ($self->zilla->files->flatten) {
