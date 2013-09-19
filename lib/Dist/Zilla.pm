@@ -501,7 +501,7 @@ sub _build_distmeta {
     version  => $self->version,
     abstract => $self->abstract,
     author   => $self->authors,
-    license  => $self->license->meta2_name,
+    license  => [ $self->license->meta2_name ],
 
     # XXX: what about unstable?
     release_status => ($self->is_trial or $self->version =~ /_/)
