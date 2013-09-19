@@ -33,6 +33,10 @@ sub BUILDARGS {
   my $zilla = delete $copy{zilla};
   my $name  = delete $copy{plugin_name};
 
+  if (exists $copy{license} && ref($copy{license}) ne 'ARRAY') {
+      $copy{license} = [ $copy{license} ];
+  }
+
   if (exists $copy{bugtracker}) {
     my $tracker = delete $copy{bugtracker};
     $copy{bugtracker}{web} = $tracker;
