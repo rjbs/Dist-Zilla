@@ -26,6 +26,12 @@ print "\$VERSION = 1.234;"
 1;
 ';
 
+my $in_comment = '
+package DZT::WInComment;
+# our $VERSION = 1.234;
+1;
+';
+
 my $two_packages = '
 package DZT::TP1;
 
@@ -82,6 +88,7 @@ my $tzil = Builder->from_config(
       'source/lib/DZT/WVer.pm'   => $with_version,
       'source/lib/DZT/WVerTwoLines.pm' => $with_version_two_lines,
       'source/lib/DZT/WStrEscaped.pm'  => $in_a_string_escaped,
+      'source/lib/DZT/WInComment.pm' => $in_comment,
       'source/lib/DZT/R1.pm'     => $repeated_packages,
       'source/lib/DZT/Monkey.pm' => $monkey_patched,
       'source/lib/DZT/HideMe.pm' => $hide_me_comment,
@@ -127,6 +134,13 @@ unlike(
   $dzt_wver_two_lines,
   qr{^\s*\$\QDZT::WVerTwoLines::VERSION = '0.001';\E\s*$}m,
   "*not* added to DZT::WVerTwoLines; we have one already",
+);
+
+my $dzt_wver_in_comment = $tzil->slurp_file('build/lib/DZT/WInComment.pm');
+like(
+  $dzt_wver_in_comment,
+  qr{^\s*\$\QDZT::WInComment::VERSION = '0.001';\E\s*$}m,
+  "added to DZT::WInComment; the one we have is in a comment",
 );
 
 my $dzt_wver_str_escaped = $tzil->slurp_file('build/lib/DZT/WStrEscaped.pm');
