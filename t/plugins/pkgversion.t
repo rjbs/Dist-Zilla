@@ -32,6 +32,22 @@ package DZT::WInComment;
 1;
 ';
 
+my $in_pod_stm = '
+package DZT::WInPODStm;
+
+1;
+
+__END__
+our $VERSION = 1.234;
+=for bug
+
+  # Because we have an __END__ up there PPI considers this a statement
+
+  our $VERSION = 1.234;
+
+=cut
+';
+
 my $two_packages = '
 package DZT::TP1;
 
@@ -89,6 +105,7 @@ my $tzil = Builder->from_config(
       'source/lib/DZT/WVerTwoLines.pm' => $with_version_two_lines,
       'source/lib/DZT/WStrEscaped.pm'  => $in_a_string_escaped,
       'source/lib/DZT/WInComment.pm' => $in_comment,
+      'source/lib/DZT/WInPODStm.pm' => $in_pod_stm,
       'source/lib/DZT/R1.pm'     => $repeated_packages,
       'source/lib/DZT/Monkey.pm' => $monkey_patched,
       'source/lib/DZT/HideMe.pm' => $hide_me_comment,
@@ -141,6 +158,13 @@ like(
   $dzt_wver_in_comment,
   qr{^\s*\$\QDZT::WInComment::VERSION = '0.001';\E\s*$}m,
   "added to DZT::WInComment; the one we have is in a comment",
+);
+
+my $dzt_wver_in_pod_stm = $tzil->slurp_file('build/lib/DZT/WInPODStm.pm');
+like(
+  $dzt_wver_in_pod_stm,
+  qr{^\s*\$\QDZT::WInPODStm::VERSION = '0.001';\E\s*$}m,
+  "added to DZT::WInPODStm; the one we have is in some POD",
 );
 
 my $dzt_wver_str_escaped = $tzil->slurp_file('build/lib/DZT/WStrEscaped.pm');
