@@ -74,6 +74,19 @@ my $script_pkg = '
 package DZT::Script;
 ';
 
+
+my $skip_package = '
+package DZT::Skip::Me;
+
+1;
+';
+
+my $skip_package_too = '
+package DZT::Skip::MeToo;
+
+1;
+';
+
 my $tzil = Builder->from_config(
   { dist_root => 'corpus/dist/DZT' },
   {
@@ -85,10 +98,16 @@ my $tzil = Builder->from_config(
       'source/lib/DZT/R1.pm'     => $repeated_packages,
       'source/lib/DZT/Monkey.pm' => $monkey_patched,
       'source/lib/DZT/HideMe.pm' => $hide_me_comment,
+      'source/lib/DZT/Skip/Me.pm'    => $skip_package,
+      'source/lib/DZT/Skip/MeToo.pm' => $skip_package_too,
       'source/bin/script_pkg.pl' => $script_pkg,
       'source/bin/script_ver.pl' => $script_pkg . "our \$VERSION = 1.234;\n",
       'source/bin/script.pl'     => $script,
-      'source/dist.ini' => simple_ini('GatherDir', 'PkgVersion', 'ExecDir'),
+      'source/dist.ini' => simple_ini(
+        'GatherDir',
+        [ 'PkgVersion', { skip => 'lib/DZT/Skip/Me.pm' }, ],
+        'ExecDir'
+      ),
     },
   },
 );
@@ -208,6 +227,53 @@ unlike(
     $dzt_sample_trial,
     qr{^\s*\$\QDZT::Sample::VERSION = '0.001'; # TRIAL\E\s*$}m,
     "added version with 'TRIAL' comment when \$ENV{TRIAL}=1",
+  );
+}
+
+my $dzt_skip= $tzil->slurp_file('build/lib/DZT/Skip/Me.pm');
+unlike(
+  $dzt_skip,
+  qr{^\s*\$\QDZT::Skip::Me::VERSION = '0.001';\E\s*$}m,
+  "did not add version to DZT::Skip::Me",
+);
+
+my $dzt_no_skip= $tzil->slurp_file('build/lib/DZT/Skip/MeToo.pm');
+like(
+  $dzt_no_skip,
+  qr{^\s*\$\QDZT::Skip::MeToo::VERSION = '0.001';\E\s*$}m,
+  "added version to DZT::Skip::MeToo",
+);
+
+{
+  my $tzil_trial = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/lib/DZT/Skip/Me.pm'    => $skip_package,
+        'source/lib/DZT/Skip/MeToo.pm' => $skip_package_too,
+        'source/dist.ini' => simple_ini(
+          'GatherDir',
+          [ 'PkgVersion', { skip => 'lib/DZT/Skip/' }, ],
+          'ExecDir'
+        ),
+      },
+    },
+  );
+
+  $tzil_trial->build;
+
+  my $dzt_skip= $tzil_trial->slurp_file('build/lib/DZT/Skip/Me.pm');
+  unlike(
+    $dzt_skip,
+    qr{^\s*\$\QDZT::Skip::Me::VERSION = '0.001';\E\s*$}m,
+    "did not add version to DZT::Skip::Me",
+  );
+
+  my $dzt_skip_too= $tzil_trial->slurp_file('build/lib/DZT/Skip/MeToo.pm');
+  unlike(
+    $dzt_skip_too,
+    qr{^\s*\$\QDZT::Skip::MeToo::VERSION = '0.001';\E\s*$}m,
+    "did not add version to DZT::Skip::MeToo",
   );
 }
 

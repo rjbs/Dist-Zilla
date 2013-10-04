@@ -42,11 +42,23 @@ C<package> keyword and the package name, like:
 This sort of declaration is also ignored by the CPAN toolchain, and is
 typically used when doing monkey patching or other tricky things.
 
+You may also specify a skip key in your dist.ini, who's value is the path or
+path part of the file or files you wish to skip
+
+  [PkgVersion]
+  skip = lib/MyModule/Some/Generated/Package.pm
+  skip = lib/MyModule/Cats/
+
 =attr die_on_existing_version
 
 If true, then when PkgVersion sees an existing C<$VERSION> assignment, it will
 throw an exception rather than skip the file.  This attribute defaults to
 false.
+
+=attr skip
+
+Specifies the module or modules to be skipped.  The value(s) are used in a regex,
+as in qr/^lib\/MyModule\/Cats\//.  Many skips may be supplied.
 
 =cut
 
@@ -74,6 +86,15 @@ has die_on_existing_version => (
   default => 0,
 );
 
+sub mvp_multivalue_args { return (qw/ skips /); }
+sub mvp_aliases { return { skip => 'skips' } }
+
+has skips => (
+  is  => 'ro',
+  isa => 'ArrayRef',
+  default => sub { [] },
+);
+
 sub munge_perl {
   my ($self, $file) = @_;
 
@@ -81,6 +102,12 @@ sub munge_perl {
 
   Carp::croak("invalid characters in version")
     unless LaxVersionStr->check($version);
+
+  my @skip = grep { $file->name =~ m/^$_/ } @{$self->skips};
+  if ( @skip ) {
+    $self->log([ 'skipping %s: user specified', $file->name ]);
+    return;
+  }
 
   my $document = $self->ppi_document_for_file($file);
 
