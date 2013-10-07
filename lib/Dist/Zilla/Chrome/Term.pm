@@ -20,6 +20,7 @@ has logger => (
   init_arg => undef,
   writer   => '_set_logger',
   default  => sub {
+    binmode STDOUT, ':utf8';
     Log::Dispatchouli->new({
       ident     => 'Dist::Zilla',
       to_stdout => 1,
