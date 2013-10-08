@@ -64,8 +64,9 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
       local $/;
       open my $fh, '<', $self->tempdir->file($filename);
 
-      # Win32.
-      binmode $fh, ':raw';
+      # avoid \n -> \r\n on win32
+      # ...and always write out encoded octets, not wide characters.
+      binmode $fh, ':raw:utf8';
       <$fh>;
     };
   }
@@ -119,9 +120,9 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
         $fn->dir->mkpath;
         open my $fh, '>', $fn;
 
-        # Win32 fix for crlf translation.
-        #   maybe :raw:utf8? -- Kentnl - 2010-06-10
-        binmode $fh, ':raw';
+        # avoid \n -> \r\n on win32
+        # ...and always write out encoded octets, not wide characters.
+        binmode $fh, ':raw:utf8';
         print { $fh } $content;
         close $fh;
       }

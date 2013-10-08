@@ -30,6 +30,7 @@ sub _file_from_filename {
 
   my $template = do {
     open my $fh, '<', $filename;
+    binmode $fh, ':utf8';
     local $/;
     <$fh>;
   };

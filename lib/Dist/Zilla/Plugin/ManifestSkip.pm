@@ -55,6 +55,11 @@ sub prune_files {
     $fh = File::Temp->new;
     $skipfile_name = $fh->filename;
     $self->log_debug([ 'create temporary %s', $skipfile_name ]);
+
+    # avoid \n -> \r\n on win32
+    # ...and always write out encoded octets, not wide characters.
+    binmode $fh, ':raw:utf8';
+
     print $fh $content;
     close $fh;
   }

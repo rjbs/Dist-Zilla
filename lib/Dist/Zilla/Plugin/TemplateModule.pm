@@ -70,8 +70,9 @@ sub make_module {
   if ($self->has_template) {
     open my $fh, '<', $self->template;
 
-    # Win32
-    binmode $fh, ':raw';
+    # avoid \n -> \r\n on win32
+    # ...and always write out encoded octets, not wide characters.
+    binmode $fh, ':raw:utf8';
     $template = do { local $/; <$fh> };
   } else {
     $template = ${ $self->section_data('Module.pm') };

@@ -71,6 +71,7 @@ sub gather_files {
       use autodie;
       local $/;
       open my $fh, '<', $fn;
+      binmode $fh, ':utf8';
       <$fh>;
     };
   });
