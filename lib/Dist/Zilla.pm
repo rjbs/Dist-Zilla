@@ -638,9 +638,8 @@ sub _write_out_file {
   open my $out_fh, '>', "$to" or die "couldn't open $to to write: $!";
 
   # This is needed, or \n is translated to \r\n on win32.
-  # Maybe :raw:utf8 is needed, but not sure.
-  #     -- Kentnl - 2010-06-10
-  binmode( $out_fh , ":raw" );
+  # ...and always write out encoded octets, not wide characters.
+  binmode( $out_fh , ":raw:utf8" );
 
   print { $out_fh } $file->content;
   close $out_fh or die "error closing $to: $!";

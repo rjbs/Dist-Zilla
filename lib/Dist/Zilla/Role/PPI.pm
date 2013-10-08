@@ -7,6 +7,7 @@ use Moose::Util::TypeConstraints;
 use namespace::autoclean;
 
 use Digest::MD5 qw(md5);
+use Encode qw(encode_utf8);
 
 =head1 DESCRIPTION
 
@@ -33,7 +34,7 @@ sub ppi_document_for_file {
 
   # We cache on the MD5 checksum to detect if the document has been modified
   # by some other plugin since it was last parsed, our document is invalid.
-  my $md5 = md5($content);
+  my $md5 = md5(encode_utf8($content));
   return $CACHE{$md5} if $CACHE{$md5};
 
   my $document = PPI::Document->new(\$content)
@@ -59,7 +60,7 @@ sub save_ppi_document_to_file {
 
   my $new_content = $document->serialize;
 
-  $CACHE{ md5($new_content) } = $document;
+  $CACHE{ md5(encode_utf8($new_content)) } = $document;
 
   $file->content($new_content);
 }

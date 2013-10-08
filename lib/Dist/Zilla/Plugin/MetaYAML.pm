@@ -118,6 +118,10 @@ sub gather_files {
         } else {
           # It's already valid UTF-8.  Emit it as is.
         }
+
+        # and now, finally, we decode it again, because it will be encoded
+        # at the final stage when we write it to disk
+        utf8::decode($yaml);
       }
 
       return $yaml;

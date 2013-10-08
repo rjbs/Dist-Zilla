@@ -123,8 +123,7 @@ sub after_release {
     open my $in_fh, '<', $filename
       or Carp::croak("can't open $filename for reading: $!");
 
-    # Win32
-    binmode $in_fh, ':raw';
+    binmode $in_fh, ':raw:utf8';
     <$in_fh>
   };
 
@@ -141,8 +140,7 @@ sub after_release {
   open my $out_fh, '>', $update_fn
     or Carp::croak("can't open $update_fn for writing: $!");
 
-  # Win32.
-  binmode $out_fh, ':raw';
+  binmode $out_fh, ':raw:utf8';
   print $out_fh $content or Carp::croak("error writing to $update_fn: $!");
   close $out_fh or Carp::croak("error closing $update_fn: $!");
 }

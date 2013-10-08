@@ -29,6 +29,7 @@ sub extract_author_deps {
     unless -e $ini;
 
   my $fh = $ini->openr;
+  binmode $fh, ':raw:utf8';
 
   require Config::INI::Reader;
   my $config = Config::INI::Reader->read_handle($fh);
