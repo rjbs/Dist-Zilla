@@ -41,15 +41,6 @@ has term_ui => (
   },
 );
 
-sub decode_utf8 ($;$)
-{
-    require Encode;
-    no warnings 'redefine';
-    *decode_utf8 = \&Encode::decode_utf8;
-    goto \&decode_utf8;
-}
-
-
 sub prompt_str {
   my ($self, $prompt, $arg) = @_;
   $arg ||= {};
@@ -60,10 +51,11 @@ sub prompt_str {
     require Term::ReadKey;
     Term::ReadKey::ReadMode('noecho');
   }
+  require Encode;
   my $input_bytes = $self->term_ui->get_reply(
     prompt => $prompt,
     allow  => $check || sub { defined $_[0] and length $_[0] },
-    (defined $default ? (default => $default) : ()),
+    (defined $default ? (default => Encode::encode_utf8($default)) : ()),
   );
   if ($arg->{noecho}) {
     Term::ReadKey::ReadMode('normal');
@@ -72,7 +64,7 @@ sub prompt_str {
     print "\n";
   }
 
-  my $input = decode_utf8( $input_bytes );
+  my $input = Encode::decode_utf8( $input_bytes );
   chomp $input;
 
   return $input;
