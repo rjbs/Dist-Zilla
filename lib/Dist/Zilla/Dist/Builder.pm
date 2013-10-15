@@ -772,7 +772,7 @@ sub run_in_build {
       return 1;
     }
 
-    $builders[0]->build;
+    $_->build for @builders;
 
     local $ENV{PERL5LIB} = join $Config::Config{path_sep},
       (map { $abstarget->subdir('blib', $_) } qw(arch lib)),
