@@ -1,6 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        [THIS RELEASE MIGHT BREAK YOUR BUILD]
+        - config.ini is assumed to be in UTF-8
+        - Data::Section sections are assumed to be UTF-8
 
 4.300039  2013-09-20 06:05:10 Asia/Tokyo
         - tweak metafile generator to keep CPAN::Meta validator happy (thanks,
