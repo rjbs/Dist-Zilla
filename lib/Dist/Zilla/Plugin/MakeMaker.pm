@@ -8,7 +8,7 @@ use namespace::autoclean;
 
 use Config;
 use CPAN::Meta::Requirements 2.121; # requirements_for_module
-use List::MoreUtils qw(any uniq);
+use List::Util 'first';
 
 use Dist::Zilla::File::InMemory;
 use Dist::Zilla::Plugin::MakeMaker::Runner;
@@ -68,12 +68,13 @@ has '_runner' => (
 
 # This is here, rather than at the top, so that the "build" and "test" methods
 # will exist, as they are required by BuildRunner and TestRunner respectively.
-# I had originally fixed this with stub methods, but stub methods to not behave
+# I had originally fixed this with stub methods, but stub methods do not behave
 # properly with this use case until Moose 2.0300. -- rjbs, 2012-02-08
 with qw(
   Dist::Zilla::Role::BuildRunner
   Dist::Zilla::Role::InstallTool
   Dist::Zilla::Role::PrereqSource
+  Dist::Zilla::Role::FileGatherer
   Dist::Zilla::Role::TestRunner
   Dist::Zilla::Role::TextTemplate
 );
@@ -122,6 +123,20 @@ sub register_prereqs {
     { phase => 'configure' },
     'File::ShareDir::Install' => 0.06,
   );
+}
+
+sub gather_files {
+  my ($self) = @_;
+
+  require Dist::Zilla::File::InMemory;
+
+  my $file = Dist::Zilla::File::InMemory->new({
+    name    => 'Makefile.PL',
+    content => $template,   # template evaluated later
+  });
+
+  $self->add_file($file);
+  return;
 }
 
 sub share_dir_code {
@@ -271,8 +286,11 @@ sub setup_installer {
 
   my $dumped_args = $self->_dump_as($write_makefile_args, '*WriteMakefileArgs');
 
+  my $file = first { $_->name eq 'Makefile.PL' } @{$self->zilla->files};
+
+  $self->log_debug([ 'updating contents of Makefile.PL in memory' ]);
   my $content = $self->fill_in_string(
-    $template,
+    $file->content,
     {
       eumm_version      => \($self->eumm_version),
       perl_prereq       => \$perl_prereq,
@@ -284,12 +302,8 @@ sub setup_installer {
     },
   );
 
-  my $file = Dist::Zilla::File::InMemory->new({
-    name    => 'Makefile.PL',
-    content => $content,
-  });
+  $file->content($content);
 
-  $self->add_file($file);
   return;
 }
 
