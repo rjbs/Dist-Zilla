@@ -1,7 +1,6 @@
 package Dist::Zilla::Plugin::ModuleBuild;
 # ABSTRACT: build a Build.PL that uses Module::Build
 
-use List::MoreUtils qw(any uniq);
 use Moose;
 use Moose::Autobox;
 with (
@@ -14,7 +13,6 @@ use namespace::autoclean;
 
 use CPAN::Meta::Requirements 2.121; # requirements_for_module
 use Dist::Zilla::File::InMemory;
-use List::MoreUtils qw(any uniq);
 use Data::Dumper;
 
 =head1 DESCRIPTION
