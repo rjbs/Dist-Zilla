@@ -72,7 +72,7 @@ sub _encode {
     require Encode;
     my $bytes =
       try { Encode::encode($enc, $text, Encode::FB_CROAK()) }
-      catch { $self->_throw(encode => $_) };
+      catch { $self->_throw("encode $enc" => $_) };
     return $bytes;
   }
 }
@@ -87,7 +87,7 @@ sub _decode {
     require Encode;
     my $text =
       try { Encode::decode($enc, $bytes, Encode::FB_CROAK()) }
-      catch { $self->_throw(decode => $_) };
+      catch { $self->_throw("decode $enc" => $_) };
     return $text;
   }
 }
@@ -96,7 +96,7 @@ sub _throw {
   my ($self, $op, $msg) = @_;
   my ($name, $added_by) = map {; $self->$_ } qw/name added_by/;
   confess(
-    "Could not $op $name on data from $added_by; error was: $msg"
+    "Could not $op $name; $added_by; error was: $msg"
   );
 }
 
