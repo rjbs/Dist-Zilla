@@ -642,7 +642,7 @@ sub _write_out_file {
   #     -- Kentnl - 2010-06-10
   binmode( $out_fh , ":raw" );
 
-  print { $out_fh } $file->content;
+  print { $out_fh } $file->encoded_content;
   close $out_fh or die "error closing $to: $!";
   chmod $file->mode, "$to" or die "couldn't chmod $to: $!";
 }
