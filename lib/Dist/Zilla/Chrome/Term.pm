@@ -19,16 +19,22 @@ has logger => (
   isa => 'Log::Dispatchouli',
   init_arg => undef,
   writer   => '_set_logger',
-  default  => sub {
-    Log::Dispatchouli->new({
+  lazy_build => 1,
+);
+
+sub _build_logger {
+  my $self = shift;
+  my $layer = sprintf(":encoding(%s)", $self->term_enc);
+  binmode( STDOUT, $layer );
+  binmode( STDERR, $layer );
+  return Log::Dispatchouli->new({
       ident     => 'Dist::Zilla',
       to_stdout => 1,
       log_pid   => 0,
       to_self   => ($ENV{DZIL_TESTING} ? 1 : 0),
       quiet_fatal => 'stdout',
-    });
-  }
-);
+  });
+}
 
 has term_ui => (
   is   => 'ro',
