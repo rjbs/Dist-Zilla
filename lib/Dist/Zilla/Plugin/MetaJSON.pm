@@ -58,6 +58,7 @@ sub gather_files {
 
   my $file  = Dist::Zilla::File::FromCode->new({
     name => $self->filename,
+    code_return_type => 'text', # because we get ASCII from JSON
     code => sub {
       my $distmeta  = $zilla->distmeta;
 

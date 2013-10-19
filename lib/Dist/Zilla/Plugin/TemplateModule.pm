@@ -3,6 +3,8 @@ package Dist::Zilla::Plugin::TemplateModule;
 use Moose;
 with qw(Dist::Zilla::Role::ModuleMaker Dist::Zilla::Role::TextTemplate);
 
+use Path::Tiny;
+
 use namespace::autoclean;
 
 use autodie;
@@ -68,11 +70,7 @@ sub make_module {
   my $template;
 
   if ($self->has_template) {
-    open my $fh, '<', $self->template;
-
-    # Win32
-    binmode $fh, ':raw';
-    $template = do { local $/; <$fh> };
+    $template = path( $self->template )->slurp_utf8;
   } else {
     $template = ${ $self->section_data('Module.pm') };
   }
