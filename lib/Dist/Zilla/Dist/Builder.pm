@@ -291,9 +291,10 @@ sub build_in {
 
   $self->log("beginning to build " . $self->name);
 
-  $_->gather_files     for $self->plugins_with(-FileGatherer)->flatten;
-  $_->prune_files      for $self->plugins_with(-FilePruner)->flatten;
-  $_->munge_files      for $self->plugins_with(-FileMunger)->flatten;
+  $_->gather_files       for $self->plugins_with(-FileGatherer)->flatten;
+  $_->set_file_encodings for $self->plugins_with(-EncodingProvider)->flatten;
+  $_->prune_files        for $self->plugins_with(-FilePruner)->flatten;
+  $_->munge_files        for $self->plugins_with(-FileMunger)->flatten;
 
   $_->register_prereqs for $self->plugins_with(-PrereqSource)->flatten;
 
