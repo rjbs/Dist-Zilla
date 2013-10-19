@@ -8,7 +8,7 @@ use namespace::autoclean;
 use autodie;
 
 use Sub::Exporter::ForMethods;
-use Data::Section 0.004 # fixed header_re
+use Data::Section 0.200002 # encoding and bytes
   { installer => Sub::Exporter::ForMethods::method_installer },
   '-setup';
 use Dist::Zilla::File::InMemory;
