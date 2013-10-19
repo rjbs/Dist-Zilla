@@ -2,6 +2,8 @@ package Dist::Zilla::File::OnDisk;
 # ABSTRACT: a file that comes from your filesystem
 use Moose;
 
+use Path::Tiny;
+
 use namespace::autoclean;
 
 with 'Dist::Zilla::Role::MutableFile', 'Dist::Zilla::Role::StubBuild';
@@ -28,16 +30,7 @@ after 'BUILD' => sub {
 
 sub _build_encoded_content {
   my ($self) = @_;
-
-  my $fname = $self->_original_name;
-  open my $fh, '<', $fname or die "can't open $fname for reading: $!";
-
-  # This is needed or \r\n is filtered to be just \n on win32.
-  # Maybe :raw:utf8, not sure.
-  #     -- Kentnl - 2010-06-10
-  binmode $fh, ':raw';
-
-  my $content = do { local $/; <$fh> };
+  return path($self->_original_name)->slurp_raw;
 }
 
 sub _build_content_source { return "encoded_content" }
