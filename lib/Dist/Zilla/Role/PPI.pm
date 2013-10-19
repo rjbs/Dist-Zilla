@@ -30,10 +30,11 @@ sub ppi_document_for_file {
   my ($self, $file) = @_;
 
   my $content = $file->content;
+  my $encoded_content = $file->encoded_content;
 
   # We cache on the MD5 checksum to detect if the document has been modified
   # by some other plugin since it was last parsed, our document is invalid.
-  my $md5 = md5($content);
+  my $md5 = md5($encoded_content);
   return $CACHE{$md5} if $CACHE{$md5};
 
   my $document = PPI::Document->new(\$content)
