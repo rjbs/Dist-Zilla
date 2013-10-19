@@ -94,7 +94,7 @@ sub _decode {
 
 sub _throw {
   my ($self, $op, $msg) = @_;
-  my ($name, $added_by) = $self->$_ for qw/name added_by/;
+  my ($name, $added_by) = map {; $self->$_ } qw/name added_by/;
   confess(
     "Could not $op $name on data from $added_by; error was: $msg"
   );
