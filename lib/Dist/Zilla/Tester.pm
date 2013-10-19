@@ -35,6 +35,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
 {
   package Dist::Zilla::Tester::_Role;
   use Moose::Role;
+  use Path::Tiny ();
 
   has tempdir => (
     is   => 'ro',
@@ -60,14 +61,17 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
   sub slurp_file {
     my ($self, $filename) = @_;
 
-    return scalar do {
-      local $/;
-      open my $fh, '<', $self->tempdir->file($filename);
+    Path::Tiny::path(
+      $self->tempdir->file($filename)
+    )->slurp_utf8;
+  }
 
-      # Win32.
-      binmode $fh, ':raw';
-      <$fh>;
-    };
+  sub slurp_file_raw {
+    my ($self, $filename) = @_;
+
+    Path::Tiny::path(
+      $self->tempdir->file($filename)
+    )->slurp_raw;
   }
 
   sub _metadata_generator_id { 'Dist::Zilla::Tester' }
