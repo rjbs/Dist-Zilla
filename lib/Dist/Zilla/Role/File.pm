@@ -95,7 +95,7 @@ sub _decode {
 sub _throw {
   my ($self, $op, $msg) = @_;
   my ($name, $added_by) = $self->$_ for qw/name added_by/;
-  $self->log_fatal(
+  confess(
     "Could not $op $name on data from $added_by; error was: $msg"
   );
 }
