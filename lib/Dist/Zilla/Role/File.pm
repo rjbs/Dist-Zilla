@@ -66,13 +66,13 @@ sub _encode {
   my ($self, $text) = @_;
   my $enc = $self->encoding;
   if ( $enc eq 'bytes' ) {
-    return $text;
+    return $text; # XXX hope you were right that it really was bytes
   }
   else {
     require Encode;
     my $bytes =
-    try { Encode::encode($enc, $text, Encode::FB_CROAK()) }
-    catch { $self->_throw(encode => $_) };
+      try { Encode::encode($enc, $text, Encode::FB_CROAK()) }
+      catch { $self->_throw(encode => $_) };
     return $bytes;
   }
 }
@@ -81,13 +81,13 @@ sub _decode {
   my ($self, $bytes) = @_;
   my $enc = $self->encoding;
   if ( $enc eq 'bytes' ) {
-    return $bytes;
+    $self->_throw(decode => "Can't decode text from 'bytes' encoding");
   }
   else {
     require Encode;
     my $text =
-    try { Encode::encode($enc, $bytes, Encode::FB_CROAK()) }
-    catch { $self->_throw(decode => $_) };
+      try { Encode::encode($enc, $bytes, Encode::FB_CROAK()) }
+      catch { $self->_throw(decode => $_) };
     return $text;
   }
 }

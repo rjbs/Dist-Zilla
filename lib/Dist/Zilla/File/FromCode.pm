@@ -52,7 +52,7 @@ has encoding => (
 sub content {
   my ($self) = @_;
 
-  confess "cannot set content of a FromCode file" if @_ > 1;
+  $self->log_fatal("cannot set content of a FromCode file") if @_ > 1;
 
   my $code = $self->code;
   my $result = $self->$code;
@@ -61,10 +61,7 @@ sub content {
     return $result;
   }
   else {
-    require Encode;
-    # XXX handle errors with _set_by information
-    # XXX die if encoding is bytes
-    return Encode::decode($self->encoding, $result, Encode::FB_CROAK());
+    $self->_decode($self->encoding, $result);
   }
 }
 
@@ -75,7 +72,7 @@ sub content {
 sub encoded_content {
   my ($self) = @_;
 
-  confess "cannot set encoded_content of a FromCode file" if @_ > 1;
+  $self->log_fatal( "cannot set encoded_content of a FromCode file" ) if @_ > 1;
 
   my $code = $self->code;
   my $result = $self->$code;
@@ -84,9 +81,7 @@ sub encoded_content {
     return $result;
   }
   else {
-    require Encode;
-    # XXX handle errors with _set_by information
-    return Encode::encode($self->encoding, $result, Encode::FB_CROAK());
+    $self->_encode($self->encoding, $result);
   }
 }
 
