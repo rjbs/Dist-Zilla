@@ -86,7 +86,7 @@ sub _decode {
   else {
     require Encode;
     my $text =
-      try { Encode::encode($enc, $bytes, Encode::FB_CROAK()) }
+      try { Encode::decode($enc, $bytes, Encode::FB_CROAK()) }
       catch { $self->_throw(decode => $_) };
     return $text;
   }
