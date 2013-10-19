@@ -121,11 +121,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
       while (my ($name, $content) = each %$files) {
         my $fn = $tempdir->file($name);
         $fn->dir->mkpath;
-        open my $fh, '>', $fn;
-
-        # Win32 fix for crlf translation.
-        #   maybe :raw:utf8? -- Kentnl - 2010-06-10
-        binmode $fh, ':raw';
+        open my $fh, '>:raw:encoding(UTF-8)', $fn;
         print { $fh } $content;
         close $fh;
       }
