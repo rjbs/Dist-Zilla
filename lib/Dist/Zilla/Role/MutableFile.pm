@@ -106,7 +106,7 @@ sub _update_by {
 }
 
 around 'added_by' => sub {
-    my ($self, $orig);
+    my ($orig, $self) = @_;
     return sprintf("%s set by %s", $self->_content_source, $self->$orig);
 };
 
