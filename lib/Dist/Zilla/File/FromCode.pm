@@ -61,7 +61,7 @@ sub content {
     return $result;
   }
   else {
-    $self->_decode($self->encoding, $result);
+    $self->_decode($result);
   }
 }
 
@@ -81,7 +81,7 @@ sub encoded_content {
     return $result;
   }
   else {
-    $self->_encode($self->encoding, $result);
+    $self->_encode($result);
   }
 }
 
