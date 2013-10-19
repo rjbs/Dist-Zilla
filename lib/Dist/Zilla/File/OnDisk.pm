@@ -4,6 +4,8 @@ use Moose;
 
 use namespace::autoclean;
 
+with 'Dist::Zilla::Role::MutableFile', 'Dist::Zilla::Role::StubBuild';
+
 =head1 DESCRIPTION
 
 This represents a file stored on disk.  Its C<content> attribute is read from
@@ -12,25 +14,19 @@ may be altered by plugins.
 
 =cut
 
-has content => (
-  is  => 'rw',
-  isa => 'Str',
-  lazy => 1,
-  default => sub { shift->_read_file },
-);
-
 has _original_name => (
   is  => 'ro',
+  writer => '_set_original_name',
   isa => 'Str',
   init_arg => undef,
 );
 
-sub BUILD {
+after 'BUILD' => sub {
   my ($self) = @_;
-  $self->{_original_name} = $self->name;
-}
+  $self->_set_original_name( $self->name );
+};
 
-sub _read_file {
+sub _build_encoded_content {
   my ($self) = @_;
 
   my $fname = $self->_original_name;
@@ -44,7 +40,11 @@ sub _read_file {
   my $content = do { local $/; <$fh> };
 }
 
-with 'Dist::Zilla::Role::File';
+sub _build_content_source { return "encoded_content" }
+
+# should never be called, as content will always be generated from
+# encoded content
+sub _build_content { die "shouldn't reach here" }
 
 __PACKAGE__->meta->make_immutable;
 1;
