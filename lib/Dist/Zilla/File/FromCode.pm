@@ -52,7 +52,7 @@ has encoding => (
 sub content {
   my ($self) = @_;
 
-  $self->log_fatal("cannot set content of a FromCode file") if @_ > 1;
+  confess("cannot set content of a FromCode file") if @_ > 1;
 
   my $code = $self->code;
   my $result = $self->$code;
@@ -72,7 +72,7 @@ sub content {
 sub encoded_content {
   my ($self) = @_;
 
-  $self->log_fatal( "cannot set encoded_content of a FromCode file" ) if @_ > 1;
+  confess( "cannot set encoded_content of a FromCode file" ) if @_ > 1;
 
   my $code = $self->code;
   my $result = $self->$code;
