@@ -19,68 +19,73 @@ my %sample = (
 
 my $sample              = join("\n", values %sample);
 my $encoded_sample      = encode("UTF-8", $sample);
-my $dub_sample          = $sample x 2;
-my $dub_encoded_sample  = $encoded_sample x 2;
-my $tempfile            = Path::Tiny->tempfile;
-$tempfile->spew_utf8($sample);
+my $db_sample          = $sample x 2;
+my $db_encoded_sample  = $encoded_sample x 2;
 
-my %cases = (
+sub test_mutable_roundtrip {
+  my ($obj, $label) = @_;
 
-  'OnDisk' => [
-    {
-      label => 'UTF-8',
-      attr => [ name => "$tempfile" ],
-    },
-  ],
+  ok( $obj->DOES("Dist::Zilla::Role::MutableFile"), "does MutableFile role" );
 
-  InMemory => [
-    {
-      label => 'UTF-8',
-      attr => [ name => 'foo.txt', content => $sample ],
-    }
-  ],
+  # assumes object content starts as $sample
+  is( $obj->content, $sample, "get content" );
+  is( $obj->encoded_content, $encoded_sample, "get encoded_content" );
 
-  FromCode => [
-    {
-      label => 'UTF-8',
-      attr => [ name => 'foo.txt', code => sub { $sample } ],
-    },
-  ],
+  # set content, check content & encoded_content
+  ok( $obj->content($db_sample), "set content");
+  is( $obj->content, $db_sample, "get content");
+  is( $obj->encoded_content, $db_encoded_sample, "get encoded_content");
 
-);
-
-while ( my ($k, $v) = each %cases ) {
-  my $class = "Dist::Zilla::File::$k";
-  my @cases = @$v;
-  for my $c ( @cases ) {
-    my $label = "$k $c->{label}";
-    my $obj = new_ok( $class, $c->{attr}, "$label: new object" );
-    is( $obj->content, $sample, "$label: content" );
-    is( $obj->encoded_content, $encoded_sample, "$label: encoded_content" );
-    if ( $obj->DOES("Dist::Zilla::Role::MutableFile") ) {
-      # set content, check content & encoded_content
-      ok( $obj->content($dub_sample), "$label: set content");
-      is( $obj->content, $dub_sample, "$label: get content");
-      is( $obj->encoded_content, $dub_encoded_sample, "$label: get encoded_content");
-
-      # set encoded_content, check encoded_content & content
-      ok( $obj->encoded_content($encoded_sample), "$label: set encoded_content");
-      is( $obj->encoded_content, $encoded_sample, "$label: get encoded_content");
-      is( $obj->content, $sample, "$label: get content");
-    }
-    else {
-      like(
-        exception { $obj->content($sample) },
-        qr/cannot set content/,
-        "$label: changing content should throw error"
-      );
-      like(
-        exception { $obj->encoded_content($encoded_sample) },
-        qr/cannot set encoded_content/,
-        "$label: changing encoded_content should throw error"
-      );
-    }
-  }
+  # set encoded_content, check encoded_content & content
+  ok( $obj->encoded_content($encoded_sample), "set encoded_content");
+  is( $obj->encoded_content, $encoded_sample, "get encoded_content");
+  is( $obj->content, $sample, "get content");
 }
+
+subtest "OnDisk" => sub {
+  my $class = "Dist::Zilla::File::OnDisk";
+
+  subtest "UTF-8 file" => sub {
+    my $tempfile = Path::Tiny->tempfile;
+
+    ok( $tempfile->spew_utf8($sample), "create UTF-8 encoded tempfile" );
+    my $obj = new_ok( $class, [name => "$tempfile"] );
+    test_mutable_roundtrip($obj);
+  };
+
+};
+
+subtest "InMemory" => sub {
+  my $class = "Dist::Zilla::File::InMemory";
+
+  subtest "UTF-8 string" => sub {
+    my $obj = new_ok( $class, [name => "foo.txt", content => $sample] );
+    test_mutable_roundtrip($obj);
+  };
+};
+
+subtest "FromCode" => sub {
+  my $class = "Dist::Zilla::File::FromCode";
+
+  subtest "UTF-8 string" => sub {
+    my $obj = new_ok( $class, [name => "foo.txt", code => sub { $sample } ]);
+    is( $obj->content, $sample, "content" );
+    is( $obj->encoded_content, $encoded_sample, "encoded_content" );
+  };
+
+  subtest "content immutable" => sub {
+    my $obj = new_ok( $class, [name => "foo.txt", code => sub { $sample } ]);
+    like(
+      exception { $obj->content($sample) },
+      qr/cannot set content/,
+      "changing content should throw error"
+    );
+    like(
+      exception { $obj->encoded_content($encoded_sample) },
+      qr/cannot set encoded_content/,
+      "changing encoded_content should throw error"
+    );
+  };
+};
 
 done_testing;
