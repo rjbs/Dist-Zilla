@@ -20,8 +20,9 @@ my %sample = (
 
 my $sample              = join("\n", values %sample);
 my $encoded_sample      = encode("UTF-8", $sample);
-my $db_sample          = $sample x 2;
-my $db_encoded_sample  = $encoded_sample x 2;
+my $db_sample           = $sample x 2;
+my $db_encoded_sample   = $encoded_sample x 2;
+my $latin1_dolmen       = encode("latin1", $sample{dolmen});
 
 sub new_args {
   my (undef, $file, $line) = caller;
@@ -67,6 +68,14 @@ sub test_content_from_bytes {
   like( $err, $source_re, "error shows encoded_content source" );
 }
 
+sub test_latin1 {
+  my ($obj) = @_;
+  # assumes encoded_content is $latin1_dolmen and encoding
+  # is already set to 'latin1"
+  is( $obj->encoded_content, $latin1_dolmen, "get encoded_content" );
+  is( $obj->content, $sample{dolmen}, "get content" );
+}
+
 subtest "OnDisk" => sub {
   my $class = "Dist::Zilla::File::OnDisk";
 
@@ -87,6 +96,17 @@ subtest "OnDisk" => sub {
     test_content_from_bytes($obj, qr/encoded_content set by \S+ line \d+/);
   };
 
+  subtest "latin1 file" => sub {
+    my $tempfile = Path::Tiny->tempfile;
+
+    ok(
+      $tempfile->spew( { binmode => ":encoding(latin1)"}, $sample{dolmen} ),
+      "create latin1 tempfile"
+    );
+    my $obj = new_ok( $class, new_args(name => "$tempfile", encoding => 'latin1') );
+    test_latin1($obj);
+  };
+
 };
 
 subtest "InMemory" => sub {
@@ -101,6 +121,13 @@ subtest "InMemory" => sub {
     my $obj = new_ok( $class, new_args( encoded_content => $encoded_sample ) );
     ok( $obj->encoding("bytes"), "set encoding to 'bytes'");
     test_content_from_bytes($obj, qr/encoded_content set by \S+ line \d+/);
+  };
+
+  subtest "latin1 string" => sub {
+    my $obj = new_ok(
+      $class, new_args(encoded_content => $latin1_dolmen, encoding => "latin1")
+    );
+    test_latin1($obj);
   };
 
 };
@@ -133,6 +160,17 @@ subtest "FromCode" => sub {
       $class, new_args( code_return_type => 'bytes', code => sub { $encoded_sample } )
     );
     test_content_from_bytes($obj, qr/bytes from coderef set by \S+ line \d+/);
+  };
+
+  subtest "latin1 string" => sub {
+    my $obj = new_ok(
+      $class, new_args(
+        code_return_type => 'bytes',
+        code => sub { $latin1_dolmen },
+        encoding => 'latin1',
+      )
+    );
+    test_latin1($obj);
   };
 
 };
