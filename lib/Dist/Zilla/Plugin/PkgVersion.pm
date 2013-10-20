@@ -63,7 +63,7 @@ sub munge_file {
   return                          if $file->name    =~ /^corpus\//;
 
   return                          if $file->name    =~ /\.t$/i;
-  return $self->munge_perl($file) if $file->name    =~ /\.(?:pm|pl)$/i;
+  return $self->munge_perl($file) if $file->name    =~ /\.(?:pm|pl|pod)$/i;
   return $self->munge_perl($file) if $file->content =~ /^#!(?:.*)perl(?:$|\s)/;
   return;
 }
