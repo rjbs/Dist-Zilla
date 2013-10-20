@@ -60,9 +60,10 @@ sub save_ppi_document_to_file {
 
   my $new_content = $document->serialize;
 
-  $CACHE{ md5($new_content) } = $document;
-
   $file->content($new_content);
+
+  $CACHE{ md5($file->encoded_content) } = $document;
+
 }
 
 =method document_assigns_to_variable
