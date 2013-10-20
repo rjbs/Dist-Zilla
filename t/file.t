@@ -17,9 +17,11 @@ my %sample = (
   keedi   =>"김도형 - Keedi Kim",
 );
 
-my $sample = join("\n", values %sample);
-my $encoded_sample = encode("UTF-8", $sample);
-my $tempfile = Path::Tiny->tempfile;
+my $sample              = join("\n", values %sample);
+my $encoded_sample      = encode("UTF-8", $sample);
+my $dub_sample          = $sample x 2;
+my $dub_encoded_sample  = $encoded_sample x 2;
+my $tempfile            = Path::Tiny->tempfile;
 $tempfile->spew_utf8($sample);
 
 my %cases = (
@@ -56,7 +58,15 @@ while ( my ($k, $v) = each %cases ) {
     is( $obj->content, $sample, "$label: content" );
     is( $obj->encoded_content, $encoded_sample, "$label: encoded_content" );
     if ( $obj->DOES("Dist::Zilla::Role::MutableFile") ) {
+      # set content, check content & encoded_content
+      ok( $obj->content($dub_sample), "$label: set content");
+      is( $obj->content, $dub_sample, "$label: get content");
+      is( $obj->encoded_content, $dub_encoded_sample, "$label: get encoded_content");
 
+      # set encoded_content, check encoded_content & content
+      ok( $obj->encoded_content($encoded_sample), "$label: set encoded_content");
+      is( $obj->encoded_content, $encoded_sample, "$label: get encoded_content");
+      is( $obj->content, $sample, "$label: get content");
     }
     else {
       like(
