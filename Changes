@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        [THIS RELEASE MIGHT BREAK YOUR BUILD]
+        - typo fixes (thanks, David Steinbrunner)
 
 5.000     2013-10-20 08:10:02 America/New_York
         [THIS RELEASE MIGHT BREAK YOUR BUILD]
