@@ -9,6 +9,7 @@ use MooseX::Types::Path::Class qw(Dir File);
 
 use File::pushd ();
 use Path::Class;
+use Path::Tiny; # because more Path::* is better, eh?
 use Try::Tiny;
 
 use namespace::autoclean;
@@ -457,15 +458,9 @@ sub _build_archive {
     }
 
     my $filename = $built_in->file( $distfile->name );
-    my $content = do {
-      use autodie;
-      local $/;
-      open my $fh, '<:raw', $filename;
-      <$fh>;
-    };
     $archive->add_data(
       $basedir->file( $distfile->name ),
-      $content,
+      path($filename)->slurp_raw,
       { mode => (stat $filename)[2] & ~022 },
     );
   }

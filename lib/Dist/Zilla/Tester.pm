@@ -12,6 +12,7 @@ use Dist::Zilla::Chrome::Test;
 use File::pushd ();
 use File::Spec;
 use File::Temp;
+use Path::Tiny;
 
 use Sub::Exporter::Util ();
 use Sub::Exporter -setup => {
@@ -35,7 +36,6 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
 {
   package Dist::Zilla::Tester::_Role;
   use Moose::Role;
-  use Path::Tiny ();
 
   has tempdir => (
     is   => 'ro',
@@ -121,9 +121,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
       while (my ($name, $content) = each %$files) {
         my $fn = $tempdir->file($name);
         $fn->dir->mkpath;
-        open my $fh, '>:raw:encoding(UTF-8)', $fn;
-        print { $fh } $content;
-        close $fh;
+        Path::Tiny::path($fn)->spew_utf8($content);
       }
     }
 
