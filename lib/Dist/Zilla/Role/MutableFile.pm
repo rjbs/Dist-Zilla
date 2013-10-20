@@ -100,14 +100,14 @@ has _content_source => (
 );
 
 sub _update_by {
-    my ($self, $attr, $from) = @_;
-    $self->_content_source($attr);
-    $self->_set_added_by($from);
+  my ($self, $attr, $from) = @_;
+  $self->_content_source($attr);
+  $self->_set_added_by($from);
 }
 
 around 'added_by' => sub {
-    my ($orig, $self) = @_;
-    return sprintf("%s set by %s", $self->_content_source, $self->$orig);
+  my ($orig, $self) = @_;
+  return sprintf("%s set by %s", $self->_content_source, $self->$orig);
 };
 
 # we really only need one of these and only if _content or _encoded_content
