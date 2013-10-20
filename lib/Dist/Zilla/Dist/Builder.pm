@@ -460,7 +460,7 @@ sub _build_archive {
     my $content = do {
       use autodie;
       local $/;
-      open my $fh, '<', $filename;
+      open my $fh, '<:raw', $filename;
       <$fh>;
     };
     $archive->add_data(

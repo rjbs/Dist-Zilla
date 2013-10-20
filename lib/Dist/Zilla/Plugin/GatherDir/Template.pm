@@ -29,7 +29,7 @@ sub _file_from_filename {
   my ($self, $filename) = @_;
 
   my $template = do {
-    open my $fh, '<', $filename;
+    open my $fh, '<:encoding(UTF-8)', $filename;
     local $/;
     <$fh>;
   };

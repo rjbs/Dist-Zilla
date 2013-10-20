@@ -635,9 +635,6 @@ sub _write_out_file {
 
   Carp::croak("attempted to write $to multiple times") if -e $to;
 
-  # This is needed, or \n is translated to \r\n on win32.
-  # Maybe :raw:utf8 is needed, but not sure.
-  #     -- Kentnl - 2010-06-10
   open my $out_fh, '>:raw', "$to" or die "couldn't open $to to write: $!";
 
   print { $out_fh } $file->encoded_content;
