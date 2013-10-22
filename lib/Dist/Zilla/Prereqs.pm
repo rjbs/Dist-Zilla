@@ -82,6 +82,36 @@ sub register_prereqs {
     $req->add_string_requirement($package, $version || 0);
   }
 
+  $self->sync_runtime_build_test_requires;
+
+  return;
+}
+
+
+# this avoids a long-standing CPAN.pm bug that incorrectly merges runtime and
+# "build" (build+test) requirements by ensuring requirements stay unified
+# across all three phases
+sub sync_runtime_build_test_requires {
+  my $self = shift;
+  my $merged = CPAN::Meta::Requirements->new;
+
+  # first pass: generated merged requirements
+  for my $phase ( qw/runtime build test/ ) {
+    my $req = $self->requirements_for($phase, 'requires');
+    $merged->add_requirements( $req );
+  };
+
+  # second pass: update from merged requirements
+  for my $phase ( qw/runtime build test/ ) {
+    my $req = $self->requirements_for($phase, 'requires');
+    for my $mod ( $req->required_modules ) {
+      $req->clear_requirement( $mod );
+      $req->add_string_requirement(
+        $mod => $merged->requirements_for_module($mod)
+      );
+    }
+  }
+
   return;
 }
 
