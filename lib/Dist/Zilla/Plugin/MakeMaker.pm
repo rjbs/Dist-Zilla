@@ -7,6 +7,7 @@ use Moose::Autobox;
 use namespace::autoclean;
 
 use Config;
+use CPAN::Meta::Requirements 2.121; # requirements_for_module
 use List::MoreUtils qw(any uniq);
 
 use Dist::Zilla::File::InMemory;
@@ -89,30 +90,12 @@ use ExtUtils::MakeMaker {{ $eumm_version }};
 
 my {{ $WriteMakefileArgs }}
 
-unless ( eval { ExtUtils::MakeMaker->VERSION(6.63_03) } ) {
-  my $tr = delete $WriteMakefileArgs{TEST_REQUIRES};
-  my $br = $WriteMakefileArgs{BUILD_REQUIRES};
-  for my $mod ( keys %$tr ) {
-    if ( exists $br->{$mod} ) {
-      $br->{$mod} = $tr->{$mod} if $tr->{$mod} > $br->{$mod};
-    }
-    else {
-      $br->{$mod} = $tr->{$mod};
-    }
-  }
-}
+my {{ $fallback_prereqs }}
 
-unless ( eval { ExtUtils::MakeMaker->VERSION(6.56) } ) {
-  my $br = delete $WriteMakefileArgs{BUILD_REQUIRES};
-  my $pp = $WriteMakefileArgs{PREREQ_PM};
-  for my $mod ( keys %$br ) {
-    if ( exists $pp->{$mod} ) {
-      $pp->{$mod} = $br->{$mod} if $br->{$mod} > $pp->{$mod};
-    }
-    else {
-      $pp->{$mod} = $br->{$mod};
-    }
-  }
+unless ( eval { ExtUtils::MakeMaker->VERSION(6.63_03) } ) {
+  delete $WriteMakefileArgs{TEST_REQUIRES};
+  delete $WriteMakefileArgs{BUILD_REQUIRES};
+  $WriteMakefileArgs{PREREQ_PM} = \%FallbackPrereqs;
 }
 
 delete $WriteMakefileArgs{CONFIGURE_REQUIRES}
@@ -237,6 +220,26 @@ sub write_makefile_args {
   return \%write_makefile_args;
 }
 
+sub fallback_prereq_pm {
+  my $self = shift;
+  my $prereqs = $self->zilla->prereqs;
+  my $merged = CPAN::Meta::Requirements->new;
+  for my $phase ( qw/runtime test build/ ) {
+    my $req = $prereqs->requirements_for($phase, 'requires');
+    $merged->add_requirements($req);
+  }
+  my $fallback = $merged->clear_requirement('perl')->as_string_hash;
+  require Data::Dumper;
+  my $dumper = Data::Dumper->new(
+    [ $fallback ],
+    [ '*FallbackPrereqs' ],
+  );
+  $dumper->Sortkeys( 1 );
+  $dumper->Indent( 1 );
+  $dumper->Useqq( 1 );
+  return $dumper->Dump;
+}
+
 sub setup_installer {
   my ($self, $arg) = @_;
 
@@ -261,6 +264,7 @@ sub setup_installer {
       eumm_version      => \($self->eumm_version),
       perl_prereq       => \$perl_prereq,
       share_dir_code    => $self->share_dir_code,
+      fallback_prereqs  => \($self->fallback_prereq_pm),
       WriteMakefileArgs => \($makefile_args_dumper->Dump),
     },
   );
