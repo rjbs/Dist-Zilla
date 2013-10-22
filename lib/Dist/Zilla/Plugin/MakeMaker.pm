@@ -220,24 +220,24 @@ sub write_makefile_args {
   return \%write_makefile_args;
 }
 
-sub fallback_prereq_pm {
-  my $self = shift;
-  my $prereqs = $self->zilla->prereqs;
-  my $merged = CPAN::Meta::Requirements->new;
-  for my $phase ( qw/runtime test build/ ) {
-    my $req = $prereqs->requirements_for($phase, 'requires');
-    $merged->add_requirements($req);
-  }
-  my $fallback = $merged->clear_requirement('perl')->as_string_hash;
+sub _dump_as {
+  my ($self, $ref, $name) = @_;
   require Data::Dumper;
-  my $dumper = Data::Dumper->new(
-    [ $fallback ],
-    [ '*FallbackPrereqs' ],
-  );
+  my $dumper = Data::Dumper->new( [ $ref ], [ $name ] );
   $dumper->Sortkeys( 1 );
   $dumper->Indent( 1 );
   $dumper->Useqq( 1 );
   return $dumper->Dump;
+}
+
+sub fallback_prereq_pm {
+  my $self = shift;
+  my $fallback
+    = $self->zilla->prereqs->merged_requires
+    ->clone
+    ->clear_requirement('perl')
+    ->as_string_hash;
+  return $self->_dump_as( $fallback, '*FallbackPrereqs' );
 }
 
 sub setup_installer {
@@ -249,14 +249,7 @@ sub setup_installer {
 
   my $perl_prereq = delete $write_makefile_args->{MIN_PERL_VERSION};
 
-  require Data::Dumper;
-  my $makefile_args_dumper = Data::Dumper->new(
-    [ $write_makefile_args ],
-    [ '*WriteMakefileArgs' ],
-  );
-  $makefile_args_dumper->Sortkeys( 1 );
-  $makefile_args_dumper->Indent( 1 );
-  $makefile_args_dumper->Useqq( 1 );
+  my $dumped_args = $self->_dump_as($write_makefile_args, '*WriteMakefileArgs');
 
   my $content = $self->fill_in_string(
     $template,
@@ -265,7 +258,7 @@ sub setup_installer {
       perl_prereq       => \$perl_prereq,
       share_dir_code    => $self->share_dir_code,
       fallback_prereqs  => \($self->fallback_prereq_pm),
-      WriteMakefileArgs => \($makefile_args_dumper->Dump),
+      WriteMakefileArgs => \$dumped_args,
     },
   );
 
