@@ -7,6 +7,7 @@ use Moose::Autobox;
 use namespace::autoclean;
 
 use Config;
+use CPAN::Meta::Requirements 2.121; # requirements_for_module
 use List::MoreUtils qw(any uniq);
 
 use Dist::Zilla::File::InMemory;
@@ -89,30 +90,12 @@ use ExtUtils::MakeMaker {{ $eumm_version }};
 
 my {{ $WriteMakefileArgs }}
 
-unless ( eval { ExtUtils::MakeMaker->VERSION(6.63_03) } ) {
-  my $tr = delete $WriteMakefileArgs{TEST_REQUIRES};
-  my $br = $WriteMakefileArgs{BUILD_REQUIRES};
-  for my $mod ( keys %$tr ) {
-    if ( exists $br->{$mod} ) {
-      $br->{$mod} = $tr->{$mod} if $tr->{$mod} > $br->{$mod};
-    }
-    else {
-      $br->{$mod} = $tr->{$mod};
-    }
-  }
-}
+my {{ $fallback_prereqs }}
 
-unless ( eval { ExtUtils::MakeMaker->VERSION(6.56) } ) {
-  my $br = delete $WriteMakefileArgs{BUILD_REQUIRES};
-  my $pp = $WriteMakefileArgs{PREREQ_PM};
-  for my $mod ( keys %$br ) {
-    if ( exists $pp->{$mod} ) {
-      $pp->{$mod} = $br->{$mod} if $br->{$mod} > $pp->{$mod};
-    }
-    else {
-      $pp->{$mod} = $br->{$mod};
-    }
-  }
+unless ( eval { ExtUtils::MakeMaker->VERSION(6.63_03) } ) {
+  delete $WriteMakefileArgs{TEST_REQUIRES};
+  delete $WriteMakefileArgs{BUILD_REQUIRES};
+  $WriteMakefileArgs{PREREQ_PM} = \%FallbackPrereqs;
 }
 
 delete $WriteMakefileArgs{CONFIGURE_REQUIRES}
@@ -237,6 +220,26 @@ sub write_makefile_args {
   return \%write_makefile_args;
 }
 
+sub _dump_as {
+  my ($self, $ref, $name) = @_;
+  require Data::Dumper;
+  my $dumper = Data::Dumper->new( [ $ref ], [ $name ] );
+  $dumper->Sortkeys( 1 );
+  $dumper->Indent( 1 );
+  $dumper->Useqq( 1 );
+  return $dumper->Dump;
+}
+
+sub fallback_prereq_pm {
+  my $self = shift;
+  my $fallback
+    = $self->zilla->prereqs->merged_requires
+    ->clone
+    ->clear_requirement('perl')
+    ->as_string_hash;
+  return $self->_dump_as( $fallback, '*FallbackPrereqs' );
+}
+
 sub setup_installer {
   my ($self, $arg) = @_;
 
@@ -246,14 +249,7 @@ sub setup_installer {
 
   my $perl_prereq = delete $write_makefile_args->{MIN_PERL_VERSION};
 
-  require Data::Dumper;
-  my $makefile_args_dumper = Data::Dumper->new(
-    [ $write_makefile_args ],
-    [ '*WriteMakefileArgs' ],
-  );
-  $makefile_args_dumper->Sortkeys( 1 );
-  $makefile_args_dumper->Indent( 1 );
-  $makefile_args_dumper->Useqq( 1 );
+  my $dumped_args = $self->_dump_as($write_makefile_args, '*WriteMakefileArgs');
 
   my $content = $self->fill_in_string(
     $template,
@@ -261,7 +257,8 @@ sub setup_installer {
       eumm_version      => \($self->eumm_version),
       perl_prereq       => \$perl_prereq,
       share_dir_code    => $self->share_dir_code,
-      WriteMakefileArgs => \($makefile_args_dumper->Dump),
+      fallback_prereqs  => \($self->fallback_prereq_pm),
+      WriteMakefileArgs => \$dumped_args,
     },
   );
 
