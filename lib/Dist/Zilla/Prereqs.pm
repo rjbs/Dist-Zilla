@@ -91,10 +91,13 @@ sub register_prereqs {
     $req->add_string_requirement($package, $version || 0);
   }
 
-  $self->sync_runtime_build_test_requires;
-
   return;
 }
+
+before 'finalize' => sub {
+  my ($self) = @_;
+  $self->sync_runtime_build_test_requires;
+};
 
 
 # this avoids a long-standing CPAN.pm bug that incorrectly merges runtime and

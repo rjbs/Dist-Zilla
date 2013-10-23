@@ -55,9 +55,10 @@ use Test::DZil;
         'source/dist.ini' => simple_ini(
           [ GatherDir => ],
           [ MetaJSON  => ],
-          [ Prereqs => RuntimeRequires  => { A => 2, B => 0 } ],
-          [ Prereqs => TestRequires     => { A => 1, B => 1 } ],
-          [ Prereqs => BuildRequires    => { A => 0, B => 2 } ],
+          [ Prereqs => RuntimeRequires  => { A => 2, B => 0, C => 2 } ],
+          [ Prereqs => TestRequires     => { A => 1, B => 1, C => 1 } ],
+          [ Prereqs => BuildRequires    => { A => 0, B => 2, C => 0 } ],
+          [ RemovePrereqs => { remove => [ qw(C) ] } ],
         ),
       },
     },
