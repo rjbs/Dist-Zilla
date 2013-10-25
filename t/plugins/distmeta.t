@@ -1,6 +1,7 @@
 use strict;
 use warnings;
 use Test::More 0.88;
+use utf8;
 
 use lib 't/lib';
 
@@ -144,6 +145,35 @@ use YAML::Tiny;
         "$key is what we want in 1.4 $type",
       );
     }
+  }
+}
+
+{ # non-ASCII
+  my $tzil = Builder->from_config(
+    { dist_root => 'corpus/dist/DZ-NonAscii' },
+  );
+
+  $tzil->build;
+
+  my @files = map {; $_->name } @{ $tzil->files };
+
+  my %meta;
+
+  my $json = $tzil->slurp_file('build/META.json');
+  $meta{json} = JSON->new->decode($json);
+
+  my $yaml = $tzil->slurp_file('build/META.yml');
+  $meta{yaml} = YAML::Tiny->new->read_string($yaml)->[0];
+
+  for my $type (qw(json yaml)) {
+    is_deeply(
+      $meta{$type}{author},
+      [
+        'Olivier Mengué <dolmen@example.org>',
+        '김도형 <keedi@example.com>'
+      ],
+      "authors ($type) are set as expected, decode properly",
+    );
   }
 }
 

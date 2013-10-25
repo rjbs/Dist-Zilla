@@ -1,6 +1,7 @@
 use strict;
 use warnings;
 use Test::More 0.88;
+use utf8;
 
 use lib 't/lib';
 
@@ -292,6 +293,20 @@ END_CHANGES
     $tzil->slurp_file('build/Changes'),
     qr{^0\.001 E\.X\. Ample <me\@example\.com>}m,
     "adding name and email from %Info works",
+  );
+}
+
+{
+  my $tzil = Builder->from_config(
+    { dist_root => 'corpus/dist/DZ-NonAscii' },
+  );
+
+  $tzil->build;
+
+  like(
+    $tzil->slurp_file('build/Changes'),
+    qr{Olivier Mengué},
+    "dolmen's name is unmangled",
   );
 }
 

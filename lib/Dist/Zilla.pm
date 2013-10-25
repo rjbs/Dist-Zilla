@@ -13,6 +13,7 @@ use Dist::Zilla::Types qw(License);
 
 use Log::Dispatchouli 1.100712; # proxy_loggers, quiet_fatal
 use Path::Class;
+use Path::Tiny;
 use List::Util qw(first);
 use Software::License 0.101370; # meta2_name
 use String::RewritePrefix;
@@ -540,7 +541,7 @@ has prereqs => (
   is   => 'ro',
   isa  => 'Dist::Zilla::Prereqs',
   init_arg => undef,
-  default  => sub { Dist::Zilla::Prereqs->new },
+  default  => sub { Dist::Zilla::Prereqs->new(zilla => $_[0]) },
   handles  => [ qw(register_prereqs) ],
 );
 
@@ -635,15 +636,7 @@ sub _write_out_file {
 
   Carp::croak("attempted to write $to multiple times") if -e $to;
 
-  open my $out_fh, '>', "$to" or die "couldn't open $to to write: $!";
-
-  # This is needed, or \n is translated to \r\n on win32.
-  # Maybe :raw:utf8 is needed, but not sure.
-  #     -- Kentnl - 2010-06-10
-  binmode( $out_fh , ":raw" );
-
-  print { $out_fh } $file->content;
-  close $out_fh or die "error closing $to: $!";
+  path("$to")->spew_raw( $file->encoded_content );
   chmod $file->mode, "$to" or die "couldn't chmod $to: $!";
 }
 

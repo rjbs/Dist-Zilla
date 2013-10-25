@@ -9,6 +9,7 @@ use MooseX::Types::Path::Class qw(Dir File);
 
 use File::pushd ();
 use Path::Class;
+use Path::Tiny; # because more Path::* is better, eh?
 use Try::Tiny;
 
 use namespace::autoclean;
@@ -291,9 +292,10 @@ sub build_in {
 
   $self->log("beginning to build " . $self->name);
 
-  $_->gather_files     for $self->plugins_with(-FileGatherer)->flatten;
-  $_->prune_files      for $self->plugins_with(-FilePruner)->flatten;
-  $_->munge_files      for $self->plugins_with(-FileMunger)->flatten;
+  $_->gather_files       for $self->plugins_with(-FileGatherer)->flatten;
+  $_->set_file_encodings for $self->plugins_with(-EncodingProvider)->flatten;
+  $_->prune_files        for $self->plugins_with(-FilePruner)->flatten;
+  $_->munge_files        for $self->plugins_with(-FileMunger)->flatten;
 
   $_->register_prereqs for $self->plugins_with(-PrereqSource)->flatten;
 
@@ -456,15 +458,9 @@ sub _build_archive {
     }
 
     my $filename = $built_in->file( $distfile->name );
-    my $content = do {
-      use autodie;
-      local $/;
-      open my $fh, '<', $filename;
-      <$fh>;
-    };
     $archive->add_data(
       $basedir->file( $distfile->name ),
-      $content,
+      path($filename)->slurp_raw,
       { mode => (stat $filename)[2] & ~022 },
     );
   }

@@ -15,7 +15,7 @@ L<Data::Section|Data::Section>.
 =cut
 
 use Sub::Exporter::ForMethods;
-use Data::Section 0.200001 # encoding and bytes
+use Data::Section 0.200002 # encoding and bytes
   { installer => Sub::Exporter::ForMethods::method_installer },
   '-setup' => { encoding => 'bytes' };
 use Dist::Zilla::File::InMemory;

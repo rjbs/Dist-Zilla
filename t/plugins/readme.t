@@ -1,6 +1,7 @@
 use strict;
 use warnings;
 use Test::More 0.88;
+use utf8;
 
 use lib 't/lib';
 
@@ -38,6 +39,22 @@ like(
   qr{\Q$name\E},
   "dist name appears in README",
 );
+
+{
+  my $tzil = Builder->from_config(
+    { dist_root => 'corpus/dist/DZ-NonAscii' },
+  );
+
+  $tzil->build;
+
+  my $contents = $tzil->slurp_file('build/README');
+
+  like(
+    $contents,
+    qr{ภูมิพลอดุลยเดช},
+    "HRH unmangled in README",
+  );
+}
 
 done_testing;
 

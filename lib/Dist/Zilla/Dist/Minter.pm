@@ -113,9 +113,10 @@ sub mint_dist {
     $minter->make_module({ name => $module->{name} })
   }
 
-  $_->gather_files for $self->plugins_with(-FileGatherer)->flatten;
-  $_->prune_files  for $self->plugins_with(-FilePruner)->flatten;
-  $_->munge_files  for $self->plugins_with(-FileMunger)->flatten;
+  $_->gather_files       for $self->plugins_with(-FileGatherer)->flatten;
+  $_->set_file_encodings for $self->plugins_with(-EncodingProvider)->flatten;
+  $_->prune_files        for $self->plugins_with(-FilePruner)->flatten;
+  $_->munge_files        for $self->plugins_with(-FileMunger)->flatten;
 
   $self->_check_dupe_files;
 
