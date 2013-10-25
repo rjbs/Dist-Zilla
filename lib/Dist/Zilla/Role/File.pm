@@ -7,7 +7,8 @@ use Try::Tiny;
 
 use namespace::autoclean;
 
-with 'Dist::Zilla::Role::StubBuild';
+with 'Dist::Zilla::Role::StubBuild',
+    'Dist::Zilla::Role::File::ModuleMetadata';
 
 =head1 DESCRIPTION
 

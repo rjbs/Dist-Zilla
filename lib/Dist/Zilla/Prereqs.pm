@@ -3,6 +3,7 @@ package Dist::Zilla::Prereqs;
 use Moose;
 use Moose::Autobox;
 use MooseX::Types::Moose qw(Bool HashRef);
+use Moose::Util::TypeConstraints;
 
 use CPAN::Meta::Prereqs 2.120630; # add_string_requirement
 use Path::Class ();
@@ -97,6 +98,7 @@ sub register_prereqs {
 before 'finalize' => sub {
   my ($self) = @_;
   $self->sync_runtime_build_test_requires;
+  $self->strip_provided_prereqs;
 };
 
 
@@ -120,6 +122,36 @@ sub sync_runtime_build_test_requires {
       $req->add_string_requirement(
         $mod => $self->merged_requires->requirements_for_module($mod)
       );
+    }
+  }
+
+  return;
+}
+
+has zilla => (
+  is  => 'ro',
+  isa => class_type('Dist::Zilla'),
+  required => 1,
+  weak_ref => 1,
+);
+
+# remove all prereqs (except 'develop') that correspond to packages that are
+# provided by this dist
+sub strip_provided_prereqs
+{
+  my ($self) = @_;
+
+  my @packages = map { $_->module_metadata->packages_inside }
+    @{$self->zilla->find_files(':InstallModules')};
+
+  my @phases = qw(configure build test runtime);
+  my @types  = qw(requires recommends suggests conflicts);
+
+  for my $p (@phases) {
+    for my $t (@types) {
+       for my $m (@packages) {
+         $self->requirements_for($p, $t)->clear_requirement($m);
+      }
     }
   }
 

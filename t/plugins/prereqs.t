@@ -87,6 +87,43 @@ use Test::DZil;
   );
 }
 
+# test that we don't inadvertently allow a plugin to inject a prereq on
+# something that is provided by our own dist
+{
+  my $tzil = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/dist.ini' => simple_ini(
+          [ GatherDir => ],
+          [ MetaJSON  => ],
+          [ Prereqs => TestRequires  => { A => 2, 'DZT::Sample' => 1 } ],
+          [ Prereqs => RuntimeRequires  => { B => 1, 'DZT::Sample_2' => 1 } ],
+        ),
+      },
+    },
+  );
+
+  $tzil->build;
+
+  my $json = $tzil->slurp_file('build/META.json');
+
+  my $meta = JSON->new->decode($json);
+
+  is_deeply(
+    $meta->{prereqs},
+    {
+      test => {
+        requires   => { A => 2 },
+      },
+      runtime => {
+        requires   => { B => 1 },
+      },
+    },
+    "prereqs are stripped of packages provided by our own modules",
+  );
+}
+
 {
   my $tzil = Builder->from_config(
     { dist_root => 'corpus/dist/DZT' },

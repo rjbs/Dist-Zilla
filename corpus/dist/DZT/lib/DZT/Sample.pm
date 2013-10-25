@@ -7,4 +7,6 @@ sub return_arrayref_of_values_passed {
   return \@_;
 }
 
+package DZT::Sample_2;
+
 1;
