@@ -41,6 +41,22 @@ sub foo { }
 1;
 ';
 
+my $with_multi_line_abstract = '
+
+package DZT::MLA;
+
+=head1 NAME
+
+DZT::MLA - This abstract spans
+multiple lines.
+
+=cut
+
+sub foo { }
+
+1;
+';
+
 my $script = '
 #!/usr/bin/perl
 
@@ -59,6 +75,7 @@ my $tzil = Builder->from_config(
     add_files => {
       'source/lib/DZT/WPFP.pm' => $with_place_for_pod,
       'source/lib/DZT/WVer.pm' => $with_version,
+      'source/lib/DZT/MLA.pm' => $with_multi_line_abstract,
       'source/bin/script.pl'   => $script,
       'source/dist.ini' => simple_ini('GatherDir', 'PodVersion', 'ExecDir'),
     },
@@ -68,6 +85,19 @@ my $tzil = Builder->from_config(
 $tzil->build;
 
 my $want = <<'END_POD';
+=head1 VERSION
+
+version 0.001
+
+=cut
+END_POD
+
+my $want_mla = <<'END_POD';
+=head1 NAME
+
+DZT::MLA - This abstract spans
+multiple lines.
+
 =head1 VERSION
 
 version 0.001
@@ -91,6 +121,12 @@ my $dzt_wver = $tzil->slurp_file('build/lib/DZT/WVer.pm');
 ok(
   index($dzt_wver, $want) == -1,
   "we didn't add version pod to WVer; it has one already",
+);
+
+my $dzt_mla = $tzil->slurp_file('build/lib/DZT/MLA.pm');
+ok(
+  index($dzt_mla, $want_mla) > 0,
+  "we properly skipped over multi-line abstract",
 );
 
 my $dzt_script = $tzil->slurp_file('build/bin/script.pl');
