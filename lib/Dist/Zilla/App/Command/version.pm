@@ -3,6 +3,8 @@ use warnings;
 
 package Dist::Zilla::App::Command::version;
 use Dist::Zilla::App -command;
+use Moose;
+extends 'App::Cmd::Command::version';
 
 # ABSTRACT: display dzil's version
 
@@ -14,25 +16,11 @@ Print dzil version
 
 =cut
 
-sub command_names { qw/version --version/ }
-
 sub version_for_display {
-  $_[0]->version_package->VERSION
-}
-
-sub version_package {
-  ref($_[0]->app)
-}
-
-sub execute {
-  my ($self, $opts, $args) = @_;
-  my $ver = $self->version_for_display;
-
-  my $version = ( $ver ? $ver : "dev" );
-
-  printf "%s (%s) version %s (%s)\n",
-    $self->app->arg0, $self->version_package,
-    $version, $self->app->full_arg0;
+  my $version_pkg = $_[0]->version_package;
+  my $version = ( $version_pkg->VERSION ?
+                  $version_pkg->VERSION :
+                 'dev' );
 }
 
 1;
