@@ -2,6 +2,10 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+5.002     2013-10-29 10:35:54 America/New_York
+        [THIS RELEASE MIGHT BREAK YOUR BUILD]
+        - perform encoding steps during listdeps
+
 5.001     2013-10-23 17:40:09 America/New_York
         [THIS RELEASE MIGHT BREAK YOUR BUILD]
         - typo fixes (thanks, David Steinbrunner)
