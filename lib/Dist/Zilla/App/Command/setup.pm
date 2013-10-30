@@ -106,6 +106,7 @@ sub execute {
       "What is your PAUSE password? ",
       {
         check   => sub { defined $_[0] and length $_[0] },
+        noecho  => 1,
       },
     );
   }
