@@ -642,7 +642,7 @@ sub install {
 
   if ($@) {
     $self->log($@);
-    $self->log("left failed dist in place at $target");
+    $self->log_fatal("left failed dist in place at $target");
   } else {
     $self->log("all's well; removing $target");
     $target->rmtree;
