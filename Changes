@@ -2,6 +2,12 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+5.003     2013-10-30 08:02:59 America/New_York
+        [THIS RELEASE MIGHT BREAK YOUR BUILD]
+        - add "dzil --version" support (thanks, Upasana Shukla)
+        - fix boneheaded mistake that broke listdeps in 5.002 (thanks, Karen
+          Etheridge)
+
 5.002     2013-10-29 10:35:54 America/New_York
         [THIS RELEASE MIGHT BREAK YOUR BUILD]
         - perform encoding steps during listdeps
