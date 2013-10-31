@@ -45,7 +45,7 @@ has time_zone => (
 has format => (
   is  => 'ro',
   isa => 'Str', # should be more validated Later -- rjbs, 2008-06-05
-  default => '%-9v %{yyyy-MM-dd HH:mm:ss VVVV}d',
+  default => '%-9v %{yyyy-MM-dd HH:mm:ss VVVV}d%{ (TRIAL RELEASE)}T',
 );
 
 has filename => (

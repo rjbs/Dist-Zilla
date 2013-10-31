@@ -170,6 +170,31 @@ END_CHANGES
       add_files => {
         'source/Changes' => $changes,
         'source/dist.ini' => simple_ini(
+          qw(GatherDir NextRelease FakeRelease)
+        ),
+      },
+    },
+  );
+
+  $tzil_trial->build;
+
+  like(
+    $tzil_trial->slurp_file('build/Changes'),
+    # not using /m here because it stinks on 5.8.8
+    qr{0\.001 .+ \(TRIAL RELEASE\)},
+    "adding -TRIAL works",
+  );
+}
+
+{
+  local $ENV{TRIAL} = 1;
+
+  my $tzil_trial = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/Changes' => $changes,
+        'source/dist.ini' => simple_ini(
                 'GatherDir',
                 [ NextRelease => { format => "%v%T", } ],
                 'FakeRelease',
