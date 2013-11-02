@@ -1,6 +1,11 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        [THIS RELEASE MIGHT BREAK YOUR BUILD]
+        - stable release of all the v5 changes below; READ THEM!
+        - by default, NextRelease now adds a trial release marker on trial
+          releases
+        - dzil setup will not echo password during setup
 
 5.003     2013-10-30 08:02:59 America/New_York
         [THIS RELEASE MIGHT BREAK YOUR BUILD]
