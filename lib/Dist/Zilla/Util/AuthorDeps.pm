@@ -29,6 +29,7 @@ sub extract_author_deps {
     unless -e $ini;
 
   my $fh = $ini->openr;
+  binmode($fh, ":encoding(UTF-8)");
 
   require Config::INI::Reader;
   my $config = Config::INI::Reader->read_handle($fh);
@@ -86,8 +87,8 @@ sub extract_author_deps {
 
   # Move inc:: first in list as they may impact the loading of other
   # plugins (in particular local ones).
-  # Also order inc:: so that thoses that want to hack @INC with inc:: plugins
-  # can have a consistant playground.
+  # Also order inc:: so that those that want to hack @INC with inc:: plugins
+  # can have a consistent playground.
   # We don't sort the others packages to preserve the same (random) ordering
   # for the common case (no inc::, no '; authordep') as in previous dzil
   # releases.

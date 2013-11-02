@@ -19,16 +19,22 @@ has logger => (
   isa => 'Log::Dispatchouli',
   init_arg => undef,
   writer   => '_set_logger',
-  default  => sub {
-    Log::Dispatchouli->new({
+  lazy_build => 1,
+);
+
+sub _build_logger {
+  my $self = shift;
+  my $layer = sprintf(":encoding(%s)", $self->term_enc);
+  binmode( STDOUT, $layer );
+  binmode( STDERR, $layer );
+  return Log::Dispatchouli->new({
       ident     => 'Dist::Zilla',
       to_stdout => 1,
       log_pid   => 0,
       to_self   => ($ENV{DZIL_TESTING} ? 1 : 0),
       quiet_fatal => 'stdout',
-    });
-  }
-);
+  });
+}
 
 has term_ui => (
   is   => 'ro',
@@ -41,14 +47,15 @@ has term_ui => (
   },
 );
 
-sub decode_utf8 ($;$)
-{
-    require Encode;
-    no warnings 'redefine';
-    *decode_utf8 = \&Encode::decode_utf8;
-    goto \&decode_utf8;
-}
-
+has term_enc => (
+  is   => 'ro',
+  isa =>'Str',
+  lazy => 1,
+  default => sub {
+    require Term::Encoding;
+    return Term::Encoding::get_encoding();
+  },
+);
 
 sub prompt_str {
   my ($self, $prompt, $arg) = @_;
@@ -56,14 +63,20 @@ sub prompt_str {
   my $default = $arg->{default};
   my $check   = $arg->{check};
 
+  require Encode;
+  my $term_enc = $self->term_enc;
+
   if ($arg->{noecho}) {
     require Term::ReadKey;
     Term::ReadKey::ReadMode('noecho');
   }
   my $input_bytes = $self->term_ui->get_reply(
-    prompt => $prompt,
+    prompt => Encode::encode($term_enc, $prompt, Encode::FB_CROAK()),
     allow  => $check || sub { defined $_[0] and length $_[0] },
-    (defined $default ? (default => $default) : ()),
+    (defined $default
+      ? (default => Encode::encode($term_enc, $default, Encode::FB_CROAK()))
+      : ()
+    ),
   );
   if ($arg->{noecho}) {
     Term::ReadKey::ReadMode('normal');
@@ -72,7 +85,7 @@ sub prompt_str {
     print "\n";
   }
 
-  my $input = decode_utf8( $input_bytes );
+  my $input = Encode::decode($term_enc, $input_bytes, Encode::FB_CROAK());
   chomp $input;
 
   return $input;

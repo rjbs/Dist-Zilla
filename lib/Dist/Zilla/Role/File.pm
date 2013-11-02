@@ -3,8 +3,11 @@ package Dist::Zilla::Role::File;
 use Moose::Role;
 
 use Moose::Util::TypeConstraints;
+use Try::Tiny;
 
 use namespace::autoclean;
+
+with 'Dist::Zilla::Role::StubBuild';
 
 =head1 DESCRIPTION
 
@@ -32,6 +35,8 @@ L<FileInjector|Dist::Zilla::Role::FileInjector> role.
 
 has added_by => (
   is => 'ro',
+  writer => '_set_added_by',
+  isa => 'Str',
 );
 
 =attr mode
@@ -53,6 +58,46 @@ has mode => (
   default => 0644,
 );
 
+requires 'encoding';
 requires 'content';
+requires 'encoded_content';
+
+sub _encode {
+  my ($self, $text) = @_;
+  my $enc = $self->encoding;
+  if ( $enc eq 'bytes' ) {
+    return $text; # XXX hope you were right that it really was bytes
+  }
+  else {
+    require Encode;
+    my $bytes =
+      try { Encode::encode($enc, $text, Encode::FB_CROAK()) }
+      catch { $self->_throw("encode $enc" => $_) };
+    return $bytes;
+  }
+}
+
+sub _decode {
+  my ($self, $bytes) = @_;
+  my $enc = $self->encoding;
+  if ( $enc eq 'bytes' ) {
+    $self->_throw(decode => "Can't decode text from 'bytes' encoding");
+  }
+  else {
+    require Encode;
+    my $text =
+      try { Encode::decode($enc, $bytes, Encode::FB_CROAK()) }
+      catch { $self->_throw("decode $enc" => $_) };
+    return $text;
+  }
+}
+
+sub _throw {
+  my ($self, $op, $msg) = @_;
+  my ($name, $added_by) = map {; $self->$_ } qw/name added_by/;
+  confess(
+    "Could not $op $name; $added_by; error was: $msg"
+  );
+}
 
 1;

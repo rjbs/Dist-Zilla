@@ -25,8 +25,7 @@ sub add_file {
   my ($self, $file) = @_;
   my ($pkg, undef, $line) = caller;
 
-  $file->meta->get_attribute('added_by')->set_value(
-    $file,
+  $file->_set_added_by(
     sprintf("%s (%s line %s)", $self->plugin_name, $pkg, $line),
   );
 

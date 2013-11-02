@@ -9,6 +9,7 @@ use namespace::autoclean;
 use autodie;
 use Moose::Autobox;
 use Dist::Zilla::File::FromCode;
+use Path::Tiny;
 
 =head1 DESCRIPTION
 
@@ -28,11 +29,7 @@ in building existing dists, too.
 sub _file_from_filename {
   my ($self, $filename) = @_;
 
-  my $template = do {
-    open my $fh, '<', $filename;
-    local $/;
-    <$fh>;
-  };
+  my $template = path($filename)->slurp_utf8;
 
   return Dist::Zilla::File::FromCode->new({
     name => $filename,

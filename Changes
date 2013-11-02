@@ -2,8 +2,33 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
         [THIS RELEASE MIGHT BREAK YOUR BUILD]
+        - stable release of all the v5 changes below; READ THEM!
+        - by default, NextRelease now adds a trial release marker on trial
+          releases
+        - dzil setup will not echo password during setup
+
+5.003     2013-10-30 08:02:59 America/New_York
+        [THIS RELEASE MIGHT BREAK YOUR BUILD]
+        - add "dzil --version" support (thanks, Upasana Shukla)
+        - fix boneheaded mistake that broke listdeps in 5.002 (thanks, Karen
+          Etheridge)
+
+5.002     2013-10-29 10:35:54 America/New_York
+        [THIS RELEASE MIGHT BREAK YOUR BUILD]
+        - perform encoding steps during listdeps
+
+5.001     2013-10-23 17:40:09 America/New_York
+        [THIS RELEASE MIGHT BREAK YOUR BUILD]
+        - typo fixes (thanks, David Steinbrunner)
+
+5.000     2013-10-20 08:10:02 America/New_York
+        [THIS RELEASE MIGHT BREAK YOUR BUILD]
+        - all files now have content, encoded_content, and encoding attributes
+        - the Encoding plugin and EncodingProvider role have been added to
+          allow you to set the encoding on files; the default is UTF-8
         - config.ini is assumed to be in UTF-8
         - Data::Section sections are assumed to be UTF-8
+        - the Term chrome should encode input and output
 
 4.300039  2013-09-20 06:05:10 Asia/Tokyo
         - tweak metafile generator to keep CPAN::Meta validator happy (thanks,

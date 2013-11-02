@@ -7,6 +7,7 @@ use Dist::Zilla::File::FromCode;
 
 use Moose::Autobox 0.10; # for ->each_value
 use MooseX::Types::Moose qw(ArrayRef Str);
+use Path::Tiny;
 
 use namespace::autoclean;
 
@@ -67,12 +68,7 @@ sub gather_files {
   $self->append_file->each_value(sub {
     my $fn = $self->zilla->root->file($_);
 
-    $postlude .= do {
-      use autodie;
-      local $/;
-      open my $fh, '<', $fn;
-      <$fh>;
-    };
+    $postlude .= path($fn)->slurp_utf8;
   });
 
   my $code = sub {

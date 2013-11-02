@@ -47,6 +47,15 @@ has cpan_meta_prereqs => (
   ) ],
 );
 
+# storing this is sort of gross, but MakeMaker winds up needing the same data
+# anyway. -- xdg, 2013-10-22
+has merged_requires => (
+  is => 'ro',
+  isa => 'CPAN::Meta::Requirements',
+  init_arg => undef,
+  default => sub { CPAN::Meta::Requirements->new },
+);
+
 =method register_prereqs
 
   $prereqs->register_prereqs(%prereqs);
@@ -80,6 +89,38 @@ sub register_prereqs {
 
   while (my ($package, $version) = each %prereq) {
     $req->add_string_requirement($package, $version || 0);
+  }
+
+  return;
+}
+
+before 'finalize' => sub {
+  my ($self) = @_;
+  $self->sync_runtime_build_test_requires;
+};
+
+
+# this avoids a long-standing CPAN.pm bug that incorrectly merges runtime and
+# "build" (build+test) requirements by ensuring requirements stay unified
+# across all three phases
+sub sync_runtime_build_test_requires {
+  my $self = shift;
+
+  # first pass: generated merged requirements
+  for my $phase ( qw/runtime build test/ ) {
+    my $req = $self->requirements_for($phase, 'requires');
+    $self->merged_requires->add_requirements( $req );
+  };
+
+  # second pass: update from merged requirements
+  for my $phase ( qw/runtime build test/ ) {
+    my $req = $self->requirements_for($phase, 'requires');
+    for my $mod ( $req->required_modules ) {
+      $req->clear_requirement( $mod );
+      $req->add_string_requirement(
+        $mod => $self->merged_requires->requirements_for_module($mod)
+      );
+    }
   }
 
   return;
