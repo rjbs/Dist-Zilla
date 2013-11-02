@@ -2,6 +2,9 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+5.005     2013-11-02 16:32:04 America/New_York
+        - add --keep-build-dir to "dzil test" and "dzil install"
+
 5.004     2013-11-02 09:59:18 America/New_York
         [THIS RELEASE MIGHT BREAK YOUR BUILD]
         - stable release of all the v5 changes below; READ THEM!
