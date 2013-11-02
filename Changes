@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+5.004     2013-11-02 09:59:18 America/New_York
         [THIS RELEASE MIGHT BREAK YOUR BUILD]
         - stable release of all the v5 changes below; READ THEM!
         - by default, NextRelease now adds a trial release marker on trial
