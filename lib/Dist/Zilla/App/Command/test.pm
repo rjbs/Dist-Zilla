@@ -31,7 +31,8 @@ sub opt_spec {
   [ 'release'   => 'enables the RELEASE_TESTING env variable', { default => 0 } ],
   [ 'automated' => 'enables the AUTOMATED_TESTING env variable', { default => 0 } ],
   [ 'author!' => 'enables the AUTHOR_TESTING env variable (default behavior)', { default => 1 } ],
-  [ 'all' => 'enables the RELEASE_TESTING, AUTOMATED_TESTING and AUTHOR_TESTING env variables', { default => 0 } ]
+  [ 'all' => 'enables the RELEASE_TESTING, AUTOMATED_TESTING and AUTHOR_TESTING env variables', { default => 0 } ],
+  [ 'keep-build-dir|keep' => 'keep the build directory even after a success' ],
 }
 
 =head1 OPTIONS
@@ -63,7 +64,11 @@ sub execute {
   local $ENV{AUTHOR_TESTING} = 1 if $opt->author or $opt->all;
   local $ENV{AUTOMATED_TESTING} = 1 if $opt->automated or $opt->all;
 
-  $self->zilla->test;
+  $self->zilla->test({
+    $opt->keep_build_dir
+      ? (keep_build_dir => 1)
+      : (),
+  });
 }
 
 1;

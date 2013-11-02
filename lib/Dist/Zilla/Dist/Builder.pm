@@ -612,6 +612,8 @@ subdir and an installer will be run.
 
 Valid arguments are:
 
+  keep_build_dir  - if true, don't rmtree the build dir, even if everything
+                    seemed to work
   install_command - the command to run in the subdir to install the dist
                     default (roughly): $^X -MCPAN -einstall .
 
@@ -640,9 +642,13 @@ sub install {
     $self->log($@);
     $self->log("left failed dist in place at $target");
   } else {
-    $self->log("all's well; removing $target");
-    $target->rmtree;
-    $latest->remove if $latest;
+    if ($arg->{keep_build_dir}) {
+      $self->log("all's well; left dist in place at $target");
+    } else {
+      $self->log("all's well; removing $target");
+      $target->rmtree;
+      $latest->remove if $latest;
+    }
   }
 
   return;
@@ -650,21 +656,31 @@ sub install {
 
 =method test
 
-  $zilla->test;
+  $zilla->test(\%arg);
 
 This method builds a new copy of the distribution and tests it using
 C<L</run_tests_in>>.
 
+C<\%arg> may be omitted.  Otherwise, valid arguments are:
+
+  keep_build_dir  - if true, don't rmtree the build dir, even if everything
+                    seemed to work
+
 =cut
 
 sub test {
-  my ($self) = @_;
+  my ($self, $arg) = @_;
 
   Carp::croak("you can't test without any TestRunner plugins")
     unless my @testers = $self->plugins_with(-TestRunner)->flatten;
 
   my ($target, $latest) = $self->ensure_built_in_tmpdir;
   my $error  = $self->run_tests_in($target);
+
+  if ($arg and $arg->{keep_build_dir}) {
+    $self->log("all's well; left dist in place at $target");
+    return;
+  }
 
   $self->log("all's well; removing $target");
   $target->rmtree;
