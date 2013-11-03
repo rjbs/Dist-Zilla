@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - document the use of filefinders in [PkgVersion], and remove
+          filtering out of .t, .pod files
 
 5.012     2014-01-15 09:58:00-05:00 America/New_York
         - when handling a multi-line abstract, fold the lines on whitespace;

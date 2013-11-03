@@ -74,6 +74,19 @@ my $script_pkg = '
 package DZT::Script;
 ';
 
+my $pod_with_pkg = '
+package DZT::PodWithPackage;
+=pod
+
+=cut
+';
+
+my $pod_no_pkg = '
+=pod
+
+=cut
+';
+
 my $tzil = Builder->from_config(
   { dist_root => 'corpus/dist/DZT' },
   {
@@ -85,6 +98,8 @@ my $tzil = Builder->from_config(
       'source/lib/DZT/R1.pm'     => $repeated_packages,
       'source/lib/DZT/Monkey.pm' => $monkey_patched,
       'source/lib/DZT/HideMe.pm' => $hide_me_comment,
+      'source/lib/DZT/PodWithPackage.pm' => $pod_with_pkg,
+      'source/lib/DZT/PodNoPackage.pm' => $pod_no_pkg,
       'source/bin/script_pkg.pl' => $script_pkg,
       'source/bin/script_ver.pl' => $script_pkg . "our \$VERSION = 1.234;\n",
       'source/bin/script.pl'     => $script,
@@ -187,6 +202,20 @@ unlike(
   $dzt_hideme,
   qr{\$DZT::TP2::VERSION},
   "no version for DZT::TP2 when it was hidden with a comment"
+);
+
+my $dzt_podwithpackage = $tzil->slurp_file('build/lib/DZT/PodWithPackage.pm');
+like(
+  $dzt_podwithpackage,
+  qr{^\s*\$\QDZT::PodWithPackage::VERSION = '0.001';\E\s*$}m,
+  "added version to DZT::PodWithPackage",
+);
+
+my $dzt_podnopackage = $tzil->slurp_file('build/lib/DZT/PodNoPackage.pm');
+unlike(
+  $dzt_podnopackage,
+  qr{VERSION},
+  "no version for pod files with no package declaration"
 );
 
 {
