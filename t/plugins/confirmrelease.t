@@ -2,8 +2,7 @@ use strict;
 use warnings;
 use Test::More 0.88;
 use Test::Fatal;
-
-use lib 't/lib';
+use Test::Deep;
 
 use Test::DZil;
 
@@ -71,8 +70,8 @@ for my $yes (qw(y yes)) {
   );
 }
 
-my $prompt = "*** Preparing to release DZT-Sample-0.001.tar.gz with FakeRelease ***\n"
-           . "Do you want to continue the release process?";
+
+my $prompt = "Do you want to continue the release process?";
 
 for my $no (qw(n no)) {
   my $tzil = new_tzil;
@@ -84,6 +83,12 @@ for my $no (qw(n no)) {
     $release_aborted,
     "ConfirmRelease aborts when answering '$no'",
   );
+
+  cmp_deeply(
+    $tzil->log_messages,
+    supersetof("[ConfirmRelease] *** Preparing to release DZT-Sample-0.001.tar.gz with FakeRelease ***"),
+    'supplementary information was also displayed',
+  ) or diag explain $tzil->log_messages;
 
   ok(!release_happened($tzil), "release did not happen when answering '$no'");
 }
@@ -98,6 +103,12 @@ for my $yes (qw(y yes)) {
     undef,
     "ConfirmRelease no exception when answering '$yes'",
   );
+
+  cmp_deeply(
+    $tzil->log_messages,
+    supersetof("[ConfirmRelease] *** Preparing to release DZT-Sample-0.001.tar.gz with FakeRelease ***"),
+    'supplementary information was also displayed',
+  ) or diag explain $tzil->log_messages;
 
   ok(release_happened($tzil), "answering '$yes' allows release");
 }
