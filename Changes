@@ -1,6 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - add ->is_bytes to files; shortcut for ->encoding eq 'bytes'
+          (thanks, David Golden)
+        - AutoPrereqs will not try scanning binary files (thanks, David Golden)
 
 5.005     2013-11-02 16:32:04 America/New_York
         - add --keep-build-dir to "dzil test" and "dzil install"
