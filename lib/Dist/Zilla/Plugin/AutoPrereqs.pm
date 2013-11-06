@@ -140,6 +140,8 @@ sub register_prereqs {
     my $files = $self->$method;
 
     foreach my $file (@$files) {
+      # skip binary files
+      next if $file->is_bytes;
       # parse only perl files
       next unless $file->name =~ /\.(?:pm|pl|t|psgi)$/i
                || $file->content =~ /^#!(?:.*)perl(?:$|\s)/;
