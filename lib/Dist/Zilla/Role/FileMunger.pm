@@ -31,7 +31,7 @@ sub munge_files {
     unless $self->can('munge_file');
 
   $self->munge_file($_)
-    for grep { $_->encoding ne 'bytes' } $self->zilla->files->flatten;
+    for grep { ! $_->is_bytes } $self->zilla->files->flatten;
 }
 
 1;
