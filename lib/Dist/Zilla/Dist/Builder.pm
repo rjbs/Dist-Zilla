@@ -724,7 +724,7 @@ non-zero, the directory will be left in place.
 =cut
 
 sub run_in_build {
-  my ($self, $cmd) = @_;
+  my ($self, $cmd, $arg) = @_;
 
   # The sort below is a cheap hack to get ModuleBuild ahead of
   # ExtUtils::MakeMaker. -- rjbs, 2010-01-05
@@ -740,6 +740,12 @@ sub run_in_build {
   # building the dist for real
   my $ok = eval {
     my $wd = File::pushd::pushd($target);
+
+    if ($arg and exists $arg->{build} and ! $arg->{build}) {
+      system(@$cmd) and die "error while running: @$cmd";
+      return 1;
+    }
+
     $builders[0]->build;
 
     local $ENV{PERL5LIB} = join $Config::Config{path_sep},
