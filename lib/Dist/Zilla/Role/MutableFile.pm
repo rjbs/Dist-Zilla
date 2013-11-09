@@ -25,8 +25,17 @@ has encoding => (
   isa         => 'Str',
   lazy        => 1,
   default     => 'UTF-8',
+  predicate   => '_has_encoding',
   traits      => [ qw(SetOnce) ],
 );
+
+sub has_encoding {
+  my $self = shift;
+
+  # If the content source is 'content', then calling ->encoded_content
+  # will set the encoding.  So we'll pretend that it's already set.
+  return $self->_has_encoding || $self->_content_source eq 'content';
+}
 
 =attr content
 

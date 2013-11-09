@@ -4,6 +4,7 @@ Revision history for {{$dist->name}}
         - add the ability to say "dzil run --no-build" to run a command without
           building inside the dist dir
           (in other words, no `perl Makefile.PL && make`)
+        - add ->has_encoding to files (thanks, Christopher J. Madsen)
         - Archive::Tar::Wrapper added as a recommended prereq
 
 5.006     2013-11-06 09:21:12 America/New_York

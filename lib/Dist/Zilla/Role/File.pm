@@ -59,6 +59,7 @@ has mode => (
 );
 
 requires 'encoding';
+requires 'has_encoding';
 requires 'content';
 requires 'encoded_content';
 
