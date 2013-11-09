@@ -90,14 +90,12 @@ is_filelist(
 );
 
 # XXX I don't use sharedir, how do I configure it? --apocal
-# disabled for now because DZ::Tester doesn't allow sharedir finder to work...
-# Can't locate object method "zilla" via package "Dist::Zilla::Tester::_Builder" at blib/lib/Dist/Zilla/Dist/Builder.pm line 114.
-#$files = $tzil->find_files(':ShareFiles');
-#is_filelist(
-#  [ map {; $_->name } @$files ],
-#  [  ],
-#  "ShareFiles finds all files",
-#);
+$files = $tzil->find_files(':ShareFiles');
+is_filelist(
+  [ map {; $_->name } @$files ],
+  [  ],
+  "ShareFiles finds all files",
+);
 
 done_testing;
 
