@@ -744,7 +744,8 @@ sub run_tests_in {
   $zilla->run_in_build( \@cmd );
 
 This method makes a temporary directory, builds the distribution there,
-executes the dist's first L<BuildRunner|Dist::Zilla::Role::BuildRunner>, and
+executes all the dist's L<BuildRunner|Dist::Zilla::Role::BuildRunner>s
+(unless directed not to, via C<< $arg->{build} = 0 >>), and
 then runs the given command in the build directory.  If the command exits
 non-zero, the directory will be left in place.
 
@@ -753,10 +754,9 @@ non-zero, the directory will be left in place.
 sub run_in_build {
   my ($self, $cmd, $arg) = @_;
 
-  # The sort below is a cheap hack to get ModuleBuild ahead of
-  # ExtUtils::MakeMaker. -- rjbs, 2010-01-05
   $self->log_fatal("you can't build without any BuildRunner plugins")
-    unless my @builders = reverse sort @{ $self->plugins_with(-BuildRunner) };
+    unless ($arg and exists $arg->{build} and ! $arg->{build})
+        or @{ $self->plugins_with(-BuildRunner) };
 
   require "Config.pm"; # skip autoprereq
 
@@ -772,7 +772,7 @@ sub run_in_build {
       return 1;
     }
 
-    $_->build for @builders;
+    $self->ensure_blib;
 
     local $ENV{PERL5LIB} = join $Config::Config{path_sep},
       (map { $abstarget->subdir('blib', $_) } qw(arch lib)),
@@ -794,6 +794,27 @@ sub run_in_build {
     my $error = $@ || '(unknown error)';
     $self->log($error);
     $self->log_fatal("left failed dist in place at $target");
+  }
+}
+
+=method ensure_blib
+
+  $zilla->ensure_blib();
+
+Ensures that a F<blib> directory exists in the build, by invoking all
+C<-BuildRunner> plugins to generate it.  Useful for commands that operate on
+F<blib>, such as C<test> or C<run>.
+
+=cut
+
+sub ensure_blib {
+  my ($self) = @_;
+
+  unless ( -d 'blib' ) {
+    my @builders = @{ $self->plugins_with( -BuildRunner ) };
+    $self->log_fatal("no BuildRunner plugins specified") unless @builders;
+    $_->build for @builders;
+    $self->log_fatal("no blib; failed to build properly?") unless -d 'blib';
   }
 }
 
