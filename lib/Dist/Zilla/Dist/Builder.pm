@@ -124,6 +124,7 @@ sub _setup_default_plugins {
       zilla       => $self,
       style       => 'list',
       code        => sub {
+        my $self = shift;
         my $map = $self->zilla->_share_dir_map;
         my @files;
         if ( $map->{dist} ) {
