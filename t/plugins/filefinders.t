@@ -20,12 +20,18 @@ my $tzil = Builder->from_config(
           root   => '../corpus/dist/DZT_Bin',
           prefix => 'bin',
         } ],
+        [ GatherDir => MySHARE => {
+          root   => '../corpus/dist/DZT_Share',
+          prefix => 'share',
+        } ],
         [ ExecDir => ],
+        [ ShareDir => ],
         'Manifest',
       ),
     },
     also_copy => { 'corpus/dist/DZT_Inc' => 'corpus/dist/DZT_Inc',
-                   'corpus/dist/DZT_Bin' => 'corpus/dist/DZT_Bin'
+                   'corpus/dist/DZT_Bin' => 'corpus/dist/DZT_Bin',
+                   'corpus/dist/DZT_Share' => 'corpus/dist/DZT_Share'
     },
   },
 );
@@ -37,7 +43,9 @@ my @files = map {; $_->name } @{ $tzil->files };
 is_filelist(
   [ @files ],
   [ qw(
-    dist.ini lib/DZT/Sample.pm t/basic.t
+    dist.ini lib/DZT/Sample.pm
+    share/my_data.dat
+    t/basic.t
     MANIFEST
     inc/Foo.pm inc/Foo/Bar.pm
     bin/test.pl
@@ -89,11 +97,12 @@ is_filelist(
   "ExecFiles finds all files",
 );
 
-# XXX I don't use sharedir, how do I configure it? --apocal
 $files = $tzil->find_files(':ShareFiles');
 is_filelist(
   [ map {; $_->name } @$files ],
-  [  ],
+  [ qw(
+    share/my_data.dat
+  ) ],
   "ShareFiles finds all files",
 );
 

@@ -129,14 +129,14 @@ sub _setup_default_plugins {
         my @files;
         if ( $map->{dist} ) {
           push @files, $self->zilla->files->grep(sub {
-            local $_ = $_->name; m{\A\Q$map->{dist}\E/}
-          });
+            $_->name =~ m{\A\Q$map->{dist}\E/}
+          })->flatten;
         }
         if ( my $mod_map = $map->{module} ) {
           for my $mod ( keys %$mod_map ) {
             push @files, $self->zilla->files->grep(sub {
-              local $_ = $_->name; m{\A\Q$mod_map->{$mod}\E/}
-            });
+              $_->name =~ m{\A\Q$mod_map->{$mod}\E/}
+            })->flatten;
           }
         }
         return \@files;
