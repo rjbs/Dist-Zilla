@@ -19,18 +19,7 @@ make much more ludicrous demands in terms of prerequisites.
 If you have access to the web, you can learn more and find an interactive
 tutorial at B<L<dzil.org|http://dzil.org/>>.  If not, try
 L<Dist::Zilla::Tutorial>.
- 
-=head2 authors
- 
-This is an arrayref of author strings, like this:
- 
-  [
-    'Ricardo Signes <rjbs@cpan.org>',
-    'X. Ample, Jr <example@example.biz>',
-  ]
- 
-This is likely to change at some point in the near future.
- 
+
 =head1 SUPPORT
  
 There are usually people on C<irc.perl.org> in C<#distzilla>, even if they're
