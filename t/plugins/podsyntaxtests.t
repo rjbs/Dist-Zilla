@@ -1,11 +1,9 @@
 use strict;
 use warnings;
 use Test::More 0.88;
-use Test::Fatal qw(exception);
+use Test::Deep;
+use Test::Deep::JSON;
 
-use lib 't/lib';
-
-use JSON 2;
 use Test::DZil;
 
 {
@@ -26,13 +24,16 @@ use Test::DZil;
 
   my $json = $tzil->slurp_file('build/META.json');
 
-  my $meta = JSON->new->decode($json);
-
-  is_deeply(
-    $meta->{prereqs},
-    {
-       develop => { requires => { 'Test::Pod' => '1.41' } },
-    },
+  cmp_deeply(
+    $json,
+    json(superhashof(
+      {
+        prereqs =>
+        {
+           develop => { requires => { 'Test::Pod' => '1.41' } },
+        },
+      }
+    )),
     'PodSyntaxTests develop prereqs'
   );
 

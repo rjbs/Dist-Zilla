@@ -86,7 +86,6 @@ has username => (
   is   => 'ro',
   isa  => 'Str',
   lazy => 1,
-  required => 1,
   default  => sub {
     my ($self) = @_;
     return $self->_credential('username')
@@ -106,7 +105,6 @@ has password => (
   is   => 'ro',
   isa  => 'Str',
   lazy => 1,
-  required => 1,
   default  => sub {
     my ($self) = @_;
     return $self->_credential('password')

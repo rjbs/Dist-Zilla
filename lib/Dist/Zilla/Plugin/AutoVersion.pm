@@ -30,7 +30,6 @@ This attribute's value can be referred to in the autoversion format template.
 has major => (
   is   => 'ro',
   isa  => 'Int',
-  required => 1,
   default  => 1,
 );
 
@@ -52,14 +51,12 @@ The default value is:
 has time_zone => (
   is       => 'ro',
   isa      => 'Str',
-  required => 1,
   default  => 'GMT',
 );
 
 has format => (
   is       => 'ro',
   isa      => 'Str',
-  required => 1,
   default  => q<{{ $major }}.{{ cldr('yyDDD') }}>
             . q<{{ sprintf('%01u', ($ENV{N} || 0)) }}>
             . q<{{$ENV{DEV} ? (sprintf '_%03u', $ENV{DEV}) : ''}}>

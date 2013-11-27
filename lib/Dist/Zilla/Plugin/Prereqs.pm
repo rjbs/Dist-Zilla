@@ -141,6 +141,7 @@ sub BUILDARGS {
 
   # Handle magic plugin names:
   unless (($other{phase} and $other{type})
+            # plugin comes from a bundle
           or $name =~ m! (?: \A | / ) Prereqs? \z !x) {
 
     my ($phase, $type) = $name =~ /\A

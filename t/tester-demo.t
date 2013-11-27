@@ -2,8 +2,6 @@ use strict;
 use warnings;
 use Test::More 0.88;
 
-use lib 't/lib';
-
 use Dist::Zilla::App::Tester;
 use Test::DZil;
 

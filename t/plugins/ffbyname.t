@@ -1,4 +1,3 @@
-#!perl
 # Test the FileFinder::ByName and FileFinder::Filter plugins
 use strict;
 use warnings;

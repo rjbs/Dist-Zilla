@@ -1,8 +1,7 @@
 use strict;
 use warnings;
 use Test::More 0.88;
-
-use lib 't/lib';
+use Test::Deep;
 
 use Test::DZil;
 
@@ -51,15 +50,16 @@ use Test::DZil;
     'configure_requires' => {
       'Module::Build' => '0.3601',
     },
+    'recommends' => {},
+    'recursive_test_files' => ignore,
+    'script_files' => [],
   );
 
-  for my $key (sort keys %want) {
-    is_deeply(
-      $have->{ $key },
-      $want{ $key },
-      "correct value set for $key",
-    );
-  }
+  cmp_deeply(
+    $have,
+    \%want,
+    'module_build_args',
+  );
 
   is($modulebuild->_use_custom_class, q{}, 'no custom class by default');
 }

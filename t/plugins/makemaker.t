@@ -1,8 +1,7 @@
 use strict;
 use warnings;
 use Test::More 0.88;
-
-use lib 't/lib';
+use Test::Deep;
 
 use Test::DZil;
 
@@ -47,15 +46,15 @@ use Test::DZil;
     CONFIGURE_REQUIRES => {
       'ExtUtils::MakeMaker' => '6.30'
     },
+    EXE_FILES => [],
+    test => { TESTS => 't/*.t' },
   );
 
-  for my $key (sort keys %want) {
-    is_deeply(
-      $makemaker->__write_makefile_args->{ $key },
-      $want{ $key },
-      "correct value set for $key",
-    );
-  }
+  cmp_deeply(
+    $makemaker->__write_makefile_args,
+    \%want,
+    'correct makemaker args generated',
+  );
 }
 
 {
