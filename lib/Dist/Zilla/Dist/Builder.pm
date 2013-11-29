@@ -162,6 +162,30 @@ sub _setup_default_plugins {
 
     $self->plugins->push($plugin);
   }
+
+  unless ($self->plugin_named(':All')) {
+    require Dist::Zilla::Plugin::FinderCode;
+    my $plugin = Dist::Zilla::Plugin::FinderCode->new({
+      plugin_name => ':All',
+      zilla       => $self,
+      style       => 'grep',
+      code        => sub { return 1 },
+    });
+
+    $self->plugins->push($plugin);
+  }
+
+  unless ($self->plugin_named(':None')) {
+    require Dist::Zilla::Plugin::FinderCode;
+    my $plugin = Dist::Zilla::Plugin::FinderCode->new({
+      plugin_name => ':None',
+      zilla       => $self,
+      style       => 'list',
+      code        => sub { return },
+    });
+
+    $self->plugins->push($plugin);
+  }
 }
 
 has _share_dir_map => (

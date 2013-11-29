@@ -74,7 +74,15 @@ L<Dist::Zilla::Plugin::ExecDir> plugin to mark those files as executables.
 = :ShareFiles
 
 Searches your ShareDir directory and lists the files in it.
-Hint: Use the L<Dist::Zilla::Plugin::ShareDir> plugin to setup the sharedir.
+Hint: Use the L<Dist::Zilla::Plugin::ShareDir> plugin to set up the sharedir.
+
+= :All
+
+Returns all files in the distribution.
+
+= :None
+
+Returns nothing.
 
 =end :list
 
