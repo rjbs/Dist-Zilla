@@ -54,7 +54,7 @@ has term_enc => (
   lazy => 1,
   default => sub {
     require Term::Encoding;
-    return Term::Encoding::get_encoding();
+    return Term::Encoding::get_encoding() || die 'cannot determine encoding: no locale set?';
   },
 );
 
