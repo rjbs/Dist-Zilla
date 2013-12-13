@@ -106,18 +106,18 @@ is_filelist(
   "ShareFiles finds all files",
 );
 
-$files = $tzil->find_files(':All');
+$files = $tzil->find_files(':AllFiles');
 is_filelist(
   [ map {; $_->name } @$files ],
   [ @files ],
-  "All finds all files",
+  ":AllFiles finds all files",
 );
 
-$files = $tzil->find_files(':None');
+$files = $tzil->find_files(':NoFiles');
 is_filelist(
   [ map {; $_->name } @$files ],
   [ ],
-  "None finds no files",
+  ":NoFiles finds no files",
 );
 
 done_testing;

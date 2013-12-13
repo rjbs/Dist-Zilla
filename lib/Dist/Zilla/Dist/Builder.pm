@@ -163,10 +163,10 @@ sub _setup_default_plugins {
     $self->plugins->push($plugin);
   }
 
-  unless ($self->plugin_named(':All')) {
+  unless ($self->plugin_named(':AllFiles')) {
     require Dist::Zilla::Plugin::FinderCode;
     my $plugin = Dist::Zilla::Plugin::FinderCode->new({
-      plugin_name => ':All',
+      plugin_name => ':AllFiles',
       zilla       => $self,
       style       => 'grep',
       code        => sub { return 1 },
@@ -175,10 +175,10 @@ sub _setup_default_plugins {
     $self->plugins->push($plugin);
   }
 
-  unless ($self->plugin_named(':None')) {
+  unless ($self->plugin_named(':NoFiles')) {
     require Dist::Zilla::Plugin::FinderCode;
     my $plugin = Dist::Zilla::Plugin::FinderCode->new({
-      plugin_name => ':None',
+      plugin_name => ':NoFiles',
       zilla       => $self,
       style       => 'list',
       code        => sub { return },
