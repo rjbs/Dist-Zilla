@@ -4,6 +4,7 @@ use Test::More 0.88;
 
 use lib 't/lib';
 
+use ExtUtils::Manifest 'maniread';
 use Test::DZil;
 
 my $tzil = Builder->from_config(
@@ -58,12 +59,11 @@ is_filelist(
   "GatherDir gathers all files in the source dir",
 );
 
-my $manifest = $tzil->slurp_file('build/MANIFEST');
-my %in_manifest = map {; chomp; $_ => 1 } grep {length} split /\n/, $manifest;
+my $manifest = maniread($tzil->tempdir->file('build/MANIFEST')->stringify);
 
-my $count = grep { $in_manifest{$_} } @files;
+my $count = grep { exists $manifest->{$_} } @files;
 ok($count == @files, "all files found were in manifest");
-ok(keys(%in_manifest) == @files, "all files in manifest were on disk");
+ok(keys(%$manifest) == @files, "all files in manifest were on disk");
 
 done_testing;
 
