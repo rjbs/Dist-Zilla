@@ -48,6 +48,20 @@ If true, then when PkgVersion sees an existing C<$VERSION> assignment, it will
 throw an exception rather than skip the file.  This attribute defaults to
 false.
 
+=attr finder
+
+=for stopwords FileFinder
+
+This is the name of a L<FileFinder|Dist::Zilla::Role::FileFinder> for finding
+modules to edit.  The default value is C<:InstallModules> and C<:ExecFiles>;
+this option can be used more than once.
+
+Other predefined finders are listed in
+L<Dist::Zilla::Role::FileFinderUser/default_finders>.
+You can define your own with the
+L<[FileFinder::ByName]|Dist::Zilla::Plugin::FileFinder::ByName> and
+L<[FileFinder::Filter]|Dist::Zilla::Plugin::FileFinder::Filter> plugins.
+
 =cut
 
 sub munge_files {
@@ -62,10 +76,7 @@ sub munge_file {
   # XXX: for test purposes, for now! evil! -- rjbs, 2010-03-17
   return                          if $file->name    =~ /^corpus\//;
 
-  return                          if $file->name    =~ /\.t$/i;
-  return $self->munge_perl($file) if $file->name    =~ /\.(?:pm|pl)$/i;
-  return $self->munge_perl($file) if $file->content =~ /^#!(?:.*)perl(?:$|\s)/;
-  return;
+  return $self->munge_perl($file);
 }
 
 has die_on_existing_version => (
@@ -93,7 +104,11 @@ sub munge_perl {
     return;
   }
 
-  return unless my $package_stmts = $document->find('PPI::Statement::Package');
+  my $package_stmts = $document->find('PPI::Statement::Package');
+  unless ($package_stmts) {
+    $self->log([ 'skipping %s: no package statement found', $file->name ]);
+    return;
+  }
 
   my %seen_pkg;
 

@@ -7,6 +7,8 @@ Revision history for {{$dist->name}}
         - Archive::Tar::Wrapper added as a recommended prereq
         - fix :ShareFiles (thanks, Christopher J. Madsen and Karen Etheridge)
         - new :All and :None filefinders
+        - document the use of filefinders in [PkgVersion], and remove
+          filtering out of .t, .pod files
 
 5.006     2013-11-06 09:21:12 America/New_York
         - add ->is_bytes to files; shortcut for ->encoding eq 'bytes'
