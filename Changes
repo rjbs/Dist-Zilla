@@ -6,7 +6,7 @@ Revision history for {{$dist->name}}
           (in other words, no `perl Makefile.PL && make`)
         - Archive::Tar::Wrapper added as a recommended prereq
         - fix :ShareFiles (thanks, Christopher J. Madsen and Karen Etheridge)
-        - new :All and :None filefinders
+        - new :AllFiles and :NoFiles filefinders
 
 5.006     2013-11-06 09:21:12 America/New_York
         - add ->is_bytes to files; shortcut for ->encoding eq 'bytes'
