@@ -59,7 +59,7 @@ sub execute {
     $self->log("no command supplied to run so using \$$envname: $args->[0]");
   }
 
-  $self->zilla->run_in_build($args, { build => $args->build });
+  $self->zilla->run_in_build($args, { build => $opt->build });
 }
 
 1;

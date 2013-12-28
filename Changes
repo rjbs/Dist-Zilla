@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - fix utterly broken `dzil run`
 
 5.007     2013-12-27 20:50:45-0500 America/New_York
         - add the ability to say "dzil run --no-build" to run a command without
