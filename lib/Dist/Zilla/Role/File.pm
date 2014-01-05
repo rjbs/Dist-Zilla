@@ -60,8 +60,10 @@ has mode => (
 );
 
 requires 'encoding';
+requires 'has_encoding';
 requires 'content';
 requires 'encoded_content';
+requires 'is_encoded_content';
 
 =method is_bytes
 

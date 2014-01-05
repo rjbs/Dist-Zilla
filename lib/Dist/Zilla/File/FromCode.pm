@@ -38,6 +38,8 @@ has code_return_type => (
   default => 'text',
 );
 
+sub is_encoded_content { shift->code_return_type eq 'bytes' }
+
 =attr encoding
 
 =cut
@@ -50,6 +52,8 @@ has encoding => (
   lazy => 1,
   builder => "_build_encoding",
 );
+
+sub has_encoding { 1 } # You can't change the encoding of a FromCode file
 
 sub _build_encoding {
   my ($self) = @_;

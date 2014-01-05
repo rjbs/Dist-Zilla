@@ -20,12 +20,14 @@ Default is 'UTF-8'. Can only be set once.
 with 'Dist::Zilla::Role::File';
 
 sub encoding;
+sub has_encoding;
 
 has encoding => (
   is          => 'rw',
   isa         => 'Str',
   lazy        => 1,
   default     => 'UTF-8',
+  predicate   => 'has_encoding',
   traits      => [ qw(SetOnce) ],
 );
 
@@ -99,6 +101,8 @@ has _content_source => (
     lazy => 1,
     builder => '_build_content_source',
 );
+
+sub is_encoded_content { shift->_content_source eq 'encoded_content' }
 
 sub _update_by {
   my ($self, $attr, $from) = @_;
