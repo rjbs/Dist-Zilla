@@ -110,7 +110,7 @@ It is passed a list of plugin specifiers, which can be one of a few things:
 
 =for :list
 * a plugin moniker (like you might provide in your config file)
-* an arrayref of: C<< [ $moniker, $plugin_name, \%plugin_config >>
+* an arrayref of: C<< [ $moniker, $plugin_name, \%plugin_config ] >>
 
 In the case of an arrayref, both C<$plugin_name> and C<\%plugin_config> are
 optional.
