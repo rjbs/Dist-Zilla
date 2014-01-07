@@ -29,7 +29,6 @@ my %CACHE;
 sub ppi_document_for_file {
   my ($self, $file) = @_;
 
-  my $content = $file->content;
   my $encoded_content = $file->encoded_content;
 
   # We cache on the MD5 checksum to detect if the document has been modified
@@ -37,7 +36,7 @@ sub ppi_document_for_file {
   my $md5 = md5($encoded_content);
   return $CACHE{$md5} if $CACHE{$md5};
 
-  my $document = PPI::Document->new(\$content)
+  my $document = PPI::Document->new(\$encoded_content)
     or Carp::croak(PPI::Document->errstr);
 
   return $CACHE{$md5} = $document;
@@ -60,9 +59,9 @@ sub save_ppi_document_to_file {
 
   my $new_content = $document->serialize;
 
-  $file->content($new_content);
+  $file->encoded_content($new_content);
 
-  $CACHE{ md5($file->encoded_content) } = $document;
+  $CACHE{ md5($new_content) } = $document;
 
 }
 
