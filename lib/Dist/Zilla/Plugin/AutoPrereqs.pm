@@ -163,7 +163,7 @@ sub register_prereqs {
       push @modules, @this_thing;
 
       # parse a file, and merge with existing prereqs
-      my $file_req = $scanner->scan_string($file->content);
+      my $file_req = $scanner->scan_string($file->encoded_content);
 
       $req->add_requirements($file_req);
     }
