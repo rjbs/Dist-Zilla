@@ -117,6 +117,12 @@ sub munge_perl {
     my $trial = $self->zilla->is_trial ? ' # TRIAL' : '';
     my $perl = "{\n  \$$package\::VERSION\x20=\x20'$version';$trial\n}\n";
 
+    $self->log("non-ASCII package name is likely to cause problems")
+      if $package =~ /\P{ASCII}/;
+
+    $self->log("non-ASCII version is likely to cause problems")
+      if $version =~ /\P{ASCII}/;
+
     my $version_doc = PPI::Document->new(\$perl);
     my @children = $version_doc->schildren;
 
