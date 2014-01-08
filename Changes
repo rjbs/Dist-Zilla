@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+5.009     2014-01-07 20:21:17-05:00 America/New_York
         - include time offset by default in NextRelease
         - always pass PPI octets, not text
 
