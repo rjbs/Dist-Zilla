@@ -1,11 +1,13 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - include time offset by default in NextRelease
+        - always pass PPI octets, not text
 
 5.008     2013-12-27 21:57:02 America/New_York
         - fix utterly broken `dzil run`
 
-5.007     2013-12-27 20:50:45-0500 America/New_York
+5.007     2013-12-27 20:50:45-05:00 America/New_York
         - add the ability to say "dzil run --no-build" to run a command without
           building inside the dist dir
           (in other words, no `perl Makefile.PL && make`)
