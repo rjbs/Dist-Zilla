@@ -36,6 +36,7 @@ sub ppi_document_for_file {
   my $md5 = md5($encoded_content);
   return $CACHE{$md5} if $CACHE{$md5};
 
+  require PPI::Document;
   my $document = PPI::Document->new(\$encoded_content)
     or Carp::croak(PPI::Document->errstr);
 
