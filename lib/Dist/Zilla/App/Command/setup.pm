@@ -112,6 +112,8 @@ sub execute {
   }
 
   $config_root->mkpath unless -d $config_root;
+  $config_root->subdir('profiles')->mkpath
+    unless -d $config_root->subdir('profiles');
 
   my $umask = umask;
   umask( $umask | 077 ); # this file might contain PAUSE pw; make it go-r
