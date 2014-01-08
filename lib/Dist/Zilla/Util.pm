@@ -61,7 +61,7 @@ C<=head1> section called "NAME" or a comment beginning with C<ABSTRACT:>.
 sub abstract_from_file {
   my ($self, $file) = @_;
   my $e = Dist::Zilla::Util::PEA->_new;
-  $e->read_string($file->content);
+  $e->read_string($file->encoded_content);
   return $e->{abstract};
 }
 
