@@ -2,6 +2,7 @@ package Dist::Zilla::Plugin::AutoPrereqs;
 use Moose;
 with(
   'Dist::Zilla::Role::PrereqSource',
+  'Dist::Zilla::Role::PPI',
   'Dist::Zilla::Role::FileFinderUser' => {
     default_finders => [ ':InstallModules', ':ExecFiles' ],
   },
@@ -44,7 +45,6 @@ use namespace::autoclean;
 use List::AllUtils 'uniq';
 use Moose::Autobox;
 use Perl::PrereqScanner 1.016; # don't skip "lib"
-use PPI;
 use CPAN::Meta::Requirements;
 use version;
 
@@ -163,7 +163,9 @@ sub register_prereqs {
       push @modules, @this_thing;
 
       # parse a file, and merge with existing prereqs
-      my $file_req = $scanner->scan_string($file->content);
+      my $file_req = $scanner->scan_ppi_document(
+        $self->ppi_document_for_file($file)
+      );
 
       $req->add_requirements($file_req);
     }
