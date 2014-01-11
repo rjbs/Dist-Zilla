@@ -1,6 +1,10 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - stop sharing a reference to cached PPI docs, which led to spooky
+          action at a distance
+        - PkgVersion no longer surrounds the new $VERSION assignment with a
+          bare block
 
 5.009     2014-01-07 20:21:17-05:00 America/New_York
         - include time offset by default in NextRelease
