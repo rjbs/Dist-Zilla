@@ -34,13 +34,13 @@ sub ppi_document_for_file {
   # We cache on the MD5 checksum to detect if the document has been modified
   # by some other plugin since it was last parsed, our document is invalid.
   my $md5 = md5($encoded_content);
-  return $CACHE{$md5} if $CACHE{$md5};
+  return $CACHE{$md5}->clone if $CACHE{$md5};
 
   require PPI::Document;
   my $document = PPI::Document->new(\$encoded_content)
     or Carp::croak(PPI::Document->errstr);
 
-  return $CACHE{$md5} = $document;
+  return ($CACHE{$md5} = $document)->clone;
 }
 
 =method save_ppi_document_to_file
@@ -62,8 +62,7 @@ sub save_ppi_document_to_file {
 
   $file->encoded_content($new_content);
 
-  $CACHE{ md5($new_content) } = $document;
-
+  $CACHE{ md5($new_content) } = $document->clone;
 }
 
 =method document_assigns_to_variable
