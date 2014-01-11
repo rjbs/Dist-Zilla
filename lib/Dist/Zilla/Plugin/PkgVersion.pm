@@ -108,20 +108,22 @@ sub munge_perl {
       next;
     }
 
-    # the \x20 hack is here so that when we scan *this* document we don't find
-    # an assignment to version; it shouldn't be needed, but it's been annoying
-    # enough in the past that I'm keeping it here until tests are better
-    my $trial = $self->zilla->is_trial ? ' # TRIAL' : '';
-    my $perl = "\n\$$package\::VERSION\x20=\x20'$version';$trial\n";
-
     $self->log("non-ASCII package name is likely to cause problems")
       if $package =~ /\P{ASCII}/;
 
     $self->log("non-ASCII version is likely to cause problems")
       if $version =~ /\P{ASCII}/;
 
-    # Why can't I use PPI::Token::Unknown? -- rjbs, 2014-01-11
-    my $bogus_token = PPI::Token::Comment->new($perl);
+    # the \x20 hack is here so that when we scan *this* document we don't find
+    # an assignment to version; it shouldn't be needed, but it's been annoying
+    # enough in the past that I'm keeping it here until tests are better
+    my $trial = $self->zilla->is_trial ? ' # TRIAL' : '';
+    my $perl = "\$$package\::VERSION\x20=\x20'$version';$trial";
+
+    my $find = $document->find(sub {
+      return $_[1]->line_number == $stmt->line_number + 1;
+      return;
+    });
 
     $self->log_debug([
       'adding $VERSION assignment to %s in %s',
@@ -129,8 +131,22 @@ sub munge_perl {
       $file->name,
     ]);
 
-    Carp::carp("error inserting version in " . $file->name)
-      unless $stmt->insert_after($bogus_token);
+    my $replace_blank
+      = $find && @$find == 1 && "$find->[0]" =~ /\A\s*\z/ && $find->[0];
+
+    $perl = $replace_blank ? "$perl\n" : "\n$perl";
+
+    # Why can't I use PPI::Token::Unknown? -- rjbs, 2014-01-11
+    my $bogus_token = PPI::Token::Comment->new($perl);
+
+    if ($replace_blank) {
+      Carp::carp("error inserting version in " . $file->name)
+        unless $replace_blank->insert_after($bogus_token);
+      $replace_blank->delete;
+    } else {
+      Carp::carp("error inserting version in " . $file->name)
+        unless $stmt->insert_after($bogus_token);
+    }
 
     $munged = 1;
   }
