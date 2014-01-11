@@ -204,6 +204,10 @@ unlike(
   $tzil_trial->build;
 
   my $dzt_sample_trial = $tzil_trial->slurp_file('build/lib/DZT/Sample.pm');
+  my $assignments = () = $dzt_sample_trial =~ /(DZT::Sample::VERSION =)/g;
+
+  is($assignments, 1, "we only add 1 VERSION assignment");
+
   like(
     $dzt_sample_trial,
     qr{^\s*\$\QDZT::Sample::VERSION = '0.001'; # TRIAL\E\s*$}m,
