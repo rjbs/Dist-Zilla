@@ -46,6 +46,15 @@ If true, then when PkgVersion sees an existing C<$VERSION> assignment, it will
 throw an exception rather than skip the file.  This attribute defaults to
 false.
 
+=attr die_on_line_insertion
+
+By default, PkgVersion look for a blank line after each C<package> statement.
+If it finds one, it inserts the C<$VERSION> assignment on that line.  If it
+doesn't, it will insert a new line, which means the shipped copy of the module
+will have different line numbers (off by one) than the source.  If
+C<die_on_line_insertion> is true, PkgVersion will raise an exception rather
+than insert a new line.
+
 =cut
 
 sub munge_files {
@@ -67,6 +76,12 @@ sub munge_file {
 }
 
 has die_on_existing_version => (
+  is  => 'ro',
+  isa => 'Bool',
+  default => 0,
+);
+
+has die_on_line_insertion => (
   is  => 'ro',
   isa => 'Bool',
   default => 0,
@@ -144,6 +159,14 @@ sub munge_perl {
         unless $replace_blank->insert_after($bogus_token);
       $replace_blank->delete;
     } else {
+      if ($self->die_on_line_insertion) {
+        $self->log_fatal([
+          'no blank line for $VERSION after package %s statement on line %s',
+          $stmt->namespace,
+          $stmt->line_number,
+        ]);
+      }
+
       Carp::carp("error inserting version in " . $file->name)
         unless $stmt->insert_after($bogus_token);
     }
