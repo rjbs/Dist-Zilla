@@ -25,9 +25,7 @@ in dist.ini
 This plugin will add lines like the following to each package in each Perl
 module or program (more or less) within the distribution:
 
-  {
-    $MyModule::VERSION = 0.001;
-  }
+  $MyModule::VERSION = 0.001;
 
 ...where 0.001 is the version of the dist, and MyModule is the name of the
 package being given a version.  (In other words, it always uses fully-qualified
@@ -100,7 +98,6 @@ sub munge_perl {
   my $munged = 0;
   for my $stmt (@$package_stmts) {
     my $package = $stmt->namespace;
-
     if ($seen_pkg{ $package }++) {
       $self->log([ 'skipping package re-declaration for %s', $package ]);
       next;
@@ -115,7 +112,7 @@ sub munge_perl {
     # an assignment to version; it shouldn't be needed, but it's been annoying
     # enough in the past that I'm keeping it here until tests are better
     my $trial = $self->zilla->is_trial ? ' # TRIAL' : '';
-    my $perl = "{\n  \$$package\::VERSION\x20=\x20'$version';$trial\n}\n";
+    my $perl = "\n\$$package\::VERSION\x20=\x20'$version';$trial\n";
 
     $self->log("non-ASCII package name is likely to cause problems")
       if $package =~ /\P{ASCII}/;
@@ -123,8 +120,8 @@ sub munge_perl {
     $self->log("non-ASCII version is likely to cause problems")
       if $version =~ /\P{ASCII}/;
 
-    my $version_doc = PPI::Document->new(\$perl);
-    my @children = $version_doc->schildren;
+    # Why can't I use PPI::Token::Unknown? -- rjbs, 2014-01-11
+    my $bogus_token = PPI::Token::Comment->new($perl);
 
     $self->log_debug([
       'adding $VERSION assignment to %s in %s',
@@ -133,8 +130,8 @@ sub munge_perl {
     ]);
 
     Carp::carp("error inserting version in " . $file->name)
-      unless $stmt->insert_after($children[0]->clone)
-      and    $stmt->insert_after( PPI::Token::Whitespace->new("\n") );
+      unless $stmt->insert_after($bogus_token);
+
     $munged = 1;
   }
 
