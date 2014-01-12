@@ -5,9 +5,10 @@ Revision history for {{$dist->name}}
           action at a distance
         - PkgVersion no longer surrounds the new $VERSION assignment with a
           bare block
-        - if there's a blank line after the package statement, PkgVersion
-          will use that for a $VERSION assignment, rather than insert a new
-          line; this can be made mandatory with die_on_line_insertion
+        - if there's a blank line after the package statement (and any number
+          of comment-only lines), PkgVersion will use that for a $VERSION
+          assignment, rather than insert a new line; this can be made mandatory
+          with die_on_line_insertion
 
 5.009     2014-01-07 20:21:17-05:00 America/New_York
         - include time offset by default in NextRelease

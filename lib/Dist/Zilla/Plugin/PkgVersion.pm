@@ -135,29 +135,46 @@ sub munge_perl {
     my $trial = $self->zilla->is_trial ? ' # TRIAL' : '';
     my $perl = "\$$package\::VERSION\x20=\x20'$version';$trial";
 
-    my $find = $document->find(sub {
-      return $_[1]->line_number == $stmt->line_number + 1;
-      return;
-    });
-
     $self->log_debug([
       'adding $VERSION assignment to %s in %s',
       $package,
       $file->name,
     ]);
 
-    my $replace_blank
-      = $find && @$find == 1 && "$find->[0]" =~ /\A\s*\z/ && $find->[0];
+    my $blank;
 
-    $perl = $replace_blank ? "$perl\n" : "\n$perl";
+    {
+      my $curr = $stmt;
+      while (1) {
+        my $find = $document->find(sub {
+          return $_[1]->line_number == $curr->line_number + 1;
+          return;
+        });
+
+        last unless $find and @$find == 1;
+
+        if ($find->[0]->isa('PPI::Token::Comment')) {
+          $curr = $find->[0];
+          next;
+        }
+
+        if ("$find->[0]" =~ /\A\s*\z/) {
+          $blank = $find->[0];
+        }
+
+        last;
+      }
+    }
+
+    $perl = $blank ? "$perl\n" : "\n$perl";
 
     # Why can't I use PPI::Token::Unknown? -- rjbs, 2014-01-11
     my $bogus_token = PPI::Token::Comment->new($perl);
 
-    if ($replace_blank) {
+    if ($blank) {
       Carp::carp("error inserting version in " . $file->name)
-        unless $replace_blank->insert_after($bogus_token);
-      $replace_blank->delete;
+        unless $blank->insert_after($bogus_token);
+      $blank->delete;
     } else {
       my $method = $self->die_on_line_insertion ? 'log_fatal' : 'log';
       $self->$method([
