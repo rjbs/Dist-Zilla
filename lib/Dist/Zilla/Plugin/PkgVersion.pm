@@ -159,13 +159,12 @@ sub munge_perl {
         unless $replace_blank->insert_after($bogus_token);
       $replace_blank->delete;
     } else {
-      if ($self->die_on_line_insertion) {
-        $self->log_fatal([
-          'no blank line for $VERSION after package %s statement on line %s',
-          $stmt->namespace,
-          $stmt->line_number,
-        ]);
-      }
+      my $method = $self->die_on_line_insertion ? 'log_fatal' : 'log';
+      $self->$method([
+        'no blank line for $VERSION after package %s statement on line %s',
+        $stmt->namespace,
+        $stmt->line_number,
+      ]);
 
       Carp::carp("error inserting version in " . $file->name)
         unless $stmt->insert_after($bogus_token);
