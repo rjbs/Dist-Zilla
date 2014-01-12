@@ -18,6 +18,8 @@ my $tzil = Builder->from_config(
 
 $tzil->release;
 
+is($tzil->VERSION, Dist::Zilla->VERSION, "zilla tester VERSION");
+
 my $basename = $tzil->dist_basename;
 my $tarball  = $tzil->archive_filename;
 

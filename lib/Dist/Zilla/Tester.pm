@@ -83,8 +83,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
 }
 
 {
-  package
-    Dist::Zilla::Tester::_Builder;
+  package Dist::Zilla::Tester::_Builder;
 
   use Moose;
   extends 'Dist::Zilla::Dist::Builder';
@@ -172,8 +171,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
 }
 
 {
-  package
-    Dist::Zilla::Tester::_Minter;
+  package Dist::Zilla::Tester::_Minter;
 
   use Moose;
   extends 'Dist::Zilla::Dist::Minter';
