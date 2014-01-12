@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+5.010     2014-01-11 22:06:04-05:00 America/New_York
         - stop sharing a reference to cached PPI docs, which led to spooky
           action at a distance
         - PkgVersion no longer surrounds the new $VERSION assignment with a
