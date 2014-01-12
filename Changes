@@ -2,6 +2,10 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+5.011     2014-01-12 16:09:29-05:00 America/New_York
+        - ->VERSION is again defined in the tester forms of Builder and Minter
+        - remove a small obsolete code path from PkgVersion
+
 5.010     2014-01-11 22:06:04-05:00 America/New_York
         - stop sharing a reference to cached PPI docs, which led to spooky
           action at a distance
