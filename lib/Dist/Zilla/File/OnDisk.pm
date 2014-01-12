@@ -1,5 +1,6 @@
 package Dist::Zilla::File::OnDisk;
 # ABSTRACT: a file that comes from your filesystem
+
 use Moose;
 
 use Path::Tiny;

@@ -1,7 +1,8 @@
 package Dist::Zilla::Plugin::TestRelease;
+# ABSTRACT: extract archive and run tests before releasing the dist
+
 use Moose;
 with 'Dist::Zilla::Role::BeforeRelease';
-# ABSTRACT: extract archive and run tests before releasing the dist
 
 use namespace::autoclean;
 

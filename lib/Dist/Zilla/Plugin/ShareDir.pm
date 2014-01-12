@@ -1,5 +1,6 @@
 package Dist::Zilla::Plugin::ShareDir;
 # ABSTRACT: install a directory's contents as "ShareDir" content
+
 use Moose;
 
 use namespace::autoclean;

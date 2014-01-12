@@ -1,5 +1,6 @@
 package Dist::Zilla::Plugin::MetaYAML;
 # ABSTRACT: produce a META.yml
+
 use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::FileGatherer';

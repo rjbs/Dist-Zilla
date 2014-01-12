@@ -1,5 +1,6 @@
 package Dist::Zilla::Plugin::PruneCruft;
 # ABSTRACT: prune stuff that you probably don't mean to include
+
 use Moose;
 use Moose::Autobox;
 use Moose::Util::TypeConstraints;

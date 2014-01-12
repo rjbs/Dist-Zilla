@@ -1,5 +1,6 @@
 package Dist::Zilla::Dist::Minter;
 # ABSTRACT: distribution builder; installer not included!
+
 use Moose 0.92; # role composition fixes
 extends 'Dist::Zilla';
 

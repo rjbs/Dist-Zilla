@@ -1,6 +1,7 @@
 package Dist::Zilla::Role::PluginBundle::Easy;
 # ABSTRACT: something that bundles a bunch of plugins easily
 # This plugin was originally contributed by Christopher J. Madsen
+
 use Moose::Role;
 with 'Dist::Zilla::Role::PluginBundle';
 

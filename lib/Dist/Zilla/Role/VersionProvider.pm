@@ -1,5 +1,6 @@
 package Dist::Zilla::Role::VersionProvider;
 # ABSTRACT: something that provides a version number for the dist
+
 use Moose::Role;
 with 'Dist::Zilla::Role::Plugin';
 

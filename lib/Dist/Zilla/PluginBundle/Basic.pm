@@ -1,5 +1,6 @@
 package Dist::Zilla::PluginBundle::Basic;
 # ABSTRACT: the basic plugins to maintain and release CPAN dists
+
 use Moose;
 with 'Dist::Zilla::Role::PluginBundle::Easy';
 

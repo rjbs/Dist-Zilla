@@ -1,8 +1,9 @@
 use strict;
 package Dist::Zilla::App::Tester;
+# ABSTRACT: testing library for Dist::Zilla::App
+
 use parent 'App::Cmd::Tester::CaptureExternal';
 use App::Cmd::Tester 0.306 (); # result_class, ->app
-# ABSTRACT: testing library for Dist::Zilla::App
 
 use Dist::Zilla::App;
 use File::Copy::Recursive qw(dircopy);
@@ -42,6 +43,7 @@ sub test_dzil {
 
 {
   package Dist::Zilla::App::Tester::Result;
+
   BEGIN { our @ISA = qw(App::Cmd::Tester::Result); }
 
   sub tempdir {

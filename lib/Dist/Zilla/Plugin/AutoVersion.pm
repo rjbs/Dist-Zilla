@@ -1,5 +1,6 @@
 package Dist::Zilla::Plugin::AutoVersion;
 # ABSTRACT: take care of numbering versions so you don't have to
+
 use Moose;
 with(
   'Dist::Zilla::Role::VersionProvider',

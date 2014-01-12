@@ -1,5 +1,6 @@
 package Dist::Zilla::Role::PPI;
 # ABSTRACT: a role for plugins which use PPI
+
 use Moose::Role;
 
 use Moose::Util::TypeConstraints;

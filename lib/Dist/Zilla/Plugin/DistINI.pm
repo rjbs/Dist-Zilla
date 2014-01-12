@@ -1,5 +1,6 @@
 package Dist::Zilla::Plugin::DistINI;
 # ABSTRACT: a plugin to add a dist.ini to newly-minted dists
+
 use Moose;
 with qw(Dist::Zilla::Role::FileGatherer);
 

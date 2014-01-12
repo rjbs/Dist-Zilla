@@ -1,5 +1,6 @@
 package Dist::Zilla::Plugin::MetaJSON;
 # ABSTRACT: produce a META.json
+
 use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::FileGatherer';

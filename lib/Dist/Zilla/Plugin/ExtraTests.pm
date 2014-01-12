@@ -1,5 +1,6 @@
 package Dist::Zilla::Plugin::ExtraTests;
 # ABSTRACT: rewrite ./xt tests to ./t tests with skips
+
 use Moose;
 with 'Dist::Zilla::Role::FileMunger';
 

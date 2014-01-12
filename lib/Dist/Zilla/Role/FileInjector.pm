@@ -1,5 +1,6 @@
 package Dist::Zilla::Role::FileInjector;
 # ABSTRACT: something that can add files to the distribution
+
 use Moose::Role;
 
 use namespace::autoclean;

@@ -1,5 +1,6 @@
 package Dist::Zilla::Plugin::GenerateFile;
 # ABSTRACT: build a custom file from only the plugin configuration
+
 use Moose;
 use Moose::Autobox;
 with (

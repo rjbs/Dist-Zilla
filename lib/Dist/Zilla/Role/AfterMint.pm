@@ -1,5 +1,6 @@
 package Dist::Zilla::Role::AfterMint;
 # ABSTRACT: something that runs after minting is mostly complete
+
 use Moose::Role;
 with 'Dist::Zilla::Role::Plugin';
 

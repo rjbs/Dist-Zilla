@@ -1,5 +1,6 @@
 package Dist::Zilla::Plugin::TemplateModule;
 # ABSTRACT: a simple module-from-template plugin
+
 use Moose;
 with qw(Dist::Zilla::Role::ModuleMaker Dist::Zilla::Role::TextTemplate);
 

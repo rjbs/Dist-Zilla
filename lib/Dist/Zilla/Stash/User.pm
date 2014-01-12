@@ -1,6 +1,7 @@
 package Dist::Zilla::Stash::User;
-use Moose;
 # ABSTRACT: a stash of user name and email
+
+use Moose;
 
 use namespace::autoclean;
 

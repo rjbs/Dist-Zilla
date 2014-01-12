@@ -1,5 +1,6 @@
 package Dist::Zilla::Dist::Builder;
 # ABSTRACT: dist zilla subclass for building dists
+
 use Moose 0.92; # role composition fixes
 extends 'Dist::Zilla';
 

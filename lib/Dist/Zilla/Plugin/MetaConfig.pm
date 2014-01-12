@@ -1,5 +1,6 @@
 package Dist::Zilla::Plugin::MetaConfig;
 # ABSTRACT: summarize Dist::Zilla configuration into distmeta
+
 use Moose;
 with 'Dist::Zilla::Role::MetaProvider';
 

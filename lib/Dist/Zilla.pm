@@ -1,5 +1,6 @@
 package Dist::Zilla;
 # ABSTRACT: distribution builder; installer not included!
+
 use Moose 0.92; # role composition fixes
 with 'Dist::Zilla::Role::ConfigDumper';
 

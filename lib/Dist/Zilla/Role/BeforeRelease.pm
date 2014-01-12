@@ -1,5 +1,6 @@
 package Dist::Zilla::Role::BeforeRelease;
 # ABSTRACT: something that runs before release really begins
+
 use Moose::Role;
 with 'Dist::Zilla::Role::Plugin';
 

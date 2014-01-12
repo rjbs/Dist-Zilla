@@ -1,4 +1,6 @@
 package Dist::Zilla::Plugin::AutoPrereqs;
+# ABSTRACT: automatically extract prereqs from your modules
+
 use Moose;
 with(
   'Dist::Zilla::Role::PrereqSource',
@@ -39,8 +41,6 @@ prerequisites unless you set configure_finder.
 =cut
 
 use namespace::autoclean;
-
-# ABSTRACT: automatically extract prereqs from your modules
 
 use List::AllUtils 'uniq';
 use Moose::Autobox;

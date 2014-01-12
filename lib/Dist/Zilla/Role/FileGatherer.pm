@@ -1,5 +1,6 @@
 package Dist::Zilla::Role::FileGatherer;
 # ABSTRACT: something that gathers files into the distribution
+
 use Moose::Role;
 with qw/Dist::Zilla::Role::Plugin Dist::Zilla::Role::FileInjector/;
 

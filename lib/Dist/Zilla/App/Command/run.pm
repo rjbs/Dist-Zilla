@@ -2,6 +2,7 @@ use strict;
 use warnings;
 package Dist::Zilla::App::Command::run;
 # ABSTRACT: run stuff in a dir where your dist is built
+
 use Dist::Zilla::App -command;
 
 =head1 SYNOPSIS

@@ -1,8 +1,9 @@
 use strict;
 use warnings;
 package Dist::Zilla::App::Command::listdeps;
-use Dist::Zilla::App -command;
 # ABSTRACT: print your distribution's prerequisites
+
+use Dist::Zilla::App -command;
 
 =head1 SYNOPSIS
 

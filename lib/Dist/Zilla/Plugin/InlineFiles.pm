@@ -1,5 +1,6 @@
 package Dist::Zilla::Plugin::InlineFiles;
 # ABSTRACT: files in a data section
+
 use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::FileGatherer';

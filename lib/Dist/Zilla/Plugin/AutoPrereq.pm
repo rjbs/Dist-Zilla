@@ -1,7 +1,8 @@
 package Dist::Zilla::Plugin::AutoPrereq;
+# ABSTRACT: (DEPRECATED) the old name for Dist::Zilla::Plugin::AutoPrereqs
+
 use Moose;
 extends 'Dist::Zilla::Plugin::AutoPrereqs';
-# ABSTRACT: (DEPRECATED) the old name for Dist::Zilla::Plugin::AutoPrereqs
 
 use namespace::autoclean;
 

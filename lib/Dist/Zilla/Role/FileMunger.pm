@@ -1,5 +1,6 @@
 package Dist::Zilla::Role::FileMunger;
 # ABSTRACT: something that alters a file's destination or content
+
 use Moose::Role;
 with 'Dist::Zilla::Role::Plugin';
 

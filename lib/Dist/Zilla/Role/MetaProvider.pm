@@ -1,5 +1,6 @@
 package Dist::Zilla::Role::MetaProvider;
 # ABSTRACT: something that provides metadata (for META.yml/json)
+
 use Moose::Role;
 with 'Dist::Zilla::Role::Plugin';
 

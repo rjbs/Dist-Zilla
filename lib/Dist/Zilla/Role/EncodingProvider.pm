@@ -1,5 +1,6 @@
 package Dist::Zilla::Role::EncodingProvider;
 # ABSTRACT: something that sets a files' encoding
+
 use Moose::Role;
 with 'Dist::Zilla::Role::Plugin';
 

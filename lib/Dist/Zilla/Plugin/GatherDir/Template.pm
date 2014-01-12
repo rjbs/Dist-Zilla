@@ -1,5 +1,6 @@
 package Dist::Zilla::Plugin::GatherDir::Template;
 # ABSTRACT: gather all the files in a directory and use them as templates
+
 use Moose;
 extends 'Dist::Zilla::Plugin::GatherDir';
 with 'Dist::Zilla::Role::TextTemplate';

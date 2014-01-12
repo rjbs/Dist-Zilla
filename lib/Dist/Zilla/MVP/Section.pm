@@ -1,7 +1,8 @@
 package Dist::Zilla::MVP::Section;
+# ABSTRACT: a standard section in Dist::Zilla's configuration sequence
+
 use Moose;
 extends 'Config::MVP::Section';
-# ABSTRACT: a standard section in Dist::Zilla's configuration sequence
 
 use namespace::autoclean;
 

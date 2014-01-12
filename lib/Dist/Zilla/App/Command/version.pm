@@ -1,12 +1,12 @@
 use strict;
 use warnings;
-
 package Dist::Zilla::App::Command::version;
+# ABSTRACT: display dzil's version
+
 use Dist::Zilla::App -command;
 use Moose;
 extends 'App::Cmd::Command::version';
 
-# ABSTRACT: display dzil's version
 
 =head1 SYNOPSIS
 

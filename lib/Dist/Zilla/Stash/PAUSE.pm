@@ -1,6 +1,7 @@
 package Dist::Zilla::Stash::PAUSE;
-use Moose;
 # ABSTRACT: a stash of your PAUSE credentials
+
+use Moose;
 
 use namespace::autoclean;
 

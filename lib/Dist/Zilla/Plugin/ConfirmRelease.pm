@@ -1,7 +1,8 @@
 package Dist::Zilla::Plugin::ConfirmRelease;
+# ABSTRACT: prompt for confirmation before releasing
+
 use Moose;
 with 'Dist::Zilla::Role::BeforeRelease';
-# ABSTRACT: prompt for confirmation before releasing
 
 use namespace::autoclean;
 

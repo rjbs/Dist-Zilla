@@ -2,6 +2,7 @@ use strict;
 use warnings;
 package Dist::Zilla::App::Command::add;
 # ABSTRACT: add a module to a dist
+
 use Dist::Zilla::App -command;
 use Path::Class;
 use File::pushd ();

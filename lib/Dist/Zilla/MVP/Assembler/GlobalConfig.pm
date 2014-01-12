@@ -1,7 +1,8 @@
 package Dist::Zilla::MVP::Assembler::GlobalConfig;
+# ABSTRACT: Dist::Zilla::MVP::Assembler for global configuration
+
 use Moose;
 extends 'Dist::Zilla::MVP::Assembler';
-# ABSTRACT: Dist::Zilla::MVP::Assembler for global configuration
 
 use namespace::autoclean;
 

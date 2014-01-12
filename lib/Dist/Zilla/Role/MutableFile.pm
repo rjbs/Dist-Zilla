@@ -1,5 +1,6 @@
 package Dist::Zilla::Role::MutableFile;
 # ABSTRACT: something that can act like a file with changeable contents
+
 use Moose::Role;
 
 use Moose::Util::TypeConstraints;

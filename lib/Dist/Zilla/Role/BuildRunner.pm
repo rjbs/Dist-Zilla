@@ -1,5 +1,6 @@
 package Dist::Zilla::Role::BuildRunner;
 # ABSTRACT: something used as a delegating agent during 'dzil run'
+
 use Moose::Role;
 with 'Dist::Zilla::Role::Plugin';
 

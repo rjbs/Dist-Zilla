@@ -1,5 +1,6 @@
 package Dist::Zilla::Plugin::PruneFiles;
 # ABSTRACT: prune arbitrary files from the dist
+
 use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::FilePruner';

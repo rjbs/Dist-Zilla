@@ -1,7 +1,8 @@
 package Dist::Zilla::Stash::Rights;
+# ABSTRACT: a stash of your default licensing terms
+
 use Moose;
 with 'Dist::Zilla::Role::Stash';
-# ABSTRACT: a stash of your default licensing terms
 
 use namespace::autoclean;
 

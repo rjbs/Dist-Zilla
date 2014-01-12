@@ -2,6 +2,7 @@ use strict;
 use warnings;
 package Dist::Zilla::App::Command::smoke;
 # ABSTRACT: smoke your dist
+
 use Dist::Zilla::App -command;
 
 =head1 SYNOPSIS

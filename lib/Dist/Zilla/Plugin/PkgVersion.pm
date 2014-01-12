@@ -1,5 +1,6 @@
 package Dist::Zilla::Plugin::PkgVersion;
 # ABSTRACT: add a $VERSION to your packages
+
 use Moose;
 with(
   'Dist::Zilla::Role::FileMunger',

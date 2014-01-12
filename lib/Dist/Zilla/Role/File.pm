@@ -1,5 +1,6 @@
 package Dist::Zilla::Role::File;
 # ABSTRACT: something that can act like a file
+
 use Moose::Role;
 
 use Moose::Util::TypeConstraints;

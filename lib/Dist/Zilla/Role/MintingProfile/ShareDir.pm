@@ -1,5 +1,6 @@
 package Dist::Zilla::Role::MintingProfile::ShareDir;
 # ABSTRACT: something that keeps its minting profile in a sharedir
+
 use Moose::Role;
 with 'Dist::Zilla::Role::MintingProfile';
 

@@ -1,5 +1,6 @@
 package Dist::Zilla::Plugin::PkgDist;
 # ABSTRACT: add a $DIST to your packages
+
 use Moose;
 with(
   'Dist::Zilla::Role::FileMunger',

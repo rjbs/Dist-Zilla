@@ -1,7 +1,8 @@
 package Dist::Zilla::Tester;
+# ABSTRACT: a testing-enabling stand-in for Dist::Zilla
+
 use Moose;
 extends 'Dist::Zilla::Dist::Builder';
-# ABSTRACT: a testing-enabling stand-in for Dist::Zilla
 
 # XXX: Adding this autoclean causes problem.  "Builder" and "Minter" do not
 # show in tests.  I'm really not sure why. -- rjbs, 2011-08-19
@@ -34,7 +35,9 @@ sub builder { 'Dist::Zilla::Tester::_Builder' }
 sub minter { 'Dist::Zilla::Tester::_Minter' }
 
 {
-  package Dist::Zilla::Tester::_Role;
+  package
+    Dist::Zilla::Tester::_Role;
+
   use Moose::Role;
 
   has tempdir => (
@@ -80,7 +83,9 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
 }
 
 {
-  package Dist::Zilla::Tester::_Builder;
+  package
+    Dist::Zilla::Tester::_Builder;
+
   use Moose;
   extends 'Dist::Zilla::Dist::Builder';
   with 'Dist::Zilla::Tester::_Role';
@@ -167,7 +172,9 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
 }
 
 {
-  package Dist::Zilla::Tester::_Minter;
+  package
+    Dist::Zilla::Tester::_Minter;
+
   use Moose;
   extends 'Dist::Zilla::Dist::Minter';
   with 'Dist::Zilla::Tester::_Role';

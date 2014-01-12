@@ -1,8 +1,9 @@
 package Dist::Zilla::MVP::Reader::Perl;
+# ABSTRACT: the reader for dist.pl files
+
 use Moose;
 extends 'Config::MVP::Reader';
 with qw(Config::MVP::Reader::Findable::ByExtension);
-# ABSTRACT: the reader for dist.pl files
 
 use namespace::autoclean;
 

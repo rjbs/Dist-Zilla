@@ -1,6 +1,7 @@
 package Dist::Zilla::Chrome::Test;
-use Moose;
 # ABSTRACT: the chrome used by Dist::Zilla::Tester
+
+use Moose;
 
 use MooseX::Types::Moose qw(ArrayRef HashRef Str);
 use Dist::Zilla::Types qw(OneZero);

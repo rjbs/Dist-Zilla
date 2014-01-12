@@ -1,5 +1,6 @@
 package Dist::Zilla::Plugin::License;
 # ABSTRACT: output a LICENSE file
+
 use Moose;
 with 'Dist::Zilla::Role::FileGatherer';
 

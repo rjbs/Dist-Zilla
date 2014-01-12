@@ -1,5 +1,6 @@
 package Dist::Zilla::PluginBundle::Filter;
 # ABSTRACT: use another bundle, with some plugins removed
+
 use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::PluginBundle';

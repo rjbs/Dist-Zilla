@@ -1,5 +1,6 @@
 package Dist::Zilla::Plugin::Encoding;
 # ABSTRACT: set the encoding of arbitrary files
+
 use Moose;
 with 'Dist::Zilla::Role::EncodingProvider';
 

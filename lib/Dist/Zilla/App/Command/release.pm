@@ -2,6 +2,7 @@ use strict;
 use warnings;
 package Dist::Zilla::App::Command::release;
 # ABSTRACT: release your dist to the CPAN
+
 use Dist::Zilla::App -command;
 
 =head1 SYNOPSIS

@@ -1,6 +1,6 @@
 package Dist::Zilla::Plugin::MetaResources;
-
 # ABSTRACT: provide arbitrary "resources" for distribution metadata
+
 use Moose;
 with 'Dist::Zilla::Role::MetaProvider';
 
