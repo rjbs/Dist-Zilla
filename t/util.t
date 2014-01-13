@@ -22,8 +22,7 @@ If no real package is found, substitutes stubs instead of basic functions.
 =head1 SYNOPSIS
 EOP
 
-    is abstract_from_string($pod), 'Perl interface to various C<readline> packages.
-If no real package is found, substitutes stubs instead of basic functions.';
+    is abstract_from_string($pod), 'Perl interface to various C<readline> packages. If no real package is found, substitutes stubs instead of basic functions.';
 }
 
 {

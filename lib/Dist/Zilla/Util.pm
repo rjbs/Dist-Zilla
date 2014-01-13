@@ -46,6 +46,7 @@ use String::RewritePrefix 0.002; # better string context behavior
       and $event->{content} =~ /^(?:\S+\s+)+?-+\s+(.+)\n$/s
     ) {
       $self->{abstract} = $1;
+      $self->{abstract} =~ s/\s+/\x20/g;
     }
   }
 }
