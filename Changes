@@ -1,6 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - [GatherDir::Template] now generates an in-memory file, rather
+          than from-code, allowing other plugins to subsequently munge its
+          contents (ether)
 
 5.012     2014-01-15 09:58:00-05:00 America/New_York
         - when handling a multi-line abstract, fold the lines on whitespace;

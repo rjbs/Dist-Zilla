@@ -9,7 +9,6 @@ use namespace::autoclean;
 
 use autodie;
 use Moose::Autobox;
-use Dist::Zilla::File::FromCode;
 use Path::Tiny;
 
 =head1 DESCRIPTION
@@ -25,6 +24,12 @@ object, respectively.
 It is meant to be used when minting dists with C<dzil new>, but could be used
 in building existing dists, too.
 
+=head1 SEE ALSO
+
+L<[GenerateFile]|Dist::Zilla::Plugin::GenerateFile> likewise
+generates a file from a template, but the template comes from the plugin
+configuration in F<dist.ini>, rather than in a separate file.
+
 =cut
 
 sub _file_from_filename {
@@ -32,19 +37,16 @@ sub _file_from_filename {
 
   my $template = path($filename)->slurp_utf8;
 
-  return Dist::Zilla::File::FromCode->new({
+  require Dist::Zilla::File::InMemory;
+  return Dist::Zilla::File::InMemory->new({
     name => $filename,
-    mode => ((stat $filename)[2] & 0755) | 0200, # kill world-writeability, make sure owner-writable.
-    code => sub {
-      my ($file_obj) = @_;
-      $self->fill_in_string(
-        $template,
-        {
-          dist   => \($self->zilla),
-          plugin => \($self),
-        },
-      );
-    },
+    content => $self->fill_in_string(
+      $template,
+      {
+        dist   => \($self->zilla),
+        plugin => \($self),
+      },
+    ),
   });
 }
 
