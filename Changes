@@ -2,6 +2,11 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+5.012     2014-01-15 09:58:00-05:00 America/New_York
+        - when handling a multi-line abstract, fold the lines on whitespace;
+          previously, the newlines had been left in, which caused downstream
+          warnings
+
 5.011     2014-01-12 16:09:29-05:00 America/New_York
         - ->VERSION is again defined in the tester forms of Builder and Minter
         - remove a small obsolete code path from PkgVersion
