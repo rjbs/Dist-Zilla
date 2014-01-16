@@ -28,7 +28,8 @@ sub mvp_aliases { return { filename => 'filenames', match => 'matches' } }
 
 =attr encoding
 
-This is the encoding to set on the selected files.
+This is the encoding to set on the selected files. The special value "bytes"
+can be used to indicate raw files that should not be encoded.
 
 =cut
 
