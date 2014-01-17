@@ -223,8 +223,9 @@ sub munge_perl {
     } else {
       my $method = $self->die_on_line_insertion ? 'log_fatal' : 'log';
       $self->$method([
-        'no blank line for $VERSION after package %s statement on line %s',
+        'no blank line for $VERSION after package %s statement in %s line %s',
         $stmt->namespace,
+        $file->name,
         $stmt->line_number,
       ]);
 
