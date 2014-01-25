@@ -23,7 +23,7 @@ In your F<dist.ini>:
   filename = xt/release/pod-coverage.t ; pod coverage tests are for jerks
   filename = todo-list.txt             ; keep our secret plans to ourselves
 
-  match     = ^test_data/*
+  match     = ^test_data/
   match     = ^test.cvs$
 
 =cut
