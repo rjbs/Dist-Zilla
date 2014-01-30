@@ -31,8 +31,13 @@ sub munge_files {
   $self->log_fatal("no munge_file behavior implemented!")
     unless $self->can('munge_file');
 
-  $self->munge_file($_)
-    for grep { ! $_->is_bytes } $self->zilla->files->flatten;
+  for my $file $self->zilla->files->flatten
+  {
+    $self->log_debug($file->name . ' has \'bytes\' encoding, skipping...'), next
+      if $file->is_bytes;
+
+    $self->munge_file($file);
+  }
 }
 
 1;
