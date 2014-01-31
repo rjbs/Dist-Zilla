@@ -84,6 +84,19 @@ sub exclude_file ($self, $file) {
   return;
 }
 
+around dump_config => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  my $config = $self->$orig;
+
+  $config->{+__PACKAGE__} = {
+      except => [ sort @{ $self->except } ],
+  };
+
+  return $config;
+};
+
 sub prune_files ($self) {
   # Copy list (break reference) so we can mutate.
   for my $file ((), $self->zilla->files->@*) {

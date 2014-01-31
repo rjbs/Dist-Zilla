@@ -110,6 +110,19 @@ sub BUILD ($self, @) {
   }
 }
 
+around dump_config => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  my $config = $self->$orig;
+
+  $config->{+__PACKAGE__} = {
+    map { $_ => $self->$_ ? 1 : 0 } qw(die_on_existing_version die_on_line_insertion),
+  };
+
+  return $config;
+};
+
 sub munge_files ($self) {
   $self->munge_file($_) for $self->found_files->@*;
 }

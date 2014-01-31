@@ -105,6 +105,19 @@ my sub _join_re ($list) {
   qr/$re/
 }
 
+around dump_config => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  my $config = $self->$orig;
+
+  $config->{+__PACKAGE__} = {
+    map { $_ => [ sort @{ $self->$_ } ] } qw(dirs files matches skips),
+  };
+
+  return $config;
+};
+
 sub find_files ($self) {
   my $skip  = _join_re($self->skips);
   my $dir   = _join_re([ map { qr!^\Q$_/! } $self->dirs->@* ]);

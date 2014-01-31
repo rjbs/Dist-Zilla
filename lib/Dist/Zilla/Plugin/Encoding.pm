@@ -80,6 +80,20 @@ has ignore => (
   default => sub { [] },
 );
 
+around dump_config => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  my $config = $self->$orig;
+
+  $config->{+__PACKAGE__} = {
+    encoding => $self->encoding,
+    map { $_ => [ sort @{ $self->$_ } ] } qw(filenames matches),
+  };
+
+  return $config;
+};
+
 sub set_file_encodings ($self) {
   # never match (at least the filename characters)
   my $matches_regex = qr/\000/;

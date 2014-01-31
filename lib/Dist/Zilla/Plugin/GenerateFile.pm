@@ -105,6 +105,20 @@ has name_is_template => (
   default => 0,
 );
 
+around dump_config => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  my $config = $self->$orig;
+
+  $config->{+__PACKAGE__} = {
+    filename => $self->filename,
+    map { $_ => $self->$_ ? 1 : 0 } qw(content_is_template name_is_template),
+  };
+
+  return $config;
+};
+
 sub gather_files ($self, $arg = {}) {
   my $file = Dist::Zilla::File::InMemory->new({
     name    => $self->_filename,

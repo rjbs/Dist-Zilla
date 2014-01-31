@@ -140,6 +140,21 @@ sub scan_file_reqs ($self, $file) {
   return $self->_scanner->scan_ppi_document($self->ppi_document_for_file($file))
 }
 
+around dump_config => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  my $config = $self->$orig;
+
+  $config->{+__PACKAGE__} = +{
+    (map { $_ => [ sort @{ $self->$_ } ] } qw(extra_scanners)),
+    (map { $_ => $self->$_ } qw(type)),
+    ($self->has_scanners ? (scanners => $self->scanners) : ()),
+  };
+
+  return $config;
+};
+
 sub register_prereqs ($self) {
   my $type = $self->type;
 

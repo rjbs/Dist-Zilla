@@ -17,6 +17,17 @@ has user => (
 
 sub cpanid { shift->user }
 
+around dump_config => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  my $config = $self->$orig;
+
+  $config->{+__PACKAGE__} = { user => $self->user };
+
+  return $config;
+};
+
 sub release ($self, $) {
   for my $env (
     'DIST_ZILLA_FAKERELEASE_FAIL', # old

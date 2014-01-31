@@ -57,6 +57,19 @@ has matches => (
   default => sub { [] },
 );
 
+around dump_config => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  my $config = $self->$orig;
+
+  $config->{+__PACKAGE__} = {
+    map { $_ => [ sort @{ $self->$_ } ] } qw(filenames matches),
+  };
+
+  return $config;
+};
+
 sub prune_files ($self) {
   # never match (at least the filename characters)
   my $matches_regex = qr/\000/;

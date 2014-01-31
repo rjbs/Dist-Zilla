@@ -86,4 +86,15 @@ sub register_component ($class, $name, $arg, $section) {
   return;
 }
 
+around dump_config => sub {
+  my ($orig, $self) = @_;
+  my $config = $self->$orig;
+
+  $config->{'' . __PACKAGE__} = {
+      version => $self->VERSION,
+  };
+
+  return $config;
+};
+
 1;

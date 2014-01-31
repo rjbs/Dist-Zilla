@@ -28,6 +28,17 @@ has filename => (
   default => 'META.yml',
 );
 
+around dump_config => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  my $config = $self->$orig;
+
+  $config->{+__PACKAGE__} = { filename => $self->filename };
+
+  return $config;
+};
+
 sub gather_files ($self) {
   require Dist::Zilla::File::FromCode;
   require YAML::Tiny;

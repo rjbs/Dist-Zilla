@@ -126,6 +126,19 @@ sub _add_build_elements {
   return '$build->add_build_element($_) for qw(' . join(' ', @elems) . ');';
 }
 
+around dump_config => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  my $config = $self->$orig;
+
+  $config->{+__PACKAGE__} = {
+    map { $_ => $self->$_ } qw(mb_version mb_class mb_lib),
+  };
+
+  return $config;
+};
+
 sub register_prereqs ($self) {
   $self->zilla->register_prereqs(
     { phase => 'configure' },
