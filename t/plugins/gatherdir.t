@@ -39,6 +39,7 @@ my $tzil = Builder->from_config(
           prefix => 'links',
         } ],
         'Manifest',
+        'MetaConfig',
       ),
       'source/.profile' => "Bogus dotfile.\n",
       'corpus/extra/.dotfile' => "Bogus dotfile.\n",
