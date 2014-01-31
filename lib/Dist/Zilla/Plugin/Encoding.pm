@@ -63,6 +63,19 @@ has matches => (
   default => sub { [] },
 );
 
+around dump_config => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  my $config = $self->$orig;
+
+  $config->{'' . __PACKAGE__} = {
+    map { $_ => $self->$_ } qw(encoding filenames matches),
+  };
+
+  return $config;
+};
+
 sub set_file_encodings {
   my ($self) = @_;
 

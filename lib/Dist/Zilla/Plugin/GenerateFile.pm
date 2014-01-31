@@ -104,6 +104,19 @@ has name_is_template => (
   default => 0,
 );
 
+around dump_config => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  my $config = $self->$orig;
+
+  $config->{'' . __PACKAGE__} = {
+    map { $_ => $self->$_ } qw(filename content content_is_template name_is_template),
+  };
+
+  return $config;
+};
+
 sub gather_files {
   my ($self, $arg) = @_;
 

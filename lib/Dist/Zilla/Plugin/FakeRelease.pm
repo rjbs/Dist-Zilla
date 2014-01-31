@@ -13,6 +13,17 @@ has user => (
   default  => 'AUTHORID',
 );
 
+around dump_config => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  my $config = $self->$orig;
+
+  $config->{'' . __PACKAGE__} = { user => $self->user };
+
+  return $config;
+};
+
 sub release {
   my $self = shift;
 

@@ -56,6 +56,19 @@ has matches => (
   default => sub { [] },
 );
 
+around dump_config => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  my $config = $self->$orig;
+
+  $config->{'' . __PACKAGE__} = {
+    map { $_ => $self->$_ } qw(filenames matches),
+  };
+
+  return $config;
+};
+
 sub prune_files {
   my ($self) = @_;
 

@@ -35,6 +35,17 @@ Other modules: L<ExtUtils::Manifest>.
 
 has skipfile => (is => 'ro', required => 1, default => 'MANIFEST.SKIP');
 
+around dump_config => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  my $config = $self->$orig;
+
+  $config->{'' . __PACKAGE__} = { skipfile => $self->skipfile };
+
+  return $config;
+};
+
 sub prune_files {
   my ($self) = @_;
   my $files = $self->zilla->files;

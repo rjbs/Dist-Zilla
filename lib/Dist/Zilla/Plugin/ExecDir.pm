@@ -24,6 +24,19 @@ has dir => (
   default => 'bin',
 );
 
+with 'Dist::Zilla::Role::ExecFiles';
+
+around dump_config => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  my $config = $self->$orig;
+
+  $config->{'' . __PACKAGE__} = { dir => $self->dir };
+
+  return $config;
+};
+
 sub find_files {
   my ($self) = @_;
 
@@ -31,6 +44,5 @@ sub find_files {
   my $files = $self->zilla->files->grep(sub { index($_->name, "$dir/") == 0 });
 }
 
-with 'Dist::Zilla::Role::ExecFiles';
 __PACKAGE__->meta->make_immutable;
 1;

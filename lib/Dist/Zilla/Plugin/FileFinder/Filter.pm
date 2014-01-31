@@ -59,6 +59,19 @@ sub mvp_aliases { +{ qw(
 
 sub mvp_multivalue_args { qw(skips) }
 
+around dump_config => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  my $config = $self->$orig;
+
+  $config->{'' . __PACKAGE__} = {
+    map { $_ => $self->$_ } qw(finder skips),
+  };
+
+  return $config;
+};
+
 sub find_files {
   my $self = shift;
 

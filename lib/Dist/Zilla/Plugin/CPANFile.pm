@@ -38,6 +38,17 @@ sub _hunkify_hunky_hunk_hunks {
   return $str;
 }
 
+around dump_config => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  my $config = $self->$orig;
+
+  $config->{'' . __PACKAGE__} = { filename => $self->filename };
+
+  return $config;
+};
+
 sub gather_files {
   my ($self, $arg) = @_;
 

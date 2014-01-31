@@ -21,6 +21,17 @@ has style => (
   required => 1,
 );
 
+around dump_config => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  my $config = $self->$orig;
+
+  $config->{'' . __PACKAGE__} = { style => $self->style };
+
+  return $config;
+};
+
 sub find_files {
   my ($self) = @_;
 

@@ -20,6 +20,18 @@ will not be added.
 
 =cut
 
+around dump_config => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  my $config = $self->$orig;
+
+  $config->{'' . __PACKAGE__} = { finder => $self->finder };
+
+  return $config;
+};
+
+
 sub munge_files {
   my ($self) = @_;
 

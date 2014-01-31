@@ -92,6 +92,19 @@ for my $attr (keys %ATTR_ALIAS) {
   );
 }
 
+around dump_config => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  my $config = $self->$orig;
+
+  $config->{'' . __PACKAGE__} = {
+    map { $_ => $self->$_ } qw(directories files packages namespaces),
+  };
+
+  return $config;
+};
+
 =method metadata
 
 Returns a reference to a hash containing the distribution's no_index metadata.

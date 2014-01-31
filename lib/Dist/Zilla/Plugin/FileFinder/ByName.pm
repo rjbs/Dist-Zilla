@@ -107,6 +107,19 @@ sub _join_re {
   $re;
 }
 
+around dump_config => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  my $config = $self->$orig;
+
+  $config->{'' . __PACKAGE__} = {
+    map { $_ => $self->$_ } qw(dirs files matches skips),
+  };
+
+  return $config;
+};
+
 sub find_files {
   my $self = shift;
 

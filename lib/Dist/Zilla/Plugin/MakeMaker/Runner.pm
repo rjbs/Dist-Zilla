@@ -17,6 +17,17 @@ has 'make_path' => (
   default => $Config{make} || 'make',
 );
 
+around dump_config => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  my $config = $self->$orig;
+
+  $config->{'' . __PACKAGE__} = { make_path => $self->make_path };
+
+  return $config;
+};
+
 sub build {
   my $self = shift;
 

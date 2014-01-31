@@ -115,6 +115,19 @@ has skips => (
   isa => 'ArrayRef[Str]',
 );
 
+around dump_config => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  my $config = $self->$orig;
+
+  $config->{'' . __PACKAGE__} = {
+    map { $_ => $self->$_ } qw(finder test_finder configure_finder extra_scanners scanners skips),
+  };
+
+  return $config;
+};
+
 sub register_prereqs {
   my $self  = shift;
 

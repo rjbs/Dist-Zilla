@@ -46,6 +46,17 @@ has version => (
   default => '1.4',
 );
 
+around dump_config => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  my $config = $self->$orig;
+
+  $config->{'' . __PACKAGE__} = { version => $self->version };
+
+  return $config;
+};
+
 sub gather_files {
   my ($self, $arg) = @_;
 

@@ -2,6 +2,7 @@ package Dist::Zilla::Plugin::ShareDir;
 # ABSTRACT: install a directory's contents as "ShareDir" content
 
 use Moose;
+with 'Dist::Zilla::Role::ShareDir';
 
 use namespace::autoclean;
 
@@ -24,6 +25,18 @@ has dir => (
   default => 'share',
 );
 
+around dump_config => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  my $config = $self->$orig;
+
+  $config->{'' . __PACKAGE__} = { dir => $self->dir };
+
+  return $config;
+};
+
+
 sub find_files {
   my ($self) = @_;
 
@@ -39,6 +52,5 @@ sub share_dir_map {
   return { dist => $self->dir };
 }
 
-with 'Dist::Zilla::Role::ShareDir';
 __PACKAGE__->meta->make_immutable;
 1;
