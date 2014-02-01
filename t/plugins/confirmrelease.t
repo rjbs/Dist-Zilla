@@ -11,7 +11,7 @@ sub new_tzil {
     {
       add_files => {
         'source/dist.ini' =>
-          simple_ini(qw(GatherDir ConfirmRelease FakeRelease)),
+          simple_ini(qw(GatherDir ConfirmRelease FakeRelease MetaConfig)),
       },
     },
   );

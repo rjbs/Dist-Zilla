@@ -27,7 +27,7 @@ my $tzil = Builder->from_config(
   { dist_root => 'corpus/dist/DZT' },
   {
     add_files => {
-      'source/dist.ini' => simple_ini(qw<GatherDir ExtraTests AutoPrereqs>),
+      'source/dist.ini' => simple_ini(qw<GatherDir ExtraTests AutoPrereqs MetaConfig>),
       (map {; "source/xt/$_/huffer.t" => sprintf($generic_test, $_) }
            @xt_types, qw(blort))
     },

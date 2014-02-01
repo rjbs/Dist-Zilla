@@ -30,6 +30,7 @@ my $tzil = Builder->from_config(
             ],
           }
         ],
+        'MetaConfig',
       )
     },
   },
@@ -96,6 +97,7 @@ $tzil = Builder->from_config(
             ],
           }
         ],
+        'MetaConfig',
       )
     },
   },

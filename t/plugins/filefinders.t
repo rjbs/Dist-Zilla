@@ -34,6 +34,7 @@ my $tzil = Builder->from_config(
         [ ExecDir => ],
         [ ShareDir => ],
         'Manifest',
+        'MetaConfig',
       ),
       (map {; "source/xt${_}more.t" => $generic_test }
            qw(/author/ /smoke/ /release/ /)),

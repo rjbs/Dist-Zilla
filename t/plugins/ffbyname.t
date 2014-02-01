@@ -77,7 +77,8 @@ sub make_tzil {
 
 #---------------------------------------------------------------------
 make_tzil([ 'FileFinder::ByName' => {qw(dir corpus  skip archives)}],
-          [ 'FileFinder::Filter' => {qw(finder FileFinder::ByName  skip DZT)}]);
+          [ 'FileFinder::Filter' => {qw(finder FileFinder::ByName  skip DZT)}],
+          [ 'MetaConfig']);
 
 is_found('FileFinder::ByName' => [qw(
   corpus/DZT/README
@@ -105,6 +106,7 @@ make_tzil(
     { finder => [qw(InBin AllPerl Plugins Synopsis)] }],
   [ 'FileFinder::Filter' => NoPluginM =>
     { finder => 'AllPerl', skip => 'Plugin/M' }],
+  [ 'MetaConfig'],
 );
 
 is_found(InBin => [qw(
@@ -176,7 +178,9 @@ is_found(NoPluginM => [qw(
 #---------------------------------------------------------------------
 make_tzil([ 'FileFinder::ByName' => 'Everything' ],
           [ 'FileFinder::ByName' => 'EverythingButPerl' =>
-            {skip => [qw( \.t$ (?i)\.p[lm]$ )]} ]);
+            {skip => [qw( \.t$ (?i)\.p[lm]$ )]} ],
+          [ 'MetaConfig'],
+);
 
 is_found(Everything => [ map { $_->name } @dist_files ]);
 
