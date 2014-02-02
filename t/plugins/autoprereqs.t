@@ -11,7 +11,7 @@ sub build_meta {
 
   $tzil->build;
 
-  YAML::Tiny->new->read($tzil->tempdir->file('build/META.yml'))->[0];
+  YAML::Tiny->new->read($tzil->tempdir->child('build/META.yml'))->[0];
 }
 
 my $tzil = Builder->from_config(
