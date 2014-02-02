@@ -96,6 +96,9 @@ sub AUTOLOAD_path {
     return _recast( scalar Path::Tiny::path($self)->$method(@args) );
 }
 
+our $WARN_LOAD_PATHCLASS_METHODS = 1;
+our $WARN_REROUTED_METHODS       = undef;
+
 # This could have been implemented differently without autoload,
 # but it would have required `require`ing all PT/PCD/PCF, loading Package::Stash,
 # iterating all their symbol tables, dynamically creating subs in ::Path that curried the results
@@ -114,10 +117,11 @@ sub AUTOLOAD {
     # If the method is Path::Tiny supported,
     # call it, and wrap the result.
     return AUTOLOAD_path( $meth, $self, @_ ) if Path::Tiny->can($meth);
-    require Carp;
-    Carp::carp( "$meth called on Dist::Zilla::Path."
+    if ( $WARN_LOAD_PATHCLASS_METHODS ) {
+        require Carp;
+        Carp::carp( "$meth called on Dist::Zilla::Path."
           . ' This is deprecated and will go away in a future release' );
-
+    }
     require Module::Runtime;
     for my $module ( qw( Path::Class::Dir Path::Class::File ) ) {
         Module::Runtime::require_module( $module );
@@ -144,6 +148,7 @@ sub AUTOLOAD {
     # anyway.
     return AUTOLOAD_dir( $meth, $self, @_ ) if Path::Class::Dir->can($meth);
     return AUTOLOAD_file( $meth, $self, @_ ) if Path::Class::File->can($meth);
+    require Carp;
     Carp::croak( "Can't find resolvant for $meth in any of"
           . ' Path::Tiny, Path::Class::Dir, Path::Class::File' );
 }
@@ -165,6 +170,37 @@ Function returns a C<Dist::Zilla::Path> object.
 sub path {
     my $pp = Path::Tiny::path(@_);
     return bless $pp, __PACKAGE__;
+}
+
+
+sub file {
+    my ( $self, @rest ) = @_;
+    if ( $WARN_REROUTED_METHODS ) {
+        require Carp;
+        Carp::carp( "file called on Dist::Zilla::Path."
+          . ' This is deprecated and will go away in a future release' );
+    }
+    return $self->child( @rest );
+}
+
+sub subdir {
+    my ( $self, @rest ) = @_;
+    if ( $WARN_REROUTED_METHODS ) {
+        require Carp;
+        Carp::carp( "subdir called on Dist::Zilla::Path."
+          . ' This is deprecated and will go away in a future release' );
+    }
+    return $self->child( @rest );
+}
+
+sub dir {
+    my ( $self, @rest ) = @_;
+    if ( $WARN_REROUTED_METHODS ) {
+        require Carp;
+        Carp::carp( "dir called on Dist::Zilla::Path."
+          . ' This is deprecated and will go away in a future release' );
+    }
+    return $self->parent( @rest );
 }
 
 1;
