@@ -123,12 +123,12 @@ Do you want to enter your PAUSE account details? ',
   }
 
   $config_root->mkpath unless -d $config_root;
-  $config_root->subdir('profiles')->mkpath
-    unless -d $config_root->subdir('profiles');
+  $config_root->child('profiles')->mkpath
+    unless -d $config_root->child('profiles');
 
   my $umask = umask;
   umask( $umask | 077 ); # this file might contain PAUSE pw; make it go-r
-  open my $fh, '>:encoding(UTF-8)', $config_root->file('config.ini');
+  open my $fh, '>:encoding(UTF-8)', $config_root->child('config.ini');
 
   $fh->print("[%User]\n");
   $fh->print("name  = $realname\n");

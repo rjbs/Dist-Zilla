@@ -30,7 +30,7 @@ sub _build_global_stashes {
   require Dist::Zilla::Util;
   my $config_dir  = Dist::Zilla::Util->_global_config_root;
 
-  my $config_base = $config_dir->file('config');
+  my $config_base = $config_dir->child('config');
 
   require Dist::Zilla::MVP::Reader::Finder;
   require Dist::Zilla::MVP::Assembler::GlobalConfig;

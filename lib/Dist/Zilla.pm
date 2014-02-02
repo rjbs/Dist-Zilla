@@ -14,7 +14,6 @@ use Moose::Util::TypeConstraints;
 use Dist::Zilla::Types qw(License ReleaseStatus);
 
 use Log::Dispatchouli 1.100712; # proxy_loggers, quiet_fatal
-use Path::Class;
 use Dist::Zilla::Path;
 use List::Util 1.33 qw(first none);
 use Software::License 0.101370; # meta2_name
@@ -725,10 +724,10 @@ sub _write_out_file {
   # Okay, this is a bit much, until we have ->debug. -- rjbs, 2008-06-13
   # $self->log("writing out " . $file->name);
 
-  my $file_path = file($file->name);
+  my $file_path = path($file->name);
 
-  my $to_dir = $build_root->subdir( $file_path->dir );
-  my $to = $to_dir->file( $file_path->basename );
+  my $to_dir = path($build_root)->child( $file_path->parent );
+  my $to = $to_dir->child( $file_path->basename );
   $to_dir->mkpath unless -e $to_dir;
   die "not a directory: $to_dir" unless -d $to_dir;
 
