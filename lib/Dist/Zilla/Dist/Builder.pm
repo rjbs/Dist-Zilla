@@ -357,6 +357,7 @@ has built_in => (
   is   => 'rw',
   isa  => Dir,
   init_arg  => undef,
+  coerce => 1,
 );
 
 =method ensure_built_in
