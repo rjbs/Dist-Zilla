@@ -8,7 +8,7 @@ with 'Dist::Zilla::Role::ConfigDumper';
 
 use MooseX::Types::Moose qw(ArrayRef Bool HashRef Object Str);
 use MooseX::Types::Perl qw(DistName LaxVersionStr);
-use MooseX::Types::Path::Class qw(Dir File);
+use Dist::Zilla::Types::Path qw(Dir File);
 use Moose::Util::TypeConstraints;
 
 use Dist::Zilla::Types qw(License ReleaseStatus);

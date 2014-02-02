@@ -5,7 +5,7 @@ use Moose 0.92; # role composition fixes
 extends 'Dist::Zilla';
 
 use MooseX::Types::Moose qw(HashRef);
-use MooseX::Types::Path::Class qw(Dir File);
+use Dist::Zilla::Types::Path qw(Dir File);
 
 use File::pushd ();
 use Path::Class;
