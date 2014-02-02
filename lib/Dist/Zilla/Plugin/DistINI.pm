@@ -7,7 +7,7 @@ with qw(Dist::Zilla::Role::FileGatherer);
 use Dist::Zilla::File::FromCode;
 
 use MooseX::Types::Moose qw(ArrayRef Str);
-use Path::Tiny;
+use Dist::Zilla::Path;
 
 use namespace::autoclean;
 

@@ -9,7 +9,7 @@ use MooseX::Types::Path::Class qw(Dir File);
 
 use File::pushd ();
 use Path::Class;
-use Path::Tiny; # because more Path::* is better, eh?
+use Dist::Zilla::Path; # because more Path::* is better, eh?
 use Try::Tiny;
 use List::Util 1.45 'uniq';
 
