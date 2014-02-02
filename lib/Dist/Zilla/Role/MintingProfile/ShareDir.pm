@@ -7,7 +7,7 @@ with 'Dist::Zilla::Role::MintingProfile';
 use namespace::autoclean;
 
 use File::ShareDir;
-use Path::Class;
+use Dist::Zilla::Path;
 
 =head1 DESCRIPTION
 
@@ -19,8 +19,8 @@ C<profile_dir> method that looks in the I<module>'s L<ShareDir|File::ShareDir>.
 sub profile_dir {
   my ($self, $profile_name) = @_;
 
-  my $profile_dir = dir( File::ShareDir::module_dir($self->meta->name) )
-                  ->subdir( $profile_name );
+  my $profile_dir = path( File::ShareDir::module_dir($self->meta->name) )
+                  ->child( $profile_name );
 
   return $profile_dir if -d $profile_dir;
 

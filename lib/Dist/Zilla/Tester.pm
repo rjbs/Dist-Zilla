@@ -94,7 +94,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
     my ($self, $filename) = @_;
 
     Dist::Zilla::Path::path(
-      $self->tempdir->file($filename)
+      $self->tempdir->child($filename)
     )->slurp_utf8;
   }
 
@@ -102,7 +102,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
     my ($self, $filename) = @_;
 
     Dist::Zilla::Path::path(
-      $self->tempdir->file($filename)
+      $self->tempdir->child($filename)
     )->slurp_raw;
   }
 
@@ -119,7 +119,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
   with 'Dist::Zilla::Tester::_Role';
 
   use File::Copy::Recursive qw(dircopy);
-  use Path::Class;
+  use Dist::Zilla::Path;
 
   our $Log_Events = [];
   sub most_recent_log_events {
@@ -143,16 +143,16 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
         CLEANUP => 1,
         (defined $tempdir_root ? (DIR => $tempdir_root) : ()),
     );
-    my $tempdir = dir($tempdir_obj)->absolute;
+    my $tempdir = path($tempdir_obj)->absolute;
 
-    my $root = $tempdir->subdir('source');
+    my $root = $tempdir->child('source');
     $root->mkpath;
 
     dircopy($source, $root);
 
     if ($tester_arg->{also_copy}) {
       while (my ($src, $dest) = each %{ $tester_arg->{also_copy} }) {
-        dircopy($src, $tempdir->subdir($dest));
+        dircopy($src, $tempdir->child($dest));
       }
     }
 
@@ -161,8 +161,8 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
         die "File name '$name' does not seem to be legal on the current OS"
           if !path_looks_legal($name);
         my $unix_name = Path::Class::File->new_foreign("Unix", $name);
-        my $fn = $tempdir->file($unix_name);
-        $fn->dir->mkpath;
+        my $fn = $tempdir->child($unix_name);
+        $fn->parent->mkpath;
         Dist::Zilla::Path::path($fn)->spew_utf8($content);
       }
     }
@@ -195,7 +195,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
     my $wd = File::pushd::pushd($self->root);
 
     $target ||= do {
-      my $target = dir($self->tempdir)->subdir('build');
+      my $target = path($self->tempdir)->child('build');
       $target->mkpath;
       $target;
     };
@@ -233,7 +233,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
   with 'Dist::Zilla::Tester::_Role';
 
   use File::Copy::Recursive qw(dircopy);
-  use Path::Class;
+  use Dist::Zilla::Path;
 
   our $Log_Events = [];
   sub most_recent_log_events {
@@ -244,7 +244,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
     my ($self) = @_;
 
     my $name = $self->name;
-    my $dir  = $self->tempdir->subdir('mint')->absolute;
+    my $dir  = $self->tempdir->child('mint')->absolute;
 
     $self->log_fatal("$dir already exists") if -e $dir;
 
@@ -254,7 +254,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
   sub _setup_global_config {
     my ($self, $dir, $arg) = @_;
 
-    my $config_base = $dir->file('config');
+    my $config_base = path($dir)->child('config');
 
     my $stash_registry = {};
 
@@ -287,14 +287,14 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
         CLEANUP => 1,
         (defined $tempdir_root ? (DIR => $tempdir_root) : ()),
     );
-    my $tempdir = dir($tempdir_obj)->absolute;
+    my $tempdir = path($tempdir_obj)->absolute;
 
     local $arg->{chrome} = Dist::Zilla::Chrome::Test->new;
     $Log_Events = $arg->{chrome}->logger->events;
 
     local @INC = map {; ref($_) ? $_ : File::Spec->rel2abs($_) } @INC;
 
-    my $global_config_root = Path::Class::dir($tester_arg->{global_config_root})->absolute;
+    my $global_config_root = path($tester_arg->{global_config_root})->absolute;
 
     local $ENV{DZIL_GLOBAL_CONFIG_ROOT} = $global_config_root;
 
