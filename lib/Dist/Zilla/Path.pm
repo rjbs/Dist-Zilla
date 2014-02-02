@@ -6,7 +6,7 @@ package Dist::Zilla::Path;
 
 # ABSTRACT: Wrapper for Path::Tiny that provides backcompat and deprecation process for Path::Class
 
-use Path::Tiny qw();
+use Path::Tiny 0.052 qw();  # issue 427
 use Scalar::Util qw( blessed );
 use Sub::Exporter::Progressive -setup => {
     exports => [qw[ path  ]],

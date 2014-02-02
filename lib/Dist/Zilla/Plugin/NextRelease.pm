@@ -10,7 +10,7 @@ with (
   'Dist::Zilla::Role::AfterRelease',
 );
 
-use Path::Tiny;
+use Dist::Zilla::Path;
 use Moose::Util::TypeConstraints;
 use List::Util 'first';
 use String::Formatter 0.100680 stringf => {
