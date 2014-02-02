@@ -34,7 +34,7 @@ my $tzil = Builder->from_config(
           MetaNoIndex => {
             file  => 'file-1.txt',
             files => 'file-2.txt',
-            
+
             dir         => 'dir-1',
             directory   => 'dir-2',
             directories => 'dir-3',
