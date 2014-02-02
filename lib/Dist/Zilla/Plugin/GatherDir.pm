@@ -2,7 +2,7 @@ package Dist::Zilla::Plugin::GatherDir;
 # ABSTRACT: gather all the files in a directory
 
 use Moose;
-use MooseX::Types::Path::Class qw(Dir File);
+use Dist::Zilla::Types::Path qw(Dir File);
 with 'Dist::Zilla::Role::FileGatherer';
 
 use namespace::autoclean;
