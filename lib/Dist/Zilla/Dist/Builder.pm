@@ -472,7 +472,7 @@ sub _build_archive {
   for my $distfile (
     sort { length($a->name) <=> length($b->name) } @{ $self->files }
   ) {
-    my $in = path($distfile->name)->dir;
+    my $in = path($distfile->name)->parent;
 
     unless ($seen_dir{ $in }++) {
       $archive->add_data(
@@ -674,7 +674,7 @@ sub install {
     $self->log("all's well; left dist in place at $target");
   } else {
     $self->log("all's well; removing $target");
-    $target->rmtree;
+    $target->remove_tree;
     $latest->remove if $latest;
   }
 
@@ -788,7 +788,7 @@ sub run_in_build {
 
   if ($ok) {
     $self->log("all's well; removing $target");
-    $target->rmtree;
+    $target->remove_tree;
     $latest->remove if $latest;
   } else {
     my $error = $@ || '(unknown error)';
