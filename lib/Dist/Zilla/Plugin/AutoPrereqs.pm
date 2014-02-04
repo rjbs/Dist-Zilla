@@ -42,7 +42,7 @@ prerequisites unless you set configure_finder.
 
 use namespace::autoclean;
 
-use List::AllUtils 'uniq';
+use List::MoreUtils 'uniq';
 use Moose::Autobox;
 use Perl::PrereqScanner 1.016; # don't skip "lib"
 use CPAN::Meta::Requirements;
