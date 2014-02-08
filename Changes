@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+5.013     2014-02-08 17:08:16-05:00 America/New_York
         - META.json is now a UTF-8 file, rather than ASCII
         - document the use of filefinders in [PkgVersion], and remove
           filtering out of .t, .pod files; do skip non-text files, though
