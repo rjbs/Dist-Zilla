@@ -32,7 +32,7 @@ around dump_config => sub {
 
   my $config = $self->$orig;
 
-  $config->{'' . __PACKAGE__} = { dir => $self->dir };
+  $config->{+__PACKAGE__} = { dir => $self->dir };
 
   return $config;
 };

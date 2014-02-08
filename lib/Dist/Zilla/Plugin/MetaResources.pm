@@ -67,7 +67,7 @@ around dump_config => sub {
 
   my $config = $self->$orig;
 
-  $config->{'' . __PACKAGE__} = { resources => $self->resources };
+  $config->{+__PACKAGE__} = { resources => $self->resources };
 
   return $config;
 };

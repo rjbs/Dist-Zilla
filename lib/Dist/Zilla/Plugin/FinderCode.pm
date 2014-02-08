@@ -27,7 +27,7 @@ around dump_config => sub {
 
   my $config = $self->$orig;
 
-  $config->{'' . __PACKAGE__} = { style => $self->style };
+  $config->{+__PACKAGE__} = { style => $self->style };
 
   return $config;
 };

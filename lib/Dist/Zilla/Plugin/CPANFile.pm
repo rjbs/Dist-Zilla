@@ -44,7 +44,7 @@ around dump_config => sub {
 
   my $config = $self->$orig;
 
-  $config->{'' . __PACKAGE__} = { filename => $self->filename };
+  $config->{+__PACKAGE__} = { filename => $self->filename };
 
   return $config;
 };

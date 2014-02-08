@@ -86,7 +86,7 @@ around dump_config => sub {
 
   my $config = $self->$orig;
 
-  $config->{'' . __PACKAGE__} = { except => $self->except };
+  $config->{+__PACKAGE__} = { except => $self->except };
 
   return $config;
 };

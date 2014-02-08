@@ -68,7 +68,7 @@ around dump_config => sub {
 
   my $config = $self->$orig;
 
-  $config->{'' . __PACKAGE__} = { module_map => $self->_module_map };
+  $config->{+__PACKAGE__} = { module_map => $self->_module_map };
 
   return $config;
 };

@@ -26,7 +26,7 @@ around dump_config => sub {
 
   my $config = $self->$orig;
 
-  $config->{'' . __PACKAGE__} = { finder => $self->finder };
+  $config->{+__PACKAGE__} = { finder => $self->finder };
 
   return $config;
 };

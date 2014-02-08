@@ -23,7 +23,7 @@ around dump_config => sub {
 
   my $config = $self->$orig;
 
-  $config->{'' . __PACKAGE__} = { make_path => $self->make_path };
+  $config->{+__PACKAGE__} = { make_path => $self->make_path };
 
   return $config;
 };

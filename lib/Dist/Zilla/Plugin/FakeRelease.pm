@@ -19,7 +19,7 @@ around dump_config => sub {
 
   my $config = $self->$orig;
 
-  $config->{'' . __PACKAGE__} = { user => $self->user };
+  $config->{+__PACKAGE__} = { user => $self->user };
 
   return $config;
 };

@@ -111,7 +111,7 @@ around dump_config => sub {
 
   my $config = $self->$orig;
 
-  $config->{'' . __PACKAGE__} = {
+  $config->{+__PACKAGE__} = {
     map { $_ => $self->$_ } qw(mb_version mb_class mb_lib),
   };
 

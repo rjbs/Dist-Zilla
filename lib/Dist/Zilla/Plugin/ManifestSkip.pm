@@ -41,7 +41,7 @@ around dump_config => sub {
 
   my $config = $self->$orig;
 
-  $config->{'' . __PACKAGE__} = { skipfile => $self->skipfile };
+  $config->{+__PACKAGE__} = { skipfile => $self->skipfile };
 
   return $config;
 };
