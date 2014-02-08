@@ -59,10 +59,7 @@ sub gather_files {
 
   my $file  = Dist::Zilla::File::FromCode->new({
     name => $self->filename,
-    # RJBS and XDG didn't 100% agree on this, it's probably fine until somebody
-    # comes up with a really good argument to change it (or to remove this
-    # comment, settling the argument). -- rjbs, 2013-10-19
-    code_return_type => 'bytes',
+    code_return_type => 'text',
     code => sub {
       my $distmeta  = $zilla->distmeta;
 
@@ -77,7 +74,7 @@ sub gather_files {
       my $converter = CPAN::Meta::Converter->new($distmeta);
       my $output    = $converter->convert(version => $self->version);
 
-      JSON->new->ascii(1)->canonical(1)->pretty->encode($output)
+      JSON->new->canonical(1)->pretty->encode($output)
       . "\n";
     },
   });
