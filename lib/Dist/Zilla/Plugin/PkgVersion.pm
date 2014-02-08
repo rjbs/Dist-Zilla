@@ -70,8 +70,10 @@ sub munge_file {
   return                          if $file->name    =~ /\.t$/i;
   return $self->munge_perl($file) if $file->name    =~ /\.(?:pm|pl)$/i;
 
-  $self->log_debug($file->name . " has 'bytes' encoding, skipping..."),
-    return                        if $file->is_bytes;
+  if ($file->is_bytes) {
+    $self->log_debug($file->name . " has 'bytes' encoding, skipping...");
+    return;
+  }
 
   return $self->munge_perl($file) if $file->content =~ /^#!(?:.*)perl(?:$|\s)/;
   return;

@@ -33,8 +33,10 @@ sub munge_files {
 
   for my $file $self->zilla->files->flatten
   {
-    $self->log_debug($file->name . ' has \'bytes\' encoding, skipping...'), next
-      if $file->is_bytes;
+    if ($file->is_bytes) {
+      $self->log_debug($file->name . " has 'bytes' encoding, skipping...");
+      next;
+    }
 
     $self->munge_file($file);
   }
