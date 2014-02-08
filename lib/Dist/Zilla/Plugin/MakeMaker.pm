@@ -120,7 +120,7 @@ sub register_prereqs {
 
   $self->zilla->register_prereqs(
     { phase => 'configure' },
-    'File::ShareDir::Install' => 0.03,
+    'File::ShareDir::Install' => 0.06,
   );
 }
 
@@ -131,7 +131,11 @@ sub share_dir_code {
 
   my $share_dir_map = $self->zilla->_share_dir_map;
   if ( keys %$share_dir_map ) {
-    my $preamble = qq{use File::ShareDir::Install;\n};
+    my $preamble = <<'PREAMBLE';
+use File::ShareDir::Install;
+$File::ShareDir::Install::INCLUDE_DOTFILES = 1;
+$File::ShareDir::Install::INCLUDE_DOTDIRS = 1;
+PREAMBLE
 
     if ( my $dist_share_dir = $share_dir_map->{dist} ) {
       $dist_share_dir = quotemeta $dist_share_dir;
