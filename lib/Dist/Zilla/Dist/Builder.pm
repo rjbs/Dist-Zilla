@@ -666,7 +666,7 @@ sub install {
 
   if ($@) {
     $self->log($@);
-    $self->log("left failed dist in place at $target");
+    $self->log_fatal("left failed dist in place at $target");
   } else {
     if ($arg->{keep_build_dir}) {
       $self->log("all's well; left dist in place at $target");
