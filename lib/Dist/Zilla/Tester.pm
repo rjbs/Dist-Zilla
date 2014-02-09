@@ -157,6 +157,8 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
 
     local @INC = map {; ref($_) ? $_ : File::Spec->rel2abs($_) } @INC;
 
+    local $ENV{DZIL_GLOBAL_CONFIG_ROOT} = $tester_arg->{global_config_root};
+
     my $zilla = $self->$orig($arg);
 
     $zilla->_set_tempdir_root($tempdir_root);
