@@ -23,7 +23,7 @@ sub format_author_deps {
 sub extract_author_deps {
   my ($root, $missing) = @_;
 
-  my $ini = $root->file('dist.ini');
+  my $ini = dir($root)->file('dist.ini');
 
   die "dzil authordeps only works on dist.ini files, and you don't have one\n"
     unless -e $ini;
