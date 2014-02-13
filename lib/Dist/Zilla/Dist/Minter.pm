@@ -59,6 +59,9 @@ sub _new_from_profile {
 
   my $profile_dir = $module->profile_dir($profile_data->[1]);
 
+  # TODO: Some warning code here to report $module for returning a Path::Class
+  $profile_dir = Dist::Zilla::Path::path( $profile_dir );
+
   $assembler->sequence->section_named('_')->add_value(root => $profile_dir);
 
   my $seq = $config_class->read_config(
