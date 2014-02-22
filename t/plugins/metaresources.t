@@ -71,7 +71,7 @@ my $generated_by_re = qr/\A\Q$generated_by\E(?:, \Q$converted_by\E)?\z/;
       generated_by   => re($generated_by_re),
       license        => [ 'perl_5' ],
       'meta-spec'    => {
-        url     => 'http://search.cpan.org/perldoc?CPAN::Meta::Spec',
+        url     => re(qr/^http.*CPAN::Meta::Spec$/),
         version => 2
       },
       name      => 'DZT-Sample',
@@ -148,7 +148,7 @@ my $generated_by_re = qr/\A\Q$generated_by\E(?:, \Q$converted_by\E)?\z/;
       generated_by   => re($generated_by_re),
       license        => [ 'perl_5' ],
       'meta-spec'    => {
-        url     => 'http://search.cpan.org/perldoc?CPAN::Meta::Spec',
+        url     => re(qr/^http.*CPAN::Meta::Spec$/),
         version => 2
       },
       name      => 'DZT-Sample',
