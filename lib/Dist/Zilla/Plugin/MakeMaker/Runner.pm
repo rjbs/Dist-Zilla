@@ -28,10 +28,10 @@ sub build {
     if -e $makefile and (stat 'Makefile.PL')[9] <= (stat $makefile)[9];
 
   $self->log_debug("running $^X Makefile.PL");
-  system($^X => 'Makefile.PL') and die "error with Makefile.PL\n";
+  system($^X => qw(Makefile.PL INSTALLMAN1DIR=none INSTALLMAN3DIR=none)) and die "error with Makefile.PL\n";
 
   $self->log_debug("running $make");
-  system($make)                and die "error running $make\n";
+  system($make) and die "error running $make\n";
 
   return;
 }
