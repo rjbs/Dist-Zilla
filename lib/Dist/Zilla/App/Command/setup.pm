@@ -15,6 +15,8 @@ Dist::Zilla looks for per-user configuration in F<~/.dzil/config.ini>.  This
 command prompts the user for some basic information that can be used to produce
 the most commonly needed F<config.ini> sections.
 
+B<WARNING> PAUSE account details are stored within config.ini in plain text.
+
 =cut
 
 use autodie;
@@ -86,7 +88,9 @@ sub execute {
 
   if (
     $chrome->prompt_yn(
-      'Do you want to enter your PAUSE account details? ',
+    '
+    * WARNING - Your account details will be stored in plain text *
+Do you want to enter your PAUSE account details? ',
       { default => 0 },
     )
   ) {
