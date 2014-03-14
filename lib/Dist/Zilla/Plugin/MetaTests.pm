@@ -14,10 +14,8 @@ following files:
 
   xt/release/meta-yaml.t - a standard Test::CPAN::Meta test
 
-Note that this test doesn't actually do anything unless you have
-L<Test::CPAN::Meta> installed.
-
-L<Test::CPAN::Meta> will be added as a C<develop requires> dependency.
+L<Test::CPAN::Meta> will be added as a C<develop requires> dependency (which
+can be installed via C<< dzil listdeps --author | cpanm >>).
 
 =head1 SEE ALSO
 
