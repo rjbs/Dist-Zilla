@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+5.014     2014-03-16 16:47:07+01:00 Europe/Paris
         - Added 'jobs' argument for 'dzil test' for parallel testing (thanks,
           David Golden!)
         - add default_jobs attribute to TestRunner role
