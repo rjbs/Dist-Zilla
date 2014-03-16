@@ -34,6 +34,7 @@ sub opt_spec {
   [ 'author!' => 'enables the AUTHOR_TESTING env variable (default behavior)', { default => 1 } ],
   [ 'all' => 'enables the RELEASE_TESTING, AUTOMATED_TESTING and AUTHOR_TESTING env variables', { default => 0 } ],
   [ 'keep-build-dir|keep' => 'keep the build directory even after a success' ],
+  [ 'jobs|j=i' => 'number of parallel test jobs to run' ],
 }
 
 =head1 OPTIONS
@@ -68,6 +69,9 @@ sub execute {
   $self->zilla->test({
     $opt->keep_build_dir
       ? (keep_build_dir => 1)
+      : (),
+    $opt->jobs
+      ? (jobs => $opt->jobs)
       : (),
   });
 }

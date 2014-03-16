@@ -30,9 +30,15 @@ sub build {
 }
 
 sub test {
-  my ($self, $target) = @_;
+  my ($self, $target, $arg) = @_;
 
   $self->build;
+
+  my $jobs = $arg ? "j" . $arg->{jobs} : '';
+  my $ho = "HARNESS_OPTIONS";
+  local $ENV{$ho} = $ENV{$ho} ? "$ENV{$ho}:$jobs" : $jobs
+    if $jobs;
+
   my @testing = $self->zilla->logger->get_debug ? '--verbose' : ();
   system $^X, 'Build', 'test', @testing and die "error running $^X Build test\n";
 
