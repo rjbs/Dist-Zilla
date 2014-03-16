@@ -23,4 +23,26 @@ This method should throw an exception on failure.
 
 requires 'test';
 
+=attr default_jobs
+
+This attribute is the default value that should be used as the C<jobs> argument
+to the C<test> method.
+
+=cut
+
+has default_jobs => (
+  is      => 'ro',
+  isa     => 'Int', # non-negative
+  default => 1,
+);
+
+around dump_config => sub {
+  my ($orig, $self) = @_;
+  my $config = $self->$orig;
+
+  $config->{'' . __PACKAGE__} = { default_jobs => $self->default_jobs };
+
+  return $config;
+};
+
 1;

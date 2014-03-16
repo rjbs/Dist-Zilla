@@ -59,9 +59,10 @@ has '_runner' => (
   default => sub {
     my ($self) = @_;
     Dist::Zilla::Plugin::MakeMaker::Runner->new({
-      zilla       => $self->zilla,
-      plugin_name => $self->plugin_name . '::Runner',
-      make_path   => $self->make_path,
+      zilla        => $self->zilla,
+      plugin_name  => $self->plugin_name . '::Runner',
+      make_path    => $self->make_path,
+      default_jobs => $self->default_jobs,
     });
   },
 );

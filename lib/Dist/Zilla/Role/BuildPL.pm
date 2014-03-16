@@ -34,10 +34,12 @@ sub test {
 
   $self->build;
 
-  my $jobs = $arg ? "j" . $arg->{jobs} : '';
+  my $job_count = $arg && exists $arg->{jobs}
+                ? $arg->{jobs}
+                : $self->default_jobs;
+  my $jobs = "j$job_count";
   my $ho = "HARNESS_OPTIONS";
-  local $ENV{$ho} = $ENV{$ho} ? "$ENV{$ho}:$jobs" : $jobs
-    if $jobs;
+  local $ENV{$ho} = $ENV{$ho} ? "$ENV{$ho}:$jobs" : $jobs;
 
   my @testing = $self->zilla->logger->get_debug ? '--verbose' : ();
   system $^X, 'Build', 'test', @testing and die "error running $^X Build test\n";
