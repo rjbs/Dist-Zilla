@@ -2,6 +2,8 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+        - Added 'jobs' argument for 'dzil test' for parallel testing
+
 5.013     2014-02-08 17:08:16-05:00 America/New_York
         - META.json is now a UTF-8 file, rather than ASCII
         - document the use of filefinders in [PkgVersion], and remove

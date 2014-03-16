@@ -703,7 +703,7 @@ sub test {
     unless my @testers = $self->plugins_with(-TestRunner)->flatten;
 
   my ($target, $latest) = $self->ensure_built_in_tmpdir;
-  my $error  = $self->run_tests_in($target);
+  my $error  = $self->run_tests_in($target, $arg);
 
   if ($arg and $arg->{keep_build_dir}) {
     $self->log("all's well; left dist in place at $target");
@@ -717,7 +717,7 @@ sub test {
 
 =method run_tests_in
 
-  my $error = $zilla->run_tests_in($directory);
+  my $error = $zilla->run_tests_in($directory, $arg);
 
 This method runs the tests in $directory (a Path::Class::Dir), which
 must contain an already-built copy of the distribution.  It will throw an
@@ -729,14 +729,14 @@ does it clean up C<$directory> afterwards.
 =cut
 
 sub run_tests_in {
-  my ($self, $target) = @_;
+  my ($self, $target, $arg) = @_;
 
   Carp::croak("you can't test without any TestRunner plugins")
     unless my @testers = $self->plugins_with(-TestRunner)->flatten;
 
   for my $tester (@testers) {
     my $wd = File::pushd::pushd($target);
-    $tester->test( $target );
+    $tester->test( $target, $arg );
   }
 }
 
