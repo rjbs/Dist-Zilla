@@ -86,6 +86,11 @@ sub munge_file {
     return;
   }
 
+  if ($file->name =~ /\.pod$/) {
+    $self->log_debug($file->name . " is a pod file, skipping...");
+    return;
+  }
+
   return $self->munge_perl($file);
 }
 
