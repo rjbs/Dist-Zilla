@@ -122,7 +122,7 @@ sub munge_perl {
 
   my $package_stmts = $document->find('PPI::Statement::Package');
   unless ($package_stmts) {
-    $self->log([ 'skipping %s: no package statement found', $file->name ]);
+    $self->log_debug([ 'skipping %s: no package statement found', $file->name ]);
     return;
   }
 
