@@ -116,13 +116,33 @@ has password => (
   },
 );
 
+=attr pause_cfg_file
+
+This is the name of the file containing your pause credentials.  It defaults
+F<.pause>.  If you give a relative path, it is taken to be relative to
+L</pause_cfg_dir>.
+
+=cut
+
 has pause_cfg_file => (
   is      => 'ro',
   isa     => 'Str',
   lazy    => 1,
-  default => sub {
-    File::Spec->catfile(File::HomeDir->my_home, '.pause');
-  },
+  default => sub { '.pause' },
+);
+
+=attr pause_cfg_dir
+
+This is the directory for resolving a relative L</pause_cfg_file>.
+It defaults to C<< File::HomeDir->my_home >>.
+
+=cut
+
+has pause_cfg_dir => (
+  is      => 'ro',
+  isa     => 'Str',
+  lazy    => 1,
+  default => sub { File::HomeDir->my_home },
 );
 
 =attr pause_cfg
@@ -140,8 +160,11 @@ has pause_cfg => (
   default => sub {
     my $self = shift;
     require CPAN::Uploader;
+    my $file = $self->pause_cfg_file;
+    $file = File::Spec->catfile($self->pause_cfg_dir, $file)
+      unless File::Spec->file_name_is_absolute($file);
     my $cfg = try {
-      CPAN::Uploader->read_config_file( $self->pause_cfg_file );
+      CPAN::Uploader->read_config_file($file)
     } catch {
       {};
     };
