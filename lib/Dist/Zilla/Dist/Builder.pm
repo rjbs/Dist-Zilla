@@ -321,9 +321,12 @@ sub build_in {
   $_->gather_files       for $self->plugins_with(-FileGatherer)->flatten;
   $_->set_file_encodings for $self->plugins_with(-EncodingProvider)->flatten;
   $_->prune_files        for $self->plugins_with(-FilePruner)->flatten;
+
+  $self->version; # instantiate this lazy attribute now that files are gathered
+
   $_->munge_files        for $self->plugins_with(-FileMunger)->flatten;
 
-  $_->register_prereqs for $self->plugins_with(-PrereqSource)->flatten;
+  $_->register_prereqs   for $self->plugins_with(-PrereqSource)->flatten;
 
   $self->prereqs->finalize;
 
