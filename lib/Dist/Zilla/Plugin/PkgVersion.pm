@@ -147,59 +147,68 @@ sub munge_perl {
     my $trial = $self->zilla->is_trial ? ' # TRIAL' : '';
     my $perl = "\$$package\::VERSION\x20=\x20'$version';$trial";
 
+    # This feels dirty, seems as if this should really be a Statement
+    my $insertable = PPI::Token::Unknown->new($perl);
+
     $self->log_debug([
       'adding $VERSION assignment to %s in %s',
       $package,
       $file->name,
     ]);
 
-    my $blank;
-
-    {
-      my $curr = $stmt;
-      while (1) {
-        my $find = $document->find(sub {
-          return $_[1]->line_number == $curr->line_number + 1;
-          return;
-        });
-
-        last unless $find and @$find == 1;
-
-        if ($find->[0]->isa('PPI::Token::Comment')) {
-          $curr = $find->[0];
-          next;
-        }
-
-        if ("$find->[0]" =~ /\A\s*\z/) {
-          $blank = $find->[0];
-        }
-
-        last;
-      }
+    # walk forward across the *significant siblings* until the next sibling is
+    # not a 'use' statement (P::S::Include, type eq 'use').  Type can
+    # apparently return undef.... This stops before a PPI::Statement::Include
+    # of type 'require' or 'no'.
+    while ( my $next = $stmt->snext_sibling ) {
+      last if ( !( $next->isa('PPI::Statement::Include') &&
+                   $next->type &&
+                   $next->type eq 'use') );
+      $stmt = $next;
     }
 
-    $perl = $blank ? "$perl\n" : "\n$perl";
+    # Now be careful not to tear any associated comment off of this statement.
+    # Walk forward a bit more, stopping when the next sibling (significant or
+    # not) is something significant or a PPI::Token::{Whitespace,Comment} that
+    # ends in a newline
+    while ( my $next = $stmt->next_sibling ) {
+      last if $next->significant;
+      last if ( ( $stmt->isa('PPI::Token::Whitespace')
+                      || $stmt->isa('PPI::Token::Comment') )
+                    && $stmt->content =~ qr{.*\n$} );
+      $stmt = $next;
+    }
 
-    # Why can't I use PPI::Token::Unknown? -- rjbs, 2014-01-11
-    my $bogus_token = PPI::Token::Comment->new($perl);
+    # Ok, we're looking at something that ends in a newline and the next line
+    # look blank.  Squeeze the version line and take advantage of the existing
+    # newline.
+    if ( $stmt->content =~ qr{.*\n} &&
+             ($stmt->next_sibling &&
+                  $stmt->next_sibling->isa('PPI::Token::Whitespace') &&
+                      $stmt->next_sibling->content =~ qr{.*\n})) {
+        Carp::carp( "error inserting version in " . $file->name )
+          unless $stmt->insert_after($insertable);
 
-    if ($blank) {
-      Carp::carp("error inserting version in " . $file->name)
-        unless $blank->insert_after($bogus_token);
-      $blank->delete;
-    } else {
+    }
+    else {
       my $method = $self->die_on_line_insertion ? 'log_fatal' : 'log';
       $self->$method([
         'no blank line for $VERSION after package %s statement on line %s',
-        $stmt->namespace,
+        $package,
         $stmt->line_number,
       ]);
 
+      # Work around insertion rules by stuffing in the newline then slip the
+      # version snippet in front of *the newline* instead of after the package
+      # statment.  Feels like a dirty trick, but...
+      my $newline = PPI::Token::Whitespace->new("\n");
       Carp::carp("error inserting version in " . $file->name)
-        unless $stmt->insert_after($bogus_token);
+        unless $stmt->insert_after( $newline )
+          && $newline->insert_before($insertable);
     }
 
     $munged = 1;
+
   }
 
   $self->save_ppi_document_to_file($document, $file) if $munged;
