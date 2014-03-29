@@ -1,14 +1,16 @@
 language: perl
-
 perl:
-    - "5.10"
-    - "5.12"
-    - "5.14"
-    - "5.16"
-
+  - 5.18
+  - 5.16
+  - 5.14
+  - 5.12
+  - 5.10
 install:
-    - cpanm Dist::Zilla
-    - dzil authordeps --missing | cpanm || { cat ~/.cpanm/build.log ; false ; }
-    - dzil listdeps --author --missing | cpanm || { cat ~/.cpanm/build.log ; false ; }
+  - cpanm -nq Devel::Cover::Report::Coveralls
+  - cpanm Dist::Zilla
+  - dzil authordeps --missing | cpanm || { cat ~/.cpanm/build.log ; false ; }
+  - dzil listdeps --author --missing | cpanm || { cat ~/.cpanm/build.log ; false ; }
 script:
-    - dzil test --author --release
+  - HARNESS_PERL_SWITCHES=-MDevel::Cover=-coverage,statement,branch,condition,path,subroutine dzil test --author --release --keep
+after_success:
+  - cd .build/latest && cover && cover -report coveralls

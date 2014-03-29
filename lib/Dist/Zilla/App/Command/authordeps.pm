@@ -1,8 +1,9 @@
 use strict;
 use warnings;
 package Dist::Zilla::App::Command::authordeps;
-use Dist::Zilla::App -command;
 # ABSTRACT: List your distribution's author dependencies
+
+use Dist::Zilla::App -command;
 
 =head1 SYNOPSIS
 

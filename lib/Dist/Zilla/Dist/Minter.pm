@@ -1,5 +1,6 @@
 package Dist::Zilla::Dist::Minter;
 # ABSTRACT: distribution builder; installer not included!
+
 use Moose 0.92; # role composition fixes
 extends 'Dist::Zilla';
 
@@ -29,7 +30,7 @@ sub _new_from_profile {
 
   my $config_class =
     $arg->{config_class} ||= 'Dist::Zilla::MVP::Reader::Finder';
-  Class::MOP::load_class($config_class);
+  Class::Load::load_class($config_class);
 
   $arg->{chrome}->logger->log_debug(
     { prefix => '[DZ] ' },
@@ -55,7 +56,7 @@ sub _new_from_profile {
     { '' => 'Dist::Zilla::MintingProfile::', '=', => '' },
     $profile_data->[0],
   );
-  Class::MOP::load_class($module);
+  Class::Load::load_class($module);
 
   my $profile_dir = $module->profile_dir($profile_data->[1]);
 
@@ -113,9 +114,10 @@ sub mint_dist {
     $minter->make_module({ name => $module->{name} })
   }
 
-  $_->gather_files for $self->plugins_with(-FileGatherer)->flatten;
-  $_->prune_files  for $self->plugins_with(-FilePruner)->flatten;
-  $_->munge_files  for $self->plugins_with(-FileMunger)->flatten;
+  $_->gather_files       for $self->plugins_with(-FileGatherer)->flatten;
+  $_->set_file_encodings for $self->plugins_with(-EncodingProvider)->flatten;
+  $_->prune_files        for $self->plugins_with(-FilePruner)->flatten;
+  $_->munge_files        for $self->plugins_with(-FileMunger)->flatten;
 
   $self->_check_dupe_files;
 

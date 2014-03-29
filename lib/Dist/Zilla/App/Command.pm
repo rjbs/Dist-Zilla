@@ -2,6 +2,7 @@ use strict;
 use warnings;
 package Dist::Zilla::App::Command;
 # ABSTRACT: base class for dzil commands
+
 use App::Cmd::Setup -command;
 use Moose::Autobox;
 

@@ -1,8 +1,9 @@
 package Dist::Zilla::MVP::Assembler;
+# ABSTRACT: Dist::Zilla-specific subclass of Config::MVP::Assembler
+
 use Moose;
 extends 'Config::MVP::Assembler';
 with 'Config::MVP::Assembler::WithBundles';
-# ABSTRACT: Dist::Zilla-specific subclass of Config::MVP::Assembler
 
 use namespace::autoclean;
 

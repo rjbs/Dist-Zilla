@@ -1,5 +1,6 @@
 package Dist::Zilla::Role::ModuleMaker;
 # ABSTRACT: something that injects module files into the dist
+
 use Moose::Role;
 with qw(
   Dist::Zilla::Role::Plugin

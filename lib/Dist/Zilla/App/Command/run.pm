@@ -2,6 +2,7 @@ use strict;
 use warnings;
 package Dist::Zilla::App::Command::run;
 # ABSTRACT: run stuff in a dir where your dist is built
+
 use Dist::Zilla::App -command;
 
 =head1 SYNOPSIS
@@ -38,6 +39,11 @@ useful for testing your distribution as if it were installed.
 
 sub abstract { 'run stuff in a dir where your dist is built' }
 
+sub opt_spec {
+  [ 'build!' => 'do the Build actions before running the command; done by default',
+                { default => 1 } ],
+}
+
 sub usage_desc {
   return '%c run %o [ run command [ arg1 arg2 ... ] ]';
 }
@@ -54,7 +60,7 @@ sub execute {
     $self->log("no command supplied to run so using \$$envname: $args->[0]");
   }
 
-  $self->zilla->run_in_build($args);
+  $self->zilla->run_in_build($args, { build => $opt->build });
 }
 
 1;

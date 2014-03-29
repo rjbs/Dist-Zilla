@@ -1,5 +1,6 @@
 package Dist::Zilla::Role::LicenseProvider;
 # ABSTRACT: something that provides a license for the dist
+
 use Moose::Role;
 with 'Dist::Zilla::Role::Plugin';
 

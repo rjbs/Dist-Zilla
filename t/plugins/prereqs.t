@@ -46,6 +46,47 @@ use Test::DZil;
   );
 }
 
+# test that we avoid a CPAN.pm bug by synchronizing Runtime|Build|Test requires
+{
+  my $tzil = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/dist.ini' => simple_ini(
+          [ GatherDir => ],
+          [ MetaJSON  => ],
+          [ Prereqs => RuntimeRequires  => { A => 2, B => 0, C => 2 } ],
+          [ RemovePrereqs => { remove => [ qw(C) ] } ],
+          [ Prereqs => TestRequires     => { A => 1, B => 1, C => 1 } ],
+          [ Prereqs => BuildRequires    => { A => 0, B => 2, C => 0 } ],
+        ),
+      },
+    },
+  );
+
+  $tzil->build;
+
+  my $json = $tzil->slurp_file('build/META.json');
+
+  my $meta = JSON->new->decode($json);
+
+  is_deeply(
+    $meta->{prereqs},
+    {
+      runtime => {
+        requires   => { A => 2, B => 2 },
+      },
+      test => {
+        requires   => { A => 2, B => 2, C => 1 },
+      },
+      build => {
+        requires   => { A => 2, B => 2, C => 1 },
+      },
+    },
+    "prereqs synchronized across runtime, build & test phases",
+  );
+}
+
 {
   my $tzil = Builder->from_config(
     { dist_root => 'corpus/dist/DZT' },

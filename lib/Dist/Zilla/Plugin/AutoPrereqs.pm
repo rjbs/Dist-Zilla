@@ -1,7 +1,10 @@
 package Dist::Zilla::Plugin::AutoPrereqs;
+# ABSTRACT: automatically extract prereqs from your modules
+
 use Moose;
 with(
   'Dist::Zilla::Role::PrereqSource',
+  'Dist::Zilla::Role::PPI',
   'Dist::Zilla::Role::FileFinderUser' => {
     default_finders => [ ':InstallModules', ':ExecFiles' ],
   },
@@ -39,12 +42,9 @@ prerequisites unless you set configure_finder.
 
 use namespace::autoclean;
 
-# ABSTRACT: automatically extract prereqs from your modules
-
 use List::AllUtils 'uniq';
 use Moose::Autobox;
-use Perl::PrereqScanner 1.005; # do not prune common libs
-use PPI;
+use Perl::PrereqScanner 1.016; # don't skip "lib"
 use CPAN::Meta::Requirements;
 use version;
 
@@ -140,6 +140,8 @@ sub register_prereqs {
     my $files = $self->$method;
 
     foreach my $file (@$files) {
+      # skip binary files
+      next if $file->is_bytes;
       # parse only perl files
       next unless $file->name =~ /\.(?:pm|pl|t|psgi)$/i
                || $file->content =~ /^#!(?:.*)perl(?:$|\s)/;
@@ -161,13 +163,17 @@ sub register_prereqs {
       push @modules, @this_thing;
 
       # parse a file, and merge with existing prereqs
-      my $file_req = $scanner->scan_string($file->content);
+      my $file_req = $scanner->scan_ppi_document(
+        $self->ppi_document_for_file($file)
+      );
 
       $req->add_requirements($file_req);
     }
 
     # remove prereqs shipped with current dist
     $req->clear_requirement($_) for @modules;
+
+    $req->clear_requirement($_) for qw(Config Errno); # never indexed
 
     # remove prereqs from skiplist
     for my $skip (($self->skips || [])->flatten) {

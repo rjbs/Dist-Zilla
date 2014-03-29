@@ -1,7 +1,8 @@
 package Dist::Zilla::Plugin::ConfirmRelease;
+# ABSTRACT: prompt for confirmation before releasing
+
 use Moose;
 with 'Dist::Zilla::Role::BeforeRelease';
-# ABSTRACT: prompt for confirmation before releasing
 
 use namespace::autoclean;
 
@@ -14,8 +15,8 @@ sub before_release {
                   map {; $_->plugin_name }
                   $self->zilla->plugins_with(-Releaser)->flatten;
 
-  my $prompt = "*** Preparing to release $tgz with $releasers ***\n"
-             . "Do you want to continue the release process?";
+  $self->log("*** Preparing to release $tgz with $releasers ***");
+  my $prompt = "Do you want to continue the release process?";
 
   my $default = exists $ENV{DZIL_CONFIRMRELEASE_DEFAULT}
               ? $ENV{DZIL_CONFIRMRELEASE_DEFAULT}

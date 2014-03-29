@@ -1,5 +1,6 @@
 package Dist::Zilla::Plugin::ManifestSkip;
 # ABSTRACT: decline to build files that appear in a MANIFEST.SKIP-like file
+
 use Moose;
 with 'Dist::Zilla::Role::FilePruner';
 

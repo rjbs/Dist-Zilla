@@ -1,5 +1,6 @@
 package Dist::Zilla::Role::Releaser;
 # ABSTRACT: something that makes a release of the dist
+
 use Moose::Role;
 with 'Dist::Zilla::Role::Plugin';
 

@@ -1,5 +1,6 @@
 package Dist::Zilla::PluginBundle::FakeClassic;
 # ABSTRACT: build something more or less like a "classic" CPAN dist
+
 use Moose;
 extends 'Dist::Zilla::PluginBundle::Classic';
 

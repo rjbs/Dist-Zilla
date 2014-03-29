@@ -1,5 +1,6 @@
 package Dist::Zilla::Role::ExecFiles;
 # ABSTRACT: something that finds files to install as executables
+
 use Moose::Role;
 with 'Dist::Zilla::Role::FileFinder';
 

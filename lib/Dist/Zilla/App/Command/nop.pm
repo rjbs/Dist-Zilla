@@ -2,6 +2,7 @@ use strict;
 use warnings;
 package Dist::Zilla::App::Command::nop;
 # ABSTRACT: initialize dzil, then exit
+
 use Dist::Zilla::App -command;
 
 =head1 SYNOPSIS

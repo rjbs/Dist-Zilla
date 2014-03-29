@@ -1,7 +1,8 @@
 package Dist::Zilla::MVP::Assembler::Zilla;
+# ABSTRACT: Dist::Zilla::MVP::Assembler for the Dist::Zilla object
+
 use Moose;
 extends 'Dist::Zilla::MVP::Assembler';
-# ABSTRACT: Dist::Zilla::MVP::Assembler for the Dist::Zilla object
 
 use namespace::autoclean;
 

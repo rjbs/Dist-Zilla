@@ -1,5 +1,6 @@
 package Dist::Zilla::Role::BeforeMint;
 # ABSTRACT: something that runs before minting really begins
+
 use Moose::Role;
 with 'Dist::Zilla::Role::Plugin';
 

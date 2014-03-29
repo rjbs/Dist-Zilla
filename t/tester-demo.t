@@ -13,6 +13,7 @@ $ENV{DZIL_GLOBAL_CONFIG_ROOT} = 't';
 
 my $result = test_dzil('corpus/dist/DZ1', [ qw(build) ]);
 
+is($result->error, undef, 'No errors');
 is($result->exit_code, 0, "dzil would have exited 0");
 
 ok(

@@ -1,4 +1,6 @@
 package Dist::Zilla::Plugin::FileFinder::Filter;
+# ABSTRACT: filter matches from other FileFinders
+
 use Moose;
 with(
   'Dist::Zilla::Role::FileFinder',
@@ -6,7 +8,6 @@ with(
     default_finders => [],
   },
 );
-# ABSTRACT: filter matches from other FileFinders
 
 use namespace::autoclean;
 

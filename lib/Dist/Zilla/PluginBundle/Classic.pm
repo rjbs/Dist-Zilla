@@ -1,5 +1,6 @@
 package Dist::Zilla::PluginBundle::Classic;
 # ABSTRACT: the classic (old) default configuration for Dist::Zilla
+
 use Moose;
 with 'Dist::Zilla::Role::PluginBundle::Easy';
 

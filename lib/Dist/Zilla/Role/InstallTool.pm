@@ -1,5 +1,6 @@
 package Dist::Zilla::Role::InstallTool;
 # ABSTRACT: something that creates an install program for a dist
+
 use Moose::Role;
 with qw(
   Dist::Zilla::Role::Plugin

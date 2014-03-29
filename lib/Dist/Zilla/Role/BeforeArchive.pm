@@ -1,5 +1,6 @@
 package Dist::Zilla::Role::BeforeArchive;
 # ABSTRACT: something that runs before the archive file is built
+
 use Moose::Role;
 with 'Dist::Zilla::Role::Plugin';
 

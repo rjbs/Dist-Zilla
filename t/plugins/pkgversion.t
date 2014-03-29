@@ -26,6 +26,28 @@ print "\$VERSION = 1.234;"
 1;
 ';
 
+my $in_comment = '
+package DZT::WInComment;
+# our $VERSION = 1.234;
+1;
+';
+
+my $in_pod_stm = '
+package DZT::WInPODStm;
+
+1;
+
+__END__
+our $VERSION = 1.234;
+=for bug
+
+  # Because we have an __END__ up there PPI considers this a statement
+
+  our $VERSION = 1.234;
+
+=cut
+';
+
 my $two_packages = '
 package DZT::TP1;
 
@@ -74,6 +96,19 @@ my $script_pkg = '
 package DZT::Script;
 ';
 
+my $pod_with_pkg = '
+package DZT::PodWithPackage;
+=pod
+
+=cut
+';
+
+my $pod_no_pkg = '
+=pod
+
+=cut
+';
+
 my $tzil = Builder->from_config(
   { dist_root => 'corpus/dist/DZT' },
   {
@@ -82,9 +117,13 @@ my $tzil = Builder->from_config(
       'source/lib/DZT/WVer.pm'   => $with_version,
       'source/lib/DZT/WVerTwoLines.pm' => $with_version_two_lines,
       'source/lib/DZT/WStrEscaped.pm'  => $in_a_string_escaped,
+      'source/lib/DZT/WInComment.pm' => $in_comment,
+      'source/lib/DZT/WInPODStm.pm' => $in_pod_stm,
       'source/lib/DZT/R1.pm'     => $repeated_packages,
       'source/lib/DZT/Monkey.pm' => $monkey_patched,
       'source/lib/DZT/HideMe.pm' => $hide_me_comment,
+      'source/lib/DZT/PodWithPackage.pm' => $pod_with_pkg,
+      'source/lib/DZT/PodNoPackage.pm' => $pod_no_pkg,
       'source/bin/script_pkg.pl' => $script_pkg,
       'source/bin/script_ver.pl' => $script_pkg . "our \$VERSION = 1.234;\n",
       'source/bin/script.pl'     => $script,
@@ -127,6 +166,20 @@ unlike(
   $dzt_wver_two_lines,
   qr{^\s*\$\QDZT::WVerTwoLines::VERSION = '0.001';\E\s*$}m,
   "*not* added to DZT::WVerTwoLines; we have one already",
+);
+
+my $dzt_wver_in_comment = $tzil->slurp_file('build/lib/DZT/WInComment.pm');
+like(
+  $dzt_wver_in_comment,
+  qr{^\s*\$\QDZT::WInComment::VERSION = '0.001';\E\s*$}m,
+  "added to DZT::WInComment; the one we have is in a comment",
+);
+
+my $dzt_wver_in_pod_stm = $tzil->slurp_file('build/lib/DZT/WInPODStm.pm');
+like(
+  $dzt_wver_in_pod_stm,
+  qr{^\s*\$\QDZT::WInPODStm::VERSION = '0.001';\E\s*$}m,
+  "added to DZT::WInPODStm; the one we have is in some POD",
 );
 
 my $dzt_wver_str_escaped = $tzil->slurp_file('build/lib/DZT/WStrEscaped.pm');
@@ -189,6 +242,20 @@ unlike(
   "no version for DZT::TP2 when it was hidden with a comment"
 );
 
+my $dzt_podwithpackage = $tzil->slurp_file('build/lib/DZT/PodWithPackage.pm');
+like(
+  $dzt_podwithpackage,
+  qr{^\s*\$\QDZT::PodWithPackage::VERSION = '0.001';\E\s*$}m,
+  "added version to DZT::PodWithPackage",
+);
+
+my $dzt_podnopackage = $tzil->slurp_file('build/lib/DZT/PodNoPackage.pm');
+unlike(
+  $dzt_podnopackage,
+  qr{VERSION},
+  "no version for pod files with no package declaration"
+);
+
 {
   local $ENV{TRIAL} = 1;
 
@@ -204,6 +271,10 @@ unlike(
   $tzil_trial->build;
 
   my $dzt_sample_trial = $tzil_trial->slurp_file('build/lib/DZT/Sample.pm');
+  my $assignments = () = $dzt_sample_trial =~ /(DZT::Sample::VERSION =)/g;
+
+  is($assignments, 1, "we only add 1 VERSION assignment");
+
   like(
     $dzt_sample_trial,
     qr{^\s*\$\QDZT::Sample::VERSION = '0.001'; # TRIAL\E\s*$}m,

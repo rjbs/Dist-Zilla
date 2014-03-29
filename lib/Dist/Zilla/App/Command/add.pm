@@ -2,13 +2,14 @@ use strict;
 use warnings;
 package Dist::Zilla::App::Command::add;
 # ABSTRACT: add a module to a dist
+
 use Dist::Zilla::App -command;
 use Path::Class;
 use File::pushd ();
 
 =head1 SYNOPSIS
 
-Adds a a new module to a Dist::Zilla-based distribution
+Adds a new module to a Dist::Zilla-based distribution
 
   $ dzil add Some::New::Module
 
@@ -63,12 +64,14 @@ sub execute {
   my $root = dir($zilla->root)->absolute;
   my $wd = File::pushd::pushd($minter->root);
 
+  my $factory = $minter->plugin_named(':DefaultModuleMaker');
+
   for my $name ( @$arg ) {
-    my $factory = $minter->plugin_named(':DefaultModuleMaker');
     $factory->make_module({ name => $name });
-    for my $file ( @{ $factory->zilla->files} ) {
-      $zilla->_write_out_file($file, $root);
-    }
+  }
+
+  for my $file ( @{ $factory->zilla->files} ) {
+    $zilla->_write_out_file($file, $root);
   }
 }
 

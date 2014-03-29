@@ -1,5 +1,6 @@
 package Dist::Zilla::Dist::Builder;
 # ABSTRACT: dist zilla subclass for building dists
+
 use Moose 0.92; # role composition fixes
 extends 'Dist::Zilla';
 
@@ -9,6 +10,7 @@ use MooseX::Types::Path::Class qw(Dir File);
 
 use File::pushd ();
 use Path::Class;
+use Path::Tiny; # because more Path::* is better, eh?
 use Try::Tiny;
 
 use namespace::autoclean;
@@ -123,18 +125,19 @@ sub _setup_default_plugins {
       zilla       => $self,
       style       => 'list',
       code        => sub {
+        my $self = shift;
         my $map = $self->zilla->_share_dir_map;
         my @files;
         if ( $map->{dist} ) {
           push @files, $self->zilla->files->grep(sub {
-            local $_ = $_->name; m{\A\Q$map->{dist}\E/}
-          });
+            $_->name =~ m{\A\Q$map->{dist}\E/}
+          })->flatten;
         }
         if ( my $mod_map = $map->{module} ) {
           for my $mod ( keys %$mod_map ) {
             push @files, $self->zilla->files->grep(sub {
-              local $_ = $_->name; m{\A\Q$mod_map->{$mod}\E/}
-            });
+              $_->name =~ m{\A\Q$mod_map->{$mod}\E/}
+            })->flatten;
           }
         }
         return \@files;
@@ -156,6 +159,30 @@ sub _setup_default_plugins {
         return 1 if $_ eq $self->zilla->main_module->name;
         return;
       },
+    });
+
+    $self->plugins->push($plugin);
+  }
+
+  unless ($self->plugin_named(':AllFiles')) {
+    require Dist::Zilla::Plugin::FinderCode;
+    my $plugin = Dist::Zilla::Plugin::FinderCode->new({
+      plugin_name => ':AllFiles',
+      zilla       => $self,
+      style       => 'grep',
+      code        => sub { return 1 },
+    });
+
+    $self->plugins->push($plugin);
+  }
+
+  unless ($self->plugin_named(':NoFiles')) {
+    require Dist::Zilla::Plugin::FinderCode;
+    my $plugin = Dist::Zilla::Plugin::FinderCode->new({
+      plugin_name => ':NoFiles',
+      zilla       => $self,
+      style       => 'list',
+      code        => sub { return },
     });
 
     $self->plugins->push($plugin);
@@ -204,7 +231,7 @@ sub _load_config {
   my $config_class =
     $arg->{config_class} ||= 'Dist::Zilla::MVP::Reader::Finder';
 
-  Class::MOP::load_class($config_class);
+  Class::Load::load_class($config_class);
 
   $arg->{chrome}->logger->log_debug(
     { prefix => '[DZ] ' },
@@ -246,12 +273,12 @@ sub _load_config {
 
     my $bundle = $package =~ /^@/ ? ' bundle' : '';
     die <<"END_DIE";
-Required plugin$bundle [$package] isn't installed.
+Required plugin$bundle $package isn't installed.
 
 Run 'dzil authordeps' to see a list of all required plugins.
 You can pipe the list to your CPAN client to install or update them:
 
-    dzil authordeps | cpanm
+    dzil authordeps --missing | cpanm
 
 END_DIE
 
@@ -291,9 +318,10 @@ sub build_in {
 
   $self->log("beginning to build " . $self->name);
 
-  $_->gather_files     for $self->plugins_with(-FileGatherer)->flatten;
-  $_->prune_files      for $self->plugins_with(-FilePruner)->flatten;
-  $_->munge_files      for $self->plugins_with(-FileMunger)->flatten;
+  $_->gather_files       for $self->plugins_with(-FileGatherer)->flatten;
+  $_->set_file_encodings for $self->plugins_with(-EncodingProvider)->flatten;
+  $_->prune_files        for $self->plugins_with(-FilePruner)->flatten;
+  $_->munge_files        for $self->plugins_with(-FileMunger)->flatten;
 
   $_->register_prereqs for $self->plugins_with(-PrereqSource)->flatten;
 
@@ -419,7 +447,8 @@ sub build_archive {
 
   $_->before_archive for $self->plugins_with(-BeforeArchive)->flatten;
 
-  my $method = Class::Load::load_optional_class('Archive::Tar::Wrapper')
+  my $method = Class::Load::load_optional_class('Archive::Tar::Wrapper',
+                                                { -version => 0.15 })
              ? '_build_archive_with_wrapper'
              : '_build_archive';
 
@@ -436,7 +465,7 @@ sub build_archive {
 sub _build_archive {
   my ($self, $built_in, $basename, $basedir) = @_;
 
-  $self->log("building archive with Archive::Tar; install Archive::Tar::Wrapper for improved speed");
+  $self->log("building archive with Archive::Tar; install Archive::Tar::Wrapper 0.15 or newer for improved speed");
 
   require Archive::Tar;
   my $archive = Archive::Tar->new;
@@ -455,15 +484,9 @@ sub _build_archive {
     }
 
     my $filename = $built_in->file( $distfile->name );
-    my $content = do {
-      use autodie;
-      local $/;
-      open my $fh, '<', $filename;
-      <$fh>;
-    };
     $archive->add_data(
       $basedir->file( $distfile->name ),
-      $content,
+      path($filename)->slurp_raw,
       { mode => (stat $filename)[2] & ~022 },
     );
   }
@@ -615,6 +638,8 @@ subdir and an installer will be run.
 
 Valid arguments are:
 
+  keep_build_dir  - if true, don't rmtree the build dir, even if everything
+                    seemed to work
   install_command - the command to run in the subdir to install the dist
                     default (roughly): $^X -MCPAN -einstall .
 
@@ -628,21 +653,26 @@ sub install {
 
   my ($target, $latest) = $self->ensure_built_in_tmpdir;
 
-  eval {
+  my $ok = eval {
     ## no critic Punctuation
     my $wd = File::pushd::pushd($target);
     my @cmd = $arg->{install_command}
             ? @{ $arg->{install_command} }
-            : ($^X => '-MCPAN' =>
-                $^O eq 'MSWin32' ? q{-e"install '.'"} : '-einstall "."');
+            : (cpanm => ".");
 
     $self->log_debug([ 'installing via %s', \@cmd ]);
     system(@cmd) && $self->log_fatal([ "error running %s", \@cmd ]);
+    1;
   };
 
-  if ($@) {
-    $self->log($@);
-    $self->log("left failed dist in place at $target");
+  unless ($ok) {
+    my $error = $@ || '(exception clobered)';
+    $self->log("install failed, left failed dist in place at $target");
+    die $error;
+  }
+
+  if ($arg->{keep_build_dir}) {
+    $self->log("all's well; left dist in place at $target");
   } else {
     $self->log("all's well; removing $target");
     $target->rmtree;
@@ -654,21 +684,31 @@ sub install {
 
 =method test
 
-  $zilla->test;
+  $zilla->test(\%arg);
 
 This method builds a new copy of the distribution and tests it using
 C<L</run_tests_in>>.
 
+C<\%arg> may be omitted.  Otherwise, valid arguments are:
+
+  keep_build_dir  - if true, don't rmtree the build dir, even if everything
+                    seemed to work
+
 =cut
 
 sub test {
-  my ($self) = @_;
+  my ($self, $arg) = @_;
 
   Carp::croak("you can't test without any TestRunner plugins")
     unless my @testers = $self->plugins_with(-TestRunner)->flatten;
 
   my ($target, $latest) = $self->ensure_built_in_tmpdir;
-  my $error  = $self->run_tests_in($target);
+  my $error  = $self->run_tests_in($target, $arg);
+
+  if ($arg and $arg->{keep_build_dir}) {
+    $self->log("all's well; left dist in place at $target");
+    return;
+  }
 
   $self->log("all's well; removing $target");
   $target->rmtree;
@@ -677,7 +717,7 @@ sub test {
 
 =method run_tests_in
 
-  my $error = $zilla->run_tests_in($directory);
+  my $error = $zilla->run_tests_in($directory, $arg);
 
 This method runs the tests in $directory (a Path::Class::Dir), which
 must contain an already-built copy of the distribution.  It will throw an
@@ -689,14 +729,14 @@ does it clean up C<$directory> afterwards.
 =cut
 
 sub run_tests_in {
-  my ($self, $target) = @_;
+  my ($self, $target, $arg) = @_;
 
   Carp::croak("you can't test without any TestRunner plugins")
     unless my @testers = $self->plugins_with(-TestRunner)->flatten;
 
   for my $tester (@testers) {
     my $wd = File::pushd::pushd($target);
-    $tester->test( $target );
+    $tester->test( $target, $arg );
   }
 }
 
@@ -712,7 +752,7 @@ non-zero, the directory will be left in place.
 =cut
 
 sub run_in_build {
-  my ($self, $cmd) = @_;
+  my ($self, $cmd, $arg) = @_;
 
   # The sort below is a cheap hack to get ModuleBuild ahead of
   # ExtUtils::MakeMaker. -- rjbs, 2010-01-05
@@ -728,6 +768,12 @@ sub run_in_build {
   # building the dist for real
   my $ok = eval {
     my $wd = File::pushd::pushd($target);
+
+    if ($arg and exists $arg->{build} and ! $arg->{build}) {
+      system(@$cmd) and die "error while running: @$cmd";
+      return 1;
+    }
+
     $builders[0]->build;
 
     local $ENV{PERL5LIB} = join $Config::Config{path_sep},

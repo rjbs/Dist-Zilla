@@ -1,5 +1,6 @@
 package Dist::Zilla::Plugin::InlineFiles;
 # ABSTRACT: files in a data section
+
 use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::FileGatherer';
@@ -15,9 +16,9 @@ L<Data::Section|Data::Section>.
 =cut
 
 use Sub::Exporter::ForMethods;
-use Data::Section 0.004 # fixed header_re
+use Data::Section 0.200002 # encoding and bytes
   { installer => Sub::Exporter::ForMethods::method_installer },
-  '-setup';
+  '-setup' => { encoding => 'bytes' };
 use Dist::Zilla::File::InMemory;
 
 sub gather_files {

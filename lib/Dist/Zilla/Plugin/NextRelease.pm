@@ -11,6 +11,7 @@ with (
 );
 
 use DateTime 0.44; # CLDR fixes
+use Path::Tiny;
 use Moose::Util::TypeConstraints;
 use String::Formatter 0.100680 stringf => {
   -as => '_format_version',
@@ -44,7 +45,7 @@ has time_zone => (
 has format => (
   is  => 'ro',
   isa => 'Str', # should be more validated Later -- rjbs, 2008-06-05
-  default => '%-9v %{yyyy-MM-dd HH:mm:ss VVVV}d',
+  default => '%-9v %{yyyy-MM-dd HH:mm:ssZZZZZ VVVV}d%{ (TRIAL RELEASE)}T',
 );
 
 has filename => (
@@ -116,17 +117,11 @@ sub munge_files {
 sub after_release {
   my ($self) = @_;
   my $filename = $self->filename;
+  my ($gathered_file) = grep { $_->name eq $filename } @{ $self->zilla->files };
+  my $iolayer = sprintf(":raw:encoding(%s)", $gathered_file->encoding);
 
   # read original changelog
-  my $content = do {
-    local $/;
-    open my $in_fh, '<', $filename
-      or Carp::croak("can't open $filename for reading: $!");
-
-    # Win32
-    binmode $in_fh, ':raw';
-    <$in_fh>
-  };
+  my $content = path($filename)->slurp({ binmode => $iolayer});
 
   # add the version and date to file content
   my $delim  = $self->delim;
@@ -138,13 +133,7 @@ sub after_release {
   $self->log_debug([ 'updating contents of %s on disk', $update_fn ]);
 
   # and finally rewrite the changelog on disk
-  open my $out_fh, '>', $update_fn
-    or Carp::croak("can't open $update_fn for writing: $!");
-
-  # Win32.
-  binmode $out_fh, ':raw';
-  print $out_fh $content or Carp::croak("error writing to $update_fn: $!");
-  close $out_fh or Carp::croak("error closing $update_fn: $!");
+  path($update_fn)->spew({binmode => $iolayer}, $content);
 }
 
 __PACKAGE__->meta->make_immutable;

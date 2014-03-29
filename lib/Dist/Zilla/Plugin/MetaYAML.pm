@@ -1,9 +1,11 @@
 package Dist::Zilla::Plugin::MetaYAML;
 # ABSTRACT: produce a META.yml
+
 use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::FileGatherer';
 
+use Try::Tiny;
 use namespace::autoclean;
 
 =head1 DESCRIPTION
@@ -58,6 +60,7 @@ sub gather_files {
 
   my $file  = Dist::Zilla::File::FromCode->new({
     name => $self->filename,
+    code_return_type => 'text',
     code => sub {
       my $distmeta  = $zilla->distmeta;
 
@@ -71,8 +74,13 @@ sub gather_files {
 
       my $converter = CPAN::Meta::Converter->new($distmeta);
       my $output    = $converter->convert(version => $self->version);
-
-      YAML::Tiny::Dump($output);
+      my $yaml = try {
+        YAML::Tiny->new($output)->write_string; # text!
+      }
+      catch {
+        $self->log_fatal("Could not create YAML string: " . YAML::Tiny->errstr)
+      };
+      return $yaml;
     },
   });
 

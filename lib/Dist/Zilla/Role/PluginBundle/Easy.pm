@@ -1,6 +1,7 @@
 package Dist::Zilla::Role::PluginBundle::Easy;
 # ABSTRACT: something that bundles a bunch of plugins easily
 # This plugin was originally contributed by Christopher J. Madsen
+
 use Moose::Role;
 with 'Dist::Zilla::Role::PluginBundle';
 
@@ -110,7 +111,7 @@ It is passed a list of plugin specifiers, which can be one of a few things:
 
 =for :list
 * a plugin moniker (like you might provide in your config file)
-* an arrayref of: C<< [ $moniker, $plugin_name, \%plugin_config >>
+* an arrayref of: C<< [ $moniker, $plugin_name, \%plugin_config ] >>
 
 In the case of an arrayref, both C<$plugin_name> and C<\%plugin_config> are
 optional.
@@ -165,7 +166,7 @@ sub add_bundle {
   if( my $v = $payload->{':version'} ){
     $load_opts->{'-version'} = $v;
   }
-  Class::MOP::load_class($package, $load_opts);
+  Class::Load::load_class($package, $load_opts);
 
   $bundle = "\@$bundle" unless $bundle =~ /^@/;
 

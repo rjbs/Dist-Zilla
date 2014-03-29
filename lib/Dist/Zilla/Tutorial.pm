@@ -2,6 +2,7 @@ use strict;
 use warnings;
 package Dist::Zilla::Tutorial;
 # ABSTRACT: how to use this "Dist::Zilla" thing
+
 use Carp ();
 Carp::confess "you're not meant to use the tutorial, just read it!";
 1;
@@ -25,7 +26,7 @@ F<dist.ini>:
 
   [@Basic]
 
-  [Prereq]
+  [Prereqs]
   App::Cmd          = 0.013
   Number::Nary      = 0
   Sub::Exporter     = 0.981

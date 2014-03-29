@@ -43,7 +43,7 @@ is_deeply(
   'manifest quotes files with spaces'
 );
 
-my @manilines = split /\n/, $tzil->slurp_file('build/MANIFEST');
+my @manilines = grep { ! /^#/ } split /\n/, $tzil->slurp_file('build/MANIFEST');
 chomp @manilines;
 
 is_deeply(

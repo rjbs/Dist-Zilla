@@ -1,5 +1,6 @@
 package Dist::Zilla::Role::PrereqSource;
 # ABSTRACT: something that registers prerequisites
+
 use Moose::Role;
 with 'Dist::Zilla::Role::Plugin';
 

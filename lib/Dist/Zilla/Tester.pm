@@ -1,10 +1,11 @@
 package Dist::Zilla::Tester;
-use Moose;
-extends 'Dist::Zilla::Dist::Builder';
 # ABSTRACT: a testing-enabling stand-in for Dist::Zilla
 
+use Moose;
+extends 'Dist::Zilla::Dist::Builder';
+
 # XXX: Adding this autoclean causes problem.  "Builder" and "Minter" do not
-# show in in tests.  I'm really not sure why. -- rjbs, 2011-08-19
+# show in tests.  I'm really not sure why. -- rjbs, 2011-08-19
 # use namespace::autoclean;
 
 use autodie;
@@ -12,6 +13,7 @@ use Dist::Zilla::Chrome::Test;
 use File::pushd ();
 use File::Spec;
 use File::Temp;
+use Path::Tiny;
 
 use Sub::Exporter::Util ();
 use Sub::Exporter -setup => {
@@ -33,7 +35,9 @@ sub builder { 'Dist::Zilla::Tester::_Builder' }
 sub minter { 'Dist::Zilla::Tester::_Minter' }
 
 {
-  package Dist::Zilla::Tester::_Role;
+  package
+    Dist::Zilla::Tester::_Role;
+
   use Moose::Role;
 
   has tempdir => (
@@ -60,14 +64,17 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
   sub slurp_file {
     my ($self, $filename) = @_;
 
-    return scalar do {
-      local $/;
-      open my $fh, '<', $self->tempdir->file($filename);
+    Path::Tiny::path(
+      $self->tempdir->file($filename)
+    )->slurp_utf8;
+  }
 
-      # Win32.
-      binmode $fh, ':raw';
-      <$fh>;
-    };
+  sub slurp_file_raw {
+    my ($self, $filename) = @_;
+
+    Path::Tiny::path(
+      $self->tempdir->file($filename)
+    )->slurp_raw;
   }
 
   sub _metadata_generator_id { 'Dist::Zilla::Tester' }
@@ -77,6 +84,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
 
 {
   package Dist::Zilla::Tester::_Builder;
+
   use Moose;
   extends 'Dist::Zilla::Dist::Builder';
   with 'Dist::Zilla::Tester::_Role';
@@ -117,13 +125,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
       while (my ($name, $content) = each %$files) {
         my $fn = $tempdir->file($name);
         $fn->dir->mkpath;
-        open my $fh, '>', $fn;
-
-        # Win32 fix for crlf translation.
-        #   maybe :raw:utf8? -- Kentnl - 2010-06-10
-        binmode $fh, ':raw';
-        print { $fh } $content;
-        close $fh;
+        Path::Tiny::path($fn)->spew_utf8($content);
       }
     }
 
@@ -170,6 +172,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
 
 {
   package Dist::Zilla::Tester::_Minter;
+
   use Moose;
   extends 'Dist::Zilla::Dist::Minter';
   with 'Dist::Zilla::Tester::_Role';

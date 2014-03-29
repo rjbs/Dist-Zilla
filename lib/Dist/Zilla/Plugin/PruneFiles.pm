@@ -1,5 +1,6 @@
 package Dist::Zilla::Plugin::PruneFiles;
-# ABSTRACT: prune arbirary files from the dist
+# ABSTRACT: prune arbitrary files from the dist
+
 use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::FilePruner';
@@ -22,7 +23,7 @@ In your F<dist.ini>:
   filename = xt/release/pod-coverage.t ; pod coverage tests are for jerks
   filename = todo-list.txt             ; keep our secret plans to ourselves
 
-  match     = ^test_data/*
+  match     = ^test_data/
   match     = ^test.cvs$
 
 =cut

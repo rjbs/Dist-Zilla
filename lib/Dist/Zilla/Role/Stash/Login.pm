@@ -1,7 +1,8 @@
 package Dist::Zilla::Role::Stash::Login;
+# ABSTRACT: a stash with username/password credentials
+
 use Moose::Role;
 with 'Dist::Zilla::Role::Stash';
-# ABSTRACT: a stash with username/password credentials
 
 use namespace::autoclean;
 

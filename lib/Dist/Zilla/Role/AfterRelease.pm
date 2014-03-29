@@ -1,5 +1,6 @@
 package Dist::Zilla::Role::AfterRelease;
 # ABSTRACT: something that runs after release is mostly complete
+
 use Moose::Role;
 with 'Dist::Zilla::Role::Plugin';
 

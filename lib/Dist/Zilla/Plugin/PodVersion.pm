@@ -1,5 +1,6 @@
 package Dist::Zilla::Plugin::PodVersion;
 # ABSTRACT: add a VERSION head1 to each Perl document
+
 use Moose;
 with(
   'Dist::Zilla::Role::FileMunger',
@@ -48,7 +49,7 @@ sub munge_pod {
     $_++; # move past the =head1 line itself
     $_++ while $content[$_] =~ /^\s*$/;
 
-    $_++; # move past the line with the abstract
+    $_++ while $content[$_] !~ /^\s*$/; # move past the abstract
     $_++ while $content[$_] =~ /^\s*$/;
 
     splice @content, $_ - 1, 0, (

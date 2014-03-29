@@ -1,5 +1,6 @@
 package Dist::Zilla::Plugin::Prereqs;
 # ABSTRACT: list simple prerequisites
+
 use Moose;
 with 'Dist::Zilla::Role::PrereqSource';
 

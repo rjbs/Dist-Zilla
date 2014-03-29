@@ -1,5 +1,6 @@
 package Dist::Zilla::Role::MintingProfile;
 # ABSTRACT: something that can find a minting profile dir
+
 use Moose::Role;
 
 use namespace::autoclean;

@@ -28,10 +28,19 @@ sub build {
 }
 
 sub test {
-  my ( $self, $target ) = @_;
+  my ($self, $target, $arg) = @_;
 
   my $make = $self->make_path;
   $self->build;
+
+  my $job_count = $arg && exists $arg->{jobs}
+                ? $arg->{jobs}
+                : $self->default_jobs;
+
+  my $jobs = "j$job_count";
+  my $ho = "HARNESS_OPTIONS";
+  local $ENV{$ho} = $ENV{$ho} ? "$ENV{$ho}:$jobs" : $jobs;
+
   system($make, 'test',
     ( $self->zilla->logger->get_debug ? 'TEST_VERBOSE=1' : () ),
   ) and die "error running $make test\n";

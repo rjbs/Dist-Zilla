@@ -2,6 +2,7 @@ use strict;
 use warnings;
 package Dist::Zilla::App::Command::setup;
 # ABSTRACT: set up a basic global config file
+
 use Dist::Zilla::App -command;
 
 =head1 SYNOPSIS
@@ -106,11 +107,14 @@ sub execute {
       "What is your PAUSE password? ",
       {
         check   => sub { defined $_[0] and length $_[0] },
+        noecho  => 1,
       },
     );
   }
 
   $config_root->mkpath unless -d $config_root;
+  $config_root->subdir('profiles')->mkpath
+    unless -d $config_root->subdir('profiles');
 
   my $umask = umask;
   umask( $umask | 077 ); # this file might contain PAUSE pw; make it go-r

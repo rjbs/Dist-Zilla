@@ -1,7 +1,8 @@
 package Dist::Zilla::Plugin::FileFinder::ByName;
+# ABSTRACT: FileFinder matching on pathnames
+
 use Moose;
 with 'Dist::Zilla::Role::FileFinder';
-# ABSTRACT: FileFinder matching on pathnames
 
 use namespace::autoclean;
 

@@ -1,5 +1,6 @@
 package Dist::Zilla::Plugin::GenerateFile;
 # ABSTRACT: build a custom file from only the plugin configuration
+
 use Moose;
 use Moose::Autobox;
 with (
@@ -16,7 +17,7 @@ use Dist::Zilla::File::InMemory;
 In your F<dist.ini>:
 
   [GenerateFile]
-  filename    = todo/{{ $dist->name =~ s/::/-/r }}_master-plan.txt
+  filename    = todo/{{ $dist->name }}-master-plan.txt
   name_is_template = 1
   content_is_template = 1
   content = # Outlines the plan for world domination by {{$dist->name}}

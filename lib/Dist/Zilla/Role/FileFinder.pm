@@ -1,5 +1,6 @@
 package Dist::Zilla::Role::FileFinder;
 # ABSTRACT: something that finds files within the distribution
+
 use Moose::Role;
 with 'Dist::Zilla::Role::Plugin';
 

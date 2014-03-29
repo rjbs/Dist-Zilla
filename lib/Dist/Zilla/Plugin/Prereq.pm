@@ -1,5 +1,6 @@
 package Dist::Zilla::Plugin::Prereq;
 # ABSTRACT: (DEPRECATED) the old name of the Prereqs plugin
+
 use Moose;
 extends 'Dist::Zilla::Plugin::Prereqs';
 

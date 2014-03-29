@@ -2,6 +2,7 @@ use strict;
 use warnings;
 package Dist::Zilla::App::Command::clean;
 # ABSTRACT: clean up after build, test, or install
+
 use Dist::Zilla::App -command;
 
 =head1 SYNOPSIS

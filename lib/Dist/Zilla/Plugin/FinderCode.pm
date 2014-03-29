@@ -1,7 +1,8 @@
 package Dist::Zilla::Plugin::FinderCode;
+# ABSTRACT: a callback-based FileFinder plugin
+
 use Moose;
 with 'Dist::Zilla::Role::FileFinder';
-# ABSTRACT: a callback-based FileFinder plugin
 
 use namespace::autoclean;
 

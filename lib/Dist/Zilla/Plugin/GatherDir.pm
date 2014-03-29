@@ -1,5 +1,6 @@
 package Dist::Zilla::Plugin::GatherDir;
 # ABSTRACT: gather all the files in a directory
+
 use Moose;
 use Moose::Autobox;
 use MooseX::Types::Path::Class qw(Dir File);
@@ -60,7 +61,7 @@ has root => (
 
 =attr prefix
 
-This parameter can be set to gather all the files found under a common
+This parameter can be set to place the gathered files under a particular
 directory.  See the L<description|DESCRIPTION> above for an example.
 
 =cut

@@ -1,5 +1,6 @@
 package Dist::Zilla::Plugin::ExecDir;
 # ABSTRACT: install a directory's contents as executables
+
 use Moose;
 
 use namespace::autoclean;

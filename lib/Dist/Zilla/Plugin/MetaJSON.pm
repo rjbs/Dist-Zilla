@@ -1,5 +1,6 @@
 package Dist::Zilla::Plugin::MetaJSON;
 # ABSTRACT: produce a META.json
+
 use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::FileGatherer';
@@ -58,6 +59,7 @@ sub gather_files {
 
   my $file  = Dist::Zilla::File::FromCode->new({
     name => $self->filename,
+    code_return_type => 'text',
     code => sub {
       my $distmeta  = $zilla->distmeta;
 
@@ -72,7 +74,7 @@ sub gather_files {
       my $converter = CPAN::Meta::Converter->new($distmeta);
       my $output    = $converter->convert(version => $self->version);
 
-      JSON->new->ascii(1)->canonical(1)->pretty->encode($output)
+      JSON->new->canonical(1)->pretty->encode($output)
       . "\n";
     },
   });

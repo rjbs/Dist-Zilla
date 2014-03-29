@@ -1,5 +1,6 @@
 package Dist::Zilla::Plugin::RemovePrereqs;
 # ABSTRACT: a plugin to remove gathered prereqs
+
 use Moose;
 with 'Dist::Zilla::Role::PrereqSource';
 

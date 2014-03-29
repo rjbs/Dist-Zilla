@@ -2,6 +2,7 @@ use strict;
 use warnings;
 package Dist::Zilla::App::Command::install;
 # ABSTRACT: install your dist
+
 use Dist::Zilla::App -command;
 
 =head1 SYNOPSIS
@@ -22,6 +23,7 @@ sub abstract { 'install your dist' }
 
 sub opt_spec {
   [ 'install-command=s', 'command to run to install (e.g. "cpan .")' ],
+  [ 'keep-build-dir|keep' => 'keep the build directory even after a success' ],
 }
 
 =head1 OPTIONS
@@ -34,7 +36,7 @@ Any value that works with L<C<system>|perlfunc/system> is accepted.
 
 If not specified, calls (roughly):
 
-    perl -MCPAN -einstall "."
+    cpanm .
 
 For more information, look at the L<install|Dist::Zilla::Dist::Builder/install> method in
 Dist::Zilla.
@@ -47,6 +49,9 @@ sub execute {
   $self->zilla->install({
     $opt->install_command
       ? (install_command => [ $opt->install_command ])
+      : (),
+    $opt->keep_build_dir
+      ? (keep_build_dir => 1)
       : (),
   });
 }

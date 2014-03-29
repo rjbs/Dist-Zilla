@@ -1,7 +1,10 @@
 package Dist::Zilla;
 # ABSTRACT: distribution builder; installer not included!
+
 use Moose 0.92; # role composition fixes
 with 'Dist::Zilla::Role::ConfigDumper';
+
+# This comment has fün̈n̈ÿ characters.
 
 use Moose::Autobox 0.09; # ->flatten
 use MooseX::Types::Moose qw(ArrayRef Bool HashRef Object Str);
@@ -13,6 +16,7 @@ use Dist::Zilla::Types qw(License);
 
 use Log::Dispatchouli 1.100712; # proxy_loggers, quiet_fatal
 use Path::Class;
+use Path::Tiny;
 use List::Util qw(first);
 use Software::License 0.101370; # meta2_name
 use String::RewritePrefix;
@@ -304,7 +308,7 @@ sub _build_license {
     $self->log("based on POD in $filename, guessing license is $guess[0]");
   }
 
-  Class::MOP::load_class($license_class);
+  Class::Load::load_class($license_class);
 
   my $license = $license_class->new({
     holder => $self->_copyright_holder,
@@ -495,13 +499,13 @@ sub _build_distmeta {
   my $meta = {
     'meta-spec' => {
       version => 2,
-      url     => 'http://github.com/dagolden/cpan-meta/',
+      url     => 'http://search.cpan.org/perldoc?CPAN::Meta::Spec',
     },
     name     => $self->name,
     version  => $self->version,
     abstract => $self->abstract,
     author   => $self->authors,
-    license  => $self->license->meta2_name,
+    license  => [ $self->license->meta2_name ],
 
     # XXX: what about unstable?
     release_status => ($self->is_trial or $self->version =~ /_/)
@@ -515,8 +519,14 @@ sub _build_distmeta {
   };
 
   require Hash::Merge::Simple;
-  $meta = Hash::Merge::Simple::merge($meta, $_->metadata)
-    for $self->plugins_with(-MetaProvider)->flatten;
+  my $dynamic;
+  for ($self->plugins_with(-MetaProvider)->flatten) {
+    my $plugin_meta = $_->metadata;
+    $meta = Hash::Merge::Simple::merge($meta, $plugin_meta);
+    $dynamic = 1 if $plugin_meta->{dynamic_config};
+  }
+
+  $meta->{dynamic_config} = 1 if $dynamic;
 
   return $meta;
 }
@@ -629,15 +639,7 @@ sub _write_out_file {
 
   Carp::croak("attempted to write $to multiple times") if -e $to;
 
-  open my $out_fh, '>', "$to" or die "couldn't open $to to write: $!";
-
-  # This is needed, or \n is translated to \r\n on win32.
-  # Maybe :raw:utf8 is needed, but not sure.
-  #     -- Kentnl - 2010-06-10
-  binmode( $out_fh , ":raw" );
-
-  print { $out_fh } $file->content;
-  close $out_fh or die "error closing $to: $!";
+  path("$to")->spew_raw( $file->encoded_content );
   chmod $file->mode, "$to" or die "couldn't chmod $to: $!";
 }
 

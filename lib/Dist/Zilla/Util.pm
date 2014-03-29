@@ -46,6 +46,7 @@ use String::RewritePrefix 0.002; # better string context behavior
       and $event->{content} =~ /^(?:\S+\s+)+?-+\s+(.+)\n$/s
     ) {
       $self->{abstract} = $1;
+      $self->{abstract} =~ s/\s+/\x20/g;
     }
   }
 }
@@ -61,7 +62,7 @@ C<=head1> section called "NAME" or a comment beginning with C<ABSTRACT:>.
 sub abstract_from_file {
   my ($self, $file) = @_;
   my $e = Dist::Zilla::Util::PEA->_new;
-  $e->read_string($file->content);
+  $e->read_string($file->encoded_content);
   return $e->{abstract};
 }
 
@@ -113,7 +114,7 @@ sub _assert_loaded_class_version_ok {
   my $have_version = $pkg->VERSION;
   unless ($req->accepts_module($pkg => $have_version)) {
     die( sprintf
-      "%s version (%s) not match required version: %s\n",
+      "%s version (%s) does not match required version: %s\n",
       $pkg,
       $have_version,
       $version,

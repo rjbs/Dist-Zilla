@@ -1,5 +1,6 @@
 package Dist::Zilla::Role::ShareDir;
 # ABSTRACT: something that picks a directory to install as shared files
+
 use Moose::Role;
 with 'Dist::Zilla::Role::FileFinder';
 
