@@ -56,6 +56,16 @@ will have different line numbers (off by one) than the source.  If
 C<die_on_line_insertion> is true, PkgVersion will raise an exception rather
 than insert a new line.
 
+=attr skip_over_use_statements
+
+By default, PkgVersion inserts the C<$VERSION> assignment immediately after the
+C<package> statement.  This interacts badly with Perl Critic's
+L<Perl::Critic::Policy::TestingAndDebugging::RequireUseStrict> policy, which
+complains about "Code before strictures are enabled".
+
+If <skip_over_use_statements> is true, PkgVersion will insert the C<$VERSION>
+assignment after any C<use> statements, allowing them to enable strictures.
+
 =attr finder
 
 =for stopwords FileFinder
@@ -96,6 +106,12 @@ has die_on_existing_version => (
 );
 
 has die_on_line_insertion => (
+  is  => 'ro',
+  isa => 'Bool',
+  default => 0,
+);
+
+has skip_over_use_statements => (
   is  => 'ro',
   isa => 'Bool',
   default => 0,
@@ -156,15 +172,18 @@ sub munge_perl {
       $file->name,
     ]);
 
-    # walk forward across the *significant siblings* until the next sibling is
-    # not a 'use' statement (P::S::Include, type eq 'use').  Type can
-    # apparently return undef.... This stops before a PPI::Statement::Include
-    # of type 'require' or 'no'.
-    while ( my $next = $stmt->snext_sibling ) {
-      last if ( !( $next->isa('PPI::Statement::Include') &&
-                   $next->type &&
-                   $next->type eq 'use') );
-      $stmt = $next;
+    if ($self->skip_over_use_statements) {
+
+      # walk forward across the *significant siblings* until the next sibling is
+      # not a 'use' statement (P::S::Include, type eq 'use').  Type can
+      # apparently return undef.... This stops before a PPI::Statement::Include
+      # of type 'require' or 'no'.
+      while ( my $next = $stmt->snext_sibling ) {
+        last if ( !( $next->isa('PPI::Statement::Include') &&
+                     $next->type &&
+                     $next->type eq 'use') );
+        $stmt = $next;
+      }
     }
 
     # Now be careful not to tear any associated comment off of this statement.
@@ -179,16 +198,17 @@ sub munge_perl {
       $stmt = $next;
     }
 
-    # Ok, we're looking at something that ends in a newline and the next line
-    # look blank.  Squeeze the version line and take advantage of the existing
+    # First case: looking at something that ends in a newline and the next line
+    # look blank.  Insert the version line and take advantage of the existing
     # newline.
+    # Otherwise: maybe complain about missing blank line and die, otherwise just
+    # wedge it in.
     if ( $stmt->content =~ qr{.*\n} &&
-             ($stmt->next_sibling &&
-                  $stmt->next_sibling->isa('PPI::Token::Whitespace') &&
-                      $stmt->next_sibling->content =~ qr{.*\n})) {
+         ( $stmt->next_sibling &&
+           $stmt->next_sibling->isa('PPI::Token::Whitespace' ) &&
+         $stmt->next_sibling->content =~ qr{.*\n})) {
         Carp::carp( "error inserting version in " . $file->name )
           unless $stmt->insert_after($insertable);
-
     }
     else {
       my $method = $self->die_on_line_insertion ? 'log_fatal' : 'log';
@@ -198,9 +218,9 @@ sub munge_perl {
         $stmt->line_number,
       ]);
 
-      # Work around insertion rules by stuffing in the newline then slip the
-      # version snippet in front of *the newline* instead of after the package
-      # statment.  Feels like a dirty trick, but...
+      # Work around PPI insertion checks by inserting the newline then insert
+      # the version snippet before *the newline* Feels like a dirty trick,
+      # but...
       my $newline = PPI::Token::Whitespace->new("\n");
       Carp::carp("error inserting version in " . $file->name)
         unless $stmt->insert_after( $newline )
@@ -223,9 +243,10 @@ Core Dist::Zilla plugins:
 L<PodVersion|Dist::Zilla::Plugin::PodVersion>,
 L<AutoVersion|Dist::Zilla::Plugin::AutoVersion>,
 L<NextRelease|Dist::Zilla::Plugin::NextRelease>.
-
 Other Dist::Zilla plugins:
 L<OurPkgVersion|Dist::Zilla::Plugin::OurPkgVersion> inserts version
-numbers using C<our $VERSION = '...';> and without changing line numbers
+numbers using C<our $VERSION = '...';> and without changing line numbers.
+Perl Critic and it's policy prohibiting code before strictures are enabled:
+L<Perl::Critic> and L<Perl::Critic::Policy::TestingAndDebugging::RequireUseStrict>.
 
 =cut
