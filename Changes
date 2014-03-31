@@ -2,6 +2,10 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+5.015     2014-03-30 21:55:36-04:00 America/New_York
+        - make it easier to have multiple PAUSE configs using UploadToCPAN's
+          pause_cfg_dir option (thanks, David Golden)
+
 5.014     2014-03-16 16:47:07+01:00 Europe/Paris
         - Added 'jobs' argument for 'dzil test' for parallel testing (thanks,
           David Golden!)
