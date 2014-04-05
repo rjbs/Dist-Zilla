@@ -43,6 +43,7 @@ sub gather_files {
 
   my $file = Dist::Zilla::File::FromCode->new({
     name => 'MANIFEST',
+    code_return_type => 'bytes',
     code => sub {
       my $generated_by = sprintf "%s v%s", ref($self), $self->VERSION || '(dev)';
 
