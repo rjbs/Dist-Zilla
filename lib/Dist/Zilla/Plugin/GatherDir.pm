@@ -36,7 +36,6 @@ files into a subdir of your dist, you might write:
 =cut
 
 use File::Find::Rule;
-use File::HomeDir;
 use File::Spec;
 use Path::Class;
 
@@ -140,7 +139,7 @@ sub gather_files {
   my %is_excluded = map {; $_ => 1 } $self->exclude_filename->flatten;
 
   my $root = "" . $self->root;
-  $root =~ s{^~([\\/])}{File::HomeDir->my_home . $1}e;
+  $root =~ s{^~([\\/])}{require File::HomeDir; File::HomeDir::->my_home . $1}e;
   $root = Path::Class::dir($root);
 
   my $rule = File::Find::Rule->new();
