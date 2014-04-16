@@ -23,6 +23,9 @@ and L<Dist::Zilla::Plugin::InstallTool> roles yourself.
 sub build {
   my $self = shift;
 
+  return
+    if -e 'Build' and (stat 'Build.PL')[9] <= (stat 'Build')[9];
+
   system $^X, 'Build.PL' and die "error with Build.PL\n";
   system $^X, 'Build'    and die "error running $^X Build\n";
 

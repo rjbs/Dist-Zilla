@@ -21,6 +21,12 @@ sub build {
   my $self = shift;
 
   my $make = $self->make_path;
+
+  my $makefile = $^O eq 'VMS' ? 'Descrip.MMS' : 'Makefile';
+
+  return
+    if -e $makefile and (stat 'Makefile.PL')[9] <= (stat $makefile)[9];
+
   system($^X => 'Makefile.PL') and die "error with Makefile.PL\n";
   system($make)                and die "error running $make\n";
 
