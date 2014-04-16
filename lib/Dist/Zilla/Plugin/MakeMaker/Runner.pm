@@ -20,6 +20,8 @@ has 'make_path' => (
 sub build {
   my $self = shift;
 
+  return if -d 'blib';
+
   my $make = $self->make_path;
   system($^X => 'Makefile.PL') and die "error with Makefile.PL\n";
   system($make)                and die "error running $make\n";
