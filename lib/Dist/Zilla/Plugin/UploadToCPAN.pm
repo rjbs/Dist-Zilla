@@ -4,7 +4,6 @@ package Dist::Zilla::Plugin::UploadToCPAN;
 use Moose;
 with qw(Dist::Zilla::Role::BeforeRelease Dist::Zilla::Role::Releaser);
 
-use File::HomeDir;
 use File::Spec;
 use Moose::Util::TypeConstraints;
 use Scalar::Util qw(weaken);
@@ -142,7 +141,7 @@ has pause_cfg_dir => (
   is      => 'ro',
   isa     => 'Str',
   lazy    => 1,
-  default => sub { File::HomeDir->my_home },
+  default => sub { require File::HomeDir; File::HomeDir::->my_home },
 );
 
 =attr pause_cfg
