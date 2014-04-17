@@ -171,9 +171,11 @@ sub gather_files {
 sub _file_from_filename {
   my ($self, $filename) = @_;
 
+  my @stat = stat $filename or $self->log_fatal("$filename does not exist!");
+
   return Dist::Zilla::File::OnDisk->new({
     name => $filename,
-    mode => (stat $filename)[2] & 0755, # kill world-writeability
+    mode => $stat[2] & 0755, # kill world-writeability
   });
 }
 
