@@ -101,7 +101,13 @@ sub extract_author_deps {
 
   my @final =
     map { { $_ => $vermap->{$_} } }
-    grep { $missing ? (! Class::Load::try_load_class($_, ($vermap->{$_} ? {-version => $vermap->{$_}} : ()))) : 1 }
+    grep {
+      $missing
+        ? $_ eq 'perl'
+          ? ($vermap->{perl} ? !eval "use $vermap->{perl}; 1" : ())
+          : (! Class::Load::try_load_class($_, ($vermap->{$_} ? {-version => $vermap->{$_}} : ())))
+        : 1
+      }
     List::MoreUtils::uniq
     @packages;
 

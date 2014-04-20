@@ -17,7 +17,10 @@ my $authordeps =
 
 is_deeply(
     $authordeps,
-    [ map { +{"Dist::Zilla::Plugin::$_" => 0} } qw<AutoPrereqs Encoding ExecDir GatherDir MetaYAML> ],
+    [
+      +{ perl => '5.005' },
+      map { +{"Dist::Zilla::Plugin::$_" => 0} } qw<AutoPrereqs Encoding ExecDir GatherDir MetaYAML>,
+    ],
     "authordeps in corpus/dist/AutoPrereqs"
 ) or diag explain $authordeps;
 
