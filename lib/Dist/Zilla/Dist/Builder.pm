@@ -657,7 +657,7 @@ sub install {
     my $wd = File::pushd::pushd($target);
     my @cmd = $arg->{install_command}
             ? @{ $arg->{install_command} }
-            : (cpanm => ".");
+            : (cpan => ".");
 
     $self->log_debug([ 'installing via %s', \@cmd ]);
     system(@cmd) && $self->log_fatal([ "error running %s", \@cmd ]);

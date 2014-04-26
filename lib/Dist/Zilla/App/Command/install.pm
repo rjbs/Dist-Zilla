@@ -22,7 +22,7 @@ sub abstract { 'install your dist' }
 =cut
 
 sub opt_spec {
-  [ 'install-command=s', 'command to run to install (e.g. "cpan .")' ],
+  [ 'install-command=s', 'command to run to install (e.g. "cpanm .")' ],
   [ 'keep-build-dir|keep' => 'keep the build directory even after a success' ],
 }
 
@@ -36,7 +36,7 @@ Any value that works with L<C<system>|perlfunc/system> is accepted.
 
 If not specified, calls (roughly):
 
-    cpanm .
+    cpan .
 
 For more information, look at the L<install|Dist::Zilla::Dist::Builder/install> method in
 Dist::Zilla.
