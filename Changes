@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - hint about [Encoding] plugin in encoding error message (David
+          Golden)
 
 5.015     2014-03-30 21:55:36-04:00 America/New_York
         - make it easier to have multiple PAUSE configs using UploadToCPAN's

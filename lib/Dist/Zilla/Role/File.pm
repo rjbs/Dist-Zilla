@@ -109,7 +109,7 @@ sub _throw {
   my ($self, $op, $msg) = @_;
   my ($name, $added_by) = map {; $self->$_ } qw/name added_by/;
   confess(
-    "Could not $op $name; $added_by; error was: $msg"
+    "Could not $op $name; $added_by; error was: $msg; maybe you need the [Encoding] plugin to specify an encoding"
   );
 }
 
