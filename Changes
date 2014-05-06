@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+5.016     2014-05-05 22:27:06-04:00 America/New_York
         - hint about [Encoding] plugin in encoding error message (David
           Golden)
 
