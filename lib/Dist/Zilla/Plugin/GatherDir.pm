@@ -3,6 +3,8 @@ package Dist::Zilla::Plugin::GatherDir;
 
 use Moose;
 use Moose::Autobox;
+use MooseX::Types::Moose qw(Str Bool ArrayRef);
+use Moose::Util::TypeConstraints;
 use MooseX::Types::Path::Class qw(Dir File);
 with 'Dist::Zilla::Role::FileGatherer';
 
@@ -67,7 +69,7 @@ directory.  See the L<description|DESCRIPTION> above for an example.
 
 has prefix => (
   is  => 'ro',
-  isa => 'Str',
+  isa => Str,
   default => '',
 );
 
@@ -82,7 +84,7 @@ In almost all cases, the default value (false) is correct.
 
 has include_dotfiles => (
   is  => 'ro',
-  isa => 'Bool',
+  isa => Bool,
   default => 0,
 );
 
@@ -96,7 +98,7 @@ always gathered.
 
 has follow_symlinks => (
   is  => 'ro',
-  isa => 'Bool',
+  isa => Bool,
   default => 0,
 );
 
@@ -111,7 +113,7 @@ option. This may be used multiple times to specify multiple files to exclude.
 
 has exclude_filename => (
   is   => 'ro',
-  isa  => 'ArrayRef',
+  isa  => ArrayRef,
   default => sub { [] },
 );
 
@@ -125,7 +127,13 @@ multiple times to specify multiple patterns to exclude.
 
 has exclude_match => (
   is   => 'ro',
-  isa  => 'ArrayRef',
+  isa  => ArrayRef,
+  default => sub { [] },
+);
+
+has _files => (
+  is   => 'ro',
+  isa  => ArrayRef[role_type('Dist::Zilla::Role::File')],
   default => sub { [] },
 );
 
@@ -162,6 +170,7 @@ sub gather_files {
 
     $fileobj->name($file->as_foreign('Unix')->stringify);
     $self->add_file($fileobj);
+    $self->_files->push($fileobj);
   }
 
   return;

@@ -46,6 +46,12 @@ through Text::Template.  The variables C<$plugin> and C<$dist> will be
 provided, set to the GenerateFile plugin and the Dist::Zilla object
 respectively.
 
+=head1 SEE ALSO
+
+L<[GatherDir::Template]|Dist::Zilla::Plugin::GatherDir::Template> likewise
+generates a file from a template, but the template comes from a file, rather
+than in F<dist.ini>.
+
 =cut
 
 sub mvp_aliases { +{ is_template => 'content_is_template' } }

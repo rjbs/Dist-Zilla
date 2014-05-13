@@ -1,6 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - [GatherDir::Template] now generates an in-memory file, rather
+          than from-code, allowing other plugins to subsequently munge its
+          contents; it now also works for file encodings other than UTF-8 (ether)
 
 5.016     2014-05-05 22:27:06-04:00 America/New_York
         - hint about [Encoding] plugin in encoding error message (David
