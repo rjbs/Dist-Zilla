@@ -64,6 +64,7 @@ sub exclude_file {
   return 1 if index($file->name, $self->zilla->name . '-') == 0;
   return 1 if $file->name =~ /\A\./;
   return 1 if $file->name =~ /\A(?:Build|Makefile)\z/;
+  return 1 if $file->name eq 'Makefile.old';
   return 1 if $file->name =~ /\Ablib/;
   return 1 if $file->name =~ /\.(?:o|bs)$/;
   return 1 if $file->name =~ /\A_Inline/;
