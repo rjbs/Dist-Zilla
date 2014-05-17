@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+5.017     2014-05-17 08:35:33-04:00 America/New_York
         - dotfiles and dot-directories are now included in sharedirs
         - ModuleBuild and MakeMake should not re-build if it isn't needed
         - authordeps now better understands "perl" dep
