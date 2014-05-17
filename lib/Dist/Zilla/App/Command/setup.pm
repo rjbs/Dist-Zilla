@@ -15,7 +15,7 @@ Dist::Zilla looks for per-user configuration in F<~/.dzil/config.ini>.  This
 command prompts the user for some basic information that can be used to produce
 the most commonly needed F<config.ini> sections.
 
-B<WARNING> PAUSE account details are stored within config.ini in plain text.
+B<WARNING>: PAUSE account details are stored within config.ini in plain text.
 
 =cut
 
