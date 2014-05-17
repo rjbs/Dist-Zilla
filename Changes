@@ -2,6 +2,14 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
         - dotfiles and dot-directories are now included in sharedirs
+        - ModuleBuild and MakeMake should not re-build if it isn't needed
+        - authordeps now better understands "perl" dep
+        - munging of README is delayed to prevent unneeded work and
+          complication
+        - MANIFEST is now treated as a binary file
+        - 'dzil setup' now warns that credentials are stored in the clear
+        - MakeMaker should include fewer empty and useless hashrefs
+        - Makefile.old is now pruned as cruft
 
 5.016     2014-05-05 22:27:06-04:00 America/New_York
         - hint about [Encoding] plugin in encoding error message (David
