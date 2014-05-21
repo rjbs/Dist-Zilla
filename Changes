@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+5.019     2014-05-20 21:11:47-04:00 America/New_York
         - remove a very brief-lived attempt to double-decode
 
 5.018     2014-05-20 21:07:04-04:00 America/New_York
