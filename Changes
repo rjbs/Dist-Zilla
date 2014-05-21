@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+5.018     2014-05-20 21:07:04-04:00 America/New_York
         - attempt to return abstract-from-file as a string, rather than
           bytes, which can lead to weirdness (github issue #303)
 
