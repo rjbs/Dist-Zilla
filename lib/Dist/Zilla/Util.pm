@@ -4,6 +4,7 @@ package Dist::Zilla::Util;
 # ABSTRACT: random snippets of code that Dist::Zilla wants
 
 use Carp ();
+use Encode ();
 use String::RewritePrefix 0.002; # better string context behavior
 
 {
@@ -62,8 +63,16 @@ C<=head1> section called "NAME" or a comment beginning with C<ABSTRACT:>.
 sub abstract_from_file {
   my ($self, $file) = @_;
   my $e = Dist::Zilla::Util::PEA->_new;
-  $e->read_string($file->encoded_content);
-  return $e->{abstract};
+
+  my $chars = $file->content;
+  my $bytes = Encode::encode('UTF-8', $chars, Encode::FB_CROAK);
+
+  $e->read_string($bytes);
+
+  return unless defined $e->{abstract};
+  my $abstract = Encode::decode('UTF-8', $e->{abstract}, Encode::FB_CROAK);
+
+  return $abstract;
 }
 
 =method expand_config_package_name

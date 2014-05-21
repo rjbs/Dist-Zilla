@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - attempt to return abstract-from-file as a string, rather than
+          bytes, which can lead to weirdness (github issue #303)
 
 5.017     2014-05-17 08:35:33-04:00 America/New_York
         - dotfiles and dot-directories are now included in sharedirs
