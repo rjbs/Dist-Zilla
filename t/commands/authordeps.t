@@ -5,11 +5,10 @@ use Test::More 0.88 tests => 1;
 use autodie;
 
 use Dist::Zilla::Util::AuthorDeps;
-use Path::Class;
 
 my $authordeps =
     Dist::Zilla::Util::AuthorDeps::extract_author_deps(
-	dir('corpus/dist/AuthorDeps'),
+	'corpus/dist/AuthorDeps',
 	0
     );
 
