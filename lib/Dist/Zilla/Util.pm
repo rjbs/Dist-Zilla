@@ -69,10 +69,7 @@ sub abstract_from_file {
 
   $e->read_string($bytes);
 
-  return unless defined $e->{abstract};
-  my $abstract = Encode::decode('UTF-8', $e->{abstract}, Encode::FB_CROAK);
-
-  return $abstract;
+  return $e->{abstract};
 }
 
 =method expand_config_package_name
