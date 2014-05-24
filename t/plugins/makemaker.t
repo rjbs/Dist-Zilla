@@ -36,6 +36,7 @@ use Test::DZil;
     VERSION  => '0.001',
     AUTHOR   => 'E. Xavier Ample <example@example.org>',
     LICENSE  => 'perl',
+    MIN_PERL_VERSION => '5.008',
     EXE_FILES => [],
     test => { TESTS => 't/*.t' },
 
