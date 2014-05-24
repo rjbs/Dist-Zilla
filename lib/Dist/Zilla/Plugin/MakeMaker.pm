@@ -265,7 +265,7 @@ sub setup_installer {
 
   $self->__write_makefile_args($write_makefile_args); # save for testing
 
-  my $perl_prereq = delete $write_makefile_args->{MIN_PERL_VERSION};
+  my $perl_prereq = $write_makefile_args->{MIN_PERL_VERSION};
 
   my $dumped_args = $self->_dump_as($write_makefile_args, '*WriteMakefileArgs');
 
