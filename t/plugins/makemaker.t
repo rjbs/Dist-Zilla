@@ -20,6 +20,7 @@ use Test::DZil;
           [ Prereqs => BuildRequires => { 'Builder::Bob' => '9.901' } ],
           [ Prereqs => TestRequires  => { 'Test::Deet'   => '7',
                                           perl           => '5.008' } ],
+          [ Prereqs => ConfigureRequires => { perl => '5.010' } ],
         ),
       },
     },
@@ -36,7 +37,7 @@ use Test::DZil;
     VERSION  => '0.001',
     AUTHOR   => 'E. Xavier Ample <example@example.org>',
     LICENSE  => 'perl',
-    MIN_PERL_VERSION => '5.008',
+    MIN_PERL_VERSION => '5.010',
     EXE_FILES => [],
     test => { TESTS => 't/*.t' },
 
