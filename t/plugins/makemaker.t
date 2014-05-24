@@ -2,8 +2,7 @@ use strict;
 use warnings;
 use Test::More 0.88;
 
-use lib 't/lib';
-
+use Test::Deep;
 use Test::DZil;
 
 {
@@ -37,6 +36,8 @@ use Test::DZil;
     VERSION  => '0.001',
     AUTHOR   => 'E. Xavier Ample <example@example.org>',
     LICENSE  => 'perl',
+    EXE_FILES => [],
+    test => { TESTS => 't/*.t' },
 
     PREREQ_PM          => {
       'Foo::Bar' => '1.20',
@@ -53,14 +54,11 @@ use Test::DZil;
       'ExtUtils::MakeMaker' => '0'
     },
   );
-
-  for my $key (sort keys %want) {
-    is_deeply(
-      $makemaker->__write_makefile_args->{ $key },
-      $want{ $key },
-      "correct value set for $key",
-    );
-  }
+  cmp_deeply(
+    $makemaker->__write_makefile_args,
+    \%want,
+    'correct makemaker args generated',
+  );
 }
 
 {
