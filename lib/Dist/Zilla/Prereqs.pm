@@ -124,6 +124,11 @@ sub sync_runtime_build_test_requires {
     }
   }
 
+  # and add configure requires for other consumers expecting this to be a full
+  # merge across all phases required by users
+  $self->merged_requires->add_requirements(
+      $self->requirements_for('configure', 'requires'));
+
   return;
 }
 
