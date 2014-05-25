@@ -72,6 +72,7 @@ use Test::DZil;
           'GatherDir',
           'MakeMaker',
           [ Prereqs => { perl => '5.8.1' } ],
+          [ Prereqs => ConfigureRequires => { 'Builder::Bob' => 0 } ],
         ),
       },
     },
@@ -82,6 +83,9 @@ use Test::DZil;
   my $content = $tzil->slurp_file('build/Makefile.PL');
 
   like($content, qr/^use 5\.008001;\s*$/m, "normalized the perl version needed");
+
+  $content =~ m'^my %FallbackPrereqs = \(\n([^;]+)^\);$'mg;
+  like($1, qr'"Builder::Bob" => ', 'configure-requires prereqs made it into %FallbackPrereqs');
 }
 
 done_testing;
