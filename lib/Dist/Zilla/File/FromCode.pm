@@ -96,9 +96,9 @@ sub encoded_content {
   }
 }
 
-around 'added_by' => sub {
-  my ($orig, $self) = @_;
-  return sprintf("%s from coderef set by %s", $self->code_return_type, $self->$orig);
+sub _set_added_by {
+  my ($self, $value) = @_;
+  return $self->_push_added_by(sprintf("%s from coderef added by %s", $self->code_return_type, $value));
 };
 
 __PACKAGE__->meta->make_immutable;
