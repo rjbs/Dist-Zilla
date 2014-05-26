@@ -8,6 +8,8 @@ binmode(Test::More->builder->$_, ":utf8") for qw/output failure_output todo_outp
 
 use Encode;
 use Path::Tiny;
+use Test::DZil;
+use List::Util 'first';
 
 use Dist::Zilla::File::InMemory;
 use Dist::Zilla::File::OnDisk;
@@ -24,15 +26,36 @@ my $db_sample           = $sample x 2;
 my $db_encoded_sample   = $encoded_sample x 2;
 my $latin1_dolmen       = encode("latin1", $sample{dolmen});
 
-sub new_args {
-  my (undef, $file, $line) = caller;
-  $file = path($file)->relative;
-  my %args = (
-    name => 'foo.txt',
-    added_by => "$file line $line",
-    @_
-  );
-  return [\%args];
+my $tzil = Builder->from_config(
+    { dist_root => 't/does_not_exist' },
+    {
+        add_files => {
+            path(qw(source dist.ini)) => simple_ini(
+                'GatherDir',
+            ),
+            path(qw(source lib DZT Sample.pm)) => "package DZT::Sample;\n\n1",
+        },
+    },
+);
+
+{
+    # this trickery is so the caller appears to be whatever called new_file()
+    my $gatherdir = first { $_->isa('Dist::Zilla::Plugin::GatherDir') } @{ $tzil->plugins };
+    my $add_file = $gatherdir->can('add_file');
+
+    my $i = 0;
+    sub new_file {
+      my ($objref, $class, @args) = @_;
+      my $obj = $class->new(
+          name => 'foo_' . $i++ . '.txt',
+          @args,
+      );
+      ok($obj, "created a $class");
+      $$objref = $obj;
+
+      # equivalent to: $gatherdir->add_file($obj);
+      @_ = ($gatherdir, $obj); goto &$add_file;
+    }
 }
 
 sub test_mutable_roundtrip {
@@ -83,7 +106,8 @@ subtest "OnDisk" => sub {
     my $tempfile = Path::Tiny->tempfile;
 
     ok( $tempfile->spew_utf8($sample), "create UTF-8 encoded tempfile" );
-    my $obj = new_ok( $class, new_args(name => "$tempfile") );
+    my $obj;
+    new_file(\$obj, $class, name => "$tempfile");
     test_mutable_roundtrip($obj);
   };
 
@@ -91,9 +115,10 @@ subtest "OnDisk" => sub {
     my $tempfile = Path::Tiny->tempfile;
 
     ok( $tempfile->spew_raw($encoded_sample), "create binary tempfile" );
-    my $obj = new_ok( $class, new_args(name => "$tempfile") );
+    my $obj;
+    new_file(\$obj, $class, name => "$tempfile");
     ok( $obj->encoding("bytes"), "set encoding to 'bytes'");
-    test_content_from_bytes($obj, qr/encoded_content set by \S+ line \d+/);
+    test_content_from_bytes($obj, qr/encoded_content added by \S+ \(\S+ line \d+\)/);
   };
 
   subtest "latin1 file" => sub {
@@ -103,7 +128,8 @@ subtest "OnDisk" => sub {
       $tempfile->spew( { binmode => ":encoding(latin1)"}, $sample{dolmen} ),
       "create latin1 tempfile"
     );
-    my $obj = new_ok( $class, new_args(name => "$tempfile", encoding => 'latin1') );
+    my $obj;
+    new_file(\$obj, $class, name => "$tempfile", encoding => 'latin1');
     test_latin1($obj);
   };
 
@@ -113,20 +139,21 @@ subtest "InMemory" => sub {
   my $class = "Dist::Zilla::File::InMemory";
 
   subtest "UTF-8 string" => sub {
-    my $obj = new_ok( $class, new_args(content => $sample) );
+    my $obj;
+    new_file(\$obj, $class, content => $sample);
     test_mutable_roundtrip($obj);
   };
 
   subtest "binary string" => sub {
-    my $obj = new_ok( $class, new_args( encoded_content => $encoded_sample ) );
+    my ($obj, $line);
+    new_file(\$obj, $class, encoded_content => $encoded_sample); $line = __LINE__;
     ok( $obj->encoding("bytes"), "set encoding to 'bytes'");
-    test_content_from_bytes($obj, qr/encoded_content set by \S+ line \d+/);
+    test_content_from_bytes($obj, qr/encoded_content added by \S+ \(\S+ line $line\)/);
   };
 
   subtest "latin1 string" => sub {
-    my $obj = new_ok(
-      $class, new_args(encoded_content => $latin1_dolmen, encoding => "latin1")
-    );
+    my $obj;
+    new_file(\$obj, $class, encoded_content => $latin1_dolmen, encoding => "latin1");
     test_latin1($obj);
   };
 
@@ -136,13 +163,15 @@ subtest "FromCode" => sub {
   my $class = "Dist::Zilla::File::FromCode";
 
   subtest "UTF-8 string" => sub {
-    my $obj = new_ok( $class, new_args( code => sub { $sample } ));
+    my $obj;
+    new_file(\$obj, $class, code => sub { $sample });
     is( $obj->content, $sample, "content" );
     is( $obj->encoded_content, $encoded_sample, "encoded_content" );
   };
 
   subtest "content immutable" => sub {
-    my $obj = new_ok( $class, new_args( code => sub { $sample } ));
+    my $obj;
+    new_file(\$obj, $class, code => sub { $sample });
     like(
       exception { $obj->content($sample) },
       qr/cannot set content/,
@@ -156,15 +185,14 @@ subtest "FromCode" => sub {
   };
 
   subtest "binary string" => sub {
-    my $obj = new_ok(
-      $class, new_args( code_return_type => 'bytes', code => sub { $encoded_sample } )
-    );
-    test_content_from_bytes($obj, qr/bytes from coderef set by \S+ line \d+/);
+    my ($obj, $line);
+    new_file(\$obj, $class, code_return_type => 'bytes', code => sub { $encoded_sample }); $line = __LINE__;
+    test_content_from_bytes($obj, qr/bytes from coderef set by \S+ line $line/);
   };
 
   subtest "latin1 string" => sub {
-    my $obj = new_ok(
-      $class, new_args(
+    my $obj;
+    new_file(\$obj, $class, (
         code_return_type => 'bytes',
         code => sub { $latin1_dolmen },
         encoding => 'latin1',

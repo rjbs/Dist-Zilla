@@ -55,8 +55,9 @@ sub content {
     }
   }
   else {
-    my ($pkg, undef, $line) = caller;
-    $self->_update_by('content', sprintf( "%s line %s", $pkg, $line));
+    my ($pkg, $line) = $self->_caller_of('content');
+    $self->_content_source('content');
+    $self->_push_added_by(sprintf("content set by %s (%s line %s)", $self->_caller_plugin_name, $pkg, $line));
     $self->clear_encoded_content;
     return $self->_content(@_);
   }
@@ -87,8 +88,9 @@ sub encoded_content {
       return $self->_encoded_content($self->_encode($self->content));
     }
   }
-  my ($pkg, undef, $line) = caller;
-  $self->_update_by('encoded_content', sprintf( "%s line %s", $pkg, $line));
+  my ($pkg, $line) = $self->_caller_of('encoded_content');
+  $self->_content_source('encoded_content');
+  $self->_push_added_by(sprintf("encoded_content set by %s (%s line %s)", $self->_caller_plugin_name, $pkg, $line));
   $self->clear_content;
   $self->_encoded_content(@_);
 }
@@ -100,15 +102,9 @@ has _content_source => (
     builder => '_build_content_source',
 );
 
-sub _update_by {
-  my ($self, $attr, $from) = @_;
-  $self->_content_source($attr);
-  $self->_set_added_by($from);
-}
-
-around 'added_by' => sub {
-  my ($orig, $self) = @_;
-  return sprintf("%s set by %s", $self->_content_source, $self->$orig);
+sub _set_added_by {
+  my ($self, $value) = @_;
+  return $self->_push_added_by(sprintf("%s added by %s", $self->_content_source, $value));
 };
 
 # we really only need one of these and only if _content or _encoded_content
