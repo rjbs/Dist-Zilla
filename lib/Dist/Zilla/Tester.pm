@@ -40,6 +40,28 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
 
   use Moose::Role;
 
+  has tempdir_root => (
+    is => 'rw', isa => 'Str|Undef',
+    writer => '_set_tempdir_root',
+  );
+  has tempdir_obj => (
+    is => 'ro', isa => 'File::Temp::Dir',
+    clearer => '_clear_tempdir_obj',
+    writer => '_set_tempdir_obj',
+  );
+
+  sub DEMOLISH {}
+  around DEMOLISH => sub {
+    my $orig = shift;
+    my $self = shift;
+
+    # File::Temp deletes the directory when it goes out of scope
+    $self->_clear_tempdir_obj;
+
+    rmdir $self->tempdir_root if $self->tempdir_root;
+    return $self->$orig(@_);
+  };
+
   has tempdir => (
     is   => 'ro',
     writer   => '_set_tempdir',
@@ -105,10 +127,11 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
 
     mkdir $tempdir_root if defined $tempdir_root and not -d $tempdir_root;
 
-    my $tempdir = dir( File::Temp::tempdir(
+    my $tempdir_obj = File::Temp->newdir(
         CLEANUP => 1,
         (defined $tempdir_root ? (DIR => $tempdir_root) : ()),
-    ))->absolute;
+    );
+    my $tempdir = dir($tempdir_obj)->absolute;
 
     my $root = $tempdir->subdir('source');
     $root->mkpath;
@@ -136,6 +159,8 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
 
     my $zilla = $self->$orig($arg);
 
+    $zilla->_set_tempdir_root($tempdir_root);
+    $zilla->_set_tempdir_obj($tempdir_obj);
     $zilla->_set_tempdir($tempdir);
 
     return $zilla;
@@ -223,10 +248,11 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
 
     mkdir $tempdir_root if defined $tempdir_root and not -d $tempdir_root;
 
-    my $tempdir = dir( File::Temp::tempdir(
+    my $tempdir_obj = File::Temp->newdir(
         CLEANUP => 1,
         (defined $tempdir_root ? (DIR => $tempdir_root) : ()),
-    ))->absolute;
+    );
+    my $tempdir = dir($tempdir_obj)->absolute;
 
     local $arg->{chrome} = Dist::Zilla::Chrome::Test->new;
 
@@ -243,6 +269,8 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
 
     my $zilla = $self->$orig($profile_data, $arg);
 
+    $zilla->_set_tempdir_root($tempdir_root);
+    $zilla->_set_tempdir_obj($tempdir_obj);
     $zilla->_set_tempdir($tempdir);
 
     return $zilla;
