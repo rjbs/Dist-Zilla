@@ -80,7 +80,7 @@ sub document_assigns_to_variable {
 
   # Clone because ppi_document_for_file which the caller is likely to
   # have retrieved his document from caches aggressively, and we'd
-  # like to prun POD and comments.
+  # like to prune POD and comments.
   #
   # It would be pretty stupid of us to say we found a variable in some
   # comment or in the POD, which we might do because if the POD is
@@ -93,7 +93,7 @@ sub document_assigns_to_variable {
 
   my $finder = sub {
     my $node = $_[1];
-    return 1 if $node->isa('PPI::Statement') && $node->content =~ /(?<!\\)\Q$variable\E\s*=/sm;
+    return 1 if $node->isa('PPI::Statement') && $node->content =~ /^[^#]*(?<!\\)\Q$variable\E\s*=/sm;
     return 0;
   };
 
