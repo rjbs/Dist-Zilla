@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - [PkgVersion] now properly skips over $VERSION assignments in
+          comments (Karen Etheridge, github #322)
 
 5.019     2014-05-20 21:11:47-04:00 America/New_York
         - remove a very brief-lived attempt to double-decode
