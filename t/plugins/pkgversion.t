@@ -37,16 +37,16 @@ package DZT::WInPODStm;
 
 1;
 
-__END__
+END
 our $VERSION = 1.234;
 =for bug
 
-  # Because we have an __END__ up there PPI considers this a statement
+  # Because we have an END up there PPI considers this a statement
 
   our $VERSION = 1.234;
 
 =cut
-';
+';  $in_pod_stm =~ s/END/__END__/g;
 
 my $two_packages = '
 package DZT::TP1;
