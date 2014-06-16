@@ -24,16 +24,15 @@ plugin should also be loaded.
 =attr eumm_version
 
 This option declares the version of ExtUtils::MakeMaker required to configure
-and build the distribution.  It defaults to 6.30, which ensures a working
-C<INSTALL_BASE>.  It can be safely set to earlier versions, although I<no
-testing has been done to determine the minimum version actually required>.
+and build the distribution.  There is no default, although one may be added if
+it can be determined that the generated F<Makefile.PL> requires some specific
+minimum.  I<No testing has been done on this front.>
 
 =cut
 
 has eumm_version => (
   isa => 'Str',
   is  => 'rw',
-  default => '6.30',
 );
 
 =attr make_path
@@ -86,7 +85,7 @@ use warnings;
 
 {{ $perl_prereq ? qq[use $perl_prereq;] : ''; }}
 
-use ExtUtils::MakeMaker {{ $eumm_version }};
+use ExtUtils::MakeMaker {{ defined $eumm_version ? $eumm_version : '' }};
 
 {{ $share_dir_code{preamble} || '' }}
 
@@ -114,7 +113,7 @@ sub register_prereqs {
 
   $self->zilla->register_prereqs(
     { phase => 'configure' },
-    'ExtUtils::MakeMaker' => $self->eumm_version,
+    'ExtUtils::MakeMaker' => $self->eumm_version || 0,
   );
 
   return unless keys %{ $self->zilla->_share_dir_map };
