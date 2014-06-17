@@ -33,9 +33,8 @@ sub execute {
   my $zilla = $self->zilla;
 
   $zilla->is_trial(1) if $opt->trial;
-  $zilla->should_build_archive(0) unless $opt->tgz;
 
-  $self->zilla->release;
+  $self->zilla->release(build_archive => $opt->tgz);
 }
 
 1;
