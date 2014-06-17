@@ -2,6 +2,9 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+5.020     2014-06-16 17:02:00-07:00 America/Los_Angeles
+        - option to not build a tarball when releasing, just like build
+
 5.019     2014-05-20 21:11:47-04:00 America/New_York
         - remove a very brief-lived attempt to double-decode
 

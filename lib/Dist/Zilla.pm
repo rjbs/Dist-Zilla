@@ -460,6 +460,18 @@ has is_trial => (
   default => sub { $ENV{TRIAL} ? 1 : 0 }
 );
 
+=attr should_build_archive
+
+This attribute tells us whether or not to build a tarball as part of the release.
+
+=cut
+
+has should_build_archive => (
+  is => 'rw',
+  isa => Bool,
+  default => 1,
+);
+
 =attr plugins
 
 This is an arrayref of plugins that have been plugged into this Dist::Zilla

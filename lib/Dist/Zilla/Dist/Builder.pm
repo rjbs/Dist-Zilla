@@ -552,7 +552,7 @@ sub release {
 
   $ENV{DZIL_RELEASING} = 1;
 
-  my $tgz = $self->build_archive;
+  my $tgz; $tgz = $self->build_archive if $self->should_build_archive;
 
   # call all plugins implementing BeforeRelease role
   $_->before_release($tgz) for $self->plugins_with(-BeforeRelease)->flatten;
