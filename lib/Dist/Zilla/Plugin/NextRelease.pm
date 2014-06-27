@@ -10,7 +10,6 @@ with (
   'Dist::Zilla::Role::AfterRelease',
 );
 
-use DateTime 0.44; # CLDR fixes
 use Path::Tiny;
 use Moose::Util::TypeConstraints;
 use String::Formatter 0.100680 stringf => {
@@ -21,6 +20,9 @@ use String::Formatter 0.100680 stringf => {
   codes => {
     v => sub { $_[0]->zilla->version },
     d => sub {
+      require DateTime;
+      DateTime->VERSION('0.44'); # CLDR fixes
+
       DateTime->from_epoch(epoch => $^T, time_zone => $_[0]->time_zone)
               ->format_cldr($_[1]),
     },
