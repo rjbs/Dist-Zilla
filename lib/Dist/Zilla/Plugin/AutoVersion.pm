@@ -9,8 +9,6 @@ with(
 
 use namespace::autoclean;
 
-use DateTime 0.44 (); # CLDR fixes
-
 =head1 DESCRIPTION
 
 This plugin automatically produces a version string, generally based on the
@@ -68,6 +66,11 @@ has format => (
 
 sub provide_version {
   my ($self) = @_;
+
+  # TODO declare this as a 'develop' prereq as we want it in
+  # `dzil listdeps --author`
+  require DateTime;
+  DateTime->VERSION('0.44'); # CLDR fixes
 
   my $now = DateTime->now(time_zone => $self->time_zone);
 
