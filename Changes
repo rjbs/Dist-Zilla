@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - load DateTime lazily
 
 5.019     2014-05-20 21:11:47-04:00 America/New_York
         - remove a very brief-lived attempt to double-decode
