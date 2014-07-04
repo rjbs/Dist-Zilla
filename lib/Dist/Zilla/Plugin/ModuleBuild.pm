@@ -26,7 +26,7 @@ L<Module::Build>.
 
 B<Optional:> Specify the minimum version of L<Module::Build> to depend on.
 
-Defaults to 0.3601
+Defaults to 0.3601 if a sharedir is being used, otherwise 0.28.
 
 =attr mb_class
 
@@ -45,7 +45,11 @@ mb_class. Defaults to C<inc>.
 has 'mb_version' => (
   isa => 'Str',
   is  => 'rw',
-  default => '0.3601',
+  lazy => 1,
+  default => sub {
+    my $self = shift;
+    keys %{$self->zilla->_share_dir_map} ? '0.3601' : '0.28';
+  },
 );
 
 has 'mb_class' => (
