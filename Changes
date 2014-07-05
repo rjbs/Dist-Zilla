@@ -2,6 +2,8 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
         - load DateTime lazily
+	- add ->has_encoding & ->is_encoded_content to files
+	  (thanks, Christopher J. Madsen)
 
 5.019     2014-05-20 21:11:47-04:00 America/New_York
         - remove a very brief-lived attempt to double-decode
