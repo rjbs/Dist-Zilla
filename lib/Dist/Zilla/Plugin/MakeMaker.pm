@@ -185,10 +185,12 @@ sub write_makefile_args {
   $perl_prereq = version->parse($perl_prereq)->numify if $perl_prereq;
 
   my $prereqs_dump = sub {
-    $prereqs->requirements_for(@_)
-            ->clone
-            ->clear_requirement('perl')
-            ->as_string_hash;
+    $self->_normalize_eumm_versions(
+      $prereqs->requirements_for(@_)
+              ->clone
+              ->clear_requirement('perl')
+              ->as_string_hash
+    );
   };
 
   my $build_prereq = $prereqs_dump->(qw(build requires));
@@ -216,6 +218,24 @@ sub write_makefile_args {
   return \%write_makefile_args;
 }
 
+sub _normalize_eumm_versions {
+  my ($self, $prereqs) = @_;
+  for my $v (values %$prereqs) {
+    if (version::is_strict($v)) {
+      my $version = version->parse($v);
+      if ($version->is_qv) {
+        if ((() = $v =~ /\./g) > 1) {
+          $v =~ s/^v//;
+        }
+        else {
+          $v = $version->numify;
+        }
+      }
+    }
+  }
+  return $prereqs;
+}
+
 sub _dump_as {
   my ($self, $ref, $name) = @_;
   require Data::Dumper;
@@ -229,10 +249,12 @@ sub _dump_as {
 sub fallback_prereq_pm {
   my $self = shift;
   my $fallback
-    = $self->zilla->prereqs->merged_requires
-    ->clone
-    ->clear_requirement('perl')
-    ->as_string_hash;
+    = $self->_normalize_eumm_versions(
+      $self->zilla->prereqs->merged_requires
+      ->clone
+      ->clear_requirement('perl')
+      ->as_string_hash
+    );
   return $self->_dump_as( $fallback, '*FallbackPrereqs' );
 }
 
