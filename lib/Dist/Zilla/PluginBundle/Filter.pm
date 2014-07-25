@@ -28,6 +28,9 @@ but removes all the entries whose package is given in the C<-remove> attributes.
 
 Options not prefixed with C<-> will be passed to the bundle to be filtered.
 
+B<NOTE:> When you filter a bundle you B<SHOULD NOT> include it directly in
+your C<dist.ini> file. This plugin will take care of including it for you.
+
 =head1 SEE ALSO
 
 Core Dist::Zilla plugins: L<@Basic|Dist::Zilla::PluginBundle::Basic>.
