@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+5.020     2014-07-28 20:56:25-04:00 America/New_York
         - the default required version for ExtUtils::MakeMaker in [MakeMaker]
           has been removed
         - load DateTime lazily
