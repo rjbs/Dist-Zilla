@@ -50,11 +50,10 @@ has term_ui => (
 
 has term_enc => (
   is   => 'ro',
-  isa =>'Str',
   lazy => 1,
   default => sub {
     require Term::Encoding;
-    return Term::Encoding::get_encoding() || die 'cannot determine encoding: no locale set?';
+    return Term::Encoding::get_encoding();
   },
 );
 
@@ -67,15 +66,22 @@ sub prompt_str {
   require Encode;
   my $term_enc = $self->term_enc;
 
+  my $encode = $term_enc
+             ? sub { Encode::encode($term_enc, shift, Encode::FB_CROAK())  }
+             : sub { shift };
+  my $decode = $term_enc
+             ? sub { Encode::decode($term_enc, shift, Encode::FB_CROAK())  }
+             : sub { shift };
+
   if ($arg->{noecho}) {
     require Term::ReadKey;
     Term::ReadKey::ReadMode('noecho');
   }
   my $input_bytes = $self->term_ui->get_reply(
-    prompt => Encode::encode($term_enc, $prompt, Encode::FB_CROAK()),
+    prompt => $encode->($prompt),
     allow  => $check || sub { defined $_[0] and length $_[0] },
     (defined $default
-      ? (default => Encode::encode($term_enc, $default, Encode::FB_CROAK()))
+      ? (default => $encode->($default))
       : ()
     ),
   );
@@ -86,7 +92,7 @@ sub prompt_str {
     print "\n";
   }
 
-  my $input = Encode::decode($term_enc, $input_bytes, Encode::FB_CROAK());
+  my $input = $decode->($input_bytes);
   chomp $input;
 
   return $input;
