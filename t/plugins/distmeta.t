@@ -6,7 +6,7 @@ use utf8;
 
 use Test::DZil;
 
-use JSON 2;
+use JSON::MaybeXS;
 use YAML::Tiny;
 
 {
@@ -38,7 +38,7 @@ use YAML::Tiny;
   my %meta;
 
   my $json = $tzil->slurp_file('build/META.json');
-  $meta{json} = JSON->new->decode($json);
+  $meta{json} = JSON::MaybeXS->new(utf8 => 0)->decode($json);
 
   my $yaml = $tzil->slurp_file('build/META.yml');
   $meta{yaml} = YAML::Tiny->new->read_string($yaml)->[0];
@@ -107,7 +107,7 @@ use YAML::Tiny;
   my %meta;
 
   my $json = $tzil->slurp_file('build/META.json');
-  $meta{json} = JSON->new->decode($json);
+  $meta{json} = JSON::MaybeXS->new(utf8 => 0)->decode($json);
 
   my $yaml = $tzil->slurp_file('build/META.yml');
   $meta{yaml} = YAML::Tiny->new->read_string($yaml)->[0];
@@ -155,7 +155,7 @@ use YAML::Tiny;
   my %meta;
 
   my $json = $tzil->slurp_file('build/META.json');
-  $meta{json} = JSON->new->decode($json);
+  $meta{json} = JSON::MaybeXS->new(utf8 => 0)->decode($json);
 
   my $yaml = $tzil->slurp_file('build/META.yml');
   $meta{yaml} = YAML::Tiny->new->read_string($yaml)->[0];
