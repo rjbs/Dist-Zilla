@@ -49,8 +49,7 @@ sub gather_files {
 
   my $zilla = $self->zilla;
 
-  require JSON;
-  JSON->VERSION(2);
+  require JSON::MaybeXS;
   require CPAN::Meta::Converter;
   CPAN::Meta::Converter->VERSION(2.101550); # improved downconversion
   require CPAN::Meta::Validator;
@@ -73,7 +72,10 @@ sub gather_files {
       my $converter = CPAN::Meta::Converter->new($distmeta);
       my $output    = $converter->convert(version => $self->version);
 
-      JSON->new->canonical(1)->pretty->encode($output)
+      # note utf8 => 1 is *not* used - so unicode characters remain as-is in
+      # the resulting json string, and therefore an encoding must be used when
+      # the file is written to disk.
+      JSON::MaybeXS->new(canonical => 1, pretty => 1)->encode($output)
       . "\n";
     },
   });
@@ -96,6 +98,6 @@ L<FileGatherer|Dist::Zilla::Role::FileGatherer>.
 
 Other modules:
 L<CPAN::Meta>,
-L<CPAN::Meta::Spec>, L<JSON>.
+L<CPAN::Meta::Spec>, L<JSON::MaybeXS>.
 
 =cut

@@ -5,7 +5,7 @@ package Test::DZil;
 
 use Dist::Zilla::Tester;
 use Params::Util qw(_HASH0);
-use JSON 2;
+use JSON::MaybeXS;
 use Scalar::Util qw(blessed);
 use Test::Deep ();
 use YAML::Tiny;
@@ -94,7 +94,7 @@ C<L<cmp_deeply|Test::Deep/cmp_deeply>>.
 sub is_json {
   my ($json, $want, $comment) = @_;
 
-  my $have = JSON->new->ascii(1)->decode($json)
+  my $have = JSON::MaybeXS->new(ascii => 1)->decode($json)
     or die "Cannot decode JSON";
 
   local $Test::Builder::Level = $Test::Builder::Level + 1;
