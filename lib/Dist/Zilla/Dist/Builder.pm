@@ -64,7 +64,6 @@ sub _setup_default_plugins {
         my ($file, $self) = @_;
         local $_ = $file->name;
         return 1 if m{\Alib/} and m{\.(pm|pod)$};
-        return 1 if $_ eq $self->zilla->main_module;
         return;
       },
     });
