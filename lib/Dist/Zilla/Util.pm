@@ -24,7 +24,7 @@ use String::RewritePrefix 0.002; # better string context behavior
     my ($self, $event) = @_;
     return if $self->{abstract};
     return $self->{abstract} = $1
-      if $event->{content}=~ /^\s*#+\s*ABSTRACT:\s*(.+)$/m;
+      if $event->{content}=~ /^\s*#+\s*ABSTRACT:\s*(\S.*)$/m;
     return;
   }
   sub handle_event {
