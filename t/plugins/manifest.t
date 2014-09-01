@@ -2,7 +2,7 @@ use strict;
 use warnings;
 use Test::More 0.88;
 
-use ExtUtils::Manifest;
+use ExtUtils::Manifest 1.66; # or maniread can't cope with quoting properly
 
 use lib 't/lib';
 
@@ -13,9 +13,9 @@ my $tzil = Builder->from_config(
   {
     add_files => {
       q{source/file with spaces.txt}        => "foo\n",
-      # q{source/file\\with some\\whacks.txt} => "bar\n",
-      # q{source/'file-with-ticks.txt'}       => "baz\n",
-      # q{source/file'with'quotes\\or\\backslash.txt} => "quux\n",
+      q{source/file\\with some\\whacks.txt} => "bar\n",
+      q{source/'file-with-ticks.txt'}       => "baz\n",
+      q{source/file'with'quotes\\or\\backslash.txt} => "quux\n",
       'source/dist.ini' => simple_ini(
         'GatherDir',
         'Manifest',
@@ -33,9 +33,9 @@ is_deeply(
   [ sort(
     'MANIFEST',
     q{file with spaces.txt},
-    # q{file\\with some\\whacks.txt},
-    # q{file'with'quotes\\or\\backslash.txt},
-    # q{'file-with-ticks.txt'},
+    q{file\\with some\\whacks.txt},
+    q{file'with'quotes\\or\\backslash.txt},
+    q{'file-with-ticks.txt'},
     'dist.ini',
     'lib/DZT/Sample.pm',
     't/basic.t',
@@ -51,9 +51,9 @@ is_deeply(
   [ sort(
     'MANIFEST',
     q{'file with spaces.txt'},
-    # q{'file\\\\with some\\\\whacks.txt'},
-    # q{'\\'file-with-ticks.txt\\''},
-    # q{'file\\'with\\'quotes\\\\or\\\\backslash.txt'},
+    q{'file\\\\with some\\\\whacks.txt'},
+    q{'\\'file-with-ticks.txt\\''},
+    q{'file\\'with\\'quotes\\\\or\\\\backslash.txt'},
     'dist.ini',
     'lib/DZT/Sample.pm',
     't/basic.t',
