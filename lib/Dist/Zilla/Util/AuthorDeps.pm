@@ -26,6 +26,7 @@ sub install_author_deps {
   foreach my $rec (@{ $reqs }) {
     my ($mod, $ver) = each(%{ $rec });
     system qq{$command $mod};
+    each(%{ $rec });
   }
   return;
 }
