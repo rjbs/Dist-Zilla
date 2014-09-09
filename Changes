@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - [PkgVersion] now properly skips over $VERSION assignments in
+          comments (Karen Etheridge, github #322)
 
 5.020     2014-07-28 20:56:25-04:00 America/New_York
         - the default required version for ExtUtils::MakeMaker in [MakeMaker]
