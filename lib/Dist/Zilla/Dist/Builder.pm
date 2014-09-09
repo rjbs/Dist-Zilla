@@ -280,6 +280,10 @@ You can pipe the list to your CPAN client to install or update them:
 
     dzil authordeps --missing | cpanm
 
+or if your OS does not support pipes:
+
+    dzil authordeps --missing --exe cpanm
+
 END_DIE
 
   };

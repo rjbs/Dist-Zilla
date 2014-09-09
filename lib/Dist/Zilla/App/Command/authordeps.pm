@@ -25,6 +25,7 @@ sub opt_spec {
     [ 'root=s' => 'the root of the dist; defaults to .' ],
     [ 'missing' => 'list only the missing dependencies' ],
     [ 'versions' => 'include required version numbers in listing' ],
+    [ 'exe=s' => 'command to be used to install dependencies. (e.g. cpanm)' ],
   );
 }
 
@@ -34,12 +35,20 @@ sub execute {
   require Path::Class;
   require Dist::Zilla::Util::AuthorDeps;
 
+  my $reqs = Dist::Zilla::Util::AuthorDeps::extract_author_deps(
+    Path::Class::dir(defined $opt->root ? $opt->root : '.'),
+    $opt->missing,
+  );
+
+  if ($opt->exe) {
+    Dist::Zilla::Util::AuthorDeps::install_author_deps(
+      $reqs, $opt->exe
+    );
+  }
+
   my $deps =
     Dist::Zilla::Util::AuthorDeps::format_author_deps(
-      Dist::Zilla::Util::AuthorDeps::extract_author_deps(
-        Path::Class::dir(defined $opt->root ? $opt->root : '.'),
-        $opt->missing,
-      ), $opt->versions
+      $reqs, $opt->versions
     );
   $self->log($deps) if $deps;
 
