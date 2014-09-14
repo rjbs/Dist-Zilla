@@ -27,8 +27,8 @@ sub build {
   return
     if -e $makefile and (stat 'Makefile.PL')[9] <= (stat $makefile)[9];
 
-  system($^X => 'Makefile.PL') and die "error with Makefile.PL\n";
-  system($make)                and die "error running $make\n";
+  system($^X => qw(Makefile.PL INSTALLMAN1DIR=none INSTALLMAN3DIR=none)) and die "error with Makefile.PL\n";
+  system($make) and die "error running $make\n";
 
   return;
 }
