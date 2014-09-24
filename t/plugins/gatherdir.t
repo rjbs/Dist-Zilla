@@ -26,7 +26,7 @@ my $tzil = Builder->from_config(
         [ GatherDir => Selective => {
           root   => '../corpus/extra',
           prefix => 'some',
-          exclude_filename => 'notme.txt',
+          exclude_filename => [ 'notme.txt', 'subdir/index.html' ],
         } ],
         [ GatherDir => SelectiveMatch => {
           root   => '../corpus/extra',
@@ -65,7 +65,7 @@ is_filelist(
   [ qw(
     bonus/subdir/index.html bonus/vader.txt bonus/notme.txt
     dotty/subdir/index.html dotty/vader.txt dotty/.dotfile dotty/notme.txt
-    some/subdir/index.html some/vader.txt
+    some/vader.txt
     xmatch/subdir/index.html xmatch/vader.txt
     links/vader.txt links/subdir/index.html links/notme.txt
     dist.ini lib/DZT/Sample.pm t/basic.t
