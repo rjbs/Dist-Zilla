@@ -38,6 +38,7 @@ files into a subdir of your dist, you might write:
 use File::Find::Rule;
 use File::Spec;
 use Path::Tiny;
+use List::Util 1.33 'all';
 
 use namespace::autoclean;
 
@@ -105,7 +106,8 @@ sub mvp_multivalue_args { qw(exclude_filename exclude_match) }
 =attr exclude_filename
 
 To exclude certain files from being gathered, use the C<exclude_filename>
-option. This may be used multiple times to specify multiple files to exclude.
+option.  The filename is matched exactly, relative to C<root>.
+This may be used multiple times to specify multiple files to exclude.
 
 =cut
 
@@ -150,8 +152,6 @@ sub gather_files {
   $exclude_regex = qr/$exclude_regex|$_/
     for ($self->exclude_match->flatten);
 
-  my %is_excluded = map {; $_ => 1 } $self->exclude_filename->flatten;
-
   my $root = "" . $self->root;
   $root =~ s{^~([\\/])}{require File::HomeDir; File::HomeDir::->my_home . $1}e;
 
@@ -168,12 +168,15 @@ sub gather_files {
 
   $rule->or($rule->new->file, $rule->new->symlink);
   $rule->not_exec(sub { /^\.[^.]/ }) unless $self->include_dotfiles;   # exec passes basename as $_
+  $rule->exec(sub {
+    my $relative = path($_[-1])->relative($root);
+    all { $relative ne $_ } @{ $self->exclude_filename };
+  });
 
   FILE: for my $filename ($rule->in($root)) {
     my $file = path($filename)->relative($root);
 
     next if $file =~ $exclude_regex;
-    next if $is_excluded{ $file };
 
     # _file_from_filename is overloaded in GatherDir::Template
     my $fileobj = $self->_file_from_filename($filename);
