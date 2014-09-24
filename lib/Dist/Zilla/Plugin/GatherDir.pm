@@ -37,7 +37,7 @@ files into a subdir of your dist, you might write:
 
 use File::Find::Rule;
 use File::Spec;
-use Path::Class;
+use Path::Tiny;
 
 use namespace::autoclean;
 
@@ -154,7 +154,6 @@ sub gather_files {
 
   my $root = "" . $self->root;
   $root =~ s{^~([\\/])}{require File::HomeDir; File::HomeDir::->my_home . $1}e;
-  $root = Path::Class::dir($root);
 
   # build up the rules
   my $rule = File::Find::Rule->new();
@@ -162,11 +161,11 @@ sub gather_files {
   $rule->or($rule->new->file, $rule->new->symlink);
 
   FILE: for my $filename ($rule->in($root)) {
-    my $file = file($filename)->relative($root);
+    my $file = path($filename)->relative($root);
 
     unless ($self->include_dotfiles) {
       next FILE if $file->basename =~ qr/^\./;
-      next FILE if grep { /^\.[^.]/ } $file->dir->dir_list;
+      next FILE if grep { /^\.[^.]/ } File::Spec->splitdir($file->parent);
     }
 
     next if $file =~ $exclude_regex;
@@ -175,9 +174,9 @@ sub gather_files {
     # _file_from_filename is overloaded in GatherDir::Template
     my $fileobj = $self->_file_from_filename($filename);
 
-    $file = Path::Class::file($self->prefix, $file) if $self->prefix;
+    $file = path($self->prefix, $file) if $self->prefix;
 
-    $fileobj->name($file->as_foreign('Unix')->stringify);
+    $fileobj->name($file->stringify);
     $self->add_file($fileobj);
   }
 
