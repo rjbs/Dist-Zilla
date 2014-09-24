@@ -31,7 +31,7 @@ my $tzil = Builder->from_config(
         [ GatherDir => SelectiveMatch => {
           root   => '../corpus/extra',
           prefix => 'xmatch',
-          exclude_match => 'notme\.*',
+          exclude_match => [ 'notme\.*', '^subdir/index\.html$' ],
         } ],
         [ GatherDir => Symlinks => {
           root   => '../corpus/extra',
@@ -66,7 +66,7 @@ is_filelist(
     bonus/subdir/index.html bonus/vader.txt bonus/notme.txt
     dotty/subdir/index.html dotty/vader.txt dotty/.dotfile dotty/notme.txt
     some/vader.txt
-    xmatch/subdir/index.html xmatch/vader.txt
+    xmatch/vader.txt
     links/vader.txt links/subdir/index.html links/notme.txt
     dist.ini lib/DZT/Sample.pm t/basic.t
     MANIFEST
