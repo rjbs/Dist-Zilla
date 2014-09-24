@@ -120,7 +120,8 @@ has exclude_filename => (
 =attr exclude_match
 
 This is just like C<exclude_filename> but provides a regular expression
-pattern.  Files matching the pattern are not gathered.  This may be used
+pattern.  Filenames matching the pattern (relative to C<root>)  are not
+gathered.  This may be used
 multiple times to specify multiple patterns to exclude.
 
 =cut
@@ -170,13 +171,12 @@ sub gather_files {
   $rule->not_exec(sub { /^\.[^.]/ }) unless $self->include_dotfiles;   # exec passes basename as $_
   $rule->exec(sub {
     my $relative = path($_[-1])->relative($root);
-    all { $relative ne $_ } @{ $self->exclude_filename };
+    $relative !~ $exclude_regex &&
+      all { $relative ne $_ } @{ $self->exclude_filename }
   });
 
   FILE: for my $filename ($rule->in($root)) {
     my $file = path($filename)->relative($root);
-
-    next if $file =~ $exclude_regex;
 
     # _file_from_filename is overloaded in GatherDir::Template
     my $fileobj = $self->_file_from_filename($filename);
