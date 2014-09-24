@@ -43,6 +43,8 @@ my $tzil = Builder->from_config(
       'source/.profile' => "Bogus dotfile.\n",
       'corpus/extra/.dotfile' => "Bogus dotfile.\n",
       'corpus/extra/notme.txt' => "A file to exclude.\n",
+      'source/.dotdir/extra/notme.txt' => "Another file to exclude.\n",
+      'source/extra/.dotdir/notme.txt' => "Another file to exclude.\n",
     },
     also_copy => { 'corpus/extra' => 'corpus/extra' },
   },
