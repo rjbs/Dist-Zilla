@@ -120,6 +120,7 @@ sub after_release {
   my ($self) = @_;
   my $filename = $self->filename;
   my ($gathered_file) = grep { $_->name eq $filename } @{ $self->zilla->files };
+  $self->log_fatal("failed to find $filename in the distribution") if not $gathered_file;
   my $iolayer = sprintf(":raw:encoding(%s)", $gathered_file->encoding);
 
   # read original changelog
