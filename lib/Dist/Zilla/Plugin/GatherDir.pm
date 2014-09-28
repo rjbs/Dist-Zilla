@@ -100,6 +100,22 @@ has follow_symlinks => (
   default => 0,
 );
 
+
+=attr allow_symlink_cycles
+
+Is only meaningful if "follow_symlinks" is enabled. When set to "true" will allow
+you to have symlink cycles in files being gathered by this plugin. Default value
+is "false" meaning the plugin will die with diagnostic message.
+
+=cut
+
+has allow_symlink_cycles => (
+  is  => 'ro',
+  isa => 'Bool',
+  default => 0,
+);
+
+
 sub mvp_multivalue_args { qw(exclude_filename exclude_match) }
 
 =attr exclude_filename
@@ -143,7 +159,10 @@ sub gather_files {
   $root = Path::Class::dir($root);
 
   my $rule = File::Find::Rule->new();
-  $rule->extras({follow => $self->follow_symlinks});
+  # for `allow_symlink_cycles=true` we set the "follow_skip" to 2
+  # for `allow_symlink_cycles=false` we set the "follow_skip" to 1 (default value)
+  # for details refer to: http://search.cpan.org/~jesse/perl-5.14.1/lib/File/Find.pm#follow_skip 
+  $rule->extras({follow => $self->follow_symlinks, follow_skip => $self->allow_symlink_cycles ? 2 : 1 });
   FILE: for my $filename ($rule->file->in($root)) {
     my $file = file($filename)->relative($root);
 
