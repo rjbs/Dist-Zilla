@@ -37,17 +37,14 @@ sub extract_author_deps {
   require CPAN::Meta::Requirements;
   my $reqs = CPAN::Meta::Requirements->new;
 
-  my @packs =
-    map  { s/\s.*//; $_ }
-    grep { $_ ne '_' }
-    keys %$config;
-
-  foreach my $pack (@packs) {
+  for my $section ( sort keys %$config ) {
+    next if q[_] eq $section;
+    my $pack = $section;
+    $pack =~ s{\s*/.*$}{}; # trim optional space and slash-delimited suffix
 
     my $version = 0;
-    if(exists $config->{$pack} && exists $config->{$pack}->{':version'}) {
-      $version = $config->{$pack}->{':version'};
-    }
+    $version = $config->{$section}->{':version'} if exists $config->{$section}->{':version'};
+
     my $realname = Dist::Zilla::Util->expand_config_package_name($pack);
     $reqs->add_minimum($realname => $version);
   }
