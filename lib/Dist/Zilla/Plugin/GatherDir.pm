@@ -176,11 +176,10 @@ sub gather_files {
   });
 
   FILE: for my $filename ($rule->in($root)) {
-    my $file = path($filename)->relative($root);
-
     # _file_from_filename is overloaded in GatherDir::Template
     my $fileobj = $self->_file_from_filename($filename);
 
+    my $file = path($filename)->relative($root);
     $file = path($self->prefix, $file) if $self->prefix;
 
     $fileobj->name($file->stringify);
