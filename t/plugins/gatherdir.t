@@ -6,6 +6,7 @@ use lib 't/lib';
 
 use ExtUtils::Manifest 'maniread';
 use Test::DZil;
+use Path::Tiny;
 
 my $tzil = Builder->from_config(
   { dist_root => 'corpus/dist/DZT' },
@@ -32,6 +33,11 @@ my $tzil = Builder->from_config(
           prefix => 'xmatch',
           exclude_match => 'notme\.*',
         } ],
+        [ GatherDir => Symlinks => {
+          root   => '../corpus/extra',
+          follow_symlinks => 1,
+          prefix => 'links',
+        } ],
         'Manifest',
       ),
       'source/.profile' => "Bogus dotfile.\n",
@@ -41,6 +47,11 @@ my $tzil = Builder->from_config(
     also_copy => { 'corpus/extra' => 'corpus/extra' },
   },
 );
+
+my $corpus_dir = path($tzil->tempdir)->child('corpus');
+symlink $corpus_dir->child('extra', 'vader.txt'), $corpus_dir->child('extra', 'vader_link.txt')
+    or note "could not create link: $!"
+  if $^O ne 'MSWin32';
 
 $tzil->build;
 
@@ -53,9 +64,12 @@ is_filelist(
     dotty/subdir/index.html dotty/vader.txt dotty/.dotfile dotty/notme.txt
     some/subdir/index.html some/vader.txt
     xmatch/subdir/index.html xmatch/vader.txt
+    links/vader.txt links/subdir/index.html links/notme.txt
     dist.ini lib/DZT/Sample.pm t/basic.t
     MANIFEST
-  ) ],
+  ),
+    ($^O ne 'MSWin32' ? (map { $_ . '/vader_link.txt' } qw(bonus dotty some xmatch links)) : ()),
+  ],
   "GatherDir gathers all files in the source dir",
 );
 
