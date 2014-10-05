@@ -161,15 +161,16 @@ sub gather_files {
   $rule->exec(sub { $self->log_debug('considering ' . path($_[-1])->relative($root)); 1 })
     if $self->zilla->logger->get_debug;
 
+  $rule->or(
+    $rule->new->directory->name(qr/^\.[^.]/)->prune->discard,
+    $rule->new,
+  ) unless $self->include_dotfiles;
+
   $rule->or($rule->new->file, $rule->new->symlink);
+  $rule->not_exec(sub { /^\.[^.]/ }) unless $self->include_dotfiles;   # exec passes basename as $_
 
   FILE: for my $filename ($rule->in($root)) {
     my $file = path($filename)->relative($root);
-
-    unless ($self->include_dotfiles) {
-      next FILE if $file->basename =~ qr/^\./;
-      next FILE if grep { /^\.[^.]/ } File::Spec->splitdir($file->parent);
-    }
 
     next if $file =~ $exclude_regex;
     next if $is_excluded{ $file };
