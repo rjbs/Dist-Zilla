@@ -299,7 +299,7 @@ sub _build_license {
       $self->log_fatal(
         "no license data in config, no %Rights stash,",
         "couldn't make a good guess at license from Pod; giving up. ",
-        "Perhaps you need set global config file (dzil setup)?"
+        "Perhaps you need to set up a global config file (dzil setup)?"
       );
     }
 
