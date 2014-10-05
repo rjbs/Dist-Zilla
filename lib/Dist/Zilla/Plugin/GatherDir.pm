@@ -142,9 +142,12 @@ sub gather_files {
   $root =~ s{^~([\\/])}{require File::HomeDir; File::HomeDir::->my_home . $1}e;
   $root = Path::Class::dir($root);
 
+  # build up the rules
   my $rule = File::Find::Rule->new();
   $rule->extras({follow => $self->follow_symlinks});
-  FILE: for my $filename ($rule->file->in($root)) {
+  $rule->or($rule->new->file, $rule->new->symlink);
+
+  FILE: for my $filename ($rule->in($root)) {
     my $file = file($filename)->relative($root);
 
     unless ($self->include_dotfiles) {
