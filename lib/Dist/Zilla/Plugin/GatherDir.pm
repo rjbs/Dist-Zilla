@@ -101,7 +101,7 @@ has follow_symlinks => (
   default => 0,
 );
 
-sub mvp_multivalue_args { qw(exclude_filename exclude_match) }
+sub mvp_multivalue_args { qw(exclude_filename exclude_match prune_directory) }
 
 =attr exclude_filename
 
@@ -132,6 +132,20 @@ has exclude_match => (
   default => sub { [] },
 );
 
+=attr prune_directory
+
+While traversing, any directory matching the regular expression pattern will
+not be traversed further. This may be used multiple times to specify multiple
+directories to skip.
+
+=cut
+
+has prune_directory => (
+  is   => 'ro',
+  isa  => 'ArrayRef',
+  default => sub { [] },
+);
+
 around dump_config => sub {
   my $orig = shift;
   my $self = shift;
@@ -140,7 +154,7 @@ around dump_config => sub {
 
   $config->{+__PACKAGE__} = {
     map { $_ => $self->$_ }
-      qw(root prefix include_dotfiles follow_symlinks exclude_filename exclude_match),
+      qw(root prefix include_dotfiles follow_symlinks exclude_filename exclude_match prune_directory),
   };
 
   return $config;
@@ -156,6 +170,11 @@ sub gather_files {
   my $root = "" . $self->root;
   $root =~ s{^~([\\/])}{require File::HomeDir; File::HomeDir::->my_home . $1}e;
 
+  my $prune_regex = qr/\000/;
+  $prune_regex = qr/$prune_regex|$_/
+    for ( $self->prune_directory->flatten,
+          $self->include_dotfiles ? () : ( qr/^\.[^.]/ ) );
+
   # build up the rules
   my $rule = File::Find::Rule->new();
   $rule->extras({follow => $self->follow_symlinks});
@@ -163,9 +182,9 @@ sub gather_files {
     if $self->zilla->logger->get_debug;
 
   $rule->or(
-    $rule->new->directory->name(qr/^\.[^.]/)->prune->discard,
+    $rule->new->directory->exec(sub { /$prune_regex/ })->prune->discard,
     $rule->new,
-  ) unless $self->include_dotfiles;
+  );
 
   $rule->or($rule->new->file, $rule->new->symlink);
   $rule->not_exec(sub { /^\.[^.]/ }) unless $self->include_dotfiles;   # exec passes basename as $_
