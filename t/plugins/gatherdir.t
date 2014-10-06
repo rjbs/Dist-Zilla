@@ -38,6 +38,11 @@ my $tzil = Builder->from_config(
           follow_symlinks => 1,
           prefix => 'links',
         } ],
+        [ GatherDir => PruneDirectory => {
+          root   => '../corpus/extra',
+          prefix => 'pruned',
+          prune_directory => '^subdir$',
+        } ],
         'Manifest',
         'MetaConfig',
       ),
@@ -68,10 +73,11 @@ is_filelist(
     some/vader.txt
     xmatch/vader.txt
     links/vader.txt links/subdir/index.html links/notme.txt
+    pruned/notme.txt pruned/vader.txt
     dist.ini lib/DZT/Sample.pm t/basic.t
     MANIFEST
   ),
-    ($^O ne 'MSWin32' ? (map { $_ . '/vader_link.txt' } qw(bonus dotty some xmatch links)) : ()),
+    ($^O ne 'MSWin32' ? (map { $_ . '/vader_link.txt' } qw(bonus dotty some xmatch links pruned)) : ()),
   ],
   "GatherDir gathers all files in the source dir",
 );
