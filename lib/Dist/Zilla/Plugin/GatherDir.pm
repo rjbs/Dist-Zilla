@@ -158,6 +158,9 @@ sub gather_files {
   # build up the rules
   my $rule = File::Find::Rule->new();
   $rule->extras({follow => $self->follow_symlinks});
+  $rule->exec(sub { $self->log_debug('considering ' . path($_[-1])->relative($root)); 1 })
+    if $self->zilla->logger->get_debug;
+
   $rule->or($rule->new->file, $rule->new->symlink);
 
   FILE: for my $filename ($rule->in($root)) {
