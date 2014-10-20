@@ -24,7 +24,7 @@ use autodie;
 sub abstract { 'set up a basic global config file' }
 
 sub description {
-  "This command will run through a short interactive process to set up\n"
+  "This command will run through a short interactive process to set up\n" .
   "a basic Dist::Zilla configuration in ~/.dzil/config.ini"
 }
 
