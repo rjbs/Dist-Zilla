@@ -19,6 +19,11 @@ overthink it, okay?
 
 sub abstract { 'do nothing: initialize dzil, then exit' }
 
+sub description {
+  "This command does nothing but initialize Dist::Zilla and exit.\n" .
+  "It is sometimes useful for diagnostic purposes."
+}
+
 sub execute {
   my ($self, $opt, $arg) = @_;
 
