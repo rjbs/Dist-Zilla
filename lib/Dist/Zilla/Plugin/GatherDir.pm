@@ -133,7 +133,7 @@ sub gather_files {
   my ($self) = @_;
 
   my $exclude_regex = qr/\000/;
-  $exclude_regex = qr/$exclude_regex|$_/
+  $exclude_regex = qr/(?:$exclude_regex)|$_/
     for ($self->exclude_match->flatten);
 
   my %is_excluded = map {; $_ => 1 } $self->exclude_filename->flatten;
