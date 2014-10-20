@@ -44,8 +44,13 @@ sub opt_spec {
                 { default => 1 } ],
 }
 
+sub description {
+  "This will build your dist and run the given 'command' in the build dir.\n" .
+  "If no command was specified, your shell will be run there instead."
+}
+
 sub usage_desc {
-  return '%c run %o [ run command [ arg1 arg2 ... ] ]';
+  return '%c run %o [ command [ arg1 arg2 ... ] ]';
 }
 
 sub execute {
