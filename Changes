@@ -3,6 +3,9 @@ Revision history for {{$dist->name}}
 {{$NEXT}}
         - improve authordeps' ability to cope with version requirements and
           non-default plugin names
+        - a few improvements to help given by "dzil help COMMAND"
+        - fixes a situation where exclusion-regexp-building in GatherDir
+          could mangle the given regexps
 
 5.020     2014-07-28 20:56:25-04:00 America/New_York
         - the default required version for ExtUtils::MakeMaker in [MakeMaker]
