@@ -9,6 +9,7 @@ use namespace::autoclean;
 use Config;
 use CPAN::Meta::Requirements 2.121; # requirements_for_module
 use List::MoreUtils qw(any uniq);
+use Module::Metadata;
 
 use Dist::Zilla::File::InMemory;
 use Dist::Zilla::Plugin::MakeMaker::Runner;
@@ -157,10 +158,32 @@ PREAMBLE
   return $share_dir_code;
 }
 
+sub main_module_name {
+  my $self = shift;
+
+  my $file = $self->zilla->main_module->name;
+
+  my $match = sub {
+    my $pkg = shift;
+    return if $pkg eq 'main' or $pkg eq 'DB';
+    $pkg =~ s!::!/!g;
+    $file =~ /\b$pkg\.pm$/;
+  };
+
+  # per MakeMaker's spec, NAME must be a package and matching .pm file should exist
+  my $meta = Module::Metadata->new_from_file($file);
+  my $name = (grep $match->($_), $meta->packages_inside)[0];
+
+  unless ($name) {
+    ($name = $self->zilla->name) =~ s/-/::/g;
+    $self->log(["Matching package not found for %s. Falling back to %s", $file, $name]);
+  }
+
+  $name;
+}
+
 sub write_makefile_args {
   my ($self) = @_;
-
-  (my $name = $self->zilla->name) =~ s/-/::/g;
 
   my @exe_files =
     $self->zilla->find_files(':ExecFiles')->map(sub { $_->name })->flatten;
@@ -200,7 +223,7 @@ sub write_makefile_args {
 
   my %write_makefile_args = (
     DISTNAME  => $self->zilla->name,
-    NAME      => $name,
+    NAME      => $self->main_module_name,
     AUTHOR    => $self->zilla->authors->join(q{, }),
     ABSTRACT  => $self->zilla->abstract,
     VERSION   => $self->zilla->version,
