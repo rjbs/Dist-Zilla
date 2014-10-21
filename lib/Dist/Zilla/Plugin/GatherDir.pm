@@ -37,7 +37,8 @@ files into a subdir of your dist, you might write:
 
 use File::Find::Rule;
 use File::Spec;
-use Path::Class;
+use Path::Tiny;
+use List::Util 1.33 'all';
 
 use namespace::autoclean;
 
@@ -100,12 +101,13 @@ has follow_symlinks => (
   default => 0,
 );
 
-sub mvp_multivalue_args { qw(exclude_filename exclude_match) }
+sub mvp_multivalue_args { qw(exclude_filename exclude_match prune_directory) }
 
 =attr exclude_filename
 
 To exclude certain files from being gathered, use the C<exclude_filename>
-option. This may be used multiple times to specify multiple files to exclude.
+option.  The filename is matched exactly, relative to C<root>.
+This may be used multiple times to specify multiple files to exclude.
 
 =cut
 
@@ -118,7 +120,8 @@ has exclude_filename => (
 =attr exclude_match
 
 This is just like C<exclude_filename> but provides a regular expression
-pattern.  Files matching the pattern are not gathered.  This may be used
+pattern.  Filenames matching the pattern (relative to C<root>)  are not
+gathered.  This may be used
 multiple times to specify multiple patterns to exclude.
 
 =cut
@@ -129,6 +132,34 @@ has exclude_match => (
   default => sub { [] },
 );
 
+=attr prune_directory
+
+While traversing, any directory matching the regular expression pattern will
+not be traversed further. This may be used multiple times to specify multiple
+directories to skip.
+
+=cut
+
+has prune_directory => (
+  is   => 'ro',
+  isa  => 'ArrayRef',
+  default => sub { [] },
+);
+
+around dump_config => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  my $config = $self->$orig;
+
+  $config->{+__PACKAGE__} = {
+    map { $_ => $self->$_ }
+      qw(root prefix include_dotfiles follow_symlinks exclude_filename exclude_match prune_directory),
+  };
+
+  return $config;
+};
+
 sub gather_files {
   my ($self) = @_;
 
@@ -136,31 +167,41 @@ sub gather_files {
   $exclude_regex = qr/(?:$exclude_regex)|$_/
     for ($self->exclude_match->flatten);
 
-  my %is_excluded = map {; $_ => 1 } $self->exclude_filename->flatten;
-
   my $root = "" . $self->root;
   $root =~ s{^~([\\/])}{require File::HomeDir; File::HomeDir::->my_home . $1}e;
-  $root = Path::Class::dir($root);
 
+  my $prune_regex = qr/\000/;
+  $prune_regex = qr/$prune_regex|$_/
+    for ( $self->prune_directory->flatten,
+          $self->include_dotfiles ? () : ( qr/^\.[^.]/ ) );
+
+  # build up the rules
   my $rule = File::Find::Rule->new();
   $rule->extras({follow => $self->follow_symlinks});
-  FILE: for my $filename ($rule->file->in($root)) {
-    my $file = file($filename)->relative($root);
+  $rule->exec(sub { $self->log_debug('considering ' . path($_[-1])->relative($root)); 1 })
+    if $self->zilla->logger->get_debug;
 
-    unless ($self->include_dotfiles) {
-      next FILE if $file->basename =~ qr/^\./;
-      next FILE if grep { /^\.[^.]/ } $file->dir->dir_list;
-    }
+  $rule->or(
+    $rule->new->directory->exec(sub { /$prune_regex/ })->prune->discard,
+    $rule->new,
+  );
 
-    next if $file =~ $exclude_regex;
-    next if $is_excluded{ $file };
+  $rule->or($rule->new->file, $rule->new->symlink);
+  $rule->not_exec(sub { /^\.[^.]/ }) unless $self->include_dotfiles;   # exec passes basename as $_
+  $rule->exec(sub {
+    my $relative = path($_[-1])->relative($root);
+    $relative !~ $exclude_regex &&
+      all { $relative ne $_ } @{ $self->exclude_filename }
+  });
 
+  FILE: for my $filename ($rule->in($root)) {
     # _file_from_filename is overloaded in GatherDir::Template
     my $fileobj = $self->_file_from_filename($filename);
 
-    $file = Path::Class::file($self->prefix, $file) if $self->prefix;
+    my $file = path($filename)->relative($root);
+    $file = path($self->prefix, $file) if $self->prefix;
 
-    $fileobj->name($file->as_foreign('Unix')->stringify);
+    $fileobj->name($file->stringify);
     $self->add_file($fileobj);
   }
 

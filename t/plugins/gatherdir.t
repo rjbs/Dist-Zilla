@@ -6,6 +6,7 @@ use lib 't/lib';
 
 use ExtUtils::Manifest 'maniread';
 use Test::DZil;
+use Path::Tiny;
 
 my $tzil = Builder->from_config(
   { dist_root => 'corpus/dist/DZT' },
@@ -25,22 +26,40 @@ my $tzil = Builder->from_config(
         [ GatherDir => Selective => {
           root   => '../corpus/extra',
           prefix => 'some',
-          exclude_filename => 'notme.txt',
+          exclude_filename => [ 'notme.txt', 'subdir/index.html' ],
         } ],
         [ GatherDir => SelectiveMatch => {
           root   => '../corpus/extra',
           prefix => 'xmatch',
-          exclude_match => 'notme\.*',
+          exclude_match => [ 'notme\.*', '^subdir/index\.html$' ],
+        } ],
+        [ GatherDir => Symlinks => {
+          root   => '../corpus/extra',
+          follow_symlinks => 1,
+          prefix => 'links',
+        } ],
+        [ GatherDir => PruneDirectory => {
+          root   => '../corpus/extra',
+          prefix => 'pruned',
+          prune_directory => '^subdir$',
         } ],
         'Manifest',
+        'MetaConfig',
       ),
       'source/.profile' => "Bogus dotfile.\n",
       'corpus/extra/.dotfile' => "Bogus dotfile.\n",
       'corpus/extra/notme.txt' => "A file to exclude.\n",
+      'source/.dotdir/extra/notme.txt' => "Another file to exclude.\n",
+      'source/extra/.dotdir/notme.txt' => "Another file to exclude.\n",
     },
     also_copy => { 'corpus/extra' => 'corpus/extra' },
   },
 );
+
+my $corpus_dir = path($tzil->tempdir)->child('corpus');
+symlink $corpus_dir->child('extra', 'vader.txt'), $corpus_dir->child('extra', 'vader_link.txt')
+    or note "could not create link: $!"
+  if $^O ne 'MSWin32';
 
 $tzil->build;
 
@@ -51,11 +70,15 @@ is_filelist(
   [ qw(
     bonus/subdir/index.html bonus/vader.txt bonus/notme.txt
     dotty/subdir/index.html dotty/vader.txt dotty/.dotfile dotty/notme.txt
-    some/subdir/index.html some/vader.txt
-    xmatch/subdir/index.html xmatch/vader.txt
+    some/vader.txt
+    xmatch/vader.txt
+    links/vader.txt links/subdir/index.html links/notme.txt
+    pruned/notme.txt pruned/vader.txt
     dist.ini lib/DZT/Sample.pm t/basic.t
     MANIFEST
-  ) ],
+  ),
+    ($^O ne 'MSWin32' ? (map { $_ . '/vader_link.txt' } qw(bonus dotty some xmatch links pruned)) : ()),
+  ],
   "GatherDir gathers all files in the source dir",
 );
 
