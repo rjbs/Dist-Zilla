@@ -11,6 +11,17 @@ Revision history for {{$dist->name}}
         - [PkgVersion] now properly skips over $VERSION assignments in
           comments (Karen Etheridge, github #322)
         - the building of manpages is supressed in [MakeMaker]-driven builds
+        - lazily load quite a few more modules
+        - avoid using user's ~/.dzil even more
+        - while building dists for testing, don't bother building man pages
+        - try harder to notice minimum required perl version
+        - try harder to delete temporarily directory at the end of testing
+        - don't treat $VERSION assignments in comments as $VERSION assignments
+        - listdeps now takes --omit-core to skip core modules
+        - don't try to use terminal encoding on locale-free systems
+        - suggest the use of PPI::XS
+        - speed up and debug behavior of GatherDir
+        - merge distmeta with CPAN::Meta::Merge, not simple hash merge
 
 5.020     2014-07-28 20:56:25-04:00 America/New_York
         - the default required version for ExtUtils::MakeMaker in [MakeMaker]
