@@ -546,13 +546,14 @@ by the loaded plugins.
 
 sub release {
   my $self = shift;
+  my %opts = @_;
 
   Carp::croak("you can't release without any Releaser plugins")
     unless my @releasers = $self->plugins_with(-Releaser)->flatten;
 
   $ENV{DZIL_RELEASING} = 1;
 
-  my $tgz = $self->build_archive;
+  my $tgz; $tgz = $self->build_archive if $opts{build_archive};
 
   # call all plugins implementing BeforeRelease role
   $_->before_release($tgz) for $self->plugins_with(-BeforeRelease)->flatten;
