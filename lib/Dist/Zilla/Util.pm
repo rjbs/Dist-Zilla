@@ -77,8 +77,15 @@ sub abstract_from_file {
   my $pkg_name = Util->expand_config_package_name($string);
 
 This method, I<which is likely to change or go away>, rewrites the given string
-into a package name.  Consult L<Dist::Zilla::Config|Dist::Zilla::Config> for
-more information.
+into a package name.
+
+Prefixes are rewritten as follows:
+
+=for :list
+* C<=> becomes nothing
+* C<@> becomes C<Dist::Zilla::PluginBundle::>
+* C<%> becomes C<Dist::Zilla::Stash::>
+* otherwise, C<Dist::Zilla::Plugin::> is prepended
 
 =cut
 
