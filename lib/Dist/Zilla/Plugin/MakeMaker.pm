@@ -179,7 +179,9 @@ sub write_makefile_args {
   my $prereqs = $self->zilla->prereqs;
   my $perl_prereq = $prereqs->requirements_for(qw(runtime requires))
     ->clone
+    ->add_requirements($prereqs->requirements_for(qw(configure requires)))
     ->add_requirements($prereqs->requirements_for(qw(build requires)))
+    ->add_requirements($prereqs->requirements_for(qw(test requires)))
     ->as_string_hash->{perl};
 
   $perl_prereq = version->parse($perl_prereq)->numify if $perl_prereq;
@@ -265,7 +267,7 @@ sub setup_installer {
 
   $self->__write_makefile_args($write_makefile_args); # save for testing
 
-  my $perl_prereq = delete $write_makefile_args->{MIN_PERL_VERSION};
+  my $perl_prereq = $write_makefile_args->{MIN_PERL_VERSION};
 
   my $dumped_args = $self->_dump_as($write_makefile_args, '*WriteMakefileArgs');
 
