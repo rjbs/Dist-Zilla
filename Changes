@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+5.021     2014-10-20 22:43:52-04:00 America/New_York
         - improve authordeps' ability to cope with version requirements and
           non-default plugin names
         - a few improvements to help given by "dzil help COMMAND"
