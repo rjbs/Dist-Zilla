@@ -21,7 +21,6 @@ Revision history for {{$dist->name}}
         - don't try to use terminal encoding on locale-free systems
         - suggest the use of PPI::XS
         - speed up and debug behavior of GatherDir
-        - merge distmeta with CPAN::Meta::Merge, not simple hash merge
 
 5.020     2014-07-28 20:56:25-04:00 America/New_York
         - the default required version for ExtUtils::MakeMaker in [MakeMaker]
