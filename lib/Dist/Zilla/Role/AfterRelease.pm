@@ -9,7 +9,7 @@ use namespace::autoclean;
 =head1 DESCRIPTION
 
 Plugins implementing this role have their C<after_release> method called
-once the release is done.
+once the release is done. The archive filename is passed as the sole argument.
 
 =cut
 
