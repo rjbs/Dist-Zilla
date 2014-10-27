@@ -164,7 +164,6 @@ sub munge_perl {
       while (1) {
         my $find = $document->find(sub {
           return $_[1]->line_number == $curr->line_number + 1;
-          return;
         });
 
         last unless $find and @$find == 1;
