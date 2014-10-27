@@ -146,7 +146,10 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
 
     if (my $files = $tester_arg->{add_files}) {
       while (my ($name, $content) = each %$files) {
-        my $fn = $tempdir->file($name);
+        die "File name '$name' does not seem to be legal on the current OS"
+          if !path_looks_legal($name);
+        my $unix_name = Path::Class::File->new_foreign("Unix", $name);
+        my $fn = $tempdir->file($unix_name);
         $fn->dir->mkpath;
         Path::Tiny::path($fn)->spew_utf8($content);
       }
@@ -195,6 +198,15 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
   };
 
   no Moose;
+
+  sub path_looks_legal {
+    return 1 if $^O eq "linux";
+    my ($path) = @_;
+    my $unix_path = Path::Class::File->new_foreign("Unix", $path)->stringify;
+    return 0 if $path ne $unix_path;
+    my $round_tripped = file($path)->as_foreign("Unix")->stringify;
+    return $path eq $round_tripped;
+  }
 }
 
 {
