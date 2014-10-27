@@ -166,7 +166,8 @@ sub munge_perl {
         $document->flush_locations if $munged;
         my $curr_line_number = $curr->line_number + 1;
         my $find = $document->find(sub {
-          return $_[1]->line_number == $curr_line_number;
+          my $line = $_[1]->line_number;
+          return $line > $curr_line_number ? undef : $line == $curr_line_number;
         });
 
         last unless $find and @$find == 1;
