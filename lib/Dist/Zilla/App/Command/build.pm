@@ -65,6 +65,8 @@ sub execute {
     $zilla->is_trial(1) if $opt->trial;
     $zilla->$method;
   }
+
+  $self->log('[DZ] built in ' . $self->zilla->built_in);
 }
 
 1;
