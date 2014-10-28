@@ -66,7 +66,7 @@ sub execute {
     $zilla->$method;
   }
 
-  $self->log('[DZ] built in ' . $self->zilla->built_in);
+  $self->zilla->log('built in ' . $self->zilla->built_in);
 }
 
 1;
