@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+5.022     2014-10-27 22:55:53-04:00 America/New_York
         - several optimizations to how PPI is used
         - handle an empty ABSTRACT better
         - now properly merging distmeta fragments together without loss, using
