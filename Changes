@@ -2,6 +2,7 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
         - several optimizations to how PPI is used
+        - handle an empty ABSTRACT better
 
 5.021     2014-10-20 22:43:52-04:00 America/New_York
         - improve authordeps' ability to cope with version requirements and
