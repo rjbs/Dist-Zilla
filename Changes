@@ -4,7 +4,9 @@ Revision history for {{$dist->name}}
         - several optimizations to how PPI is used
         - handle an empty ABSTRACT better
         - now properly merging distmeta fragments together without loss, using
-          new CPAN::Meta::Merge (Karen Etheridge)
+          new CPAN::Meta::Merge
+        - create Makefile.PL and Build.PL files earlier, so they're in the file
+          list "the whole time"
 
 5.021     2014-10-20 22:43:52-04:00 America/New_York
         - improve authordeps' ability to cope with version requirements and
