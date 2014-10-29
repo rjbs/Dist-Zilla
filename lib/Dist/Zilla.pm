@@ -141,7 +141,7 @@ has abstract => (
     }
 
     my $file = $self->main_module;
-    $self->log("extracting distribution abstract from " . $file->name);
+    $self->log_debug("extracting distribution abstract from " . $file->name);
     my $abstract = Dist::Zilla::Util->abstract_from_file($file);
 
     if (!defined($abstract)) {
