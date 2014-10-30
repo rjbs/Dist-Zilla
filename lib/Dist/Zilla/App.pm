@@ -6,7 +6,6 @@ package Dist::Zilla::App;
 use App::Cmd::Setup 0.309 -app; # better compilation error detection
 
 use Carp ();
-use Dist::Zilla::MVP::Reader::Finder;
 use Dist::Zilla::Util;
 use Try::Tiny;
 
@@ -33,6 +32,7 @@ sub _build_global_stashes {
 
   my $config_base = $config_dir->file('config');
 
+  require Dist::Zilla::MVP::Reader::Finder;
   require Dist::Zilla::MVP::Assembler::GlobalConfig;
   require Dist::Zilla::MVP::Section;
   my $assembler = Dist::Zilla::MVP::Assembler::GlobalConfig->new({
