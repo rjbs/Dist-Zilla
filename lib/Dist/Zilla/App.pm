@@ -6,7 +6,6 @@ package Dist::Zilla::App;
 use App::Cmd::Setup 0.309 -app; # better compilation error detection
 
 use Carp ();
-use Dist::Zilla::Util;
 use Try::Tiny;
 
 sub global_opt_spec {
@@ -28,6 +27,7 @@ sub _build_global_stashes {
 
   my $stash_registry = $self->{__global_stashes__} = {};
 
+  require Dist::Zilla::Util;
   my $config_dir  = Dist::Zilla::Util->_global_config_root;
 
   my $config_base = $config_dir->file('config');
