@@ -4,9 +4,12 @@ package Dist::Zilla::App::Command::version;
 # ABSTRACT: display dzil's version
 
 use Dist::Zilla::App -command;
-use Moose;
-extends 'App::Cmd::Command::version';
-
+use App::Cmd::Command::version;
+BEGIN {
+  ## parent and base dont work here. ??? -- kentnl 2014-10-31
+  our @ISA;
+  unshift @ISA, 'App::Cmd::Command::version';
+}
 
 =head1 SYNOPSIS
 
