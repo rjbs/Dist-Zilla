@@ -8,7 +8,6 @@ use App::Cmd::Setup 0.309 -app; # better compilation error detection
 use Carp ();
 use Dist::Zilla::MVP::Reader::Finder;
 use Dist::Zilla::Util;
-use Moose::Autobox;
 use Try::Tiny;
 
 sub global_opt_spec {
@@ -130,7 +129,7 @@ sub zilla {
 
     VERBOSE_PLUGIN: for my $plugin_name (grep { ! m{\A[-_]\z} } @v_plugins) {
       my @plugins = grep { $_->plugin_name =~ /\b\Q$plugin_name\E\b/ }
-                    $zilla->plugins->flatten;
+                    @{ $zilla->plugins };
 
       $zilla->log_fatal("can't find plugins matching $plugin_name to set debug")
         unless @plugins;
