@@ -6,14 +6,12 @@ with 'Dist::Zilla::Role::BeforeRelease';
 
 use namespace::autoclean;
 
-use Moose::Autobox;
-
 sub before_release {
   my ($self, $tgz) = @_;
 
   my $releasers = join q{, },
                   map {; $_->plugin_name }
-                  $self->zilla->plugins_with(-Releaser)->flatten;
+                  @{ $self->zilla->plugins_with(-Releaser) };
 
   $self->log("*** Preparing to release $tgz with $releasers ***");
   my $prompt = "Do you want to continue the release process?";

@@ -8,8 +8,6 @@ use namespace::autoclean;
 
 use Config::MVP::Section 2.200002; # for not-installed error
 
-use Moose::Autobox;
-
 after finalize => sub {
   my ($self) = @_;
 

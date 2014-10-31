@@ -6,7 +6,6 @@ with qw(Dist::Zilla::Role::FileGatherer);
 
 use Dist::Zilla::File::FromCode;
 
-use Moose::Autobox 0.10; # for ->each_value
 use MooseX::Types::Moose qw(ArrayRef Str);
 use Path::Tiny;
 
@@ -66,11 +65,12 @@ sub gather_files {
   my $zilla = $self->zilla;
 
   my $postlude = '';
-  $self->append_file->each_value(sub {
+
+  for (@{ $self->append_file }) {
     my $fn = $self->zilla->root->file($_);
 
     $postlude .= path($fn)->slurp_utf8;
-  });
+  }
 
   my $code = sub {
     my @core_attrs = qw(name authors copyright_holder);

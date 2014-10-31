@@ -2,7 +2,6 @@ package Dist::Zilla::Plugin::CPANFile;
 # ABSTRACT: produce a cpanfile prereqs file
 
 use Moose;
-use Moose::Autobox;
 with 'Dist::Zilla::Role::FileGatherer';
 
 use namespace::autoclean;

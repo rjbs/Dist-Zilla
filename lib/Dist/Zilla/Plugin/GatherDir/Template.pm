@@ -8,7 +8,6 @@ with 'Dist::Zilla::Role::TextTemplate';
 use namespace::autoclean;
 
 use autodie;
-use Moose::Autobox;
 use Dist::Zilla::File::FromCode;
 use Path::Tiny;
 

@@ -6,7 +6,6 @@ with 'Dist::Zilla::Role::FileFinder';
 
 use namespace::autoclean;
 
-use Moose::Autobox;
 use Moose::Util::TypeConstraints;
 
 has code => (
@@ -32,7 +31,7 @@ sub find_files {
 sub _find_via_grep {
   my ($self) = @_;
 
-  my @files = grep { $self->code->($_, $self) } $self->zilla->files->flatten;
+  my @files = grep { $self->code->($_, $self) } @{ $self->zilla->files };
   return \@files;
 }
 
