@@ -41,6 +41,7 @@ has added_by => (
   lazy => 1,
   default => sub { [] },
   traits => ['Array'],
+  init_arg => undef,
   handles => {
     _push_added_by => 'push',
     added_by => [ join => '; ' ],
