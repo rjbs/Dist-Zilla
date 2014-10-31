@@ -1,6 +1,10 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - optimizations to loading of heavyweight libraries in cmd line app
+        - some tests are now skipped on Win32 to avoid filename insanity
+        - files' added_by data should be more informative
+        - conflicts with installed code is now detected and/or advertised
 
 5.022     2014-10-27 22:55:53-04:00 America/New_York
         - several optimizations to how PPI is used
