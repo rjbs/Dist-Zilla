@@ -141,7 +141,7 @@ has abstract => (
     }
 
     my $file = $self->main_module;
-    $self->log("extracting distribution abstract from " . $file->name);
+    $self->log_debug("extracting distribution abstract from " . $file->name);
     my $abstract = Dist::Zilla::Util->abstract_from_file($file);
 
     if (!defined($abstract)) {
@@ -187,14 +187,13 @@ has main_module => (
     my ($self) = @_;
 
     my $file;
-    my $guessing = q{};
     my $guess;
 
     if ( $self->_has_main_module_override ) {
        $file = first { $_->name eq $self->_main_module_override }
                $self->files->flatten;
     } else {
-       $guessing = 'guessing '; # We're having to guess
+       # We're having to guess
 
        ($guess = $self->name) =~ s{-}{/}g;
        $guess = "lib/$guess.pm";
@@ -204,6 +203,7 @@ has main_module => (
              ->grep(sub { $_->name =~ m{\.pm\z} and $_->name =~ m{\Alib/} })
              ->sort(sub { length $_[0]->name <=> length $_[1]->name })
              ->head;
+       $self->log("guessing dist's main_module is " . ($file ? $file->name : $guess));
     }
 
     if (not $file) {
@@ -223,7 +223,7 @@ has main_module => (
         push @errorlines,"Cannot continue without a main_module";
         $self->log_fatal( join qq{\n}, @errorlines );
     }
-    $self->log("${guessing}dist's main_module is " . $file->name);
+    $self->log_debug("dist's main_module is " . $file->name);
 
     return $file;
   },
