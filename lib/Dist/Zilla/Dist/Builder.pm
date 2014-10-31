@@ -4,7 +4,6 @@ package Dist::Zilla::Dist::Builder;
 use Moose 0.92; # role composition fixes
 extends 'Dist::Zilla';
 
-use Moose::Autobox 0.09; # ->flatten
 use MooseX::Types::Moose qw(HashRef);
 use MooseX::Types::Path::Class qw(Dir File);
 
@@ -68,7 +67,7 @@ sub _setup_default_plugins {
       },
     });
 
-    $self->plugins->push($plugin);
+    push @{ $self->plugins }, $plugin;
   }
 
   unless ($self->plugin_named(':IncModules')) {
@@ -85,7 +84,7 @@ sub _setup_default_plugins {
       },
     });
 
-    $self->plugins->push($plugin);
+    push @{ $self->plugins }, $plugin;
   }
 
   unless ($self->plugin_named(':TestFiles')) {
@@ -97,7 +96,7 @@ sub _setup_default_plugins {
       code        => sub { local $_ = $_->name; m{\At/} },
     });
 
-    $self->plugins->push($plugin);
+    push @{ $self->plugins }, $plugin;
   }
 
   unless ($self->plugin_named(':ExecFiles')) {
@@ -114,7 +113,7 @@ sub _setup_default_plugins {
       },
     });
 
-    $self->plugins->push($plugin);
+    push @{ $self->plugins }, $plugin;
   }
 
   unless ($self->plugin_named(':ShareFiles')) {
@@ -128,22 +127,20 @@ sub _setup_default_plugins {
         my $map = $self->zilla->_share_dir_map;
         my @files;
         if ( $map->{dist} ) {
-          push @files, $self->zilla->files->grep(sub {
-            $_->name =~ m{\A\Q$map->{dist}\E/}
-          })->flatten;
+          push @files, grep {; $_->name =~ m{\A\Q$map->{dist}\E/} }
+                       @{ $self->zilla->files };
         }
         if ( my $mod_map = $map->{module} ) {
           for my $mod ( keys %$mod_map ) {
-            push @files, $self->zilla->files->grep(sub {
-              $_->name =~ m{\A\Q$mod_map->{$mod}\E/}
-            })->flatten;
+            push @files, grep { $_->name =~ m{\A\Q$mod_map->{$mod}\E/} }
+                         @{ $self->zilla->files };
           }
         }
         return \@files;
       },
     });
 
-    $self->plugins->push($plugin);
+    push @{ $self->plugins }, $plugin;
   }
 
   unless ($self->plugin_named(':MainModule')) {
@@ -160,7 +157,7 @@ sub _setup_default_plugins {
       },
     });
 
-    $self->plugins->push($plugin);
+    push @{ $self->plugins }, $plugin;
   }
 
   unless ($self->plugin_named(':AllFiles')) {
@@ -172,7 +169,7 @@ sub _setup_default_plugins {
       code        => sub { return 1 },
     });
 
-    $self->plugins->push($plugin);
+    push @{ $self->plugins }, $plugin;
   }
 
   unless ($self->plugin_named(':NoFiles')) {
@@ -184,7 +181,7 @@ sub _setup_default_plugins {
       code        => sub { return },
     });
 
-    $self->plugins->push($plugin);
+    push @{ $self->plugins }, $plugin;
   }
 }
 
@@ -201,7 +198,7 @@ sub _build_share_dir_map {
 
   my $share_dir_map = {};
 
-  for my $plugin ( $self->plugins_with(-ShareDir)->flatten ) {
+  for my $plugin (@{ $self->plugins_with(-ShareDir) }) {
     next unless my $sub_map = $plugin->share_dir_map;
 
     if ( $sub_map->{dist} ) {
@@ -313,26 +310,26 @@ sub build_in {
   $self->log_fatal("attempted to build " . $self->name . " a second time")
     if $self->built_in;
 
-  $_->before_build for $self->plugins_with(-BeforeBuild)->flatten;
+  $_->before_build for @{ $self->plugins_with(-BeforeBuild) };
 
   $self->log("beginning to build " . $self->name);
 
-  $_->gather_files       for $self->plugins_with(-FileGatherer)->flatten;
-  $_->set_file_encodings for $self->plugins_with(-EncodingProvider)->flatten;
-  $_->prune_files        for $self->plugins_with(-FilePruner)->flatten;
+  $_->gather_files       for @{ $self->plugins_with(-FileGatherer) };
+  $_->set_file_encodings for @{ $self->plugins_with(-EncodingProvider) };
+  $_->prune_files        for @{ $self->plugins_with(-FilePruner) };
 
   $self->version; # instantiate this lazy attribute now that files are gathered
 
-  $_->munge_files        for $self->plugins_with(-FileMunger)->flatten;
+  $_->munge_files        for @{ $self->plugins_with(-FileMunger) };
 
-  $_->register_prereqs   for $self->plugins_with(-PrereqSource)->flatten;
+  $_->register_prereqs   for @{ $self->plugins_with(-PrereqSource) };
 
   $self->prereqs->finalize;
 
   # Barf if someone has already set up a prereqs entry? -- rjbs, 2010-04-13
   $self->distmeta->{prereqs} = $self->prereqs->as_string_hash;
 
-  $_->setup_installer for $self->plugins_with(-InstallTool)->flatten;
+  $_->setup_installer for @{ $self->plugins_with(-InstallTool) };
 
   $self->_check_dupe_files;
 
@@ -340,12 +337,12 @@ sub build_in {
 
   $self->log("writing " . $self->name . " in $build_root");
 
-  for my $file ($self->files->flatten) {
+  for my $file (@{ $self->files }) {
     $self->_write_out_file($file, $build_root);
   }
 
   $_->after_build({ build_root => $build_root })
-    for $self->plugins_with(-AfterBuild)->flatten;
+    for @{ $self->plugins_with(-AfterBuild) };
 
   $self->built_in($build_root);
 }
@@ -447,7 +444,7 @@ sub build_archive {
   my $basename = $self->dist_basename;
   my $basedir = dir($basename);
 
-  $_->before_archive for $self->plugins_with(-BeforeArchive)->flatten;
+  $_->before_archive for @{ $self->plugins_with(-BeforeArchive) };
 
   my $method = Class::Load::load_optional_class('Archive::Tar::Wrapper',
                                                 { -version => 0.15 })
@@ -473,7 +470,7 @@ sub _build_archive {
   my $archive = Archive::Tar->new;
   my %seen_dir;
   for my $distfile (
-    sort { length($a->name) <=> length($b->name) } $self->files->flatten
+    sort { length($a->name) <=> length($b->name) } @{ $self->files }
   ) {
     my $in = file($distfile->name)->dir;
 
@@ -504,7 +501,7 @@ sub _build_archive_with_wrapper {
   my $archive = Archive::Tar::Wrapper->new;
 
   for my $distfile (
-    sort { length($a->name) <=> length($b->name) } $self->files->flatten
+    sort { length($a->name) <=> length($b->name) } @{ $self->files }
   ) {
     my $in = file($distfile->name)->dir;
 
@@ -547,20 +544,20 @@ sub release {
   my $self = shift;
 
   Carp::croak("you can't release without any Releaser plugins")
-    unless my @releasers = $self->plugins_with(-Releaser)->flatten;
+    unless my @releasers = @{ $self->plugins_with(-Releaser) };
 
   $ENV{DZIL_RELEASING} = 1;
 
   my $tgz = $self->build_archive;
 
   # call all plugins implementing BeforeRelease role
-  $_->before_release($tgz) for $self->plugins_with(-BeforeRelease)->flatten;
+  $_->before_release($tgz) for @{ $self->plugins_with(-BeforeRelease) };
 
   # do the actual release
   $_->release($tgz) for @releasers;
 
   # call all plugins implementing AfterRelease role
-  $_->after_release($tgz) for $self->plugins_with(-AfterRelease)->flatten;
+  $_->after_release($tgz) for @{ $self->plugins_with(-AfterRelease) };
 }
 
 =method clean
@@ -702,7 +699,7 @@ sub test {
   my ($self, $arg) = @_;
 
   Carp::croak("you can't test without any TestRunner plugins")
-    unless my @testers = $self->plugins_with(-TestRunner)->flatten;
+    unless my @testers = @{ $self->plugins_with(-TestRunner) };
 
   my ($target, $latest) = $self->ensure_built_in_tmpdir;
   my $error  = $self->run_tests_in($target, $arg);
@@ -734,7 +731,7 @@ sub run_tests_in {
   my ($self, $target, $arg) = @_;
 
   Carp::croak("you can't test without any TestRunner plugins")
-    unless my @testers = $self->plugins_with(-TestRunner)->flatten;
+    unless my @testers = @{ $self->plugins_with(-TestRunner) };
 
   for my $tester (@testers) {
     my $wd = File::pushd::pushd($target);
@@ -759,8 +756,7 @@ sub run_in_build {
   # The sort below is a cheap hack to get ModuleBuild ahead of
   # ExtUtils::MakeMaker. -- rjbs, 2010-01-05
   $self->log_fatal("you can't build without any BuildRunner plugins")
-    unless my @builders =
-    $self->plugins_with(-BuildRunner)->sort->reverse->flatten;
+    unless my @builders = reverse sort @{ $self->plugins_with(-BuildRunner) };
 
   require "Config.pm"; # skip autoprereq
 
