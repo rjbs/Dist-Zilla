@@ -540,6 +540,7 @@ has prereqs => (
   is   => 'ro',
   isa  => 'Dist::Zilla::Prereqs',
   init_arg => undef,
+  lazy     => 1,
   default  => sub { Dist::Zilla::Prereqs->new },
   handles  => [ qw(register_prereqs) ],
 );
