@@ -14,8 +14,9 @@ use Test::DZil;
           'GatherDir',
           'ModuleBuild',
           [ Prereqs => { 'Foo::Bar' => '1.20' } ],
-          [ Prereqs => BuildRequires => { 'Builder::Bob' => '9.901' } ],
-          [ Prereqs => TestRequires  => { 'Test::Deet'   => '7'     } ],
+          [ Prereqs => BuildRequires   => { 'Builder::Bob' => '9.901' } ],
+          [ Prereqs => DevelopRequires => { 'Devel::Thing' => '42'    } ],
+          [ Prereqs => TestRequires    => { 'Test::Deet'   => '7'     } ],
         ),
       },
     },
@@ -43,6 +44,9 @@ use Test::DZil;
     build_requires => {
       'Builder::Bob'  => '9.901',
       'Module::Build' => '0.28',
+    },
+    develop_requires => {
+      'Devel::Thing' => '42',
     },
     test_requires => {
       'Test::Deet'    => '7',
