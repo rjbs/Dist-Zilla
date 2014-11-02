@@ -86,7 +86,7 @@ use warnings;
 
 {{ $perl_prereq ? qq[use $perl_prereq;] : ''; }}
 
-use ExtUtils::MakeMaker{{ defined $eumm_version ? ' ' . $eumm_version : '' }};
+use ExtUtils::MakeMaker{{ defined $eumm_version && 0+$eumm_version ? ' ' . $eumm_version : '' }};
 
 {{ $share_dir_code{preamble} || '' }}
 
