@@ -70,27 +70,28 @@ sub _new_from_profile {
   );
 
   my $self = $seq->section_named('_')->zilla;
-
+  $self->_mint_target_dir( $module->mint_dir( $arg->{name} ) ) if $module->can( 'mint_dir' );
   $self->_setup_default_plugins;
 
   return $self;
 }
 
-sub _mint_target_dir {
-  my ($self) = @_;
-
-  my $name = $self->name;
-  my $dir  = dir($name);
-  $self->log_fatal("./$name already exists") if -e $dir;
-
-  return $dir = $dir->absolute;
-}
+has '_mint_target_dir' => (
+  'is' => 'rw',
+  'isa' => 'Str',
+  'lazy' => 1,
+  'default' => sub {
+    my ($self) = @_;
+    return $self->name;
+  },
+);
 
 sub mint_dist {
   my ($self, $arg) = @_;
 
   my $name = $self->name;
-  my $dir  = $self->_mint_target_dir;
+  my $dir  = dir($self->_mint_target_dir)->absolute;
+  $self->log_fatal("$dir already exists") if -e $dir;
 
   # XXX: We should have a way to get more than one module name in, and to
   # supply plugin names for the minter to use. -- rjbs, 2010-05-03
@@ -130,7 +131,7 @@ sub mint_dist {
   $_->after_mint({ mint_root => $dir })
     for $self->plugins_with(-AfterMint)->flatten;
 
-  $self->log("dist minted in ./$name");
+  $self->log("dist minted in $dir");
 }
 
 __PACKAGE__->meta->make_immutable;
