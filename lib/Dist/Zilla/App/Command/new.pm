@@ -71,12 +71,16 @@ sub execute {
   my $dist = $arg->[0];
 
   require Dist::Zilla::Dist::Minter;
+  my $stash = $self->app->_build_global_stashes;
   my $minter = Dist::Zilla::Dist::Minter->_new_from_profile(
-    [ $opt->provider, $opt->profile ],
+    ( exists $stash->{'%Mint'} ?
+      [ $stash->{'%Mint'}->provider, $stash->{'%Mint'}->profile ] :
+      [ $opt->provider, $opt->profile ]
+    ),
     {
       chrome  => $self->app->chrome,
       name    => $dist,
-      _global_stashes => $self->app->_build_global_stashes,
+      _global_stashes => $stash,
     },
   );
 
