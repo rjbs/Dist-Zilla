@@ -219,17 +219,6 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
   use File::Copy::Recursive qw(dircopy);
   use Path::Class;
 
-  sub _mint_target_dir {
-    my ($self) = @_;
-
-    my $name = $self->name;
-    my $dir  = $self->tempdir->subdir('mint')->absolute;
-
-    $self->log_fatal("$dir already exists") if -e $dir;
-
-    return $dir;
-  }
-
   sub _setup_global_config {
     my ($self, $dir, $arg) = @_;
 
@@ -286,6 +275,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
     $zilla->_set_tempdir_root($tempdir_root);
     $zilla->_set_tempdir_obj($tempdir_obj);
     $zilla->_set_tempdir($tempdir);
+    $zilla->_mint_target_dir( $zilla->tempdir->subdir('mint')->absolute->stringify );
 
     return $zilla;
   };
