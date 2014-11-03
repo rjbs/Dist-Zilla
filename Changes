@@ -1,6 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - quiet down some low-priority log lines
+        - teeny tiny optimization by building dist prereqs structure lazily
+        - avoid ever requiring v0 of ExtUtils::MakeMaker
 
 5.023     2014-10-30 22:56:42-04:00 America/New_York
         - optimizations to loading of heavyweight libraries in cmd line app
