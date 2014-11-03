@@ -30,6 +30,12 @@ exists, it will use a very simple configuration shipped with Dist::Zilla.
 This command would instruct C<dzil> to consult the Foo provider about the
 directory of 'default' profile.
 
+Furthermore, it is possible to specify the default minting provider and profile
+in the F<~/.dzil/config.ini> file, for example:
+
+  [%Mint]
+  provider = FooCorp
+  profile = work
 
 =cut
 
