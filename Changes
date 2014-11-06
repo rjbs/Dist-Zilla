@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - add the %Mint stash for minting defaults
         - quiet down some low-priority log lines
         - teeny tiny optimization by building dist prereqs structure lazily
         - avoid ever requiring v0 of ExtUtils::MakeMaker
