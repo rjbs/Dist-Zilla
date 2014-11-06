@@ -39,6 +39,7 @@ sub execute {
 
   my $chrome = $self->app->chrome;
 
+  require Dist::Zilla::Util;
   my $config_root = Dist::Zilla::Util->_global_config_root;
 
   if (
