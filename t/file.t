@@ -88,7 +88,8 @@ sub test_content_from_bytes {
     qr/can't decode text from 'bytes'/i,
     "get content from bytes should throw error"
   );
-  like( $err, $source_re, "error shows encoded_content source" );
+  # Match only the first line of the stack trace
+  like( $err, qr/^[^\n]+$source_re/s, "error shows encoded_content source" );
 }
 
 sub test_latin1 {
@@ -187,7 +188,7 @@ subtest "FromCode" => sub {
   subtest "binary string" => sub {
     my ($obj, $line);
     new_file(\$obj, $class, code_return_type => 'bytes', code => sub { $encoded_sample }); $line = __LINE__;
-    test_content_from_bytes($obj, qr/bytes from coderef set by \S+ line $line/);
+    test_content_from_bytes($obj, qr/bytes from coderef added by \S+ \(main line $line\)/);
   };
 
   subtest "latin1 string" => sub {
