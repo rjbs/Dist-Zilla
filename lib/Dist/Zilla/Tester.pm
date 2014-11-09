@@ -113,6 +113,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
 
   use File::Copy::Recursive qw(dircopy);
   use Dist::Zilla::Path;
+  use Data::Difference 'data_diff';
 
   around from_config => sub {
     my ($orig, $self, $arg, $tester_arg) = @_;
@@ -146,10 +147,9 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
 
     if (my $files = $tester_arg->{add_files}) {
       while (my ($name, $content) = each %$files) {
-        die "File name '$name' does not seem to be legal on the current OS"
-          if !path_looks_legal($name);
-        my $unix_name = Path::Class::File->new_foreign("Unix", $name);
-        my $fn = $tempdir->child($unix_name);
+        die "Unix path '$name' does not seem to be portable to the current OS"
+          if !unix_path_seems_portable($name);
+        my $fn = $tempdir->child($name);
         $fn->parent->mkpath;
         Dist::Zilla::Path::path($fn)->spew_utf8($content);
       }
@@ -199,13 +199,22 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
 
   no Moose;
 
-  sub path_looks_legal {
-    return 1 if $^O eq "linux";
-    my ($path) = @_;
-    my $unix_path = Path::Class::File->new_foreign("Unix", $path)->stringify;
-    return 0 if $path ne $unix_path;
-    my $round_tripped = file($path)->as_foreign("Unix")->stringify;
-    return $path eq $round_tripped;
+  sub unix_path_seems_portable {
+    return 1 if $^O eq "linux"; # this check only makes sense on non-unixes
+
+    my ($unix_path) = @_;
+
+    # split the  $unix_path into 3 strings: $volume, $directories, $file; with:
+    my @native_parts = File::Spec->splitpath($unix_path); # current OS rules
+    my @unix_parts = File::Spec::Unix->splitpath($unix_path); # unix rules
+    return if data_diff( \@native_parts, \@unix_parts );
+
+    # split the $directories string into a list of the sub-directories; with:
+    my @native_dirs = File::Spec->splitdir($native_parts[1]); # current OS rules
+    my @unix_dirs = File::Spec::Unix->splitdir($unix_parts[1]); # unix rules
+    return if data_diff( \@native_dirs, \@unix_dirs );
+
+    return 1;
   }
 }
 
