@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+5.025     2014-11-10 21:12:14-05:00 America/New_York
         - fix file.t failures with perl v5.14 and v5.16's Carp
 
 5.024     2014-11-05 23:08:07-05:00 America/New_York
