@@ -72,6 +72,11 @@ Searches your t/ directory and lists the files in it.
 Searches your distribution for executable files.  Hint: Use the
 L<Dist::Zilla::Plugin::ExecDir> plugin to mark those files as executables.
 
+= :PerlExecFiles
+
+A subset of C<:ExecFiles> limited just to perl scripts (those ending with
+F<.pl>, or with a recognizable perl shebang).
+
 = :ShareFiles
 
 Searches your ShareDir directory and lists the files in it.
