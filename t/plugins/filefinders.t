@@ -58,6 +58,8 @@ is_filelist(
     xt/author/more.t xt/smoke/more.t xt/release/more.t xt/more.t
     MANIFEST
     inc/Foo.pm inc/Foo/Bar.pm
+    bin/another_perl_script
+    bin/test.bash
     bin/test.pl
   ) ],
   "GatherDir gathers all files in the source dir",
@@ -110,9 +112,21 @@ $files = $tzil->find_files(':ExecFiles');
 is_filelist(
   [ map {; $_->name } @$files ],
   [ qw(
+    bin/another_perl_script
+    bin/test.bash
     bin/test.pl
   ) ],
   "ExecFiles finds all files",
+);
+
+$files = $tzil->find_files(':PerlExecFiles');
+is_filelist(
+  [ map {; $_->name } @$files ],
+  [ qw(
+    bin/another_perl_script
+    bin/test.pl
+  ) ],
+  "PerlExecFiles finds exec files that are perl",
 );
 
 $files = $tzil->find_files(':ShareFiles');

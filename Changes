@@ -12,6 +12,7 @@ Revision history for {{$dist->name}}
         - PkgVersion now skips .pod files (David Golden)
         - new native filefinder :ExtraTestFiles
         - [AutoPrereqs] now looks for develop prerequisites in xt/
+        - new file finder ':PerlExecFiles'
 
 5.037     2015-06-04 21:46:38-04:00 America/New_York
         - issue a warning when version ranges are passed through to
