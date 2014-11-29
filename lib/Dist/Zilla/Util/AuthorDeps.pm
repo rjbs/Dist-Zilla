@@ -36,6 +36,12 @@ sub extract_author_deps {
   require CPAN::Meta::Requirements;
   my $reqs = CPAN::Meta::Requirements->new;
 
+  my $license = $config->{_}->{license};
+  if (defined $license) {
+    $license = 'Software::License::'.$license;
+    $reqs->add_minimum($license => 0);
+  }
+
   for my $section ( sort keys %$config ) {
     next if q[_] eq $section;
     my $pack = $section;
