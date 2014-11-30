@@ -20,12 +20,22 @@ Revision history for {{$dist->name}}
 END_CHANGES
 
 {
+  package inc::TrashChanges;
+  use Moose;
+  with 'Dist::Zilla::Role::AfterRelease';
+
+  sub after_release {
+    Path::Tiny::path('Changes')->spew('OHHAI');
+  }
+}
+
+{
   my $tzil = Builder->from_config(
     { dist_root => 'does/not/exist' },
     {
       add_files => {
         'source/Changes' => $changes,
-        'source/dist.ini' => simple_ini(qw(GatherDir NextRelease FakeRelease)),
+        'source/dist.ini' => simple_ini(qw(GatherDir =inc::TrashChanges NextRelease FakeRelease)),
       },
     },
   );
