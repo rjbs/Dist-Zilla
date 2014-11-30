@@ -21,7 +21,7 @@ END_CHANGES
 
 {
   my $tzil = Builder->from_config(
-    { dist_root => 'corpus/dist/DZT' },
+    { dist_root => 'does/not/exist' },
     {
       add_files => {
         'source/Changes' => $changes,
@@ -36,6 +36,12 @@ END_CHANGES
     $tzil->slurp_file('build/Changes'),
     qr{0\.001},
     "new version appears in build Changes file",
+  );
+
+  unlike(
+    $tzil->slurp_file('build/Changes'),
+    qr/\{\{\$NEXT\}\}/,
+    "template variable does not appear in build Changes file",
   );
 
   unlike(
@@ -54,8 +60,8 @@ END_CHANGES
 
   like(
     $tzil->slurp_file('source/Changes'),
-    qr{0\.001},
-    "new version appears in source Changes file after release",
+    qr{\{\{\$NEXT\}\}\s+0\.001},
+    "new version appears in source Changes file after release, below template variable",
   );
 
   ok(
