@@ -6,8 +6,6 @@ with 'Dist::Zilla::Role::PrereqSource';
 
 use namespace::autoclean;
 
-use Moose::Autobox;
-
 use MooseX::Types::Moose qw(ArrayRef);
 use MooseX::Types::Perl  qw(ModuleName);
 
@@ -65,7 +63,7 @@ sub register_prereqs {
 
   for my $p (@phases) {
     for my $t (@types) {
-      for my $m ($self->modules_to_remove->flatten) {
+      for my $m (@{ $self->modules_to_remove }) {
         $prereqs->requirements_for($p, $t)->clear_requirement($m);
       }
     }

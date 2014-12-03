@@ -24,7 +24,6 @@ This plugin was originally contributed by Christopher J. Madsen.
 =cut
 
 use File::pushd ();
-use Moose::Autobox;
 use Path::Class ();
 
 sub before_release {

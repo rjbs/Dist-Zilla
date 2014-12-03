@@ -9,8 +9,6 @@ with qw(
 
 use namespace::autoclean;
 
-use Moose::Autobox;
-
 =head1 DESCRIPTION
 
 Plugins implementing InstallTool have their C<setup_installer> method called to

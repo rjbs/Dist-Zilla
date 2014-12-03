@@ -2,7 +2,6 @@ package Dist::Zilla::Plugin::GenerateFile;
 # ABSTRACT: build a custom file from only the plugin configuration
 
 use Moose;
-use Moose::Autobox;
 with (
   'Dist::Zilla::Role::FileGatherer',
   'Dist::Zilla::Role::TextTemplate',
@@ -119,7 +118,7 @@ sub gather_files {
 sub _content {
   my $self = shift;
 
-  my $content = join "\n", $self->content->flatten;
+  my $content = join "\n", @{ $self->content };
   $content .= qq{\n};
 
   if ($self->content_is_template) {

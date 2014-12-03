@@ -30,7 +30,6 @@ C<add_plugins> and/or C<add_bundle>.
 
 =cut
 
-use Moose::Autobox;
 use MooseX::Types::Moose qw(Str ArrayRef HashRef);
 
 use String::RewritePrefix 0.005
@@ -98,7 +97,7 @@ sub bundle_config {
 
   $self->configure;
 
-  return $self->plugins->flatten;
+  return @{ $self->plugins };
 }
 
 =method add_plugins
@@ -170,13 +169,12 @@ sub add_bundle {
 
   $bundle = "\@$bundle" unless $bundle =~ /^@/;
 
-  $self->plugins->push(
+  push @{ $self->plugins },
     $package->bundle_config({
       name    => $self->name . '/' . $bundle,
       package => $package,
       payload => $payload,
-    })
-  );
+    });
 }
 
 =method config_slice

@@ -12,7 +12,10 @@ sub find_files {
   my ($self) = @_;
 
   my $dir = $self->dir;
-  my $files = $self->zilla->files->grep(sub { index($_->name, "$dir/") == 0 });
+  my $files = [
+    grep { index($_->name, "$dir/") == 0 }
+      @{ $self->zilla->files }
+  ];
 }
 
 1;

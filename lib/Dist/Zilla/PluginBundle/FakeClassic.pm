@@ -6,8 +6,6 @@ extends 'Dist::Zilla::PluginBundle::Classic';
 
 use namespace::autoclean;
 
-use Moose::Autobox;
-
 around bundle_config => sub {
   my ($orig, $self, $arg) = @_;
 
