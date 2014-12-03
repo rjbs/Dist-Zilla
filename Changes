@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - eliminate use of Moose::Autobox
 
 5.025     2014-11-10 21:12:14-05:00 America/New_York
         - fix file.t failures with perl v5.14 and v5.16's Carp
