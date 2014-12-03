@@ -11,6 +11,12 @@ our $DIST = \'DZT-Blort\';
 1;
 ';
 
+my $with_dist_fully_qualified = '
+package DZT::WDistFullyQualified;
+$DZT::WDistFullyQualified::DIST = \'DZT-Blort\';
+1;
+';
+
 my $two_packages = '
 package DZT::TP1;
 
@@ -56,6 +62,7 @@ my $tzil = Builder->from_config(
     add_files => {
       'source/lib/DZT/TP1.pm'    => $two_packages,
       'source/lib/DZT/WDist.pm'  => $with_dist,
+      'source/lib/DZT/WDistFullyQualified.pm' => $with_dist_fully_qualified,
       'source/lib/DZT/R1.pm'     => $repeated_packages,
       'source/lib/DZT/Monkey.pm' => $monkey_patched,
       'source/bin/script_pkg.pl' => $script_pkg,
@@ -92,6 +99,13 @@ my $dzt_wdist = $tzil->slurp_file('build/lib/DZT/WDist.pm');
 unlike(
   $dzt_wdist,
   qr{^\s*\$\QDZT::WDist::DIST = 'DZT-Sample';\E\s*$}m,
+  "*not* added to DZT::WDist; we have one already",
+);
+
+my $dzt_wdist_fully_qualified = $tzil->slurp_file('build/lib/DZT/WDistFullyQualified.pm');
+unlike(
+  $dzt_wdist_fully_qualified,
+  qr{^\s*\$\QDZT::WDistFullyQualified::DIST = 'DZT-Sample';\E\s*$}m,
   "*not* added to DZT::WDist; we have one already",
 );
 
