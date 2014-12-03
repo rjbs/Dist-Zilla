@@ -5,8 +5,6 @@ use Moose::Role;
 
 use namespace::autoclean;
 
-use Moose::Autobox;
-
 =head1 DESCRIPTION
 
 This role should be implemented by any plugin that plans to add files into the
@@ -31,7 +29,7 @@ sub add_file {
   );
 
   $self->log_debug([ 'adding file %s', $file->name ]);
-  $self->zilla->files->push($file);
+  push @{ $self->zilla->files }, $file;
 }
 
 1;

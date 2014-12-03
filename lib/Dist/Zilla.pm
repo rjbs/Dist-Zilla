@@ -6,7 +6,6 @@ with 'Dist::Zilla::Role::ConfigDumper';
 
 # This comment has fün̈n̈ÿ characters.
 
-use Moose::Autobox 0.09; # ->flatten
 use MooseX::Types::Moose qw(ArrayRef Bool HashRef Object Str);
 use MooseX::Types::Perl qw(DistName LaxVersionStr);
 use MooseX::Types::Path::Class qw(Dir File);
@@ -17,7 +16,7 @@ use Dist::Zilla::Types qw(License);
 use Log::Dispatchouli 1.100712; # proxy_loggers, quiet_fatal
 use Path::Class;
 use Path::Tiny;
-use List::Util qw(first);
+use List::Util 1.33 qw(first none);
 use Software::License 0.101370; # meta2_name
 use String::RewritePrefix;
 use Try::Tiny;
@@ -91,7 +90,7 @@ sub _build_name {
   my ($self) = @_;
 
   my $name;
-  for my $plugin ($self->plugins_with(-NameProvider)->flatten) {
+  for my $plugin (@{ $self->plugins_with(-NameProvider) }) {
     next unless defined(my $this_name = $plugin->provide_name);
 
     $self->log_fatal('attempted to set name twice') if defined $name;
@@ -109,7 +108,7 @@ sub _build_version {
 
   my $version = $self->_version_override;
 
-  for my $plugin ($self->plugins_with(-VersionProvider)->flatten) {
+  for my $plugin (@{ $self->plugins_with(-VersionProvider) }) {
     next unless defined(my $this_version = $plugin->provide_version);
 
     $self->log_fatal('attempted to set version twice') if defined $version;
@@ -191,18 +190,17 @@ has main_module => (
 
     if ( $self->_has_main_module_override ) {
        $file = first { $_->name eq $self->_main_module_override }
-               $self->files->flatten;
+               @{ $self->files };
     } else {
        # We're having to guess
 
        ($guess = $self->name) =~ s{-}{/}g;
        $guess = "lib/$guess.pm";
 
-       $file = (first { $_->name eq $guess } $self->files->flatten)
-           ||  $self->files
-             ->grep(sub { $_->name =~ m{\.pm\z} and $_->name =~ m{\Alib/} })
-             ->sort(sub { length $_[0]->name <=> length $_[1]->name })
-             ->head;
+       $file = (first { $_->name eq $guess } @{ $self->files })
+           ||  (sort { length $a->name <=> length $b->name }
+                grep { $_->name =~ m{\.pm\z} and $_->name =~ m{\Alib/} }
+                @{ $self->files })[0];
        $self->log("guessing dist's main_module is " . ($file ? $file->name : $guess));
     }
 
@@ -215,9 +213,9 @@ has main_module => (
         } else {
             push @errorlines,"We tried to guess '$guess' but no file like that existed";
         }
-        if ( not $self->files->flatten ) {
+        if ( not @{ $self->files } ) {
             push @errorlines, "Upon further inspection we didn't find any files in your dist, did you add any?";
-        } elsif ( not $self->files->grep(sub{ $_->name =~ m{\.pm\z} })->head ){
+        } elsif ( none { $_->name =~ m{\.pm\z} } @{ $self->files } ){
             push @errorlines, "We didn't find any .pm files in your dist, this is probably a problem.";
         }
         push @errorlines,"Cannot continue without a main_module";
@@ -265,7 +263,7 @@ sub _build_license {
 
   my $provided_license;
 
-  for my $plugin ($self->plugins_with(-LicenseProvider)->flatten) {
+  for my $plugin (@{ $self->plugins_with(-LicenseProvider) }) {
     my $this_license = $plugin->provide_license({
       copyright_holder => $copyright_holder,
       copyright_year   => $copyright_year,
@@ -520,7 +518,7 @@ sub _build_distmeta {
                     . (defined $self->VERSION ? $self->VERSION : '(undef)')
   };
 
-  for ($self->plugins_with(-MetaProvider)->flatten) {
+  for (@{ $self->plugins_with(-MetaProvider) }) {
     $meta = $meta_merge->merge($meta, $_->metadata);
   }
 
@@ -553,7 +551,7 @@ has prereqs => (
 
 sub plugin_named {
   my ($self, $name) = @_;
-  my $plugin = first { $_->plugin_name eq $name } $self->plugins->flatten;
+  my $plugin = first { $_->plugin_name eq $name } @{ $self->plugins };
 
   return $plugin if $plugin;
   return;
@@ -573,7 +571,7 @@ sub plugins_with {
   my ($self, $role) = @_;
 
   $role =~ s/^-/Dist::Zilla::Role::/;
-  my $plugins = $self->plugins->grep(sub { $_->does($role) });
+  my $plugins = [ grep { $_->does($role) } @{ $self->plugins } ];
 
   return $plugins;
 }
@@ -605,12 +603,12 @@ sub _check_dupe_files {
   my ($self) = @_;
 
   my %files_named;
-  for my $file ($self->files->flatten) {
-    ($files_named{ $file->name} ||= [])->push($file);
+  for my $file (@{ $self->files }) {
+    push @{ $files_named{ $file->name} ||= [] }, $file;
   }
 
   return unless
-    my @dupes = grep { $files_named{$_}->length > 1 } keys %files_named;
+    my @dupes = grep { @{ $files_named{$_} } > 1 } keys %files_named;
 
   for my $name (@dupes) {
     $self->log("attempt to add $name multiple times; added by: "

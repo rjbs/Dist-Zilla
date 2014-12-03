@@ -6,8 +6,6 @@ with qw/Dist::Zilla::Role::Plugin Dist::Zilla::Role::FileInjector/;
 
 use namespace::autoclean;
 
-use Moose::Autobox;
-
 =head1 DESCRIPTION
 
 A FileGatherer plugin is a special sort of

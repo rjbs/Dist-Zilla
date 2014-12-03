@@ -5,7 +5,6 @@ use Moose::Role;
 with 'Dist::Zilla::Role::ConfigDumper';
 
 use Params::Util qw(_HASHLIKE);
-use Moose::Autobox;
 use MooseX::Types;
 
 use namespace::autoclean;
@@ -68,10 +67,9 @@ sub plugin_from_config {
   my ($class, $name, $arg, $section) = @_;
 
   my $self = $class->new(
-    $arg->merge({
-      plugin_name => $name,
-      zilla       => $section->sequence->assembler->zilla,
-    }),
+    %$arg,
+    plugin_name => $name,
+    zilla       => $section->sequence->assembler->zilla,
   );
 }
 
@@ -84,7 +82,7 @@ sub register_component {
 
   $self->log_debug([ 'online, %s v%s', $self->meta->name, $version ]);
 
-  $self->zilla->plugins->push($self);
+  push @{ $self->zilla->plugins }, $self;
 
   return;
 }

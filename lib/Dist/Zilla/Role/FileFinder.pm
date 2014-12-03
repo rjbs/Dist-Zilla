@@ -6,8 +6,6 @@ with 'Dist::Zilla::Role::Plugin';
 
 use namespace::autoclean;
 
-use Moose::Autobox;
-
 =head1 DESCRIPTION
 
 A FileFinder plugin locates files within the distribution.  This role exists so

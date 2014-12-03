@@ -2,7 +2,6 @@ package Dist::Zilla::Plugin::GatherDir;
 # ABSTRACT: gather all the files in a directory
 
 use Moose;
-use Moose::Autobox;
 use MooseX::Types::Path::Class qw(Dir File);
 with 'Dist::Zilla::Role::FileGatherer';
 
@@ -165,14 +164,14 @@ sub gather_files {
 
   my $exclude_regex = qr/\000/;
   $exclude_regex = qr/(?:$exclude_regex)|$_/
-    for ($self->exclude_match->flatten);
+    for @{ $self->exclude_match };
 
   my $root = "" . $self->root;
   $root =~ s{^~([\\/])}{require File::HomeDir; File::HomeDir::->my_home . $1}e;
 
   my $prune_regex = qr/\000/;
   $prune_regex = qr/$prune_regex|$_/
-    for ( $self->prune_directory->flatten,
+    for ( @{ $self->prune_directory },
           $self->include_dotfiles ? () : ( qr/^\.[^.]/ ) );
 
   # build up the rules

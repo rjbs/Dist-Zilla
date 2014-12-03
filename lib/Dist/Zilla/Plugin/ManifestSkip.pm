@@ -6,8 +6,6 @@ with 'Dist::Zilla::Role::FilePruner';
 
 use namespace::autoclean;
 
-use Moose::Autobox;
-
 =head1 DESCRIPTION
 
 This plugin reads a MANIFEST.SKIP-like file, as used by L<ExtUtils::MakeMaker>
@@ -40,7 +38,7 @@ sub prune_files {
   my $files = $self->zilla->files;
 
   my $skipfile_name = $self->skipfile;
-  my ($skipfile) = grep { $_->name eq $skipfile_name } $files->flatten;
+  my ($skipfile) = grep { $_->name eq $skipfile_name } @$files;
   unless (defined $skipfile) {
     $self->log_debug([ 'file %s not found', $skipfile_name ]);
     return;
@@ -65,7 +63,7 @@ sub prune_files {
 
   my $skip = ExtUtils::Manifest::maniskip($skipfile_name);
 
-  for my $file ($files->flatten) {
+  for my $file (sort @{ $files }) {
     next unless $skip->($file->name);
 
     $self->log_debug([ 'pruning %s', $file->name ]);

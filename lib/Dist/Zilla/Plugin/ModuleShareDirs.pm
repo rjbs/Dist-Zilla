@@ -5,8 +5,6 @@ use Moose;
 
 use namespace::autoclean;
 
-use Moose::Autobox;
-
 =head1 SYNOPSIS
 
 In your F<dist.ini>:
@@ -30,10 +28,9 @@ sub find_files {
 
   for my $mod ( keys %$modmap ) {
     my $dir = $modmap->{$mod};
-    my $mod_files = $self->zilla->files->grep(
-      sub { index($_->name, "$dir/") == 0 }
-    );
-    push @files, @$mod_files;
+    my @mod_files = grep { index($_->name, "$dir/") == 0 }
+      @{ $self->zilla->files };
+    push @files, @mod_files;
   }
 
   return \@files;

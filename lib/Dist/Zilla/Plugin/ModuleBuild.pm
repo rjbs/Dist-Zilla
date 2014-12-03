@@ -2,7 +2,6 @@ package Dist::Zilla::Plugin::ModuleBuild;
 # ABSTRACT: build a Build.PL that uses Module::Build
 
 use Moose;
-use Moose::Autobox;
 with (
   'Dist::Zilla::Role::BuildPL',
   'Dist::Zilla::Role::PrereqSource',
@@ -126,8 +125,8 @@ sub register_prereqs {
 sub module_build_args {
   my ($self) = @_;
 
-  my @exe_files =
-    $self->zilla->find_files(':ExecFiles')->map(sub { $_->name })->flatten;
+  my @exe_files = map { $_->name }
+    @{ $self->zilla->find_files(':ExecFiles') };
 
   $self->log_fatal("can't install files with whitespace in their names")
     if grep { /\s/ } @exe_files;
@@ -149,7 +148,7 @@ sub module_build_args {
     dist_abstract => $self->zilla->abstract,
     dist_name     => $self->zilla->name,
     dist_version  => $self->zilla->version,
-    dist_author   => [ $self->zilla->authors->flatten ],
+    dist_author   => [ @{ $self->zilla->authors } ],
     script_files  => \@exe_files,
     ( keys %{$self->zilla->_share_dir_map} ? (share_dir => $self->zilla->_share_dir_map) : ()),
 

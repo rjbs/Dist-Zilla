@@ -2,7 +2,6 @@ package Dist::Zilla::Plugin::MakeMaker;
 # ABSTRACT: build a Makefile.PL that uses ExtUtils::MakeMaker
 
 use Moose;
-use Moose::Autobox;
 
 use namespace::autoclean;
 
@@ -177,14 +176,14 @@ sub write_makefile_args {
 
   (my $name = $self->zilla->name) =~ s/-/::/g;
 
-  my @exe_files =
-    $self->zilla->find_files(':ExecFiles')->map(sub { $_->name })->flatten;
+  my @exe_files = map { $_->name }
+    @{ $self->zilla->find_files(':ExecFiles') };
 
   $self->log_fatal("can't install files with whitespace in their names")
     if grep { /\s/ } @exe_files;
 
   my %test_dirs;
-  for my $file ($self->zilla->files->flatten) {
+  for my $file (@{ $self->zilla->files }) {
     next unless $file->name =~ m{\At/.+\.t\z};
     (my $dir = $file->name) =~ s{/[^/]+\.t\z}{/*.t}g;
 
@@ -216,7 +215,7 @@ sub write_makefile_args {
   my %write_makefile_args = (
     DISTNAME  => $self->zilla->name,
     NAME      => $name,
-    AUTHOR    => $self->zilla->authors->join(q{, }),
+    AUTHOR    => join(q{, }, @{ $self->zilla->authors }),
     ABSTRACT  => $self->zilla->abstract,
     VERSION   => $self->zilla->version,
     LICENSE   => $self->zilla->license->meta_yml_name,

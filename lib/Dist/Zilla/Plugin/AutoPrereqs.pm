@@ -42,8 +42,6 @@ prerequisites unless you set configure_finder.
 
 use namespace::autoclean;
 
-use Moose::Autobox;
-
 =head1 SYNOPSIS
 
 In your F<dist.ini>:
@@ -177,7 +175,7 @@ sub register_prereqs {
     $req->clear_requirement($_) for qw(Config Errno); # never indexed
 
     # remove prereqs from skiplist
-    for my $skip (($self->skips || [])->flatten) {
+    for my $skip (@{ $self->skips || [] }) {
       my $re   = qr/$skip/;
 
       foreach my $k ($req->required_modules) {
