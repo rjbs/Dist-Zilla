@@ -18,6 +18,12 @@ $VERSION = 1.234;
 1;
 ';
 
+my $with_version_fully_qualified = '
+package DZT::WVerFullyQualified;
+$DZT::WVerFullyQualified::VERSION = 1.234;
+1;
+';
+
 my $in_a_string_escaped = '
 package DZT::WStrEscaped;
 print "\$VERSION = 1.234;"
@@ -122,6 +128,7 @@ my $tzil = Builder->from_config(
       'source/lib/DZT/TP1.pm'    => $two_packages,
       'source/lib/DZT/WVer.pm'   => $with_version,
       'source/lib/DZT/WVerTwoLines.pm' => $with_version_two_lines,
+      'source/lib/DZT/WVerFullyQualified.pm' => $with_version_fully_qualified,
       'source/lib/DZT/WStrEscaped.pm'  => $in_a_string_escaped,
       'source/lib/DZT/WInComment.pm' => $in_comment,
       'source/lib/DZT/WInCommentInSub.pm' => $in_comment_in_sub,
@@ -173,6 +180,13 @@ unlike(
   $dzt_wver_two_lines,
   qr{^\s*\$\QDZT::WVerTwoLines::VERSION = '0.001';\E\s*$}m,
   "*not* added to DZT::WVerTwoLines; we have one already",
+);
+
+my $dzt_wver_fully_qualified = $tzil->slurp_file('build/lib/DZT/WVerFullyQualified.pm');
+unlike(
+  $dzt_wver_fully_qualified,
+  qr{^\s*\$\QDZT::WVerFullyQualified::VERSION = '0.001';\E\s*$}m,
+  "*not* added to DZT::WVer; we have one already",
 );
 
 my $dzt_wver_in_comment = $tzil->slurp_file('build/lib/DZT/WInComment.pm');

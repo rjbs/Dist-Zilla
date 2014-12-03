@@ -109,19 +109,22 @@ sub munge_perl {
 
   my $document = $self->ppi_document_for_file($file);
 
-  if ($self->document_assigns_to_variable($document, '$VERSION')) {
-    if ($self->die_on_existing_version) {
-      $self->log_fatal([ 'existing assignment to $VERSION in %s', $file->name ]);
-    }
-
-    $self->log([ 'skipping %s: assigns to $VERSION', $file->name ]);
-    return;
-  }
-
   my $package_stmts = $document->find('PPI::Statement::Package');
   unless ($package_stmts) {
     $self->log_debug([ 'skipping %s: no package statement found', $file->name ]);
     return;
+  }
+
+  for my $prefix ('', map { $_->namespace . '::' } @$package_stmts) {
+    my $variable = '$' . $prefix . 'VERSION';
+    if ($self->document_assigns_to_variable($document, $variable)) {
+      if ($self->die_on_existing_version) {
+        $self->log_fatal([ 'existing assignment to %s in %s', $variable, $file->name ]);
+      }
+
+      $self->log([ 'skipping %s: assigns to %s', $file->name, $variable ]);
+      return;
+    }
   }
 
   my %seen_pkg;
