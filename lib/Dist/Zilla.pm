@@ -603,12 +603,18 @@ sub _check_dupe_files {
   my ($self) = @_;
 
   my %files_named;
+  my @dupes;
   for my $file (@{ $self->files }) {
-    push @{ $files_named{ $file->name} ||= [] }, $file;
+    my $filename = $file->name;
+    if (my $seen = $files_named{ $filename }) {
+      push @{ $seen }, $file;
+      push @dupes, $filename if @{ $seen } == 2;
+    } else {
+      $files_named{ $filename } = [ $file ];
+    }
   }
 
-  return unless
-    my @dupes = grep { @{ $files_named{$_} } > 1 } keys %files_named;
+  return unless @dupes;
 
   for my $name (@dupes) {
     $self->log("attempt to add $name multiple times; added by: "
