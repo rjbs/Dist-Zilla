@@ -149,9 +149,7 @@ role {
     my @filesets = map {; $self->zilla->find_files($_) }
                    @{ $self->$finder_arg };
 
-    my %by_name = map {; $_->name, $_ } map { @$_ } @filesets;
-
-    return [ values %by_name ];
+    return [ sort {$a->name cmp $b->name} map { @$_ } @filesets ];
   };
 };
 
