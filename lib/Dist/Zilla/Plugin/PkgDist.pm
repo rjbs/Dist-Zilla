@@ -55,12 +55,12 @@ sub munge_perl {
 
   my $document = $self->ppi_document_for_file($file);
 
+  return unless my $package_stmts = $document->find('PPI::Statement::Package');
+
   if ($self->document_assigns_to_variable($document, '$DIST')) {
     $self->log([ 'skipping %s: assigns to $DIST', $file->name ]);
     return;
   }
-
-  return unless my $package_stmts = $document->find('PPI::Statement::Package');
 
   my %seen_pkg;
 
