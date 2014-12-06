@@ -151,7 +151,7 @@ role {
 
     my %by_name = map {; $_->name, $_ } map { @$_ } @filesets;
 
-    return [ values %by_name ];
+    return [ map {; $by_name{$_} } sort keys %by_name ];
   };
 };
 
