@@ -23,7 +23,7 @@ in dist.ini
 This plugin will add lines like the following to each package in each Perl
 module or program (more or less) within the distribution:
 
-  $MyModule::VERSION = 0.001;
+  $MyModule::VERSION = '0.001';
 
 ...where 0.001 is the version of the dist, and MyModule is the name of the
 package being given a version.  (In other words, it always uses fully-qualified
