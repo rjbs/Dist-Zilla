@@ -39,8 +39,6 @@ use File::Spec;
 use Path::Tiny;
 use List::Util 1.33 'all';
 
-use namespace::autoclean;
-
 =attr root
 
 This is the directory in which to look for files.  If not given, it defaults to
