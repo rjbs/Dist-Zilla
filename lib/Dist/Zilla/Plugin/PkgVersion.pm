@@ -23,7 +23,11 @@ in dist.ini
 This plugin will add lines like the following to each package in each Perl
 module or program (more or less) within the distribution:
 
-  $MyModule::VERSION = 0.001;
+  $MyModule::VERSION = '0.001';
+
+or
+
+  { our $VERSION = '0.001'; }
 
 ...where 0.001 is the version of the dist, and MyModule is the name of the
 package being given a version.  (In other words, it always uses fully-qualified
@@ -52,6 +56,12 @@ doesn't, it will insert a new line, which means the shipped copy of the module
 will have different line numbers (off by one) than the source.  If
 C<die_on_line_insertion> is true, PkgVersion will raise an exception rather
 than insert a new line.
+
+=attr use_our_variable
+
+If true, the inserted line looks like C<< { our $VERSION = '0.001'; } >>;
+otherwise, it is C<< $Module::Name::VERSION = '0.001'; >>.
+This attribute Defaults to false.
 
 =attr finder
 
@@ -93,6 +103,12 @@ has die_on_existing_version => (
 );
 
 has die_on_line_insertion => (
+  is  => 'ro',
+  isa => 'Bool',
+  default => 0,
+);
+
+has use_our_variable => (
   is  => 'ro',
   isa => 'Bool',
   default => 0,
@@ -149,7 +165,9 @@ sub munge_perl {
     # an assignment to version; it shouldn't be needed, but it's been annoying
     # enough in the past that I'm keeping it here until tests are better
     my $trial = $self->zilla->is_trial ? ' # TRIAL' : '';
-    my $perl = "\$$package\::VERSION\x20=\x20'$version';$trial";
+    my $perl = $self->use_our_variable
+        ? "{ our \$VERSION\x20=\x20'$version'; }$trial"
+        : "\$$package\::VERSION\x20=\x20'$version';$trial";
 
     $self->log_debug([
       'adding $VERSION assignment to %s in %s',
