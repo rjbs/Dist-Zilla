@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+5.027     2014-12-09 09:30:30-05:00 America/New_York
         - fix regression in Plugin->plugin_from_config which started passing a
           list of pairs rather than a hashref
 
