@@ -66,11 +66,11 @@ sub mvp_aliases         { return {} };
 sub plugin_from_config {
   my ($class, $name, $arg, $section) = @_;
 
-  my $self = $class->new(
+  my $self = $class->new({
     %$arg,
     plugin_name => $name,
     zilla       => $section->sequence->assembler->zilla,
-  );
+  });
 }
 
 sub register_component {
