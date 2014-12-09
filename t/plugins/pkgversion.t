@@ -314,7 +314,7 @@ my $tzil2 = Builder->from_config(
   },
 );
 $tzil2->plugins->[1]->{die_on_line_insertion} = 1;
-$tzil2->plugins->[1]->{use_our_variable} = 1;
+$tzil2->plugins->[1]->{use_our} = 1;
 $tzil2->build;
 
 my $dzt_tpw = $tzil2->slurp_file('build/lib/DZT/TPW.pm');

@@ -57,11 +57,12 @@ will have different line numbers (off by one) than the source.  If
 C<die_on_line_insertion> is true, PkgVersion will raise an exception rather
 than insert a new line.
 
-=attr use_our_variable
+=attr use_our
 
 If true, the inserted line looks like C<< { our $VERSION = '0.001'; } >>;
-otherwise, it is C<< $Module::Name::VERSION = '0.001'; >>.
-This attribute Defaults to false.
+otherwise, it is C<< $Module::Name::VERSION = '0.001'; >>.  This attribute
+defaults to false for now, but will change to true in the future without
+warning.
 
 =attr finder
 
@@ -108,7 +109,7 @@ has die_on_line_insertion => (
   default => 0,
 );
 
-has use_our_variable => (
+has use_our => (
   is  => 'ro',
   isa => 'Bool',
   default => 0,
@@ -165,7 +166,7 @@ sub munge_perl {
     # an assignment to version; it shouldn't be needed, but it's been annoying
     # enough in the past that I'm keeping it here until tests are better
     my $trial = $self->zilla->is_trial ? ' # TRIAL' : '';
-    my $perl = $self->use_our_variable
+    my $perl = $self->use_our
         ? "{ our \$VERSION\x20=\x20'$version'; }$trial"
         : "\$$package\::VERSION\x20=\x20'$version';$trial";
 
