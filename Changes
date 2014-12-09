@@ -1,7 +1,11 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+5.026     2014-12-08 21:33:55-05:00 America/New_York
         - eliminate use of Moose::Autobox
+        - various small performance optimizations
+        - add "use_our" option to PkgVersion
 
 5.025     2014-11-10 21:12:14-05:00 America/New_York
         - fix file.t failures with perl v5.14 and v5.16's Carp
