@@ -66,7 +66,8 @@ sub prune_files {
   # \A\Q$_\E should also handle the `eq` check
   $matches_regex = qr/$matches_regex|\A\Q$_\E/ for (@{ $self->filenames });
 
-  for my $file (@{ $self->zilla->files }) {
+  # Copy list (break reference) so we can mutate.
+  for my $file ((), @{ $self->zilla->files }) {
     next unless $file->name =~ $matches_regex;
 
     $self->log_debug([ 'pruning %s', $file->name ]);

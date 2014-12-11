@@ -63,7 +63,8 @@ sub prune_files {
 
   my $skip = ExtUtils::Manifest::maniskip($skipfile_name);
 
-  for my $file (sort @{ $files }) {
+  # Copy list (break reference) so we can mutate.
+  for my $file ((), @{ $files }) {
     next unless $skip->($file->name);
 
     $self->log_debug([ 'pruning %s', $file->name ]);

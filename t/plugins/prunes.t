@@ -168,7 +168,6 @@ for my $skip_skip (0..1) {
 }
 
 {
-  local $TODO = 'Fix bug causing Pruners to skip some files';
   my $tzil = Builder->from_config(
     { dist_root => 'corpus/dist/DZT' },
     {
@@ -221,7 +220,6 @@ for my $arg (qw(filename filenames)) {
 }
 
 {
-  local $TODO = 'Fix bug causing Pruners to skip some files';
   my $tzil = Builder->from_config(
     { dist_root => 'corpus/dist/DZT' },
     {
