@@ -86,7 +86,8 @@ sub exclude_file {
 sub prune_files {
   my ($self) = @_;
 
-  for my $file (@{ $self->zilla->files }) {
+  # Copy list (break reference) so we can mutate.
+  for my $file ((), @{ $self->zilla->files }) {
     next unless $self->exclude_file($file);
 
     $self->log_debug([ 'pruning %s', $file->name ]);
