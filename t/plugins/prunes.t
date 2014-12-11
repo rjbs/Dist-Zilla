@@ -167,6 +167,35 @@ for my $skip_skip (0..1) {
   );
 }
 
+{
+  local $TODO = 'Fix bug causing Pruners to skip some files';
+  my $tzil = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/Build'    => "This file is cruft.\n",
+        'source/dist.ini' => simple_ini('GatherDir', 'PruneCruft'),
+        # Make sure there are multiple files to be pruned.
+        'source/DZT-Sample-1/foo' => "foo from previous build\n",
+        'source/DZT-Sample-1/bar' => "bar from previous build\n",
+        'source/DZT-Sample-1/baz' => "baz from previous build\n",
+        'source/DZT-Sampler-1/stays' => "file stays\n",
+      },
+    },
+  );
+
+  $tzil->build;
+
+  my @files = map {; $_->name } @{ $tzil->files };
+
+  is_filelist(
+    [ @files ],
+    [ qw(dist.ini lib/DZT/Sample.pm t/basic.t DZT-Sampler-1/stays) ],
+    "all files from previous build removed",
+  );
+}
+
+
 for my $arg (qw(filename filenames)) {
   my $tzil = Builder->from_config(
     { dist_root => 'corpus/dist/DZT' },
@@ -188,6 +217,31 @@ for my $arg (qw(filename filenames)) {
     [ @files ],
     [ qw(lib/DZT/Sample.pm t/basic.t) ],
     "we can prune a specific file by request (arg $arg)",
+  );
+}
+
+{
+  local $TODO = 'Fix bug causing Pruners to skip some files';
+  my $tzil = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/dist.ini' => simple_ini(
+          'GatherDir',
+          [ PruneFiles => { match => '^dist.ini|\.t$' } ],
+        ),
+      },
+    },
+  );
+
+  $tzil->build;
+
+  my @files = map {; $_->name } @{ $tzil->files };
+
+  is_filelist(
+    [ @files ],
+    [ qw(lib/DZT/Sample.pm) ],
+    "prune multiple files with 'match'",
   );
 }
 
