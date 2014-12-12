@@ -99,7 +99,10 @@ sub document_assigns_to_variable {
       return 1 if grep {
         my $child = $_;
         $child->isa('PPI::Token::Symbol')
-          and grep { $child->canonical eq "${sigil}${_}::${varname}" } @namespaces
+          and grep {
+            $child->canonical eq "${sigil}${_}::${varname}"
+                and $node->content =~ /\Q${sigil}${_}::${varname}\E.*=/
+          } @namespaces
       } $node->children;
 
       return undef;     # do not descend into nodes comprising the statement

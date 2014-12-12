@@ -30,6 +30,13 @@ print "\$VERSION = 1.234;"
 1;
 ';
 
+my $xsloader_version = '
+package DZT::XSLoader;
+use XSLoader;
+XSLoader::load __PACKAGE__, $DZT::XSLoader::VERSION;
+1;
+';
+
 my $in_comment = '
 package DZT::WInComment;
 # our $VERSION = 1.234;
@@ -130,6 +137,7 @@ my $tzil = Builder->from_config(
       'source/lib/DZT/WVerTwoLines.pm' => $with_version_two_lines,
       'source/lib/DZT/WVerFullyQualified.pm' => $with_version_fully_qualified,
       'source/lib/DZT/WStrEscaped.pm'  => $in_a_string_escaped,
+      'source/lib/DZT/XSLoader.pm'  => $xsloader_version,
       'source/lib/DZT/WInComment.pm' => $in_comment,
       'source/lib/DZT/WInCommentInSub.pm' => $in_comment_in_sub,
       'source/lib/DZT/WInPODStm.pm' => $in_pod_stm,
@@ -187,6 +195,13 @@ unlike(
   $dzt_wver_fully_qualified,
   qr{^\s*\$\QDZT::WVerFullyQualified::VERSION = '0.001';\E\s*$}m,
   "*not* added to DZT::WVer; we have one already",
+);
+
+my $dzt_xsloader = $tzil->slurp_file('build/lib/DZT/XSLoader.pm');
+like(
+  $dzt_xsloader,
+  qr{^\s*\$\QDZT::XSLoader::VERSION = '0.001';\E\s*$}m,
+  "added version to DZT::XSLoader",
 );
 
 my $dzt_wver_in_comment = $tzil->slurp_file('build/lib/DZT/WInComment.pm');
