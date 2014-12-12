@@ -150,8 +150,9 @@ around dump_config => sub {
   my $config = $self->$orig;
 
   $config->{+__PACKAGE__} = {
-    map { $_ => $self->$_ }
-      qw(root prefix include_dotfiles follow_symlinks exclude_filename exclude_match prune_directory),
+    (map { $_ => $self->$_ }
+      qw(prefix include_dotfiles follow_symlinks exclude_filename exclude_match prune_directory)),
+    root => $self->root . '',
   };
 
   return $config;
