@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+5.028     2014-12-12 19:06:23-05:00 America/New_York
         - fix regression in [PkgVersion] that made false-positive
           identifications for pre-existing assignments to $VERSION
         - try avoid cases in which plugin code directly modifies file list
