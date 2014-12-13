@@ -1,8 +1,10 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
-        - fix regression in [PkgVersion] that was mishandling calls to
-          XSLoader::load
+        - fix regression in [PkgVersion] that made false-positive
+          identifications for pre-existing assignments to $VERSION
+        - try avoid cases in which plugin code directly modifies file list
+        - switch, tentatively, to JSON::MaybeXS
 
 5.027     2014-12-09 09:30:30-05:00 America/New_York
         - fix regression in Plugin->plugin_from_config which started passing a
