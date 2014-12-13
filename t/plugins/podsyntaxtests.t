@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use Test::More 0.88;
-use Test::Fatal qw(exception);
+use Test::Deep;
 
 use JSON 2;
 use Test::DZil;
@@ -14,7 +14,6 @@ use Test::DZil;
         'source/dist.ini' => simple_ini(
           [ GatherDir => ],
           [ PodSyntaxTests => ],
-          [ MetaJSON  => ],
         ),
       },
     },
@@ -22,15 +21,16 @@ use Test::DZil;
 
   $tzil->build;
 
-  my $json = $tzil->slurp_file('build/META.json');
-
-  my $meta = JSON->new->decode($json);
-
-  is_deeply(
-    $meta->{prereqs},
-    {
-       develop => { requires => { 'Test::Pod' => '1.41' } },
-    },
+  cmp_deeply(
+    $tzil->distmeta,
+    superhashof(
+      {
+        prereqs =>
+        {
+           develop => { requires => { 'Test::Pod' => '1.41' } },
+        },
+      }
+    ),
     'PodSyntaxTests develop prereqs'
   );
 

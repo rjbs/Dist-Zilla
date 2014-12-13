@@ -2,6 +2,7 @@ use strict;
 use warnings;
 use Test::More 0.88;
 use Test::Fatal qw(exception);
+use Test::Deep;
 
 use JSON 2;
 use Test::DZil;
@@ -13,7 +14,6 @@ use Test::DZil;
       add_files => {
         'source/dist.ini' => simple_ini(
           [ GatherDir => ],
-          [ MetaJSON  => ],
           [ Prereqs =>                 => { A => 1 }         ],
           [ Prereqs => RuntimeRequires => { A => 2, B => 3 } ],
           [ Prereqs => DevelopSuggests => { C => 4 }         ],
@@ -26,20 +26,18 @@ use Test::DZil;
 
   $tzil->build;
 
-  my $json = $tzil->slurp_file('build/META.json');
-
-  my $meta = JSON->new->decode($json);
-
-  is_deeply(
-    $meta->{prereqs},
-    {
-      develop => { suggests  => { C => 4 } },
-      runtime => {
-        requires   => { A => 2, B => 3 },
-        recommends => { E => 7 },
-      },
-      test    => { conflicts => { C => 5, D => 6 } },
-    },
+  cmp_deeply(
+    $tzil->distmeta,,
+    superhashof({
+      prereqs => {
+        develop => { suggests  => { C => 4 } },
+        runtime => {
+          requires   => { A => 2, B => 3 },
+          recommends => { E => 7 },
+        },
+        test    => { conflicts => { C => 5, D => 6 } },
+      }
+    }),
     "prereqs merged",
   );
 }
@@ -52,7 +50,6 @@ use Test::DZil;
       add_files => {
         'source/dist.ini' => simple_ini(
           [ GatherDir => ],
-          [ MetaJSON  => ],
           [ Prereqs => RuntimeRequires  => { A => 2, B => 0, C => 2 } ],
           [ RemovePrereqs => { remove => [ qw(C) ] } ],
           [ Prereqs => TestRequires     => { A => 1, B => 1, C => 1 } ],
@@ -64,12 +61,8 @@ use Test::DZil;
 
   $tzil->build;
 
-  my $json = $tzil->slurp_file('build/META.json');
-
-  my $meta = JSON->new->decode($json);
-
   is_deeply(
-    $meta->{prereqs},
+    $tzil->distmeta->{prereqs},
     {
       runtime => {
         requires   => { A => 2, B => 2 },
@@ -92,7 +85,6 @@ use Test::DZil;
       add_files => {
         'source/dist.ini' => simple_ini(
           [ GatherDir => ],
-          [ MetaJSON  => ],
           [ Prereqs =>                 => { A => 1 }         ],
           [ Prereqs => RuntimeRequires => { A => 2, B => 3 } ],
           [ Prereqs => DevelopSuggests => { C => 4 }         ],
@@ -105,16 +97,17 @@ use Test::DZil;
 
   $tzil->build;
 
-  my $json = $tzil->slurp_file('build/META.json');
-
-  my $meta = JSON->new->decode($json);
-
-  is_deeply(
-    $meta->{prereqs},
-    {
-      runtime => { requires  => { A => 2 } },
-      test    => { conflicts => { D => 6 } },
-    },
+  cmp_deeply(
+    $tzil->distmeta,
+    superhashof(
+      {
+        prereqs =>
+        {
+          runtime => { requires  => { A => 2 } },
+          test    => { conflicts => { D => 6 } },
+        },
+      }
+    ),
     "prereqs merged and pruned",
   );
 }
@@ -126,7 +119,6 @@ use Test::DZil;
       add_files => {
         'source/dist.ini' => simple_ini(
           [ GatherDir => ],
-          [ MetaJSON  => ],
           [ Prereqs => { A => 1 } ],
           [ Prereqs => P1
             => { qw(-phase runtime -type requires), A => 2, B => 3 } ],
@@ -143,20 +135,21 @@ use Test::DZil;
 
   $tzil->build;
 
-  my $json = $tzil->slurp_file('build/META.json');
-
-  my $meta = JSON->new->decode($json);
-
-  is_deeply(
-    $meta->{prereqs},
-    {
-      develop => { suggests  => { C => 4 } },
-      runtime => {
-        requires   => { A => 2, B => 3 },
-        recommends => { E => 7 },
-      },
-      test    => { conflicts => { C => 5, D => 6 } },
-    },
+  cmp_deeply(
+    $tzil->distmeta,
+    superhashof(
+      {
+        prereqs =>
+        {
+          develop => { suggests  => { C => 4 } },
+          runtime => {
+            requires   => { A => 2, B => 3 },
+            recommends => { E => 7 },
+          },
+          test    => { conflicts => { C => 5, D => 6 } },
+        },
+      }
+    ),
     "-phase, -type, & -relationship",
   );
 }
