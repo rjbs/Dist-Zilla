@@ -3,7 +3,6 @@ use warnings;
 use Test::More 0.88;
 use Test::Deep;
 
-use JSON 2;
 use Test::DZil;
 
 {

@@ -4,7 +4,6 @@ use Test::More 0.88;
 use Test::Fatal qw(exception);
 use Test::Deep;
 
-use JSON 2;
 use Test::DZil;
 
 {
