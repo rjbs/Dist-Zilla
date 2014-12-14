@@ -80,7 +80,7 @@ sub document_assigns_to_variable {
   my ($self, $document, $variable) = @_;
 
   my $package_stmts = $document->find('PPI::Statement::Package');
-  my @namespaces = map { $_->namespace } @$package_stmts;
+  my @namespaces = map { $_->namespace } @{ $package_stmts || []};
 
   my ($sigil, $varname) = ($variable =~ m'^([$@%*])(.+)$');
 
