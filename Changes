@@ -1,8 +1,11 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+5.029     2014-12-14 14:44:44-05:00 America/New_York
         - fix new error in [PkgVersion] when a module had no package
           statements
+        - further rip out use of JSON.pm
 
 5.028     2014-12-12 19:06:23-05:00 America/New_York
         - fix regression in [PkgVersion] that made false-positive
