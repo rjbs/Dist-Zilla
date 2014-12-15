@@ -104,8 +104,6 @@ sub document_assigns_to_variable {
                 and $node->content =~ /\Q${sigil}${_}::${varname}\E.*=/
           } @namespaces
       } $node->children;
-
-      return undef;     # do not descend into nodes comprising the statement
     }
     return 0;   # not found
   };

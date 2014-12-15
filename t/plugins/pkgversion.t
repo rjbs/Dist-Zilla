@@ -24,6 +24,12 @@ $DZT::WVerFullyQualified::VERSION = 1.234;
 1;
 ';
 
+my $use_our = '
+package DZT::UseOur;
+{ our $VERSION = \'1.234\'; }
+1;
+';
+
 my $in_a_string_escaped = '
 package DZT::WStrEscaped;
 print "\$VERSION = 1.234;"
@@ -136,6 +142,7 @@ my $tzil = Builder->from_config(
       'source/lib/DZT/WVer.pm'   => $with_version,
       'source/lib/DZT/WVerTwoLines.pm' => $with_version_two_lines,
       'source/lib/DZT/WVerFullyQualified.pm' => $with_version_fully_qualified,
+      'source/lib/DZT/UseOur.pm' => $use_our,
       'source/lib/DZT/WStrEscaped.pm'  => $in_a_string_escaped,
       'source/lib/DZT/XSLoader.pm'  => $xsloader_version,
       'source/lib/DZT/WInComment.pm' => $in_comment,
@@ -194,7 +201,14 @@ my $dzt_wver_fully_qualified = $tzil->slurp_file('build/lib/DZT/WVerFullyQualifi
 unlike(
   $dzt_wver_fully_qualified,
   qr{^\s*\$\QDZT::WVerFullyQualified::VERSION = '0.001';\E\s*$}m,
-  "*not* added to DZT::WVer; we have one already",
+  "*not* added to DZT::WVerFullyQualified; we have one already",
+);
+
+my $dzt_use_our = $tzil->slurp_file('build/lib/DZT/UseOur.pm');
+unlike(
+  $dzt_use_our,
+  qr{^\s*\$\QDZT::UseOur::VERSION = '0.001';\E\s*$}m,
+  "*not* added to DZT::UseOur; we have one already",
 );
 
 my $dzt_xsloader = $tzil->slurp_file('build/lib/DZT/XSLoader.pm');
