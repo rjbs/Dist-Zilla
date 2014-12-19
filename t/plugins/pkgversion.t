@@ -4,6 +4,7 @@ use Test::More 0.88;
 
 use autodie;
 use Test::DZil;
+use Test::Fatal;
 
 my $with_version = '
 package DZT::WVer;
@@ -371,6 +372,26 @@ like(
   $dzt_tpw,
   qr{^\s*\{ our \$VERSION = '0\.001'; \}\s*$}m,
   "added 'our' version to DZT::TPW2",
+);
+
+
+my $tzil3 = Builder->from_config(
+  { dist_root => 'corpus/dist/DZT' },
+  {
+    add_files => {
+      'source/dist.ini' => simple_ini(
+        'GatherDir',
+        [ 'PkgVersion' => 'first' ],
+        [ 'PkgVersion' => 'second' => { die_on_existing_version => 1 } ],
+      ),
+    },
+  },
+);
+
+like(
+  exception { $tzil3->build },
+  qr/\[second\] existing assignment to \$VERSION in /,
+  '$VERSION inserted by the first plugin is detected by the second',
 );
 
 done_testing;
