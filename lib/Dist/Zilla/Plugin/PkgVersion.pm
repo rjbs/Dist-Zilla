@@ -228,7 +228,8 @@ sub munge_perl {
     $munged = 1;
   }
 
-  $self->save_ppi_document_to_file($document, $file) if $munged;
+  # the document is no longer correct; it must be reparsed before it can be used again
+  $file->encoded_content($document->serialize) if $munged;
 }
 
 __PACKAGE__->meta->make_immutable;

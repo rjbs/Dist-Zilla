@@ -42,7 +42,7 @@ cmp_deeply(
   methods(
     added_by => all(
       re(qr/\bencoded_content added by GatherDir \(Dist::Zilla::Plugin::GatherDir line \d+\)(;|$)/),
-      re(qr/\bencoded_content set by PkgVersion \(Dist::Zilla::Role::PPI line \d+\)(;|$)/),
+      re(qr/\bencoded_content set by PkgVersion \(Dist::Zilla::Plugin::PkgVersion line \d+\)(;|$)/),
     ),
   ),
   'OnDisk file added by GatherDir, set by PkgVersion has correct properties',

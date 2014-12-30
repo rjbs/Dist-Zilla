@@ -96,7 +96,8 @@ sub munge_perl {
       and    $stmt->insert_after( PPI::Token::Whitespace->new("\n") );
   }
 
-  $self->save_ppi_document_to_file($document, $file);
+  # the document is no longer correct; it must be reparsed before it can be used again
+  $file->encoded_content($document->serialize);
 }
 
 __PACKAGE__->meta->make_immutable;
