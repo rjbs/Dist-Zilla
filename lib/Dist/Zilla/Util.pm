@@ -74,7 +74,7 @@ sub abstract_from_file {
 
 =method expand_config_package_name
 
-  my $pkg_name = Util->expand_config_package_name($string);
+  my $pkg_name = Dist::Zilla::Util->expand_config_package_name($string);
 
 This method, I<which is likely to change or go away>, rewrites the given string
 into a package name.
