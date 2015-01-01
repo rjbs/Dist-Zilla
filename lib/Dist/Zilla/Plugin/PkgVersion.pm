@@ -90,18 +90,35 @@ sub BUILD {
 sub munge_files {
   my ($self) = @_;
 
-  $self->munge_file($_) for @{ $self->found_files };
+  my $version = $self->zilla->version;
+
+  require version;
+  Carp::croak("invalid characters in version")
+    unless version::is_lax($version);
+
+  $self->log("non-ASCII version is likely to cause problems")
+    if $version =~ /\P{ASCII}/;
+
+  # the \x20 hack is here so that when we scan *this* document we don't find
+  # an assignment to version; it shouldn't be needed, but it's been annoying
+  # enough in the past that I'm keeping it here until tests are better
+  my $trial = $self->zilla->is_trial ? ' # TRIAL' : '';
+  my $version_string = $self->use_our
+    ? "{ our \$VERSION\x20=\x20'$version'; }$trial"
+    : "\$__PACKAGE__::VERSION\x20=\x20'$version';$trial";
+
+  $self->munge_file($_, $version_string) for @{ $self->found_files };
 }
 
 sub munge_file {
-  my ($self, $file) = @_;
+  my ($self, $file, $version_string) = @_;
 
   if ($file->is_bytes) {
     $self->log_debug($file->name . " has 'bytes' encoding, skipping...");
     return;
   }
 
-  return $self->munge_perl($file);
+  return $self->munge_perl($file, $version_string);
 }
 
 has die_on_existing_version => (
@@ -123,13 +140,7 @@ has use_our => (
 );
 
 sub munge_perl {
-  my ($self, $file) = @_;
-
-  my $version = $self->zilla->version;
-
-  require version;
-  Carp::croak("invalid characters in version")
-    unless version::is_lax($version);
+  my ($self, $file, $version_string) = @_;
 
   my $document = $self->ppi_document_for_file($file);
 
@@ -166,17 +177,6 @@ sub munge_perl {
     $self->log("non-ASCII package name is likely to cause problems")
       if $package =~ /\P{ASCII}/;
 
-    $self->log("non-ASCII version is likely to cause problems")
-      if $version =~ /\P{ASCII}/;
-
-    # the \x20 hack is here so that when we scan *this* document we don't find
-    # an assignment to version; it shouldn't be needed, but it's been annoying
-    # enough in the past that I'm keeping it here until tests are better
-    my $trial = $self->zilla->is_trial ? ' # TRIAL' : '';
-    my $perl = $self->use_our
-        ? "{ our \$VERSION\x20=\x20'$version'; }$trial"
-        : "\$$package\::VERSION\x20=\x20'$version';$trial";
-
     $self->log_debug([
       'adding $VERSION assignment to %s in %s',
       $package,
@@ -211,7 +211,8 @@ sub munge_perl {
       }
     }
 
-    $perl = $blank ? "$perl\n" : "\n$perl";
+    my $perl = $blank ? "$version_string\n" : "\n$version_string";
+    $perl =~ s/__PACKAGE__/$package/;
 
     # Why can't I use PPI::Token::Unknown? -- rjbs, 2014-01-11
     my $bogus_token = PPI::Token::Comment->new($perl);
