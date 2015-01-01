@@ -173,11 +173,12 @@ sub gather_files {
   my $prune_regex = qr/\000/;
   $prune_regex = qr/$prune_regex|$_/
     for ( @{ $self->prune_directory },
-          $self->include_dotfiles ? () : ( qr/^\.[^.]/ ) );
+      $self->include_dotfiles ? () : ( qr/^\.[^.]/ ) );
 
   # build up the rules
   my $rule = File::Find::Rule->new();
-  $rule->extras({follow => $self->follow_symlinks});
+  $rule->extras({ follow => $self->follow_symlinks });
+
   $rule->exec(sub { $self->log_debug('considering ' . path($_[-1])->relative($root)); 1 })
     if $self->zilla->logger->get_debug;
 
