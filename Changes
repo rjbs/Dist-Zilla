@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - fixed [GatherDir]'s handling of symlinks to directories
 
 5.029     2014-12-14 14:44:44-05:00 America/New_York
         - fix new error in [PkgVersion] when a module had no package
