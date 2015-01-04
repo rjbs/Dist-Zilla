@@ -64,6 +64,11 @@ otherwise, it is C<< $Module::Name::VERSION = '0.001'; >>.  This attribute
 defaults to false for now, but will change to true in the future without
 warning.
 
+B<But listen:>  the code you get with L<use_our> is totally okay Perl code, but
+not all static analyzers can cope with it.  You're probably better off not
+using C<use_our> at least for now.  Any why bother, anyway?  It's just a
+version declaration.
+
 =attr finder
 
 =for stopwords FileFinder
