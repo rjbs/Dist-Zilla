@@ -10,6 +10,7 @@ with(
   'Dist::Zilla::Role::PPI',
 );
 
+use Moose::Util::TypeConstraints 'enum';
 use namespace::autoclean;
 
 =head1 SYNOPSIS
@@ -24,6 +25,10 @@ This plugin will add lines like the following to each package in each Perl
 module or program (more or less) within the distribution:
 
   $MyModule::VERSION = '0.001';
+
+or
+
+  our $VERSION = '0.001';
 
 or
 
@@ -57,13 +62,35 @@ will have different line numbers (off by one) than the source.  If
 C<die_on_line_insertion> is true, PkgVersion will raise an exception rather
 than insert a new line.
 
-=attr use_our
+=attr version_format
 
-The idea here was to insert C<< { our $VERSION = '0.001'; } >> instead of C<<
-$Module::Name::VERSION = '0.001'; >>.  It turns out that this causes problems
-with some analyzers.  Use of this feature is deprecated.
+Specifies the desired format of the C<$VERSION> assignment. Options are:
 
-Something else will replace it in the future.
+=over 4
+
+=item * fully_qualified (default)
+
+example: C<< $Module::Name::VERSION = '0.001'; >>
+
+=item * our_without_braces
+
+example: C<< our $VERSION = '0.001'; >>
+
+=item * our_with_braces
+
+example: C<< { our $VERSION = '0.001'; } >>
+
+This form is useful in situations where it is important to keep the package's
+lexical state the same between the repistory and installed forms -- with the
+braces around the `our` variable, C<$VERSION> does not become a safe short-form
+name elsewhere in the program.
+
+B<But listen:>  the code you get with L<use_our> is totally okay Perl code, but
+not all static analyzers can cope with it.  You're probably better off not
+using this option, at least for now.  Any why bother, anyway?  It's just a
+version declaration.
+
+=back
 
 =attr finder
 
@@ -116,10 +143,10 @@ has die_on_line_insertion => (
   default => 0,
 );
 
-has use_our => (
+has version_format => (
   is  => 'ro',
-  isa => 'Bool',
-  default => 0,
+  isa => enum([ qw(fully_qualified our_without_braces our_with_braces) ]),
+  default => 'fully_qualified',
 );
 
 sub munge_perl {
@@ -172,10 +199,13 @@ sub munge_perl {
     # the \x20 hack is here so that when we scan *this* document we don't find
     # an assignment to version; it shouldn't be needed, but it's been annoying
     # enough in the past that I'm keeping it here until tests are better
-    my $trial = $self->zilla->is_trial ? ' # TRIAL' : '';
-    my $perl = $self->use_our
-        ? "{ our \$VERSION\x20=\x20'$version'; }$trial"
-        : "\$$package\::VERSION\x20=\x20'$version';$trial";
+    my $perl =
+        $self->version_format eq 'fully_qualified' ? "\$$package\::VERSION\x20=\x20'$version';"
+      : $self->version_format eq 'our_without_braces' ? "our \$VERSION\x20=\x20'$version';"
+      : $self->version_format eq 'our_with_braces' ? "{ our \$VERSION\x20=\x20'$version'; }"
+      : $self->log_fatal('unknown version_format');
+
+    $perl .= ' # TRIAL' if $self->zilla->is_trial;
 
     $self->log_debug([
       'adding $VERSION assignment to %s in %s',
