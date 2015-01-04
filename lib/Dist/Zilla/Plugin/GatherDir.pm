@@ -86,9 +86,12 @@ has include_dotfiles => (
 
 =attr follow_symlinks
 
-By default, directories that are symlinks will not be followed. Note on the
-other hand that in all followed directories, files which are symlinks are
-always gathered.
+By default, symlinks pointing to directories will not be followed; set
+C<< follow_symlinks = 1 >> to traverse these links as if they were normal
+directories.
+
+In all followed directories, files which are symlinks are B<always> gathered,
+with the link turning into a normal file.
 
 =cut
 
@@ -170,11 +173,12 @@ sub gather_files {
   my $prune_regex = qr/\000/;
   $prune_regex = qr/$prune_regex|$_/
     for ( @{ $self->prune_directory },
-          $self->include_dotfiles ? () : ( qr/^\.[^.]/ ) );
+      $self->include_dotfiles ? () : ( qr/^\.[^.]/ ) );
 
   # build up the rules
   my $rule = File::Find::Rule->new();
-  $rule->extras({follow => $self->follow_symlinks});
+  $rule->extras({ follow => $self->follow_symlinks });
+
   $rule->exec(sub { $self->log_debug('considering ' . path($_[-1])->relative($root)); 1 })
     if $self->zilla->logger->get_debug;
 
@@ -183,7 +187,15 @@ sub gather_files {
     $rule->new,
   );
 
-  $rule->or($rule->new->file, $rule->new->symlink);
+  if ($self->follow_symlinks) {
+    $rule->or(
+      $rule->new->file,     # symlinks to files still count as files
+      $rule->new->symlink,  # traverse into the linked dir, but screen it out later
+    );
+  } else {
+    $rule->file;
+  }
+
   $rule->not_exec(sub { /^\.[^.]/ }) unless $self->include_dotfiles;   # exec passes basename as $_
   $rule->exec(sub {
     my $relative = path($_[-1])->relative($root);
@@ -192,6 +204,8 @@ sub gather_files {
   });
 
   FILE: for my $filename ($rule->in($root)) {
+    next if -d $filename;
+
     # _file_from_filename is overloaded in GatherDir::Template
     my $fileobj = $self->_file_from_filename($filename);
 

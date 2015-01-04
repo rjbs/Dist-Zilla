@@ -50,15 +50,21 @@ my $tzil = Builder->from_config(
       'source/.dotdir/extra/notme.txt' => "Another file to exclude.\n",
       'source/extra/.dotdir/notme.txt' => "Another file to exclude.\n",
     },
-    also_copy => { 'corpus/extra' => 'corpus/extra' },
+    also_copy => { 'corpus/extra' => 'corpus/extra', 'corpus/global' => 'corpus/global' },
   },
 );
 
 my $corpus_dir = path($tzil->tempdir)->child('corpus');
-symlink $corpus_dir->child('extra', 'vader.txt'), $corpus_dir->child('extra', 'vader_link.txt')
-    or note "could not create link: $!"
-  if $^O ne 'MSWin32';
+if ($^O ne 'MSWin32') {
+  symlink $corpus_dir->child('extra', 'vader.txt'), $corpus_dir->child('extra', 'vader_link.txt')
+    or note "could not create link: $!";
 
+  # link must be to something that is not otherwise being gathered, or we get duplicate errors
+  symlink $corpus_dir->child('global'), $corpus_dir->child('extra', 'global_link')
+    or note "could not create link: $!";
+}
+
+$tzil->chrome->logger->set_debug(1);
 $tzil->build;
 
 my @files = map {; $_->name } @{ $tzil->files };
@@ -70,7 +76,7 @@ is_filelist(
     dotty/subdir/index.html dotty/vader.txt dotty/.dotfile dotty/notme.txt
     some/vader.txt
     xmatch/vader.txt
-    links/vader.txt links/subdir/index.html links/notme.txt
+    links/vader.txt links/subdir/index.html links/global_link/config.ini links/notme.txt
     pruned/notme.txt pruned/vader.txt
     dist.ini lib/DZT/Sample.pm t/basic.t
     MANIFEST
@@ -86,5 +92,7 @@ my $count = grep { exists $manifest->{$_} } @files;
 ok($count == @files, "all files found were in manifest");
 ok(keys(%$manifest) == @files, "all files in manifest were on disk");
 
-done_testing;
+diag 'got log messages: ', explain $tzil->log_messages
+  if not Test::Builder->new->is_passing;
 
+done_testing;
