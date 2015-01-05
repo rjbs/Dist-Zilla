@@ -59,15 +59,11 @@ than insert a new line.
 
 =attr use_our
 
-If true, the inserted line looks like C<< { our $VERSION = '0.001'; } >>;
-otherwise, it is C<< $Module::Name::VERSION = '0.001'; >>.  This attribute
-defaults to false for now, but will change to true in the future without
-warning.
+The idea here was to insert C<< { our $VERSION = '0.001'; } >> instead of C<<
+$Module::Name::VERSION = '0.001'; >>.  It turns out that this causes problems
+with some analyzers.  Use of this feature is deprecated.
 
-B<But listen:>  the code you get with L<use_our> is totally okay Perl code, but
-not all static analyzers can cope with it.  You're probably better off not
-using C<use_our> at least for now.  Any why bother, anyway?  It's just a
-version declaration.
+Something else will replace it in the future.
 
 =attr finder
 
@@ -84,6 +80,12 @@ L<[FileFinder::ByName]|Dist::Zilla::Plugin::FileFinder::ByName> and
 L<[FileFinder::Filter]|Dist::Zilla::Plugin::FileFinder::Filter> plugins.
 
 =cut
+
+sub BUILD {
+  my ($self) = @_;
+  $self->log("use_our option to PkgVersion is deprecated and will be removed")
+    if $self->use_our;
+}
 
 sub munge_files {
   my ($self) = @_;
