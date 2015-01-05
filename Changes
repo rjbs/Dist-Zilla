@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - [AutoPrereqs] now filters out all namespaces found in contained
+          modules, not just the one corresponding to the module filename
 
 5.029     2014-12-14 14:44:44-05:00 America/New_York
         - fix new error in [PkgVersion] when a module had no package
