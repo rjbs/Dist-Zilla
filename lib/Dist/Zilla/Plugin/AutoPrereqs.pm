@@ -149,6 +149,8 @@ sub register_prereqs {
 
       # store module name, to trim it from require list later on
       my @this_thing = $file->name;
+
+      # t/lib/Foo.pm is treated as providing t::lib::Foo, lib::Foo, and Foo
       if ($this_thing[0] =~ /^t/) {
         push @this_thing, ($this_thing[0]) x 2;
         $this_thing[1] =~ s{^t/}{};
@@ -156,10 +158,11 @@ sub register_prereqs {
       } else {
         $this_thing[0] =~ s{^lib/}{};
       }
-      @this_thing = List::MoreUtils::uniq @this_thing;
       s{\.pm$}{} for @this_thing;
       s{/}{::}g for @this_thing;
-      push @modules, @this_thing;
+
+      push @this_thing, $file->content =~ /package\s+([^\s;]+)/g;
+      push @modules, List::MoreUtils::uniq @this_thing;
 
       # parse a file, and merge with existing prereqs
       my $file_req = $scanner->scan_ppi_document(
