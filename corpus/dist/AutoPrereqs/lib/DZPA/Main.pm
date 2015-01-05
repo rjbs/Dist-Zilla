@@ -38,6 +38,15 @@ print qw{
     use !!
 };
 
+# multiple namespaces; some referencing local packages
+package DZPA::Second;
+
+package DZPA::Third;
+use parent -norequire => 'DZPA::Second';
+
+use DZPA::Empty;
+
+
 __END__
 =head1 FOO
 
