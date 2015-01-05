@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+5.030     2015-01-04 22:31:38-05:00 America/New_York
         - fixed [GatherDir]'s handling of symlinks to directories
         - [AutoPrereqs] now filters out all namespaces found in contained
           modules, not just the one corresponding to the module filename
