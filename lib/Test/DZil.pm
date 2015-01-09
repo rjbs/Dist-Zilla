@@ -52,15 +52,15 @@ do L<Dist::Zilla::Role::File>.
 sub is_filelist {
   my ($have, $want, $comment) = @_;
 
-  my @want = sort @$want;
-  my @have = sort map { my $str = (blessed $_ and
-                                   $_->DOES('Dist::Zilla::Role::File'))
-                            ? $_->name
-                            : $_;
-                        $str =~ s{\\}{/}g; $str } @$have;
+  my @want = @$want;
+  my @have = map { my $str = (blessed $_ and
+                              $_->DOES('Dist::Zilla::Role::File'))
+                       ? $_->name
+                       : $_;
+                   $str =~ s{\\}{/}g; $str } @$have;
 
   local $Test::Builder::Level = $Test::Builder::Level + 1;
-  Test::More::is_deeply(\@have, \@want, $comment);
+  Test::Deep::cmp_bag(\@have, \@want, $comment);
 }
 
 =func is_yaml
