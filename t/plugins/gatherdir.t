@@ -76,11 +76,12 @@ is_filelist(
     dotty/subdir/index.html dotty/vader.txt dotty/.dotfile dotty/notme.txt
     some/vader.txt
     xmatch/vader.txt
-    links/vader.txt links/subdir/index.html links/global_link/config.ini links/notme.txt
+    links/vader.txt links/subdir/index.html links/notme.txt
     pruned/notme.txt pruned/vader.txt
     dist.ini lib/DZT/Sample.pm t/basic.t
     MANIFEST
   ),
+    ($^O ne 'MSWin32' ? ('links/global_link/config.ini') : ()),
     ($^O ne 'MSWin32' ? (map { $_ . '/vader_link.txt' } qw(bonus dotty some xmatch links pruned)) : ()),
   ],
   "GatherDir gathers all files in the source dir",
