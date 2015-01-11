@@ -1,0 +1,16 @@
+  -i=2   # standard indent
+  -ce    # cuddly elses
+  -pt=2  # parentheses should be tight
+  -nsfs  # no space before "for" loop semicolon
+  -nolq  # don't outdent long quotes
+  -b     # edit file in place, leave .bak file
+  -nola  # don't outdent labels
+  -msc=2 # two spaces for post-line comments (not 4)
+  -bok   # keep old breaks before map/grep/sort (we're smarter than perltidy)
+
+  -sot   # stack opening/closing delims (but not for blocks)
+  -sct
+
+  # we always want to break BEFORE operators
+  -wbb="+ - * / x != == >= <= =~ !~ < > | & >= <"
+  -wbb="= **= += *= &= <<= &&= -= /= |= >>= ||= .= %= ^= x="
