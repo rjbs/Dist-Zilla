@@ -12,8 +12,8 @@ This plugin adds resources entries to the distribution's metadata.
 
   [MetaResources]
   homepage          = http://example.com/~dude/project.asp
-  bugtracker.web    = http://rt.cpan.org/NoAuth/Bugs.html?Dist=Project
-  bugtracker.mailto = bug-project@rt.cpan.org
+  bugtracker.web    = https://rt.cpan.org/Public/Dist/Display.html?Name=Project
+  bugtracker.mailto = bug-Project@rt.cpan.org
   repository.url    = git://github.com/dude/project.git
   repository.web    = http://github.com/dude/project
   repository.type   = git
