@@ -49,6 +49,9 @@ use parent -norequire => 'DZPA::Second';
 
 use DZPA::Empty;
 
+package # hide from PAUSE
+    DZPA::Fourth;
+
 
 __END__
 =head1 FOO
