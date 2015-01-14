@@ -113,7 +113,7 @@ sub _build_ini_builder {
 
     my $config = '';
 
-    for my $key (keys %$core_config) {
+    for my $key (sort keys %$core_config) {
       my @values = ref $core_config->{ $key }
                  ? @{ $core_config->{ $key } }
                  : $core_config->{ $key };
@@ -135,7 +135,7 @@ sub _build_ini_builder {
       $config .= ' / ' . $name if defined $name;
       $config .= "]\n";
 
-      for my $key (keys %$payload) {
+      for my $key (sort keys %$payload) {
         my @values = ref $payload->{ $key }
                    ? @{ $payload->{ $key } }
                    : $payload->{ $key };
