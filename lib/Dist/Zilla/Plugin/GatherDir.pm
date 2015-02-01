@@ -167,6 +167,7 @@ sub gather_files {
   $exclude_regex = qr/(?:$exclude_regex)|$_/
     for @{ $self->exclude_match };
 
+  my $repo_root = $self->zilla->root;
   my $root = "" . $self->root;
   $root =~ s{^~([\\/])}{require File::HomeDir; File::HomeDir::->my_home . $1}e;
 
@@ -179,7 +180,7 @@ sub gather_files {
   my $rule = File::Find::Rule->new();
   $rule->extras({ follow => $self->follow_symlinks });
 
-  $rule->exec(sub { $self->log_debug('considering ' . path($_[-1])->relative($root)); 1 })
+  $rule->exec(sub { $self->log_debug('considering ' . path($_[-1])->relative($repo_root)); 1 })
     if $self->zilla->logger->get_debug;
 
   $rule->or(
