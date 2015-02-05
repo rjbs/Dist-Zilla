@@ -16,6 +16,7 @@ In your F<dist.ini>:
 
   [@Filter]
   -bundle = @Basic
+  -version = 5.031
   -remove = ShareDir
   -remove = UploadToCPAN
   option = for_basic
@@ -25,6 +26,9 @@ In your F<dist.ini>:
 This plugin bundle actually wraps and modifies another plugin bundle.  It
 includes all the configuration for the bundle named in the C<-bundle> attribute,
 but removes all the entries whose package is given in the C<-remove> attributes.
+
+A minimum required version of the bundle can be specified with the C<-version> 
+attribute.
 
 Options not prefixed with C<-> will be passed to the bundle to be filtered.
 
