@@ -165,6 +165,7 @@ sub register_prereqs {
       push @modules, List::MoreUtils::uniq @this_thing;
 
       # parse a file, and merge with existing prereqs
+      $self->log_debug([ 'scanning %s for %s prereqs', $file->name, $phase ]);
       my $file_req = $scanner->scan_ppi_document(
         $self->ppi_document_for_file($file)
       );
