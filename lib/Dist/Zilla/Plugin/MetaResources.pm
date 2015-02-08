@@ -26,9 +26,12 @@ has resources => (
   required => 1,
 );
 
-sub BUILDARGS {
+around BUILDARGS => sub {
+  my $orig = shift;
   my ($class, @arg) = @_;
-  my %copy = ref $arg[0] ? %{ $arg[0] } : @arg;
+
+  my $args = $class->$orig(@arg);
+  my %copy = %{ $args };
 
   my $zilla = delete $copy{zilla};
   my $name  = delete $copy{plugin_name};
@@ -59,7 +62,7 @@ sub BUILDARGS {
     plugin_name => $name,
     resources   => \%copy,
   };
-}
+};
 
 sub metadata {
   my ($self) = @_;

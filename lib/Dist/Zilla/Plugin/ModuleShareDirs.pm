@@ -44,9 +44,12 @@ sub share_dir_map {
   return { module => $modmap };
 }
 
-sub BUILDARGS {
+around BUILDARGS => sub {
+  my $orig = shift;
   my ($class, @arg) = @_;
-  my %copy = ref $arg[0] ? %{$arg[0]} : @arg;
+
+  my $args = $class->$orig(@arg);
+  my %copy = %{ $args };
 
   my $zilla = delete $copy{zilla};
   my $name  = delete $copy{plugin_name};
@@ -56,7 +59,7 @@ sub BUILDARGS {
     plugin_name => $name,
     _module_map => \%copy,
   }
-}
+};
 
 with 'Dist::Zilla::Role::ShareDir';
 __PACKAGE__->meta->make_immutable;
