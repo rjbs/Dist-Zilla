@@ -60,6 +60,15 @@ L<Prereqs|Dist::Zilla::Plugin::Prereqs> plugin.
 
 This plugin will skip the modules shipped within your dist.
 
+B<Note>, if you have any non-Perl files in your C<t/> directory or other
+directories being scanned, be sure to mark those files' encoding as C<bytes>
+with the L<Encoding|Dist::Zilla::Plugin::Encoding> plugin so they won't be
+scanned:
+
+    [Encoding]
+    encoding = bytes
+    match    = ^t/data/
+
 =attr extra_scanners
 
 This is an arrayref of scanner names (as expected by Perl::PrereqScanner).
