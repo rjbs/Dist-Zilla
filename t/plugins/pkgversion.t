@@ -348,6 +348,7 @@ package DZT::TPW1;
 sub tmp}
 END
 
+
 my $tzil2 = Builder->from_config(
   { dist_root => 'corpus/dist/DZT' },
   {
@@ -358,20 +359,19 @@ my $tzil2 = Builder->from_config(
   },
 );
 $tzil2->plugins->[1]->{die_on_line_insertion} = 1;
-$tzil2->plugins->[1]->{use_our} = 1;
 $tzil2->build;
 
 my $dzt_tpw = $tzil2->slurp_file('build/lib/DZT/TPW.pm');
 like(
   $dzt_tpw,
-  qr{^\s*\{ our \$VERSION = '0\.001'; \}\s*$}m,
-  "added 'our' version to DZT::TPW1",
+  qr{^\s*\$\QDZT::TPW1::VERSION = '0.001';\E\s*$}m,
+  "added version to DZT::TPW1",
 );
 
 like(
   $dzt_tpw,
-  qr{^\s*\{ our \$VERSION = '0\.001'; \}\s*$}m,
-  "added 'our' version to DZT::TPW2",
+  qr{^\s*\$\QDZT::TPW2::VERSION = '0.001';\E\s*$}m,
+  "added version to DZT::TPW2",
 );
 
 
@@ -394,5 +394,42 @@ like(
   '$VERSION inserted by the first plugin is detected by the second',
 );
 
-done_testing;
 
+my $tzil4 = Builder->from_config(
+  { dist_root => 'corpus/dist/DZT' },
+  {
+    add_files => {
+      'source/dist.ini' => simple_ini('GatherDir', 'PkgVersion'),
+    },
+  },
+);
+$tzil4->plugins->[1]->{die_on_line_insertion} = 1;
+$tzil4->plugins->[1]->{version_format} = 'our_with_braces';
+$tzil4->build;
+
+like(
+  $tzil4->slurp_file('build/lib/DZT/Sample.pm'),
+  qr{^\{ our \$VERSION = '0\.001'; \}$}m,
+  "added 'our' version with braces to DZT::Sample",
+);
+
+
+my $tzil5 = Builder->from_config(
+  { dist_root => 'corpus/dist/DZT' },
+  {
+    add_files => {
+      'source/dist.ini' => simple_ini('GatherDir', 'PkgVersion'),
+    },
+  },
+);
+$tzil5->plugins->[1]->{die_on_line_insertion} = 1;
+$tzil5->plugins->[1]->{version_format} = 'our_without_braces';
+$tzil5->build;
+
+like(
+  $tzil5->slurp_file('build/lib/DZT/Sample.pm'),
+  qr{^our \$VERSION = '0\.001';$}m,
+  "added 'our' version without braces to DZT::Sample",
+);
+
+done_testing;

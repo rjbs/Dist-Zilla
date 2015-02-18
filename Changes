@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - PkgVersion gets a braceless formatting option; the "use_our" option
+          has been renamed
 
 5.031     2015-01-08 22:04:30-05:00 America/New_York
         - correct a test to avoid testing symlinks on Win32
