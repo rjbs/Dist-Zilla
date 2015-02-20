@@ -55,4 +55,15 @@ subtest "Not::A::Plugin" => sub {
   like( $error, qr{dzil authordeps}, "Exception suggests using authordeps" );
 };
 
+subtest ":version, good" => sub {
+  my $error = exception { mkconfig( 'corpus/dist/DZT', [ 'Versioned' => { ':version' => '1.0' } ] ) };
+  ok(!$error, 'plugin satisfies requested version');
+};
+
+subtest ":version, bad" => sub {
+  my $error = exception { mkconfig( 'corpus/dist/DZT', [ 'Versioned' => { ':version' => '1.4' } ] ) };
+  ok($error, 'plugin does not satisfy requested version');
+  like($error, qr/\QDist::Zilla::Plugin::Versioned version (1.234) does not match required version: 1.4\E/, 'exception tells us why');
+};
+
 done_testing;
