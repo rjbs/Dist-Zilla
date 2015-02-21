@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - when :version is in plugin config, it's now enforced as soon as it's
+          seen
 
 5.031     2015-01-08 22:04:30-05:00 America/New_York
         - correct a test to avoid testing symlinks on Win32
