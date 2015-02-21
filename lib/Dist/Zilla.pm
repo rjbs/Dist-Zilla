@@ -192,10 +192,10 @@ has main_module => (
         $file = first { $_->name eq $override }
                 @{ $self->files };
     } else {
-       # We're having to guess
+        # We're having to guess
 
-       ($guess = $self->name) =~ s{-}{/}g;
-       $guess = "lib/$guess.pm";
+        ($guess = $self->name) =~ s{-}{/}g;
+        $guess = "lib/$guess.pm";
 
         # Look for $guess among modules in lib/
         my %modules;
@@ -217,7 +217,7 @@ has main_module => (
                   (sort { length($a) <=> length($b) }
                   keys %modules)[0] };
         }
-       $self->log("guessing dist's main_module is " . ($file ? $file->name : $guess));
+        $self->log("guessing dist's main_module is " . ($file ? $file->name : $guess));
     }
 
     if (not $file) {
