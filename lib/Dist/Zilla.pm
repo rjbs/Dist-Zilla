@@ -215,7 +215,7 @@ has main_module => (
         }
         if ( not @{ $self->files } ) {
             push @errorlines, "Upon further inspection we didn't find any files in your dist, did you add any?";
-        } elsif ( none { $_->name =~ m{\.pm\z} } @{ $self->files } ){
+        } elsif ( none { $_->name =~ m{^lib/.+\.pm\z} } @{ $self->files } ){
             push @errorlines, "We didn't find any .pm files in your dist, this is probably a problem.";
         }
         push @errorlines,"Cannot continue without a main_module";
