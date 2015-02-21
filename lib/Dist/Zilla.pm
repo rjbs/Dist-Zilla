@@ -188,19 +188,35 @@ has main_module => (
     my $file;
     my $guess;
 
-    if ( $self->_has_main_module_override ) {
-       $file = first { $_->name eq $self->_main_module_override }
-               @{ $self->files };
+    if ( my $override = $self->_has_main_module_override ) {
+        $file = first { $_->name eq $override }
+                @{ $self->files };
     } else {
        # We're having to guess
 
        ($guess = $self->name) =~ s{-}{/}g;
        $guess = "lib/$guess.pm";
 
-       $file = (first { $_->name eq $guess } @{ $self->files })
-           ||  (sort { length $a->name <=> length $b->name }
-                grep { $_->name =~ m{\.pm\z} and $_->name =~ m{\Alib/} }
-                @{ $self->files })[0];
+        # Look for $guess among modules in lib/
+        my %modules;
+        foreach my $f (@{ $self->files }) {
+            my $path = $f->name;
+            next if substr($path, 0, 4) ne 'lib/'
+                 || index($path, '.pm', length($path) - 3) < 0
+                 || exists $modules{$path};   # skip dupes
+            if ($path eq $guess) {
+                $file = $f;
+                last
+            }
+            $modules{$path} = $f;
+        }
+
+        if (! $file && %modules) {
+            # Fallback to the module with the shortest path
+            $file = $modules{
+                  (sort { length($a) <=> length($b) }
+                  keys %modules)[0] };
+        }
        $self->log("guessing dist's main_module is " . ($file ? $file->name : $guess));
     }
 
