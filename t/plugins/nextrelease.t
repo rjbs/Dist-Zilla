@@ -20,12 +20,22 @@ Revision history for {{$dist->name}}
 END_CHANGES
 
 {
+  package inc::TrashChanges;
+  use Moose;
+  with 'Dist::Zilla::Role::AfterRelease';
+
+  sub after_release {
+    Path::Tiny::path('Changes')->spew('OHHAI');
+  }
+}
+
+{
   my $tzil = Builder->from_config(
-    { dist_root => 'corpus/dist/DZT' },
+    { dist_root => 'does/not/exist' },
     {
       add_files => {
         'source/Changes' => $changes,
-        'source/dist.ini' => simple_ini(qw(GatherDir NextRelease FakeRelease)),
+        'source/dist.ini' => simple_ini(qw(GatherDir =inc::TrashChanges NextRelease FakeRelease)),
       },
     },
   );
@@ -36,6 +46,12 @@ END_CHANGES
     $tzil->slurp_file('build/Changes'),
     qr{0\.001},
     "new version appears in build Changes file",
+  );
+
+  unlike(
+    $tzil->slurp_file('build/Changes'),
+    qr/\{\{\$NEXT\}\}/,
+    "template variable does not appear in build Changes file",
   );
 
   unlike(
@@ -54,8 +70,8 @@ END_CHANGES
 
   like(
     $tzil->slurp_file('source/Changes'),
-    qr{0\.001},
-    "new version appears in source Changes file after release",
+    qr{\{\{\$NEXT\}\}\s+0\.001},
+    "new version appears in source Changes file after release, below template variable",
   );
 
   ok(
