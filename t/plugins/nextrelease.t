@@ -196,7 +196,7 @@ END_CHANGES
     $tzil_trial->slurp_file('build/Changes'),
     # not using /m here because it stinks on 5.8.8
     qr{0\.001 .+ \(TRIAL RELEASE\)},
-    "adding -TRIAL works",
+    "adding (TRIAL RELEASE) works",
   );
 }
 
