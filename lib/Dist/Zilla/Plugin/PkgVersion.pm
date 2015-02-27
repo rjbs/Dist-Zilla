@@ -65,6 +65,13 @@ with some analyzers.  Use of this feature is deprecated.
 
 Something else will replace it in the future.
 
+=attr use_begin
+
+The idea here is to wrap the version assignment in a BEGIN bloc. This helps
+when using dist.ini in distribution that contains XS code, and where DynaLoader
+has t be called at BEGIN time, and requires VERSION. Yes, there are intrepid
+heroes that are using Dist::Zilla with XS code. Defaults is false.
+
 =attr finder
 
 =for stopwords FileFinder
@@ -117,6 +124,12 @@ has die_on_line_insertion => (
 );
 
 has use_our => (
+  is  => 'ro',
+  isa => 'Bool',
+  default => 0,
+);
+
+has use_begin => (
   is  => 'ro',
   isa => 'Bool',
   default => 0,
@@ -176,6 +189,9 @@ sub munge_perl {
     my $perl = $self->use_our
         ? "{ our \$VERSION\x20=\x20'$version'; }$trial"
         : "\$$package\::VERSION\x20=\x20'$version';$trial";
+
+    $self->use_begin
+      and $perl = "BEGIN { $perl }";
 
     $self->log_debug([
       'adding $VERSION assignment to %s in %s',
