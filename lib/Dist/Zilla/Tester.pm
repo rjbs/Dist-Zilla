@@ -13,7 +13,7 @@ use Dist::Zilla::Chrome::Test;
 use File::pushd ();
 use File::Spec;
 use File::Temp;
-use Path::Tiny;
+use Path::Tiny 0.052;
 
 use Sub::Exporter::Util ();
 use Sub::Exporter -setup => {
