@@ -561,6 +561,17 @@ sub _prep_build_root {
   my $res = $build_root->rmtree; # this warns with error details
   die "unable to delete '$build_root' in preparation of build" if !$res;
 
+  # the following is done only on windows, and only if the deletion failed,
+  # yet rmtree reported success, because currently rmdir is non-blocking as per:
+  # https://rt.perl.org/Ticket/Display.html?id=123958
+  if ( $^O eq 'MSWin32' and -d $build_root ) {
+    $self->log("spinning for at least one second to allow other processes to release locks on $build_root");
+    my $timeout = time + 2;
+    while(time != $timeout and -d $build_root) { }
+    die "unable to delete '$build_root' in preparation of build because some process has a lock on it"
+      if -d $build_root;
+  }
+
   return $build_root;
 }
 
