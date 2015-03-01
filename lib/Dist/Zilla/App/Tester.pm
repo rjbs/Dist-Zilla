@@ -1,4 +1,5 @@
 use strict;
+use warnings;
 package Dist::Zilla::App::Tester;
 # ABSTRACT: testing library for Dist::Zilla::App
 
