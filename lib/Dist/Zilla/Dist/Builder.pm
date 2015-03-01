@@ -525,7 +525,10 @@ sub _prep_build_root {
 
   my $dist_root = $self->root;
 
-  $build_root->rmtree if -d $build_root;
+  return $build_root if !-d $build_root;
+
+  my $res = $build_root->rmtree; # this warns with error details
+  die "unable to delete '$build_root' in preparation of build" if !$res;
 
   return $build_root;
 }
