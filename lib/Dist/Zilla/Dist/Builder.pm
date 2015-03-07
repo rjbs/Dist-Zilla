@@ -267,9 +267,8 @@ sub _load_config {
 
     my $package = $_->package;
 
-    my $bundle = $package =~ /^@/ ? ' bundle' : '';
     die <<"END_DIE";
-Required plugin$bundle $package isn't installed.
+Required plugin $package isn't installed.
 
 Run 'dzil authordeps' to see a list of all required plugins.
 You can pipe the list to your CPAN client to install or update them:
