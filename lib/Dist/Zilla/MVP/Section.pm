@@ -6,7 +6,7 @@ extends 'Config::MVP::Section';
 
 use namespace::autoclean;
 
-use Config::MVP::Section 2.200002; # for not-installed error
+use Config::MVP::Section 2.200009; # not-installed error with section_name
 
 around add_value => sub {
   my ($orig, $self, $name, $value) = @_;
