@@ -56,7 +56,20 @@ sub _build_global_stashes {
 
     my $seq = $reader->read_config($config_base, { assembler => $assembler });
   } catch {
-    die <<'END_DIE';
+    my $e = $_;
+    if (eval { $e->isa('Config::MVP::Error') and $e->ident eq 'package not installed' }) {
+      my $package = $e->package;
+
+      my $bundle = $package =~ /^@/ ? ' bundle' : '';
+      die <<"END_DIE";
+Required plugin$bundle $package isn't installed.  Remedy with:
+
+    cpanm $package
+
+END_DIE
+    }
+    else {
+      die <<'END_DIE';
 
 Your global configuration file couldn't be loaded.  It's a file matching
 ~/.dzil/config.*
@@ -66,6 +79,7 @@ format.  In most cases, this will just mean replacing [!release] with [%PAUSE]
 and deleting any [!new] stanza.  You can also delete the existing file and run
 "dzil setup"
 END_DIE
+    }
   };
 
   return $stash_registry;
