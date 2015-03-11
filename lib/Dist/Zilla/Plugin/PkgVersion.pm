@@ -67,10 +67,13 @@ Something else will replace it in the future.
 
 =attr use_begin
 
-The idea here is to wrap the version assignment in a BEGIN bloc. This helps
-when using dist.ini in distribution that contains XS code, and where DynaLoader
-has t be called at BEGIN time, and requires VERSION. Yes, there are intrepid
-heroes that are using Dist::Zilla with XS code. Defaults is false.
+If true, the version assignment is wrapped in a BEGIN block.  This may help in
+rare cases, such as when DynaLoader has to be called at BEGIN time, and
+requires VERSION.  This option should be needed rarely.
+
+Also note that assigning to C<$VERSION> before the module has finished
+compiling can lead to confused behavior with attempts to determine whether a
+module was successfully loaded on perl v5.8.
 
 =attr finder
 
