@@ -348,71 +348,78 @@ package DZT::TPW1;
 sub tmp}
 END
 
-my $tzil2 = Builder->from_config(
-  { dist_root => 'corpus/dist/DZT' },
-  {
-    add_files => {
-      'source/lib/DZT/TPW.pm'    => $two_packages_weird,
-      'source/dist.ini' => simple_ini('GatherDir', 'PkgVersion', 'ExecDir'),
+{
+  my $tzil2 = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/lib/DZT/TPW.pm'    => $two_packages_weird,
+        'source/dist.ini' => simple_ini(
+          'GatherDir',
+          [ 'PkgVersion' => { die_on_line_insertion => 1, use_our => 1 } ],
+        ),
+      },
     },
-  },
-);
-$tzil2->plugins->[1]->{die_on_line_insertion} = 1;
-$tzil2->plugins->[1]->{use_our} = 1;
-$tzil2->build;
+  );
+  $tzil2->build;
 
-my $dzt_tpw = $tzil2->slurp_file('build/lib/DZT/TPW.pm');
-like(
-  $dzt_tpw,
-  qr{^\s*\{ our \$VERSION = '0\.001'; \}\s*$}m,
-  "added 'our' version to DZT::TPW1",
-);
+  my $dzt_tpw = $tzil2->slurp_file('build/lib/DZT/TPW.pm');
+  like(
+    $dzt_tpw,
+    qr{^\s*\{ our \$VERSION = '0\.001'; \}\s*$}m,
+    "added 'our' version to DZT::TPW1",
+  );
 
-like(
-  $dzt_tpw,
-  qr{^\s*\{ our \$VERSION = '0\.001'; \}\s*$}m,
-  "added 'our' version to DZT::TPW2",
-);
+  like(
+    $dzt_tpw,
+    qr{^\s*\{ our \$VERSION = '0\.001'; \}\s*$}m,
+    "added 'our' version to DZT::TPW2",
+  );
+}
 
-
-my $tzil3 = Builder->from_config(
-  { dist_root => 'corpus/dist/DZT' },
-  {
-    add_files => {
-      'source/dist.ini' => simple_ini(
-        'GatherDir',
-        [ 'PkgVersion' => 'first' ],
-        [ 'PkgVersion' => 'second' => { die_on_existing_version => 1 } ],
-      ),
+{
+  my $tzil3 = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/dist.ini' => simple_ini(
+          'GatherDir',
+          [ 'PkgVersion' => 'first' ],
+          [ 'PkgVersion' => 'second' => { die_on_existing_version => 1 } ],
+        ),
+      },
     },
-  },
-);
+  );
 
-like(
-  exception { $tzil3->build },
-  qr/\[second\] existing assignment to \$VERSION in /,
-  '$VERSION inserted by the first plugin is detected by the second',
-);
+  like(
+    exception { $tzil3->build },
+    qr/\[second\] existing assignment to \$VERSION in /,
+    '$VERSION inserted by the first plugin is detected by the second',
+  );
+}
 
-my $tzil4 = Builder->from_config(
-  { dist_root => 'corpus/dist/DZT' },
-  {
-    add_files => {
-      'source/lib/DZT/TPW.pm'    => $two_packages_weird,
-      'source/dist.ini' => simple_ini('GatherDir', 'PkgVersion', 'ExecDir'),
+{
+  my $tzil4 = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/lib/DZT/TPW.pm'    => $two_packages_weird,
+        'source/dist.ini' => simple_ini(
+          'GatherDir',
+          [ 'PkgVersion' => { use_begin => 1 } ],
+        ),
+      },
     },
-  },
-);
-$tzil4->plugins->[1]->{use_begin} = 1;
-$tzil4->build;
+  );
+  $tzil4->build;
 
-my $dzt_tpw4 = $tzil4->slurp_file('build/lib/DZT/TPW.pm');
-like(
-  $dzt_tpw4,
-  qr{^\s*BEGIN\s*\{ \$DZT::TPW1::VERSION = '0\.001'; \}\s*$}m,
-  "added 'begin' version to DZT::TPW1",
-);
-
+  my $dzt_tpw4 = $tzil4->slurp_file('build/lib/DZT/TPW.pm');
+  like(
+    $dzt_tpw4,
+    qr{^\s*BEGIN\s*\{ \$DZT::TPW1::VERSION = '0\.001'; \}\s*$}m,
+    "added 'begin' version to DZT::TPW1",
+  );
+}
 
 done_testing;
 
