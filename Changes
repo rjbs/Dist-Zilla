@@ -3,6 +3,8 @@ Revision history for {{$dist->name}}
 {{$NEXT}}
         - NextRelease now bases the new file on disk on the original file on
           disk, skipping any munging that happened in between
+        - default dzil install to use cpan instead of cpanm for higher
+          portability
 
 5.032     2015-02-21 09:36:00-05:00 America/New_York
         - when :version is in plugin config, it's now enforced as soon as it's
