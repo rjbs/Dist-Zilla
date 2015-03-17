@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+5.033     2015-03-17 07:45:36-04:00 America/New_York
         - NextRelease now bases the new file on disk on the original file on
           disk, skipping any munging that happened in between
         - improve error message when a plugin can't be loaded
