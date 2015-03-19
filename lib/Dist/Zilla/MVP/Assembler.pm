@@ -3,7 +3,7 @@ package Dist::Zilla::MVP::Assembler;
 
 use Moose;
 extends 'Config::MVP::Assembler';
-with 'Config::MVP::Assembler::WithBundles';
+with 'Config::MVP::Assembler::WithBundles' => { -version => '2.200010' };
 
 use namespace::autoclean;
 
