@@ -266,7 +266,7 @@ sub _load_config {
     };
 
     my $package = $_->package;
-    my $bundle  = $_->section_name =~ /^@/ ? ' bundle' : '';
+    my $bundle  = $_->section_name =~ m{^@(?!.*/)} ? ' bundle' : '';
 
     die <<"END_DIE";
 Required plugin$bundle $package isn't installed.
