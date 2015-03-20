@@ -1,7 +1,10 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+5.034     2015-03-20 10:57:07-04:00 America/New_York
         - require new Config::MVP for better exceptions (that we rely on)
+        - point to IRC in dist metadata
 
 5.033     2015-03-17 07:45:36-04:00 America/New_York
         - NextRelease now bases the new file on disk on the original file on
