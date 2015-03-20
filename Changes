@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - require new Config::MVP for better exceptions (that we rely on)
 
 5.033     2015-03-17 07:45:36-04:00 America/New_York
         - NextRelease now bases the new file on disk on the original file on
