@@ -11,7 +11,7 @@ use MooseX::Types::Perl qw(DistName LaxVersionStr);
 use MooseX::Types::Path::Class qw(Dir File);
 use Moose::Util::TypeConstraints;
 
-use Dist::Zilla::Types qw(License);
+use Dist::Zilla::Types qw(License ReleaseStatus);
 
 use Log::Dispatchouli 1.100712; # proxy_loggers, quiet_fatal
 use Path::Class;
@@ -119,6 +119,65 @@ sub _build_version {
   $self->log_fatal('no version was ever set') unless defined $version;
 
   $version;
+}
+
+=attr release_status
+
+This attribute sets the release status to one of the
+L<CPAN::META::Spec/https://metacpan.org/pod/CPAN::Meta::Spec#release_status>
+values: 'stable', 'testing' or 'unstable'.
+
+If the C<$ENV{RELEASE_STATUS}> environment variable exists, its value will
+be used as the release status.
+
+For backwards compatibility, if C<$ENV{RELEASE_STATUS}> does not exist and
+the C<$ENV{TRIAL}> variable is true, the release status will be 'testing'.
+
+Otherwise, the release status will be set from a
+L<ReleaseStatusProvider|Dist::Zilla::Role::ReleaseStatusProvider>, if one
+has been configured.
+
+For backwards compatibility, setting C<is_trial> in F<dist.ini> is equivalent
+to using a C<ReleaseStatusProvider>.
+
+Only B<one> C<ReleaseStatusProvider> may be used.
+
+If no providers are used, the release status defaults to 'stable'.
+
+=cut
+
+has release_status => (
+  is => 'ro',
+  isa => ReleaseStatus,
+  lazy => 1,
+  builder => '_build_release_status',
+);
+
+sub _build_release_status {
+  my ($self) = @_;
+
+  # environment variables override completely
+  return $ENV{RELEASE_STATUS} if defined $ENV{RELEASE_STATUS};
+  return 'testing' if $ENV{TRIAL};
+
+  # other ways of setting status must not conflict
+  my $status;
+
+  # dist.ini is equivalent to a release provider
+  if ( $self->_has_override_is_trial ) {
+    $status = $self->_override_is_trial ? 'testing' : 'stable';
+  }
+
+  for my $plugin (@{ $self->plugins_with(-ReleaseStatusProvider) }) {
+    next unless defined(my $this_status = $plugin->provide_release_status);
+
+    $self->log_fatal('attempted to set release status twice')
+      if defined $status;
+
+    $status = $this_status;
+  }
+
+  return $status || 'stable';
 }
 
 =attr abstract
@@ -448,15 +507,32 @@ has root => (
 
 =attr is_trial
 
-This attribute tells us whether or not the dist will be a trial release.
+This attribute tells us whether or not the dist will be a trial release,
+i.e. whether it has C<release_status> 'testing' or 'unstable' and will
+have '-TRIAL' in the tarball name.
+
+Do not set this directly, it will be derived from C<release_status>.
 
 =cut
 
 has is_trial => (
-  is => 'rw', # XXX: make SetOnce -- rjbs, 2010-03-23
+  is => 'ro',
   isa => Bool,
-  default => sub { $ENV{TRIAL} ? 1 : 0 }
+  init_arg => undef,
+  lazy => 1,
+  builder => '_build_is_trial',
 );
+
+has _override_is_trial => (
+  is => 'ro',
+  init_arg => 'is_trial',
+  predicate => '_has_override_is_trial',
+);
+
+sub _build_is_trial {
+    my ($self) = @_;
+    return $self->release_status =~ /\A(?:testing|unstable)\z/;
+}
 
 =attr plugins
 
@@ -507,10 +583,7 @@ sub _build_distmeta {
     author   => $self->authors,
     license  => [ $self->license->meta2_name ],
 
-    # XXX: what about unstable?
-    release_status => ($self->is_trial or $self->version =~ /_/)
-                    ? 'testing'
-                    : 'stable',
+    release_status => $self->release_status,
 
     dynamic_config => 0, # problematic, I bet -- rjbs, 2010-06-04
     generated_by   => $self->_metadata_generator_id

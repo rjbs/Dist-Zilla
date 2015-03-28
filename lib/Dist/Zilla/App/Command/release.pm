@@ -27,9 +27,9 @@ sub opt_spec {
 sub execute {
   my ($self, $opt, $arg) = @_;
 
-  my $zilla = $self->zilla;
+  $ENV{RELEASE_STATUS} ||= $opt->trial ? "testing" : "stable";
 
-  $zilla->is_trial(1) if $opt->trial;
+  my $zilla = $self->zilla;
 
   $self->zilla->release;
 }
