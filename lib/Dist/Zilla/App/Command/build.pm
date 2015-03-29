@@ -61,8 +61,13 @@ sub execute {
     $self->zilla->build_in($opt->in);
   } else {
     my $method = $opt->tgz ? 'build_archive' : 'build';
-    $ENV{RELEASE_STATUS} ||= $opt->trial ? "testing" : "stable";
-    my $zilla  = $self->zilla;
+    my $zilla;
+    {
+      local $ENV{RELEASE_STATUS} = $ENV{RELEASE_STATUS};
+      $ENV{RELEASE_STATUS} ||= $opt->trial ? "testing" : "stable";
+      $zilla  = $self->zilla;
+      $zilla->release_status; # initialize before running method
+    }
     $zilla->$method;
   }
 
