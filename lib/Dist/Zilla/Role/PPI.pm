@@ -2,13 +2,8 @@ package Dist::Zilla::Role::PPI;
 # ABSTRACT: a role for plugins which use PPI
 
 use Moose::Role;
-
-use Moose::Util::TypeConstraints;
-
-use namespace::autoclean;
-
 use Digest::MD5 qw(md5);
-use Storable qw(dclone);
+use namespace::autoclean;
 
 =head1 DESCRIPTION
 
