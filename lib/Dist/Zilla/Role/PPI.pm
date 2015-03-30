@@ -7,7 +7,7 @@ use namespace::autoclean;
 
 =head1 DESCRIPTION
 
-This role provides some common utilities for plugins which use PPI
+This role provides some common utilities for plugins which use L<PPI>.
 
 =method ppi_document_for_file
 
@@ -29,7 +29,7 @@ sub ppi_document_for_file {
   my $encoded_content = $file->encoded_content;
 
   # We cache on the MD5 checksum to detect if the document has been modified
-  # by some other plugin since it was last parsed, our document is invalid.
+  # by some other plugin since it was last parsed, making our document invalid.
   my $md5 = md5($encoded_content);
   return $CACHE{$md5}->clone if $CACHE{$md5};
 

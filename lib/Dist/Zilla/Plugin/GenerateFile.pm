@@ -30,19 +30,19 @@ In your F<dist.ini>:
 This plugin adds a file to the distribution.
 
 You can specify the content, as a sequence of lines, in your configuration.
-The specified filename and content might be literals or might be Text::Template
+The specified filename and content might be literals or might be L<Text::Template>
 templates.
 
 =head2 Templating of the content
 
-If you provide C<content_is_template> (or C<is_template>) parameter of "1", the
-content will be run through Text::Template.  The variables C<$plugin> and
-C<$dist> will be provided, set to the GenerateFile plugin and the Dist::Zilla
+If you provide C<content_is_template> (or C<is_template>) parameter of C<"1">, the
+content will be run through L<Text::Template>.  The variables C<$plugin> and
+C<$dist> will be provided, set to the [GenerateFile] plugin and the L<Dist::Zilla>
 object respectively.
 
 If you provide a C<name_is_template> parameter of "1", the filename will be run
-through Text::Template.  The variables C<$plugin> and C<$dist> will be
-provided, set to the GenerateFile plugin and the Dist::Zilla object
+through L<Text::Template>.  The variables C<$plugin> and C<$dist> will be
+provided, set to the [GenerateFile] plugin and the L<Dist::Zilla> object
 respectively.
 
 =cut
