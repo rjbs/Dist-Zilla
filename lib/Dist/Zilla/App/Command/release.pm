@@ -27,9 +27,13 @@ sub opt_spec {
 sub execute {
   my ($self, $opt, $arg) = @_;
 
-  my $zilla = $self->zilla;
-
-  $zilla->is_trial(1) if $opt->trial;
+  my $zilla;
+  {
+    local $ENV{RELEASE_STATUS} = $ENV{RELEASE_STATUS};
+    $ENV{RELEASE_STATUS} ||= $opt->trial ? "testing" : "stable";
+    $zilla = $self->zilla;
+    $zilla->release_status; # initialize before running method
+  }
 
   $self->zilla->release;
 }
