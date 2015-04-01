@@ -23,7 +23,7 @@ In your F<dist.ini>:
 
 =cut
 
-sub mvp_multivalue_args { qw(filenames matches) }
+sub mvp_multivalue_args { qw(filenames matches ignore) }
 sub mvp_aliases { return { filename => 'filenames', match => 'matches' } }
 
 =attr encoding
@@ -64,6 +64,20 @@ has matches => (
   default => sub { [] },
 );
 
+=attr ignore
+
+This is an arrayref of regular expressions.  Any file whose name matches one of
+these regex will B<not> have its encoding set. Useful to ignore a few files
+that would otherwise be selected by C<matches>.
+
+=cut
+
+has ignore => (
+  is   => 'ro',
+  isa  => 'ArrayRef',
+  default => sub { [] },
+);
+
 sub set_file_encodings {
   my ($self) = @_;
 
@@ -75,8 +89,12 @@ sub set_file_encodings {
   # \A\Q$_\E should also handle the `eq` check
   $matches_regex = qr/$matches_regex|\A\Q$_\E/ for @{$self->filenames};
 
+  my( $ignore_regex ) = map { $_ && qr/$_/ } join '|', @{ $self->ignore };
+
   for my $file (@{$self->zilla->files}) {
     next unless $file->name =~ $matches_regex;
+
+    next if $ignore_regex and $file->name =~ $ignore_regex;
 
     $self->log_debug([
       'setting encoding of %s to %s',
