@@ -18,6 +18,7 @@ Revision history for {{$dist->name}}
         - better errors when a global config package isn't available (thanks,
           Karen Etheridge)
         - added the "ignore" option to [Encoding] (thanks, Yanick Champoux)
+        - allow ; authordep specifications to contain version ranges
 
 5.037     2015-06-04 21:46:38-04:00 America/New_York
         - issue a warning when version ranges are passed through to
