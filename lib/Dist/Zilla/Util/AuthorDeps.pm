@@ -72,8 +72,8 @@ sub extract_author_deps {
   my @packages;
   while (<$fh>) {
     chomp;
-    next unless /\A\s*;\s*authordep\s*(\S+)\s*(=\s*(\S+))?\s*\z/;
-    my $ver = defined $3 ? $3 : "0";
+    next unless /\A\s*;\s*authordep\s*(\S+)\s*(?:=\s*(\S+))?\s*\z/;
+    my $ver = defined $2 ? $2 : "0";
     # Any "; authordep " is inserted at the beginning of the list
     # in the file order so the user can control the order of at least a part of
     # the plugin list
