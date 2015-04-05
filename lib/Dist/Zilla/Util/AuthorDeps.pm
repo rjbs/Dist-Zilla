@@ -67,14 +67,14 @@ sub extract_author_deps {
   my @packages;
   while (<$fh>) {
     chomp;
-    next unless /\A\s*;\s*authordep\s*(\S+)\s*(?:=\s*(\S+))?\s*\z/;
+    next unless /\A\s*;\s*authordep\s*(\S+)\s*(?:=\s*(.+))?\s*\z/;
     my $ver = defined $2 ? $2 : "0";
     # Any "; authordep " is inserted at the beginning of the list
     # in the file order so the user can control the order of at least a part of
     # the plugin list
     push @packages, $1;
     # And added to the requirements so we can use it later
-    $reqs->add_minimum($1 => $ver);
+    $reqs->add_string_requirement($1 => $ver);
   }
 
   my $vermap = $reqs->as_string_hash;
