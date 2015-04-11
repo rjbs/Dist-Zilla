@@ -3,7 +3,6 @@ use warnings;
 package Test::DZil;
 # ABSTRACT: tools for testing Dist::Zilla plugins
 
-use Dist::Zilla::Tester;
 use Params::Util qw(_HASH0);
 use JSON::MaybeXS;
 use Scalar::Util qw(blessed);
@@ -38,6 +37,18 @@ Test::DZil provides routines for writing tests for Dist::Zilla plugins.
 These return class names that subclass L<Dist::Zilla::Dist::Builder> or
 L<Dist::Zilla::Dist::Minter>, respectively, with the L<Dist::Zilla::Tester>
 behavior added.
+
+=cut
+
+sub Builder {
+  require Dist::Zilla::Tester;
+  Dist::Zilla::Tester::builder();
+}
+
+sub Minter {
+  require Dist::Zilla::Tester;
+  Dist::Zilla::Tester::minter();
+}
 
 =func is_filelist
 

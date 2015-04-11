@@ -21,7 +21,7 @@ ok(
 );
 
 ## SIMPLE TEST WITH DZIL TESTER
-
+require Dist::Zilla::Tester;
 my $tester = Dist::Zilla::Tester->from_config(
   { dist_root => 'corpus/dist/DZT' },
   {
