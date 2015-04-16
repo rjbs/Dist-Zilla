@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+5.035     2015-04-16 15:43:26+02:00 Europe/Berlin
         - BREAKING CHANGE: is_trial is now read-only
         - release_status is a new Dist::Zilla attribute and
           ReleaseStatusProvider plugin role
