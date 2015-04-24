@@ -532,7 +532,7 @@ has _override_is_trial => (
 
 sub _build_is_trial {
     my ($self) = @_;
-    return $self->release_status =~ /\A(?:testing|unstable)\z/;
+    return $self->release_status =~ /\A(?:testing|unstable)\z/ ? 1 : 0;
 }
 
 =attr plugins

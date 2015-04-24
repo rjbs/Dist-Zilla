@@ -59,11 +59,11 @@ for my $c ( qw/true false/ ) {
 
         is($tzil->release_status, $expect, "release status set from is_trial");
         if ( $is_trial ) {
-            ok($tzil->is_trial, "is_trial is true");
+            is($tzil->is_trial, 1, "is_trial is true, represented as 1");
             like($tzil->archive_filename, qr/-TRIAL/, "-TRIAL in archive filename");
         }
         else {
-            ok(! $tzil->is_trial, "is_trial is not true");
+            is($tzil->is_trial, 0, "is_trial is not true, represented as 0");
             unlike($tzil->archive_filename, qr/-TRIAL/, "-TRIAL not in archive filename");
         }
 
