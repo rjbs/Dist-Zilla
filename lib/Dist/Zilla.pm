@@ -177,7 +177,7 @@ sub _build_release_status {
     $status = $this_status;
   }
 
-  return $status || 'stable';
+  return $status || ( $self->version =~ /_/ ? 'testing' : 'stable' );
 }
 
 =attr abstract

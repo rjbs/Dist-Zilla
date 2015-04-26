@@ -132,4 +132,36 @@ subtest "too many providers" => sub {
   );
 };
 
+subtest "from version (stable)" => sub {
+  my $tzil = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/dist.ini' => simple_ini(
+          { version => 1.23 }, 'GatherDir',
+        ),
+      },
+    },
+  );
+
+  $tzil->build;
+  is($tzil->release_status, 'stable', "release status set from version (stable)");
+};
+
+subtest "from version (testing)" => sub {
+  my $tzil = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/dist.ini' => simple_ini(
+          { version => "1.23_45" }, 'GatherDir',
+        ),
+      },
+    },
+  );
+
+  $tzil->build;
+  is($tzil->release_status, 'testing', "release status set from version (testing)");
+};
+
 done_testing;
