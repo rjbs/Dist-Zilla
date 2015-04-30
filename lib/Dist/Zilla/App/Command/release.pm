@@ -30,7 +30,7 @@ sub execute {
   my $zilla;
   {
     local $ENV{RELEASE_STATUS} = $ENV{RELEASE_STATUS};
-    $ENV{RELEASE_STATUS} ||= $opt->trial ? "testing" : "stable";
+    $ENV{RELEASE_STATUS} = 'testing' if $opt->trial;
     $zilla = $self->zilla;
     $zilla->release_status; # initialize before running method
   }
