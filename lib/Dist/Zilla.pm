@@ -147,6 +147,7 @@ is an "_" character in the version, in which case, it defaults to 'testing'.
 
 =cut
 
+# release status must be lazy, after files are gathered
 has release_status => (
   is => 'ro',
   isa => ReleaseStatus,
@@ -158,8 +159,7 @@ sub _build_release_status {
   my ($self) = @_;
 
   # environment variables override completely
-  return $ENV{RELEASE_STATUS} if defined $ENV{RELEASE_STATUS};
-  return 'testing' if $ENV{TRIAL};
+  return $self->_release_status_from_env if $self->_release_status_from_env;
 
   # other ways of setting status must not conflict
   my $status;
@@ -179,6 +179,19 @@ sub _build_release_status {
   }
 
   return $status || ( $self->version =~ /_/ ? 'testing' : 'stable' );
+}
+
+# captures environment variables early during Zilla object construction
+has _release_status_from_env => (
+  is => 'ro',
+  isa => Str,
+  builder => '_build_release_status_from_env',
+);
+
+sub _build_release_status_from_env {
+  my ($self) = @_;
+  return $ENV{RELEASE_STATUS} if $ENV{RELEASE_STATUS};
+  return $ENV{TRIAL} ? 'testing' : '';
 }
 
 =attr abstract
