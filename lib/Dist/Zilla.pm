@@ -142,7 +142,8 @@ to using a C<ReleaseStatusProvider>.
 
 Only B<one> C<ReleaseStatusProvider> may be used.
 
-If no providers are used, the release status defaults to 'stable'.
+If no providers are used, the release status defaults to 'stable' unless there
+is an "_" character in the version, in which case, it defaults to 'testing'.
 
 =cut
 
