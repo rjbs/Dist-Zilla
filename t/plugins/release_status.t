@@ -59,11 +59,11 @@ for my $c ( qw/true false/ ) {
 
         is($tzil->release_status, $expect, "release status set from is_trial");
         if ( $is_trial ) {
-            ok($tzil->is_trial, "is_trial is true");
+            is($tzil->is_trial, 1, "is_trial is true, represented as 1");
             like($tzil->archive_filename, qr/-TRIAL/, "-TRIAL in archive filename");
         }
         else {
-            ok(! $tzil->is_trial, "is_trial is not true");
+            is($tzil->is_trial, 0, "is_trial is not true, represented as 0");
             unlike($tzil->archive_filename, qr/-TRIAL/, "-TRIAL not in archive filename");
         }
 
@@ -130,6 +130,38 @@ subtest "too many providers" => sub {
     qr/attempted to set release status twice/,
     "setting too many times is fatal",
   );
+};
+
+subtest "from version (stable)" => sub {
+  my $tzil = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/dist.ini' => simple_ini(
+          { version => 1.23 }, 'GatherDir',
+        ),
+      },
+    },
+  );
+
+  $tzil->build;
+  is($tzil->release_status, 'stable', "release status set from version (stable)");
+};
+
+subtest "from version (testing)" => sub {
+  my $tzil = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/dist.ini' => simple_ini(
+          { version => "1.23_45" }, 'GatherDir',
+        ),
+      },
+    },
+  );
+
+  $tzil->build;
+  is($tzil->release_status, 'testing', "release status set from version (testing)");
 };
 
 done_testing;

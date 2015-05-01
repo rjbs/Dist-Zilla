@@ -137,15 +137,18 @@ Otherwise, the release status will be set from a
 L<ReleaseStatusProvider|Dist::Zilla::Role::ReleaseStatusProvider>, if one
 has been configured.
 
-For backwards compatibility, setting C<is_trial> in F<dist.ini> is equivalent
-to using a C<ReleaseStatusProvider>.
+For backwards compatibility, setting C<is_trial> true in F<dist.ini> is
+equivalent to using a C<ReleaseStatusProvider>.  If C<is_trial> is false,
+it has no effect.
 
 Only B<one> C<ReleaseStatusProvider> may be used.
 
-If no providers are used, the release status defaults to 'stable'.
+If no providers are used, the release status defaults to 'stable' unless there
+is an "_" character in the version, in which case, it defaults to 'testing'.
 
 =cut
 
+# release status must be lazy, after files are gathered
 has release_status => (
   is => 'ro',
   isa => ReleaseStatus,
@@ -157,16 +160,15 @@ sub _build_release_status {
   my ($self) = @_;
 
   # environment variables override completely
-  return $ENV{RELEASE_STATUS} if defined $ENV{RELEASE_STATUS};
-  return 'testing' if $ENV{TRIAL};
+  return $self->_release_status_from_env if $self->_release_status_from_env;
 
   # other ways of setting status must not conflict
   my $status;
 
-  # dist.ini is equivalent to a release provider
-  if ( $self->_has_override_is_trial ) {
-    $status = $self->_override_is_trial ? 'testing' : 'stable';
-  }
+  # dist.ini is equivalent to a release provider if is_trial is true.
+  # If false, though, we want other providers to run or fall back to
+  # the version
+  $status = 'testing' if $self->_override_is_trial;
 
   for my $plugin (@{ $self->plugins_with(-ReleaseStatusProvider) }) {
     next unless defined(my $this_status = $plugin->provide_release_status);
@@ -177,7 +179,20 @@ sub _build_release_status {
     $status = $this_status;
   }
 
-  return $status || 'stable';
+  return $status || ( $self->version =~ /_/ ? 'testing' : 'stable' );
+}
+
+# captures environment variables early during Zilla object construction
+has _release_status_from_env => (
+  is => 'ro',
+  isa => Str,
+  builder => '_build_release_status_from_env',
+);
+
+sub _build_release_status_from_env {
+  my ($self) = @_;
+  return $ENV{RELEASE_STATUS} if $ENV{RELEASE_STATUS};
+  return $ENV{TRIAL} ? 'testing' : '';
 }
 
 =attr abstract
@@ -525,13 +540,14 @@ has is_trial => (
 
 has _override_is_trial => (
   is => 'ro',
+  isa => Bool,
   init_arg => 'is_trial',
-  predicate => '_has_override_is_trial',
+  default => 0,
 );
 
 sub _build_is_trial {
     my ($self) = @_;
-    return $self->release_status =~ /\A(?:testing|unstable)\z/;
+    return $self->release_status =~ /\A(?:testing|unstable)\z/ ? 1 : 0;
 }
 
 =attr plugins
