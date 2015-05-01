@@ -137,8 +137,9 @@ Otherwise, the release status will be set from a
 L<ReleaseStatusProvider|Dist::Zilla::Role::ReleaseStatusProvider>, if one
 has been configured.
 
-For backwards compatibility, setting C<is_trial> in F<dist.ini> is equivalent
-to using a C<ReleaseStatusProvider>.
+For backwards compatibility, setting C<is_trial> true in F<dist.ini> is
+equivalent to using a C<ReleaseStatusProvider>.  If C<is_trial> is false,
+it has no effect.
 
 Only B<one> C<ReleaseStatusProvider> may be used.
 
@@ -164,10 +165,10 @@ sub _build_release_status {
   # other ways of setting status must not conflict
   my $status;
 
-  # dist.ini is equivalent to a release provider
-  if ( $self->_has_override_is_trial ) {
-    $status = $self->_override_is_trial ? 'testing' : 'stable';
-  }
+  # dist.ini is equivalent to a release provider if is_trial is true.
+  # If false, though, we want other providers to run or fall back to
+  # the version
+  $status = 'testing' if $self->_override_is_trial;
 
   for my $plugin (@{ $self->plugins_with(-ReleaseStatusProvider) }) {
     next unless defined(my $this_status = $plugin->provide_release_status);
@@ -539,8 +540,9 @@ has is_trial => (
 
 has _override_is_trial => (
   is => 'ro',
+  isa => Bool,
   init_arg => 'is_trial',
-  predicate => '_has_override_is_trial',
+  default => 0,
 );
 
 sub _build_is_trial {
