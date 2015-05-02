@@ -2,6 +2,10 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+5.036     2015-05-02 11:08:51-04:00 America/New_York
+        - BUGFIX: detection of trial status via underscore in version was
+          accidentally lost in v5.035; restored now!
+
 5.035     2015-04-16 15:43:26+02:00 Europe/Berlin
         - BREAKING CHANGE: is_trial is now read-only
         - release_status is a new Dist::Zilla attribute and
