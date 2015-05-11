@@ -97,6 +97,8 @@ has username => (
   },
 );
 
+sub cpanid { shift->username }
+
 =attr password
 
 This option supplies the user's PAUSE password.  It cannot be provided via
