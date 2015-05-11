@@ -136,7 +136,6 @@ END_CHANGES
         'source/dist.ini' => simple_ini(
                 'GatherDir',
                 [ NextRelease => { format => "** FOOTASTIC %-9v", } ],
-                'FakeRelease',
         ),
       },
     },
@@ -160,7 +159,6 @@ END_CHANGES
         'source/dist.ini' => simple_ini(
                 'GatherDir',
                 [ NextRelease => { time_zone => 'UTC', } ],
-                'FakeRelease',
         ),
       },
     },
@@ -184,7 +182,7 @@ END_CHANGES
       add_files => {
         'source/Changes' => $changes,
         'source/dist.ini' => simple_ini(
-          qw(GatherDir NextRelease FakeRelease)
+          qw(GatherDir NextRelease)
         ),
       },
     },
@@ -211,7 +209,6 @@ END_CHANGES
         'source/dist.ini' => simple_ini(
                 'GatherDir',
                 [ NextRelease => { format => "%v%T", } ],
-                'FakeRelease',
         ),
       },
     },
@@ -237,7 +234,6 @@ END_CHANGES
         'source/dist.ini' => simple_ini(
                 'GatherDir',
                 [ NextRelease => { format => "%-12V ohhai", } ],
-                'FakeRelease',
         ),
       },
     },
@@ -261,7 +257,6 @@ END_CHANGES
         'source/dist.ini' => simple_ini(
                 'GatherDir',
                 [ NextRelease => { format => "%v %U %E", } ],
-                'FakeRelease',
         ),
       },
     },
@@ -283,7 +278,6 @@ END_CHANGES
         'source/dist.ini' => simple_ini(
                 'GatherDir',
                 [ NextRelease => { format => "%v %U <%E>", } ],
-                'FakeRelease',
                 [ '%User' => { name  => 'E.X. Ample',
                                email => 'me@example.com' } ],
         ),
@@ -314,7 +308,6 @@ END_CHANGES
                 'GatherDir',
                 [ NextRelease => { format => "%v %U <%E>",
                                    user_stash => '%Info' } ],
-                'FakeRelease',
                 [ '%User' => '%Info' => { name  => 'E.X. Ample',
                                           email => 'me@example.com' } ],
         ),
