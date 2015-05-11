@@ -12,6 +12,7 @@ with (
 
 use Path::Tiny;
 use Moose::Util::TypeConstraints;
+use List::Util 'first';
 use String::Formatter 0.100680 stringf => {
   -as => '_format_version',
 
@@ -35,6 +36,11 @@ use String::Formatter 0.100680 stringf => {
     V => sub { $_[0]->zilla->version
                 . ($_[0]->zilla->is_trial
                    ? (defined $_[1] ? $_[1] : '-TRIAL') : '') },
+    P => sub {
+      my $releaser = first { $_->can('cpanid') } @{ $_[0]->zilla->plugins_with('-Releaser') };
+      $_[0]->log_fatal('releaser doesn\'t provide cpanid, but %P used') unless $releaser;
+      $releaser->cpanid;
+    },
   },
 };
 
@@ -237,6 +243,10 @@ The name of the user making this release (from C<user_stash>).
 
 = C<%E>
 The email address of the user making this release (from C<user_stash>).
+
+= C<%P>
+The CPAN (PAUSE) id of the user namking this release (from -Releaser plugins;
+see L<[UploadToCPAN]|Dist::Zilla::Plugin::UploadToCPAN/username>).
 
 = C<%n>
 A newline

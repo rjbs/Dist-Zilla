@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - added %P formatter code to [NextRelease] for the releaser's PAUSE id
 
 5.036     2015-05-02 11:08:51-04:00 America/New_York
         - BUGFIX: detection of trial status via underscore in version was
