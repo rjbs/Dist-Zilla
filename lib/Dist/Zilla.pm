@@ -651,7 +651,7 @@ sub plugin_named {
   my $roles = $zilla->plugins_with( -SomeRole );
 
 This method returns an arrayref containing all the Dist::Zilla object's plugins
-that perform a the named role.  If the given role name begins with a dash, the
+that perform the named role.  If the given role name begins with a dash, the
 dash is replaced with "Dist::Zilla::Role::"
 
 =cut
