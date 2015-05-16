@@ -170,7 +170,9 @@ sub register_prereqs {
       s{\.pm$}{} for @this_thing;
       s{/}{::}g for @this_thing;
 
-      push @this_thing, $file->content =~ /package\s+([^\s;]+)/g;
+      # this is a bunk heuristic and can still capture strings from pod - the
+      # proper thing to do is grab all packages from Module::Metadata
+      push @this_thing, $file->content =~ /^[^#]*?(?:^|\s)package\s+([^\s;#]+)/mg;
       push @modules, List::MoreUtils::uniq @this_thing;
 
       # parse a file, and merge with existing prereqs
@@ -183,6 +185,7 @@ sub register_prereqs {
     }
 
     # remove prereqs shipped with current dist
+    $self->log_debug([ 'excluding local packages: %s', sub { join(', ', List::MoreUtils::uniq @modules) } ]);
     $req->clear_requirement($_) for @modules;
 
     $req->clear_requirement($_) for qw(Config Errno); # never indexed

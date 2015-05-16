@@ -23,6 +23,9 @@ use parent qw{ DZPA::Base::parent2 DZPA::Base::parent3 };
 # DZPA::Skip should be trimmed
 use DZPA::Skip::Blah;
 
+# and this comment should not cause a package to be trimmed:
+# package foobar DZPA::Role
+
 # require in a module
 require DZPA::ModRequire;
 
@@ -54,3 +57,6 @@ this pod should not be taken in to account, with:
 use fake;
 require blah;
 with 'fubar';
+
+nor should this statement here, but that is still a TODO!
+pack age strict;  XXX remove this space
