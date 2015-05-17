@@ -6,8 +6,6 @@ with 'Dist::Zilla::Role::FileGatherer';
 
 use namespace::autoclean;
 
-use Dist::Zilla::File::FromCode;
-
 =head1 DESCRIPTION
 
 This plugin will add a F<META.json> file to the distribution.
@@ -50,6 +48,7 @@ sub gather_files {
   my $zilla = $self->zilla;
 
   require JSON::MaybeXS;
+  require Dist::Zilla::File::FromCode;
   require CPAN::Meta::Converter;
   CPAN::Meta::Converter->VERSION(2.101550); # improved downconversion
   require CPAN::Meta::Validator;
