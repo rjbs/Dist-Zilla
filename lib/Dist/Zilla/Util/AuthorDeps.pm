@@ -92,7 +92,6 @@ sub extract_author_deps {
 
   # Now that we have a sorted list of packages, use that to build an array of
   # hashrefs for display.
-  require List::MoreUtils;
   require Class::Load;
 
   my @final =
