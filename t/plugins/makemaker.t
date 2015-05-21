@@ -91,4 +91,31 @@ use Test::DZil;
   like($1, qr'"Builder::Bob" => ', 'configure-requires prereqs made it into %FallbackPrereqs');
 }
 
+{
+  my $tzil = Builder->from_config(
+    { dist_root => 'does-not-exist' },
+    {
+      add_files => {
+        'source/dist.ini' => simple_ini(
+          'GatherDir',
+          'MakeMaker',
+          [ Prereqs => { 'External::Module' => '<= 1.23' } ],
+        ),
+        'source/lib/Foo.pm' => "package Foo;\n1\n",
+      },
+    },
+  );
+
+  $tzil->build;
+
+  cmp_deeply(
+    $tzil->log_messages,
+    superbagof('[MakeMaker] found version range in runtime prerequisites, which ExtUtils::MakeMaker cannot parse: External::Module <= 1.23'),
+    'got warning about probably-unparsable version range',
+  );
+
+  diag 'got log messages: ', explain $tzil->log_messages
+    if not Test::Builder->new->is_passing;
+}
+
 done_testing;
