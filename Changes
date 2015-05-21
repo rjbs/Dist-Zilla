@@ -1,6 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          - issue a warning when version ranges are passed through to
+            ExtUtils::MakeMaker, which cannot parse them and treats them as
+            '0' (see https://github.com/Perl-Toolchain-Gang/ExtUtils-MakeMaker/issues/215)
 
 5.036     2015-05-02 11:08:51-04:00 America/New_York
         - BUGFIX: detection of trial status via underscore in version was

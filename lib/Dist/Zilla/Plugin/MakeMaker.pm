@@ -7,8 +7,8 @@ use namespace::autoclean;
 
 use Config;
 use CPAN::Meta::Requirements 2.121; # requirements_for_module
-use List::Util 'first';
-
+use List::Util 1.29 qw(first pairs pairgrep);
+use version;
 use Dist::Zilla::File::InMemory;
 use Dist::Zilla::Plugin::MakeMaker::Runner;
 
@@ -206,6 +206,18 @@ sub write_makefile_args {
   my %require_prereqs = map {
     $_ => $prereqs_dump->($_, 'requires');
   } qw(configure build test runtime);
+
+  # EUMM may soon be able to support this, but until we decide to inject a
+  # higher configure-requires version, we should at least warn the user
+  # https://github.com/Perl-Toolchain-Gang/ExtUtils-MakeMaker/issues/215
+  foreach my $phase (qw(configure build test runtime)) {
+    if (my @version_ranges = pairgrep { !version::is_lax($b) } %{ $require_prereqs{$phase} }) {
+      $self->log([
+        'found version range in %s prerequisites, which ExtUtils::MakeMaker cannot parse: %s %s',
+        $phase, $_->[0], $_->[1]
+      ]) foreach pairs @version_ranges;
+    }
+  }
 
   my %write_makefile_args = (
     DISTNAME  => $self->zilla->name,
