@@ -7,7 +7,7 @@ perl:
   - 5.10
 install:
   - cpanm -nq Devel::Cover::Report::Coveralls
-  - cpanm Dist::Zilla
+  - cpanm JSON::PP Dist::Zilla
   - dzil authordeps --missing | cpanm || { cat ~/.cpanm/build.log ; false ; }
   - dzil listdeps --author --missing | cpanm || { cat ~/.cpanm/build.log ; false ; }
 script:
