@@ -173,7 +173,7 @@ sub register_prereqs {
       # this is a bunk heuristic and can still capture strings from pod - the
       # proper thing to do is grab all packages from Module::Metadata
       push @this_thing, $file->content =~ /^[^#]*?(?:^|\s)package\s+([^\s;#]+)/mg;
-      push @modules, List::MoreUtils::uniq @this_thing;
+      push @modules, @this_thing;
 
       # parse a file, and merge with existing prereqs
       $self->log_debug([ 'scanning %s for %s prereqs', $file->name, $phase ]);
@@ -184,12 +184,6 @@ sub register_prereqs {
       $req->add_requirements($file_req);
     }
 
-    # remove prereqs shipped with current dist
-    $self->log_debug([ 'excluding local packages: %s', sub { join(', ', List::MoreUtils::uniq @modules) } ]);
-    $req->clear_requirement($_) for @modules;
-
-    $req->clear_requirement($_) for qw(Config Errno); # never indexed
-
     # remove prereqs from skiplist
     for my $skip (@{ $self->skips || [] }) {
       my $re   = qr/$skip/;
@@ -198,6 +192,12 @@ sub register_prereqs {
         $req->clear_requirement($k) if $k =~ $re;
       }
     }
+
+    # remove prereqs shipped with current dist
+    $self->log_debug([ 'excluding local packages: %s', sub { join(', ', List::MoreUtils::uniq @modules) } ]);
+    $req->clear_requirement($_) for @modules;
+
+    $req->clear_requirement($_) for qw(Config Errno); # never indexed
 
     # we're done, return what we've found
     my %got = %{ $req->as_string_hash };
