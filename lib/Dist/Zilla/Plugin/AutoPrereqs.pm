@@ -124,7 +124,7 @@ sub register_prereqs {
   require Perl::PrereqScanner;
   Perl::PrereqScanner->VERSION('1.016'); # don't skip "lib"
   require CPAN::Meta::Requirements;
-  require List::MoreUtils;  # uniq
+  require List::UtilsBy;    # uniq_by
 
   my @modules;
 
@@ -171,7 +171,7 @@ sub register_prereqs {
       s{/}{::}g for @this_thing;
 
       push @this_thing, $file->content =~ /package\s+([^\s;]+)/g;
-      push @modules, List::MoreUtils::uniq @this_thing;
+      push @modules, List::UtilsBy::uniq_by(sub {$_}, @this_thing);
 
       # parse a file, and merge with existing prereqs
       $self->log_debug([ 'scanning %s for %s prereqs', $file->name, $phase ]);
