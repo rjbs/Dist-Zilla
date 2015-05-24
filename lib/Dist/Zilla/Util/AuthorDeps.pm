@@ -5,8 +5,6 @@ package Dist::Zilla::Util::AuthorDeps;
 
 use Dist::Zilla::Util;
 use Path::Tiny;
-use List::MoreUtils ();
-
 
 sub format_author_deps {
   my ($reqs, $versions) = @_;
@@ -93,6 +91,7 @@ sub extract_author_deps {
   # Now that we have a sorted list of packages, use that to build an array of
   # hashrefs for display.
   require Class::Load;
+  require List::UtilsBy;    # uniq_by
 
   my @final =
     map { { $_ => $vermap->{$_} } }
@@ -103,8 +102,7 @@ sub extract_author_deps {
           : (! Class::Load::try_load_class($_, ($vermap->{$_} ? {-version => $vermap->{$_}} : ())))
         : 1
       }
-    List::MoreUtils::uniq
-    @packages;
+    List::UtilsBy::uniq_by(sub {$_}, @packages);
 
   return \@final;
 }
