@@ -197,7 +197,7 @@ sub register_prereqs {
     $self->log_debug([ 'excluding local packages: %s', sub { join(', ', List::MoreUtils::uniq @modules) } ]);
     $req->clear_requirement($_) for @modules;
 
-    $req->clear_requirement($_) for qw(Config Errno); # never indexed
+    $req->clear_requirement($_) for qw(Config DB Errno NEXT Pod::Functions); # never indexed
 
     # we're done, return what we've found
     my %got = %{ $req->as_string_hash };
