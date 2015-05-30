@@ -77,16 +77,17 @@ sub mvp_aliases {
 
 =attr username
 
-This option supplies the user's PAUSE username.  If not supplied, it will be
-looked for in the user's PAUSE configuration.
+This option supplies the user's PAUSE username.  It cannot be provided via
+F<dist.ini>.  It will be looked for in the user's PAUSE configuration; if not
+found, the user will be prompted.
 
 =cut
 
 has username => (
   is   => 'ro',
   isa  => 'Str',
+  init_arg => undef,
   lazy => 1,
-  required => 1,
   default  => sub {
     my ($self) = @_;
     return $self->_credential('username')
@@ -97,16 +98,17 @@ has username => (
 
 =attr password
 
-This option supplies the user's PAUSE password.  If not supplied, it will be
-looked for in the user's PAUSE configuration.
+This option supplies the user's PAUSE password.  It cannot be provided via
+F<dist.ini>.  It will be looked for in the user's PAUSE configuration; if not
+found, the user will be prompted.
 
 =cut
 
 has password => (
   is   => 'ro',
   isa  => 'Str',
+  init_arg => undef,
   lazy => 1,
-  required => 1,
   default  => sub {
     my ($self) = @_;
     return $self->_credential('password')
