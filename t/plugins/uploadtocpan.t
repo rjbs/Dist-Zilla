@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::More 0.88 tests => 16;
+use Test::More 0.88 tests => 17;
 
 use File::Spec ();
 use Test::DZil qw(Builder simple_ini);
@@ -138,4 +138,21 @@ my %safety_first = (qw(upload_uri http://bogus.example.com/do/not/upload/),
     !grep({ /fake release happen/i } @$msgs),
     "no release without password"
   );
+}
+
+# Config from dist.ini
+{
+  my $tzil = build_tzil(
+    'FakeRelease',
+    [ UploadToCPAN => {
+        %safety_first,
+        username => 'me',
+        password => 'ohhai',
+      }
+    ],
+  );
+
+  like( exception { $tzil->release },
+        qr/You need to supply a username/,
+        "username and password set in dist.ini is ignored");
 }
