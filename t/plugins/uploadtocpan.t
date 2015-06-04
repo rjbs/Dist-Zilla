@@ -31,9 +31,9 @@ sub build_tzil {
 #---------------------------------------------------------------------
 # Set responses for the username and password prompts:
 sub set_responses {
-  my $chrome = shift->chrome;
-  $chrome->set_response_for('PAUSE username: ', shift);
-  $chrome->set_response_for('PAUSE password: ', shift);
+  my ($zilla, $username, $pw) = @_;
+  $zilla->chrome->set_response_for('PAUSE username: ', $username);
+  $zilla->chrome->set_response_for("PAUSE password for $username: ", $pw);
 }
 
 #---------------------------------------------------------------------
@@ -153,6 +153,6 @@ my %safety_first = (qw(upload_uri http://bogus.example.com/do/not/upload/),
   );
 
   like( exception { $tzil->release },
-        qr/You need to supply a username/,
-        "username and password set in dist.ini is ignored");
+        qr/You need to supply a password/,
+        "password set in dist.ini is ignored");
 }

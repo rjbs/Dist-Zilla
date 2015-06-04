@@ -34,6 +34,8 @@ If neither configuration exists, it will prompt you to enter your
 username and password during the BeforeRelease phase.  Entering a
 blank username or password will abort the release.
 
+You can't put your password in your F<dist.ini>.  C'mon now!
+
 =cut
 
 {
@@ -77,8 +79,8 @@ sub mvp_aliases {
 
 =attr username
 
-This option supplies the user's PAUSE username.  It cannot be provided via
-F<dist.ini>.  It will be looked for in the user's PAUSE configuration; if not
+This option supplies the user's PAUSE username.
+It will be looked for in the user's PAUSE configuration; if not
 found, the user will be prompted.
 
 =cut
@@ -86,7 +88,6 @@ found, the user will be prompted.
 has username => (
   is   => 'ro',
   isa  => 'Str',
-  init_arg => undef,
   lazy => 1,
   default  => sub {
     my ($self) = @_;
@@ -111,9 +112,17 @@ has password => (
   lazy => 1,
   default  => sub {
     my ($self) = @_;
-    return $self->_credential('password')
-        || $self->pause_cfg->{password}
-        || $self->zilla->chrome->prompt_str('PAUSE password: ', { noecho => 1 });
+    my $pw = $self->_credential('password') || $self->pause_cfg->{password};
+
+    unless ($pw){
+      my $uname = $self->username;
+      $pw = $self->zilla->chrome->prompt_str(
+        "PAUSE password for $uname: ",
+        { noecho => 1 },
+      );
+    }
+
+    return $pw;
   },
 );
 
