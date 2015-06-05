@@ -136,7 +136,6 @@ END_CHANGES
         'source/dist.ini' => simple_ini(
                 'GatherDir',
                 [ NextRelease => { format => "** FOOTASTIC %-9v", } ],
-                'FakeRelease',
         ),
       },
     },
@@ -160,7 +159,6 @@ END_CHANGES
         'source/dist.ini' => simple_ini(
                 'GatherDir',
                 [ NextRelease => { time_zone => 'UTC', } ],
-                'FakeRelease',
         ),
       },
     },
@@ -184,7 +182,7 @@ END_CHANGES
       add_files => {
         'source/Changes' => $changes,
         'source/dist.ini' => simple_ini(
-          qw(GatherDir NextRelease FakeRelease)
+          qw(GatherDir NextRelease)
         ),
       },
     },
@@ -211,7 +209,6 @@ END_CHANGES
         'source/dist.ini' => simple_ini(
                 'GatherDir',
                 [ NextRelease => { format => "%v%T", } ],
-                'FakeRelease',
         ),
       },
     },
@@ -237,7 +234,6 @@ END_CHANGES
         'source/dist.ini' => simple_ini(
                 'GatherDir',
                 [ NextRelease => { format => "%-12V ohhai", } ],
-                'FakeRelease',
         ),
       },
     },
@@ -261,7 +257,6 @@ END_CHANGES
         'source/dist.ini' => simple_ini(
                 'GatherDir',
                 [ NextRelease => { format => "%v %U %E", } ],
-                'FakeRelease',
         ),
       },
     },
@@ -283,7 +278,6 @@ END_CHANGES
         'source/dist.ini' => simple_ini(
                 'GatherDir',
                 [ NextRelease => { format => "%v %U <%E>", } ],
-                'FakeRelease',
                 [ '%User' => { name  => 'E.X. Ample',
                                email => 'me@example.com' } ],
         ),
@@ -314,7 +308,6 @@ END_CHANGES
                 'GatherDir',
                 [ NextRelease => { format => "%v %U <%E>",
                                    user_stash => '%Info' } ],
-                'FakeRelease',
                 [ '%User' => '%Info' => { name  => 'E.X. Ample',
                                           email => 'me@example.com' } ],
         ),
@@ -346,6 +339,42 @@ END_CHANGES
     $tzil->slurp_file('build/Changes'),
     qr{Olivier Mengué},
     "dolmen's name is unmangled",
+  );
+}
+
+{
+  my $tzil = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/Changes' => $changes,
+        'source/dist.ini' => simple_ini(
+                'GatherDir',
+                [ NextRelease => { format => '%v %P' } ],
+                [ '%PAUSE' => { username  => 'NOBODY', password => 'ohhai' } ],
+                [ UploadToCPAN => ],
+        ),
+      },
+    },
+  );
+
+  {
+    use Dist::Zilla::Plugin::UploadToCPAN;
+    package Dist::Zilla::Plugin::UploadToCPAN;
+    no warnings 'redefine';
+    sub release { die 'should not be releasing from tests!' }
+  }
+
+  is(
+    exception { $tzil->build },
+    undef,
+    'build successfully with %PAUSE stash',
+  );
+
+  like(
+    $tzil->slurp_file('build/Changes'),
+    qr{^0\.001 NOBODY}m,
+    'added cpanid from %PAUSE username',
   );
 }
 
