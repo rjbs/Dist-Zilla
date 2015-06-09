@@ -175,9 +175,11 @@ has pause_cfg => (
     my $file = $self->pause_cfg_file;
     $file = File::Spec->catfile($self->pause_cfg_dir, $file)
       unless File::Spec->file_name_is_absolute($file);
+    return {} unless -e $file && -r _;
     my $cfg = try {
       CPAN::Uploader->read_config_file($file)
     } catch {
+      $self->log("Couldn't load credentials from '$file': $_");
       {};
     };
     return $cfg;
