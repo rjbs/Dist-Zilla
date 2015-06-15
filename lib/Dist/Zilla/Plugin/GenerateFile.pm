@@ -2,6 +2,7 @@ package Dist::Zilla::Plugin::GenerateFile;
 # ABSTRACT: build a custom file from only the plugin configuration
 
 use Moose;
+use Path::Tiny;
 with (
   'Dist::Zilla::Role::FileGatherer',
   'Dist::Zilla::Role::TextTemplate',
@@ -63,6 +64,20 @@ has filename => (
   required => 1,
 );
 
+=attr copy
+
+The C<copy> attribute defines a filename whose lines will be used as
+the C<content> attribute. The lines will be prepended to the C<content>
+arrayref.
+
+=cut
+
+has copy => (
+  is  => 'ro',
+  isa => 'Str',
+);
+
+
 =attr content
 
 The C<content> attribute is an arrayref of lines that will be joined together
@@ -118,7 +133,10 @@ sub gather_files {
 sub _content {
   my $self = shift;
 
-  my $content = join "\n", @{ $self->content };
+  my @file_content = $self->copy ? path( $self->copy )->slurp_utf8 : ();
+  my @content = $self->content ? @{ $self->content } : ();
+
+  my $content = join "\n", @file_content, @content;
   $content .= qq{\n};
 
   if ($self->content_is_template) {
