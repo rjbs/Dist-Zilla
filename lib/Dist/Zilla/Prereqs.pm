@@ -49,6 +49,8 @@ has cpan_meta_prereqs => (
 
 # storing this is sort of gross, but MakeMaker winds up needing the same data
 # anyway. -- xdg, 2013-10-22
+# This does *not* contain configure requires, as MakeMaker explicitly should
+# not have it in its fallback prereqs.
 has merged_requires => (
   is => 'ro',
   isa => 'CPAN::Meta::Requirements',
@@ -122,11 +124,6 @@ sub sync_runtime_build_test_requires {
       );
     }
   }
-
-  # and add configure requires for other consumers expecting this to be a full
-  # merge across all phases required by users
-  $self->merged_requires->add_requirements(
-      $self->requirements_for('configure', 'requires'));
 
   return;
 }

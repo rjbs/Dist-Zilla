@@ -73,7 +73,9 @@ use Test::DZil;
           'GatherDir',
           'MakeMaker',
           [ Prereqs => { perl => '5.8.1' } ],
-          [ Prereqs => ConfigureRequires => { 'Builder::Bob' => 0 } ],
+          [ Prereqs => BuildRequires => { 'Builder::Bob' => 0 } ],
+          [ Prereqs => TestRequires => { 'Tester::Bob' => 0 } ],
+          [ Prereqs => RuntimeRequires => { 'Runner::Bob' => 0 } ],
         ),
       },
     },
@@ -86,7 +88,10 @@ use Test::DZil;
   like($content, qr/^use 5\.008001;\s*$/m, "normalized the perl version needed");
 
   $content =~ m'^my %FallbackPrereqs = \(\n([^;]+)^\);$'mg;
-  like($1, qr'"Builder::Bob" => ', 'configure-requires prereqs made it into %FallbackPrereqs');
+
+  like($1, qr'"Builder::Bob" => ', 'build-requires prereqs made it into %FallbackPrereqs');
+  like($1, qr'"Tester::Bob" => ', 'test-requires prereqs made it into %FallbackPrereqs');
+  like($1, qr'"Runner::Bob" => ', 'runtime-requires prereqs made it into %FallbackPrereqs');
 }
 
 {
