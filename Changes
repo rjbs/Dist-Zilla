@@ -4,6 +4,9 @@ Revision history for {{$dist->name}}
         - the distribution tarball name no longer includes -TRIAL if the
           version contains an underscore
 
+        - [PkgVersion] adds "$VERSION = $VERSION_SANS_UNDERSCORES" when
+          version contains an underscore
+
         - made the PodCoverageTests and PodSyntaxTests plugins generate author
           tests, not release tests. These are tests you want passing on every
           commit, not just before a release (Dave Rolsky)

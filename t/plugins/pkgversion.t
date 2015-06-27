@@ -421,5 +421,45 @@ END
   );
 }
 
-done_testing;
+foreach my $use_our (0, 1) {
+  my $tzil_trial = Builder->from_config(
+    { dist_root => 'does-not-exist' },
+    {
+      add_files => {
+        'source/dist.ini' => simple_ini(
+          { # merge into root section
+            version => '0.004_002',
+          },
+          [ GatherDir => ],
+          [ PkgVersion => { use_our => $use_our } ],
+        ),
+        'source/lib/DZT/Sample.pm' => "package DZT::Sample;\n1;\n",
+      },
+    },
+  );
 
+  $tzil_trial->build;
+
+  my $dzt_sample_trial = $tzil_trial->slurp_file('build/lib/DZT/Sample.pm');
+
+  is(
+    $dzt_sample_trial,
+    $use_our
+      ? <<'MODULE'
+package DZT::Sample;
+{ our $VERSION = '0.004_002'; } # TRIAL
+$VERSION = eval $VERSION;
+1;
+MODULE
+      : <<'MODULE'
+package DZT::Sample;
+$DZT::Sample::VERSION = '0.004_002'; # TRIAL
+$DZT::Sample::VERSION = eval $DZT::Sample::VERSION;
+1;
+MODULE
+    ,
+    "use_our = $use_our: added version with 'TRIAL' comment and eval line when using an underscore trial version",
+  );
+}
+
+done_testing;

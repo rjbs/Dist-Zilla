@@ -236,6 +236,11 @@ sub munge_perl {
     }
 
     $perl = $blank ? "$perl\n" : "\n$perl";
+    $perl .= (
+      $self->use_our
+        ? "\n\$VERSION\x20=\x20eval\x20\$VERSION;"
+        : "\n\$$package\::VERSION\x20=\x20eval\x20\$$package\::VERSION;"
+      ) if $version =~ /_/ and scalar($version =~ /\./g) <= 1;
 
     # Why can't I use PPI::Token::Unknown? -- rjbs, 2014-01-11
     my $bogus_token = PPI::Token::Comment->new($perl);
