@@ -38,7 +38,6 @@ use Test::DZil;
     AUTHOR   => 'E. Xavier Ample <example@example.org>',
     LICENSE  => 'perl',
     MIN_PERL_VERSION => '5.010',
-    EXE_FILES => [],
     test => { TESTS => 't/*.t' },
 
     PREREQ_PM          => {
@@ -55,7 +54,6 @@ use Test::DZil;
     CONFIGURE_REQUIRES => {
       'ExtUtils::MakeMaker' => '0'
     },
-    EXE_FILES => [],
     test => { TESTS => 't/*.t' },
   );
 
