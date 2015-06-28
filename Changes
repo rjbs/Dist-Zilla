@@ -25,6 +25,8 @@ Revision history for {{$dist->name}}
           Golden)
         - fix documentation for the LicenseProvider role
         - improve errors when PPI failes to parse (thanks, Nick Tonkin)
+        - sort list of executable files in Makefile.PL, for deterministic
+          builds (thanks, Karen Etheridge)
 
 5.037     2015-06-04 21:46:38-04:00 America/New_York
         - issue a warning when version ranges are passed through to
