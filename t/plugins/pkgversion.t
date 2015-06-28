@@ -448,13 +448,13 @@ foreach my $use_our (0, 1) {
       ? <<'MODULE'
 package DZT::Sample;
 { our $VERSION = '0.004_002'; } # TRIAL
-$VERSION = eval $VERSION;
+$VERSION = '0.004002';
 1;
 MODULE
       : <<'MODULE'
 package DZT::Sample;
 $DZT::Sample::VERSION = '0.004_002'; # TRIAL
-$DZT::Sample::VERSION = eval $DZT::Sample::VERSION;
+$DZT::Sample::VERSION = '0.004002';
 1;
 MODULE
     ,
