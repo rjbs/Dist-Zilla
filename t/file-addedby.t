@@ -48,7 +48,7 @@ cmp_deeply(
   'OnDisk file added by GatherDir, set by PkgVersion has correct properties',
 );
 
-my $test = first { $_->name eq path(qw(t release-pod-syntax.t)) }
+my $test = first { $_->name eq path(qw(t author-pod-syntax.t)) }
            @{ $tzil->files };
 
 cmp_deeply(

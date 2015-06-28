@@ -1,6 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - made the PodCoverageTests and PodSyntaxTests plugins generate author
+          tests, not release tests. These are tests you want passing on every
+          commit, not just before a release (Dave Rolsky)
 
 5.039     2015-08-10 09:03:08-04:00 America/New_York
         - update required version of MooseX::Role::Parameterized; older
