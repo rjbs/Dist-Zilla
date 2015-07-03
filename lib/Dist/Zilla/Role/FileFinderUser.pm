@@ -86,11 +86,11 @@ F<.pl>, or with a recognizable perl shebang).
 Searches your ShareDir directory and lists the files in it.
 Hint: Use the L<Dist::Zilla::Plugin::ShareDir> plugin to set up the sharedir.
 
-= :All
+= :AllFiles
 
 Returns all files in the distribution.
 
-= :None
+= :NoFiles
 
 Returns nothing.
 
