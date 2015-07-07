@@ -274,7 +274,9 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
 
     local @INC = map {; ref($_) ? $_ : File::Spec->rel2abs($_) } @INC;
 
-    local $ENV{DZIL_GLOBAL_CONFIG_ROOT} = $tester_arg->{global_config_root};
+    local $ENV{DZIL_GLOBAL_CONFIG_ROOT};
+    $ENV{DZIL_GLOBAL_CONFIG_ROOT} = $tester_arg->{global_config_root}
+      if defined $ENV{DZIL_GLOBAL_CONFIG_ROOT};
 
     my $global_stashes = $self->_setup_global_config(
       $tester_arg->{global_config_root},
