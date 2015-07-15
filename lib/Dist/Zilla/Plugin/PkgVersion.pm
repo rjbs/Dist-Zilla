@@ -167,7 +167,7 @@ sub munge_perl {
   my %seen_pkg;
 
   my $munged = 0;
-  while (my $stmt = shift @$package_stmts) {
+  for my $stmt (@$package_stmts) {
     my $package = $stmt->namespace;
     if ($seen_pkg{ $package }++) {
       $self->log([ 'skipping package re-declaration for %s', $package ]);
@@ -202,34 +202,53 @@ sub munge_perl {
       $file->name,
     ]);
 
-    my $last_usable_line_number = do {
-        my ($next_stmt) = @$package_stmts;
-        $next_stmt ? $next_stmt->line_number : undef;
-    };
     my $blank;
 
+    # here we look for an empty line between "package" and the first
+    # non-comment, non-"use"/"require" line
     {
+      # start at the "package" statement
       my $curr = $stmt;
       while (1) {
         # avoid bogus locations due to insert_after
         $document->flush_locations if $munged;
+
+        # get all the PPI::Node in the line after $curr
         my $curr_line_number = $curr->line_number + 1;
         my $find = $document->find(sub {
           my $line = $_[1]->line_number;
           return $line > $curr_line_number ? undef : $line == $curr_line_number;
         });
 
+        # nothing there? give up, we'll insert just after "package"
         last unless $find;
 
-        if (@$find == 1 and "$find->[0]" =~ /\A\s*\z/) {
-          $blank = $find->[0];
+        my $first_found = $find->[0];
+
+        # we found only 1 PPI::Node, and it's whitespace: ok, insert
+        # in its place
+        if (@$find == 1 and "$first_found" =~ /\A\s*\z/) {
+          $blank = $first_found;
           last;
         }
 
-        last if $last_usable_line_number &&
-            $find->[0]->line_number >= $last_usable_line_number;
+        # get the first actual "thing" on the line
+        my $sfirst_found = $first_found->significant
+            ? $first_found
+            : $first_found->snext_sibling;
+        if (not $sfirst_found
+                or $sfirst_found->line_number != $first_found->line_number) {
+            $sfirst_found = $first_found;
+        }
 
-        $curr = $find->[0];
+        # is it a "use" or "require"? if not, give up: we don't want
+        # to skip anything else, it may not be safe
+        last unless $sfirst_found->isa('PPI::Statement::Include')
+            or $sfirst_found->isa('PPI::Token::Comment');
+        # we could get a comment if it's the only thing on the line
+
+        # skip over it, and try again
+        $curr = $first_found;
       }
     }
 

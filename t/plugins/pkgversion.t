@@ -137,16 +137,28 @@ my $pod_no_pkg = '
 
 my $pkg_with_strict = '
 package DZT::WithStrict;
-use strict;
+# comment
+  use strict;
+# other comment
 
+sub foo {
+
+    return 1;
+
+}
 1;
 ';
 
 my $pkg_pathological = '
 package DZT::Pathological;
+# comment
 use strict;
 package DZT::Pathological2;
 use strict;
+sub foo {
+
+    return 1;
+}
 1;
 ';
 
@@ -334,7 +346,11 @@ unlike(
 my $dzt_with_strict = $tzil->slurp_file('build/lib/DZT/WithStrict.pm');
 like(
   $dzt_with_strict,
-  qr{^use strict;\s*^\$DZT::WithStrict::VERSION = '0\.001';\s*$}m,
+  qr{
+     ^\s* use \s+ strict; \s*
+     ^\# .*? $ \s*
+     ^\$DZT::WithStrict::VERSION \s+ = \s+ '0\.001';\s*
+  }mx,
   "version inserted in the first empty line"
 );
 
@@ -344,6 +360,7 @@ like(
   qr{
      ^package \s+ DZT::Pathological; \s*
      ^\$DZT::Pathological::VERSION \s+ = \s+ '0\.001'; \s*
+     ^\# .*? $ \s*
      ^use \s+ strict; \s*
      ^package \s+ DZT::Pathological2; \s*
      ^\$DZT::Pathological2::VERSION \s+ = \s+ '0\.001'; \s*
