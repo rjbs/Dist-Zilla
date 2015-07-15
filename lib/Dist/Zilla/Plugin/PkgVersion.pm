@@ -167,7 +167,7 @@ sub munge_perl {
   my %seen_pkg;
 
   my $munged = 0;
-  for my $stmt (@$package_stmts) {
+  while (my $stmt = shift @$package_stmts) {
     my $package = $stmt->namespace;
     if ($seen_pkg{ $package }++) {
       $self->log([ 'skipping package re-declaration for %s', $package ]);
@@ -202,6 +202,10 @@ sub munge_perl {
       $file->name,
     ]);
 
+    my $last_usable_line_number = do {
+        my ($next_stmt) = @$package_stmts;
+        $next_stmt ? $next_stmt->line_number : undef;
+    };
     my $blank;
 
     {
@@ -221,6 +225,9 @@ sub munge_perl {
           $blank = $find->[0];
           last;
         }
+
+        last if $last_usable_line_number &&
+            $find->[0]->line_number >= $last_usable_line_number;
 
         $curr = $find->[0];
       }
