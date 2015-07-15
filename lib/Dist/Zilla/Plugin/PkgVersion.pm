@@ -215,18 +215,14 @@ sub munge_perl {
           return $line > $curr_line_number ? undef : $line == $curr_line_number;
         });
 
-        last unless $find and @$find == 1;
+        last unless $find;
 
-        if ($find->[0]->isa('PPI::Token::Comment')) {
-          $curr = $find->[0];
-          next;
-        }
-
-        if ("$find->[0]" =~ /\A\s*\z/) {
+        if (@$find == 1 and "$find->[0]" =~ /\A\s*\z/) {
           $blank = $find->[0];
+          last;
         }
 
-        last;
+        $curr = $find->[0];
       }
     }
 

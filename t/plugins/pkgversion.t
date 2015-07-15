@@ -135,6 +135,13 @@ my $pod_no_pkg = '
 =cut
 ';
 
+my $pkg_with_strict = '
+package DZT::WithStrict;
+use strict;
+
+1;
+';
+
 my $tzil = Builder->from_config(
   { dist_root => 'corpus/dist/DZT' },
   {
@@ -154,6 +161,7 @@ my $tzil = Builder->from_config(
       'source/lib/DZT/HideMe.pm' => $hide_me_comment,
       'source/lib/DZT/PodWithPackage.pm' => $pod_with_pkg,
       'source/lib/DZT/PodNoPackage.pm' => $pod_no_pkg,
+      'source/lib/DZT/WithStrict.pm' => $pkg_with_strict,
       'source/bin/script_pkg.pl' => $script_pkg,
       'source/bin/script_ver.pl' => $script_pkg . "our \$VERSION = 1.234;\n",
       'source/bin/script.pl'     => $script,
@@ -312,6 +320,13 @@ unlike(
   $dzt_podnopackage,
   qr{VERSION},
   "no version for pod files with no package declaration"
+);
+
+my $dzt_with_strict = $tzil->slurp_file('build/lib/DZT/WithStrict.pm');
+like(
+  $dzt_with_strict,
+  qr{^use strict;\s*^\$DZT::WithStrict::VERSION = '0\.001';\s*$}m,
+  "version inserted in the first empty line"
 );
 
 {
