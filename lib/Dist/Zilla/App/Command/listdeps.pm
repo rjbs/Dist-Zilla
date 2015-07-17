@@ -18,7 +18,7 @@ quick go.
 
 =head1 OPTIONS
 
-=head2 --author
+=head2 --author (or --develop)
 
 Include author dependencies (those listed under C<develop_requires>).
 
@@ -48,7 +48,7 @@ use Try::Tiny;
 sub abstract { "print your distribution's prerequisites" }
 
 sub opt_spec {
-  [ 'author', 'include author dependencies' ],
+  [ 'develop|author', 'include author/develop dependencies' ],
   [ 'missing', 'list only the missing dependencies' ],
   [ 'versions', 'include required version numbers in listing' ],
   [ 'json', 'list dependencies by phase, in JSON format' ],
@@ -130,7 +130,7 @@ sub execute {
   $self->app->chrome->logger->mute;
 
   my @phases = qw(build test configure runtime);
-  push @phases, 'develop' if $opt->author;
+  push @phases, 'develop' if $opt->develop;
 
   my $omit_core = $opt->omit_core;
   if($opt->json) {
