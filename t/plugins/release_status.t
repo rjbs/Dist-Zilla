@@ -146,6 +146,9 @@ subtest "from version (stable)" => sub {
 
   $tzil->build;
   is($tzil->release_status, 'stable', "release status set from version (stable)");
+  ok(!$tzil->is_trial, "is_trial is false");
+  unlike($tzil->archive_filename, qr/-TRIAL/, "no -TRIAL in archive filename");
+
 };
 
 subtest "from version (testing)" => sub {
@@ -162,6 +165,8 @@ subtest "from version (testing)" => sub {
 
   $tzil->build;
   is($tzil->release_status, 'testing', "release status set from version (testing)");
+  ok($tzil->is_trial, "is_trial is true");
+  unlike($tzil->archive_filename, qr/-TRIAL/, "no -TRIAL in archive filename");
 };
 
 done_testing;
