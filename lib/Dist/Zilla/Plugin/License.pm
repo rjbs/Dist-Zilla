@@ -12,15 +12,25 @@ This plugin adds a F<LICENSE> file containing the full text of the
 distribution's license, as produced by the C<fulltext> method of the
 dist's L<Software::License> object.
 
+=attr filename
+
+This attribute can be used to specify a name other than F<LICENSE> to be used.
+
 =cut
 
 use Dist::Zilla::File::InMemory;
+
+has filename => (
+  is  => 'ro',
+  isa => 'Str',
+  default => 'LICENSE',
+);
 
 sub gather_files {
   my ($self, $arg) = @_;
 
   my $file = Dist::Zilla::File::InMemory->new({
-    name    => 'LICENSE',
+    name    => $self->filename,
     content => $self->zilla->license->fulltext,
   });
 
