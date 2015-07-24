@@ -23,6 +23,7 @@ Revision history for {{$dist->name}}
           Karen Etheridge)
         - better error when PAUSE credentials can't be loaded (thanks, David
           Golden)
+        - fix documentation for the LicenseProvider role
 
 5.037     2015-06-04 21:46:38-04:00 America/New_York
         - issue a warning when version ranges are passed through to

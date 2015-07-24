@@ -15,7 +15,7 @@ ignored.
 
 =head1 REQUIRED METHODS
 
-=head2 C<< provide_license($copyright_holder, $copyright_year) >>
+=head2 C<< provide_license({ copyright_holder => $holder, copyright_year => $year }) >>
 
 Generate license object. Returned object should be an instance of
 L<Software::License>.
