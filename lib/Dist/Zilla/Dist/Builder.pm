@@ -772,7 +772,7 @@ sub run_in_build {
       return 1;
     }
 
-    $self->ensure_blib;
+    $self->_ensure_blib;
 
     local $ENV{PERL5LIB} = join $Config::Config{path_sep},
       (map { $abstarget->subdir('blib', $_) } qw(arch lib)),
@@ -797,17 +797,11 @@ sub run_in_build {
   }
 }
 
-=method ensure_blib
+# Ensures that a F<blib> directory exists in the build, by invoking all
+# C<-BuildRunner> plugins to generate it.  Useful for commands that operate on
+# F<blib>, such as C<test> or C<run>.
 
-  $zilla->ensure_blib();
-
-Ensures that a F<blib> directory exists in the build, by invoking all
-C<-BuildRunner> plugins to generate it.  Useful for commands that operate on
-F<blib>, such as C<test> or C<run>.
-
-=cut
-
-sub ensure_blib {
+sub _ensure_blib {
   my ($self) = @_;
 
   unless ( -d 'blib' ) {
