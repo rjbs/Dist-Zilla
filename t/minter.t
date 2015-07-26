@@ -16,7 +16,7 @@ use Test::File::ShareDir -share => {
 my $tzil = Minter->_new_from_profile(
   [ Default => 'default' ],
   { name => 'DZT-Minty', },
-  { global_config_root => dir('corpus/global')->absolute },
+  { global_config_root => 'corpus/global' },
 );
 
 $tzil->mint_dist;
