@@ -672,7 +672,7 @@ sub ensure_built_in_tmpdir {
       or $self->log('cannot create link .build/latest');
   }
 
-  $self->ensure_built_in($target);
+  $self->build_in($target);
 
   return ($target, $latest, $previous);
 }
