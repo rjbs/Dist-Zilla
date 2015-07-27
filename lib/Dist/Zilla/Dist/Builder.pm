@@ -116,6 +116,25 @@ sub _setup_default_plugins {
     push @{ $self->plugins }, $plugin;
   }
 
+  unless ($self->plugin_named(':PerlExecFiles')) {
+    require Dist::Zilla::Plugin::FinderCode;
+    my $plugin = Dist::Zilla::Plugin::FinderCode->new({
+      plugin_name => ':PerlExecFiles',
+      zilla       => $self,
+      style       => 'list',
+      code        => sub {
+        my $parent_plugin = $self->plugin_named(':ExecFiles');
+        my @files = grep {
+          $_->name =~ m{\.pl$}
+              or $_->content =~ m{^\s*\#\!.*perl\b};
+        } @{ $parent_plugin->find_files };
+        return \@files;
+      },
+    });
+
+    push @{ $self->plugins }, $plugin;
+  }
+
   unless ($self->plugin_named(':ShareFiles')) {
     require Dist::Zilla::Plugin::FinderCode;
     my $plugin = Dist::Zilla::Plugin::FinderCode->new({
