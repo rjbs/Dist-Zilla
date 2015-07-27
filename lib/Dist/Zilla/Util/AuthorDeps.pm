@@ -20,6 +20,17 @@ sub format_author_deps {
   return $formatted;
 }
 
+sub install_author_deps {
+  my ($reqs, $command) = @_;
+
+  foreach my $rec (@{ $reqs }) {
+    my ($mod, $ver) = each(%{ $rec });
+    system qq{$command $mod};
+    each(%{ $rec });
+  }
+  return;
+}
+
 sub extract_author_deps {
   my ($root, $missing) = @_;
 
