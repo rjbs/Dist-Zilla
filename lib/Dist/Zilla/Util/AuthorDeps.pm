@@ -36,8 +36,7 @@ sub extract_author_deps {
   require CPAN::Meta::Requirements;
   my $reqs = CPAN::Meta::Requirements->new;
 
-  my $license = $config->{_}->{license};
-  if (defined $license) {
+  if (defined (my $license = $config->{_}->{license})) {
     $license = 'Software::License::'.$license;
     $reqs->add_minimum($license => 0);
   }
