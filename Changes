@@ -7,6 +7,7 @@ Revision history for {{$dist->name}}
         - dzil authordeps now lists the Software::License class needed
           (thanks, David Zurborg)
         - PkgVersion now skips .pod files (David Golden)
+        - fix documentation for the LicenseProvider role
 
 5.037     2015-06-04 21:46:38-04:00 America/New_York
         - issue a warning when version ranges are passed through to
