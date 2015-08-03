@@ -45,7 +45,7 @@ around dump_config => sub {
   my $config = $self->$orig;
 
   my $this_config = {
-    modules_to_remove  => $self->modules_to_remove,
+    modules_to_remove  => [ sort @{ $self->modules_to_remove } ],
   };
 
   $config->{'' . __PACKAGE__} = $this_config;

@@ -153,8 +153,11 @@ around dump_config => sub {
   my $config = $self->$orig;
 
   $config->{+__PACKAGE__} = {
-    map { $_ => $self->$_ }
-      qw(root prefix include_dotfiles follow_symlinks exclude_filename exclude_match prune_directory),
+    prefix => $self->prefix,
+    # only report relative to dist root to avoid leaking private info
+    root => path($self->root)->relative($self->zilla->root),
+    (map { $_ => $self->$_ ? 1 : 0 } qw(include_dotfiles follow_symlinks)),
+    (map { $_ => [ sort @{ $self->$_ } ] } qw(exclude_filename exclude_match prune_directory)),
   };
 
   return $config;
