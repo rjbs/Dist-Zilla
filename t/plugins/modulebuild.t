@@ -50,9 +50,7 @@ use Test::DZil;
     'configure_requires' => {
       'Module::Build' => '0.28',
     },
-    'recommends' => {},
     'recursive_test_files' => ignore,
-    'script_files' => [],
   );
 
   cmp_deeply(
