@@ -168,7 +168,7 @@ sub module_build_args {
     dist_name     => $self->zilla->name,
     dist_version  => $self->zilla->version,
     dist_author   => [ @{ $self->zilla->authors } ],
-    @exe_files ? ( script_files  => [ @exe_files ] ) : (),
+    @exe_files ? ( script_files  => [ sort @exe_files ] ) : (),
     ( keys %{$self->zilla->_share_dir_map} ? (share_dir => $self->zilla->_share_dir_map) : ()),
 
     (map {; my $modules = $prereqs{$_}->as_string_hash; keys %$modules ? ( $_ => $modules ) : () } keys %prereqs),
