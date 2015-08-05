@@ -245,9 +245,8 @@ test_this(
     my $tzil = shift;
     my $makemaker = $tzil->plugin_named('MakeMaker');
 
-    is_deeply(
-      $makemaker->__write_makefile_args->{EXE_FILES},
-      undef,
+    ok(
+      !exists $makemaker->__write_makefile_args->{EXE_FILES},
       "not going to install execs",
     );
   },
@@ -259,9 +258,8 @@ test_this(
   sub {
     my $tzil = shift;
     my $makemaker = $tzil->plugin_named('MakeMaker');
-    is_deeply(
-      $makemaker->__write_makefile_args->{EXE_FILES},
-      undef,
+    ok(
+      !exists $makemaker->__write_makefile_args->{EXE_FILES},
       "files in ./bin, but no ExecDir, not going to install execs",
     );
   },
