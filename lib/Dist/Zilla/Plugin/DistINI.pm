@@ -7,7 +7,7 @@ with qw(Dist::Zilla::Role::FileGatherer);
 use Dist::Zilla::File::FromCode;
 
 use MooseX::Types::Moose qw(ArrayRef Str);
-use Path::Tiny;
+use Dist::Zilla::Path;
 
 use namespace::autoclean;
 
@@ -67,7 +67,7 @@ sub gather_files {
   my $postlude = '';
 
   for (@{ $self->append_file }) {
-    my $fn = $self->zilla->root->file($_);
+    my $fn = $self->zilla->root->child($_);
 
     $postlude .= path($fn)->slurp_utf8;
   }
