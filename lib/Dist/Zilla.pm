@@ -804,6 +804,20 @@ sub stash_named {
 __PACKAGE__->meta->make_immutable;
 1;
 
+=head1 STABILITY PROMISE
+
+None.
+
+I will try not to break things within any major release.  Minor releases are
+not extensively tested before release.  In major releases, anything goes,
+although I will try to publish a complete list of known breaking changes in any
+major release.
+
+If Dist::Zilla was a tool, it would have yellow and black stripes and there
+would be no L<UL
+certification|https://en.wikipedia.org/wiki/UL_(safety_organization)> on it.
+It is nasty, brutish, and large.
+
 =head1 SUPPORT
 
 There are usually people on C<irc.perl.org> in C<#distzilla>, even if they're
