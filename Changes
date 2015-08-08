@@ -11,7 +11,6 @@ Revision history for {{$dist->name}}
         - PkgVersion now skips .pod files (thanks, David Golden)
         - build_element support added for [ModuleBuild] (thanks, David
           Wheeler!)
-        - PkgVersion now skips .pod files (David Golden)
         - new native filefinder :ExtraTestFiles (thanks, Karen Etheridge)
         - [AutoPrereqs] now looks for develop prerequisites in xt/ (thanks,
           Karen Etheridge)
