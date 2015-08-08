@@ -41,6 +41,11 @@ to the generated Build.PL file.
 B<Optional:> Specify the list of directories to be passed to lib when using 
 mb_class. Defaults to C<inc>. 
 
+=attr build_element
+
+Anything given in a C<build_element> option will be added as a build element
+with Module::Build's L<add_build_element> method.
+
 =cut
 
 has 'mb_version' => (
