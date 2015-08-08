@@ -393,8 +393,9 @@ sub _build_license {
   }
 
   my $license = $license_class->new({
-    holder => $self->_copyright_holder,
-    year   => $self->_copyright_year,
+    holder  => $self->_copyright_holder,
+    year    => $self->_copyright_year,
+    program => $self->name,
   });
 
   $self->_clear_license_class;
