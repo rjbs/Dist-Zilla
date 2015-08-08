@@ -13,6 +13,10 @@ Revision history for {{$dist->name}}
         - new native filefinder :ExtraTestFiles
         - [AutoPrereqs] now looks for develop prerequisites in xt/
         - new file finder ':PerlExecFiles'
+        - try harder to notice failure to set up build root, especially on
+          Win32 (thanks, Christian Walde)
+        - better errors when a global config package isn't available (thanks,
+          Karen Etheridge)
 
 5.037     2015-06-04 21:46:38-04:00 America/New_York
         - issue a warning when version ranges are passed through to
