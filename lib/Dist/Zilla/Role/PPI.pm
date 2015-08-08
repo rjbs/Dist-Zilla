@@ -40,7 +40,7 @@ sub ppi_document_for_file {
 
   require PPI::Document;
   my $document = PPI::Document->new(\$encoded_content)
-    or Carp::croak(PPI::Document->errstr);
+    or Carp::croak(PPI::Document->errstr . ' while processing file ' . $file->name);
 
   return ($CACHE{$md5} = $document)->clone;
 }
