@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+5.038     2015-08-07 22:16:50-04:00 America/New_York
         - [License] can be given a filename option to use instead of LICENSE
         - dzil listdeps --develop now exists as an alias for dzil listdeps
           --author (Karen Etheridge)
