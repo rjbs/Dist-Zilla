@@ -10,15 +10,19 @@ Revision history for {{$dist->name}}
         - build_element support added for [ModuleBuild] (thanks, David
           Wheeler!)
         - PkgVersion now skips .pod files (David Golden)
-        - new native filefinder :ExtraTestFiles
-        - [AutoPrereqs] now looks for develop prerequisites in xt/
-        - new file finder ':PerlExecFiles'
+        - new native filefinder :ExtraTestFiles (thanks, Karen Etheridge)
+        - [AutoPrereqs] now looks for develop prerequisites in xt/ (thanks,
+          Karen Etheridge)
+        - new file finder ':PerlExecFiles' (thanks, Karen Etheridge)
         - try harder to notice failure to set up build root, especially on
           Win32 (thanks, Christian Walde)
         - better errors when a global config package isn't available (thanks,
           Karen Etheridge)
         - added the "ignore" option to [Encoding] (thanks, Yanick Champoux)
-        - allow ; authordep specifications to contain version ranges
+        - allow ; authordep specifications to contain version ranges (thanks,
+          Karen Etheridge)
+        - better error when PAUSE credentials can't be loaded (thanks, David
+          Golden)
 
 5.037     2015-06-04 21:46:38-04:00 America/New_York
         - issue a warning when version ranges are passed through to
