@@ -1,7 +1,7 @@
 package Dist::Zilla::Role::FileFinderUser;
 # ABSTRACT: something that uses FileFinder plugins
 
-use MooseX::Role::Parameterized;
+use MooseX::Role::Parameterized 1.01;
 
 use namespace::autoclean;
 
