@@ -124,7 +124,7 @@ sub _build_version {
 =attr release_status
 
 This attribute sets the release status to one of the
-L<CPAN::META::Spec/https://metacpan.org/pod/CPAN::Meta::Spec#release_status>
+L<CPAN::META::Spec|https://metacpan.org/pod/CPAN::Meta::Spec#release_status>
 values: 'stable', 'testing' or 'unstable'.
 
 If the C<$ENV{RELEASE_STATUS}> environment variable exists, its value will
