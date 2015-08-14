@@ -3,7 +3,7 @@ use warnings;
 package Dist::Zilla::App;
 # ABSTRACT: Dist::Zilla's App::Cmd
 
-use App::Cmd::Setup 0.309 -app; # better compilation error detection
+use App::Cmd::Setup 0.327 -app; # better compilation error detection
 
 use Carp ();
 use Try::Tiny;
