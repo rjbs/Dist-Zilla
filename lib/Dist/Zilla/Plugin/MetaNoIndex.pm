@@ -102,7 +102,7 @@ sub metadata {
   my $self = shift;
   return {
     no_index => {
-      map  {; my $reader = $_->[0];  ($_->[1] => $self->$reader) }
+      map  {; my $reader = $_->[0];  ($_->[1] => [ sort @{ $self->$reader } ]) }
       grep {; my $pred   = "_has_$_->[0]"; $self->$pred }
       map  {; [ $_ => $ATTR_ALIAS{$_}[0] ] }
       keys %ATTR_ALIAS
