@@ -114,6 +114,11 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
   use File::Copy::Recursive qw(dircopy);
   use Path::Class;
 
+  our $Log_Events = [];
+  sub most_recent_log_events {
+    return @{ $Log_Events }
+  }
+
   around from_config => sub {
     my ($orig, $self, $arg, $tester_arg) = @_;
 
@@ -157,6 +162,8 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
 
     local $arg->{dist_root} = "$root";
     local $arg->{chrome} = Dist::Zilla::Chrome::Test->new;
+
+    $Log_Events = $arg->{chrome}->logger->events;
 
     local @INC = map {; ref($_) ? $_ : File::Spec->rel2abs($_) } @INC;
 
@@ -221,6 +228,11 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
   use File::Copy::Recursive qw(dircopy);
   use Path::Class;
 
+  our $Log_Events = [];
+  sub most_recent_log_events {
+    return @{ $Log_Events }
+  }
+
   sub _mint_target_dir {
     my ($self) = @_;
 
@@ -271,6 +283,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
     my $tempdir = dir($tempdir_obj)->absolute;
 
     local $arg->{chrome} = Dist::Zilla::Chrome::Test->new;
+    $Log_Events = $arg->{chrome}->logger->events;
 
     local @INC = map {; ref($_) ? $_ : File::Spec->rel2abs($_) } @INC;
 
