@@ -34,7 +34,7 @@ use Test::DZil;
   );
 
   like(
-    $tzil->slurp_file('build/xt/release/pod-syntax.t'),
+    $tzil->slurp_file('build/xt/author/pod-syntax.t'),
     qr/\Quse Test::Pod 1.41/,
     'xt/release/pod-syntax.t content'
   );
