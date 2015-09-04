@@ -9,11 +9,14 @@ use Carp ();
 use Try::Tiny;
 
 sub global_opt_spec {
+  my ($self) = @_;
+
   return (
     [ "verbose|v:s@", "log additional output" ],
     [ "lib-inc|I=s@",     "additional \@INC dirs", {
         callbacks => { 'always fine' => sub { unshift @INC, @{$_[0]}; } }
-    } ]
+    } ],
+    $self->SUPER::global_opt_spec,
   );
 }
 
