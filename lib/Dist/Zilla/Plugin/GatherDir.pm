@@ -173,7 +173,7 @@ sub gather_files {
   my $repo_root = $self->zilla->root;
   my $root = "" . $self->root;
   $root =~ s{^~([\\/])}{require File::HomeDir; File::HomeDir::->my_home . $1}e;
-  $root = path($repo_root)->child($root)->stringify if path($root)->is_relative;
+  $root = path($root)->absolute($repo_root)->stringify if path($root)->is_relative;
 
   my $prune_regex = qr/\000/;
   $prune_regex = qr/$prune_regex|$_/
