@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - [PkgVersion] adds "$VERSION = eval $VERSION" when version contains
+          an underscore
 
 5.039     2015-08-10 09:03:08-04:00 America/New_York
         - update required version of MooseX::Role::Parameterized; older
