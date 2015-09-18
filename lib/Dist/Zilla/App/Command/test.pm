@@ -34,7 +34,7 @@ sub opt_spec {
   [ 'author!' => 'enables the AUTHOR_TESTING env variable (default behavior)', { default => 1 } ],
   [ 'all' => 'enables the RELEASE_TESTING, AUTOMATED_TESTING and AUTHOR_TESTING env variables', { default => 0 } ],
   [ 'keep-build-dir|keep' => 'keep the build directory even after a success' ],
-  [ 'jobs|j=i' => 'number of parallel test jobs to run' ],
+  [ 'jobs|j=i' => 'number of parallel test jobs to run', { default => 1 } ],
   [ 'test-verbose' => 'enables verbose testing (TEST_VERBOSE env variable on Makefile.PL, --verbose on Build.PL', { default => 0 } ],
 }
 
