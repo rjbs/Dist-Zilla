@@ -3,17 +3,20 @@ use warnings;
 package Dist::Zilla::App;
 # ABSTRACT: Dist::Zilla's App::Cmd
 
-use App::Cmd::Setup 0.309 -app; # better compilation error detection
+use App::Cmd::Setup 0.327 -app; # better compilation error detection
 
 use Carp ();
 use Try::Tiny;
 
 sub global_opt_spec {
+  my ($self) = @_;
+
   return (
     [ "verbose|v:s@", "log additional output" ],
     [ "lib-inc|I=s@",     "additional \@INC dirs", {
         callbacks => { 'always fine' => sub { unshift @INC, @{$_[0]}; } }
-    } ]
+    } ],
+    $self->SUPER::global_opt_spec,
   );
 }
 
