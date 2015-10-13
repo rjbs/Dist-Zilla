@@ -81,14 +81,14 @@ scanned:
 
 =attr extra_scanners
 
-This is an arrayref of scanner names (as expected by Perl::PrereqScanner).
-It will be passed as the C<extra_scanners> parameter to Perl::PrereqScanner.
+This is an arrayref of scanner names (as expected by L<Perl::PrereqScanner>).
+It will be passed as the C<extra_scanners> parameter to L<Perl::PrereqScanner>.
 
 =attr scanners
 
-This is an arrayref of scanner names (as expected by Perl::PrereqScanner).
+This is an arrayref of scanner names (as expected by L<Perl::PrereqScanner>).
 If present, it will be passed as the C<scanners> parameter to
-Perl::PrereqScanner, which means that it will replace the default list
+L<Perl::PrereqScanner>, which means that it will replace the default list
 of scanners.
 
 =attr skips
