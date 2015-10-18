@@ -4,6 +4,8 @@ package Dist::Zilla::Role::TestRunner;
 use Moose::Role;
 with 'Dist::Zilla::Role::Plugin';
 
+use File::pushd ();
+
 use namespace::autoclean;
 
 =head1 DESCRIPTION
@@ -43,6 +45,19 @@ around dump_config => sub {
   $config->{'' . __PACKAGE__} = { default_jobs => $self->default_jobs };
 
   return $config;
+};
+
+=method test_in
+
+The method temporary switches to C<$target> directory and calls C<test> method,
+passing all the arguments.
+
+=cut
+
+sub test_in {
+  my ($self, $target, @args) = @_;
+  my $wd = File::pushd::pushd($target);
+  $self->test($target, @args);
 };
 
 1;

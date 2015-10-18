@@ -58,12 +58,12 @@ sub opt_spec {
 sub prereqs {
   my ($self, $zilla) = @_;
 
-  $_->before_build for @{ $zilla->plugins_with(-BeforeBuild) };
-  $_->gather_files for @{ $zilla->plugins_with(-FileGatherer) };
-  $_->set_file_encodings for @{ $zilla->plugins_with(-EncodingProvider) };
-  $_->prune_files  for @{ $zilla->plugins_with(-FilePruner) };
-  $_->munge_files  for @{ $zilla->plugins_with(-FileMunger) };
-  $_->register_prereqs for @{ $zilla->plugins_with(-PrereqSource) };
+  $zilla->phase('BeforeBuild', 'before_build');
+  $zilla->phase('FileGatherer', 'gather_files');
+  $zilla->phase('EncodingProvider', 'set_file_encodings');
+  $zilla->phase('FilePruner', 'prune_files');
+  $zilla->phase('FileMunger', 'munge_files');
+  $zilla->phase('PrereqSource', 'register_prereqs');
 
   my $prereqs = $zilla->prereqs;
 }

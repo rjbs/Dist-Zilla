@@ -103,7 +103,7 @@ sub mint_dist {
 
   my $wd = File::pushd::pushd($self->root);
 
-  $_->before_mint  for @{ $self->plugins_with(-BeforeMint) };
+  $self->phase('BeforeMint', 'before_mint');
 
   for my $module (@modules) {
     my $minter = $self->plugin_named(
@@ -113,10 +113,10 @@ sub mint_dist {
     $minter->make_module({ name => $module->{name} })
   }
 
-  $_->gather_files       for @{ $self->plugins_with(-FileGatherer) };
-  $_->set_file_encodings for @{ $self->plugins_with(-EncodingProvider) };
-  $_->prune_files        for @{ $self->plugins_with(-FilePruner) };
-  $_->munge_files        for @{ $self->plugins_with(-FileMunger) };
+  $self->phase('FileGatherer', 'gather_files');
+  $self->phase('EncodingProvider', 'set_file_encodings');
+  $self->phase('FilePruner', 'prune_files' );
+  $self->phase('FileMunger', 'munge_files');
 
   $self->_check_dupe_files;
 
@@ -126,8 +126,7 @@ sub mint_dist {
     $self->_write_out_file($file, $dir);
   }
 
-  $_->after_mint({ mint_root => $dir })
-    for @{ $self->plugins_with(-AfterMint) };
+  $self->phase('AfterMint', 'after_mint', { mint_root => $dir });
 
   $self->log("dist minted in ./$name");
 }
