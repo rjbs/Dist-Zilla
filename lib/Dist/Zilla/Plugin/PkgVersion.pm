@@ -237,6 +237,13 @@ sub munge_perl {
 
     $perl = $blank ? "$perl\n" : "\n$perl";
 
+    (my $clean_version = $version) =~ tr/_//d;
+    $perl .= (
+      $self->use_our
+        ? "\n\$VERSION\x20=\x20'$clean_version';"
+        : "\n\$$package\::VERSION\x20=\x20'$clean_version';"
+      ) if $version ne $clean_version;
+
     # Why can't I use PPI::Token::Unknown? -- rjbs, 2014-01-11
     my $bogus_token = PPI::Token::Comment->new($perl);
 

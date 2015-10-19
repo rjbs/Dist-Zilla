@@ -2,6 +2,17 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+5.040     2015-10-13 11:42:25-04:00 America/New_York
+        - the distribution tarball name no longer includes -TRIAL if the
+          version contains an underscore
+
+        - [PkgVersion] adds "$VERSION = $VERSION_SANS_UNDERSCORES" when
+          version contains an underscore
+
+        - made the PodCoverageTests and PodSyntaxTests plugins generate author
+          tests, not release tests. These are tests you want passing on every
+          commit, not just before a release (Dave Rolsky)
+
 5.039     2015-08-10 09:03:08-04:00 America/New_York
         - update required version of MooseX::Role::Parameterized; older
           versions work, but can cause a bunch of unwanted warnings

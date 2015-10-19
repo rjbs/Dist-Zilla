@@ -443,8 +443,9 @@ sub dist_basename {
   my $tarball = $zilla->archive_filename;
 
 This method will return the filename (e.g. C<Dist-Name-1.01.tar.gz>)
-of the tarball of this dist.  It will include C<-TRIAL> if building a
-trial dist.  The tarball might not exist.
+of the tarball of this distribution.  It will include C<-TRIAL> if building a
+trial distribution, unless the version contains an underscore.  The tarball
+might not exist.
 
 =cut
 
@@ -452,7 +453,7 @@ sub archive_filename {
   my ($self) = @_;
   return join(q{},
     $self->dist_basename,
-    ( $self->is_trial ? '-TRIAL' : '' ),
+    ( $self->is_trial && $self->version !~ /_/ ? '-TRIAL' : '' ),
     '.tar.gz'
   );
 }
