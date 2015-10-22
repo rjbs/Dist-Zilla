@@ -256,7 +256,6 @@ has main_module => (
   lazy => 1,
   init_arg => undef,
   default  => sub {
-
     my ($self) = @_;
 
     my $file;
@@ -266,34 +265,34 @@ has main_module => (
        $file = first { $_->name eq $self->_main_module_override }
                @{ $self->files };
     } else {
-       # We're having to guess
+      # We're having to guess
 
-       ($guess = $self->name) =~ s{-}{/}g;
-       $guess = "lib/$guess.pm";
+      ($guess = $self->name) =~ s{-}{/}g;
+      $guess = "lib/$guess.pm";
 
-       $file = (first { $_->name eq $guess } @{ $self->files })
-           ||  (sort { length $a->name <=> length $b->name }
-                grep { $_->name =~ m{\.pm\z} and $_->name =~ m{\Alib/} }
-                @{ $self->files })[0];
-       $self->log("guessing dist's main_module is " . ($file ? $file->name : $guess));
+      $file = (first { $_->name eq $guess } @{ $self->files })
+          ||  (sort { length $a->name <=> length $b->name }
+               grep { $_->name =~ m{\.pm\z} and $_->name =~ m{\Alib/} }
+               @{ $self->files })[0];
+      $self->log("guessing dist's main_module is " . ($file ? $file->name : $guess));
     }
 
     if (not $file) {
-        my @errorlines;
+      my @errorlines;
 
-        push @errorlines, "Unable to find main_module in the distribution";
-        if ( $self->_has_main_module_override ) {
-            push @errorlines, "'main_module' was specified in dist.ini but the file '" . $self->_main_module_override . "' is not to be found in our dist. ( Did you add it? )";
-        } else {
-            push @errorlines,"We tried to guess '$guess' but no file like that existed";
-        }
-        if ( not @{ $self->files } ) {
-            push @errorlines, "Upon further inspection we didn't find any files in your dist, did you add any?";
-        } elsif ( none { $_->name =~ m{^lib/.+\.pm\z} } @{ $self->files } ){
-            push @errorlines, "We didn't find any .pm files in your dist, this is probably a problem.";
-        }
-        push @errorlines,"Cannot continue without a main_module";
-        $self->log_fatal( join qq{\n}, @errorlines );
+      push @errorlines, "Unable to find main_module in the distribution";
+      if ($self->_has_main_module_override) {
+        push @errorlines, "'main_module' was specified in dist.ini but the file '" . $self->_main_module_override . "' is not to be found in our dist. ( Did you add it? )";
+      } else {
+        push @errorlines,"We tried to guess '$guess' but no file like that existed";
+      }
+      if (not @{ $self->files }) {
+        push @errorlines, "Upon further inspection we didn't find any files in your dist, did you add any?";
+      } elsif ( none { $_->name =~ m{^lib/.+\.pm\z} } @{ $self->files } ){
+        push @errorlines, "We didn't find any .pm files in your dist, this is probably a problem.";
+      }
+      push @errorlines,"Cannot continue without a main_module";
+      $self->log_fatal( join qq{\n}, @errorlines );
     }
     $self->log_debug("dist's main_module is " . $file->name);
 
