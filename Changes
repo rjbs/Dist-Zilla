@@ -1,7 +1,10 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+5.041     2015-10-27 22:07:54-04:00 America/New_York
         - add 'static_attribution' attribution to MakeMaker plugin
+        - fix prereqs for App::Cmd and Config::MVP::Reader::INI
 
 5.040     2015-10-13 11:42:25-04:00 America/New_York
         - the distribution tarball name no longer includes -TRIAL if the
