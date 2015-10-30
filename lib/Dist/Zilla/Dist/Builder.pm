@@ -341,26 +341,26 @@ sub build_in {
   $self->log_fatal("attempted to build " . $self->name . " a second time")
     if $self->built_in;
 
-  $self->phase('BeforeBuild', 'before_build');
+  $self->_call_plugin_method('BeforeBuild', 'before_build');
 
   $self->log("beginning to build " . $self->name);
 
-  $self->phase('FileGatherer', 'gather_files');
-  $self->phase('EncodingProvider', 'set_file_encodings');
-  $self->phase('FilePruner', 'prune_files' );
+  $self->_call_plugin_method('FileGatherer', 'gather_files');
+  $self->_call_plugin_method('EncodingProvider', 'set_file_encodings');
+  $self->_call_plugin_method('FilePruner', 'prune_files' );
 
   $self->version; # instantiate this lazy attribute now that files are gathered
 
-  $self->phase('FileMunger', 'munge_files');
+  $self->_call_plugin_method('FileMunger', 'munge_files');
 
-  $self->phase('PrereqSource', 'register_prereqs');
+  $self->_call_plugin_method('PrereqSource', 'register_prereqs');
 
   $self->prereqs->finalize;
 
   # Barf if someone has already set up a prereqs entry? -- rjbs, 2010-04-13
   $self->distmeta->{prereqs} = $self->prereqs->as_string_hash;
 
-  $self->phase('InstallTool', 'setup_installer' );
+  $self->_call_plugin_method('InstallTool', 'setup_installer' );
 
   $self->_check_dupe_files;
 
@@ -372,7 +372,7 @@ sub build_in {
     $self->_write_out_file($file, $build_root);
   }
 
-  $self->phase('AfterBuild', 'after_build', { build_root => $build_root });
+  $self->_call_plugin_method('AfterBuild', 'after_build', { build_root => $build_root });
 
   $self->built_in($build_root);
 }
@@ -475,7 +475,7 @@ sub build_archive {
   my $basename = $self->dist_basename;
   my $basedir = dir($basename);
 
-  $self->phase('BeforeArchive', 'before_archive');
+  $self->_call_plugin_method('BeforeArchive', 'before_archive');
 
   my $method = Class::Load::load_optional_class('Archive::Tar::Wrapper',
                                                 { -version => 0.15 })
@@ -598,13 +598,13 @@ sub release {
   my $tgz = $self->build_archive;
 
   # call all plugins implementing BeforeRelease role
-  $self->phase('BeforeRelease', 'before_release', $tgz);
+  $self->_call_plugin_method('BeforeRelease', 'before_release', $tgz);
 
   # do the actual release
-  $self->phase('Releaser', 'release', $tgz);
+  $self->_call_plugin_method('Releaser', 'release', $tgz);
 
   # call all plugins implementing AfterRelease role
-  $self->phase('AfterRelease', 'after_release', $tgz);
+  $self->_call_plugin_method('AfterRelease', 'after_release', $tgz);
 }
 
 =method clean
@@ -777,7 +777,7 @@ does it clean up C<$directory> afterwards.
 sub run_tests_in {
   my ($self, $target, $arg) = @_;
 
-  $self->phase('TestRunner', 'test_in', $target, $arg )
+  $self->_call_plugin_method('TestRunner', 'test_in', $target, $arg )
     or $self->log_fatal("you can't test without any TestRunner plugins");
 }
 
@@ -847,7 +847,7 @@ sub _ensure_blib {
   my ($self) = @_;
 
   unless ( -d 'blib' ) {
-    $self->phase('BuildRunner', 'build')
+    $self->_call_plugin_method('BuildRunner', 'build')
       or $self->log_fatal("no BuildRunner plugins specified");
     $self->log_fatal("no blib; failed to build properly?") unless -d 'blib';
   }
