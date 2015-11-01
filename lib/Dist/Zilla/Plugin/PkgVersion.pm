@@ -50,7 +50,7 @@ false.
 
 =attr die_on_line_insertion
 
-By default, PkgVersion look for a blank line after each C<package> statement.
+By default, PkgVersion looks for a blank line after each C<package> statement.
 If it finds one, it inserts the C<$VERSION> assignment on that line.  If it
 doesn't, it will insert a new line, which means the shipped copy of the module
 will have different line numbers (off by one) than the source.  If
