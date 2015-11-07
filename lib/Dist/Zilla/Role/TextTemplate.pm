@@ -40,7 +40,7 @@ given in the C<%stash>.  The stash becomes the HASH argument to Text::Template,
 so scalars must be scalar references rather than plain scalars.
 
 C<%arg> is dereferenced and passed in as extra arguments to Text::Template's
-C<fill_in_string> routine.
+C<new> routine.
 
 =cut
 
