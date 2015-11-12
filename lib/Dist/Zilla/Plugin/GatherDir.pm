@@ -214,6 +214,8 @@ sub gather_files {
     # _file_from_filename is overloaded in GatherDir::Template
     my $fileobj = $self->_file_from_filename($filename);
 
+    # GatherDir::Template may rename the file
+    $filename = $fileobj->name;
     my $file = path($filename)->relative($root);
     $file = path($self->prefix, $file) if $self->prefix;
 
