@@ -27,7 +27,14 @@ use Sub::Exporter -setup => {
 
 sub from_config {
   my ($self, @arg) = @_;
-  $self->builder->from_config(@arg);
+
+  # The only thing using a local time zone should be NextRelease.  Normally it
+  # defaults to "local," but since some users won't have an automatically
+  # determinable time zone, we'll switch to not-local times for testing.
+  # -- rjbs, 2015-11-26
+  local $Dist::Zilla::Plugin::NextRelease::DEFAULT_TIME_ZONE = 'GMT';
+
+  return $self->builder->from_config(@arg);
 }
 
 sub builder { 'Dist::Zilla::Tester::_Builder' }

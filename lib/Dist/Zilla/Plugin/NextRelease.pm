@@ -44,10 +44,11 @@ use String::Formatter 0.100680 stringf => {
   },
 };
 
+our $DEFAULT_TIME_ZONE = 'local';
 has time_zone => (
   is => 'ro',
   isa => 'Str', # should be more validated later -- apocal
-  default => 'local',
+  default => $DEFAULT_TIME_ZONE,
 );
 
 has format => (

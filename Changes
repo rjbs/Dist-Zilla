@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - try to avoid testing errors when the local time zone can't be
+          determined (https://github.com/rjbs/Dist-Zilla/issues/497)
 
 5.041     2015-10-27 22:07:54-04:00 America/New_York
         - add 'static_attribution' attribution to MakeMaker plugin
