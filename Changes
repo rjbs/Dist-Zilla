@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+5.042     2015-11-26 09:05:37-05:00 America/New_York
         - try to avoid testing errors when the local time zone can't be
           determined (https://github.com/rjbs/Dist-Zilla/issues/497)
 
