@@ -26,11 +26,13 @@ has logger => (
 sub _build_logger {
   my $self = shift;
   my $enc = $self->term_enc;
-  if ( $enc ) {
+
+  if ($enc && Encode::resolve_alias($enc)) {
     my $layer = sprintf(":encoding(%s)", $enc);
     binmode( STDOUT, $layer );
     binmode( STDERR, $layer );
   }
+
   return Log::Dispatchouli->new({
       ident     => 'Dist::Zilla',
       to_stdout => 1,
