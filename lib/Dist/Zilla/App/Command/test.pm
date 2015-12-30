@@ -59,7 +59,7 @@ This will run the test suite without setting AUTHOR_TESTING
 
 =head2 --all
 
-Equivalent to --release --automated --author
+Equivalent to --release --automated --extended --author
 
 =cut
 
