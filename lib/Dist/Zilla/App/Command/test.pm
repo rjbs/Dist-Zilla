@@ -7,7 +7,7 @@ use Dist::Zilla::App -command;
 
 =head1 SYNOPSIS
 
-  dzil test [ --release ] [ --no-author ] [ --automated ] [ --all ]
+  dzil test [ --release ] [ --no-author ] [ --automated ] [ --extended ] [ --all ]
 
 =head1 DESCRIPTION
 
@@ -31,8 +31,9 @@ be removed and F<dzil> will exit with status 0.
 sub opt_spec {
   [ 'release'   => 'enables the RELEASE_TESTING env variable', { default => 0 } ],
   [ 'automated' => 'enables the AUTOMATED_TESTING env variable', { default => 0 } ],
+  [ 'extended' => 'enables the EXTENDED_TESTING env variable', { default => 0 } ],
   [ 'author!' => 'enables the AUTHOR_TESTING env variable (default behavior)', { default => 1 } ],
-  [ 'all' => 'enables the RELEASE_TESTING, AUTOMATED_TESTING and AUTHOR_TESTING env variables', { default => 0 } ],
+  [ 'all' => 'enables the RELEASE_TESTING, AUTOMATED_TESTING, EXTENDED_TESTING and AUTHOR_TESTING env variables', { default => 0 } ],
   [ 'keep-build-dir|keep' => 'keep the build directory even after a success' ],
   [ 'jobs|j=i' => 'number of parallel test jobs to run' ],
   [ 'test-verbose' => 'enables verbose testing (TEST_VERBOSE env variable on Makefile.PL, --verbose on Build.PL', { default => 0 } ],
@@ -48,13 +49,17 @@ This will run the test suite with RELEASE_TESTING=1
 
 This will run the test suite with AUTOMATED_TESTING=1
 
+=head2 --extended
+
+This will run the test suite with EXTENDED_TESTING=1
+
 =head2 --no-author
 
 This will run the test suite without setting AUTHOR_TESTING
 
 =head2 --all
 
-Equivalent to --release --automated --author
+Equivalent to --release --automated --extended --author
 
 =cut
 
@@ -66,6 +71,7 @@ sub execute {
   local $ENV{RELEASE_TESTING} = 1 if $opt->release or $opt->all;
   local $ENV{AUTHOR_TESTING} = 1 if $opt->author or $opt->all;
   local $ENV{AUTOMATED_TESTING} = 1 if $opt->automated or $opt->all;
+  local $ENV{EXTENDED_TESTING} = 1 if $opt->extended or $opt->all;
 
   $self->zilla->test({
     $opt->keep_build_dir
