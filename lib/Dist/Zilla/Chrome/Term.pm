@@ -11,6 +11,7 @@ terminal environment.  It's the default chrome used by L<Dist::Zilla::App>.
 =cut
 
 use Dist::Zilla::Types qw(OneZero);
+use Encode ();
 use Log::Dispatchouli 1.102220;
 
 use namespace::autoclean;
