@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - make PkgDist preserve blank line after 'package' for PkgVersion
 
 5.043     2016-01-04 22:54:56-05:00 America/New_York
         - dzil test now supports --extended to set EXTENDED_TESTING (thanks,
