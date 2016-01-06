@@ -91,8 +91,12 @@ sub munge_perl {
       $file->name,
     ]);
 
+    # the extra whitespace element ensures we don't swallow up any blanks
+    # lines after 'package ...' in the source file that PkgVersion warns about
+    # if it's missing.
     Carp::carp('error inserting $DIST in ' . $file->name)
-      unless $stmt->insert_after($children[0]->clone)
+      unless $stmt->add_element( PPI::Token::Whitespace->new("\n") )
+      and    $stmt->insert_after($children[0]->clone)
       and    $stmt->insert_after( PPI::Token::Whitespace->new("\n") );
   }
 
