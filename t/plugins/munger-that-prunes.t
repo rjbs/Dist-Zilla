@@ -7,6 +7,10 @@ use lib 't/lib';
 use Test::DZil;
 use YAML::Tiny;
 
+# In the future, pruning during munging may become impossible by design.  Until
+# that time, it should not cause weird-o action at a distance. -- rjbs,
+# 2016-01-31
+
 {
    my $tzil = Builder->from_config(
       { dist_root => 'corpus/dist/DZT' },
