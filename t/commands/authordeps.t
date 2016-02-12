@@ -18,6 +18,7 @@ cmp_deeply(
     [
       +{ perl => '5.005' },
       +{ 'List::MoreUtils'=> '!= 0.407' },
+      +{ 'Foo::Bar' => '1.23' },
       ( map { +{"Dist::Zilla::Plugin::$_" => '5.0'} } qw<AutoPrereqs Encoding ExecDir> ),
       ( map { +{"Dist::Zilla::Plugin::$_" => 0} } qw<GatherDir MetaYAML> ),
       +{ 'Software::License::Perl_5' => '0' },
