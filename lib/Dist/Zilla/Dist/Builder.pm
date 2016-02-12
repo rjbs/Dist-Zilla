@@ -11,6 +11,7 @@ use File::pushd ();
 use Path::Class;
 use Path::Tiny; # because more Path::* is better, eh?
 use Try::Tiny;
+use List::Util 1.45 'uniq';
 
 use namespace::autoclean;
 
@@ -119,7 +120,7 @@ sub _setup_default_plugins {
       style       => 'list',
       code        => sub {
         my $plugins = $_[0]->zilla->plugins_with(-ExecFiles);
-        my @files = map {; @{ $_->find_files } } @$plugins;
+        my @files = uniq map {; @{ $_->find_files } } @$plugins;
 
         return \@files;
       },
