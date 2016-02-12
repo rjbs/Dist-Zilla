@@ -13,6 +13,8 @@ has user => (
   default  => 'AUTHORID',
 );
 
+sub cpanid { shift->user }
+
 sub release {
   my $self = shift;
 
