@@ -352,18 +352,11 @@ END_CHANGES
                 'GatherDir',
                 [ NextRelease => { format => '%v %P' } ],
                 [ '%PAUSE' => { username  => 'NOBODY', password => 'ohhai' } ],
-                [ UploadToCPAN => ],
+                [ FakeRelease => { user => 'NOBODY' } ],
         ),
       },
     },
   );
-
-  {
-    use Dist::Zilla::Plugin::UploadToCPAN;
-    package Dist::Zilla::Plugin::UploadToCPAN;
-    no warnings 'redefine';
-    sub release { die 'should not be releasing from tests!' }
-  }
 
   is(
     exception { $tzil->build },
