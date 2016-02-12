@@ -246,7 +246,7 @@ The name of the user making this release (from C<user_stash>).
 The email address of the user making this release (from C<user_stash>).
 
 = C<%P>
-The CPAN (PAUSE) id of the user namking this release (from -Releaser plugins;
+The CPAN (PAUSE) id of the user making this release (from -Releaser plugins;
 see L<[UploadToCPAN]|Dist::Zilla::Plugin::UploadToCPAN/username>).
 
 = C<%n>
