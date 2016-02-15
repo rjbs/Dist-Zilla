@@ -125,7 +125,7 @@ sub _assert_loaded_class_version_ok {
     die( sprintf
       "%s version (%s) does not match required version: %s\n",
       $pkg,
-      $have_version,
+      ( defined $have_version ? $have_version : 'undef' ),
       $version,
     );
   }
