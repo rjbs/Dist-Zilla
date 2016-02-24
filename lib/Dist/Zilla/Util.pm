@@ -5,7 +5,6 @@ package Dist::Zilla::Util;
 
 use Carp ();
 use Encode ();
-use String::RewritePrefix 0.002; # better string context behavior
 
 {
   package
@@ -89,20 +88,17 @@ Prefixes are rewritten as follows:
 
 =cut
 
+use String::RewritePrefix 0.006 rewrite => {
+  -as => '_expand_config_package_name',
+  prefixes => {
+    '=' => '',
+    '@' => 'Dist::Zilla::PluginBundle::',
+    '%' => 'Dist::Zilla::Stash::',
+    ''  => 'Dist::Zilla::Plugin::',
+  },
+};
 sub expand_config_package_name {
-  my ($self, $package) = @_;
-
-  my $str = String::RewritePrefix->rewrite(
-    {
-      '=' => '',
-      '@' => 'Dist::Zilla::PluginBundle::',
-      '%' => 'Dist::Zilla::Stash::',
-      ''  => 'Dist::Zilla::Plugin::',
-    },
-    $package,
-  );
-
-  return $str;
+  shift; goto &_expand_config_package_name
 }
 
 sub _global_config_root {
