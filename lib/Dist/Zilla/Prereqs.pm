@@ -5,8 +5,6 @@ use Moose;
 use MooseX::Types::Moose qw(Bool HashRef);
 
 use CPAN::Meta::Prereqs 2.120630; # add_string_requirement
-use Path::Class ();
-use String::RewritePrefix;
 use CPAN::Meta::Requirements 2.121; # requirements_for_module
 
 use namespace::autoclean;
