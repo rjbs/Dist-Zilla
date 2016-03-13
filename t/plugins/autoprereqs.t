@@ -192,6 +192,8 @@ $tzil = Builder->from_config(
 # check found prereqs
 $meta = build_meta($tzil);
 
+{
+my %want_runtime = %want_runtime;
 # Moose-style prereqs should not be recognized this time:
 delete $want_runtime{'DZPA::Base::Moose1'};
 delete $want_runtime{'DZPA::Base::Moose2'};
@@ -206,6 +208,38 @@ is_deeply(
   $meta->{prereqs}{runtime}{requires},
   \%want_runtime,
   'custom scanner list',
+);
+}
+
+
+# Try again with a non-default prereq type:
+$tzil = Builder->from_config(
+  { dist_root => 'corpus/dist/AutoPrereqs' },
+  {
+    add_files => {
+      'source/dist.ini' => simple_ini(
+        qw(GatherDir ExecDir),
+        [ AutoPrereqs => { skip             => '^DZPA::Skip',
+                           type             => 'suggests' } ],
+        [ MetaYAML => { version => 2 } ],
+      ),
+      'source/t/basic.t' => "use Test::Foo;\n",
+    },
+  },
+);
+
+# check found prereqs
+$meta = build_meta($tzil);
+
+cmp_deeply(
+  $meta,
+  superhashof({
+    prereqs => {
+      runtime => { suggests => \%want_runtime },
+      test => { suggests => \%want_test },
+    },
+  }),
+  'all prereqs were added with the "suggests" relationship',
 );
 
 done_testing;
