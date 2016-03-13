@@ -50,6 +50,7 @@ is C<:ExtraTestFiles>.
 
 =cut
 
+use Moose::Util::TypeConstraints 'enum';
 use namespace::autoclean;
 
 =head1 SYNOPSIS
@@ -97,6 +98,11 @@ This is an arrayref of regular expressions, derived from all the 'skip' lines
 in the configuration.  Any module names matching any of these regexes will not
 be registered as prerequisites.
 
+=attr relationship
+
+The relationship used for the registered prerequisites. The default value is
+'requires'; other options are 'recommends' and 'suggests'.
+
 =head1 SEE ALSO
 
 L<Prereqs|Dist::Zilla::Plugin::Prereqs>, L<Perl::PrereqScanner>.
@@ -109,7 +115,8 @@ This plugin was originally contributed by Jerome Quelin.
 
 sub mvp_multivalue_args { qw(extra_scanners scanners skips) }
 sub mvp_aliases { return { extra_scanner => 'extra_scanners',
-                           scanner => 'scanners', skip => 'skips' } }
+                           scanner => 'scanners', skip => 'skips',
+                           relationship => 'type' } }
 
 has extra_scanners => (
   is  => 'ro',
@@ -126,6 +133,12 @@ has scanners => (
 has skips => (
   is  => 'ro',
   isa => 'ArrayRef[Str]',
+);
+
+has type => (
+  is => 'ro',
+  isa => enum([qw(requires recommends suggests)]),
+  default => 'requires',
 );
 
 sub register_prereqs {
@@ -190,7 +203,7 @@ sub register_prereqs {
       push @modules, @this_thing;
 
       # parse a file, and merge with existing prereqs
-      $self->log_debug([ 'scanning %s for %s prereqs', $file->name, $phase ]);
+      $self->log_debug([ 'scanning %s for %s %s prereqs', $file->name, $phase, $self->type ]);
       my $file_req = $scanner->scan_ppi_document(
         $self->ppi_document_for_file($file)
       );
@@ -224,7 +237,13 @@ sub register_prereqs {
         keys %runtime_final;
     }
 
-    $self->zilla->register_prereqs({ phase => $phase }, %got);
+    $self->zilla->register_prereqs(
+      {
+        phase => $phase,
+        type  => $self->type,
+      },
+      %got,
+    );
   }
 }
 
