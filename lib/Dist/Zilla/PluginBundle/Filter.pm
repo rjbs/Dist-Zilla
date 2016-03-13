@@ -84,9 +84,8 @@ sub bundle_config {
 
   return @plugins unless my $remove = $config->{filter}->{remove};
 
-  require List::MoreUtils;
   for my $i (reverse 0 .. $#plugins) {
-    splice @plugins, $i, 1 if List::MoreUtils::any(sub {
+    splice @plugins, $i, 1 if any(sub {
       $plugins[$i][1] eq Dist::Zilla::Util->expand_config_package_name($_)
     }, @$remove);
   }

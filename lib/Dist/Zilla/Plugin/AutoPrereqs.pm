@@ -134,7 +134,8 @@ sub register_prereqs {
   require Perl::PrereqScanner;
   Perl::PrereqScanner->VERSION('1.016'); # don't skip "lib"
   require CPAN::Meta::Requirements;
-  require List::MoreUtils;  # uniq
+  require List::Util;
+  List::Util->VERSION(1.45);  # uniq
 
   my @modules;
 
@@ -207,7 +208,7 @@ sub register_prereqs {
     }
 
     # remove prereqs shipped with current dist
-    $self->log_debug([ 'excluding local packages: %s', sub { join(', ', List::MoreUtils::uniq @modules) } ]);
+    $self->log_debug([ 'excluding local packages: %s', sub { join(', ', List::Util::uniq @modules) } ]);
     $req->clear_requirement($_) for @modules;
 
     $req->clear_requirement($_) for qw(Config DB Errno NEXT Pod::Functions); # never indexed
