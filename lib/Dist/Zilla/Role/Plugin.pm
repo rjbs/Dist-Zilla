@@ -5,7 +5,7 @@ use Moose::Role;
 with 'Dist::Zilla::Role::ConfigDumper';
 
 use Params::Util qw(_HASHLIKE);
-use MooseX::Types;
+use Moose::Util::TypeConstraints 'class_type';
 
 use namespace::autoclean;
 
