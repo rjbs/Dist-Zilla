@@ -1,6 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - [MakeMaker] now rejects version ranges in prereqs if eumm_version is
+          not specified to be high enough (7.1101) to guarantee it can be
+          handled (Karen Etheridge)
 
 5.044     2016-04-06 20:32:14-04:00 America/New_York
         - require a newer List::Util to avoid a dumb bug caused by relying on
