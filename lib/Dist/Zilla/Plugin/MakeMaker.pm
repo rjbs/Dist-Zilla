@@ -224,9 +224,10 @@ sub write_makefile_args {
   # higher configure-requires version, we should at least warn the user
   # https://github.com/Perl-Toolchain-Gang/ExtUtils-MakeMaker/issues/215
   foreach my $phase (qw(configure build test runtime)) {
-    if (my @version_ranges = pairgrep { !version::is_lax($b) } %{ $require_prereqs{$phase} }) {
-      $self->log([
-        'found version range in %s prerequisites, which ExtUtils::MakeMaker cannot parse: %s %s',
+    if (my @version_ranges = pairgrep { defined($b) && !version::is_lax($b) } %{ $require_prereqs{$phase} }
+        and ($self->eumm_version || 0) < '7.1101') {
+      $self->log_fatal([
+        'found version range in %s prerequisites, which ExtUtils::MakeMaker cannot parse (must specify eumm_version of at least 7.1101): %s %s',
         $phase, $_->[0], $_->[1]
       ]) foreach pairs @version_ranges;
     }
