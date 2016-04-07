@@ -96,4 +96,43 @@ ok(keys(%$manifest) == @files, "all files in manifest were on disk");
 diag 'got log messages: ', explain $tzil->log_messages
   if not Test::Builder->new->is_passing;
 
+
+SKIP: {
+  todo_skip('MSWin32 - skipping symlink test', 1) if $^O eq 'MSWin32';
+
+  # tmp/tmp -> tmp/private/tmp
+  my $real_tmp = path('tmp', 'private', 'tmp');
+  mkpath $real_tmp;
+  my $link_tmp = path('tmp', 'tmp');
+  symlink 'private/tmp', 'tmp/tmp';
+
+  END { $real_tmp->remove_tree; $link_tmp->remove }
+
+  my $tzil = Builder->from_config(
+    { dist_root => 'corpus/dist' },
+    {
+      add_files => {
+        'source/dist.ini' => simple_ini(
+          [ GatherDir => { root => 'DZ1' } ],
+        ),
+      },
+      tempdir_root => 'tmp/tmp',
+    },
+  );
+
+  $tzil->chrome->logger->set_debug(1);
+  $tzil->build;
+
+  my @files = map {; $_->name } @{ $tzil->files };
+
+  is_filelist(
+    [ @files ],
+    [ qw(dist.ini lib/DZ1.pm) ],
+    "GatherDir gathers all files in the source dir (canonically corpus/dist/DZ1)",
+  );
+
+  diag 'got log messages: ', explain $tzil->log_messages
+    if not Test::Builder->new->is_passing;
+}
+
 done_testing;
