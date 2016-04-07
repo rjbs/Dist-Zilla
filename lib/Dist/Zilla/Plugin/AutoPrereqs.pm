@@ -183,6 +183,7 @@ sub register_prereqs {
       }
       s{\.pm$}{} for @this_thing;
       s{/}{::}g for @this_thing;
+      @this_thing = List::MoreUtils::uniq grep { /^\w+(?:(?:'|::)\w+)*$/ } @this_thing;
 
       # this is a bunk heuristic and can still capture strings from pod - the
       # proper thing to do is grab all packages from Module::Metadata
@@ -208,7 +209,8 @@ sub register_prereqs {
     }
 
     # remove prereqs shipped with current dist
-    $self->log_debug([ 'excluding local packages: %s', sub { join(', ', List::Util::uniq @modules) } ]);
+    @modules = List::Util::uniq(@modules);
+    $self->log_debug([ 'excluding local packages: %s', sub { join(', ', @modules) } ]);
     $req->clear_requirement($_) for @modules;
 
     $req->clear_requirement($_) for qw(Config DB Errno NEXT Pod::Functions); # never indexed
