@@ -108,8 +108,7 @@ sub extract_author_deps {
           : (! Class::Load::try_load_class($_, ($vermap->{$_} ? {-version => $vermap->{$_}} : ())))
         : 1
       }
-    List::Util::uniq
-    @packages;
+    List::Util::uniq(@packages);
 
   return \@final;
 }
