@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - allow comments in an authordep specification with a version
 
 5.044     2016-04-06 20:32:14-04:00 America/New_York
         - require a newer List::Util to avoid a dumb bug caused by relying on
