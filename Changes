@@ -2,6 +2,10 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+5.044     2016-04-06 20:32:14-04:00 America/New_York
+        - require a newer List::Util to avoid a dumb bug caused by relying on
+          side effects of loading Moose (thanks, Karen Etheridge!)
+
 5.043     2016-01-04 22:54:56-05:00 America/New_York
         - dzil test now supports --extended to set EXTENDED_TESTING (thanks,
           Philippe Bruhat)
