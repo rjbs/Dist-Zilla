@@ -674,16 +674,16 @@ sub _create_build_symlinks {
     $latest   = path( $symlink_root, 'latest'   );
     if( -l $previous ) {
       $previous->remove
-        or $self->log([ 'cannot remove old %s/previous link', $symlink_root ]);
+        or $self->log([ 'cannot remove old %s/previous link', "$symlink_root" ]);
     }
     if( -l $latest ) {
       rename $latest, $previous
-        or $self->log([ 'cannot move %s/latest link to .build/previous', $symlink_root ]);
+        or $self->log([ 'cannot move %s/latest link to .build/previous', "$symlink_root" ]);
     }
 
     my $link_dest = path($build_target)->relative(path($latest)->parent);
     symlink $link_dest->stringify, $latest
-      or $self->log([ 'cannot create link %s/latest', $symlink_root ]);
+      or $self->log([ 'cannot create link %s/latest', "$symlink_root" ]);
   }
 
   return ($latest, $previous);
