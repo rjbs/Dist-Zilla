@@ -5,50 +5,8 @@ use Moose;
 with(
   'Dist::Zilla::Role::PrereqSource',
   'Dist::Zilla::Role::PPI',
-  'Dist::Zilla::Role::FileFinderUser' => {
-    default_finders => [ ':InstallModules', ':ExecFiles' ],
-  },
-  'Dist::Zilla::Role::FileFinderUser' => {
-    method           => 'found_test_files',
-    finder_arg_names => [ 'test_finder' ],
-    default_finders  => [ ':TestFiles' ],
-  },
-  'Dist::Zilla::Role::FileFinderUser' => {
-    method           => 'found_configure_files',
-    finder_arg_names => [ 'configure_finder' ],
-    default_finders  => [],
-  },
-  'Dist::Zilla::Role::FileFinderUser' => {
-    method           => 'found_develop_files',
-    finder_arg_names => [ 'develop_finder' ],
-    default_finders  => [ ':ExtraTestFiles' ],
-  },
+  'Dist::Zilla::Role::ScanPrereqs',
 );
-
-=attr finder
-
-This is the name of a L<FileFinder|Dist::Zilla::Role::FileFinder>
-whose files will be scanned to determine runtime prerequisites.  It
-may be specified multiple times.  The default value is
-C<:InstallModules> and C<:ExecFiles>.
-
-=attr test_finder
-
-Just like C<finder>, but for test-phase prerequisites.  The default
-value is C<:TestFiles>.
-
-=attr configure_finder
-
-Just like C<finder>, but for configure-phase prerequisites.  There is
-no default value; AutoPrereqs will not determine configure-phase
-prerequisites unless you set configure_finder.
-
-=attr develop_finder
-
-Just like C<finder>, but for develop-phase prerequisites.  The default value
-is C<:ExtraTestFiles>.
-
-=cut
 
 use Moose::Util::TypeConstraints 'enum';
 use namespace::autoclean;
@@ -80,17 +38,28 @@ scanned:
     encoding = bytes
     match    = ^t/data/
 
-=attr extra_scanners
+=attr finder
 
-This is an arrayref of scanner names (as expected by L<Perl::PrereqScanner>).
-It will be passed as the C<extra_scanners> parameter to L<Perl::PrereqScanner>.
+This is the name of a L<FileFinder|Dist::Zilla::Role::FileFinder>
+whose files will be scanned to determine runtime prerequisites.  It
+may be specified multiple times.  The default value is
+C<:InstallModules> and C<:ExecFiles>.
 
-=attr scanners
+=attr test_finder
 
-This is an arrayref of scanner names (as expected by L<Perl::PrereqScanner>).
-If present, it will be passed as the C<scanners> parameter to
-L<Perl::PrereqScanner>, which means that it will replace the default list
-of scanners.
+Just like C<finder>, but for test-phase prerequisites.  The default
+value is C<:TestFiles>.
+
+=attr configure_finder
+
+Just like C<finder>, but for configure-phase prerequisites.  There is
+no default value; AutoPrereqs will not determine configure-phase
+prerequisites unless you set configure_finder.
+
+=attr develop_finder
+
+Just like C<finder>, but for develop-phase prerequisites.  The default value
+is C<:ExtraTestFiles>.
 
 =attr skips
 
@@ -103,6 +72,18 @@ be registered as prerequisites.
 The relationship used for the registered prerequisites. The default value is
 'requires'; other options are 'recommends' and 'suggests'.
 
+=attr extra_scanners
+
+This is an arrayref of scanner names (as expected by L<Perl::PrereqScanner>).
+It will be passed as the C<extra_scanners> parameter to L<Perl::PrereqScanner>.
+
+=attr scanners
+
+This is an arrayref of scanner names (as expected by L<Perl::PrereqScanner>).
+If present, it will be passed as the C<scanners> parameter to
+L<Perl::PrereqScanner>, which means that it will replace the default list
+of scanners.
+
 =head1 SEE ALSO
 
 L<Prereqs|Dist::Zilla::Plugin::Prereqs>, L<Perl::PrereqScanner>.
@@ -113,9 +94,9 @@ This plugin was originally contributed by Jerome Quelin.
 
 =cut
 
-sub mvp_multivalue_args { qw(extra_scanners scanners skips) }
+sub mvp_multivalue_args { qw(extra_scanners scanners) }
 sub mvp_aliases { return { extra_scanner => 'extra_scanners',
-                           scanner => 'scanners', skip => 'skips',
+                           scanner => 'scanners',
                            relationship => 'type' } }
 
 has extra_scanners => (
@@ -130,9 +111,22 @@ has scanners => (
   predicate => 'has_scanners',
 );
 
-has skips => (
-  is  => 'ro',
-  isa => 'ArrayRef[Str]',
+
+has _scanner => (
+  is => 'ro',
+  lazy => 1,
+  default => sub {
+    my $self = shift;
+
+    require Perl::PrereqScanner;
+    Perl::PrereqScanner->VERSION('1.016'); # don't skip "lib"
+
+    return Perl::PrereqScanner->new(
+      ($self->has_scanners ? (scanners => $self->scanners) : ()),
+      extra_scanners => $self->extra_scanners,
+    )
+  },
+  init_arg => undef,
 );
 
 has type => (
@@ -141,111 +135,19 @@ has type => (
   default => 'requires',
 );
 
+sub scan_file_reqs {
+  my ($self, $file) = @_;
+  return $self->_scanner->scan_ppi_document($self->ppi_document_for_file($file))
+}
+
 sub register_prereqs {
   my $self  = shift;
 
-  require Perl::PrereqScanner;
-  Perl::PrereqScanner->VERSION('1.016'); # don't skip "lib"
-  require CPAN::Meta::Requirements;
-  require List::Util;
-  List::Util->VERSION(1.45);  # uniq
+  my $type = $self->type;
 
-  my @modules;
-
-  my $scanner = Perl::PrereqScanner->new(
-    ($self->has_scanners ? (scanners => $self->scanners) : ()),
-    extra_scanners => $self->extra_scanners,
-  );
-
-  # not a hash, because order is important
-  my @sets = (
-    # phase => file finder method
-    [ configure => 'found_configure_files' ], # must come before runtime
-    [ runtime => 'found_files'      ],
-    [ test    => 'found_test_files' ],
-    [ develop => 'found_develop_files' ],
-  );
-
-  my %runtime_final;
-
-  for my $fileset (@sets) {
-    my ($phase, $method) = @$fileset;
-
-    my $req   = CPAN::Meta::Requirements->new;
-    my $files = $self->$method;
-
-    foreach my $file (@$files) {
-      # skip binary files
-      next if $file->is_bytes;
-      # parse only perl files
-      next unless $file->name =~ /\.(?:pm|pl|t|psgi)$/i
-               || $file->content =~ /^#!(?:.*)perl(?:$|\s)/;
-      # RT#76305 skip extra tests produced by ExtraTests plugin
-      next if $file->name =~ m{^t/(?:author|release)-[^/]*\.t$};
-
-      # store module name, to trim it from require list later on
-      my @this_thing = $file->name;
-
-      # t/lib/Foo.pm is treated as providing t::lib::Foo, lib::Foo, and Foo
-      if ($this_thing[0] =~ /^t/) {
-        push @this_thing, ($this_thing[0]) x 2;
-        $this_thing[1] =~ s{^t/}{};
-        $this_thing[2] =~ s{^t/lib/}{};
-      } else {
-        $this_thing[0] =~ s{^lib/}{};
-      }
-      s{\.pm$}{} for @this_thing;
-      s{/}{::}g for @this_thing;
-      @this_thing = List::Util::uniq(grep { /^\w+(?:(?:'|::)\w+)*$/ } @this_thing);
-
-      # this is a bunk heuristic and can still capture strings from pod - the
-      # proper thing to do is grab all packages from Module::Metadata
-      push @this_thing, $file->content =~ /^[^#]*?(?:^|\s)package\s+([^\s;#]+)/mg;
-      push @modules, @this_thing;
-
-      # parse a file, and merge with existing prereqs
-      $self->log_debug([ 'scanning %s for %s %s prereqs', $file->name, $phase, $self->type ]);
-      my $file_req = $scanner->scan_ppi_document(
-        $self->ppi_document_for_file($file)
-      );
-
-      $req->add_requirements($file_req);
-    }
-
-    # remove prereqs from skiplist
-    for my $skip (@{ $self->skips || [] }) {
-      my $re   = qr/$skip/;
-
-      foreach my $k ($req->required_modules) {
-        $req->clear_requirement($k) if $k =~ $re;
-      }
-    }
-
-    # remove prereqs shipped with current dist
-    @modules = List::Util::uniq(@modules);
-    $self->log_debug([ 'exclsuding local packages: %s', sub { join(', ', @modules) } ]);
-    $req->clear_requirement($_) for @modules;
-
-    $req->clear_requirement($_) for qw(Config DB Errno NEXT Pod::Functions); # never indexed
-
-    # we're done, return what we've found
-    my %got = %{ $req->as_string_hash };
-    if ($phase eq 'runtime') {
-      %runtime_final = %got;
-    } else {
-      # do not test-require things required for runtime
-      delete $got{$_} for
-        grep { exists $got{$_} and $runtime_final{$_} ge $got{$_} }
-        keys %runtime_final;
-    }
-
-    $self->zilla->register_prereqs(
-      {
-        phase => $phase,
-        type  => $self->type,
-      },
-      %got,
-    );
+  my $reqs_by_phase = $self->scan_prereqs;
+  while (my ($phase, $reqs) = each %$reqs_by_phase) {
+    $self->zilla->register_prereqs({ phase => $phase, type => $type }, %$reqs);
   }
 }
 
