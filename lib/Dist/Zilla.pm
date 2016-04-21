@@ -379,7 +379,11 @@ sub _build_license {
     $self->log("based on POD in $filename, guessing license is $guess[0]");
   }
 
-  Class::Load::load_class($license_class);
+  unless (Class::Load::try_load_class($license_class)) {
+    $self->log_fatal(
+      "could not load class $license_class for license " . $self->_license_class
+    );
+  }
 
   my $license = $license_class->new({
     holder => $self->_copyright_holder,
