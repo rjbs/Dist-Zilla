@@ -95,16 +95,12 @@ sub mvp_multivalue_args { qw(dirs files matches skips) }
 
 sub _join_re {
   my $list = shift;
-
-  return undef if @$list == 0;
-
-  my $re = qr/(?:$list->[0])/;
-
-  for my $i (1 .. $#$list) {
-    $re = qr/$re|(?:$list->[$i])/;
-  }
-
-  $re;
+  return undef unless @$list;
+  # Special case to avoid stringify+compile
+  return $list->[0] if @$list == 1;
+  # Wrap each element to ensure that alternations are isolated
+  my $re = join('|', map { "(?:$_)" } @$list);
+  qr/$re/
 }
 
 sub find_files {
