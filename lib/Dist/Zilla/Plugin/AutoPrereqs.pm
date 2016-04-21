@@ -3,9 +3,9 @@ package Dist::Zilla::Plugin::AutoPrereqs;
 
 use Moose;
 with(
+  'Dist::Zilla::Role::PrereqScanner',
   'Dist::Zilla::Role::PrereqSource',
   'Dist::Zilla::Role::PPI',
-  'Dist::Zilla::Role::ScanPrereqs',
 );
 
 use Moose::Util::TypeConstraints 'enum';

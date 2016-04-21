@@ -1,4 +1,4 @@
-package Dist::Zilla::Role::ScanPrereqs;
+package Dist::Zilla::Role::PrereqScanner;
 # ABSTRACT: automatically extract prereqs from your modules
 
 use Moose::Role;
