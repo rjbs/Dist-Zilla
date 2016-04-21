@@ -21,7 +21,8 @@ has logger => (
   isa => 'Log::Dispatchouli',
   init_arg => undef,
   writer   => '_set_logger',
-  lazy_build => 1,
+  lazy => 1,
+  builder => '_build_logger',
 );
 
 sub _build_logger {
