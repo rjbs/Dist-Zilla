@@ -14,6 +14,9 @@ Revision history for {{$dist->name}}
         - make PkgDist preserve blank line after 'package' for PkgVersion
           (Chisel Wright)
         - add rename option to [GatherDir::Template] (Alastair McGowan-Douglas)
+        - META.json is now emitted in ASCII (using \u... for non-ASCII
+          characters) to avoid a bug in older versions of JSON::PP on older
+          versions of perl
 
 5.043     2016-01-04 22:54:56-05:00 America/New_York
         - dzil test now supports --extended to set EXTENDED_TESTING (thanks,
