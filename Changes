@@ -2,6 +2,8 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
         - add 'relationship' option to AutoPrereqs plugin (Karen Etheridge)
+        - PrereqScanner role abstracts much of the AutoPrereqs behavior
+          (thanks, Olivier Mengué!)
         - remove duplicates from the results of the :ExecFiles filefinder
         - [MakeMaker] now rejects version ranges in prereqs if eumm_version is
           not specified to be high enough (7.1101) to guarantee it can be
