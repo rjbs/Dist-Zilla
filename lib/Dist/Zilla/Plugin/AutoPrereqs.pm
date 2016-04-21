@@ -223,7 +223,7 @@ sub register_prereqs {
 
     # remove prereqs shipped with current dist
     @modules = List::Util::uniq(@modules);
-    $self->log_debug([ 'exclsuding local packages: %s', sub { join(', ', @modules) } ]);
+    $self->log_debug([ 'excluding local packages: %s', sub { join(', ', @modules) } ]) if @modules;
     $req->clear_requirement($_) for @modules;
 
     $req->clear_requirement($_) for qw(Config DB Errno NEXT Pod::Functions); # never indexed
