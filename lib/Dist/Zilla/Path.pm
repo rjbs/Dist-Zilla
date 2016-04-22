@@ -4,7 +4,7 @@ use utf8;
 
 package Dist::Zilla::Path;
 
-# ABSTRACT: Wrapper for Path::Tiny that provides backcompat and deprecation process for Path::Class
+# ABSTRACT: a temporary wrapper for Path::Tiny with backcompat / deprecation code
 
 use Path::Tiny 0.052 qw();  # issue 427
 use Scalar::Util qw( blessed );
