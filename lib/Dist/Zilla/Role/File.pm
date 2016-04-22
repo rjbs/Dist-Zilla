@@ -3,6 +3,7 @@ package Dist::Zilla::Role::File;
 
 use Moose::Role;
 
+use Dist::Zilla::Types qw(_Filename);
 use Moose::Util::TypeConstraints;
 use Try::Tiny;
 
@@ -22,7 +23,7 @@ This is the name of the file to be written out.
 
 has name => (
   is   => 'rw',
-  isa  => 'Str', # Path::Class::File?
+  isa  => _Filename,
   required => 1,
 );
 
