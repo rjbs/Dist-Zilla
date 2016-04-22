@@ -34,13 +34,13 @@ sub execute {
   require Dist::Zilla::Path;
   require Dist::Zilla::Util::AuthorDeps;
 
-  my $deps =
-    Dist::Zilla::Util::AuthorDeps::format_author_deps(
-      Dist::Zilla::Util::AuthorDeps::extract_author_deps(
-        Dist::Zilla::Path::path(defined $opt->root ? $opt->root : '.'),
-        $opt->missing,
-      ), $opt->versions
-    );
+  my $deps = Dist::Zilla::Util::AuthorDeps::format_author_deps(
+    Dist::Zilla::Util::AuthorDeps::extract_author_deps(
+      Dist::Zilla::Path::path(defined $opt->root ? $opt->root : '.'),
+      $opt->missing,
+    ), $opt->versions
+  );
+
   $self->log($deps) if $deps;
 
   return;
