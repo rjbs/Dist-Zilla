@@ -52,7 +52,7 @@ You can't put your password in your F<dist.ini>.  C'mon now!
   }
 }
 
-=attribute credentials_stash
+=attr credentials_stash
 
 This attribute holds the name of a L<PAUSE stash|Dist::Zilla::Stash::PAUSE>
 that will contain the credentials to be used for the upload.  By default,
