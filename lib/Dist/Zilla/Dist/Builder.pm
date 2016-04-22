@@ -380,7 +380,7 @@ sub build_in {
 
 =attr built_in
 
-This is the L<Path::Class::Dir>, if any, in which the dist has been built.
+This is the L<Path::Tiny>, if any, in which the dist has been built.
 
 =cut
 
@@ -765,9 +765,9 @@ sub test {
 
   my $error = $zilla->run_tests_in($directory, $arg);
 
-This method runs the tests in $directory (a Path::Class::Dir), which
-must contain an already-built copy of the distribution.  It will throw an
-exception if there are test failures.
+This method runs the tests in $directory (a Path::Tiny), which must contain an
+already-built copy of the distribution.  It will throw an exception if there
+are test failures.
 
 It does I<not> set any of the C<*_TESTING> environment variables, nor
 does it clean up C<$directory> afterwards.
