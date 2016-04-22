@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - avoid using syntax that is called ambiguous on older perls
 
 5.045     2016-04-22 11:37:13+01:00 Europe/London
         - add 'relationship' option to AutoPrereqs plugin (Karen Etheridge)
