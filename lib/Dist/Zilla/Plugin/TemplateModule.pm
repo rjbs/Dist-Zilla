@@ -84,7 +84,7 @@ sub make_module {
     },
   );
 
-  (my $filename = $arg->{name}) =~ s{::}{/}g;
+  my $filename = $arg->{name} =~ s{::}{/}gr;
 
   my $file = Dist::Zilla::File::InMemory->new({
     name    => "lib/$filename.pm",

@@ -98,10 +98,9 @@ sub mint_dist {
 
   # XXX: We should have a way to get more than one module name in, and to
   # supply plugin names for the minter to use. -- rjbs, 2010-05-03
-  my @modules = do {
-    (my $module_name = $name) =~ s/-/::/g;
-    ({ name => $module_name });
-  };
+  my @modules = (
+    { name => $name =~ s/-/::/gr }
+  );
 
   $self->log("making target dir $dir");
   $dir->mkpath;

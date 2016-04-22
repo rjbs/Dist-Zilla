@@ -265,7 +265,7 @@ has main_module => (
     } else {
       # We're having to guess
 
-      ($guess = $self->name) =~ s{-}{/}g;
+      $guess = $self->name =~ s{-}{/}gr;
       $guess = "lib/$guess.pm";
 
       $file = (first { $_->name eq $guess } @{ $self->files })

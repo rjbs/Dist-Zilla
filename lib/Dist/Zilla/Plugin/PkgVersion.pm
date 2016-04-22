@@ -237,7 +237,7 @@ sub munge_perl {
 
     $perl = $blank ? "$perl\n" : "\n$perl";
 
-    (my $clean_version = $version) =~ tr/_//d;
+    my $clean_version = $version =~ tr/_//dr;
     $perl .= (
       $self->use_our
         ? "\n\$VERSION\x20=\x20'$clean_version';"

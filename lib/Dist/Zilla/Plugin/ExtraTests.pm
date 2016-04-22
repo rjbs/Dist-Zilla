@@ -49,7 +49,7 @@ sub _rewrite_release_test {
 sub _rewrite {
   my ($self, $file, $env, $msg) = @_;
 
-  (my $name = $file->name) =~ s{^xt/([^/]+)/}{t/$1-};
+  my $name = $file->name =~ s{^xt/([^/]+)/}{t/$1-}r;
 
   $file->name($name);
 

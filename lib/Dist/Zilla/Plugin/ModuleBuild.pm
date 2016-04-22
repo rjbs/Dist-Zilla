@@ -159,7 +159,7 @@ sub module_build_args {
     recommends         => $prereqs->requirements_for(qw(runtime   recommends)),
   );
 
-  (my $name = $self->zilla->name) =~ s/-/::/g;
+  my $name = $self->zilla->name =~ s/-/::/gr;
 
   return {
     module_name   => $name,
