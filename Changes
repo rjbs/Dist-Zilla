@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+5.045     2016-04-22 11:37:13+01:00 Europe/London
         - add 'relationship' option to AutoPrereqs plugin (Karen Etheridge)
         - PrereqScanner role abstracts much of the AutoPrereqs behavior
           (thanks, Olivier Mengué!)
