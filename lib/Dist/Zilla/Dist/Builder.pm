@@ -721,7 +721,7 @@ sub install {
     $self->log("all's well; left dist in place at $target");
   } else {
     $self->log("all's well; removing $target");
-    $target->remove_tree;
+    $target->remove_tree({ safe => 0 });
     $latest->remove if $latest;
   }
 
