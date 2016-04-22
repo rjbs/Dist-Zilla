@@ -30,6 +30,11 @@ List only dependencies which are unsatisfied.
 
 Also display the required versions of listed modules.
 
+=head2 --cpanm-versions
+
+Also display the required versions of listed modules, but in a format suitable
+for piping into F<cpanm>.
+
 =head2 --json
 
 Lists all prerequisites in JSON format, as they would appear in META.json
@@ -51,6 +56,7 @@ sub opt_spec {
   [ 'develop|author', 'include author/develop dependencies' ],
   [ 'missing', 'list only the missing dependencies' ],
   [ 'versions', 'include required version numbers in listing' ],
+  [ 'cpanm-versions', 'format versions for consumption by cpanm' ],
   [ 'json', 'list dependencies by phase, in JSON format' ],
   [ 'omit-core=s', 'Omit dependencies that are shipped with the specified version of perl' ],
 }
@@ -145,9 +151,12 @@ sub execute {
 
   my %modules = $self->extract_dependencies($self->zilla, \@phases, $opt->missing, $opt->omit_core);
 
-  if($opt->versions) {
-    for(sort { lc $a cmp lc $b } keys %modules) {
-      print "$_ = ".$modules{$_}."\n";
+  if ($opt->versions or $opt->cpanm_versions) {
+    my @names = sort { lc $a cmp lc $b } keys %modules;
+    if ($opt->cpanm_versions) {
+      print qq{$_~"$modules{$_}"\n} for @names;
+    } else {
+      print "$_ = $modules{$_}\n" for @names;
     }
   } else {
       print "$_\n" for sort { lc $a cmp lc $b } keys(%modules);
