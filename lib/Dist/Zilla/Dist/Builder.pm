@@ -560,7 +560,7 @@ sub _prep_build_root {
 
   return $build_root if !-d $build_root;
 
-  my $ok = eval { $build_root->remove_tree; 1 };
+  my $ok = eval { $build_root->remove_tree({ safe => 0 }); 1 };
   die "unable to delete '$build_root' in preparation of build: $@" unless $ok;
 
   # the following is done only on windows, and only if the deletion failed,
@@ -835,7 +835,7 @@ sub run_in_build {
 
   if ($ok) {
     $self->log("all's well; removing $target");
-    $target->remove_tree;
+    $target->remove_tree({ safe => 0 });
     $latest->remove if $latest;
   } else {
     my $error = $@ || '(unknown error)';
