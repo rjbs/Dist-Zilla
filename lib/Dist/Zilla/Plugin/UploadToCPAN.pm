@@ -52,6 +52,14 @@ You can't put your password in your F<dist.ini>.  C'mon now!
   }
 }
 
+=attribute credentials_stash
+
+This attribute holds the name of a L<PAUSE stash|Dist::Zilla::Stash::PAUSE>
+that will contain the credentials to be used for the upload.  By default,
+UploadToCPAN will look for a C<%PAUSE> stash.
+
+=cut
+
 has credentials_stash => (
   is  => 'ro',
   isa => 'Str',
