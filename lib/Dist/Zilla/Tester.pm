@@ -120,7 +120,6 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
 
   use File::Copy::Recursive qw(dircopy);
   use Dist::Zilla::Path;
-  use Data::Difference 'data_diff';
 
   our $Log_Events = [];
   sub most_recent_log_events {
@@ -223,12 +222,12 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
     # split the  $unix_path into 3 strings: $volume, $directories, $file; with:
     my @native_parts = File::Spec->splitpath($unix_path); # current OS rules
     my @unix_parts = File::Spec::Unix->splitpath($unix_path); # unix rules
-    return if data_diff( \@native_parts, \@unix_parts );
+    return unless join(qq{\0}, @native_parts) eq join(qq{\0}, @unix_parts);
 
     # split the $directories string into a list of the sub-directories; with:
     my @native_dirs = File::Spec->splitdir($native_parts[1]); # current OS rules
     my @unix_dirs = File::Spec::Unix->splitdir($unix_parts[1]); # unix rules
-    return if data_diff( \@native_dirs, \@unix_dirs );
+    return unless join(qq{\0}, @native_dirs) eq join(qq{\0}, @unix_dirs);
 
     return 1;
   }
