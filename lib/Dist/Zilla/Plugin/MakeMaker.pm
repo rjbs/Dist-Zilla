@@ -234,6 +234,8 @@ sub write_makefile_args {
         }
       }
       else {
+# XXX FIXME - gah! this is too late to make it into configure-require prereqs
+# in either makefile args or the actual prereq data structure.
         $self->log('found a version range in prereqs; increasing minimum required ExtUtils::MakeMaker to 7.1101');
         $self->eumm_version('7.1101');
       }

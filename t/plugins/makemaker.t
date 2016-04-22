@@ -102,7 +102,7 @@ use Test::DZil;
       add_files => {
         'source/dist.ini' => simple_ini(
           'GatherDir',
-          'MakeMaker',
+          [ 'MakeMaker' => { eumm_version => '6.70' } ],
           [ Prereqs => { 'External::Module' => '<= 1.23' } ],
         ),
         'source/lib/Foo.pm' => "package Foo;\n1\n",
@@ -114,6 +114,49 @@ use Test::DZil;
     exception { $tzil->build },
     qr/\Q[MakeMaker] found version range in runtime prerequisites, which ExtUtils::MakeMaker cannot parse (must specify eumm_version of at least 7.1101): External::Module <= 1.23\E/,
     'build does not permit passing unparsable version range',
+  );
+
+  diag 'got log messages: ', explain $tzil->log_messages
+    if not Test::Builder->new->is_passing;
+}
+
+{
+  my $tzil = Builder->from_config(
+    { dist_root => 'does-not-exist' },
+    {
+      add_files => {
+        'source/dist.ini' => simple_ini(
+          'GatherDir',
+          'MakeMaker',
+          [ Prereqs => { 'External::Module' => '<= 1.23' } ],
+        ),
+        'source/lib/Foo.pm' => "package Foo;\n1\n",
+      },
+    },
+  );
+
+  $tzil->chrome->logger->set_debug(1);
+  is(
+    exception { $tzil->build },
+    undef,
+    'build proceeds normally',
+  );
+
+  cmp_deeply(
+    $tzil->log_messages,
+    superbagof(re(qr/\[MakeMaker\] found a version range in prereqs; increasing minimum required ExtUtils::MakeMaker /)),
+    'build logs that it bumps eumm_version upon detection of version range',
+  );
+
+  my $makemaker = $tzil->plugin_named('MakeMaker');
+  cmp_deeply(
+    $makemaker->__write_makefile_args,
+    superhashof({
+      CONFIGURE_REQUIRES => {
+        'ExtUtils::MakeMaker' => '7.1101',
+      },
+    }),
+    'minimum EUMM version increased',
   );
 
   diag 'got log messages: ', explain $tzil->log_messages
