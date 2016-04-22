@@ -18,11 +18,14 @@ Almost every dist will be built with one GatherDir plugin, since it's the
 easiest way to get files from disk into your dist.  Most users just need:
 
   [GatherDir]
+  [PruneCruft]
 
 ...and this will pick up all the files from the current directory into the
-dist.  You can use it multiple times, as you can any other plugin, by providing
-a plugin name.  For example, if you want to include external specification
-files into a subdir of your dist, you might write:
+dist.  (L<PruneCruft|Dist::Zilla::Plugin::PruneCruft> is needed, here, to drop
+files that might present as build artifacts, but should not be shipped.)  You
+can use it multiple times, as you can any other plugin, by providing a plugin
+name.  For example, if you want to include external specification files into a
+subdir of your dist, you might write:
 
   [GatherDir]
   ; this plugin needs no config and gathers most of your files
