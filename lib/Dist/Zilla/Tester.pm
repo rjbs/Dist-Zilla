@@ -172,7 +172,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
 
     $Log_Events = $arg->{chrome}->logger->events;
 
-    local @INC = map {; ref($_) ? $_ : File::Spec->rel2abs($_) } @INC;
+    local @INC = map {; ref ? $_ : File::Spec->rel2abs($_) } @INC;
 
     local $ENV{DZIL_GLOBAL_CONFIG_ROOT};
     $ENV{DZIL_GLOBAL_CONFIG_ROOT} = $tester_arg->{global_config_root}
@@ -292,7 +292,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
     local $arg->{chrome} = Dist::Zilla::Chrome::Test->new;
     $Log_Events = $arg->{chrome}->logger->events;
 
-    local @INC = map {; ref($_) ? $_ : File::Spec->rel2abs($_) } @INC;
+    local @INC = map {; ref ? $_ : File::Spec->rel2abs($_) } @INC;
 
     my $global_config_root = Path::Class::dir($tester_arg->{global_config_root})->absolute;
 

@@ -25,7 +25,7 @@ sub test_dzil {
   my ($self, $source, $argv, $arg) = @_;
   $arg ||= {};
 
-  local @INC = map {; File::Spec->rel2abs($_) } @INC;
+  local @INC = map {; ref ? $_ : File::Spec->rel2abs($_) } @INC;
 
   my $tmpdir = $arg->{tempdir} || File::Temp::tempdir(CLEANUP => 1);
   my $root   = dir($tmpdir)->subdir('source');
