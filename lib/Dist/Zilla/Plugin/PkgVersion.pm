@@ -57,6 +57,14 @@ will have different line numbers (off by one) than the source.  If
 C<die_on_line_insertion> is true, PkgVersion will raise an exception rather
 than insert a new line.
 
+=attr use_package
+
+This option, if true, will not insert an assignment to C<$VERSION> but will
+replace the existing C<package> declaration with one that includes a version
+like:
+
+  package Module::Name 0.001;
+
 =attr use_our
 
 The idea here was to insert C<< { our $VERSION = '0.001'; } >> instead of C<<
@@ -95,6 +103,10 @@ sub BUILD {
   my ($self) = @_;
   $self->log("use_our option to PkgVersion is deprecated and will be removed")
     if $self->use_our;
+
+  if ($self->use_package && ($self->use_our || $self->use_begin)) {
+    $self->log_fatal("use_package and (use_our or use_begin) are not compatible");
+  }
 }
 
 sub munge_files {
@@ -126,6 +138,12 @@ has die_on_existing_version => (
 );
 
 has die_on_line_insertion => (
+  is  => 'ro',
+  isa => 'Bool',
+  default => 0,
+);
+
+has use_package => (
   is  => 'ro',
   isa => 'Bool',
   default => 0,
@@ -172,7 +190,7 @@ sub munge_perl {
   my %seen_pkg;
 
   my $munged = 0;
-  for my $stmt (@$package_stmts) {
+  STATEMENT: for my $stmt (@$package_stmts) {
     my $package = $stmt->namespace;
     if ($seen_pkg{ $package }++) {
       $self->log([ 'skipping package re-declaration for %s', $package ]);
@@ -189,6 +207,18 @@ sub munge_perl {
 
     $self->log("non-ASCII version is likely to cause problems")
       if $version =~ /\P{ASCII}/;
+
+    if ($self->use_package) {
+      my $perl = sprintf 'package %s %s;', $package, $version;
+      $perl .= ' # TRIAL' if $self->zilla->is_trial;
+
+      my $newstmt = PPI::Token::Unknown->new($perl);
+      Carp::carp("error inserting version in " . $file->name)
+        unless $stmt->parent->__replace_child($stmt, $newstmt);
+      $stmt->remove;
+      $munged = 1;
+      next STATEMENT;
+    }
 
     # the \x20 hack is here so that when we scan *this* document we don't find
     # an assignment to version; it shouldn't be needed, but it's been annoying
