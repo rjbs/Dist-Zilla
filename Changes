@@ -17,6 +17,7 @@ Revision history for {{$dist->name}}
         - META.json is now emitted in ASCII (using \u... for non-ASCII
           characters) to avoid a bug in older versions of JSON::PP on older
           versions of perl
+        - "dzil build --in ." no longer allows you to blow away your cwd
 
 5.044     2016-04-06 20:32:14-04:00 America/New_York
         - require a newer List::Util to avoid a dumb bug caused by relying on

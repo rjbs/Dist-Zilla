@@ -58,6 +58,10 @@ sub execute {
   my ($self, $opt, $args) = @_;
 
   if ($opt->in) {
+    require Path::Tiny;
+    die qq{using "--in ." would destroy your working directory!\n}
+      if Path::Tiny::path($opt->in)->absolute eq Path::Tiny::path('.')->absolute;
+
     $self->zilla->build_in($opt->in);
   } else {
     my $method = $opt->tgz ? 'build_archive' : 'build';
