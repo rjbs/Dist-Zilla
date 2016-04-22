@@ -62,7 +62,7 @@ sub _new_from_profile {
   warn "expected a string or Path::Tiny but got a Path::Class from $module\n"
     if ref $profile_dir && $profile_dir->isa('Path::Class');
 
-  $profile_dir = Dist::Zilla::Path::path( $profile_dir );
+  $profile_dir = path($profile_dir);
 
   $assembler->sequence->section_named('_')->add_value(root => $profile_dir);
 
