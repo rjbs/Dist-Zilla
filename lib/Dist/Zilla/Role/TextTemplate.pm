@@ -61,7 +61,7 @@ sub fill_in_string {
   $self->log_fatal("Could not create a Text::Template object from:\n$string")
     unless $tmpl;
 
-  my $content = $tmpl->fill_in(HASH => $stash);
+  my $content = $tmpl->fill_in(%$arg, HASH => $stash);
 
   $self->log_fatal("Filling in the template returned undef for:\n$string")
     unless defined $content;
