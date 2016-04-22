@@ -15,11 +15,18 @@ that's what you want.
 
 use MooseX::Types -declare => [qw(
   License OneZero YesNoStr ReleaseStatus 
+  Path
   _Filename
 )];
-use MooseX::Types::Moose qw(Str Int);
+use MooseX::Types::Moose qw(Str Int Defined);
 
 subtype License, as class_type('Software::License');
+
+subtype Path, as class_type('Path::Tiny');
+coerce Path, from Defined, via {
+  require Dist::Zilla::Path;
+  Dist::Zilla::Path::path($_);
+};
 
 subtype OneZero, as Str, where { $_ eq '0' or $_ eq '1' };
 

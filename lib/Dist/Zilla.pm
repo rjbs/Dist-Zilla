@@ -8,10 +8,9 @@ with 'Dist::Zilla::Role::ConfigDumper';
 
 use MooseX::Types::Moose qw(ArrayRef Bool HashRef Object Str);
 use MooseX::Types::Perl qw(DistName LaxVersionStr);
-use Dist::Zilla::Types::Path qw(Dir File);
 use Moose::Util::TypeConstraints;
 
-use Dist::Zilla::Types qw(License ReleaseStatus);
+use Dist::Zilla::Types qw(Path License ReleaseStatus);
 
 use Log::Dispatchouli 1.100712; # proxy_loggers, quiet_fatal
 use Dist::Zilla::Path;
@@ -517,7 +516,7 @@ nearly always be the current working directory in which C<dzil> was run.
 
 has root => (
   is   => 'ro',
-  isa  => Dir,
+  isa  => Path,
   coerce   => 1,
   required => 1,
 );

@@ -5,7 +5,7 @@ use Moose 0.92; # role composition fixes
 extends 'Dist::Zilla';
 
 use MooseX::Types::Moose qw(HashRef);
-use Dist::Zilla::Types::Path qw(Dir File);
+use Dist::Zilla::Types qw(Path);
 
 use File::pushd ();
 use Dist::Zilla::Path; # because more Path::* is better, eh?
@@ -386,7 +386,7 @@ This is the L<Path::Tiny>, if any, in which the dist has been built.
 
 has built_in => (
   is   => 'rw',
-  isa  => Dir,
+  isa  => Path,
   init_arg  => undef,
   coerce => 1,
 );
