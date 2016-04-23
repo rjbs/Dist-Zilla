@@ -1,6 +1,22 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        [THIS RELEASE MIGHT BREAK YOUR BUILD]
+        - Path::Class has been excised in favor of Path::Tiny, exposed as
+          Dist::Zilla::Path; it will still respond to ->subdir and ->file, but
+          only until Dist::Zilla v7 -- fix your plugins by then!
+
+        - The --verbose switch to dzil is now strictly on/off.  To set
+          verbosity on a per-plugin basis, use the -V switch.  Unfortunately,
+          per-plugin verbosity seems to have been broken for some time, anyway.
+
+        - The plugins [Prereq] and [AutoPrereq] and [BumpVersion] have been
+          removed.  These were long deprecated.  (Don't confuse Prereq, for
+          example, with the plural Prereqs, which is the correct plugin.)
+
+        - [PkgVersion] now supports a use_package argument which will put the
+          version in the package statement.  (Remember that this syntax was
+          introduced in perl v5.12.0.)
 
 5.046     2016-04-22 15:50:27+01:00 Europe/London
         - avoid using syntax that is called ambiguous on older perls
