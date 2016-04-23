@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - tweaks to Dist::Zilla::Path to keep plugins from v5 era working
 
 6.001     2016-04-23 13:21:56+01:00 Europe/London
         [THIS RELEASE MIGHT BREAK YOUR BUILD]
