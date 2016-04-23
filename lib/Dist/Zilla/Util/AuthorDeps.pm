@@ -74,7 +74,7 @@ sub extract_author_deps {
     chomp;
     next unless /\A\s*;\s*authordep\s*(\S+)\s*(?:=\s*([^;]+))?\s*/;
     my $module = $1;
-    my $ver = defined $2 ? $2 : "0";
+    my $ver = $2 // "0";
     $ver =~ s/\s+$//;
     # Any "; authordep " is inserted at the beginning of the list
     # in the file order so the user can control the order of at least a part of

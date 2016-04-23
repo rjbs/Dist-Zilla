@@ -437,7 +437,7 @@ has _copyright_year => (
     # rjbs, 2008-06-13
     my $stash = $_[0]->stash_named('%Rights');
     my $year  = $stash && $stash->copyright_year;
-    return defined $year ? $year : (localtime)[5] + 1900;
+    return( $year // (localtime)[5] + 1900 );
   }
 );
 
@@ -604,7 +604,7 @@ sub _build_distmeta {
     dynamic_config => 0, # problematic, I bet -- rjbs, 2010-06-04
     generated_by   => $self->_metadata_generator_id
                     . ' version '
-                    . (defined $self->VERSION ? $self->VERSION : '(undef)')
+                    . ($self->VERSION // '(undef)'),
   };
 
   for (@{ $self->plugins_with(-MetaProvider) }) {

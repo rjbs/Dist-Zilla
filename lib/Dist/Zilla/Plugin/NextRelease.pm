@@ -32,10 +32,10 @@ use String::Formatter 0.100680 stringf => {
     E => sub { $_[0]->_user_info('email') },
     U => sub { $_[0]->_user_info('name')  },
     T => sub { $_[0]->zilla->is_trial
-                   ? (defined $_[1] ? $_[1] : '-TRIAL') : '' },
+                   ? ($_[1] // '-TRIAL') : '' },
     V => sub { $_[0]->zilla->version
                 . ($_[0]->zilla->is_trial
-                   ? (defined $_[1] ? $_[1] : '-TRIAL') : '') },
+                   ? ($_[1] // '-TRIAL') : '') },
     P => sub {
       my $releaser = first { $_->can('cpanid') } @{ $_[0]->zilla->plugins_with('-Releaser') };
       $_[0]->log_fatal('releaser doesn\'t provide cpanid, but %P used') unless $releaser;

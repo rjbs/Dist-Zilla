@@ -36,7 +36,7 @@ sub execute {
 
   my $deps = Dist::Zilla::Util::AuthorDeps::format_author_deps(
     Dist::Zilla::Util::AuthorDeps::extract_author_deps(
-      Dist::Zilla::Path::path(defined $opt->root ? $opt->root : '.'),
+      Dist::Zilla::Path::path($opt->root // '.'),
       $opt->missing,
     ), $opt->versions
   );
