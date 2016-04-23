@@ -29,4 +29,9 @@ based on your profile with the:
 
 requires 'profile_dir';
 
+around profile_dir => sub {
+  my ($orig, $self, @args) = @_;
+  dir($self->$orig(@args));
+};
+
 1;
