@@ -27,9 +27,16 @@ sub path {
   return bless(Path::Tiny::path($thing, @rest), __PACKAGE__);
 }
 
+my %warned;
+
 sub file {
   my ($self, @file) = @_;
-  Carp::carp("->file called on a Dist::Zilla::Path object; this will cease to work in Dist::Zilla v7; downstream code should be updated to use Path::Tiny API, not Path::Class");
+
+  my ($package, $pmfile, $line) = caller;
+  unless ($warned{ $pmfile, $line }++) {
+    Carp::carp("->file called on a Dist::Zilla::Path object; this will cease to work in Dist::Zilla v7; downstream code should be updated to use Path::Tiny API, not Path::Class");
+  }
+
   require Path::Class;
   Path::Class::dir($self)->file(@file);
 }

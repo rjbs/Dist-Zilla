@@ -1,6 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        [THIS RELEASE MIGHT BREAK YOUR BUILD]
+        - Using a Dist::Zilla::Path like a Path::Class object now issues a
+          deprecation warning ("this will be removed") once per call site.
 
 6.000     2016-04-23 11:35:28+01:00 Europe/London (TRIAL RELEASE)
         [THIS RELEASE MIGHT BREAK YOUR BUILD]
