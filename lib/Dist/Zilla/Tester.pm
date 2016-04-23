@@ -143,7 +143,8 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
         CLEANUP => 1,
         (defined $tempdir_root ? (DIR => $tempdir_root) : ()),
     );
-    my $tempdir = path($tempdir_obj)->absolute;
+
+    my $tempdir = path( path($tempdir_obj)->absolute) ;
 
     my $root = $tempdir->child('source');
     $root->mkpath;
