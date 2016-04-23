@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+6.000     2016-04-23 11:35:28+01:00 Europe/London (TRIAL RELEASE)
         [THIS RELEASE MIGHT BREAK YOUR BUILD]
         - Path::Class has been excised in favor of Path::Tiny, exposed as
           Dist::Zilla::Path; it will still respond to ->subdir and ->file, but
