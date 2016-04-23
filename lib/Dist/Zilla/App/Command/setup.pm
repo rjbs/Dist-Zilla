@@ -116,7 +116,7 @@ Do you want to enter your PAUSE account details? ',
     $pause{password} = $chrome->prompt_str(
       "What is your PAUSE password? ",
       {
-        check   => sub { defined $_[0] and length $_[0] },
+        check   => sub { length $_[0] },
         noecho  => 1,
       },
     );
@@ -141,7 +141,7 @@ Do you want to enter your PAUSE account details? ',
   if (keys %pause) {
     $fh->print("[%PAUSE]\n");
     $fh->print("username = $pause{username}\n");
-    if (defined $pause{password} and length $pause{password}) {
+    if (length $pause{password}) {
       $fh->print("password = $pause{password}\n");
     }
     $fh->print("\n");

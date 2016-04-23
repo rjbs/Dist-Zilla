@@ -466,7 +466,7 @@ has authors => (
     }
 
     my $author = try { $self->copyright_holder };
-    return [ $author ] if defined $author and length $author;
+    return [ $author ] if length $author;
 
     $self->log_fatal(
       "No %User stash and no copyright holder;",

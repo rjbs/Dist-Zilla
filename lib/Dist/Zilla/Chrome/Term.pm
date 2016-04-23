@@ -85,7 +85,7 @@ sub prompt_str {
   }
   my $input_bytes = $self->term_ui->get_reply(
     prompt => $encode->($prompt),
-    allow  => $check || sub { defined $_[0] and length $_[0] },
+    allow  => $check || sub { length $_[0] },
     (defined $default
       ? (default => $encode->($default))
       : ()
