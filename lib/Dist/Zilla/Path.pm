@@ -29,12 +29,14 @@ sub path {
 
 sub file {
   my ($self, @file) = @_;
+  Carp::carp("->file called on a Dist::Zilla::Path object; this will cease to work in Dist::Zilla v7; downstream code should be updated to use Path::Tiny API, not Path::Class");
   require Path::Class;
   Path::Class::dir($self)->file(@file);
 }
 
 sub subdir {
   my ($self, @subdir) = @_;
+  Carp::carp("->subdir called on a Dist::Zilla::Path object; this will cease to work in Dist::Zilla v7; downstream code should be updated to use Path::Tiny API, not Path::Class");
   require Path::Class;
   Path::Class::dir($self)->file(@subdir);
 }
