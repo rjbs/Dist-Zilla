@@ -215,7 +215,6 @@ sub munge_perl {
       my $newstmt = PPI::Token::Unknown->new($perl);
       Carp::carp("error inserting version in " . $file->name)
         unless $stmt->parent->__replace_child($stmt, $newstmt);
-      $stmt->remove;
       $munged = 1;
       next STATEMENT;
     }
