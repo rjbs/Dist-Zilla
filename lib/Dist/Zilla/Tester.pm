@@ -172,11 +172,22 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
 
     $Log_Events = $arg->{chrome}->logger->events;
 
+    local @INC = @INC;
+
+    my $had_dot;
+    if ($INC[-1] eq '.') {
+      $had_dot = 1;
+      pop @INC;
+    }
+
+    @INC = map {; ref($_) ? $_ : File::Spec->rel2abs($_) } @INC;
+
+    push @INC, '.' if $had_dot;
+
     # We do this so that . in @INC will find plugins like [=inc::YourFace]
     # -- rjbs, 2016-04-24
     my $wd = File::pushd::pushd($arg->{dist_root});
 
-    local @INC = map {; ref($_) ? $_ : File::Spec->rel2abs($_) } @INC;
 
     local $ENV{DZIL_GLOBAL_CONFIG_ROOT};
     $ENV{DZIL_GLOBAL_CONFIG_ROOT} = $tester_arg->{global_config_root}
