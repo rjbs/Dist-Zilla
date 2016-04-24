@@ -28,6 +28,9 @@ Revision history for {{$dist->name}}
           version in the package statement.  (Remember that this syntax was
           introduced in perl v5.12.0.)
 
+        - Dist::Zilla now requires perl v5.14.0.  It will still happily build
+          dists that run on whatever version of perl you like.
+
 5.046     2016-04-22 15:50:27+01:00 Europe/London
         - avoid using syntax that is called ambiguous on older perls
 
