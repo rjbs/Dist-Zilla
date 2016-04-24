@@ -140,8 +140,8 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
     mkdir $tempdir_root if defined $tempdir_root and not -d $tempdir_root;
 
     my $tempdir_obj = File::Temp->newdir(
-        CLEANUP => 1,
-        (defined $tempdir_root ? (DIR => $tempdir_root) : ()),
+      CLEANUP => 1,
+      (defined $tempdir_root ? (DIR => $tempdir_root) : ()),
     );
 
     my $tempdir = path( path($tempdir_obj)->absolute) ;
