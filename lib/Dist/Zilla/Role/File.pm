@@ -144,6 +144,21 @@ sub _decode {
     my $text =
       try { Encode::decode($enc, $bytes, Encode::FB_CROAK()) }
       catch { $self->_throw("decode $enc" => $_) };
+
+    # Okay, look, buddy…  If you're using a BOM on UTF-8, that's fine.  You can
+    # use it.  You're just not going to get it back.  If we don't do this, the
+    # sequence of events will be:
+    # * read file from UTF-8-BOM file on disk
+    # * end up with FEFF as first character of file
+    # * pass file content to PPI
+    # * PPI blows up
+    #
+    # I'm not going to try to account for the BOM and add it back.  It's awful!
+    #
+    # Meanwhile, if you're using UTF-16, you can get the BOM handled by picking
+    # the right encoding type, I think. -- rjbs, 2016-04-24
+    $enc =~ /^utf-?8$/i && $text =~ s/\A\x{FEFF}//;
+
     return $text;
   }
 }
