@@ -33,8 +33,10 @@ sub ppi_document_for_file {
   my $md5 = md5($encoded_content);
   return $CACHE{$md5}->clone if $CACHE{$md5};
 
+  my $content = $file->content;
+
   require PPI::Document;
-  my $document = PPI::Document->new(\$encoded_content)
+  my $document = PPI::Document->new(\$content)
     or Carp::croak(PPI::Document->errstr . ' while processing file ' . $file->name);
 
   return ($CACHE{$md5} = $document)->clone;
@@ -57,9 +59,11 @@ sub save_ppi_document_to_file {
 
   my $new_content = $document->serialize;
 
-  $file->encoded_content($new_content);
+  $file->content($new_content);
 
-  $CACHE{ md5($new_content) } = $document->clone;
+  my $encoded = $file->encoded_content;
+
+  $CACHE{ md5($encoded) } = $document->clone;
 }
 
 =method document_assigns_to_variable

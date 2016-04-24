@@ -3,6 +3,7 @@ use warnings;
 use Test::More 0.88;
 
 use autodie;
+use utf8;
 use Test::DZil;
 use Test::Fatal;
 
@@ -129,6 +130,16 @@ package DZT::PodWithPackage;
 =cut
 ';
 
+my $pod_with_utf8 = '
+package DZT::PodWithUTF8;
+
+our $π =  atan2(1,1) * 4;
+
+=pod
+
+=cut
+';
+
 my $pod_no_pkg = '
 =pod
 
@@ -155,6 +166,7 @@ my $pod_no_pkg = '
         'source/lib/DZT/HideMe.pm' => $hide_me_comment,
         'source/lib/DZT/PodWithPackage.pm' => $pod_with_pkg,
         'source/lib/DZT/PodNoPackage.pm' => $pod_no_pkg,
+        'source/lib/DZT/PodWithUTF8.pm' => $pod_with_utf8,
         'source/bin/script_pkg.pl' => $script_pkg,
         'source/bin/script_ver.pl' => $script_pkg . "our \$VERSION = 1.234;\n",
         'source/bin/script.pl'     => $script,
@@ -253,6 +265,13 @@ my $pod_no_pkg = '
     $dzt_script_pkg,
     qr{^\s*\$\QDZT::Script::VERSION = '0.001';\E\s*$}m,
     "added version to DZT::Script",
+  );
+
+  my $dzt_utf8 = $tzil->slurp_file('build/lib/DZT/PodWithUTF8.pm');
+  like(
+    $dzt_utf8,
+    qr{^\s*\$\QDZT::PodWithUTF8::VERSION = '0.001';\E\s*$}m,
+    "added version to DZT::PodWithUTF8",
   );
 
   TODO: {
