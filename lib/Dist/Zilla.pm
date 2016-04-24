@@ -875,7 +875,3 @@ Search for plugin bundles: L<https://metacpan.org/search?q=Dist::Zilla::PluginBu
 =back
 
 =back
-__END__
-🌮
-&
-🍺
