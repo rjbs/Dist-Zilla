@@ -2,6 +2,11 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+6.003     2016-04-24 19:23:46+01:00 Europe/London (TRIAL RELEASE)
+        - leading BOM (FEFF) is stripped on UTF-8 content
+        - PPI now handles characters, not bytes, fixing non-ASCII
+          non-comments in your source
+
 6.002     2016-04-23 17:50:26+01:00 Europe/London (TRIAL RELEASE)
         - tweaks to Dist::Zilla::Path to keep plugins from v5 era working
 
