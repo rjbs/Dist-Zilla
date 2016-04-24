@@ -296,8 +296,12 @@ sub munge_perl {
     $munged = 1;
   }
 
-  # the document is no longer correct; it must be reparsed before it can be used again
-  $file->encoded_content($document->serialize) if $munged;
+  # the document is no longer correct; it must be reparsed before it can be
+  # used again, so we can't just save_ppi_document_to_file
+  # Maybe we want a way to clear the cache for the old form, though...
+  # -- rjbs, 2016-04-24
+  $file->content($document->serialize) if $munged;
+  return;
 }
 
 __PACKAGE__->meta->make_immutable;
