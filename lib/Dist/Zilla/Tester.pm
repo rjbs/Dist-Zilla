@@ -174,6 +174,10 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
 
     local @INC = map {; ref($_) ? $_ : File::Spec->rel2abs($_) } @INC;
 
+    # We do this so that . in @INC will find plugins like [=inc::YourFace]
+    # -- rjbs, 2016-04-24
+    my $wd = File::pushd::pushd($arg->{dist_root});
+
     local $ENV{DZIL_GLOBAL_CONFIG_ROOT};
     $ENV{DZIL_GLOBAL_CONFIG_ROOT} = $tester_arg->{global_config_root}
       if defined $tester_arg->{global_config_root};
