@@ -96,6 +96,7 @@ ok(keys(%$manifest) == @files, "all files in manifest were on disk");
 diag 'got log messages: ', explain $tzil->log_messages
   if not Test::Builder->new->is_passing;
 
+my @to_remove;
 
 SKIP: {
   todo_skip('MSWin32 - skipping symlink test', 1) if $^O eq 'MSWin32';
@@ -106,7 +107,7 @@ SKIP: {
   my $link_tmp = path('tmp', 'tmp');
   symlink 'private/tmp', 'tmp/tmp';
 
-  END { $real_tmp->remove_tree; $link_tmp->remove }
+  push @to_remove, [ $real_tmp, $link_tmp ];
 
   my $tzil = Builder->from_config(
     { dist_root => 'corpus/dist' },
@@ -133,6 +134,11 @@ SKIP: {
 
   diag 'got log messages: ', explain $tzil->log_messages
     if not Test::Builder->new->is_passing;
+}
+
+for my $pair (@to_remove) {
+  $pair->[0]->remove_tree;
+  $pair->[1]->remove;
 }
 
 done_testing;
