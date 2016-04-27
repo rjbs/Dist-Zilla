@@ -509,7 +509,7 @@ sub prune_file {
 
 =attr root
 
-This is the root directory of the dist, as a L<Path::Class::Dir>.  It will
+This is the root directory of the dist, as a L<Path::Tiny>.  It will
 nearly always be the current working directory in which C<dzil> was run.
 
 =cut
