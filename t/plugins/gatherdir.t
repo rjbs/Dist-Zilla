@@ -98,7 +98,7 @@ diag 'got log messages: ', explain $tzil->log_messages
 
 my @to_remove;
 
-SKIP: {
+TODO: {
   todo_skip('MSWin32 - skipping symlink test', 1) if $^O eq 'MSWin32';
 
   # tmp/tmp -> tmp/private/tmp
