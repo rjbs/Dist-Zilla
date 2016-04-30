@@ -78,5 +78,38 @@ sub test_dzil {
   }
 }
 
+=head1 DESCRIPTION
+
+This module exports only one function, C<test_dzil>.
+
+=head2 C<test_dzil>
+
+This function is used to test L<Dist::Zilla::App>.
+It receives two mandatory options. The first is the path to a Dist::Zilla-based
+distribution. The second, an array reference to a list of arguments. 
+
+The third optional argument is a hash reference, with further options. At the moment
+the only supported option is c<tempdir>.
+
+It returns a L<Dist::Zilla::App::Tester::Result>, that inherits from 
+L<App::Cmd::Tester::Result>. Typical methods called from this result are:
+
+=over 4 
+
+=item C<output>
+
+The output of running dzil;
+
+=item C<tempdir>
+
+The folder used for temporary files.
+
+=item C<build_dir>
+
+The folder where the distribution was built.
+
+=back
+
+=cut
 
 1;
