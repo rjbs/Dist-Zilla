@@ -209,29 +209,51 @@ sub munge_perl {
 
     my $blank;
 
+    # here we look for an empty line between "package" and the first
+    # non-comment, non-"use"/"require" line
     {
+      # start at the "package" statement
       my $curr = $stmt;
       while (1) {
         # avoid bogus locations due to insert_after
         $document->flush_locations if $munged;
+
+        # get all the PPI::Node in the line after $curr
         my $curr_line_number = $curr->line_number + 1;
         my $find = $document->find(sub {
           my $line = $_[1]->line_number;
           return $line > $curr_line_number ? undef : $line == $curr_line_number;
         });
 
-        last unless $find and @$find == 1;
+        # nothing there? give up, we'll insert just after "package"
+        last unless $find;
 
-        if ($find->[0]->isa('PPI::Token::Comment')) {
-          $curr = $find->[0];
-          next;
+        my $first_found = $find->[0];
+
+        # we found only 1 PPI::Node, and it's whitespace: ok, insert
+        # in its place
+        if (@$find == 1 and "$first_found" =~ /\A\s*\z/) {
+          $blank = $first_found;
+          last;
         }
 
-        if ("$find->[0]" =~ /\A\s*\z/) {
-          $blank = $find->[0];
+        # get the first actual "thing" on the line
+        my $sfirst_found = $first_found->significant
+            ? $first_found
+            : $first_found->snext_sibling;
+        if (not $sfirst_found
+                or $sfirst_found->line_number != $first_found->line_number) {
+            $sfirst_found = $first_found;
         }
 
-        last;
+        # is it a "use" or "require"? if not, give up: we don't want
+        # to skip anything else, it may not be safe
+        last unless $sfirst_found->isa('PPI::Statement::Include')
+            or $sfirst_found->isa('PPI::Token::Comment');
+        # we could get a comment if it's the only thing on the line
+
+        # skip over it, and try again
+        $curr = $first_found;
       }
     }
 

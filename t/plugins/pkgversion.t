@@ -135,6 +135,33 @@ my $pod_no_pkg = '
 =cut
 ';
 
+my $pkg_with_strict = '
+package DZT::WithStrict;
+# comment
+  use strict;
+# other comment
+
+sub foo {
+
+    return 1;
+
+}
+1;
+';
+
+my $pkg_pathological = '
+package DZT::Pathological;
+# comment
+use strict;
+package DZT::Pathological2;
+use strict;
+sub foo {
+
+    return 1;
+}
+1;
+';
+
 my $tzil = Builder->from_config(
   { dist_root => 'corpus/dist/DZT' },
   {
@@ -154,6 +181,8 @@ my $tzil = Builder->from_config(
       'source/lib/DZT/HideMe.pm' => $hide_me_comment,
       'source/lib/DZT/PodWithPackage.pm' => $pod_with_pkg,
       'source/lib/DZT/PodNoPackage.pm' => $pod_no_pkg,
+      'source/lib/DZT/WithStrict.pm' => $pkg_with_strict,
+      'source/lib/DZT/Pathological.pm' => $pkg_pathological,
       'source/bin/script_pkg.pl' => $script_pkg,
       'source/bin/script_ver.pl' => $script_pkg . "our \$VERSION = 1.234;\n",
       'source/bin/script.pl'     => $script,
@@ -312,6 +341,32 @@ unlike(
   $dzt_podnopackage,
   qr{VERSION},
   "no version for pod files with no package declaration"
+);
+
+my $dzt_with_strict = $tzil->slurp_file('build/lib/DZT/WithStrict.pm');
+like(
+  $dzt_with_strict,
+  qr{
+     ^\s* use \s+ strict; \s*
+     ^\# .*? $ \s*
+     ^\$DZT::WithStrict::VERSION \s+ = \s+ '0\.001';\s*
+  }mx,
+  "version inserted in the first empty line"
+);
+
+my $dzt_pathological = $tzil->slurp_file('build/lib/DZT/Pathological.pm');
+like(
+  $dzt_pathological,
+  qr{
+     ^package \s+ DZT::Pathological; \s*
+     ^\$DZT::Pathological::VERSION \s+ = \s+ '0\.001'; \s*
+     ^\# .*? $ \s*
+     ^use \s+ strict; \s*
+     ^package \s+ DZT::Pathological2; \s*
+     ^\$DZT::Pathological2::VERSION \s+ = \s+ '0\.001'; \s*
+     ^use \s+ strict; \s*
+  }xm,
+  "version inserted after 'package' if no empty line"
 );
 
 {
