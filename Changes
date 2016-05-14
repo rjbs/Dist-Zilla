@@ -12,6 +12,8 @@ Revision history for {{$dist->name}}
           Karen!)
         - the config loading of the "perl" config loader is more reliable, but
           still please don't use it (thanks, Karen!)
+        - introducing a new plugin, [GatherFile], to support adding individual
+          files to the distribution (thanks, Karen!)
 
 6.008     2016-10-05 21:35:23-04:00 America/New_York
         - fix the skip message from ExtraTests (thanks, Roy Ivy Ⅲ!)
