@@ -15,10 +15,11 @@ that's what you want.
 
 use MooseX::Types -declare => [qw(
   License OneZero YesNoStr ReleaseStatus 
-  Path
+  Path ArrayRefOfPaths
   _Filename
 )];
-use MooseX::Types::Moose qw(Str Int Defined);
+use MooseX::Types::Moose qw(Str Int Defined ArrayRef);
+use Path::Tiny;
 
 subtype License, as class_type('Software::License');
 
@@ -26,6 +27,12 @@ subtype Path, as class_type('Path::Tiny');
 coerce Path, from Defined, via {
   require Dist::Zilla::Path;
   Dist::Zilla::Path::path($_);
+};
+
+subtype ArrayRefOfPaths, as ArrayRef[Path];
+coerce ArrayRefOfPaths, from ArrayRef[Defined], via {
+  require Dist::Zilla::Path;
+  [ map { Dist::Zilla::Path::path($_) } @$_ ];
 };
 
 subtype OneZero, as Str, where { $_ eq '0' or $_ eq '1' };
@@ -38,6 +45,6 @@ coerce OneZero, from YesNoStr, via { /\Ay/i ? 1 : 0 };
 
 subtype _Filename, as Str,
   where   { $_ !~ qr/(?:\x{0a}|\x{0b}|\x{0c}|\x{0d}|\x{85}|\x{2028}|\x{2029})/ },
-  message { "Filename contains a newline or other vertical whitespace" };
+  message { "Filename not a Str, or contains a newline or other vertical whitespace" };
 
 1;
