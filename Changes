@@ -2,6 +2,10 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+6.004     2016-05-14 09:14:19-04:00 America/New_York (TRIAL RELEASE)
+        - stop listing Path::Class as a prereq (thanks, Karen Etheridge)
+        - update docs on path types (thanks, Graham Ollis)
+
 6.003     2016-04-24 19:23:46+01:00 Europe/London (TRIAL RELEASE)
         - leading BOM (FEFF) is stripped on UTF-8 content
         - PPI now handles characters, not bytes, fixing non-ASCII
