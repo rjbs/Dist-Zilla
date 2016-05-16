@@ -40,6 +40,10 @@ Revision history for {{$dist->name}}
         - Dist::Zilla now requires perl v5.14.0.  It will still happily build
           dists that run on whatever version of perl you like.
 
+5.047     2016-04-23 16:20:13+01:00 Europe/London
+        - cast things to Path::Class as needed, for now, for v6 backcompat
+          (don't expect more commits like this)
+
 5.046     2016-04-22 15:50:27+01:00 Europe/London
         - avoid using syntax that is called ambiguous on older perls
 
