@@ -97,8 +97,8 @@ diag 'got log messages: ', explain $tzil->log_messages
   if not Test::Builder->new->is_passing;
 
 
-TODO: {
-  todo_skip('MSWin32 - skipping symlink test', 1) if $^O eq 'MSWin32';
+SKIP: {
+  skip('MSWin32 - skipping symlink test', 1) if $^O eq 'MSWin32';
 
   # tmp/tmp -> tmp/private/tmp
   my $real_tmp = path('tmp', 'private', 'tmp');
