@@ -56,7 +56,7 @@ for my $type (@xt_types) {
 
   like(
     $test_program,
-    qr/\$ENV\{$env\}/,
+    qr/\$ENV\{'$env'\}/,
     "we mention $env in the rewritten $type test",
   );
 }
