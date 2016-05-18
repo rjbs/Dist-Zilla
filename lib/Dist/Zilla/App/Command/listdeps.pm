@@ -48,8 +48,6 @@ API.
 
 =cut
 
-use Try::Tiny;
-
 sub abstract { "print your distribution's prerequisites" }
 
 sub opt_spec {
@@ -108,22 +106,21 @@ sub extract_dependencies {
     $req->add_requirements( $prereqs->requirements_for($phase, 'recommends') );
   }
 
-  require Class::Load;
-
   my @required = grep { $_ ne 'perl' } $req->required_modules;
   if ($missing) {
-    my $is_required = sub {
-      my $mod = shift;
-      # it is required if it's not already installed
-      return 1 unless Class::Load::try_load_class($mod);
-
-      # guard against libs with -1 in $VERSION and other insanity
-      my $version;
-      return unless try { $version = $mod->VERSION; 1; };
-
-      return !$req->accepts_module($mod => $version);
-    };
-    @required = grep { $is_required->($_) } @required;
+    require Module::Runtime;
+    @required =
+      grep {
+        # Keep modules that can't be loaded or that don't have a $VERSION
+        # matching our requirements
+        ! eval {
+          my $m = $_;
+          # Will die if module is not installed
+          Module::Runtime::require_module($m);
+          # Returns true if $VERSION matches, so we will exclude the module
+          $req->accepts_module($m => $m->VERSION)
+        }
+      } @required;
   }
 
   my $versions = $req->as_string_hash;
