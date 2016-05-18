@@ -2,6 +2,9 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
         - replace uses of File::HomeDir with a simple glob()
+        - Dist::Zilla::Tester no longer changes into the source directory when
+          building. This may break some plugins that do not prepend
+          $zilla->root to paths when they should.
 
 6.012     2018-04-21 10:20:21+02:00 Europe/Oslo
         - revert addition of Archive::Tar::Wrapper as a mandatory prereq (in
