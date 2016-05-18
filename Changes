@@ -2,6 +2,9 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
         - replace uses of File::HomeDir with a simple glob()
+        - Dist::Zilla::Tester no longer changes into the source directory when
+          building. This may break some plugins that do not prepend
+          $zilla->root to paths when they should.
 
 6.015     2020-05-29 14:30:51-04:00 America/New_York
         - add docs for "dzil release -j" (thanks, Jonas B. Nielsen)
