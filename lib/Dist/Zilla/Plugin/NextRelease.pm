@@ -152,7 +152,7 @@ sub after_release {
   $self->log_debug([ 'updating contents of %s on disk', $update_fn ]);
 
   # and finally rewrite the changelog on disk
-  path($update_fn)->spew({binmode => $iolayer}, $content);
+  path($self->zilla->root, $update_fn)->spew({binmode => $iolayer}, $content);
 }
 
 __PACKAGE__->meta->make_immutable;

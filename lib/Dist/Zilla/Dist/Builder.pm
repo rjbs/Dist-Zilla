@@ -487,7 +487,7 @@ sub build_archive {
 
   my $archive = $self->$method($built_in, $basename, $basedir);
 
-  my $file = path($self->archive_filename);
+  my $file = path($self->root, $self->archive_filename);
 
   $self->log("writing archive to $file");
   $archive->write("$file", 9);
