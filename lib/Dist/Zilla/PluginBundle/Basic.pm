@@ -14,6 +14,7 @@ sub configure ($self) {
     PruneCruft
     ManifestSkip
     MetaYAML
+    MetaJSON
     License
     Readme
     ExtraTests
@@ -45,6 +46,7 @@ It includes the following plugins with their default configuration:
 * L<Dist::Zilla::Plugin::PruneCruft>
 * L<Dist::Zilla::Plugin::ManifestSkip>
 * L<Dist::Zilla::Plugin::MetaYAML>
+* L<Dist::Zilla::Plugin::MetaJSON>
 * L<Dist::Zilla::Plugin::License>
 * L<Dist::Zilla::Plugin::Readme>
 * L<Dist::Zilla::Plugin::ExtraTests>
