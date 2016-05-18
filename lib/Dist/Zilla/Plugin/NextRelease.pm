@@ -113,7 +113,7 @@ sub munge_files {
   my ($self) = @_;
 
   my ($file) = grep { $_->name eq $self->filename } @{ $self->zilla->files };
-  return unless $file;
+  $self->log_fatal([ 'failed to find %s in the distribution', $self->filename ]) if not $file;
 
   # save original unmunged content, for replacing back in the repo later
   my $content = $self->_original_changes_content($file->content);
