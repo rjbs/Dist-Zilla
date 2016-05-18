@@ -207,10 +207,6 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
   around build_in => sub {
     my ($orig, $self, $target) = @_;
 
-    # XXX: We *must eliminate* the need for this!  It's only here because right
-    # now building a dist with (root <> cwd) doesn't work. -- rjbs, 2010-03-08
-    my $wd = File::pushd::pushd($self->root);
-
     $target ||= do {
       my $target = path($self->tempdir)->child('build');
       $target->mkpath;
@@ -222,10 +218,6 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
 
   around ['test', 'release'] => sub {
     my ($orig, $self) = @_;
-
-    # XXX: We *must eliminate* the need for this!  It's only here because right
-    # now building a dist with (root <> cwd) doesn't work. -- rjbs, 2010-03-08
-    my $wd = File::pushd::pushd($self->root);
 
     return $self->$orig;
   };
