@@ -23,7 +23,7 @@ is($tzil->VERSION, Dist::Zilla->VERSION, "zilla tester VERSION");
 my $basename = $tzil->dist_basename;
 my $tarball  = $tzil->archive_filename;
 
-$tarball = $tzil->built_in->parent->subdir('source')->file($tarball);
+$tarball = $tzil->built_in->parent->child('source')->child($tarball);
 $tarball = Archive::Tar->new($tarball->stringify);
 
 my $makefile_pl = File::Spec::Unix->catfile($basename, 'Makefile.PL');

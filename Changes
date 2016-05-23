@@ -2,6 +2,44 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+6.004     2016-05-14 09:14:19-04:00 America/New_York (TRIAL RELEASE)
+        - stop listing Path::Class as a prereq (thanks, Karen Etheridge)
+        - update docs on path types (thanks, Graham Ollis)
+
+6.003     2016-04-24 19:23:46+01:00 Europe/London (TRIAL RELEASE)
+        - leading BOM (FEFF) is stripped on UTF-8 content
+        - PPI now handles characters, not bytes, fixing non-ASCII
+          non-comments in your source
+
+6.002     2016-04-23 17:50:26+01:00 Europe/London (TRIAL RELEASE)
+        - tweaks to Dist::Zilla::Path to keep plugins from v5 era working
+
+6.001     2016-04-23 13:21:56+01:00 Europe/London
+        [THIS RELEASE MIGHT BREAK YOUR BUILD]
+        - Using a Dist::Zilla::Path like a Path::Class object now issues a
+          deprecation warning ("this will be removed") once per call site.
+
+6.000     2016-04-23 11:35:28+01:00 Europe/London (TRIAL RELEASE)
+        [THIS RELEASE MIGHT BREAK YOUR BUILD]
+        - Path::Class has been excised in favor of Path::Tiny, exposed as
+          Dist::Zilla::Path; it will still respond to ->subdir and ->file, but
+          only until Dist::Zilla v7 -- fix your plugins by then!
+
+        - The --verbose switch to dzil is now strictly on/off.  To set
+          verbosity on a per-plugin basis, use the -V switch.  Unfortunately,
+          per-plugin verbosity seems to have been broken for some time, anyway.
+
+        - The plugins [Prereq] and [AutoPrereq] and [BumpVersion] have been
+          removed.  These were long deprecated.  (Don't confuse Prereq, for
+          example, with the plural Prereqs, which is the correct plugin.)
+
+        - [PkgVersion] now supports a use_package argument which will put the
+          version in the package statement.  (Remember that this syntax was
+          introduced in perl v5.12.0.)
+
+        - Dist::Zilla now requires perl v5.14.0.  It will still happily build
+          dists that run on whatever version of perl you like.
+
 5.047     2016-04-23 16:20:13+01:00 Europe/London
         - cast things to Path::Class as needed, for now, for v6 backcompat
           (don't expect more commits like this)

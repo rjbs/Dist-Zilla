@@ -3,6 +3,8 @@ Dist-Zilla-*
 tmp
 *.patch
 
+.gitnxtver_cache
+
 # avoid temp and backup files
 *~
 *#

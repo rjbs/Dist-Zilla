@@ -31,16 +31,16 @@ sub opt_spec {
 sub execute {
   my ($self, $opt, $arg) = @_;
 
-  require Path::Class;
+  require Dist::Zilla::Path;
   require Dist::Zilla::Util::AuthorDeps;
 
-  my $deps =
-    Dist::Zilla::Util::AuthorDeps::format_author_deps(
-      Dist::Zilla::Util::AuthorDeps::extract_author_deps(
-        Path::Class::dir(defined $opt->root ? $opt->root : '.'),
-        $opt->missing,
-      ), $opt->versions
-    );
+  my $deps = Dist::Zilla::Util::AuthorDeps::format_author_deps(
+    Dist::Zilla::Util::AuthorDeps::extract_author_deps(
+      Dist::Zilla::Path::path($opt->root // '.'),
+      $opt->missing,
+    ), $opt->versions
+  );
+
   $self->log($deps) if $deps;
 
   return;

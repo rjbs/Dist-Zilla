@@ -11,7 +11,7 @@ use File::Copy::Recursive qw(dircopy);
 use File::pushd ();
 use File::Spec;
 use File::Temp;
-use Path::Class;
+use Dist::Zilla::Path;
 
 use Sub::Exporter::Util ();
 use Sub::Exporter -setup => {
@@ -28,7 +28,7 @@ sub test_dzil {
   local @INC = map {; ref($_) ? $_ : File::Spec->rel2abs($_) } @INC;
 
   my $tmpdir = $arg->{tempdir} || File::Temp::tempdir(CLEANUP => 1);
-  my $root   = dir($tmpdir)->subdir('source');
+  my $root   = path($tmpdir)->child('source');
   $root->mkpath;
 
   dircopy($source, $root);

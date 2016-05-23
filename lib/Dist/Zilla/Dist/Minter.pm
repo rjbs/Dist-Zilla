@@ -5,7 +5,7 @@ use Moose 0.92; # role composition fixes
 extends 'Dist::Zilla';
 
 use File::pushd ();
-use Path::Class;
+use Dist::Zilla::Path;
 
 use namespace::autoclean;
 
@@ -59,10 +59,15 @@ sub _new_from_profile {
 
   my $profile_dir = $module->profile_dir($profile_data->[1]);
 
+  warn "expected a string or Path::Tiny but got a Path::Class from $module\n"
+    if ref $profile_dir && $profile_dir->isa('Path::Class');
+
+  $profile_dir = path($profile_dir);
+
   $assembler->sequence->section_named('_')->add_value(root => $profile_dir);
 
   my $seq = $config_class->read_config(
-    $profile_dir->file('profile'),
+    $profile_dir->child('profile'),
     {
       assembler => $assembler
     },
@@ -79,7 +84,7 @@ sub _mint_target_dir {
   my ($self) = @_;
 
   my $name = $self->name;
-  my $dir  = dir($name);
+  my $dir  = path($name);
   $self->log_fatal("./$name already exists") if -e $dir;
 
   return $dir = $dir->absolute;
@@ -93,10 +98,9 @@ sub mint_dist {
 
   # XXX: We should have a way to get more than one module name in, and to
   # supply plugin names for the minter to use. -- rjbs, 2010-05-03
-  my @modules = do {
-    (my $module_name = $name) =~ s/-/::/g;
-    ({ name => $module_name });
-  };
+  my @modules = (
+    { name => $name =~ s/-/::/gr }
+  );
 
   $self->log("making target dir $dir");
   $dir->mkpath;

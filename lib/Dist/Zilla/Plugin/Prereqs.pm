@@ -136,7 +136,7 @@ around BUILDARGS => sub {
 
   my %other;
   for my $dkey (@dashed) {
-    (my $key = $dkey) =~ s/^-//;
+    my $key = $dkey =~ s/^-//r;
 
     $other{ $key } = delete $copy{ $dkey };
   }

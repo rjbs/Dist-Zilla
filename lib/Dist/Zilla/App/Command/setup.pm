@@ -116,19 +116,19 @@ Do you want to enter your PAUSE account details? ',
     $pause{password} = $chrome->prompt_str(
       "What is your PAUSE password? ",
       {
-        check   => sub { defined $_[0] and length $_[0] },
+        check   => sub { length $_[0] },
         noecho  => 1,
       },
     );
   }
 
   $config_root->mkpath unless -d $config_root;
-  $config_root->subdir('profiles')->mkpath
-    unless -d $config_root->subdir('profiles');
+  $config_root->child('profiles')->mkpath
+    unless -d $config_root->child('profiles');
 
   my $umask = umask;
   umask( $umask | 077 ); # this file might contain PAUSE pw; make it go-r
-  open my $fh, '>:encoding(UTF-8)', $config_root->file('config.ini');
+  open my $fh, '>:encoding(UTF-8)', $config_root->child('config.ini');
 
   $fh->print("[%User]\n");
   $fh->print("name  = $realname\n");
@@ -141,7 +141,7 @@ Do you want to enter your PAUSE account details? ',
   if (keys %pause) {
     $fh->print("[%PAUSE]\n");
     $fh->print("username = $pause{username}\n");
-    if (defined $pause{password} and length $pause{password}) {
+    if (length $pause{password}) {
       $fh->print("password = $pause{password}\n");
     }
     $fh->print("\n");

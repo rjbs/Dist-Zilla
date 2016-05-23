@@ -4,7 +4,7 @@ package Dist::Zilla::Plugin::TemplateModule;
 use Moose;
 with qw(Dist::Zilla::Role::ModuleMaker Dist::Zilla::Role::TextTemplate);
 
-use Path::Tiny;
+use Dist::Zilla::Path;
 
 use namespace::autoclean;
 
@@ -84,7 +84,7 @@ sub make_module {
     },
   );
 
-  (my $filename = $arg->{name}) =~ s{::}{/}g;
+  my $filename = $arg->{name} =~ s{::}{/}gr;
 
   my $file = Dist::Zilla::File::InMemory->new({
     name    => "lib/$filename.pm",

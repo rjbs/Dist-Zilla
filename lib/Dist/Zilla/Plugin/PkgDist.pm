@@ -101,7 +101,7 @@ sub munge_perl {
   }
 
   # the document is no longer correct; it must be reparsed before it can be used again
-  $file->encoded_content($document->serialize);
+  $file->content($document->serialize);
 }
 
 __PACKAGE__->meta->make_immutable;

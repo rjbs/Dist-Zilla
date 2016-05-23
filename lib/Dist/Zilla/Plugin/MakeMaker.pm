@@ -181,7 +181,7 @@ PREAMBLE
 sub write_makefile_args {
   my ($self) = @_;
 
-  (my $name = $self->zilla->name) =~ s/-/::/g;
+  my $name = $self->zilla->name =~ s/-/::/gr;
 
   my @exe_files = map { $_->name }
     @{ $self->zilla->find_files(':ExecFiles') };
@@ -192,7 +192,7 @@ sub write_makefile_args {
   my %test_dirs;
   for my $file (@{ $self->zilla->files }) {
     next unless $file->name =~ m{\At/.+\.t\z};
-    (my $dir = $file->name) =~ s{/[^/]+\.t\z}{/*.t}g;
+    my $dir = $file->name =~ s{/[^/]+\.t\z}{/*.t}gr;
 
     $test_dirs{ $dir } = 1;
   }

@@ -2,7 +2,7 @@ package Dist::Zilla::Plugin::GatherDir;
 # ABSTRACT: gather all the files in a directory
 
 use Moose;
-use MooseX::Types::Path::Class qw(Dir File);
+use Dist::Zilla::Types qw(Path);
 with 'Dist::Zilla::Role::FileGatherer';
 
 use namespace::autoclean;
@@ -52,7 +52,7 @@ configuration file is located.
 
 has root => (
   is   => 'ro',
-  isa  => Dir,
+  isa  => Path,
   lazy => 1,
   coerce   => 1,
   required => 1,

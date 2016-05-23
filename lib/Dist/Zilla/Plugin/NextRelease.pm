@@ -10,7 +10,7 @@ with (
   'Dist::Zilla::Role::AfterRelease',
 );
 
-use Path::Tiny;
+use Dist::Zilla::Path;
 use Moose::Util::TypeConstraints;
 use List::Util 'first';
 use String::Formatter 0.100680 stringf => {
@@ -32,10 +32,10 @@ use String::Formatter 0.100680 stringf => {
     E => sub { $_[0]->_user_info('email') },
     U => sub { $_[0]->_user_info('name')  },
     T => sub { $_[0]->zilla->is_trial
-                   ? (defined $_[1] ? $_[1] : '-TRIAL') : '' },
+                   ? ($_[1] // '-TRIAL') : '' },
     V => sub { $_[0]->zilla->version
                 . ($_[0]->zilla->is_trial
-                   ? (defined $_[1] ? $_[1] : '-TRIAL') : '') },
+                   ? ($_[1] // '-TRIAL') : '') },
     P => sub {
       my $releaser = first { $_->can('cpanid') } @{ $_[0]->zilla->plugins_with('-Releaser') };
       $_[0]->log_fatal('releaser doesn\'t provide cpanid, but %P used') unless $releaser;
@@ -113,7 +113,7 @@ sub munge_files {
   my ($self) = @_;
 
   my ($file) = grep { $_->name eq $self->filename } @{ $self->zilla->files };
-  return unless $file;
+  $self->log_fatal([ 'failed to find %s in the distribution', $self->filename ]) if not $file;
 
   # save original unmunged content, for replacing back in the repo later
   my $content = $self->_original_changes_content($file->content);

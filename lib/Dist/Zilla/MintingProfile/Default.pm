@@ -7,7 +7,6 @@ with 'Dist::Zilla::Role::MintingProfile::ShareDir';
 use namespace::autoclean;
 
 use Dist::Zilla::Util;
-use Path::Class;
 
 =head1 DESCRIPTION
 
@@ -26,7 +25,7 @@ around profile_dir => sub {
   # shouldn't look in user's config when testing
   if (!$ENV{DZIL_TESTING}) {
     my $profile_dir = Dist::Zilla::Util->_global_config_root
-                    ->subdir('profiles', $profile_name);
+                    ->child('profiles', $profile_name);
 
     return $profile_dir if -d $profile_dir;
   }

@@ -3,7 +3,7 @@ package Dist::Zilla::File::OnDisk;
 
 use Moose;
 
-use Path::Tiny;
+use Dist::Zilla::Path;
 
 use namespace::autoclean;
 

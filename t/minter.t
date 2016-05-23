@@ -4,7 +4,7 @@ use warnings;
 use Test::More 0.88;
 
 use File::pushd qw/pushd/;
-use Path::Class;
+use Dist::Zilla::Path;
 use Test::DZil;
 use Dist::Zilla::App::Tester;
 use YAML::Tiny;
@@ -38,9 +38,9 @@ like(
 );
 
 {
-  my $result = test_dzil( $tzil->tempdir->subdir('mint')->absolute, [qw(add Foo::Bar)] );
+  my $result = test_dzil( $tzil->tempdir->child('mint')->absolute, [qw(add Foo::Bar)] );
   ok(!$result->{exit_code}) || diag($result->{error});
-  my $pm = dir($result->{tempdir})->file('source/lib/Foo/Bar.pm')->slurp;
+  my $pm = path($result->{tempdir})->child('source/lib/Foo/Bar.pm')->slurp;
 
   like(
     $pm,

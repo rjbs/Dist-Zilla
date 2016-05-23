@@ -6,7 +6,6 @@ use Moose::Role;
 use namespace::autoclean;
 
 use File::ShareDir;
-use Path::Class;
 
 =head1 DESCRIPTION
 

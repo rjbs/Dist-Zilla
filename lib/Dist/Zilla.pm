@@ -8,14 +8,12 @@ with 'Dist::Zilla::Role::ConfigDumper';
 
 use MooseX::Types::Moose qw(ArrayRef Bool HashRef Object Str);
 use MooseX::Types::Perl qw(DistName LaxVersionStr);
-use MooseX::Types::Path::Class qw(Dir File);
 use Moose::Util::TypeConstraints;
 
-use Dist::Zilla::Types qw(License ReleaseStatus);
+use Dist::Zilla::Types qw(Path License ReleaseStatus);
 
 use Log::Dispatchouli 1.100712; # proxy_loggers, quiet_fatal
-use Path::Class;
-use Path::Tiny;
+use Dist::Zilla::Path;
 use List::Util 1.33 qw(first none);
 use Software::License 0.101370; # meta2_name
 use String::RewritePrefix;
@@ -267,7 +265,7 @@ has main_module => (
     } else {
       # We're having to guess
 
-      ($guess = $self->name) =~ s{-}{/}g;
+      $guess = $self->name =~ s{-}{/}gr;
       $guess = "lib/$guess.pm";
 
       $file = (first { $_->name eq $guess } @{ $self->files })
@@ -439,7 +437,7 @@ has _copyright_year => (
     # rjbs, 2008-06-13
     my $stash = $_[0]->stash_named('%Rights');
     my $year  = $stash && $stash->copyright_year;
-    return defined $year ? $year : (localtime)[5] + 1900;
+    return( $year // (localtime)[5] + 1900 );
   }
 );
 
@@ -468,7 +466,7 @@ has authors => (
     }
 
     my $author = try { $self->copyright_holder };
-    return [ $author ] if defined $author and length $author;
+    return [ $author ] if length $author;
 
     $self->log_fatal(
       "No %User stash and no copyright holder;",
@@ -511,14 +509,14 @@ sub prune_file {
 
 =attr root
 
-This is the root directory of the dist, as a L<Path::Class::Dir>.  It will
+This is the root directory of the dist, as a L<Path::Tiny>.  It will
 nearly always be the current working directory in which C<dzil> was run.
 
 =cut
 
 has root => (
   is   => 'ro',
-  isa  => Dir,
+  isa  => Path,
   coerce   => 1,
   required => 1,
 );
@@ -606,7 +604,7 @@ sub _build_distmeta {
     dynamic_config => 0, # problematic, I bet -- rjbs, 2010-06-04
     generated_by   => $self->_metadata_generator_id
                     . ' version '
-                    . (defined $self->VERSION ? $self->VERSION : '(undef)')
+                    . ($self->VERSION // '(undef)'),
   };
 
   for (@{ $self->plugins_with(-MetaProvider) }) {
@@ -727,10 +725,10 @@ sub _write_out_file {
   # Okay, this is a bit much, until we have ->debug. -- rjbs, 2008-06-13
   # $self->log("writing out " . $file->name);
 
-  my $file_path = file($file->name);
+  my $file_path = path($file->name);
 
-  my $to_dir = $build_root->subdir( $file_path->dir );
-  my $to = $to_dir->file( $file_path->basename );
+  my $to_dir = path($build_root)->child( $file_path->parent );
+  my $to = $to_dir->child( $file_path->basename );
   $to_dir->mkpath unless -e $to_dir;
   die "not a directory: $to_dir" unless -d $to_dir;
 

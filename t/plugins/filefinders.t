@@ -65,7 +65,7 @@ is_filelist(
   "GatherDir gathers all files in the source dir",
 );
 
-my $manifest = maniread($tzil->tempdir->file('build/MANIFEST')->stringify);
+my $manifest = maniread($tzil->tempdir->child('build/MANIFEST')->stringify);
 
 my $count = grep { exists $manifest->{$_} } @files;
 ok($count == @files, "all files found were in manifest");

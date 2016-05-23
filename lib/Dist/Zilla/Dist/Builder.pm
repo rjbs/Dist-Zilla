@@ -5,11 +5,10 @@ use Moose 0.92; # role composition fixes
 extends 'Dist::Zilla';
 
 use MooseX::Types::Moose qw(HashRef);
-use MooseX::Types::Path::Class qw(Dir File);
+use Dist::Zilla::Types qw(Path);
 
 use File::pushd ();
-use Path::Class;
-use Path::Tiny; # because more Path::* is better, eh?
+use Dist::Zilla::Path; # because more Path::* is better, eh?
 use Try::Tiny;
 use List::Util 1.45 'uniq';
 
@@ -36,7 +35,7 @@ sub from_config {
   my ($class, $arg) = @_;
   $arg ||= {};
 
-  my $root = dir($arg->{dist_root} || '.');
+  my $root = path($arg->{dist_root} || '.');
 
   my $sequence = $class->_load_config({
     root   => $root,
@@ -286,7 +285,7 @@ sub _load_config {
   my $seq;
   try {
     $seq = $config_class->read_config(
-      $root->file('dist'),
+      $root->child('dist'),
       {
         assembler => $assembler
       },
@@ -381,14 +380,15 @@ sub build_in {
 
 =attr built_in
 
-This is the L<Path::Class::Dir>, if any, in which the dist has been built.
+This is the L<Path::Tiny>, if any, in which the dist has been built.
 
 =cut
 
 has built_in => (
   is   => 'rw',
-  isa  => Dir,
+  isa  => Path,
   init_arg  => undef,
+  coerce => 1,
 );
 
 =method ensure_built_in
@@ -475,7 +475,7 @@ sub build_archive {
   my $built_in = $self->ensure_built;
 
   my $basename = $self->dist_basename;
-  my $basedir = dir($basename);
+  my $basedir = path($basename);
 
   $_->before_archive for @{ $self->plugins_with(-BeforeArchive) };
 
@@ -486,7 +486,7 @@ sub build_archive {
 
   my $archive = $self->$method($built_in, $basename, $basedir);
 
-  my $file = file($self->archive_filename);
+  my $file = path($self->archive_filename);
 
   $self->log("writing archive to $file");
   $archive->write("$file", 9);
@@ -505,19 +505,19 @@ sub _build_archive {
   for my $distfile (
     sort { length($a->name) <=> length($b->name) } @{ $self->files }
   ) {
-    my $in = file($distfile->name)->dir;
+    my $in = path($distfile->name)->parent;
 
     unless ($seen_dir{ $in }++) {
       $archive->add_data(
-        $basedir->subdir($in),
+        $basedir->child($in),
         '',
         { type => Archive::Tar::Constant::DIR(), mode => 0755 },
       )
     }
 
-    my $filename = $built_in->file( $distfile->name );
+    my $filename = $built_in->child( $distfile->name );
     $archive->add_data(
-      $basedir->file( $distfile->name ),
+      $basedir->child( $distfile->name ),
       path($filename)->slurp_raw,
       { mode => (stat $filename)[2] & ~022 },
     );
@@ -536,11 +536,11 @@ sub _build_archive_with_wrapper {
   for my $distfile (
     sort { length($a->name) <=> length($b->name) } @{ $self->files }
   ) {
-    my $in = file($distfile->name)->dir;
+    my $in = path($distfile->name)->parent;
 
-    my $filename = $built_in->file( $distfile->name );
+    my $filename = $built_in->child( $distfile->name );
     $archive->add(
-      $basedir->file( $distfile->name )->stringify,
+      $basedir->child( $distfile->name )->stringify,
       $filename->stringify,
       { perm => (stat $filename)[2] & ~022 },
     );
@@ -552,7 +552,7 @@ sub _build_archive_with_wrapper {
 sub _prep_build_root {
   my ($self, $build_root) = @_;
 
-  $build_root = dir($build_root || $self->dist_basename);
+  $build_root = path($build_root || $self->dist_basename);
 
   $build_root->mkpath unless -d $build_root;
 
@@ -560,8 +560,8 @@ sub _prep_build_root {
 
   return $build_root if !-d $build_root;
 
-  my $res = $build_root->rmtree; # this warns with error details
-  die "unable to delete '$build_root' in preparation of build" if !$res;
+  my $ok = eval { $build_root->remove_tree({ safe => 0 }); 1 };
+  die "unable to delete '$build_root' in preparation of build: $@" unless $ok;
 
   # the following is done only on windows, and only if the deletion failed,
   # yet rmtree reported success, because currently rmdir is non-blocking as per:
@@ -644,10 +644,10 @@ sub ensure_built_in_tmpdir {
 
   require File::Temp;
 
-  my $build_root = dir('.build');
+  my $build_root = path('.build');
   $build_root->mkpath unless -d $build_root;
 
-  my $target = dir( File::Temp::tempdir(DIR => $build_root) );
+  my $target = path( File::Temp::tempdir(DIR => $build_root) );
   $self->log("building distribution under $target for installation");
 
   my $os_has_symlinks = eval { symlink("",""); 1 };
@@ -655,8 +655,8 @@ sub ensure_built_in_tmpdir {
   my $latest;
 
   if( $os_has_symlinks ) {
-    $previous = file( $build_root, 'previous' );
-    $latest   = file( $build_root, 'latest'   );
+    $previous = path( $build_root, 'previous' );
+    $latest   = path( $build_root, 'latest'   );
     if( -l $previous ) {
       $previous->remove
         or $self->log("cannot remove old .build/previous link");
@@ -721,7 +721,7 @@ sub install {
     $self->log("all's well; left dist in place at $target");
   } else {
     $self->log("all's well; removing $target");
-    $target->rmtree;
+    $target->remove_tree({ safe => 0 });
     $latest->remove if $latest;
   }
 
@@ -757,7 +757,7 @@ sub test {
   }
 
   $self->log("all's well; removing $target");
-  $target->rmtree;
+  $target->remove_tree({ safe => 0 });
   $latest->remove if $latest;
 }
 
@@ -765,9 +765,9 @@ sub test {
 
   my $error = $zilla->run_tests_in($directory, $arg);
 
-This method runs the tests in $directory (a Path::Class::Dir), which
-must contain an already-built copy of the distribution.  It will throw an
-exception if there are test failures.
+This method runs the tests in $directory (a Path::Tiny), which must contain an
+already-built copy of the distribution.  It will throw an exception if there
+are test failures.
 
 It does I<not> set any of the C<*_TESTING> environment variables, nor
 does it clean up C<$directory> afterwards.
@@ -822,11 +822,11 @@ sub run_in_build {
     $self->_ensure_blib;
 
     local $ENV{PERL5LIB} = join $Config::Config{path_sep},
-      (map { $abstarget->subdir('blib', $_) } qw(arch lib)),
+      (map { $abstarget->child('blib', $_) } qw(arch lib)),
       (defined $ENV{PERL5LIB} ? $ENV{PERL5LIB} : ());
 
     local $ENV{PATH} = join $Config::Config{path_sep},
-      (map { $abstarget->subdir('blib', $_) } qw(bin script)),
+      (map { $abstarget->child('blib', $_) } qw(bin script)),
       (defined $ENV{PATH} ? $ENV{PATH} : ());
 
     system(@$cmd) and die "error while running: @$cmd";
@@ -835,7 +835,7 @@ sub run_in_build {
 
   if ($ok) {
     $self->log("all's well; removing $target");
-    $target->rmtree;
+    $target->remove_tree({ safe => 0 });
     $latest->remove if $latest;
   } else {
     my $error = $@ || '(unknown error)';

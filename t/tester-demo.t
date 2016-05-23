@@ -21,7 +21,7 @@ ok(
 );
 
 ## SIMPLE TEST WITH DZIL TESTER
-
+require Dist::Zilla::Tester;
 my $tester = Dist::Zilla::Tester->from_config(
   { dist_root => 'corpus/dist/DZT' },
   {
@@ -37,7 +37,7 @@ ok(
 );
 
 use YAML::Tiny;
-my $yaml = YAML::Tiny->read($tester->built_in->file('META.yml'));
+my $yaml = YAML::Tiny->read($tester->built_in->child('META.yml'));
 my $meta = $yaml->[0];
 
 like($meta->{generated_by}, qr{Dist::Zilla}, "powered by... ROBOT DINOSAUR");

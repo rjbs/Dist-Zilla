@@ -75,10 +75,10 @@ sub exclude_file {
   # https://github.com/andk/pause/pull/65
   return 1 if substr($file->name, 0, 7) eq 'fatlib/';
 
-  if ((my $file = $file->name) =~ s/\.c$//) {
-      for my $other (@{ $self->zilla->files }) {
-          return 1 if $other->name eq "${file}.xs";
-      }
+  if (my $file = $file->name =~ s/\.c$//r) {
+    for my $other (@{ $self->zilla->files }) {
+      return 1 if $other->name eq "${file}.xs";
+    }
   }
 
   return;
