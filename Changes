@@ -1,6 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - NextRelease now dies if there's no changelog file found
+          (thanks, Karen Etheridge)
+        - Module::Runtime replaces Class::Load (thanks Olivier Mengué)
 
 6.004     2016-05-14 09:14:19-04:00 America/New_York (TRIAL RELEASE)
         - stop listing Path::Class as a prereq (thanks, Karen Etheridge)
