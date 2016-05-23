@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+6.005     2016-05-23 08:08:15-04:00 America/New_York
         - NextRelease now dies if there's no changelog file found
           (thanks, Karen Etheridge)
         - Module::Runtime replaces Class::Load (thanks Olivier Mengué)
