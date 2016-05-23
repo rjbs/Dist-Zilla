@@ -5,6 +5,7 @@ use Moose::Role;
 
 use namespace::autoclean;
 
+use Dist::Zilla::Path;
 use File::ShareDir;
 
 =head1 DESCRIPTION
@@ -30,7 +31,7 @@ requires 'profile_dir';
 
 around profile_dir => sub {
   my ($orig, $self, @args) = @_;
-  dir($self->$orig(@args));
+  path($self->$orig(@args));
 };
 
 1;
