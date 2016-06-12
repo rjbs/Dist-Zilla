@@ -39,9 +39,11 @@ use YAML::Tiny;
 
   my $json = $tzil->slurp_file('build/META.json');
   $meta{json} = JSON::MaybeXS->new(utf8 => 0)->decode($json);
+  $meta{json}{x_serialization_backend} = 'ignore';
 
   my $yaml = $tzil->slurp_file('build/META.yml');
   $meta{yaml} = YAML::Tiny->new->read_string($yaml)->[0];
+  $meta{yaml}{x_serialization_backend} = 'ignore';
 
   is_deeply($meta{json}, $meta{yaml}, "META.json is_deeply META.yml");
 
@@ -108,9 +110,11 @@ use YAML::Tiny;
 
   my $json = $tzil->slurp_file('build/META.json');
   $meta{json} = JSON::MaybeXS->new(utf8 => 0)->decode($json);
+  $meta{json}{x_serialization_backend} = 'ignore';
 
   my $yaml = $tzil->slurp_file('build/META.yml');
   $meta{yaml} = YAML::Tiny->new->read_string($yaml)->[0];
+  $meta{yaml}{x_serialization_backend} = 'ignore';
 
   is_deeply($meta{json}, $meta{yaml}, "META.json is_deeply META.yml");
 
@@ -156,9 +160,11 @@ use YAML::Tiny;
 
   my $json = $tzil->slurp_file('build/META.json');
   $meta{json} = JSON::MaybeXS->new(utf8 => 0)->decode($json);
+  $meta{json}{x_serialization_backend} = 'ignore';
 
   my $yaml = $tzil->slurp_file('build/META.yml');
   $meta{yaml} = YAML::Tiny->new->read_string($yaml)->[0];
+  $meta{yaml}{x_serialization_backend} = 'ignore';
 
   for my $type (qw(json yaml)) {
     is_deeply(
