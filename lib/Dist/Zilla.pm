@@ -588,7 +588,13 @@ sub _build_distmeta {
 
   require CPAN::Meta::Merge;
   my $meta_merge = CPAN::Meta::Merge->new(default_version => 2);
-  my $meta = {
+  my $meta = {};
+
+  for (@{ $self->plugins_with(-MetaProvider) }) {
+    $meta = $meta_merge->merge($meta, $_->metadata);
+  }
+
+  $meta = $meta_merge->merge($meta, {
     'meta-spec' => {
       version => 2,
       url     => 'https://metacpan.org/pod/CPAN::Meta::Spec',
@@ -605,11 +611,7 @@ sub _build_distmeta {
     generated_by   => $self->_metadata_generator_id
                     . ' version '
                     . ($self->VERSION // '(undef)'),
-  };
-
-  for (@{ $self->plugins_with(-MetaProvider) }) {
-    $meta = $meta_merge->merge($meta, $_->metadata);
-  }
+  });
 
   return $meta;
 }
