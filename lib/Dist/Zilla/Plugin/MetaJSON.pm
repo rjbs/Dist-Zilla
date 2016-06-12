@@ -72,6 +72,10 @@ sub gather_files {
       my $converter = CPAN::Meta::Converter->new($distmeta);
       my $output    = $converter->convert(version => $self->version);
 
+      my $backend = JSON::MaybeXS::JSON();
+      $output->{x_serialization_backend} = sprintf '%s version %s',
+            $backend, $backend->VERSION;
+
       JSON::MaybeXS->new(canonical => 1, pretty => 1, ascii => 1)->encode($output)
       . "\n";
     },

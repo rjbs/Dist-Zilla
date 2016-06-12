@@ -73,6 +73,9 @@ sub gather_files {
 
       my $converter = CPAN::Meta::Converter->new($distmeta);
       my $output    = $converter->convert(version => $self->version);
+      $output->{x_serialization_backend} = sprintf '%s version %s',
+            'YAML::Tiny', YAML::Tiny->VERSION;
+
       my $yaml = try {
         YAML::Tiny->new($output)->write_string; # text!
       }
