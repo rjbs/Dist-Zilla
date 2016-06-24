@@ -3,6 +3,7 @@ package Dist::Zilla::Plugin::MetaJSON;
 
 use Moose;
 with 'Dist::Zilla::Role::FileGatherer';
+use Moose::Util::TypeConstraints;
 
 use namespace::autoclean;
 
@@ -36,9 +37,15 @@ If you want a fixed version, specify it.
 
 =cut
 
+my $version_type = subtype(
+    as 'Num',
+    where { $_ >= 2 },
+    message { "MetaJSON version must be 2 or greater" },
+);
+
 has version => (
   is  => 'ro',
-  isa => 'Num',
+  isa => $version_type,
   default => '2',
 );
 

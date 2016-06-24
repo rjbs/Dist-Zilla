@@ -11,8 +11,7 @@ sub build_meta {
   my $tzil = shift;
 
   $tzil->build;
-
-  YAML::Tiny->new->read($tzil->tempdir->child('build/META.yml'))->[0];
+  $tzil->distmeta;
 }
 
 my $tzil = Builder->from_config(
@@ -64,7 +63,6 @@ $tzil = Builder->from_config(
         qw(GatherDir ExecDir),
         [ AutoPrereqs => { skip             => '^DZPA::Skip',
                            configure_finder => ':IncModules' } ],
-        [ MetaYAML => { version => 2 } ],
       ),
       'source/inc/DZPA.pm' => "use DZPA::NotInDist;\n use DZPA::Configure;\n",
     },
@@ -101,7 +99,6 @@ $tzil = Builder->from_config(
         qw(GatherDir ExecDir),
         [ AutoPrereqs => { skip             => '^DZPA::Skip',
                            configure_finder => ':IncModules' } ],
-        [ MetaYAML => { version => 2 } ],
       ),
       'source/inc/DZPA.pm' => "use DZPA::NotInDist;\n use DZPA::Configure;\n",
       'source/t/basic.t' => "use Test::Foo;\n",
@@ -138,7 +135,6 @@ $tzil = Builder->from_config(
         qw(GatherDir ExecDir),
         [ AutoPrereqs => { skip             => '^DZPA::Skip',
                            configure_finder => ':IncModules' } ],
-        [ MetaYAML => { version => 2 } ],
       ),
       'source/inc/DZPA.pm' => "use DZPA::NotInDist;\n use DZPA::Configure;\n",
       'source/t/basic.t' => "use Test::Foo;\n",
@@ -182,7 +178,6 @@ $tzil = Builder->from_config(
       'source/dist.ini' => simple_ini(
         qw(GatherDir ExecDir),
         [ AutoPrereqs => { scanner => 'Perl5', extra_scanner => 'Aliased' } ],
-        [ MetaYAML => { version => 2 } ],
       ),
       'source/lib/DZPA/Aliased.pm' => "use aliased 'Long::Class::Name';\n",
     },
@@ -221,7 +216,6 @@ $tzil = Builder->from_config(
         qw(GatherDir ExecDir),
         [ AutoPrereqs => { skip             => '^DZPA::Skip',
                            type             => 'suggests' } ],
-        [ MetaYAML => { version => 2 } ],
       ),
       'source/t/basic.t' => "use Test::Foo;\n",
     },
