@@ -57,7 +57,7 @@ sub _rewrite {
   my $after = $lines[0] =~ /\A#!/ ? 1 : 0;
   splice @lines, $after, 0, qq|
 BEGIN {
-  unless (\$ENV{'$env'}) {
+  unless (\$ENV{$env}) {
     print "1..0 # SKIP these tests are for $msg\\n";
     exit
   }
