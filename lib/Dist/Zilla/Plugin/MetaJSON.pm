@@ -72,9 +72,10 @@ sub gather_files {
       my $converter = CPAN::Meta::Converter->new($distmeta);
       my $output    = $converter->convert(version => $self->version);
 
-      # note utf8 => 1 is *not* used - so unicode characters remain as-is in
-      # the resulting json string, and therefore an encoding must be used when
-      # the file is written to disk.
+      my $backend = JSON::MaybeXS::JSON();
+      $output->{x_serialization_backend} = sprintf '%s version %s',
+            $backend, $backend->VERSION;
+
       JSON::MaybeXS->new(canonical => 1, pretty => 1, ascii => 1)->encode($output)
       . "\n";
     },

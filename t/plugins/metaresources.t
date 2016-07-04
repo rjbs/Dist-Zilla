@@ -14,6 +14,10 @@ my $converted_by = "CPAN::Meta::Converter version "
 
 my $generated_by_re = qr/\A\Q$generated_by\E(?:, \Q$converted_by\E)?\z/;
 
+my $serialization_yaml = 'YAML::Tiny version ' . YAML::Tiny->VERSION;
+my $json_backend = JSON::MaybeXS::JSON();
+my $serialization_json = $json_backend . ' version ' . $json_backend->VERSION;
+
 {
   my $tzil = Builder->from_config(
     { dist_root => 'corpus/dist/DZT' },
@@ -57,7 +61,8 @@ my $generated_by_re = qr/\A\Q$generated_by\E(?:, \Q$converted_by\E)?\z/;
         bugtracker => 'http://bugs.example.com',
         repository => 'git://example.com/project.git',
       },
-      version => '0.001'
+      version => '0.001',
+      x_serialization_backend => $serialization_yaml,
     },
     'META.yml matches expected 1.4 spec output'
   );
@@ -82,7 +87,8 @@ my $generated_by_re = qr/\A\Q$generated_by\E(?:, \Q$converted_by\E)?\z/;
         homepage   => 'http://example.com',
         repository => superhashof({ url => 'git://example.com/project.git' }),
       },
-      version => '0.001'
+      version => '0.001',
+      x_serialization_backend => $serialization_json,
     },
     'META.json was 2.0 output, old-style resources were upgraded'
   );
@@ -134,7 +140,8 @@ my $generated_by_re = qr/\A\Q$generated_by\E(?:, \Q$converted_by\E)?\z/;
         bugtracker => 'http://bugs.example.com',
         repository => 'git://example.com/project.git',
       },
-      version => '0.001'
+      version => '0.001',
+      x_serialization_backend => $serialization_yaml,
     },
     'META.yml matches expected 1.4 spec output, new style resources were down-graded'
   );
@@ -166,7 +173,8 @@ my $generated_by_re = qr/\A\Q$generated_by\E(?:, \Q$converted_by\E)?\z/;
           web  => 'http://example.com/git/project',
         }
       },
-      version => '0.001'
+      version => '0.001',
+      x_serialization_backend => $serialization_json,
     },
     'META.json was 2.0 output'
   );
