@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+6.006     2016-07-04 10:56:36-04:00 America/New_York
         - add some documentation to Dist::Zilla::App::Tester (thanks, Alberto
           Simões!)
         - optimizations to regex munging (thanks, Olivier Mengué!)
