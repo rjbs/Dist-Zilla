@@ -1,6 +1,15 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - add some documentation to Dist::Zilla::App::Tester (thanks, Alberto
+          Simões!)
+        - optimizations to regex munging (thanks, Olivier Mengué!)
+        - add x_serialization_backend to META.* files (thanks, Karen
+          Etheridge!)
+        - metadata plugins are called before metadata defaults are built
+          (thanks, Karen Etheridge!)
+        - don't use ExtraTests plugin, but if you do, its generated test files
+          are a bit faster when unused
 
 6.005     2016-05-23 08:08:15-04:00 America/New_York
         - NextRelease now dies if there's no changelog file found
