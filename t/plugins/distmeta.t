@@ -24,7 +24,6 @@ use YAML::Tiny;
           [ Prereqs   => BuildRequires     => { 'Test::Foo' => '2.34' } ],
           [ Prereqs   => ConfigureRequires => { 'Build::Foo' => '0.12' } ],
           'MetaJSON',
-          [ MetaYAML => { version => 2 } ],
           'MetaConfig',
         ),
       },
@@ -41,13 +40,19 @@ use YAML::Tiny;
   $meta{json} = JSON::MaybeXS->new(utf8 => 0)->decode($json);
   $meta{json}{x_serialization_backend} = 'ignore';
 
-  my $yaml = $tzil->slurp_file('build/META.yml');
-  $meta{yaml} = YAML::Tiny->new->read_string($yaml)->[0];
-  $meta{yaml}{x_serialization_backend} = 'ignore';
+  $meta{original} = $tzil->distmeta;
+  $meta{original}{x_serialization_backend} = 'ignore';
 
-  is_deeply($meta{json}, $meta{yaml}, "META.json is_deeply META.yml");
+  cmp_deeply(
+      $meta{json},
+      {
+        %{ $meta{original} },
+        generated_by => $meta{original}{generated_by} . ', CPAN::Meta::Converter version ' . CPAN::Meta::Converter->VERSION,
+      },
+      "META.json data is identical to original distmeta",
+  );
 
-  for my $type (qw(json yaml)) {
+  for my $type (qw(json original)) {
     my $meta = $meta{$type};
 
     my %want = (
@@ -94,7 +99,6 @@ use YAML::Tiny;
           [ Prereqs   => RuntimeRecommends => { 'Foo::Bar::Opt' => '1.234' } ],
           [ Prereqs   => BuildRequires     => { 'Test::Foo' => '2.34' } ],
           [ Prereqs   => ConfigureRequires => { 'Build::Foo' => '0.12' } ],
-          [ MetaJSON => { version => 1.4 } ],
           'MetaYAML',
           'MetaConfig',
         ),
@@ -108,17 +112,13 @@ use YAML::Tiny;
 
   my %meta;
 
-  my $json = $tzil->slurp_file('build/META.json');
-  $meta{json} = JSON::MaybeXS->new(utf8 => 0)->decode($json);
-  $meta{json}{x_serialization_backend} = 'ignore';
-
   my $yaml = $tzil->slurp_file('build/META.yml');
   $meta{yaml} = YAML::Tiny->new->read_string($yaml)->[0];
   $meta{yaml}{x_serialization_backend} = 'ignore';
 
-  is_deeply($meta{json}, $meta{yaml}, "META.json is_deeply META.yml");
+  #cmp_deeply($meta{json}, $meta{yaml}, "META.json data is identical to META.yml");
 
-  for my $type (qw(json yaml)) {
+  for my $type (qw(yaml)) {
     my $meta = $meta{$type};
 
     my %want = (
@@ -167,7 +167,7 @@ use YAML::Tiny;
   $meta{yaml}{x_serialization_backend} = 'ignore';
 
   for my $type (qw(json yaml)) {
-    is_deeply(
+    cmp_deeply(
       $meta{$type}{author},
       [
         'Olivier Mengué <dolmen@example.org>',

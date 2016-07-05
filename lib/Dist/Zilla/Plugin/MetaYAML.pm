@@ -26,25 +26,6 @@ has filename => (
   default => 'META.yml',
 );
 
-=attr version
-
-This parameter lets you pick what version of the spec to use when generating
-the output.  It defaults to 1.4, the most commonly supported version at
-present.
-
-B<This may change without notice in the future.>
-
-Once version 2 of the META file spec is more widely supported, this may default
-to 2.
-
-=cut
-
-has version => (
-  is  => 'ro',
-  isa => 'Num',
-  default => '1.4',
-);
-
 sub gather_files {
   my ($self, $arg) = @_;
 
@@ -72,7 +53,7 @@ sub gather_files {
       }
 
       my $converter = CPAN::Meta::Converter->new($distmeta);
-      my $output    = $converter->convert(version => $self->version);
+      my $output    = $converter->convert(version => '1.4');
       $output->{x_serialization_backend} = sprintf '%s version %s',
             'YAML::Tiny', YAML::Tiny->VERSION;
 
