@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+6.007     2016-08-06 14:04:39-04:00 America/New_York
         - restrict [MetaYAML] to metaspec v1.4, [MetaJSON] to v2.0+, as other
           version combinations are not well-supported by the toolchain
 
