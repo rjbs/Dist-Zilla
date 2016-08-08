@@ -1,0 +1,92 @@
+=head1 NAME
+ 
+Dist::Zilla - distribution builder;
+ 
+=head1 VERSION
+ 
+version 5.006
+ 
+=head1 DESCRIPTION
+ 
+Dist::Zilla builds distributions of code to be uploaded to the CPAN.  In this
+respect, it is like L<ExtUtils::MakeMaker>, L<Module::Build>, or
+L<Module::Install>.  Unlike those tools, however, it is not also a system for
+installing code that has been downloaded from the CPAN.  Since it's only run by
+authors, and is meant to be run on a repository checkout rather than on
+published, released code, it can do much more than those tools, and is free to
+make much more ludicrous demands in terms of prerequisites.
+ 
+If you have access to the web, you can learn more and find an interactive
+tutorial at B<L<dzil.org|http://dzil.org/>>.  If not, try
+L<Dist::Zilla::Tutorial>.
+
+=head1 SUPPORT
+ 
+There are usually people on C<irc.perl.org> in C<#distzilla>, even if they're
+idling.
+ 
+The L<Dist::Zilla website|http://dzil.org/> has several valuable resources for
+learning to use Dist::Zilla.
+ 
+There is a mailing list to discuss Dist::Zilla.  You can L<join the
+list|http://www.listbox.com/subscribe/?list_id=139292> or L<browse the
+archives|http://listbox.com/member/archive/139292>.
+ 
+=head1 SEE ALSO
+ 
+=over 4
+ 
+=item *
+ 
+In the Dist::Zilla distribution:
+ 
+=over 4
+ 
+=item *
+ 
+Plugin bundles:
+L<@Basic|Dist::Zilla::PluginBundle::Basic>,
+L<@Filter|Dist::Zilla::PluginBundle::Filter>.
+ 
+=item *
+ 
+Major plugins:
+L<GatherDir|Dist::Zilla::Plugin::GatherDir>,
+L<Prereqs|Dist::Zilla::Plugin::Prereqs>,
+L<AutoPrereqs|Dist::Zilla::Plugin::AutoPrereqs>,
+L<MetaYAML|Dist::Zilla::Plugin::MetaYAML>,
+L<MetaJSON|Dist::Zilla::Plugin::MetaJSON>,
+...
+ 
+=back
+ 
+=item *
+ 
+On the CPAN:
+ 
+=over 4
+ 
+=item *
+ 
+Search for plugins: L<https://metacpan.org/search?q=Dist::Zilla::Plugin::>
+ 
+=item *
+ 
+Search for plugin bundles: L<https://metacpan.org/search?q=Dist::Zilla::PluginBundle::>
+ 
+=back
+ 
+=back
+ 
+=head1 AUTHOR
+ 
+Ricardo SIGNES <rjbs@cpan.org>
+ 
+=head1 COPYRIGHT AND LICENSE
+ 
+This software is copyright (c) 2013 by Ricardo SIGNES.
+ 
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+ 
+=cut
