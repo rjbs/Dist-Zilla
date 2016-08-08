@@ -357,9 +357,6 @@ sub build_in {
 
   $self->prereqs->finalize;
 
-  # Barf if someone has already set up a prereqs entry? -- rjbs, 2010-04-13
-  $self->distmeta->{prereqs} = $self->prereqs->as_string_hash;
-
   $_->setup_installer for @{ $self->plugins_with(-InstallTool) };
 
   $self->_check_dupe_files;

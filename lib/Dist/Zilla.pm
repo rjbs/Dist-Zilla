@@ -575,13 +575,20 @@ hash; use a MetaProvider plugin instead.
 
 =cut
 
-has distmeta => (
-  is   => 'ro',
-  isa  => 'HashRef',
-  init_arg  => undef,
-  lazy      => 1,
+has _frozen_distmeta => (
+  is => ro =>,
+  lazy => 1,
+  predicate => '_has_frozen_distmeta',
   builder   => '_build_distmeta',
 );
+
+sub distmeta {
+  my ( $self ) = @_;
+  if ( $self->_has_frozen_distmeta ) {
+      return $self->_frozen_distmeta;
+  }
+  return $self->_build_distmeta;
+}
 
 sub _build_distmeta {
   my ($self) = @_;
@@ -612,6 +619,8 @@ sub _build_distmeta {
                     . ' version '
                     . ($self->VERSION // '(undef)'),
   });
+
+  $meta->{prereqs} = $self->prereqs->as_string_hash;
 
   return $meta;
 }
