@@ -48,6 +48,18 @@ has chrome => (
   required => 1,
 );
 
+=attr dzil_version
+
+The minimum version of Dist::Zilla that is required. Set this in your C<dist.ini> when
+you know that a minimum version of C<Dist::Zilla> is required
+
+=cut
+
+has dzil_version => (
+  reader  => 'VERSION',
+  trigger => __PACKAGE__->can('VERSION'),
+);
+
 =attr name
 
 The name attribute (which is required) gives the name of the distribution to be
