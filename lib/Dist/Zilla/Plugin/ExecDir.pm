@@ -34,3 +34,14 @@ sub find_files {
 with 'Dist::Zilla::Role::ExecFiles';
 __PACKAGE__->meta->make_immutable;
 1;
+__END__
+
+=head1 SEE ALSO
+
+Core Dist::Zilla plugins:
+L<@Basic|Dist::Zilla::PluginBundle::Basic>.
+
+Implemented roles:
+L<ExecFiles|Dist::Zilla::Role::ExecFiles>.
+
+=cut

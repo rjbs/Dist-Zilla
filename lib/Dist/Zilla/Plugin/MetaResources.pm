@@ -15,7 +15,7 @@ This plugin adds resources entries to the distribution's metadata.
   bugtracker.web    = https://rt.cpan.org/Public/Dist/Display.html?Name=Project
   bugtracker.mailto = bug-Project@rt.cpan.org
   repository.url    = git://github.com/dude/project.git
-  repository.web    = http://github.com/dude/project
+  repository.web    = https://github.com/dude/project
   repository.type   = git
 
 =cut

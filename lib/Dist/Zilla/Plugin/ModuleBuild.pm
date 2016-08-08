@@ -251,8 +251,12 @@ L<@Filter|Dist::Zilla::PluginBundle::Filter>,
 L<MakeMaker|Dist::Zilla::Plugin::MakeMaker>,
 L<Manifest|Dist::Zilla::Plugin::Manifest>.
 
-Dist::Zilla roles:
-L<BuildPL|Dist::Zilla::Role::BuildPL>.
+Implemented Dist::Zilla roles:
+L<BuildPL|Dist::Zilla::Role::BuildPL>,
+L<PrereqSource|Dist::Zilla::Role::PrereqSource>.
+
+Consummed roles:
+L<ExecFiles|Dist::Zilla::Role::ExecFiles>.
 
 =cut
 

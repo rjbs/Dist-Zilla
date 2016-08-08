@@ -19,3 +19,20 @@ sub find_files {
 }
 
 1;
+__END__
+
+=head1 SEE ALSO
+
+Core Dist::Zilla plugins that implement this role:
+L<ExecDir|Dist::Zilla::Plugin::ExecDir>.
+
+Core Dist::Zilla plugins that consume this role:
+L<FileFinder::Filter|Dist::Zilla::Plugin::FileFinder::Filter>,
+L<AutoPrereqs|Dist::Zilla::Plugin::AutoPrereqs>,
+L<MakeMaker|Dist::Zilla::Plugin::MakeMaker>,
+L<ModuleBuild|Dist::Zilla::Plugin::ModuleBuild>,
+L<PkgDist|Dist::Zilla::Plugin::PkgDist>,
+L<PkgVersion|Dist::Zilla::Plugin::PkgVersion>,
+L<PodVersion|Dist::Zilla::Plugin::PodVersion>.
+
+=cut
