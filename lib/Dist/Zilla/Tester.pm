@@ -193,6 +193,8 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
     $ENV{DZIL_GLOBAL_CONFIG_ROOT} = $tester_arg->{global_config_root}
       if defined $tester_arg->{global_config_root};
 
+    local $ENV{DZIL_GLOBAL_CONFIG_ROOT} = $tester_arg->{global_config_root};
+
     my $zilla = $self->$orig($arg);
 
     $zilla->_set_tempdir_root($tempdir_root);
