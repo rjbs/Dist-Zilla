@@ -87,6 +87,23 @@ sub _setup_default_plugins {
     push @{ $self->plugins }, $plugin;
   }
 
+  unless ($self->plugin_named(':TestModules')) {
+    require Dist::Zilla::Plugin::FinderCode;
+    my $plugin = Dist::Zilla::Plugin::FinderCode->new({
+      plugin_name => ':TestModules',
+      zilla       => $self,
+      style       => 'grep',
+      code        => sub {
+        my ($file, $self) = @_;
+        local $_ = $file->name;
+        return 1 if m{\At/lib/} and m{\.pm$};
+        return;
+      },
+    });
+
+    $self->plugins->push($plugin);
+  }
+
   unless ($self->plugin_named(':TestFiles')) {
     require Dist::Zilla::Plugin::FinderCode;
     my $plugin = Dist::Zilla::Plugin::FinderCode->new({

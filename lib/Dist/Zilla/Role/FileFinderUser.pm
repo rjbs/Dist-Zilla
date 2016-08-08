@@ -63,6 +63,10 @@ Searches your inc/ directory for pm files
 
 Finds the C<main_module> of your dist
 
+= :TestModules
+
+Searches your t/ directory for pm files
+
 = :TestFiles
 
 Searches your t/ directory and lists the files in it.
