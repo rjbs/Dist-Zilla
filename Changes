@@ -333,6 +333,7 @@ Revision history for {{$dist->name}}
         - add the ability to say "dzil run --no-build" to run a command without
           building inside the dist dir
           (in other words, no `perl Makefile.PL && make`)
+        - add ->has_encoding to files (thanks, Christopher J. Madsen)
         - Archive::Tar::Wrapper added as a recommended prereq
         - fix :ShareFiles (thanks, Christopher J. Madsen and Karen Etheridge)
         - new :AllFiles and :NoFiles filefinders (thanks, Karen Etheridge)

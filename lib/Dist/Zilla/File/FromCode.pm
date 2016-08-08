@@ -51,6 +51,8 @@ has encoding => (
   builder => "_build_encoding",
 );
 
+sub has_encoding { 1 } # You can't change the encoding of a FromCode file
+
 sub _build_encoding {
   my ($self) = @_;
   return $self->code_return_type eq 'text' ? 'UTF-8' : 'bytes';
