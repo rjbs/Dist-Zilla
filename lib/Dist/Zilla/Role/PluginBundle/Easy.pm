@@ -126,6 +126,7 @@ sub add_plugins {
   my $plugins = $self->plugins;
 
   foreach my $this_spec (@plugin_specs) {
+    next unless defined $this_spec; # skip undef - RT #64896
     my $moniker;
     my $name;
     my $payload;
