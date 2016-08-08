@@ -153,6 +153,7 @@ sub module_build_args {
   my $prereqs = $self->zilla->prereqs;
   my %prereqs = (
     configure_requires => $prereqs->requirements_for(qw(configure requires)),
+    develop_requires   => $prereqs->requirements_for(qw(develop   requires)),
     build_requires     => $prereqs->requirements_for(qw(build     requires)),
     test_requires      => $prereqs->requirements_for(qw(test      requires)),
     requires           => $prereqs->requirements_for(qw(runtime   requires)),
