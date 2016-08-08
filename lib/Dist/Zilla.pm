@@ -499,7 +499,7 @@ sub prune_file {
   my @files = @{ $self->files };
 
   for my $i (0 .. $#files) {
-    next unless $file == $files[ $i ];
+    next unless $file eq $files[ $i ];
     splice @{ $self->files }, $i, 1;
     return;
   }
