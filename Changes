@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          The GatherDir::Template documentation has been improved
+          (Thanks, Christopher J. Madsen!)
 
 6.007     2016-08-06 14:04:39-04:00 America/New_York
         - restrict [MetaYAML] to metaspec v1.4, [MetaJSON] to v2.0+, as other
