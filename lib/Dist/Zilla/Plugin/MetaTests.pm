@@ -17,6 +17,8 @@ following files:
 L<Test::CPAN::Meta> will be added as a C<develop requires> dependency (which
 can be installed via C<< dzil listdeps --author | cpanm >>).
 
+L<Test::CPAN::Meta> will be added as a C<develop requires> dependency.
+
 =head1 SEE ALSO
 
 Core Dist::Zilla plugins:
