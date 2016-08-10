@@ -36,7 +36,7 @@ sub metadata {
   };
 
   $dump->{perl} = {
-    version => $],
+    version => "$]",
   };
 
   for my $plugin (@{ $self->zilla->plugins }) {
