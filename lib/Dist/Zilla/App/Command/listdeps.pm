@@ -26,6 +26,24 @@ Include author dependencies (those listed under C<develop_requires>).
 
 List only dependencies which are unsatisfied.
 
+=head2 --requires / --no-requires
+
+Add required dependencies to the list (or don't).
+
+Default: on.
+
+=head2 --recommends / --no-recommends
+
+Add recommended dependencies to the list (or don't).
+
+Default: on.
+
+=head2 --suggests / --no-suggests
+
+Add suggested dependencies to the list (or don't).
+
+Default: off.
+
 =head2 --versions
 
 Also display the required versions of listed modules.
@@ -53,6 +71,9 @@ sub abstract { "print your distribution's prerequisites" }
 sub opt_spec {
   [ 'develop|author', 'include author/develop dependencies' ],
   [ 'missing', 'list only the missing dependencies' ],
+  [ 'requires!', 'list the required dependencies', { default => 1 } ],
+  [ 'recommends!', 'list the recommended dependencies', { default => 1 } ],
+  [ 'suggests!', 'list the suggested dependencies', {default => 0 } ],
   [ 'versions', 'include required version numbers in listing' ],
   [ 'cpanm-versions', 'format versions for consumption by cpanm' ],
   [ 'json', 'list dependencies by phase, in JSON format' ],
@@ -93,21 +114,22 @@ sub filter_core {
 }
 
 sub extract_dependencies {
-  my ($self, $zilla, $phases, $missing, $omit_core) = @_;
+  my ($self, $zilla, $phases, $opt) = @_;
 
   my $prereqs = $self->prereqs($zilla);
-  $prereqs = filter_core($prereqs, $omit_core) if $omit_core;
+  $prereqs = filter_core($prereqs, $opt->omit_core) if $opt->omit_core;
 
   require CPAN::Meta::Requirements;
   my $req = CPAN::Meta::Requirements->new;
 
   for my $phase (@$phases) {
-    $req->add_requirements( $prereqs->requirements_for($phase, 'requires') );
-    $req->add_requirements( $prereqs->requirements_for($phase, 'recommends') );
+    $req->add_requirements( $prereqs->requirements_for($phase, 'requires') )   if $opt->requires;
+    $req->add_requirements( $prereqs->requirements_for($phase, 'recommends') ) if $opt->recommends;
+    $req->add_requirements( $prereqs->requirements_for($phase, 'suggests') )   if $opt->suggests;
   }
 
   my @required = grep { $_ ne 'perl' } $req->required_modules;
-  if ($missing) {
+  if ($opt->missing) {
     require Module::Runtime;
     @required =
       grep {
@@ -146,7 +168,7 @@ sub execute {
     return 1;
   }
 
-  my %modules = $self->extract_dependencies($self->zilla, \@phases, $opt->missing, $opt->omit_core);
+  my %modules = $self->extract_dependencies($self->zilla, \@phases, $opt);
 
   if ($opt->versions or $opt->cpanm_versions) {
     my @names = sort { lc $a cmp lc $b } keys %modules;
