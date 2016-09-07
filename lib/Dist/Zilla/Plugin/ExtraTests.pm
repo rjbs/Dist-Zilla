@@ -58,7 +58,7 @@ sub _rewrite {
   splice @lines, $after, 0, qq|
 BEGIN {
   unless (\$ENV{$env}) {
-    print "1..0 # SKIP these tests are for $msg\\n";
+    print qq{1..0 # SKIP these tests are for $msg\\n};
     exit
   }
 }
