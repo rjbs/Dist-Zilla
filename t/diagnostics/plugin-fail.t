@@ -43,8 +43,7 @@ subtest "BrokenPlugin4" => sub {
   my $error = exception { mkconfig( 'corpus/dist/DZT', [ 'BrokenPlugin4' => {} ] ) };
 
   ok( $error, "Failure occurs when a plugin is broken" );
-  like( $error, qr{Can't locate}, "Exception explains that it couldn't load the plugin 2-layers down" );
-  like( $error, qr{Some/Package/That/Does/Not/Exist/}, "Exception reports the original problem" );
+  like( $error, qr{Some(/|::)Package(/|::)That(/|::)Does(/|::)Not(/|::)Exist}, "Exception reports the original problem" );
 };
 
 subtest "Not::A::Plugin" => sub {
