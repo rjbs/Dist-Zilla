@@ -2,6 +2,7 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
         - fix the skip message from ExtraTests (thanks, Roy Ivy Ⅲ!)
+        - fix test failures with Moose 2.1806 (thanks, Dave Rolsky, github #569)
 
 6.007     2016-08-06 14:04:39-04:00 America/New_York
         - restrict [MetaYAML] to metaspec v1.4, [MetaJSON] to v2.0+, as other
