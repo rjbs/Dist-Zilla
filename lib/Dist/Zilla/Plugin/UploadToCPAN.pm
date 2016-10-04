@@ -223,26 +223,28 @@ has upload_uri => (
 
 =attr retries
 
-The number of retries to perform on upload failure. This value will be passed to
-L<CPAN::Uploader>.
+The number of retries to perform on upload failure (5xx response). The default
+is set to 3 by this plugin. This option will be passed to L<CPAN::Uploader>.
 
 =cut
 
 has retries => (
   is => 'ro',
   isa => 'Int',
+  default => sub { 3 },
 );
 
 =attr retry_delay
 
-The number of seconds to wait between retries. This value will be passed to
-L<CPAN::Uploader>.
+The number of seconds to wait between retries. The default is set to 5 seconds
+by this plugin. This option will be passed to L<CPAN::Uploader>.
 
 =cut
 
 has retry_delay => (
   is => 'ro',
   isa => 'Int',
+  default => sub { 5 },
 );
 
 has uploader => (
