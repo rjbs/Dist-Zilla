@@ -221,6 +221,30 @@ has upload_uri => (
   predicate => 'has_upload_uri',
 );
 
+=attr retries
+
+The number of retries to perform on upload failure. This value will be passed to
+L<CPAN::Uploader>.
+
+=cut
+
+has retries => (
+  is => 'ro',
+  isa => 'Int',
+);
+
+=attr retry_delay
+
+The number of seconds to wait between retries. This value will be passed to
+L<CPAN::Uploader>.
+
+=cut
+
+has retry_delay => (
+  is => 'ro',
+  isa => 'Int',
+);
+
 has uploader => (
   is   => 'ro',
   isa  => 'CPAN::Uploader',
@@ -239,6 +263,10 @@ has uploader => (
            ? (subdir => $self->subdir) : ()),
       ($self->has_upload_uri
            ? (upload_uri => $self->upload_uri) : ()),
+      ($self->retries
+           ? (retries => $self->retries) : ()),
+      ($self->retry_delay
+           ? (retry_delay => $self->retry_delay) : ()),
     });
 
     $uploader->{'Dist::Zilla'}{plugin} = $self;
