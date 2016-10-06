@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+6.008     2016-10-05 21:35:23-04:00 America/New_York
         - fix the skip message from ExtraTests (thanks, Roy Ivy Ⅲ!)
         - cope with error changes in latest Moose (thanks, Karen Etheridge and
           Dave Rolsky)
