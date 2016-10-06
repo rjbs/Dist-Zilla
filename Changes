@@ -4,6 +4,8 @@ Revision history for {{$dist->name}}
         - fix the skip message from ExtraTests (thanks, Roy Ivy Ⅲ!)
         - cope with error changes in latest Moose (thanks, Karen Etheridge and
           Dave Rolsky)
+        - always stringify $] in MetaConfig to avoid losing trailing zeroes
+          through numification (thanks, Karen Etheridge!)
 
 6.007     2016-08-06 14:04:39-04:00 America/New_York
         - restrict [MetaYAML] to metaspec v1.4, [MetaJSON] to v2.0+, as other
