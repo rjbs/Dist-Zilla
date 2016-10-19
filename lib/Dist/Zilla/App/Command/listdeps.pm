@@ -148,15 +148,13 @@ sub execute {
 
   my %modules = $self->extract_dependencies($self->zilla, \@phases, $opt->missing, $opt->omit_core);
 
-  if ($opt->versions or $opt->cpanm_versions) {
-    my @names = sort { lc $a cmp lc $b } keys %modules;
-    if ($opt->cpanm_versions) {
-      print qq{$_~"$modules{$_}"\n} for @names;
-    } else {
+  my @names = sort { lc $a cmp lc $b } keys %modules;
+  if ($opt->versions) {
       print "$_ = $modules{$_}\n" for @names;
-    }
+  } elsif ($opt->cpanm_versions) {
+      print qq{$_~"$modules{$_}"\n} for @names;
   } else {
-      print "$_\n" for sort { lc $a cmp lc $b } keys(%modules);
+      print "$_\n" for @names;
   }
 }
 
