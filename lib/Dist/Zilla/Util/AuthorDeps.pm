@@ -42,7 +42,12 @@ sub extract_author_deps {
   }
 
   for my $section ( sort keys %$config ) {
-    next if q[_] eq $section;
+    if (q[_] eq $section) {
+      my $version = $config->{_}{':version'};
+      $reqs->add_minimum('Dist::Zilla' => $version) if $version;
+      next;
+    }
+
     my $pack = $section;
     $pack =~ s{\s*/.*$}{}; # trim optional space and slash-delimited suffix
 
