@@ -1,6 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - if the copyright_year in the dist.ini is not this year, the
+          copyright statement and license are formatted as "$year -
+          $current_year" (Dave Rolsky, github #578)
 
 6.008     2016-10-05 21:35:23-04:00 America/New_York
         - fix the skip message from ExtraTests (thanks, Roy Ivy Ⅲ!)

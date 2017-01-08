@@ -11,7 +11,7 @@ subtest "ASCII-only author" => sub {
     { dist_root => 'corpus/dist/DZT' },
     {
       add_files => {
-        'source/dist.ini' => simple_ini('License'),
+        'source/dist.ini' => simple_ini({ copyright_year => 2012 }, 'License'),
       },
     },
   );
@@ -22,7 +22,7 @@ subtest "ASCII-only author" => sub {
 
   like(
     $contents,
-    qr{This software is copyright .c. [0-9]+ by E\. Xavier Ample}i,
+    qr{This software is copyright .c. 2012 - \d\d\d\d by E\. Xavier Ample}i,
     "copyright appears in LICENSE file",
   );
 

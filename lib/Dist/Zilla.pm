@@ -383,9 +383,15 @@ sub _build_license {
     );
   }
 
+  my $this_year = (localtime)[5] + 1900;
+  my $years
+    = $copyright_year == $this_year
+    ? $copyright_year
+    : "$copyright_year - $this_year";
+
   my $license = $license_class->new({
     holder => $self->_copyright_holder,
-    year   => $self->_copyright_year,
+    year   => $years,
   });
 
   $self->_clear_license_class;
