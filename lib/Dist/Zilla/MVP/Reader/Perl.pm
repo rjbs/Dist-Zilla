@@ -18,7 +18,7 @@ sub default_extension { 'pl' }
 sub read_into_assembler {
   my ($self, $location, $asm) = @_;
 
-  my @input = do $location;
+  my @input = do File::Spec->rel2abs($location);
   while (@input and ! ref $input[0]) {
     my ($key, $value) = (shift(@input), shift(@input));
     $asm->add_value($key => $value);
