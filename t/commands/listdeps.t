@@ -97,7 +97,7 @@ note "--versions"; {
     my $output = test_dzil('corpus/dist/AutoPrereqs', [ qw(listdeps --cpanm-versions) ])->output;
     cmp_deeply(
         [ split("\n", $output) ],
-        bag(map { $_ . '~"' . $prereqs{$_} . '"' } grep { $_ ne 'perl' } keys %prereqs),
+        bag(map { $_ . '~"' . $versions{$_} . '"' } grep { $_ ne 'perl' } @default_prereqs),
         'prereqs listed with versions for --cpanm-versions',
     );
 }
