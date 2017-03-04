@@ -1,6 +1,17 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - update DateTime::TimeZone prereq on Win32 to improve workingness
+          (thanks, Schwern!)
+        - add --recommends and --requires and --suggests to listdeps
+        - improve testing of listdeps (thanks, Mickey Nasriachi!)
+        - Module::Runtime is now considered 'internal' for the purpose of
+          carping (thanks, Karen Etheridge!)
+        - ./tmp is now pruned by PruneCruft (thanks, Karent Etheridge!)
+        - authordeps now picks up :version for the root section (thanks,
+          Karen!)
+        - the config loading of the "perl" config loader is more reliable, but
+          still please don't use it (thanks, Karen!)
 
 6.008     2016-10-05 21:35:23-04:00 America/New_York
         - fix the skip message from ExtraTests (thanks, Roy Ivy Ⅲ!)
