@@ -9,7 +9,7 @@ Revision history for {{$dist->name}}
         - improve testing of listdeps (thanks, Mickey Nasriachi!)
         - Module::Runtime is now considered 'internal' for the purpose of
           carping (thanks, Karen Etheridge!)
-        - ./tmp is now pruned by PruneCruft (thanks, Karent Etheridge!)
+        - ./tmp is now pruned by PruneCruft (thanks, Karen Etheridge!)
         - authordeps now picks up :version for the root section (thanks,
           Karen!)
         - the config loading of the "perl" config loader is more reliable, but
