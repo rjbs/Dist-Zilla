@@ -209,7 +209,7 @@ sub _setup_default_plugins {
       plugin_name => ':NoFiles',
       zilla       => $self,
       style       => 'list',
-      code        => sub { return },
+      code        => sub { [] },
     });
 
     push @{ $self->plugins }, $plugin;
