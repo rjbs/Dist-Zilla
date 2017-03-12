@@ -110,6 +110,16 @@ sub prompt_yn {
   $arg ||= {};
   my $default = $arg->{default};
 
+  if (! $self->_isa_tty) {
+    if (defined $default) {
+      return OneZero->coerce($default);
+    }
+
+    $self->logger->log_fatal(
+      "want interactive input, but terminal doesn't appear interactive"
+    );
+  }
+
   my $input = $self->term_ui->ask_yn(
     prompt  => $prompt,
     (defined $default ? (default => OneZero->coerce($default)) : ()),
@@ -118,11 +128,16 @@ sub prompt_yn {
   return $input;
 }
 
+sub _isa_tty {
+  my $isa_tty = -t STDIN && (-t STDOUT || !(-f STDOUT || -c STDOUT));
+  return $isa_tty;
+}
+
 sub prompt_any_key {
   my ($self, $prompt) = @_;
   $prompt ||= 'press any key to continue';
 
-  my $isa_tty = -t STDIN && (-t STDOUT || !(-f STDOUT || -c STDOUT));
+  my $isa_tty = $self->_isa_tty;
 
   if ($isa_tty) {
     local $| = 1;
