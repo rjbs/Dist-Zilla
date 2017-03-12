@@ -36,11 +36,11 @@ sub _build_logger {
   }
 
   return Log::Dispatchouli->new({
-      ident     => 'Dist::Zilla',
-      to_stdout => 1,
-      log_pid   => 0,
-      to_self   => ($ENV{DZIL_TESTING} ? 1 : 0),
-      quiet_fatal => 'stdout',
+    ident     => 'Dist::Zilla',
+    to_stdout => 1,
+    log_pid   => 0,
+    to_self   => ($ENV{DZIL_TESTING} ? 1 : 0),
+    quiet_fatal => 'stdout',
   });
 }
 
