@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - the distribution tarball name no longer includes -TRIAL if the
+          version contains an underscore
 
 6.009     2017-03-04 11:16:37-05:00 America/New_York
         - update DateTime::TimeZone prereq on Win32 to improve workingness
