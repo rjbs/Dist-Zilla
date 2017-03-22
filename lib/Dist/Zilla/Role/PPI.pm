@@ -68,7 +68,7 @@ sub save_ppi_document_to_file {
 
 =method document_assigns_to_variable
 
-  if( $self->ppi_document_for_file($document, '$FOO')) { ... }
+  if( $self->document_assigns_to_variable($document, '$FOO')) { ... }
 
 This method returns true if the document assigns to the given variable (the
 sigil must be included).
