@@ -26,6 +26,13 @@ file.  It defaults, of course, to F<cpanfile>.
     [CPANFile]
     filename = dzil-generated-cpanfile
 
+=head1 SEE ALSO
+
+=for :list
+* L<Module::CPANfile>
+* L<Carton>
+* L<cpanm>
+
 =cut
 
 has filename => (
