@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - make PkgDist preserve blank line after 'package' for PkgVersion
 
 6.009     2017-03-04 11:16:37-05:00 America/New_York
         - update DateTime::TimeZone prereq on Win32 to improve workingness
