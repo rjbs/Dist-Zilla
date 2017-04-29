@@ -83,6 +83,16 @@ Also note that assigning to C<$VERSION> before the module has finished
 compiling can lead to confused behavior with attempts to determine whether a
 module was successfully loaded on perl v5.8.
 
+=attr skip_over_use_statements
+
+By default, PkgVersion inserts the C<$VERSION> assignment immediately after the
+C<package> statement.  This interacts badly with Perl Critic's
+L<Perl::Critic::Policy::TestingAndDebugging::RequireUseStrict> policy, which
+complains about "Code before strictures are enabled".
+
+If <skip_over_use_statements> is true, PkgVersion will insert the C<$VERSION>
+assignment after any C<use> statements, allowing them to enable strictures.
+
 =attr finder
 
 =for stopwords FileFinder
@@ -156,6 +166,12 @@ has use_our => (
 );
 
 has use_begin => (
+  is  => 'ro',
+  isa => 'Bool',
+  default => 0,
+);
+
+has skip_over_use_statements => (
   is  => 'ro',
   isa => 'Bool',
   default => 0,
@@ -236,6 +252,20 @@ sub munge_perl {
       $file->name,
     ]);
 
+    if ($self->skip_over_use_statements) {
+
+      # walk forward across the *significant siblings* until the next sibling is
+      # not a 'use' statement (P::S::Include, type eq 'use').  Type can
+      # apparently return undef.... This stops before a PPI::Statement::Include
+      # of type 'require' or 'no'.
+      while ( my $next = $stmt->snext_sibling ) {
+        last if ( !( $next->isa('PPI::Statement::Include') &&
+                     $next->type &&
+                     $next->type eq 'use') );
+        $stmt = $next;
+      }
+    }
+
     my $blank;
 
     {
@@ -264,7 +294,20 @@ sub munge_perl {
       }
     }
 
-    $perl = $blank ? "$perl\n" : "\n$perl";
+    if (!$blank) {
+
+      # Be careful not to tear any associated comment off of this statement.
+      # Walk forward a bit more, stop when the next sibling (significant or
+      # not) is something significant or a PPI::Token::{Whitespace,Comment}
+      # that ends in a newline.
+      while ( my $next = $stmt->next_sibling ) {
+        last if $next->significant;
+        last if ( ( $stmt->isa('PPI::Token::Whitespace')
+                        || $stmt->isa('PPI::Token::Comment') )
+                      && $stmt->content =~ qr{.*\n$} );
+        $stmt = $next;
+      }
+    }
 
     my $clean_version = $version =~ tr/_//dr;
     $perl .= (
@@ -274,7 +317,7 @@ sub munge_perl {
       ) if $version ne $clean_version;
 
     # Why can't I use PPI::Token::Unknown? -- rjbs, 2014-01-11
-    my $bogus_token = PPI::Token::Comment->new($perl);
+    my $bogus_token = PPI::Token::Comment->new("$perl\n");
 
     if ($blank) {
       Carp::carp("error inserting version in " . $file->name)
@@ -284,7 +327,7 @@ sub munge_perl {
       my $method = $self->die_on_line_insertion ? 'log_fatal' : 'log';
       $self->$method([
         'no blank line for $VERSION after package %s statement in %s line %s',
-        $stmt->namespace,
+        $package,
         $file->name,
         $stmt->line_number,
       ]);
@@ -308,7 +351,6 @@ __PACKAGE__->meta->make_immutable;
 1;
 
 =head1 SEE ALSO
-
 Core Dist::Zilla plugins:
 L<PodVersion|Dist::Zilla::Plugin::PodVersion>,
 L<AutoVersion|Dist::Zilla::Plugin::AutoVersion>,
@@ -316,6 +358,10 @@ L<NextRelease|Dist::Zilla::Plugin::NextRelease>.
 
 Other Dist::Zilla plugins:
 L<OurPkgVersion|Dist::Zilla::Plugin::OurPkgVersion> inserts version
-numbers using C<our $VERSION = '...';> and without changing line numbers
+numbers using C<our $VERSION = '...';> and without changing line numbers.
+
+Perl Critic and its policy prohibiting code before strictures are enabled:
+L<Perl::Critic> and
+L<Perl::Critic::Policy::TestingAndDebugging::RequireUseStrict>.
 
 =cut
