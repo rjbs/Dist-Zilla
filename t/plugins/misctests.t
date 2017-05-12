@@ -19,7 +19,7 @@ my $tzil = Builder->from_config(
 
 $tzil->build;
 
-my $meta_test = $tzil->slurp_file('build/xt/release/distmeta.t');
+my $meta_test = $tzil->slurp_file('build/xt/author/distmeta.t');
 like($meta_test, qr{meta_yaml_ok}, "we have a distmeta file that tests it");
 
 my $pod_test = $tzil->slurp_file('build/xt/author/pod-syntax.t');
