@@ -127,7 +127,7 @@ sub expand_config_package_name {
 }
 
 sub homedir {
-  $^O eq 'MSWin32' && "$]" < 5.016 ? $ENV{HOME} || $ENV{USERPROFILE} : (glob('~'))[0];
+  (glob('~'))[0];
 }
 
 sub _global_config_root {
