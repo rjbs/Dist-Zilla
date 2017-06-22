@@ -1,18 +1,18 @@
 language: perl
 perl:
-  - 5.22
-  - 5.20
-  - 5.18
-  - 5.16
   - 5.14
-  - 5.12
-  - 5.10
-install:
-  - cpanm -nq Devel::Cover::Report::Coveralls
-  - cpanm JSON::PP Dist::Zilla
-  - dzil authordeps --missing | cpanm || { cat ~/.cpanm/build.log ; false ; }
-  - dzil listdeps --author --missing | cpanm || { cat ~/.cpanm/build.log ; false ; }
+  - 5.16
+  - 5.18
+  - 5.20
+  - 5.22
+before_install:
+  - git clone git://github.com/travis-perl/helpers ~/travis-perl-helpers
+  - source ~/travis-perl-helpers/init
+  - build-perl
+  - perl -V
+  - build-dist
+  - cd $BUILD_DIR
 script:
-  - HARNESS_PERL_SWITCHES=-MDevel::Cover=-coverage,statement,branch,condition,path,subroutine dzil test --author --release --keep
-after_success:
-  - cd .build/latest && cover && cover -report coveralls
+  - perl Makefile.PL
+  - make
+  - prove -b -r -s -j$(test-jobs) $(test-files)
