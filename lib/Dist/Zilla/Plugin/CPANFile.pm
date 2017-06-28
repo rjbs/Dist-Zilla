@@ -17,6 +17,24 @@ This plugin will add a F<cpanfile> file to the distribution.
 If given, parameter allows you to specify an alternate name for the generated
 file.  It defaults, of course, to F<cpanfile>.
 
+=head1 SEE ALSO
+
+=over
+
+=item *
+
+L<Module::CPANfile>
+
+=item *
+
+L<Carton>
+
+=item *
+
+L<cpanm>
+
+=back
+
 =cut
 
 has filename => (
