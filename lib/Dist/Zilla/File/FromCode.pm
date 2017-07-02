@@ -65,6 +65,7 @@ sub content {
 
   confess("cannot set content of a FromCode file") if @_ > 1;
 
+  $self->log_debug([ 'calculating %s content', $self->name ]);
   my $code = $self->code;
   my $result = $self->$code;
 
@@ -85,6 +86,7 @@ sub encoded_content {
 
   confess( "cannot set encoded_content of a FromCode file" ) if @_ > 1;
 
+  $self->log_debug([ 'calculating %s encoded_content', $self->name ]);
   my $code = $self->code;
   my $result = $self->$code;
 
