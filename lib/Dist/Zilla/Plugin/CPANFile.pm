@@ -8,6 +8,11 @@ use namespace::autoclean;
 
 use Dist::Zilla::File::FromCode;
 
+=head1 SYNOPSIS
+
+    # dist.ini
+    [CPANfile]
+
 =head1 DESCRIPTION
 
 This plugin will add a F<cpanfile> file to the distribution.
@@ -16,6 +21,10 @@ This plugin will add a F<cpanfile> file to the distribution.
 
 If given, parameter allows you to specify an alternate name for the generated
 file.  It defaults, of course, to F<cpanfile>.
+
+    # dist.ini
+    [CPANfile]
+    filename = dzil-generated-cpanfile
 
 =cut
 
