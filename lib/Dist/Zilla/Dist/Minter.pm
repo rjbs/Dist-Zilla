@@ -6,6 +6,7 @@ extends 'Dist::Zilla';
 
 use File::pushd ();
 use Dist::Zilla::Path;
+use Module::Runtime 'require_module';
 
 use namespace::autoclean;
 
@@ -29,7 +30,7 @@ sub _new_from_profile {
 
   my $config_class =
     $arg->{config_class} ||= 'Dist::Zilla::MVP::Reader::Finder';
-  Class::Load::load_class($config_class);
+  require_module($config_class);
 
   $arg->{chrome}->logger->log_debug(
     { prefix => '[DZ] ' },
@@ -55,7 +56,7 @@ sub _new_from_profile {
     { '' => 'Dist::Zilla::MintingProfile::', '=', => '' },
     $profile_data->[0],
   );
-  Class::Load::load_class($module);
+  require_module($module);
 
   my $profile_dir = $module->profile_dir($profile_data->[1]);
 
