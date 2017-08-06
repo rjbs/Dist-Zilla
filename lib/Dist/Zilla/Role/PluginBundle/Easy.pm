@@ -5,6 +5,7 @@ package Dist::Zilla::Role::PluginBundle::Easy;
 use Moose::Role;
 with 'Dist::Zilla::Role::PluginBundle';
 
+use Module::Runtime 'use_module';
 use namespace::autoclean;
 
 =head1 SYNOPSIS
@@ -45,8 +46,6 @@ use String::RewritePrefix 0.005
       '=' => ''
     },
   };
-
-use namespace::autoclean;
 
 requires 'configure';
 
@@ -159,13 +158,12 @@ sub add_bundle {
   my ($self, $bundle, $payload) = @_;
 
   my $package = _bundle_class($bundle);
-  $payload  ||= {};
+  $payload ||= {};
 
-  my $load_opts = {};
-  if( my $v = $payload->{':version'} ){
-    $load_opts->{'-version'} = $v;
-  }
-  Class::Load::load_class($package, $load_opts);
+  &use_module(
+    $package,
+    $payload->{':version'} ? $payload->{':version'} : (),
+  );
 
   $bundle = "\@$bundle" unless $bundle =~ /^@/;
 

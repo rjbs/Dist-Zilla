@@ -11,6 +11,7 @@ use File::pushd ();
 use Dist::Zilla::Path; # because more Path::* is better, eh?
 use Try::Tiny;
 use List::Util 1.45 'uniq';
+use Module::Runtime 'require_module';
 
 use namespace::autoclean;
 
@@ -258,7 +259,7 @@ sub _load_config {
   my $config_class =
     $arg->{config_class} ||= 'Dist::Zilla::MVP::Reader::Finder';
 
-  Class::Load::load_class($config_class);
+  require_module($config_class);
 
   $arg->{chrome}->logger->log_debug(
     { prefix => '[DZ] ' },
@@ -479,8 +480,8 @@ sub build_archive {
 
   $_->before_archive for @{ $self->plugins_with(-BeforeArchive) };
 
-  my $method = Class::Load::load_optional_class('Archive::Tar::Wrapper',
-                                                { -version => 0.15 })
+  my $method = eval { require Archive::Tar::Wrapper;
+                      Archive::Tar::Wrapper->VERSION('0.15'); 1 }
              ? '_build_archive_with_wrapper'
              : '_build_archive';
 

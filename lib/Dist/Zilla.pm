@@ -23,6 +23,7 @@ use Dist::Zilla::Prereqs;
 use Dist::Zilla::File::OnDisk;
 use Dist::Zilla::Role::Plugin;
 use Dist::Zilla::Util;
+use Module::Runtime 'require_module';
 
 use namespace::autoclean;
 
@@ -377,7 +378,7 @@ sub _build_license {
     $self->log("based on POD in $filename, guessing license is $guess[0]");
   }
 
-  unless (Class::Load::try_load_class($license_class)) {
+  unless (eval { require_module($license_class) }) {
     $self->log_fatal(
       "could not load class $license_class for license " . $self->_license_class
     );

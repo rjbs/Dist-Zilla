@@ -7,7 +7,7 @@ with 'Dist::Zilla::Role::PluginBundle';
 use namespace::autoclean;
 
 use List::Util 1.33 qw(any);
-use Class::Load qw(try_load_class);
+use Module::Runtime qw(use_module);
 use Dist::Zilla::Util;
 
 =head1 SYNOPSIS
@@ -66,12 +66,9 @@ sub bundle_config {
 
   my $pkg = Dist::Zilla::Util->expand_config_package_name($bundle);
 
-  my $load_opts = {};
-  if( my $v = $config->{filter}->{version} ){
-    $load_opts->{'-version'} = $v;
-  }
+  my $version = $config->{filter}->{version};
 
-  unless (try_load_class($pkg, $load_opts)) {
+  unless (eval { &use_module($pkg, $version ? $version : ()); 1 }) {
     # XXX Naughty! -- rjbs, 2013-07-23
     Config::MVP::Section->missing_package($pkg, $bundle);
   }
