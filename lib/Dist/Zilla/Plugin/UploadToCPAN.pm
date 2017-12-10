@@ -9,6 +9,7 @@ use Dist::Zilla::Dialect;
 use File::Spec;
 use Moose::Util::TypeConstraints;
 use Scalar::Util qw(weaken);
+use Dist::Zilla::Util;
 use Try::Tiny;
 
 use namespace::autoclean;
@@ -156,7 +157,7 @@ has pause_cfg_file => (
 =attr pause_cfg_dir
 
 This is the directory for resolving a relative L</pause_cfg_file>.
-It defaults to C<< File::HomeDir->my_home >>.
+it defaults to the glob expansion of F<~>.
 
 =cut
 
@@ -164,7 +165,7 @@ has pause_cfg_dir => (
   is      => 'ro',
   isa     => 'Str',
   lazy    => 1,
-  default => sub { require File::HomeDir; File::HomeDir::->my_home },
+  default => sub { Dist::Zilla::Util->homedir },
 );
 
 =attr pause_cfg

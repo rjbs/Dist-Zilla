@@ -3,6 +3,7 @@ package Dist::Zilla::Plugin::GatherDir;
 
 use Moose;
 use Dist::Zilla::Types qw(Path);
+use Dist::Zilla::Util;
 with 'Dist::Zilla::Role::FileGatherer';
 
 use Dist::Zilla::Dialect;
@@ -14,7 +15,7 @@ use namespace::autoclean;
 This is a very, very simple L<FileGatherer|Dist::Zilla::Role::FileGatherer>
 plugin.  It looks in the directory named in the L</root> attribute and adds all
 the files it finds there.  If the root begins with a tilde, the tilde is
-replaced with the current user's home directory according to L<File::HomeDir>.
+passed through C<glob()> first.
 
 Almost every dist will be built with one GatherDir plugin, since it's the
 easiest way to get files from disk into your dist.  Most users just need:
@@ -176,7 +177,7 @@ sub gather_files {
 
   my $repo_root = $self->zilla->root;
   my $root = "" . $self->root;
-  $root =~ s{^~([\\/])}{require File::HomeDir; File::HomeDir::->my_home . $1}e;
+  $root =~ s{^~([\\/])}{ Dist::Zilla::Util->homedir . $1 }e;
   $root = path($root)->absolute($repo_root)->stringify if path($root)->is_relative;
 
   my $prune_regex = qr/\000/;

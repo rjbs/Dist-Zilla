@@ -104,13 +104,16 @@ sub expand_config_package_name {
   shift; goto &_expand_config_package_name
 }
 
+sub homedir {
+  $^O eq 'MSWin32' && "$]" < 5.016 ? $ENV{HOME} || $ENV{USERPROFILE} : (glob('~'))[0];
+}
+
 sub _global_config_root {
   require Dist::Zilla::Path;
   return Dist::Zilla::Path::path($ENV{DZIL_GLOBAL_CONFIG_ROOT}) if $ENV{DZIL_GLOBAL_CONFIG_ROOT};
 
-  require File::HomeDir;
-  my $homedir = File::HomeDir->my_home
-    or Carp::croak("couldn't determine home directory");
+  my $homedir = homedir();
+  Carp::croak("couldn't determine home directory") if not $homedir;
 
   return Dist::Zilla::Path::path($homedir)->child('.dzil');
 }

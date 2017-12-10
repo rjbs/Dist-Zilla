@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - replace uses of File::HomeDir with a simple glob()
 
 6.012     2018-04-21 10:20:21+02:00 Europe/Oslo
         - revert addition of Archive::Tar::Wrapper as a mandatory prereq (in
