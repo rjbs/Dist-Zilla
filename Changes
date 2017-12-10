@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - replace uses of File::HomeDir with a simple glob()
 
 6.015     2020-05-29 14:30:51-04:00 America/New_York
         - add docs for "dzil release -j" (thanks, Jonas B. Nielsen)
