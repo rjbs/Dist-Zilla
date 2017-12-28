@@ -1,7 +1,10 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
-        - stashes can now be added in [%Stash] form from a bundle
+        - stashes can now be added in [%Stash] form from a bundle (thanks,
+          Karen Etheridge)
+        - use $V env var as an override, when set, in [AutoVersion]
+          (thanks, Karen Etheridge)
 
 6.010     2017-07-10 09:22:16-04:00 America/New_York
         - a few documentation improvements (thanks, Chase Whitener, Mary
