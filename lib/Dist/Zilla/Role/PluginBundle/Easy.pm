@@ -35,7 +35,11 @@ use MooseX::Types::Moose qw(Str ArrayRef HashRef);
 use String::RewritePrefix 0.005
   rewrite => {
     -as => '_plugin_class',
-    prefixes => { '' => 'Dist::Zilla::Plugin::', '=' => '' },
+    prefixes => {
+      '=' => '',
+      '%' => 'Dist::Zilla::Stash::',
+      '' => 'Dist::Zilla::Plugin::',
+    },
   },
   rewrite => {
     -as => '_bundle_class',
