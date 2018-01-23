@@ -11,7 +11,7 @@ use Dist::Zilla::File::FromCode;
 =head1 SYNOPSIS
 
     # dist.ini
-    [CPANfile]
+    [CPANFile]
 
 =head1 DESCRIPTION
 
@@ -23,7 +23,7 @@ If given, parameter allows you to specify an alternate name for the generated
 file.  It defaults, of course, to F<cpanfile>.
 
     # dist.ini
-    [CPANfile]
+    [CPANFile]
     filename = dzil-generated-cpanfile
 
 =cut
