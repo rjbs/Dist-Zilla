@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - use $V as an override, when set, in [AutoVersion]
 
 6.010     2017-07-10 09:22:16-04:00 America/New_York
         - a few documentation improvements (thanks, Chase Whitener, Mary

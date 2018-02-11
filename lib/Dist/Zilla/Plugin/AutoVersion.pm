@@ -67,6 +67,11 @@ has format => (
 sub provide_version {
   my ($self) = @_;
 
+  if (exists $ENV{V}) {
+    $self->log_debug([ 'providing version %s', $ENV{V} ]);
+    return $ENV{V};
+  }
+
   # TODO declare this as a 'develop' prereq as we want it in
   # `dzil listdeps --author`
   require DateTime;
