@@ -18,6 +18,11 @@ distribution, indicating the version of the dist being built.  This section is
 added after C<=head1 NAME>.  If there is no such section, the version section
 will not be added.
 
+Note that this plugin is not useful if you are using the
+L<[PodWeaver]|Dist::Zilla::Plugin::PodWeaver> plugin, as it also adds a
+C<=head1 VERSION> section (via the L<[Version]|Pod::Weaver::Section::Version>
+section).
+
 =cut
 
 sub munge_files {
