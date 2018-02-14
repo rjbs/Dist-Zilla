@@ -1,10 +1,15 @@
+sudo: false
 language: perl
 perl:
-  - 5.14
-  - 5.16
-  - 5.18
-  - 5.20
-  - 5.22
+  - blead       # builds perl from git
+  - dev         # latest point release
+  - "5.26"
+  - "5.24"
+  - "5.22"
+  - "5.20"
+  - "5.18"
+  - "5.16"
+  - "5.14"
 before_install:
   - git clone git://github.com/rjbs/travis-perl-helpers -b release-testing ~/travis-perl-helpers
   - source ~/travis-perl-helpers/init
@@ -12,6 +17,8 @@ before_install:
   - perl -V
   - build-dist
   - cd $BUILD_DIR
+install:
+  - cpan-install --deps
 script:
   - perl Makefile.PL
   - make
