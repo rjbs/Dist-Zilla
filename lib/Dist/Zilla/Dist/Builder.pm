@@ -480,7 +480,7 @@ sub build_archive {
 
   $_->before_archive for @{ $self->plugins_with(-BeforeArchive) };
 
-  my $method = eval { require Archive::Tar::Wrapper;
+  my $method = eval { +require Archive::Tar::Wrapper;
                       Archive::Tar::Wrapper->VERSION('0.15'); 1 }
              ? '_build_archive_with_wrapper'
              : '_build_archive';

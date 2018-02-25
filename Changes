@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - revert addition of Archive::Tar::Wrapper as a mandatory prereq (in
+          release 6.011).
 
 6.011     2018-02-11 12:57:02-05:00 America/New_York
         - stashes can now be added in [%Stash] form from a bundle (thanks,
