@@ -41,7 +41,7 @@ in the F<~/.dzil/config.ini> file, for example:
 
 sub abstract { 'mint a new dist' }
 
-sub usage_desc { '%c %o <ModuleName>' }
+sub usage_desc { '%c new %o <ModuleName>' }
 
 sub opt_spec {
   [ 'profile|p=s',  'name of the profile to use',
