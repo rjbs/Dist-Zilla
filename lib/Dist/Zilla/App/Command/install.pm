@@ -5,6 +5,8 @@ package Dist::Zilla::App::Command::install;
 
 use Dist::Zilla::App -command;
 
+use Dist::Zilla::Dialect;
+
 =head1 SYNOPSIS
 
 Installs your distribution using a specified command.

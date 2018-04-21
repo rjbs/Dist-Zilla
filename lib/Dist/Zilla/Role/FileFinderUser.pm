@@ -3,6 +3,8 @@ package Dist::Zilla::Role::FileFinderUser;
 
 use MooseX::Role::Parameterized 1.01;
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 =head1 DESCRIPTION

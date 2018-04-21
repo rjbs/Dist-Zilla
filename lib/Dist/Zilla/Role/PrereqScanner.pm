@@ -23,6 +23,8 @@ with(
   },
 );
 
+use Dist::Zilla::Dialect;
+
 use MooseX::Types;
 
 =attr finder

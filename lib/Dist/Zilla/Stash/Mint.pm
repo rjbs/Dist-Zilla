@@ -4,6 +4,8 @@ package Dist::Zilla::Stash::Mint;
 use Moose;
 with 'Dist::Zilla::Role::Stash';
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 has provider => (

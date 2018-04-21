@@ -3,10 +3,11 @@ use warnings;
 package Dist::Zilla::Util::AuthorDeps;
 # ABSTRACT: Utils for listing your distribution's author dependencies
 
+use Dist::Zilla::Dialect;
+
 use Dist::Zilla::Util;
 use Path::Tiny;
 use List::Util 1.45 ();
-
 
 sub format_author_deps {
   my ($reqs, $versions) = @_;

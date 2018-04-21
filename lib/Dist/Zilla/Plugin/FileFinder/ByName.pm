@@ -4,6 +4,8 @@ package Dist::Zilla::Plugin::FileFinder::ByName;
 use Moose;
 with 'Dist::Zilla::Role::FileFinder';
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 =head1 SYNOPSIS

@@ -4,6 +4,9 @@ package Dist::Zilla::App::Command::add;
 # ABSTRACT: add a module to a dist
 
 use Dist::Zilla::App -command;
+
+use Dist::Zilla::Dialect;
+
 use Dist::Zilla::Path;
 
 =head1 SYNOPSIS

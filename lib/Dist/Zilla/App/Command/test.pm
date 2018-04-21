@@ -5,6 +5,8 @@ package Dist::Zilla::App::Command::test;
 
 use Dist::Zilla::App -command;
 
+use Dist::Zilla::Dialect;
+
 =head1 SYNOPSIS
 
   dzil test [ --release ] [ --no-author ] [ --automated ] [ --extended ] [ --all ]

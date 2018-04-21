@@ -5,6 +5,8 @@ use Moose;
 extends 'Dist::Zilla::Plugin::InlineFiles';
 with 'Dist::Zilla::Role::PrereqSource';
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 =head1 SYNTAX

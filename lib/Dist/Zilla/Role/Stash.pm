@@ -3,6 +3,8 @@ package Dist::Zilla::Role::Stash;
 
 use Moose::Role;
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 sub register_component {

@@ -7,6 +7,8 @@ with(
   'Dist::Zilla::Role::TestRunner',
 );
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 use Config;

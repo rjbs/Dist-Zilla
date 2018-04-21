@@ -1,6 +1,8 @@
 package Dist::Zilla::Types;
 # ABSTRACT: dzil-specific type library
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 =head1 OVERVIEW

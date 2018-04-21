@@ -5,6 +5,8 @@ package Dist::Zilla::App::Command::smoke;
 
 use Dist::Zilla::App -command;
 
+use Dist::Zilla::Dialect;
+
 =head1 SYNOPSIS
 
   dzil smoke [ --release ] [ --author ] [ --no-automated ]

@@ -3,9 +3,12 @@ package Dist::Zilla::Plugin::MetaJSON;
 
 use Moose;
 with 'Dist::Zilla::Role::FileGatherer';
-use Moose::Util::TypeConstraints;
+
+use Dist::Zilla::Dialect;
 
 use namespace::autoclean;
+
+use Moose::Util::TypeConstraints;
 
 =head1 DESCRIPTION
 

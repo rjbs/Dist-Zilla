@@ -5,6 +5,8 @@ package Dist::Zilla::Role::PluginBundle::Easy;
 use Moose::Role;
 with 'Dist::Zilla::Role::PluginBundle';
 
+use Dist::Zilla::Dialect;
+
 use Module::Runtime 'use_module';
 use namespace::autoclean;
 

@@ -4,6 +4,8 @@ package Dist::Zilla::Plugin::InlineFiles;
 use Moose;
 with 'Dist::Zilla::Role::FileGatherer';
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 =head1 DESCRIPTION

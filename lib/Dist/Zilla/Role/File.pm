@@ -3,6 +3,8 @@ package Dist::Zilla::Role::File;
 
 use Moose::Role;
 
+use Dist::Zilla::Dialect;
+
 use Dist::Zilla::Types qw(_Filename);
 use Moose::Util::TypeConstraints;
 use Try::Tiny;

@@ -5,6 +5,8 @@ use Moose;
 use Moose::Util::TypeConstraints;
 with 'Dist::Zilla::Role::FilePruner';
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 =head1 SYNOPSIS

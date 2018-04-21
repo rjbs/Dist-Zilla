@@ -4,6 +4,8 @@ package Dist::Zilla::Role::FileGatherer;
 use Moose::Role;
 with qw/Dist::Zilla::Role::Plugin Dist::Zilla::Role::FileInjector/;
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 =head1 DESCRIPTION

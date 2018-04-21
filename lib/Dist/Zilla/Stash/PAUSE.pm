@@ -3,6 +3,8 @@ package Dist::Zilla::Stash::PAUSE;
 
 use Moose;
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 =head1 OVERVIEW

@@ -4,6 +4,8 @@ package Dist::Zilla::Role::ExecFiles;
 use Moose::Role;
 with 'Dist::Zilla::Role::FileFinder';
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 requires 'dir';

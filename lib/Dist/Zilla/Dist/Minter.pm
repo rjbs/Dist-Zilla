@@ -4,6 +4,8 @@ package Dist::Zilla::Dist::Minter;
 use Moose 0.92; # role composition fixes
 extends 'Dist::Zilla';
 
+use Dist::Zilla::Dialect;
+
 use File::pushd ();
 use Dist::Zilla::Path;
 use Module::Runtime 'require_module';

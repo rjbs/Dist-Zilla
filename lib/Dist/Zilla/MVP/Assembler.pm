@@ -5,6 +5,8 @@ use Moose;
 extends 'Config::MVP::Assembler';
 with 'Config::MVP::Assembler::WithBundles' => { -version => '2.200010' };
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 use Dist::Zilla::Util;

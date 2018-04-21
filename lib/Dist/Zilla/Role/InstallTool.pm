@@ -7,6 +7,8 @@ with qw(
   Dist::Zilla::Role::FileInjector
 );
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 =head1 DESCRIPTION
