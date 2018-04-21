@@ -378,6 +378,8 @@ sub build_in {
   $_->after_build({ build_root => $build_root })
     for $self->plugins_with(-AfterBuild);
 
+  $self->_create_build_symlinks(path('.build'), $build_root);
+
   $self->built_in($build_root);
 }
 
@@ -653,28 +655,40 @@ sub ensure_built_in_tmpdir {
   my $target = path( File::Temp::tempdir(DIR => $build_root) );
   $self->log("building distribution under $target for installation");
 
+  my ($latest, $previous) = $self->_create_build_symlinks($build_root, $target);
+
+  $self->build_in($target);
+
+  return ($target, $latest, $previous);
+}
+
+sub _create_build_symlinks {
+  my ($self, $symlink_root, $build_target) = @_;
+
+  $symlink_root->mkpath unless -d $symlink_root;
+
   my $os_has_symlinks = eval { symlink("",""); 1 };
   my $previous;
   my $latest;
 
   if( $os_has_symlinks ) {
-    $previous = path( $build_root, 'previous' );
-    $latest   = path( $build_root, 'latest'   );
+    $previous = path( $symlink_root, 'previous' );
+    $latest   = path( $symlink_root, 'latest'   );
     if( -l $previous ) {
       $previous->remove
-        or $self->log("cannot remove old .build/previous link");
+        or $self->log([ 'cannot remove old %s/previous link', "$symlink_root" ]);
     }
     if( -l $latest ) {
       rename $latest, $previous
-        or $self->log("cannot move .build/latest link to .build/previous");
+        or $self->log([ 'cannot move %s/latest link to .build/previous', "$symlink_root" ]);
     }
-    symlink $target->basename, $latest
-      or $self->log('cannot create link .build/latest');
+
+    my $link_dest = path($build_target)->relative(path($latest)->parent);
+    symlink $link_dest->stringify, $latest
+      or $self->log([ 'cannot create link %s/latest', "$symlink_root" ]);
   }
 
-  $self->ensure_built_in($target);
-
-  return ($target, $latest, $previous);
+  return ($latest, $previous);
 }
 
 =method install
