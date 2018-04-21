@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - cope with error changes in latest Moose (thanks, Karen Etheridge and
+          Dave Rolsky)
 
 5.047     2016-04-23 16:20:13+01:00 Europe/London
         - cast things to Path::Class as needed, for now, for v6 backcompat
