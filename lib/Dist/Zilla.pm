@@ -7,10 +7,10 @@ with 'Dist::Zilla::Role::ConfigDumper';
 # This comment has fün̈n̈ÿ characters.
 
 use MooseX::Types::Moose qw(ArrayRef Bool HashRef Object Str);
-use MooseX::Types::Perl qw(DistName LaxVersionStr);
+use MooseX::Types::Perl qw(DistName);
 use Moose::Util::TypeConstraints;
 
-use Dist::Zilla::Types qw(Path License ReleaseStatus);
+use Dist::Zilla::Types qw(Path License ReleaseStatus VersionStr);
 
 use Log::Dispatchouli 1.100712; # proxy_loggers, quiet_fatal
 use Dist::Zilla::Path;
@@ -71,15 +71,14 @@ This is the version of the distribution to be created.
 =cut
 
 has _version_override => (
-  isa => LaxVersionStr,
+  isa => VersionStr,
   is  => 'ro' ,
   init_arg => 'version',
 );
 
-# XXX: *clearly* this needs to be really much smarter -- rjbs, 2008-06-01
 has version => (
   is   => 'rw',
-  isa  => LaxVersionStr,
+  isa  => VersionStr,
   lazy => 1,
   init_arg  => undef,
   builder   => '_build_version',

@@ -17,6 +17,7 @@ use MooseX::Types -declare => [qw(
   License OneZero YesNoStr ReleaseStatus 
   Path ArrayRefOfPaths
   _Filename
+  VersionStr
 )];
 use MooseX::Types::Moose qw(Str Int Defined ArrayRef);
 use Path::Tiny;
@@ -46,5 +47,11 @@ coerce OneZero, from YesNoStr, via { /\Ay/i ? 1 : 0 };
 subtype _Filename, as Str,
   where   { $_ !~ qr/(?:\x{0a}|\x{0b}|\x{0c}|\x{0d}|\x{85}|\x{2028}|\x{2029})/ },
   message { "Filename not a Str, or contains a newline or other vertical whitespace" };
+
+use MooseX::Types::Perl qw(LaxVersionStr);
+subtype VersionStr, as LaxVersionStr,
+  # non-decimal versions cannot use underscores
+  where { /_/ && (/^v/ || (()= /\./g) > 1) ? 0 : 1 },
+  message { 'Only decimal versions can contain underscores' };
 
 1;
