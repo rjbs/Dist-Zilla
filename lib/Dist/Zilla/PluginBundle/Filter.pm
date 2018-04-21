@@ -53,8 +53,8 @@ sub bundle_config {
 
   my $config = {};
 
-  my $has_filter_args = any { /^-/ } keys %{ $section->{payload} };
-  for my $key (keys %{ $section->{payload} }) {
+  my $has_filter_args = any { /^-/ } keys $section->{payload}->%*;
+  for my $key (keys $section->{payload}->%*) {
     my $val = $section->{payload}->{$key};
     my $target = $has_filter_args && ($key !~ /^-/)
       ? 'bundle'

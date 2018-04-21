@@ -47,7 +47,7 @@ after finalize => sub {
 
   my $assembler = $self->sequence->assembler;
 
-  my %payload = %{ $self->payload };
+  my %payload = $self->payload->%*;
 
   my %dzil;
   $dzil{$_} = delete $payload{":$_"} for grep { s/\A:// } keys %payload;

@@ -75,7 +75,7 @@ sub make_module {
   if ($self->has_template) {
     $template = path( $self->template )->slurp_utf8;
   } else {
-    $template = ${ $self->section_data('Module.pm') };
+    $template = $self->section_data('Module.pm')->$*;
   }
 
   my $content = $self->fill_in_string(

@@ -22,7 +22,7 @@ sub _setup_default_plugins {
       zilla       => $self,
     });
 
-    push @{ $self->_plugins }, $plugin;
+    push $self->_plugins->@*, $plugin;
   }
 }
 
@@ -129,7 +129,7 @@ sub mint_dist {
 
   $self->log("writing files to $dir");
 
-  for my $file (@{ $self->files }) {
+  for my $file ($self->files->@*) {
     $self->_write_out_file($file, $dir);
   }
 

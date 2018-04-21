@@ -120,7 +120,7 @@ sub gather_files {
 sub _content {
   my $self = shift;
 
-  my $content = join "\n", @{ $self->content };
+  my $content = join "\n", $self->content->@*;
   $content .= qq{\n};
 
   if ($self->content_is_template) {

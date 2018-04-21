@@ -89,7 +89,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
 
   sub log_messages {
     my ($self) = @_;
-    [ map {; $_->{message} } @{ $self->chrome->logger->events } ];
+    [ map {; $_->{message} } $self->chrome->logger->events->@* ];
   }
 
   sub slurp_file {
@@ -125,7 +125,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
 
   our $Log_Events = [];
   sub most_recent_log_events {
-    return @{ $Log_Events }
+    return @$Log_Events;
   }
 
   around from_config => sub {
@@ -154,7 +154,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
     dircopy($source, $root);
 
     if ($tester_arg->{also_copy}) {
-      while (my ($src, $dest) = each %{ $tester_arg->{also_copy} }) {
+      while (my ($src, $dest) = each $tester_arg->{also_copy}->%*) {
         dircopy($src, $tempdir->child($dest));
       }
     }
@@ -263,7 +263,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
 
   our $Log_Events = [];
   sub most_recent_log_events {
-    return @{ $Log_Events }
+    return @$Log_Events;
   }
 
   sub _mint_target_dir {

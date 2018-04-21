@@ -84,7 +84,7 @@ sub register_component {
 
   $self->log_debug([ 'online, %s v%s', $self->meta->name, $version ]);
 
-  push @{ $self->zilla->_plugins }, $self;
+  $self->zilla->_add_plugin($self);
 
   return;
 }

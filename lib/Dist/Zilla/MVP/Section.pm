@@ -36,7 +36,7 @@ after finalize => sub {
     $self->payload,
   );
 
-  my %payload = %{ $self->payload };
+  my %payload = $self->payload->%*;
 
   $plugin_class->register_component($name, \%payload, $self);
 

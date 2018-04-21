@@ -109,10 +109,10 @@ sub find_files {
   my $self = shift;
 
   my $skip  = _join_re($self->skips);
-  my $dir   = _join_re([ map { qr!^\Q$_/! } @{ $self->dirs } ]);
+  my $dir   = _join_re([ map { qr!^\Q$_/! } $self->dirs->@* ]);
   my $match = _join_re([
     (map { my $re = glob_to_regex_string($_); qr!(?:\A|/)$re\z! }
-         @{ $self->files }),
+         $self->files->@*),
     @{ $self->matches }
   ]);
 

@@ -28,10 +28,7 @@ sub find_files {
   my ($self) = @_;
 
   my $dir = $self->dir;
-  my $files = [
-    grep { index($_->name, "$dir/") == 0 }
-      @{ $self->zilla->files }
-  ];
+  return [ grep { index($_->name, "$dir/") == 0 } $self->zilla->files->@* ];
 }
 
 sub share_dir_map {

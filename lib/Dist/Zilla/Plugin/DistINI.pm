@@ -68,7 +68,7 @@ sub gather_files {
 
   my $postlude = '';
 
-  for (@{ $self->append_file }) {
+  for ($self->append_file->@*) {
     my $fn = $self->zilla->root->child($_);
 
     $postlude .= path($fn)->slurp_utf8;

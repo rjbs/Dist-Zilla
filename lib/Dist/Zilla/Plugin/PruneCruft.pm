@@ -52,7 +52,7 @@ L<ManifestSkip|Dist::Zilla::Plugin::ManifestSkip>.
 
 sub _dont_exclude_file {
   my ($self, $file) = @_;
-  for my $exception (@{ $self->except }) {
+  for my $exception ($self->except->@*) {
     return 1 if $file->name =~ $exception;
   }
   return;
@@ -79,7 +79,7 @@ sub exclude_file {
   return 1 if substr($file->name, 0, 4) eq 'tmp/';
 
   if (my $file = $file->name =~ s/\.c$//r) {
-    for my $other (@{ $self->zilla->files }) {
+    for my $other ($self->zilla->files->@*) {
       return 1 if $other->name eq "${file}.xs";
     }
   }
@@ -91,7 +91,7 @@ sub prune_files {
   my ($self) = @_;
 
   # Copy list (break reference) so we can mutate.
-  for my $file ((), @{ $self->zilla->files }) {
+  for my $file ((), $self->zilla->files->@*) {
     next unless $self->exclude_file($file);
 
     $self->log_debug([ 'pruning %s', $file->name ]);
