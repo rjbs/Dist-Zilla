@@ -22,7 +22,7 @@ sub _setup_default_plugins {
       zilla       => $self,
     });
 
-    push @{ $self->plugins }, $plugin;
+    push @{ $self->_plugins }, $plugin;
   }
 }
 
@@ -110,7 +110,7 @@ sub mint_dist {
 
   my $wd = File::pushd::pushd($self->root);
 
-  $_->before_mint  for @{ $self->plugins_with(-BeforeMint) };
+  $_->before_mint         for $self->plugins_with(-BeforeMint);
 
   for my $module (@modules) {
     my $minter = $self->plugin_named(
@@ -120,10 +120,10 @@ sub mint_dist {
     $minter->make_module({ name => $module->{name} })
   }
 
-  $_->gather_files       for @{ $self->plugins_with(-FileGatherer) };
-  $_->set_file_encodings for @{ $self->plugins_with(-EncodingProvider) };
-  $_->prune_files        for @{ $self->plugins_with(-FilePruner) };
-  $_->munge_files        for @{ $self->plugins_with(-FileMunger) };
+  $_->gather_files        for $self->plugins_with(-FileGatherer);
+  $_->set_file_encodings  for $self->plugins_with(-EncodingProvider);
+  $_->prune_files         for $self->plugins_with(-FilePruner);
+  $_->munge_files         for $self->plugins_with(-FileMunger);
 
   $self->_check_dupe_files;
 
@@ -133,8 +133,7 @@ sub mint_dist {
     $self->_write_out_file($file, $dir);
   }
 
-  $_->after_mint({ mint_root => $dir })
-    for @{ $self->plugins_with(-AfterMint) };
+  $_->after_mint({ mint_root => $dir }) for $self->plugins_with(-AfterMint);
 
   $self->log("dist minted in ./$name");
 }

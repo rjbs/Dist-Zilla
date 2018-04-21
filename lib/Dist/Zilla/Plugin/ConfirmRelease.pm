@@ -13,7 +13,7 @@ sub before_release {
 
   my $releasers = join q{, },
                   map {; $_->plugin_name }
-                  @{ $self->zilla->plugins_with(-Releaser) };
+                  $self->zilla->plugins_with(-Releaser);
 
   $self->log("*** Preparing to release $tgz with $releasers ***");
   my $prompt = "Do you want to continue the release process?";

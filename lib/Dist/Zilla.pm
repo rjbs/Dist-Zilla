@@ -4,13 +4,13 @@ package Dist::Zilla;
 use Moose 0.92; # role composition fixes
 with 'Dist::Zilla::Role::ConfigDumper';
 
-use Dist::Zilla::Dialect;
-
 # This comment has fün̈n̈ÿ characters.
 
 use MooseX::Types::Moose qw(ArrayRef Bool HashRef Object Str);
 use MooseX::Types::Perl qw(DistName LaxVersionStr);
 use Moose::Util::TypeConstraints;
+
+use Dist::Zilla::Dialect;
 
 use Dist::Zilla::Types qw(Path License ReleaseStatus);
 
@@ -91,7 +91,7 @@ sub _build_name {
   my ($self) = @_;
 
   my $name;
-  for my $plugin (@{ $self->plugins_with(-NameProvider) }) {
+  for my $plugin ($self->plugins_with(-NameProvider)) {
     next unless defined(my $this_name = $plugin->provide_name);
 
     $self->log_fatal('attempted to set name twice') if defined $name;
@@ -109,7 +109,7 @@ sub _build_version {
 
   my $version = $self->_version_override;
 
-  for my $plugin (@{ $self->plugins_with(-VersionProvider) }) {
+  for my $plugin ($self->plugins_with(-VersionProvider)) {
     next unless defined(my $this_version = $plugin->provide_version);
 
     $self->log_fatal('attempted to set version twice') if defined $version;
@@ -171,7 +171,7 @@ sub _build_release_status {
   # the version
   $status = 'testing' if $self->_override_is_trial;
 
-  for my $plugin (@{ $self->plugins_with(-ReleaseStatusProvider) }) {
+  for my $plugin ($self->plugins_with(-ReleaseStatusProvider)) {
     next unless defined(my $this_status = $plugin->provide_release_status);
 
     $self->log_fatal('attempted to set release status twice')
@@ -337,7 +337,7 @@ sub _build_license {
 
   my $provided_license;
 
-  for my $plugin (@{ $self->plugins_with(-LicenseProvider) }) {
+  for my $plugin ($self->plugins_with(-LicenseProvider)) {
     my $this_license = $plugin->provide_license({
       copyright_holder => $copyright_holder,
       copyright_year   => $copyright_year,
@@ -555,20 +555,38 @@ sub _build_is_trial {
 
 =attr plugins
 
-This is an arrayref of plugins that have been plugged into this Dist::Zilla
-object.
-
-Non-core code B<must not> alter this arrayref.  Public access to this attribute
-B<may go away> in the future.
+This is a list of plugins that have been plugged into this Dist::Zilla object.
 
 =cut
 
 has plugins => (
-  is   => 'ro',
   isa  => 'ArrayRef[Dist::Zilla::Role::Plugin]',
   init_arg => undef,
+  traits   => [ 'Array' ],
+  reader   => '_plugins',
   default  => sub { [ ] },
 );
+
+sub _add_plugin ($self, $plugin) {
+  push $self->_plugins->@*, $plugin;
+  return;
+}
+
+sub plugins ($self) {
+  state %warned;
+
+  my $plugins = $self->_plugins;
+
+  if (! wantarray) {
+    my ($package, $pmfile, $line) = caller;
+    Carp::carp('in v7, $zilla->plugins should only be called in list context; scalar context behavior will change in Dist::Zilla v8')
+      unless $warned{ $pmfile, $line }++;
+
+    return $plugins;
+  }
+
+  return @$plugins;
+}
 
 =attr distmeta
 
@@ -593,7 +611,7 @@ sub _build_distmeta {
   my $meta_merge = CPAN::Meta::Merge->new(default_version => 2);
   my $meta = {};
 
-  for (@{ $self->plugins_with(-MetaProvider) }) {
+  for ($self->plugins_with(-MetaProvider)) {
     $meta = $meta_merge->merge($meta, $_->metadata);
   }
 
@@ -656,7 +674,7 @@ has prereqs => (
 
 sub plugin_named {
   my ($self, $name) = @_;
-  my $plugin = first { $_->plugin_name eq $name } @{ $self->plugins };
+  my $plugin = first { $_->plugin_name eq $name } $self->plugins;
 
   return $plugin if $plugin;
   return;
@@ -664,11 +682,11 @@ sub plugin_named {
 
 =method plugins_with
 
-  my $roles = $zilla->plugins_with( -SomeRole );
+  my @roles = $zilla->plugins_with( -SomeRole );
 
-This method returns an arrayref containing all the Dist::Zilla object's plugins
-that perform the named role.  If the given role name begins with a dash, the
-dash is replaced with "Dist::Zilla::Role::"
+This method returns a list of all the Dist::Zilla object's plugins that perform
+the named role.  If the given role name begins with a dash, the dash is
+replaced with "Dist::Zilla::Role::"
 
 =cut
 
@@ -676,9 +694,18 @@ sub plugins_with {
   my ($self, $role) = @_;
 
   $role =~ s/^-/Dist::Zilla::Role::/;
-  my $plugins = [ grep { $_->does($role) } @{ $self->plugins } ];
+  my @plugins = grep { $_->does($role) } $self->plugins;
 
-  return $plugins;
+  state %warned;
+  if (! wantarray) {
+    my ($package, $pmfile, $line) = caller;
+    Carp::carp('in v7, $zilla->plugins_with should only be called in list context; scalar context behavior will change in Dist::Zilla v8')
+      unless $warned{ $pmfile, $line }++;
+
+    return \@plugins;
+  }
+
+  return @plugins;
 }
 
 =method find_files

@@ -151,7 +151,7 @@ sub zilla {
 
     VERBOSE_PLUGIN: for my $plugin_name (grep { ! m{\A[-_]\z} } @v_plugins) {
       my @plugins = grep { $_->plugin_name =~ /\b\Q$plugin_name\E\b/ }
-                    @{ $zilla->plugins };
+                    $zilla->plugins;
 
       $zilla->log_fatal("can't find plugins matching $plugin_name to set debug")
         unless @plugins;

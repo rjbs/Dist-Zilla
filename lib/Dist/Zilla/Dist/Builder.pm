@@ -70,7 +70,7 @@ sub _setup_default_plugins {
       },
     });
 
-    push @{ $self->plugins }, $plugin;
+    $self->_add_plugin($plugin);
   }
 
   unless ($self->plugin_named(':IncModules')) {
@@ -87,7 +87,7 @@ sub _setup_default_plugins {
       },
     });
 
-    push @{ $self->plugins }, $plugin;
+    $self->_add_plugin($plugin);
   }
 
   unless ($self->plugin_named(':TestFiles')) {
@@ -99,7 +99,7 @@ sub _setup_default_plugins {
       code        => sub { local $_ = $_->name; m{\At/} },
     });
 
-    push @{ $self->plugins }, $plugin;
+    $self->_add_plugin($plugin);
   }
 
   unless ($self->plugin_named(':ExtraTestFiles')) {
@@ -111,7 +111,7 @@ sub _setup_default_plugins {
       code        => sub { local $_ = $_->name; m{\Axt/} },
     });
 
-    push @{ $self->plugins }, $plugin;
+    $self->_add_plugin($plugin);
   }
 
   unless ($self->plugin_named(':ExecFiles')) {
@@ -121,14 +121,14 @@ sub _setup_default_plugins {
       zilla       => $self,
       style       => 'list',
       code        => sub {
-        my $plugins = $_[0]->zilla->plugins_with(-ExecFiles);
-        my @files = uniq map {; @{ $_->find_files } } @$plugins;
+        my @files = uniq map {; @{ $_->find_files } }
+                         $_[0]->zilla->plugins_with(-ExecFiles);
 
         return \@files;
       },
     });
 
-    push @{ $self->plugins }, $plugin;
+    $self->_add_plugin($plugin);
   }
 
   unless ($self->plugin_named(':PerlExecFiles')) {
@@ -147,7 +147,7 @@ sub _setup_default_plugins {
       },
     });
 
-    push @{ $self->plugins }, $plugin;
+    $self->_add_plugin($plugin);
   }
 
   unless ($self->plugin_named(':ShareFiles')) {
@@ -174,7 +174,7 @@ sub _setup_default_plugins {
       },
     });
 
-    push @{ $self->plugins }, $plugin;
+    $self->_add_plugin($plugin);
   }
 
   unless ($self->plugin_named(':MainModule')) {
@@ -191,7 +191,7 @@ sub _setup_default_plugins {
       },
     });
 
-    push @{ $self->plugins }, $plugin;
+    $self->_add_plugin($plugin);
   }
 
   unless ($self->plugin_named(':AllFiles')) {
@@ -203,7 +203,7 @@ sub _setup_default_plugins {
       code        => sub { return 1 },
     });
 
-    push @{ $self->plugins }, $plugin;
+    $self->_add_plugin($plugin);
   }
 
   unless ($self->plugin_named(':NoFiles')) {
@@ -215,7 +215,7 @@ sub _setup_default_plugins {
       code        => sub { [] },
     });
 
-    push @{ $self->plugins }, $plugin;
+    $self->_add_plugin($plugin);
   }
 }
 
@@ -232,7 +232,7 @@ sub _build_share_dir_map {
 
   my $share_dir_map = {};
 
-  for my $plugin (@{ $self->plugins_with(-ShareDir) }) {
+  for my $plugin ($self->plugins_with(-ShareDir)) {
     next unless my $sub_map = $plugin->share_dir_map;
 
     if ( $sub_map->{dist} ) {
@@ -344,26 +344,26 @@ sub build_in {
   $self->log_fatal("attempted to build " . $self->name . " a second time")
     if $self->built_in;
 
-  $_->before_build for @{ $self->plugins_with(-BeforeBuild) };
+  $_->before_build        for $self->plugins_with(-BeforeBuild);
 
   $self->log("beginning to build " . $self->name);
 
-  $_->gather_files       for @{ $self->plugins_with(-FileGatherer) };
-  $_->set_file_encodings for @{ $self->plugins_with(-EncodingProvider) };
-  $_->prune_files        for @{ $self->plugins_with(-FilePruner) };
+  $_->gather_files        for $self->plugins_with(-FileGatherer);
+  $_->set_file_encodings  for $self->plugins_with(-EncodingProvider);
+  $_->prune_files         for $self->plugins_with(-FilePruner);
 
   $self->version; # instantiate this lazy attribute now that files are gathered
 
-  $_->munge_files        for @{ $self->plugins_with(-FileMunger) };
+  $_->munge_files         for $self->plugins_with(-FileMunger);
 
-  $_->register_prereqs   for @{ $self->plugins_with(-PrereqSource) };
+  $_->register_prereqs    for $self->plugins_with(-PrereqSource);
 
   $self->prereqs->finalize;
 
   # Barf if someone has already set up a prereqs entry? -- rjbs, 2010-04-13
   $self->distmeta->{prereqs} = $self->prereqs->as_string_hash;
 
-  $_->setup_installer for @{ $self->plugins_with(-InstallTool) };
+  $_->setup_installer     for $self->plugins_with(-InstallTool);
 
   $self->_check_dupe_files;
 
@@ -376,7 +376,7 @@ sub build_in {
   }
 
   $_->after_build({ build_root => $build_root })
-    for @{ $self->plugins_with(-AfterBuild) };
+    for $self->plugins_with(-AfterBuild);
 
   $self->built_in($build_root);
 }
@@ -480,7 +480,7 @@ sub build_archive {
   my $basename = $self->dist_basename;
   my $basedir = path($basename);
 
-  $_->before_archive for @{ $self->plugins_with(-BeforeArchive) };
+  $_->before_archive for $self->plugins_with(-BeforeArchive);
 
   my $method = eval { +require Archive::Tar::Wrapper;
                       Archive::Tar::Wrapper->VERSION('0.15'); 1 }
@@ -594,20 +594,20 @@ sub release {
   my $self = shift;
 
   Carp::croak("you can't release without any Releaser plugins")
-    unless my @releasers = @{ $self->plugins_with(-Releaser) };
+    unless my @releasers = $self->plugins_with(-Releaser);
 
   $ENV{DZIL_RELEASING} = 1;
 
   my $tgz = $self->build_archive;
 
   # call all plugins implementing BeforeRelease role
-  $_->before_release($tgz) for @{ $self->plugins_with(-BeforeRelease) };
+  $_->before_release($tgz)  for $self->plugins_with(-BeforeRelease);
 
   # do the actual release
-  $_->release($tgz) for @releasers;
+  $_->release($tgz)         for @releasers;
 
   # call all plugins implementing AfterRelease role
-  $_->after_release($tgz) for @{ $self->plugins_with(-AfterRelease) };
+  $_->after_release($tgz)   for $self->plugins_with(-AfterRelease);
 }
 
 =method clean
@@ -749,7 +749,7 @@ sub test {
   my ($self, $arg) = @_;
 
   Carp::croak("you can't test without any TestRunner plugins")
-    unless my @testers = @{ $self->plugins_with(-TestRunner) };
+    unless my @testers = $self->plugins_with(-TestRunner);
 
   my ($target, $latest) = $self->ensure_built_in_tmpdir;
   my $error  = $self->run_tests_in($target, $arg);
@@ -781,7 +781,7 @@ sub run_tests_in {
   my ($self, $target, $arg) = @_;
 
   Carp::croak("you can't test without any TestRunner plugins")
-    unless my @testers = @{ $self->plugins_with(-TestRunner) };
+    unless my @testers = $self->plugins_with(-TestRunner);
 
   for my $tester (@testers) {
     my $wd = File::pushd::pushd($target);
@@ -804,9 +804,10 @@ non-zero, the directory will be left in place.
 sub run_in_build {
   my ($self, $cmd, $arg) = @_;
 
+  my @runners = $self->plugins_with(-BuildRunner);
+
   $self->log_fatal("you can't build without any BuildRunner plugins")
-    unless ($arg and exists $arg->{build} and ! $arg->{build})
-        or @{ $self->plugins_with(-BuildRunner) };
+    unless ($arg and exists $arg->{build} and ! $arg->{build}) or @runners;
 
   require "Config.pm"; # skip autoprereq
 
@@ -855,7 +856,7 @@ sub _ensure_blib {
   my ($self) = @_;
 
   unless ( -d 'blib' ) {
-    my @builders = @{ $self->plugins_with( -BuildRunner ) };
+    my @builders = $self->plugins_with( -BuildRunner );
     $self->log_fatal("no BuildRunner plugins specified") unless @builders;
     $_->build for @builders;
     $self->log_fatal("no blib; failed to build properly?") unless -d 'blib';

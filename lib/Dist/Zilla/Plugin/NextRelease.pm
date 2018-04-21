@@ -39,7 +39,9 @@ use String::Formatter 0.100680 stringf => {
                 . ($_[0]->zilla->is_trial
                    ? ($_[1] // '-TRIAL') : '') },
     P => sub {
-      my $releaser = first { $_->can('cpanid') } @{ $_[0]->zilla->plugins_with('-Releaser') };
+      my $releaser = first { $_->can('cpanid') }
+                     $_[0]->zilla->plugins_with('-Releaser');
+
       $_[0]->log_fatal('releaser doesn\'t provide cpanid, but %P used') unless $releaser;
       $releaser->cpanid;
     },
