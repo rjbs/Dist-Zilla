@@ -5,6 +5,8 @@ package Dist::Zilla::App::Command::nop;
 
 use Dist::Zilla::App -command;
 
+use Dist::Zilla::Dialect;
+
 =head1 SYNOPSIS
 
 This command does nothing.  It initializes Dist::Zilla, then exits.  This is

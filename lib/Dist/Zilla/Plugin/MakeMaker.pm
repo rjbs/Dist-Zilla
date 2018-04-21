@@ -3,6 +3,8 @@ package Dist::Zilla::Plugin::MakeMaker;
 
 use Moose;
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 use Config;

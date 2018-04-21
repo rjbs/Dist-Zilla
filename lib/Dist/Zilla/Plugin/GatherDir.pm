@@ -5,6 +5,8 @@ use Moose;
 use Dist::Zilla::Types qw(Path);
 with 'Dist::Zilla::Role::FileGatherer';
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 =head1 DESCRIPTION

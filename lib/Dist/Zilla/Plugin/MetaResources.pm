@@ -4,6 +4,8 @@ package Dist::Zilla::Plugin::MetaResources;
 use Moose;
 with 'Dist::Zilla::Role::MetaProvider';
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 =head1 DESCRIPTION

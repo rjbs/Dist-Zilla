@@ -4,6 +4,8 @@ package Dist::Zilla::Plugin::DistINI;
 use Moose;
 with qw(Dist::Zilla::Role::FileGatherer);
 
+use Dist::Zilla::Dialect;
+
 use Dist::Zilla::File::FromCode;
 
 use MooseX::Types::Moose qw(ArrayRef Str);

@@ -1,6 +1,8 @@
 package Dist::Zilla::File::FromCode;
 # ABSTRACT: a file whose content is (re-)built on demand
 
+use Dist::Zilla::Dialect;
+
 use Moose;
 use Moose::Util::TypeConstraints;
 

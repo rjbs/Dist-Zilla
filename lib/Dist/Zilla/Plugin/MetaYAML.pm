@@ -4,6 +4,8 @@ package Dist::Zilla::Plugin::MetaYAML;
 use Moose;
 with 'Dist::Zilla::Role::FileGatherer';
 
+use Dist::Zilla::Dialect;
+
 use Try::Tiny;
 use namespace::autoclean;
 

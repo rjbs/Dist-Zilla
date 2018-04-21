@@ -4,10 +4,12 @@ package Dist::Zilla::Role::Plugin;
 use Moose::Role;
 with 'Dist::Zilla::Role::ConfigDumper';
 
-use Params::Util qw(_HASHLIKE);
-use Moose::Util::TypeConstraints 'class_type';
+use Dist::Zilla::Dialect;
 
 use namespace::autoclean;
+
+use Params::Util qw(_HASHLIKE);
+use Moose::Util::TypeConstraints 'class_type';
 
 =head1 DESCRIPTION
 

@@ -2,12 +2,13 @@ package Dist::Zilla::Role::BuildPL;
 # ABSTRACT: Common ground for Build.PL based builders
 
 use Moose::Role;
-
 with qw(
   Dist::Zilla::Role::InstallTool
   Dist::Zilla::Role::BuildRunner
   Dist::Zilla::Role::TestRunner
 );
+
+use Dist::Zilla::Dialect;
 
 use namespace::autoclean;
 

@@ -4,6 +4,8 @@ package Dist::Zilla::PluginBundle::Filter;
 use Moose;
 with 'Dist::Zilla::Role::PluginBundle';
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 use List::Util 1.33 qw(any);

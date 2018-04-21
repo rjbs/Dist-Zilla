@@ -3,6 +3,8 @@ use warnings;
 package Dist::Zilla::Util;
 # ABSTRACT: random snippets of code that Dist::Zilla wants
 
+use Dist::Zilla::Dialect;
+
 use Carp ();
 use Encode ();
 

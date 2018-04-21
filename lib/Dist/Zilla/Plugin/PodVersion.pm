@@ -9,6 +9,8 @@ with(
   },
 );
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 =head1 DESCRIPTION

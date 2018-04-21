@@ -4,6 +4,8 @@ package Dist::Zilla::Role::MintingProfile::ShareDir;
 use Moose::Role;
 with 'Dist::Zilla::Role::MintingProfile';
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 use File::ShareDir;

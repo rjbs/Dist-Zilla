@@ -4,6 +4,8 @@ package Dist::Zilla::MVP::RootSection;
 use Moose;
 extends 'Config::MVP::Section';
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 =head1 DESCRIPTION

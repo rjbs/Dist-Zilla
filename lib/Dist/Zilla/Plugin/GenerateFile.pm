@@ -7,6 +7,8 @@ with (
   'Dist::Zilla::Role::TextTemplate',
 );
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 use Dist::Zilla::File::InMemory;

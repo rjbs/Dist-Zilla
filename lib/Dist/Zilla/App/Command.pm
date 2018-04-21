@@ -5,6 +5,8 @@ package Dist::Zilla::App::Command;
 
 use App::Cmd::Setup -command;
 
+use Dist::Zilla::Dialect;
+
 =method zilla
 
 This returns the Dist::Zilla object in use by the command.  If none has yet

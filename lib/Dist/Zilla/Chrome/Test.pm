@@ -3,6 +3,8 @@ package Dist::Zilla::Chrome::Test;
 
 use Moose;
 
+use Dist::Zilla::Dialect;
+
 use MooseX::Types::Moose qw(ArrayRef HashRef Str);
 use Dist::Zilla::Types qw(OneZero);
 use Log::Dispatchouli 1.102220;

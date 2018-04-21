@@ -2,6 +2,9 @@ package Dist::Zilla::Prereqs;
 # ABSTRACT: the prerequisites of a Dist::Zilla distribution
 
 use Moose;
+
+use Dist::Zilla::Dialect;
+
 use MooseX::Types::Moose qw(Bool HashRef);
 
 use CPAN::Meta::Prereqs 2.120630; # add_string_requirement

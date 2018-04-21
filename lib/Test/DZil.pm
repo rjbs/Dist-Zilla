@@ -3,6 +3,8 @@ use warnings;
 package Test::DZil;
 # ABSTRACT: tools for testing Dist::Zilla plugins
 
+use Dist::Zilla::Dialect;
+
 use Params::Util qw(_HASH0);
 use JSON::MaybeXS;
 use Scalar::Util qw(blessed);

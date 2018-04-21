@@ -4,6 +4,8 @@ package Dist::Zilla;
 use Moose 0.92; # role composition fixes
 with 'Dist::Zilla::Role::ConfigDumper';
 
+use Dist::Zilla::Dialect;
+
 # This comment has fün̈n̈ÿ characters.
 
 use MooseX::Types::Moose qw(ArrayRef Bool HashRef Object Str);

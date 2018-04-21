@@ -4,6 +4,8 @@ package Dist::Zilla::Plugin::ConfirmRelease;
 use Moose;
 with 'Dist::Zilla::Role::BeforeRelease';
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 sub before_release {

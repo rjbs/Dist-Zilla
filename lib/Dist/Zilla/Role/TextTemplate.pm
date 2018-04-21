@@ -3,6 +3,8 @@ package Dist::Zilla::Role::TextTemplate;
 
 use Moose::Role;
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 =head1 DESCRIPTION

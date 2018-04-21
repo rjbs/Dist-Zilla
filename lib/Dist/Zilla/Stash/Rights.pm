@@ -4,6 +4,8 @@ package Dist::Zilla::Stash::Rights;
 use Moose;
 with 'Dist::Zilla::Role::Stash';
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 has license_class => (

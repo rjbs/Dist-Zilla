@@ -4,6 +4,8 @@ package Dist::Zilla::Plugin::TemplateModule;
 use Moose;
 with qw(Dist::Zilla::Role::ModuleMaker Dist::Zilla::Role::TextTemplate);
 
+use Dist::Zilla::Dialect;
+
 use Dist::Zilla::Path;
 
 use namespace::autoclean;

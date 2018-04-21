@@ -4,6 +4,8 @@ package Dist::Zilla::Plugin::Encoding;
 use Moose;
 with 'Dist::Zilla::Role::EncodingProvider';
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 =head1 SYNOPSIS

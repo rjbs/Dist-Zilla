@@ -11,6 +11,8 @@ BEGIN {
   unshift @ISA, 'App::Cmd::Command::version';
 }
 
+use Dist::Zilla::Dialect;
+
 =head1 SYNOPSIS
 
 Print dzil version

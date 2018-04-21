@@ -1,9 +1,12 @@
 package Dist::Zilla::Role::PPI;
 # ABSTRACT: a role for plugins which use PPI
 
+use Dist::Zilla::Dialect;
+
+use namespace::autoclean;
+
 use Moose::Role;
 use Digest::MD5 qw(md5);
-use namespace::autoclean;
 
 =head1 DESCRIPTION
 

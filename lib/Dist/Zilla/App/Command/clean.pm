@@ -5,6 +5,8 @@ package Dist::Zilla::App::Command::clean;
 
 use Dist::Zilla::App -command;
 
+use Dist::Zilla::Dialect;
+
 =head1 SYNOPSIS
 
   dzil clean [ --dry-run|-n ]

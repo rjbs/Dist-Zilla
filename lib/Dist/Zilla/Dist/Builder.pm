@@ -4,6 +4,8 @@ package Dist::Zilla::Dist::Builder;
 use Moose 0.92; # role composition fixes
 extends 'Dist::Zilla';
 
+use Dist::Zilla::Dialect;
+
 use MooseX::Types::Moose qw(HashRef);
 use Dist::Zilla::Types qw(Path);
 
