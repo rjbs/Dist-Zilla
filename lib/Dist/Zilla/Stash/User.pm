@@ -19,9 +19,17 @@ has email => (
   required => 1,
 );
 
-sub authors {
-  my ($self) = @_;
-  return [ sprintf "%s <%s>", $self->name, $self->email ];
+sub authors ($self) {
+  my $string = sprintf "%s <%s>", $self->name, $self->email;
+  return $string if wantarray;
+
+  state %warned;
+
+  my ($package, $pmfile, $line) = caller;
+  Carp::carp('in v7, $zilla->authors should only be called in list context; scalar context behavior will change in Dist::Zilla v8')
+    unless $warned{ $pmfile, $line }++;
+
+  return [ $string ];
 }
 
 with 'Dist::Zilla::Role::Stash::Authors';
