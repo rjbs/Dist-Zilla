@@ -612,6 +612,7 @@ sub _build_distmeta {
     generated_by   => $self->_metadata_generator_id
                     . ' version '
                     . ($self->VERSION // '(undef)'),
+    x_generated_by_perl => "$^V", # v5.24.0
   });
 
   return $meta;
