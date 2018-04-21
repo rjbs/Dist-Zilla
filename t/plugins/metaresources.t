@@ -62,6 +62,7 @@ my $serialization_json = $json_backend . ' version ' . $json_backend->VERSION;
         repository => 'git://example.com/project.git',
       },
       version => '0.001',
+      x_generated_by_perl => "$^V",
       x_serialization_backend => $serialization_yaml,
     },
     'META.yml matches expected 1.4 spec output'
@@ -88,6 +89,7 @@ my $serialization_json = $json_backend . ' version ' . $json_backend->VERSION;
         repository => superhashof({ url => 'git://example.com/project.git' }),
       },
       version => '0.001',
+      x_generated_by_perl => "$^V",
       x_serialization_backend => $serialization_json,
     },
     'META.json was 2.0 output, old-style resources were upgraded'
@@ -141,6 +143,7 @@ my $serialization_json = $json_backend . ' version ' . $json_backend->VERSION;
         repository => 'git://example.com/project.git',
       },
       version => '0.001',
+      x_generated_by_perl => "$^V",
       x_serialization_backend => $serialization_yaml,
     },
     'META.yml matches expected 1.4 spec output, new style resources were down-graded'
@@ -174,6 +177,7 @@ my $serialization_json = $json_backend . ' version ' . $json_backend->VERSION;
         }
       },
       version => '0.001',
+      x_generated_by_perl => "$^V",
       x_serialization_backend => $serialization_json,
     },
     'META.json was 2.0 output'
