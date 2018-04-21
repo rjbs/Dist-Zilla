@@ -3,6 +3,7 @@ use warnings;
 use Test::More 0.88;
 use Test::Deep;
 
+use Dist::Zilla::Dialect;
 use Dist::Zilla::App::Tester;
 
 # see also t/plugins/autoprereqs.t
@@ -60,7 +61,7 @@ for my $how (
   my $map  = $how->[1];
   my $desc = @opt ? "@opt" : "default";
 
-  my $make_bag = sub { bag(map {; $map->() } grep {; $_ ne 'perl' } @_) };
+  my sub nonperl_bag { bag(map {; $map->() } grep {; $_ ne 'perl' } @_) };
 
   subtest "$desc output" => sub {
     {
@@ -71,7 +72,7 @@ for my $how (
 
       cmp_deeply(
         [ split("\n", $output) ],
-        $make_bag->(@default_prereqs),
+        nonperl_bag(@default_prereqs),
         "all prereqs listed as output",
       );
     }
@@ -84,7 +85,7 @@ for my $how (
 
       cmp_deeply(
         [ split("\n", $output) ],
-        $make_bag->(keys %{$prereqs{recommends}}),
+        nonperl_bag(keys %{$prereqs{recommends}}),
         "no recommended prereqs listed as output, --no-requires",
       );
     }
@@ -97,7 +98,7 @@ for my $how (
 
       cmp_deeply(
         [ split("\n", $output) ],
-        $make_bag->(keys %{$prereqs{requires}}),
+        nonperl_bag(keys %{$prereqs{requires}}),
         'no recommended prereqs listed as output, --no-recommends',
       );
     }
@@ -110,7 +111,7 @@ for my $how (
 
       cmp_deeply(
         [ split("\n", $output) ],
-        $make_bag->(@default_prereqs, keys %{$prereqs{suggests}}),
+        nonperl_bag(@default_prereqs, keys %{$prereqs{suggests}}),
         'no recommended prereqs listed as output, --suggests',
       );
     }
@@ -123,7 +124,7 @@ for my $how (
 
       cmp_deeply(
         [ split("\n", $output) ],
-        $make_bag->('String::Formatter', @default_prereqs),
+        nonperl_bag('String::Formatter', @default_prereqs),
         'develop prereqs included in output for ' . $arg,
       );
     }
