@@ -129,7 +129,7 @@ around BUILDARGS => sub {
   my ($class, @arg) = @_;
 
   my $args = $class->$orig(@arg);
-  my %copy = %{ $args };
+  my %copy = %$args;
 
   my $zilla = delete $copy{zilla};
   my $name  = delete $copy{plugin_name};
@@ -181,7 +181,7 @@ sub register_prereqs {
       type  => $self->prereq_type,
       phase => $self->prereq_phase,
     },
-    %{ $self->_prereq },
+    $self->_prereq->%*,
   );
 }
 

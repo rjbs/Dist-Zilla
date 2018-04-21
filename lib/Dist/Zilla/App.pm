@@ -19,7 +19,7 @@ sub global_opt_spec {
     [ "verbose|v",           "log additional output" ],
     [ "verbose-plugin|V=s@", "log additional output from some plugins only" ],
     [ "lib-inc|I=s@",        "additional \@INC dirs", {
-        callbacks => { 'always fine' => sub { unshift @INC, @{$_[0]}; } }
+        callbacks => { 'always fine' => sub { unshift @INC, $_[0]->@* } }
     } ],
     $self->SUPER::global_opt_spec,
   );
@@ -109,7 +109,7 @@ sub chrome {
   $self->{__chrome__} = Dist::Zilla::Chrome::Term->new;
 
   my @v_plugins = $self->global_options->verbose_plugin
-                ? grep { length } @{ $self->global_options->verbose_plugin }
+                ? grep { length } $self->global_options->verbose_plugin->@*
                 : ();
 
   my $verbose = $self->global_options->verbose;
@@ -126,7 +126,7 @@ sub zilla {
 
   return $self->{'' . __PACKAGE__}{zilla} ||= do {
     my @v_plugins = $self->global_options->verbose_plugin
-                  ? grep { length } @{ $self->global_options->verbose_plugin }
+                  ? grep { length } $self->global_options->verbose_plugin->@*
                   : ();
 
     my $verbose = $self->global_options->verbose;

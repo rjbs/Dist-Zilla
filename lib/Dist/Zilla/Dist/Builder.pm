@@ -121,7 +121,7 @@ sub _setup_default_plugins {
       zilla       => $self,
       style       => 'list',
       code        => sub {
-        my @files = uniq map {; @{ $_->find_files } }
+        my @files = uniq map {; $_->find_files->@* }
                          $_[0]->zilla->plugins_with(-ExecFiles);
 
         return \@files;
@@ -142,7 +142,7 @@ sub _setup_default_plugins {
         my @files = grep {
           $_->name =~ m{\.pl$}
               or $_->content =~ m{^\s*\#\!.*perl\b};
-        } @{ $parent_plugin->find_files };
+        } $parent_plugin->find_files->@*;
         return \@files;
       },
     });
@@ -162,12 +162,12 @@ sub _setup_default_plugins {
         my @files;
         if ( $map->{dist} ) {
           push @files, grep {; $_->name =~ m{\A\Q$map->{dist}\E/} }
-                       @{ $self->zilla->files };
+                       $self->zilla->files->@*;
         }
         if ( my $mod_map = $map->{module} ) {
           for my $mod ( keys %$mod_map ) {
             push @files, grep { $_->name =~ m{\A\Q$mod_map->{$mod}\E/} }
-                         @{ $self->zilla->files };
+                         $self->zilla->files->@*;
           }
         }
         return \@files;
@@ -371,7 +371,7 @@ sub build_in {
 
   $self->log("writing " . $self->name . " in $build_root");
 
-  for my $file (@{ $self->files }) {
+  for my $file ($self->files->@*) {
     $self->_write_out_file($file, $build_root);
   }
 
@@ -506,7 +506,7 @@ sub _build_archive {
   my $archive = Archive::Tar->new;
   my %seen_dir;
   for my $distfile (
-    sort { length($a->name) <=> length($b->name) } @{ $self->files }
+    sort { length($a->name) <=> length($b->name) } $self->files->@*
   ) {
     my $in = path($distfile->name)->parent;
 
@@ -537,7 +537,7 @@ sub _build_archive_with_wrapper {
   my $archive = Archive::Tar::Wrapper->new;
 
   for my $distfile (
-    sort { length($a->name) <=> length($b->name) } @{ $self->files }
+    sort { length($a->name) <=> length($b->name) } $self->files->@*
   ) {
     my $in = path($distfile->name)->parent;
 
@@ -706,7 +706,7 @@ sub install {
     ## no critic Punctuation
     my $wd = File::pushd::pushd($target);
     my @cmd = $arg->{install_command}
-            ? @{ $arg->{install_command} }
+            ? $arg->{install_command}->@*
             : (cpanm => ".");
 
     $self->log_debug([ 'installing via %s', \@cmd ]);

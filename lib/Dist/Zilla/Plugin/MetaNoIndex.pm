@@ -48,7 +48,7 @@ sub mvp_aliases {
   my %alias_for;
 
   for my $key (keys %ATTR_ALIAS) {
-    $alias_for{ $_ } = $key for @{ $ATTR_ALIAS{$key} };
+    $alias_for{ $_ } = $key for $ATTR_ALIAS{$key}->@*;
   }
 
   return \%alias_for;
@@ -104,7 +104,7 @@ sub metadata {
   my $self = shift;
   return {
     no_index => {
-      map  {; my $reader = $_->[0];  ($_->[1] => [ sort @{ $self->$reader } ]) }
+      map  {; my $reader = $_->[0];  ($_->[1] => [ sort $self->$reader->@* ]) }
       grep {; my $pred   = "_has_$_->[0]"; $self->$pred }
       map  {; [ $_ => $ATTR_ALIAS{$_}[0] ] }
       keys %ATTR_ALIAS

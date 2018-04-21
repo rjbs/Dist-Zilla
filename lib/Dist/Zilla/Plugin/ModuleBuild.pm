@@ -56,7 +56,7 @@ has 'mb_version' => (
   lazy => 1,
   default => sub {
     my $self = shift;
-    keys %{$self->zilla->_share_dir_map} ? '0.3601' : '0.28';
+    keys $self->zilla->_share_dir_map->%* ? '0.3601' : '0.28';
   },
 );
 
@@ -125,7 +125,7 @@ sub _dump_as {
 }
 
 sub _add_build_elements {
-  my @elems = @{ shift->build_element } or return '';
+  my @elems = shift->build_element->@* or return '';
   return '$build->add_build_element($_) for qw(' . join(' ', @elems) . ');';
 }
 
@@ -147,7 +147,7 @@ sub module_build_args {
   my ($self) = @_;
 
   my @exe_files = map { $_->name }
-    @{ $self->zilla->find_files(':ExecFiles') };
+    $self->zilla->find_files(':ExecFiles')->@*;
 
   $self->log_fatal("can't install files with whitespace in their names")
     if grep { /\s/ } @exe_files;
@@ -171,7 +171,9 @@ sub module_build_args {
     dist_version  => $self->zilla->version,
     dist_author   => [ $self->zilla->authors ],
     @exe_files ? ( script_files  => [ sort @exe_files ] ) : (),
-    ( keys %{$self->zilla->_share_dir_map} ? (share_dir => $self->zilla->_share_dir_map) : ()),
+    (keys $self->zilla->_share_dir_map->%*
+      ? (share_dir => $self->zilla->_share_dir_map)
+      : ()),
 
     (map {; my $modules = $prereqs{$_}->as_string_hash; keys %$modules ? ( $_ => $modules ) : () } keys %prereqs),
     recursive_test_files => 1,
@@ -217,7 +219,7 @@ sub setup_installer {
 
   my $fallback_build_requires = $self->fallback_build_requires;
 
-  my $file = first { $_->name eq 'Build.PL' } @{$self->zilla->files};
+  my $file = first { $_->name eq 'Build.PL' } $self->zilla->files->@*;
 
   $self->log_debug([ 'updating contents of Build.PL in memory' ]);
   my $content = $self->fill_in_string(

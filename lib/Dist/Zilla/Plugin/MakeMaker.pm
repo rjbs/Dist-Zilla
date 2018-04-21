@@ -125,7 +125,7 @@ sub register_prereqs {
     'ExtUtils::MakeMaker' => $self->eumm_version || 0,
   );
 
-  return unless keys %{ $self->zilla->_share_dir_map };
+  return unless keys $self->zilla->_share_dir_map->%*;
 
   $self->zilla->register_prereqs(
     { phase => 'configure' },
@@ -185,14 +185,13 @@ sub write_makefile_args {
 
   my $name = $self->zilla->name =~ s/-/::/gr;
 
-  my @exe_files = map { $_->name }
-    @{ $self->zilla->find_files(':ExecFiles') };
+  my @exe_files = map { $_->name } $self->zilla->find_files(':ExecFiles')->@*;
 
   $self->log_fatal("can't install files with whitespace in their names")
     if grep { /\s/ } @exe_files;
 
   my %test_dirs;
-  for my $file (@{ $self->zilla->files }) {
+  for my $file ($self->zilla->files->@*) {
     next unless $file->name =~ m{\At/.+\.t\z};
     my $dir = $file->name =~ s{/[^/]+\.t\z}{/*.t}gr;
 
@@ -226,8 +225,10 @@ sub write_makefile_args {
   # higher configure-requires version, we should at least warn the user
   # https://github.com/Perl-Toolchain-Gang/ExtUtils-MakeMaker/issues/215
   foreach my $phase (qw(configure build test runtime)) {
-    if (my @version_ranges = pairgrep { defined($b) && !version::is_lax($b) } %{ $require_prereqs{$phase} }
-        and ($self->eumm_version || 0) < '7.1101') {
+    if (my @version_ranges = pairgrep { defined($b) && !version::is_lax($b) }
+                             $require_prereqs{$phase}->%*
+        and ($self->eumm_version || 0) < '7.1101'
+    ) {
       $self->log_fatal([
         'found version range in %s prerequisites, which ExtUtils::MakeMaker cannot parse (must specify eumm_version of at least 7.1101): %s %s',
         $phase, $_->[0], $_->[1]
@@ -245,8 +246,15 @@ sub write_makefile_args {
     @exe_files ? ( EXE_FILES => [ sort @exe_files ] ) : (),
 
     CONFIGURE_REQUIRES => $require_prereqs{configure},
-    keys %{ $require_prereqs{build} } ? ( BUILD_REQUIRES => $require_prereqs{build} ) : (),
-    keys %{ $require_prereqs{test} } ? ( TEST_REQUIRES => $require_prereqs{test} ) : (),
+
+    keys $require_prereqs{build}->%*
+      ? ( BUILD_REQUIRES => $require_prereqs{build} )
+      : (),
+
+    keys $require_prereqs{test}->%*
+      ? ( TEST_REQUIRES => $require_prereqs{test} )
+      : (),
+
     PREREQ_PM          => $require_prereqs{runtime},
 
     test => { TESTS => join q{ }, sort keys %test_dirs },
@@ -308,7 +316,7 @@ sub setup_installer {
 
   my $dumped_args = $self->_dump_as($write_makefile_args, '*WriteMakefileArgs');
 
-  my $file = first { $_->name eq 'Makefile.PL' } @{$self->zilla->files};
+  my $file = first { $_->name eq 'Makefile.PL' } $self->zilla->files->@*;
 
   $self->log_debug([ 'updating contents of Makefile.PL in memory' ]);
 

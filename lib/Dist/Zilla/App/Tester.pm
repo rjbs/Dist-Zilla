@@ -76,7 +76,7 @@ sub test_dzil {
 
   sub log_messages {
     my ($self) = @_;
-    [ map {; $_->{message} } @{ $self->app->zilla->logger->logger->events } ];
+    [ map {; $_->{message} } $self->app->zilla->logger->logger->events->@* ];
   }
 }
 

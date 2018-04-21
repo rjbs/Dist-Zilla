@@ -33,7 +33,7 @@ sub find_files {
 sub _find_via_grep {
   my ($self) = @_;
 
-  my @files = grep { $self->code->($_, $self) } @{ $self->zilla->files };
+  my @files = grep { $self->code->($_, $self) } $self->zilla->files->@*;
   return \@files;
 }
 

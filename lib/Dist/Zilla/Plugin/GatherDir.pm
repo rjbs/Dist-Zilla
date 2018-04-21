@@ -163,7 +163,7 @@ around dump_config => sub {
     # only report relative to dist root to avoid leaking private info
     root => path($self->root)->relative($self->zilla->root),
     (map { $_ => $self->$_ ? 1 : 0 } qw(include_dotfiles follow_symlinks)),
-    (map { $_ => [ sort @{ $self->$_ } ] } qw(exclude_filename exclude_match prune_directory)),
+    (map { $_ => [ sort $self->$_->@* ] } qw(exclude_filename exclude_match prune_directory)),
   };
 
   return $config;
@@ -173,8 +173,7 @@ sub gather_files {
   my ($self) = @_;
 
   my $exclude_regex = qr/\000/;
-  $exclude_regex = qr/(?:$exclude_regex)|$_/
-    for @{ $self->exclude_match };
+  $exclude_regex = qr/(?:$exclude_regex)|$_/ for $self->exclude_match->@*;
 
   my $repo_root = $self->zilla->root;
   my $root = "" . $self->root;
@@ -183,7 +182,7 @@ sub gather_files {
 
   my $prune_regex = qr/\000/;
   $prune_regex = qr/$prune_regex|$_/
-    for ( @{ $self->prune_directory },
+    for ( $self->prune_directory->@*,
       $self->include_dotfiles ? () : ( qr/^\.[^.]/ ) );
 
   # build up the rules
@@ -211,7 +210,7 @@ sub gather_files {
   $rule->exec(sub {
     my $relative = path($_[-1])->relative($root);
     $relative !~ $exclude_regex &&
-      all { $relative ne $_ } @{ $self->exclude_filename }
+      all { $relative ne $_ } $self->exclude_filename->@*
   });
 
   FILE: for my $filename ($rule->in($root)) {

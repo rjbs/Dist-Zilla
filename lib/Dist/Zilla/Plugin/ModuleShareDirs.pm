@@ -31,7 +31,7 @@ sub find_files {
   for my $mod ( keys %$modmap ) {
     my $dir = $modmap->{$mod};
     my @mod_files = grep { index($_->name, "$dir/") == 0 }
-      @{ $self->zilla->files };
+      $self->zilla->files->@*;
     push @files, @mod_files;
   }
 
@@ -51,7 +51,7 @@ around BUILDARGS => sub {
   my ($class, @arg) = @_;
 
   my $args = $class->$orig(@arg);
-  my %copy = %{ $args };
+  my %copy = %$args;
 
   my $zilla = delete $copy{zilla};
   my $name  = delete $copy{plugin_name};

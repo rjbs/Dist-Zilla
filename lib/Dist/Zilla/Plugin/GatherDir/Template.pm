@@ -75,7 +75,7 @@ sub _file_from_filename {
 
   my $new_filename = $filename;
 
-  for my $token (keys %{$self->_rename}) {
+  for my $token (keys $self->_rename->%*) {
     my $expr = $self->_rename->{$token};
     my $temp_temp = "{{ $expr }}";
     my $replacement = $self->fill_in_string(

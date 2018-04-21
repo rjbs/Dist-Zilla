@@ -13,8 +13,8 @@ sub format_author_deps {
   my ($reqs, $versions) = @_;
 
   my $formatted = '';
-  foreach my $rec (@{ $reqs }) {
-    my ($mod, $ver) = each(%{ $rec });
+  foreach my $rec (@$reqs) {
+    my ($mod, $ver) = each %$rec;
     $formatted .= $versions ? "$mod = $ver\n" : "$mod\n";
   }
   chomp($formatted);
@@ -92,7 +92,7 @@ sub extract_author_deps {
 
   my $vermap = $reqs->as_string_hash;
   # Add the other requirements
-  push(@packages, sort keys %{ $vermap });
+  push @packages, sort keys %$vermap;
 
   # Move inc:: first in list as they may impact the loading of other
   # plugins (in particular local ones).

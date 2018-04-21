@@ -88,7 +88,7 @@ around dump_config => sub {
     prefix => $self->prefix,
     # only report relative to dist root to avoid leaking private info
     root => path($self->root)->relative($self->zilla->root),
-    filenames => [ sort @{ $self->filenames } ],
+    filenames => [ sort $self->filenames->@* ],
   };
 
   return $config;
@@ -103,10 +103,10 @@ sub gather_files {
   $root = path($root);
   $root = $root->absolute($repo_root) if path($root)->is_relative;
 
-  for my $filename (@{ $self->filenames })
-  {
+  for my $filename ($self->filenames->@*) {
     $filename = $root->child($filename);
-    $self->log_fatal("$filename is a directory! Use [GatherDir] instead?") if -d $filename;
+    $self->log_fatal("$filename is a directory! Use [GatherDir] instead?")
+      if -d $filename;
 
     my $fileobj = $self->_file_from_filename($filename->stringify);
 

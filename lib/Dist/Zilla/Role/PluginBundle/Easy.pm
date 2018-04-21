@@ -177,7 +177,7 @@ sub add_bundle {
 
   $bundle = "\@$bundle" unless $bundle =~ /^@/;
 
-  push @{ $self->_plugins },
+  push $self->_plugins->@*,
     $package->bundle_config({
       name    => $self->name . '/' . $bundle,
       package => $package,
