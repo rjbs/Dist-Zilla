@@ -53,7 +53,7 @@ subtype _Filename, as Str,
 use MooseX::Types::Perl qw(LaxVersionStr);
 subtype VersionStr, as LaxVersionStr,
   # non-decimal versions cannot use underscores
-  where { /_/ && (/^v/ || (()= /\./g) > 1) ? 0 : 1 },
+  where { /_/ && (/^v/ || tr/././ > 1) ? 0 : 1 },
   message { 'Only decimal versions can contain underscores' };
 
 1;
