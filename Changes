@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+5.048     2018-04-21 15:26:30+02:00 Europe/Oslo
         - cope with error changes in latest Moose (thanks, Karen Etheridge and
           Dave Rolsky)
 
