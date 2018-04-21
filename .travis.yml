@@ -11,7 +11,7 @@ perl:
   - "5.16"
   - "5.14"
 before_install:
-  - git clone git://github.com/rjbs/travis-perl-helpers -b release-testing ~/travis-perl-helpers
+  - git clone git://github.com/travis-perl/helpers ~/travis-perl-helpers
   - source ~/travis-perl-helpers/init
   - build-perl
   - perl -V
