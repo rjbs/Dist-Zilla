@@ -169,7 +169,7 @@ sub module_build_args {
     dist_abstract => $self->zilla->abstract,
     dist_name     => $self->zilla->name,
     dist_version  => $self->zilla->version,
-    dist_author   => [ @{ $self->zilla->authors } ],
+    dist_author   => [ $self->zilla->authors ],
     @exe_files ? ( script_files  => [ sort @exe_files ] ) : (),
     ( keys %{$self->zilla->_share_dir_map} ? (share_dir => $self->zilla->_share_dir_map) : ()),
 
