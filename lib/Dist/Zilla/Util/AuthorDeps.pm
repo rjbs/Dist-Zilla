@@ -105,7 +105,7 @@ sub extract_author_deps {
 
   if ($missing) {
     require Module::Runtime;
-
+    unshift @INC, $root->absolute->stringify;
     @packages =
       grep {
         $_ eq 'perl'

@@ -37,6 +37,7 @@ sub from_config {
   $arg ||= {};
 
   my $root = path($arg->{dist_root} || '.');
+  unshift @INC, $root->absolute->stringify;
 
   my $sequence = $class->_load_config({
     root   => $root,
