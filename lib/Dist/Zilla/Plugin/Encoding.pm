@@ -86,14 +86,14 @@ sub set_file_encodings {
   # never match (at least the filename characters)
   my $matches_regex = qr/\000/;
 
-  $matches_regex = qr/$matches_regex|$_/ for @{$self->matches};
+  $matches_regex = qr/$matches_regex|$_/ for $self->matches->@*;
 
   # \A\Q$_\E should also handle the `eq` check
-  $matches_regex = qr/$matches_regex|\A\Q$_\E/ for @{$self->filenames};
+  $matches_regex = qr/$matches_regex|\A\Q$_\E/ for $self->filenames->@*;
 
-  my( $ignore_regex ) = map { $_ && qr/$_/ } join '|', @{ $self->ignore };
+  my( $ignore_regex ) = map { $_ && qr/$_/ } join '|', $self->ignore->@*;
 
-  for my $file (@{$self->zilla->files}) {
+  for my $file ($self->zilla->files->@*) {
     next unless $file->name =~ $matches_regex;
 
     next if $ignore_regex and $file->name =~ $ignore_regex;

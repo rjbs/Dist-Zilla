@@ -61,19 +61,20 @@ be registered as prerequisites.
 has skips => (
   is  => 'ro',
   isa => 'ArrayRef[Str]',
+  default => sub {  []  },
 );
 
 around mvp_multivalue_args => sub {
   my ($orig, $self) = @_;
   ($self->$orig, 'skips')
 };
+
 around mvp_aliases => sub {
   my ($orig, $self) = @_;
   my $aliases = $self->$orig;
   $aliases->{skip}       = 'skips';
   return $aliases
 };
-
 
 requires 'scan_file_reqs';
 
@@ -140,7 +141,7 @@ sub scan_prereqs {
     }
 
     # remove prereqs from skiplist
-    for my $skip (@{ $self->skips || [] }) {
+    for my $skip ($self->skips->@*) {
       my $re   = qr/$skip/;
 
       foreach my $k ($req->required_modules) {
@@ -160,7 +161,8 @@ sub scan_prereqs {
     $req->clear_requirement($_) for qw(Config DB Errno NEXT Pod::Functions); # never indexed
 
     # we're done, return what we've found
-    my %got = %{ $req->as_string_hash };
+    my %got = $req->as_string_hash->%*;
+
     if ($phase eq 'runtime') {
       %runtime_final = %got;
     } else {

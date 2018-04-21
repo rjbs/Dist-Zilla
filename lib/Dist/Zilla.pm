@@ -264,17 +264,17 @@ has main_module => (
 
     if ( $self->_has_main_module_override ) {
        $file = first { $_->name eq $self->_main_module_override }
-               @{ $self->files };
+               $self->files->@*;
     } else {
       # We're having to guess
 
       $guess = $self->name =~ s{-}{/}gr;
       $guess = "lib/$guess.pm";
 
-      $file = (first { $_->name eq $guess } @{ $self->files })
+      $file = (first { $_->name eq $guess } $self->files->@*)
           ||  (sort { length $a->name <=> length $b->name }
                grep { $_->name =~ m{\.pm\z} and $_->name =~ m{\Alib/} }
-               @{ $self->files })[0];
+               $self->files->@*)[0];
       $self->log("guessing dist's main_module is " . ($file ? $file->name : $guess));
     }
 
@@ -287,9 +287,9 @@ has main_module => (
       } else {
         push @errorlines,"We tried to guess '$guess' but no file like that existed";
       }
-      if (not @{ $self->files }) {
+      if (not $self->files->@*) {
         push @errorlines, "Upon further inspection we didn't find any files in your dist, did you add any?";
-      } elsif ( none { $_->name =~ m{^lib/.+\.pm\z} } @{ $self->files } ){
+      } elsif ( none { $_->name =~ m{^lib/.+\.pm\z} } $self->files->@* ){
         push @errorlines, "We didn't find any .pm files in your dist, this is probably a problem.";
       }
       push @errorlines,"Cannot continue without a main_module";
@@ -518,11 +518,11 @@ has files => (
 
 sub prune_file {
   my ($self, $file) = @_;
-  my @files = @{ $self->files };
+  my @files = $self->files->@*;
 
   for my $i (0 .. $#files) {
     next unless $file == $files[ $i ];
-    splice @{ $self->files }, $i, 1;
+    splice $self->files->@*, $i, 1;
     return;
   }
 
@@ -750,11 +750,11 @@ sub _check_dupe_files {
 
   my %files_named;
   my @dupes;
-  for my $file (@{ $self->files }) {
+  for my $file ($self->files->@*) {
     my $filename = $file->name;
     if (my $seen = $files_named{ $filename }) {
-      push @{ $seen }, $file;
-      push @dupes, $filename if @{ $seen } == 2;
+      push @$seen, $file;
+      push @dupes, $filename if @$seen == 2;
     } else {
       $files_named{ $filename } = [ $file ];
     }
@@ -764,7 +764,7 @@ sub _check_dupe_files {
 
   for my $name (@dupes) {
     $self->log("attempt to add $name multiple times; added by: "
-       . join('; ', map { $_->added_by } @{ $files_named{ $name } })
+       . join('; ', map { $_->added_by } $files_named{ $name }->@*)
     );
   }
 

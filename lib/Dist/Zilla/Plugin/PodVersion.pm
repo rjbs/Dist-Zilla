@@ -30,7 +30,7 @@ section).
 sub munge_files {
   my ($self) = @_;
 
-  $self->munge_file($_) for @{ $self->found_files };
+  $self->munge_file($_) for $self->found_files->@*;
 }
 
 sub munge_file {

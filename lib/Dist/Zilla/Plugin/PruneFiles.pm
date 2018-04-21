@@ -63,10 +63,10 @@ sub prune_files {
   # never match (at least the filename characters)
   my $matches_regex = qr/\000/;
 
-  $matches_regex = qr/$matches_regex|$_/ for (@{ $self->matches });
+  $matches_regex = qr/$matches_regex|$_/ for ($self->matches->@*);
 
   # \A\Q$_\E should also handle the `eq` check
-  $matches_regex = qr/$matches_regex|\A\Q$_\E/ for (@{ $self->filenames });
+  $matches_regex = qr/$matches_regex|\A\Q$_\E/ for ($self->filenames->@*);
 
   # Copy list (break reference) so we can mutate.
   for my $file ((), @{ $self->zilla->files }) {

@@ -116,7 +116,7 @@ has _original_changes_content => (
 sub munge_files {
   my ($self) = @_;
 
-  my ($file) = grep { $_->name eq $self->filename } @{ $self->zilla->files };
+  my ($file) = grep { $_->name eq $self->filename } $self->zilla->files->@*;
   $self->log_fatal([ 'failed to find %s in the distribution', $self->filename ]) if not $file;
 
   # save original unmunged content, for replacing back in the repo later
@@ -139,7 +139,7 @@ sub munge_files {
 sub after_release {
   my ($self) = @_;
   my $filename = $self->filename;
-  my ($gathered_file) = grep { $_->name eq $filename } @{ $self->zilla->files };
+  my ($gathered_file) = grep { $_->name eq $filename } $self->zilla->files->@*;
   $self->log_fatal("failed to find $filename in the distribution") if not $gathered_file;
   my $iolayer = sprintf(":raw:encoding(%s)", $gathered_file->encoding);
 

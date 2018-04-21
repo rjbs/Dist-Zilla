@@ -31,7 +31,7 @@ sub add_file {
   );
 
   $self->log_debug([ 'adding file %s', $file->name ]);
-  push @{ $self->zilla->files }, $file;
+  push $self->zilla->files->@*, $file;
 }
 
 1;

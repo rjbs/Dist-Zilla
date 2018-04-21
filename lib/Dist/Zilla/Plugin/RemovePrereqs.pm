@@ -47,7 +47,7 @@ around dump_config => sub {
   my $config = $self->$orig;
 
   my $this_config = {
-    modules_to_remove  => [ sort @{ $self->modules_to_remove } ],
+    modules_to_remove  => [ sort $self->modules_to_remove->@* ],
   };
 
   $config->{'' . __PACKAGE__} = $this_config;
@@ -65,7 +65,7 @@ sub register_prereqs {
 
   for my $p (@phases) {
     for my $t (@types) {
-      for my $m (@{ $self->modules_to_remove }) {
+      for my $m ($self->modules_to_remove->@*) {
         $prereqs->requirements_for($p, $t)->clear_requirement($m);
       }
     }

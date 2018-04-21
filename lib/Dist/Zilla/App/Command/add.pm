@@ -52,7 +52,7 @@ sub execute {
 
   my $zilla = $self->zilla;
   my $dist = $zilla->name;
-  
+
   require File::pushd;
 
   require Dist::Zilla::Dist::Minter;
@@ -74,7 +74,7 @@ sub execute {
     $factory->make_module({ name => $name });
   }
 
-  for my $file ( @{ $factory->zilla->files} ) {
+  for my $file ($factory->zilla->files->@*) {
     $zilla->_write_out_file($file, $root);
   }
 }
