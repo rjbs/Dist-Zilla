@@ -13,7 +13,7 @@ sub before_release {
                   map {; $_->plugin_name }
                   @{ $self->zilla->plugins_with(-Releaser) };
 
-  $self->log("*** Preparing to release $tgz with $releasers ***");
+  $self->log([ '*** Preparing to release %s with %s ***', $tgz->basename, $releasers ]);
   my $prompt = "Do you want to continue the release process?";
 
   my $default = exists $ENV{DZIL_CONFIRMRELEASE_DEFAULT}

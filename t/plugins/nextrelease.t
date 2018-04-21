@@ -25,7 +25,7 @@ END_CHANGES
   with 'Dist::Zilla::Role::AfterRelease';
 
   sub after_release {
-    Path::Tiny::path('Changes')->spew('OHHAI');
+    Path::Tiny::path(shift->zilla->root, 'Changes')->spew('OHHAI');
   }
 }
 
