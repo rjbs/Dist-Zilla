@@ -4,6 +4,8 @@ package Dist::Zilla::Role::ShareDir;
 use Moose::Role;
 with 'Dist::Zilla::Role::FileFinder';
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 # Must return a hashref with any of the keys 'dist' and 'module'.  The 'dist'

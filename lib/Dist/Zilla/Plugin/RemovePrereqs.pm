@@ -4,6 +4,8 @@ package Dist::Zilla::Plugin::RemovePrereqs;
 use Moose;
 with 'Dist::Zilla::Role::PrereqSource';
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 use MooseX::Types::Moose qw(ArrayRef);

@@ -6,6 +6,8 @@ package Dist::Zilla::App::Tester;
 use parent 'App::Cmd::Tester::CaptureExternal';
 use App::Cmd::Tester 0.306 (); # result_class, ->app
 
+use Dist::Zilla::Dialect;
+
 use Dist::Zilla::App;
 use File::Copy::Recursive qw(dircopy);
 use File::pushd ();

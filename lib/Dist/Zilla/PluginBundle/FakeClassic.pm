@@ -4,6 +4,8 @@ package Dist::Zilla::PluginBundle::FakeClassic;
 use Moose;
 extends 'Dist::Zilla::PluginBundle::Classic';
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 around bundle_config => sub {

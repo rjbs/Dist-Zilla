@@ -4,6 +4,8 @@ package Dist::Zilla::Plugin::FinderCode;
 use Moose;
 with 'Dist::Zilla::Role::FileFinder';
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 use Moose::Util::TypeConstraints;

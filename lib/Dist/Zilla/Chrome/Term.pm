@@ -3,6 +3,8 @@ package Dist::Zilla::Chrome::Term;
 
 use Moose;
 
+use Dist::Zilla::Dialect;
+
 =head1 OVERVIEW
 
 This class provides a L<Dist::Zilla::Chrome> implementation for use in a

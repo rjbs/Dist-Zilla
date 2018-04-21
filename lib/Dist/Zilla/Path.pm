@@ -7,6 +7,8 @@ package Dist::Zilla::Path;
 
 use parent 'Path::Tiny';
 
+use Dist::Zilla::Dialect;
+
 use Path::Tiny 0.052 qw();  # issue 427
 use Scalar::Util qw( blessed );
 use Sub::Exporter -setup => {

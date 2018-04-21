@@ -6,6 +6,8 @@ with qw/Dist::Zilla::Role::FileGatherer
     Dist::Zilla::Role::TextTemplate
     Dist::Zilla::Role::FileMunger/;
 
+use Dist::Zilla::Dialect;
+
 use Moose::Util::TypeConstraints;
 use namespace::autoclean;
 

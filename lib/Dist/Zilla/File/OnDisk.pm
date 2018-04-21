@@ -1,6 +1,8 @@
 package Dist::Zilla::File::OnDisk;
 # ABSTRACT: a file that comes from your filesystem
 
+use Dist::Zilla::Dialect;
+
 use Moose;
 
 use Dist::Zilla::Path;

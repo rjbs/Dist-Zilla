@@ -4,6 +4,8 @@ package Dist::Zilla::Plugin::CPANFile;
 use Moose;
 with 'Dist::Zilla::Role::FileGatherer';
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 use Dist::Zilla::File::FromCode;

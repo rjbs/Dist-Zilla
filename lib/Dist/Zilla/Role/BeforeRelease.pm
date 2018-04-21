@@ -4,6 +4,8 @@ package Dist::Zilla::Role::BeforeRelease;
 use Moose::Role;
 with 'Dist::Zilla::Role::Plugin';
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 =head1 DESCRIPTION

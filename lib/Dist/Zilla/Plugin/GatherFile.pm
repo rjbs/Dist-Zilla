@@ -5,6 +5,8 @@ use Moose;
 use Dist::Zilla::Types qw(Path ArrayRefOfPaths);
 with 'Dist::Zilla::Role::FileGatherer';
 
+use Dist::Zilla::Dialect;
+
 use MooseX::Types::Moose 'ArrayRef';
 use Path::Tiny;
 use Dist::Zilla::File::OnDisk;

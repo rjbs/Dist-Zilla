@@ -3,6 +3,8 @@ package Dist::Zilla::Role::FileInjector;
 
 use Moose::Role;
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 =head1 DESCRIPTION

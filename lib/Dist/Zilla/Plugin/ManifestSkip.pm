@@ -4,6 +4,8 @@ package Dist::Zilla::Plugin::ManifestSkip;
 use Moose;
 with 'Dist::Zilla::Role::FilePruner';
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 =head1 DESCRIPTION

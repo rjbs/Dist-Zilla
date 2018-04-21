@@ -4,6 +4,8 @@ package Dist::Zilla::Plugin::ExtraTests;
 use Moose;
 with 'Dist::Zilla::Role::FileMunger';
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 =head1 DESCRIPTION

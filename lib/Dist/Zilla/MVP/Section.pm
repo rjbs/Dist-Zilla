@@ -4,6 +4,8 @@ package Dist::Zilla::MVP::Section;
 use Moose;
 extends 'Config::MVP::Section';
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 use Config::MVP::Section 2.200009; # not-installed error with section_name

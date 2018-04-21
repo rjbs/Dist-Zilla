@@ -9,6 +9,8 @@ with (
   'Dist::Zilla::Role::TextTemplate',
 );
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 use CPAN::Meta::Requirements 2.121; # requirements_for_module

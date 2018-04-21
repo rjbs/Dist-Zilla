@@ -4,6 +4,8 @@ package Dist::Zilla::MintingProfile::Default;
 use Moose;
 with 'Dist::Zilla::Role::MintingProfile::ShareDir';
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 use Dist::Zilla::Util;

@@ -5,6 +5,8 @@ package Dist::Zilla::App::Command::new;
 
 use Dist::Zilla::App -command;
 
+use Dist::Zilla::Dialect;
+
 =head1 SYNOPSIS
 
 Creates a new Dist-Zilla based distribution under the current directory.

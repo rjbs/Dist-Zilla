@@ -1,6 +1,8 @@
 package Dist::Zilla::File::InMemory;
 # ABSTRACT: a file that you build entirely in memory
 
+use Dist::Zilla::Dialect;
+
 use Moose;
 
 use namespace::autoclean;

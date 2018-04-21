@@ -3,6 +3,8 @@ package Dist::Zilla::Role::MintingProfile;
 
 use Moose::Role;
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 use Dist::Zilla::Path;

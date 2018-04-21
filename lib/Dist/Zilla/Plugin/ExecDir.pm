@@ -3,6 +3,8 @@ package Dist::Zilla::Plugin::ExecDir;
 
 use Moose;
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 =head1 SYNOPSIS

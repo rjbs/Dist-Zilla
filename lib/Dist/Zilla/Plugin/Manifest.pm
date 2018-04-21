@@ -4,6 +4,8 @@ package Dist::Zilla::Plugin::Manifest;
 use Moose;
 with 'Dist::Zilla::Role::FileGatherer';
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 use Dist::Zilla::File::FromCode;

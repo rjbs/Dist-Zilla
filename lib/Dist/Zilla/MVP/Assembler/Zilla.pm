@@ -4,6 +4,8 @@ package Dist::Zilla::MVP::Assembler::Zilla;
 use Moose;
 extends 'Dist::Zilla::MVP::Assembler';
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 =head1 OVERVIEW

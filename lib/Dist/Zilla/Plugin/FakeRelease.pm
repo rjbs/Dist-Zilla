@@ -4,6 +4,8 @@ package Dist::Zilla::Plugin::FakeRelease;
 use Moose;
 with 'Dist::Zilla::Role::Releaser';
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 has user => (

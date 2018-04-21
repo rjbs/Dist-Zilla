@@ -4,6 +4,8 @@ package Dist::Zilla::PluginBundle::Classic;
 use Moose;
 with 'Dist::Zilla::Role::PluginBundle::Easy';
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 sub configure {

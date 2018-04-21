@@ -5,6 +5,8 @@ use Moose;
 extends 'Dist::Zilla::Plugin::GatherDir';
 with 'Dist::Zilla::Role::TextTemplate';
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 use autodie;

@@ -5,6 +5,8 @@ use Moose;
 use Config::MVP::Reader 2.101540; # if_none
 extends 'Config::MVP::Reader::Finder';
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 use Dist::Zilla::MVP::Assembler;

@@ -5,6 +5,8 @@ use Moose;
 extends 'Config::MVP::Reader';
 with qw(Config::MVP::Reader::Findable::ByExtension);
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 =head1 DESCRIPTION

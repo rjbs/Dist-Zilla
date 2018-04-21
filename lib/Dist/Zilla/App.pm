@@ -5,6 +5,8 @@ package Dist::Zilla::App;
 
 use App::Cmd::Setup 0.330 -app; # better compilation error detection
 
+use Dist::Zilla::Dialect;
+
 use Carp ();
 use Try::Tiny;
 

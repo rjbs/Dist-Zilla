@@ -8,6 +8,8 @@ with(
   'Dist::Zilla::Role::PPI',
 );
 
+use Dist::Zilla::Dialect;
+
 use Moose::Util::TypeConstraints 'enum';
 use namespace::autoclean;
 

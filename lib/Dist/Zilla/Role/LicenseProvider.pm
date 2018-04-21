@@ -4,6 +4,8 @@ package Dist::Zilla::Role::LicenseProvider;
 use Moose::Role;
 with 'Dist::Zilla::Role::Plugin';
 
+use Dist::Zilla::Dialect;
+
 =head1 DESCRIPTION
 
 Plugins implementing this role must provide a C<provide_license> method that

@@ -3,9 +3,12 @@ package Dist::Zilla::Role::MutableFile;
 
 use Moose::Role;
 
+use Dist::Zilla::Dialect;
+
+use namespace::autoclean;
+
 use Moose::Util::TypeConstraints;
 use MooseX::SetOnce;
-use namespace::autoclean;
 
 =head1 DESCRIPTION
 

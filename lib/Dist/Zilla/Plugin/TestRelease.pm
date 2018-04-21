@@ -4,6 +4,8 @@ package Dist::Zilla::Plugin::TestRelease;
 use Moose;
 with 'Dist::Zilla::Role::BeforeRelease';
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 =head1 DESCRIPTION

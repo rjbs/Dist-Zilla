@@ -4,6 +4,8 @@ package Dist::Zilla::Plugin::Prereqs;
 use Moose;
 with 'Dist::Zilla::Role::PrereqSource';
 
+use Dist::Zilla::Dialect;
+
 use namespace::autoclean;
 
 =head1 SYNOPSIS
