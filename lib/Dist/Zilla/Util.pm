@@ -97,6 +97,7 @@ use String::RewritePrefix 0.006 rewrite => {
     ''  => 'Dist::Zilla::Plugin::',
   },
 };
+
 sub expand_config_package_name {
   shift; goto &_expand_config_package_name
 }
