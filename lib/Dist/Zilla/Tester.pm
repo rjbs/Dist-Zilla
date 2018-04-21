@@ -118,7 +118,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
   extends 'Dist::Zilla::Dist::Builder';
   with 'Dist::Zilla::Tester::_Role';
 
-  use File::Copy::Recursive qw(dircopy);
+  use File::Copy::Recursive 0.41 qw(dircopy);
   use Dist::Zilla::Path;
 
   our $Log_Events = [];
@@ -256,7 +256,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
   extends 'Dist::Zilla::Dist::Minter';
   with 'Dist::Zilla::Tester::_Role';
 
-  use File::Copy::Recursive qw(dircopy);
+  use File::Copy::Recursive 0.41 qw(dircopy);
   use Dist::Zilla::Path;
 
   our $Log_Events = [];
