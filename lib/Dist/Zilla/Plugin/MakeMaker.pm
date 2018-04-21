@@ -238,7 +238,7 @@ sub write_makefile_args {
   my %write_makefile_args = (
     DISTNAME  => $self->zilla->name,
     NAME      => $name,
-    AUTHOR    => join(q{, }, @{ $self->zilla->authors }),
+    AUTHOR    => join(q{, }, $self->zilla->authors),
     ABSTRACT  => $self->zilla->abstract,
     VERSION   => $self->zilla->version,
     LICENSE   => $self->zilla->license->meta_yml_name,

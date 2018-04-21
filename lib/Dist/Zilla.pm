@@ -446,6 +446,8 @@ has _copyright_year => (
 
 =attr authors
 
+  my @authors = $zilla->authors;
+
 This is an arrayref of author strings, like this:
 
   [
@@ -453,19 +455,20 @@ This is an arrayref of author strings, like this:
     'X. Ample, Jr <example@example.biz>',
   ]
 
-This is likely to change at some point in the near future.
+The method C<authors> returns a list of the authors.
 
 =cut
 
 has authors => (
-  is   => 'ro',
   isa  => ArrayRef[Str],
   lazy => 1,
-  default  => sub {
+  traits    => [ 'Array' ],
+  reader    => '_authors',
+  default   => sub {
     my ($self) = @_;
 
     if (my $stash  = $self->stash_named('%User')) {
-      return $stash->authors;
+      return [ $stash->authors ];
     }
 
     my $author = try { $self->copyright_holder };
@@ -477,6 +480,22 @@ has authors => (
     );
   },
 );
+
+sub authors ($self) {
+  state %warned;
+
+  my $authors = $self->_authors;
+
+  if (! wantarray) {
+    my ($package, $pmfile, $line) = caller;
+    Carp::carp('in v7, $zilla->authors should only be called in list context; scalar context behavior will change in Dist::Zilla v8')
+      unless $warned{ $pmfile, $line }++;
+
+    return $authors;
+  }
+
+  return @$authors;
+}
 
 =attr files
 
@@ -623,7 +642,7 @@ sub _build_distmeta {
     name     => $self->name,
     version  => $self->version,
     abstract => $self->abstract,
-    author   => $self->authors,
+    author   => [ $self->authors ],
     license  => [ $self->license->meta2_name ],
 
     release_status => $self->release_status,

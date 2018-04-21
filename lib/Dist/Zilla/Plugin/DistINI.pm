@@ -86,7 +86,7 @@ sub gather_files {
 
     my $content = '';
     $content .= sprintf "name    = %s\n", $zilla->name;
-    $content .= sprintf "author  = %s\n", $_ for @{ $zilla->authors };
+    $content .= sprintf "author  = %s\n", $_ for $zilla->authors;
     $content .= sprintf "license = %s\n", $license;
     $content .= sprintf "copyright_holder = %s\n", $zilla->copyright_holder;
     $content .= sprintf "copyright_year   = %s\n", (localtime)[5] + 1900;
