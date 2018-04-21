@@ -40,7 +40,8 @@ my $tzil = Builder->from_config(
 
 {
     # this trickery is so the caller appears to be whatever called new_file()
-    my $gatherdir = first { $_->isa('Dist::Zilla::Plugin::GatherDir') } @{ $tzil->plugins };
+    my $gatherdir = first { $_->isa('Dist::Zilla::Plugin::GatherDir') }
+                    $tzil->plugins;
     my $add_file = $gatherdir->can('add_file');
 
     my $i = 0;

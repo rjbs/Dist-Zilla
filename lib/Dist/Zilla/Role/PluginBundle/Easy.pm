@@ -90,9 +90,13 @@ C<add_plugins> and C<add_bundle> methods.
 =cut
 
 has plugins => (
-  is       => 'ro',
   isa      => ArrayRef,
   default  => sub { [] },
+  reader   => '_plugins',
+  traits   => [ 'Array' ],
+  handles  => {
+    plugins => 'elements',
+  },
 );
 
 sub bundle_config {
@@ -102,7 +106,7 @@ sub bundle_config {
 
   $self->configure;
 
-  return @{ $self->plugins };
+  return $self->plugins;
 }
 
 =method add_plugins
@@ -128,7 +132,7 @@ sub add_plugins {
   my ($self, @plugin_specs) = @_;
 
   my $prefix  = $self->name . '/';
-  my $plugins = $self->plugins;
+  my $plugins = $self->_plugins;
 
   foreach my $this_spec (@plugin_specs) {
     my $moniker;
@@ -173,7 +177,7 @@ sub add_bundle {
 
   $bundle = "\@$bundle" unless $bundle =~ /^@/;
 
-  push @{ $self->plugins },
+  push @{ $self->_plugins },
     $package->bundle_config({
       name    => $self->name . '/' . $bundle,
       package => $package,
