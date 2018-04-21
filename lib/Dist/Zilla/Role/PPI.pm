@@ -1,11 +1,12 @@
 package Dist::Zilla::Role::PPI;
 # ABSTRACT: a role for plugins which use PPI
 
+use Moose::Role;
+
 use Dist::Zilla::Dialect;
 
 use namespace::autoclean;
 
-use Moose::Role;
 use Digest::MD5 qw(md5);
 
 =head1 DESCRIPTION
@@ -87,9 +88,7 @@ sub document_assigns_to_variable {
   my ($sigil, $varname) = ($variable =~ m'^([$@%*])(.+)$');
 
   my $package;
-  my $finder = sub {
-    my $node = $_[1];
-
+  my $finder = sub ($top, $node) {
     if ($node->isa('PPI::Statement')
       && !$node->isa('PPI::Statement::End')
       && !$node->isa('PPI::Statement::Data')) {

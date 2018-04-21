@@ -208,18 +208,16 @@ sub write_makefile_args {
 
   $perl_prereq = version->parse($perl_prereq)->numify if $perl_prereq;
 
-  my $prereqs_dump = sub {
+  my sub dump_prereqs ($phase, $type) {
     $self->_normalize_eumm_versions(
       $prereqs->requirements_for(@_)
               ->clone
               ->clear_requirement('perl')
-              ->as_string_hash
-    );
-  };
+              ->as_string_hash)
+  }
 
-  my %require_prereqs = map {
-    $_ => $prereqs_dump->($_, 'requires');
-  } qw(configure build test runtime);
+  my %require_prereqs = map { $_ => dump_prereqs($_, 'requires'); }
+                        qw(configure build test runtime);
 
   # EUMM may soon be able to support this, but until we decide to inject a
   # higher configure-requires version, we should at least warn the user
