@@ -56,9 +56,7 @@ sub usage_desc {
   return '%c run %o [ command [ arg1 arg2 ... ] ]';
 }
 
-sub execute {
-  my ($self, $opt, $args) = @_;
-
+sub execute ($self, $opt, $args) {
   unless (@$args) {
     my $envname = $^O eq 'MSWin32' ? 'COMSPEC' : 'SHELL';
     unless ($ENV{$envname}) {

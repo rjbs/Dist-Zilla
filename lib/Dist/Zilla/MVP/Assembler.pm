@@ -44,25 +44,22 @@ has logger => (
   isa  => 'Log::Dispatchouli::Proxy', # could be duck typed, I guess
   lazy => 1,
   handles => [ qw(log log_debug log_fatal) ],
-  default => sub {
-    $_[0]->chrome->logger->proxy({ proxy_prefix => '[DZ] ' })
+  default => sub ($self, @) {
+    $self->chrome->logger->proxy({ proxy_prefix => '[DZ] ' })
   },
 );
 
-sub expand_package {
+sub expand_package ($self, $pkg) {
   return scalar Dist::Zilla::Util->expand_config_package_name($_[1]);
 }
 
-sub package_bundle_method {
-  my ($self, $pkg) = @_;
+sub package_bundle_method ($self, $pkg) {
   return unless $pkg->isa('Moose::Object')
          and    $pkg->does('Dist::Zilla::Role::PluginBundle');
   return 'bundle_config';
 }
 
-before add_value => sub {
-  my ($self, $name) = @_;
-
+before add_value => sub ($self, $name, $) {
   return unless $name =~ /\A(?:plugin_name|zilla)\z/;
 
   my $section_name = $self->current_section->name;

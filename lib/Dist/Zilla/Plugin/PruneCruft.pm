@@ -50,17 +50,14 @@ L<ManifestSkip|Dist::Zilla::Plugin::ManifestSkip>.
   sub mvp_multivalue_args { qw(except) }
 }
 
-sub _dont_exclude_file {
-  my ($self, $file) = @_;
+sub _dont_exclude_file ($self, $file) {
   for my $exception ($self->except->@*) {
     return 1 if $file->name =~ $exception;
   }
   return;
 }
 
-sub exclude_file {
-  my ($self, $file) = @_;
-
+sub exclude_file ($self, $file) {
   return 0 if $self->_dont_exclude_file($file);
   return 1 if index($file->name, $self->zilla->name . '-') == 0;
   return 1 if $file->name =~ /\A\./;
@@ -87,9 +84,7 @@ sub exclude_file {
   return;
 }
 
-sub prune_files {
-  my ($self) = @_;
-
+sub prune_files ($self) {
   # Copy list (break reference) so we can mutate.
   for my $file ((), $self->zilla->files->@*) {
     next unless $self->exclude_file($file);

@@ -1,9 +1,9 @@
 package Dist::Zilla::File::OnDisk;
 # ABSTRACT: a file that comes from your filesystem
 
-use Dist::Zilla::Dialect;
-
 use Moose;
+
+use Dist::Zilla::Dialect;
 
 use Dist::Zilla::Path;
 
@@ -26,13 +26,11 @@ has _original_name => (
   init_arg => undef,
 );
 
-after 'BUILD' => sub {
-  my ($self) = @_;
+after 'BUILD' => sub ($self, @) {
   $self->_set_original_name( $self->name );
 };
 
-sub _build_encoded_content {
-  my ($self) = @_;
+sub _build_encoded_content ($self) {
   return path($self->_original_name)->slurp_raw;
 }
 

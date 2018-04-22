@@ -19,9 +19,7 @@ if not found it looks among the default profiles shipped with Dist::Zilla.
 
 =cut
 
-around profile_dir => sub {
-  my ($orig, $self, $profile_name) = @_;
-
+around profile_dir => sub ($orig, $self, $profile_name) {
   $profile_name ||= 'default';
 
   # shouldn't look in user's config when testing

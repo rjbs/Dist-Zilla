@@ -35,9 +35,7 @@ already taken, in which case an exception is raised.
 
 =cut
 
-sub register_stash {
-  my ($self, $name, $object) = @_;
-
+sub register_stash ($self, $name, $object) {
   # $self->log_fatal("tried to register $name stash entry twice")
   confess("tried to register $name stash entry twice")
     if $self->stash_registry->{ $name };

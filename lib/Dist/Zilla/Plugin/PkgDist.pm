@@ -32,15 +32,11 @@ typically used when doing monkey patching or other tricky things.
 
 =cut
 
-sub munge_files {
-  my ($self) = @_;
-
+sub munge_files ($self) {
   $self->munge_file($_) for $self->found_files->@*;
 }
 
-sub munge_file {
-  my ($self, $file) = @_;
-
+sub munge_file ($self, $file) {
   # XXX: for test purposes, for now! evil! -- rjbs, 2010-03-17
   return                          if $file->name    =~ /^corpus\//;
 
@@ -50,9 +46,7 @@ sub munge_file {
   return;
 }
 
-sub munge_perl {
-  my ($self, $file) = @_;
-
+sub munge_perl ($self, $file) {
   my $dist_name = $self->zilla->name;
 
   my $document = $self->ppi_document_for_file($file);

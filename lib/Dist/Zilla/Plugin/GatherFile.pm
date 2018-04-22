@@ -78,10 +78,7 @@ has filenames => (
 sub mvp_aliases { +{ filename => 'filenames' } }
 sub mvp_multivalue_args { qw(filenames) }
 
-around dump_config => sub {
-  my $orig = shift;
-  my $self = shift;
-
+around dump_config => sub ($orig, $self) {
   my $config = $self->$orig;
 
   $config->{+__PACKAGE__} = {
@@ -94,9 +91,7 @@ around dump_config => sub {
   return $config;
 };
 
-sub gather_files {
-  my ($self) = @_;
-
+sub gather_files ($self) {
   my $repo_root = $self->zilla->root;
   my $root = "" . $self->root;
   $root =~ s{^~([\\/])}{ Dist::Zilla::Util->homedir . $1 }e;
@@ -122,9 +117,7 @@ sub gather_files {
 }
 
 # as in GatherDir
-sub _file_from_filename {
-  my ($self, $filename) = @_;
-
+sub _file_from_filename ($self, $filename) {
   my @stat = stat $filename or $self->log_fatal("$filename does not exist!");
 
   return Dist::Zilla::File::OnDisk->new({

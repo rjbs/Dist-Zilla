@@ -38,8 +38,7 @@ has default_jobs => (
   default => 1,
 );
 
-around dump_config => sub {
-  my ($orig, $self) = @_;
+around dump_config => sub ($orig, $self) {
   my $config = $self->$orig;
 
   $config->{'' . __PACKAGE__} = { default_jobs => $self->default_jobs };

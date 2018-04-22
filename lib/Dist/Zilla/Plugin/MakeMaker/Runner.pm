@@ -19,9 +19,7 @@ has 'make_path' => (
   default => $Config{make} || 'make',
 );
 
-sub build {
-  my $self = shift;
-
+sub build ($self) {
   my $make = $self->make_path;
 
   my $makefile = $^O eq 'VMS' ? 'Descrip.MMS' : 'Makefile';
@@ -38,9 +36,7 @@ sub build {
   return;
 }
 
-sub test {
-  my ($self, $target, $arg) = @_;
-
+sub test ($self, $target, $arg = {}) {
   my $make = $self->make_path;
   $self->build;
 

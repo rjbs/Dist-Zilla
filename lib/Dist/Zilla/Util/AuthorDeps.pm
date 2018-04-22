@@ -9,9 +9,7 @@ use Dist::Zilla::Util;
 use Path::Tiny;
 use List::Util 1.45 ();
 
-sub format_author_deps {
-  my ($reqs, $versions) = @_;
-
+sub format_author_deps ($reqs, $versions) {
   my $formatted = '';
   foreach my $rec (@$reqs) {
     my ($mod, $ver) = each %$rec;
@@ -21,9 +19,7 @@ sub format_author_deps {
   return $formatted;
 }
 
-sub extract_author_deps {
-  my ($root, $missing) = @_;
-
+sub extract_author_deps ($root, $missing) {
   my $ini = path($root, 'dist.ini');
 
   die "dzil authordeps only works on dist.ini files, and you don't have one\n"

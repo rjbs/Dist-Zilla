@@ -55,9 +55,7 @@ sub opt_spec {
   # [ 'module|m=s@', 'module(s) to create; may be given many times'         ],
 }
 
-sub validate_args {
-  my ($self, $opt, $args) = @_;
-
+sub validate_args ($self, $opt, $args) {
   require MooseX::Types::Perl;
 
   $self->usage_error('dzil new takes exactly one argument') if @$args != 1;
@@ -73,9 +71,7 @@ sub validate_args {
   $args->[0] = $name;
 }
 
-sub execute {
-  my ($self, $opt, $arg) = @_;
-
+sub execute ($self, $opt, $arg) {
   my $dist = $arg->[0];
 
   require Dist::Zilla::Dist::Minter;

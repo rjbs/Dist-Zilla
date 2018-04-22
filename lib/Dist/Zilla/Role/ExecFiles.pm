@@ -10,9 +10,7 @@ use namespace::autoclean;
 
 requires 'dir';
 
-sub find_files {
-  my ($self) = @_;
-
+sub find_files ($self) {
   my $dir = $self->dir;
   return [ grep { index($_->name, "$dir/") == 0 } $self->zilla->files->@* ];
 }

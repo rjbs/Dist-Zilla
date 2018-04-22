@@ -102,8 +102,7 @@ has prereq_type => (
   default  => 'requires',
 );
 
-around dump_config => sub {
-  my ($orig, $self) = @_;
+around dump_config => sub ($orig, $self, @) {
   my $config = $self->$orig;
 
   my $this_config = {
@@ -124,11 +123,8 @@ has _prereq => (
 
 sub mvp_aliases { return { -relationship => '-type' } }
 
-around BUILDARGS => sub {
-  my $orig = shift;
-  my ($class, @arg) = @_;
-
-  my $args = $class->$orig(@arg);
+around BUILDARGS => sub ($orig, $class, @rest) {
+  my $args = $class->$orig(@rest);
   my %copy = %$args;
 
   my $zilla = delete $copy{zilla};
@@ -173,9 +169,7 @@ around BUILDARGS => sub {
   }
 };
 
-sub register_prereqs {
-  my ($self) = @_;
-
+sub register_prereqs ($self) {
   $self->zilla->register_prereqs(
     {
       type  => $self->prereq_type,

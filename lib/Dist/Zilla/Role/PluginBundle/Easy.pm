@@ -99,9 +99,7 @@ has plugins => (
   },
 );
 
-sub bundle_config {
-  my ($class, $section) = @_;
-
+sub bundle_config ($class, $section) {
   my $self = $class->new($section);
 
   $self->configure;
@@ -128,9 +126,7 @@ The plugins are added to the config in the order given.
 
 =cut
 
-sub add_plugins {
-  my ($self, @plugin_specs) = @_;
-
+sub add_plugins ($self, @plugin_specs) {
   my $prefix  = $self->name . '/';
   my $plugins = $self->_plugins;
 
@@ -164,9 +160,7 @@ you omit C<%bundle_config>, an empty hashref will be supplied.
 
 =cut
 
-sub add_bundle {
-  my ($self, $bundle, $payload) = @_;
-
+sub add_bundle ($self, $bundle, $payload) {
   my $package = _bundle_class($bundle);
   $payload ||= {};
 
@@ -200,14 +194,12 @@ key does not exist in C<payload>, then it is omitted from the result.
 
 =cut
 
-sub config_slice {
-  my $self = shift;
-
+sub config_slice ($self, @rest) {
   my $payload = $self->payload;
 
   my %arg;
 
-  foreach my $arg (@_) {
+  foreach my $arg (@rest) {
     if (ref $arg) {
       while (my ($in, $out) = each %$arg) {
         $arg{$out} = $payload->{$in} if exists $payload->{$in};

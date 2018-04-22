@@ -56,11 +56,9 @@ This will run the test suite with AUTHOR_TESTING=1
 
 sub abstract { 'smoke your dist' }
 
-sub execute {
-  my ($self, $opt, $arg) = @_;
-
-  local $ENV{RELEASE_TESTING} = 1 if $opt->release;
-  local $ENV{AUTHOR_TESTING} = 1 if $opt->author;
+sub execute ($self, $opt, $arg) {
+  local $ENV{RELEASE_TESTING}   = 1 if $opt->release;
+  local $ENV{AUTHOR_TESTING}    = 1 if $opt->author;
   local $ENV{AUTOMATED_TESTING} = 1 if $opt->automated;
 
   $self->zilla->test;

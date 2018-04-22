@@ -21,11 +21,9 @@ Print dzil version
 
 =cut
 
-sub version_for_display {
-  my $version_pkg = $_[0]->version_package;
-  my $version = ( $version_pkg->VERSION ?
-                  $version_pkg->VERSION :
-                 'dev' );
+sub version_for_display ($self) {
+  my $version_pkg = $self->version_package;
+  my $version     = $version_pkg->VERSION // 'dev';
 }
 
 1;

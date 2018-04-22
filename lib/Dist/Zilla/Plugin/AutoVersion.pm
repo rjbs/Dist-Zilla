@@ -66,9 +66,7 @@ has format => (
             . q<{{$ENV{DEV} ? (sprintf '_%03u', $ENV{DEV}) : ''}}>
 );
 
-sub provide_version {
-  my ($self) = @_;
-
+sub provide_version ($self) {
   if (exists $ENV{V}) {
     $self->log_debug([ 'providing version %s', $ENV{V} ]);
     return $ENV{V};

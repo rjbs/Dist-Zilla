@@ -47,8 +47,7 @@ Dist::Zilla roles: L<PluginBundle|Dist::Zilla::Role::PluginBundle>.
 
 sub mvp_multivalue_args { qw(remove -remove) }
 
-sub bundle_config {
-  my ($self, $section) = @_;
+sub bundle_config ($self, $section) {
   my $class = (ref $self) || $self;
 
   my $config = {};

@@ -49,10 +49,7 @@ has response_for => (
   },
 );
 
-sub prompt_str {
-  my ($self, $prompt, $arg) = @_;
-  $arg ||= {};
-
+sub prompt_str ($self, $prompt, $arg = {}) {
   my $response = $self->response_for($prompt);
 
   $response = shift @$response if ref $response;
@@ -65,10 +62,8 @@ sub prompt_str {
   return $response;
 }
 
-sub prompt_yn {
-  my $self = shift;
-
-  return OneZero->coerce( $self->prompt_str(@_) );
+sub prompt_yn ($self, @rest) {
+  return OneZero->coerce( $self->prompt_str(@rest) );
 }
 
 sub prompt_any_key { return }

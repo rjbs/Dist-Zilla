@@ -10,9 +10,7 @@ use namespace::autoclean;
 
 use Config::MVP::Section 2.200009; # not-installed error with section_name
 
-around add_value => sub {
-  my ($orig, $self, $name, $value) = @_;
-
+around add_value => sub ($orig, $self, $name, $value) {
   if ($name =~ s/\A://) {
     if ($name eq 'version') {
       Dist::Zilla::Util->_assert_loaded_class_version_ok(
@@ -27,9 +25,7 @@ around add_value => sub {
   $self->$orig($name, $value);
 };
 
-after finalize => sub {
-  my ($self) = @_;
-
+after finalize => sub ($self, @) {
   my ($name, $plugin_class, $arg) = (
     $self->name,
     $self->package,

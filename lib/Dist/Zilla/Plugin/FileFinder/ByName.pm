@@ -4,6 +4,8 @@ package Dist::Zilla::Plugin::FileFinder::ByName;
 use Moose;
 with 'Dist::Zilla::Role::FileFinder';
 
+use Moose::Util::TypeConstraints;
+
 use Dist::Zilla::Dialect;
 
 use namespace::autoclean;
@@ -25,7 +27,6 @@ This plugin was originally contributed by Christopher J. Madsen.
 
 =cut
 
-use Moose::Util::TypeConstraints;
 use MooseX::Types::Moose qw(ArrayRef RegexpRef Str);
 
 use Text::Glob 0.08 qw(glob_to_regex_string);
@@ -95,8 +96,7 @@ sub mvp_aliases { +{ qw(
 
 sub mvp_multivalue_args { qw(dirs files matches skips) }
 
-sub _join_re {
-  my $list = shift;
+my sub _join_re ($list) {
   return undef unless @$list;
   # Special case to avoid stringify+compile
   return $list->[0] if @$list == 1;
@@ -105,9 +105,7 @@ sub _join_re {
   qr/$re/
 }
 
-sub find_files {
-  my $self = shift;
-
+sub find_files ($self) {
   my $skip  = _join_re($self->skips);
   my $dir   = _join_re([ map { qr!^\Q$_/! } $self->dirs->@* ]);
   my $match = _join_re([

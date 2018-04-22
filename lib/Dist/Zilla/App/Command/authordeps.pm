@@ -30,9 +30,7 @@ sub opt_spec {
   );
 }
 
-sub execute {
-  my ($self, $opt, $arg) = @_;
-
+sub execute ($self, $opt, $arg) {
   require Dist::Zilla::Path;
   require Dist::Zilla::Util::AuthorDeps;
 

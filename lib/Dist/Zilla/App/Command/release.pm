@@ -26,9 +26,7 @@ sub opt_spec {
   [ 'trial' => 'build a trial release that PAUSE will not index' ],
 }
 
-sub execute {
-  my ($self, $opt, $arg) = @_;
-
+sub execute ($self, $opt, $arg) {
   my $zilla;
   {
     # isolate changes to RELEASE_STATUS to zilla construction

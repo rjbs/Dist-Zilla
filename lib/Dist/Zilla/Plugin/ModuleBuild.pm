@@ -40,8 +40,8 @@ to the generated Build.PL file.
 
 =attr mb_lib
 
-B<Optional:> Specify the list of directories to be passed to lib when using 
-mb_class. Defaults to C<inc>. 
+B<Optional:> Specify the list of directories to be passed to lib when using
+mb_class. Defaults to C<inc>.
 
 =attr build_element
 
@@ -54,8 +54,7 @@ has 'mb_version' => (
   isa => 'Str',
   is  => 'rw',
   lazy => 1,
-  default => sub {
-    my $self = shift;
+  default => sub ($self, @) {
     keys $self->zilla->_share_dir_map->%* ? '0.3601' : '0.28';
   },
 );
@@ -103,8 +102,7 @@ my $build = {{ $plugin->mb_class }}->new(%module_build_args);
 $build->create_build_script;
 |;
 
-sub _use_custom_class {
-  my ($self) = @_;
+sub _use_custom_class ($self) {
   my $class = $self->mb_class;
   if ( $class eq 'Module::Build' ) {
     return "";
@@ -114,8 +112,7 @@ sub _use_custom_class {
   }
 }
 
-sub _dump_as {
-  my ($self, $ref, $name) = @_;
+sub _dump_as ($self, $ref, $name) {
   require Data::Dumper;
   my $dumper = Data::Dumper->new( [ $ref ], [ $name ] );
   $dumper->Sortkeys( 1 );
@@ -129,9 +126,7 @@ sub _add_build_elements {
   return '$build->add_build_element($_) for qw(' . join(' ', @elems) . ');';
 }
 
-sub register_prereqs {
-  my ($self) = @_;
-
+sub register_prereqs ($self) {
   $self->zilla->register_prereqs(
     { phase => 'configure' },
     'Module::Build' => $self->mb_version,
@@ -143,9 +138,7 @@ sub register_prereqs {
   );
 }
 
-sub module_build_args {
-  my ($self) = @_;
-
+sub module_build_args ($self) {
   my @exe_files = map { $_->name }
     $self->zilla->find_files(':ExecFiles')->@*;
 
@@ -180,8 +173,7 @@ sub module_build_args {
   };
 }
 
-sub fallback_build_requires {
-  my $self = shift;
+sub fallback_build_requires ($self) {
   my $prereqs = $self->zilla->prereqs;
   my $merged = CPAN::Meta::Requirements->new;
   for my $phase ( qw/build test/ ) {
@@ -191,9 +183,7 @@ sub fallback_build_requires {
   return $self->_dump_as( $merged->as_string_hash, '*fallback_build_requires' );
 }
 
-sub gather_files {
-  my ($self) = @_;
-
+sub gather_files ($self) {
   require Dist::Zilla::File::InMemory;
 
   my $file = Dist::Zilla::File::InMemory->new({
@@ -205,9 +195,7 @@ sub gather_files {
   return;
 }
 
-sub setup_installer {
-  my ($self) = @_;
-
+sub setup_installer ($self) {
   $self->log_fatal("can't build Build.PL; license has no known META.yml value")
     unless $self->zilla->license->meta_yml_name;
 

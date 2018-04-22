@@ -8,9 +8,7 @@ use Dist::Zilla::Dialect;
 
 use namespace::autoclean;
 
-sub configure {
-  my ($self) = @_;
-
+sub configure ($self) {
   $self->add_plugins(qw(
     GatherDir
     PruneCruft

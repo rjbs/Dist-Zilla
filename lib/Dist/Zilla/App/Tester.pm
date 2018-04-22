@@ -23,10 +23,7 @@ use Sub::Exporter -setup => {
 
 sub result_class { 'Dist::Zilla::App::Tester::Result' }
 
-sub test_dzil {
-  my ($self, $source, $argv, $arg) = @_;
-  $arg ||= {};
-
+sub test_dzil ($self, $source, $argv, $arg = {}) {
   local @INC = map {; ref($_) ? $_ : File::Spec->rel2abs($_) } @INC;
 
   my $tmpdir = $arg->{tempdir} || File::Temp::tempdir(CLEANUP => 1);
@@ -49,33 +46,27 @@ sub test_dzil {
 
   BEGIN { our @ISA = qw(App::Cmd::Tester::Result); }
 
-  sub tempdir {
-    my ($self) = @_;
+  sub tempdir ($self) {
     return $self->{tempdir};
   }
 
-  sub zilla {
-    my ($self) = @_;
+  sub zilla ($self) {
     return $self->app->zilla;
   }
 
-  sub build_dir {
-    my ($self) = @_;
+  sub build_dir ($self) {
     return $self->zilla->built_in;
   }
 
-  sub clear_log_events {
-    my ($self) = @_;
+  sub clear_log_events ($self) {
     $self->app->zilla->logger->logger->clear_events;
   }
 
-  sub log_events {
-    my ($self) = @_;
+  sub log_events ($self) {
     $self->app->zilla->logger->logger->events;
   }
 
-  sub log_messages {
-    my ($self) = @_;
+  sub log_messages ($self) {
     [ map {; $_->{message} } $self->app->zilla->logger->logger->events->@* ];
   }
 }
@@ -88,15 +79,15 @@ This module exports only one function, C<test_dzil>.
 
 This function is used to test L<Dist::Zilla::App>.
 It receives two mandatory options. The first is the path to a Dist::Zilla-based
-distribution. The second, an array reference to a list of arguments. 
+distribution. The second, an array reference to a list of arguments.
 
 The third optional argument is a hash reference, with further options. At the moment
 the only supported option is c<tempdir>.
 
-It returns a L<Dist::Zilla::App::Tester::Result>, that inherits from 
+It returns a L<Dist::Zilla::App::Tester::Result>, that inherits from
 L<App::Cmd::Tester::Result>. Typical methods called from this result are:
 
-=over 4 
+=over 4
 
 =item C<output>
 

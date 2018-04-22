@@ -9,14 +9,11 @@ has payload => (
   required => 1,
 );
 
-sub value {
-  my ($self, $name) = @_;
+sub value ($self, $name) {
   $self->payload->{ $name };
 }
 
-sub stash_from_config {
-  my ($class, $name, $arg, $section) = @_;
-
+sub stash_from_config ($class, $name, $arg, $section) {
   my $self = $class->new({ payload => $arg });
   return $self;
 }

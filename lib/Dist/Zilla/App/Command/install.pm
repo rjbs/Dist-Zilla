@@ -45,9 +45,7 @@ Dist::Zilla.
 
 =cut
 
-sub execute {
-  my ($self, $opt, $arg) = @_;
-
+sub execute ($self, $opt, $arg) {
   $self->zilla->install({
     $opt->install_command
       ? (install_command => [ $opt->install_command ])

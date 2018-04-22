@@ -4,12 +4,13 @@ package Dist::Zilla::Role::Plugin;
 use Moose::Role;
 with 'Dist::Zilla::Role::ConfigDumper';
 
+use Moose::Util::TypeConstraints 'class_type';
+
 use Dist::Zilla::Dialect;
 
 use namespace::autoclean;
 
 use Params::Util qw(_HASHLIKE);
-use Moose::Util::TypeConstraints 'class_type';
 
 =head1 DESCRIPTION
 
@@ -53,9 +54,9 @@ has logger => (
   is   => 'ro',
   lazy => 1,
   handles => [ qw(log log_debug log_fatal) ],
-  default => sub {
-    $_[0]->zilla->chrome->logger->proxy({
-      proxy_prefix => '[' . $_[0]->plugin_name . '] ',
+  default => sub ($self, @) {
+    $self->zilla->chrome->logger->proxy({
+      proxy_prefix => '[' . $self->plugin_name . '] ',
     });
   },
 );
@@ -65,9 +66,7 @@ has logger => (
 sub mvp_multivalue_args {};
 sub mvp_aliases         { return {} };
 
-sub plugin_from_config {
-  my ($class, $name, $arg, $section) = @_;
-
+sub plugin_from_config ($class, $name, $arg, $section) {
   my $self = $class->new({
     %$arg,
     plugin_name => $name,
@@ -75,9 +74,7 @@ sub plugin_from_config {
   });
 }
 
-sub register_component {
-  my ($class, $name, $arg, $section) = @_;
-
+sub register_component ($class, $name, $arg, $section) {
   my $self = $class->plugin_from_config($name, $arg, $section);
 
   my $version = $self->VERSION || 0;

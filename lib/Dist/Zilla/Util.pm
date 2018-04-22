@@ -21,15 +21,13 @@ use Encode ();
 
     bless {} => shift;
   }
-  sub handle_nonpod {
-    my ($self, $event) = @_;
+  sub handle_nonpod ($self, $event) {
     return if $self->{abstract};
     return $self->{abstract} = $1
       if $event->{content}=~ /^\s*#+\s*ABSTRACT:[ \t]*(\S.*)$/m;
     return;
   }
-  sub handle_event {
-    my ($self, $event) = @_;
+  sub handle_event ($self, $event) {
     return if $self->{abstract};
     if (
       ! $self->{in_name}

@@ -32,9 +32,7 @@ Nothing is removed; instead, everything that would be removed will be listed.
 
 sub abstract { 'clean up after build, test, or install' }
 
-sub execute {
-  my ($self, $opt, $arg) = @_;
-
+sub execute ($self, $opt, $arg) {
   $self->zilla->clean($opt->dry_run);
 }
 

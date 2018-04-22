@@ -4,10 +4,11 @@ package Dist::Zilla::Plugin::UploadToCPAN;
 use Moose;
 with qw(Dist::Zilla::Role::BeforeRelease Dist::Zilla::Role::Releaser);
 
+use Moose::Util::TypeConstraints;
+
 use Dist::Zilla::Dialect;
 
 use File::Spec;
-use Moose::Util::TypeConstraints;
 use Scalar::Util qw(weaken);
 use Dist::Zilla::Util;
 use Try::Tiny;
@@ -49,9 +50,8 @@ You can't put your password in your F<dist.ini>.  C'mon now!
   # Report CPAN::Uploader's version, not ours:
   sub _ua_string { CPAN::Uploader->_ua_string }
 
-  sub log {
-    my $self = shift;
-    $self->{'Dist::Zilla'}{plugin}->log(@_);
+  sub log ($self, @rest) {
+    $self->{'Dist::Zilla'}{plugin}->log(@rest);
   }
 }
 
@@ -74,12 +74,11 @@ has _credentials_stash_obj => (
   isa  => maybe_type( class_type('Dist::Zilla::Stash::PAUSE') ),
   lazy => 1,
   init_arg => undef,
-  default  => sub { $_[0]->zilla->stash_named( $_[0]->credentials_stash ) },
+  default  => sub ($self, @) {
+    $self->zilla->stash_named( $self->credentials_stash ) },
 );
 
-sub _credential {
-  my ($self, $name) = @_;
-
+sub _credential ($self, $name) {
   return unless my $stash = $self->_credentials_stash_obj;
   return $stash->$name;
 }
@@ -100,8 +99,7 @@ has username => (
   is   => 'ro',
   isa  => 'Str',
   lazy => 1,
-  default  => sub {
-    my ($self) = @_;
+  default  => sub ($self, @) {
     return $self->_credential('username')
         || $self->pause_cfg->{user}
         || $self->zilla->chrome->prompt_str("PAUSE username: ");
@@ -123,8 +121,7 @@ has password => (
   isa  => 'Str',
   init_arg => undef,
   lazy => 1,
-  default  => sub {
-    my ($self) = @_;
+  default  => sub ($self, @) {
     my $pw = $self->_credential('password') || $self->pause_cfg->{password};
 
     unless ($pw){
@@ -180,8 +177,7 @@ has pause_cfg => (
   is      => 'ro',
   isa     => 'HashRef[Str]',
   lazy    => 1,
-  default => sub {
-    my $self = shift;
+  default => sub ($self, @) {
     require CPAN::Uploader;
     my $file = $self->pause_cfg_file;
     $file = File::Spec->catfile($self->pause_cfg_dir, $file)
@@ -228,9 +224,7 @@ has uploader => (
   is   => 'ro',
   isa  => 'CPAN::Uploader',
   lazy => 1,
-  default => sub {
-    my ($self) = @_;
-
+  default => sub ($self, @) {
     # Load the module lazily
     require CPAN::Uploader;
     CPAN::Uploader->VERSION('0.103004');  # require HTTPS
@@ -251,9 +245,7 @@ has uploader => (
   }
 );
 
-sub before_release {
-  my $self = shift;
-
+sub before_release ($self, $tgz) {
   my $problem;
   try {
     for my $attr (qw(username password)) {
@@ -266,9 +258,7 @@ sub before_release {
   $self->log_fatal(['You need to supply a %s', $problem]) if $problem;
 }
 
-sub release {
-  my ($self, $archive) = @_;
-
+sub release ($self, $archive) {
   $self->uploader->upload_file("$archive");
 }
 

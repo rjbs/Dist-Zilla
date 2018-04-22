@@ -21,9 +21,7 @@ and L<Dist::Zilla::Plugin::InstallTool> roles yourself.
 
 =cut
 
-sub build {
-  my $self = shift;
-
+sub build ($self) {
   return
     if -e 'Build' and (stat 'Build.PL')[9] <= (stat 'Build')[9];
 
@@ -36,9 +34,7 @@ sub build {
   return;
 }
 
-sub test {
-  my ($self, $target, $arg) = @_;
-
+sub test ($self, $target, $arg = {}) {
   $self->build;
 
   my $job_count = $arg && exists $arg->{jobs}

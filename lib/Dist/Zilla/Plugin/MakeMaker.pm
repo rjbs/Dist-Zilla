@@ -69,8 +69,7 @@ has '_runner' => (
   is   => 'ro',
   lazy => 1,
   handles => [qw(build test)],
-  default => sub {
-    my ($self) = @_;
+  default => sub ($self, @) {
     Dist::Zilla::Plugin::MakeMaker::Runner->new({
       zilla        => $self->zilla,
       plugin_name  => $self->plugin_name . '::Runner',
@@ -117,9 +116,7 @@ delete $WriteMakefileArgs{CONFIGURE_REQUIRES}
 WriteMakefile(%WriteMakefileArgs);
 {{ $share_dir_code{postamble} || '' }}!;
 
-sub register_prereqs {
-  my ($self) = @_;
-
+sub register_prereqs ($self) {
   $self->zilla->register_prereqs(
     { phase => 'configure' },
     'ExtUtils::MakeMaker' => $self->eumm_version || 0,
@@ -133,9 +130,7 @@ sub register_prereqs {
   );
 }
 
-sub gather_files {
-  my ($self) = @_;
-
+sub gather_files ($self) {
   require Dist::Zilla::File::InMemory;
 
   my $file = Dist::Zilla::File::InMemory->new({
@@ -147,9 +142,7 @@ sub gather_files {
   return;
 }
 
-sub share_dir_code {
-  my ($self) = @_;
-
+sub share_dir_code ($self) {
   my $share_dir_code = {};
 
   my $share_dir_map = $self->zilla->_share_dir_map;
@@ -180,9 +173,7 @@ PREAMBLE
   return $share_dir_code;
 }
 
-sub write_makefile_args {
-  my ($self) = @_;
-
+sub write_makefile_args ($self) {
   my $name = $self->zilla->name =~ s/-/::/gr;
 
   my @exe_files = map { $_->name } $self->zilla->find_files(':ExecFiles')->@*;
@@ -263,8 +254,7 @@ sub write_makefile_args {
   return \%write_makefile_args;
 }
 
-sub _normalize_eumm_versions {
-  my ($self, $prereqs) = @_;
+sub _normalize_eumm_versions ($self, $prereqs) {
   for my $v (values %$prereqs) {
     if (version::is_strict($v)) {
       my $version = version->parse($v);
@@ -281,8 +271,7 @@ sub _normalize_eumm_versions {
   return $prereqs;
 }
 
-sub _dump_as {
-  my ($self, $ref, $name) = @_;
+sub _dump_as ($self, $ref, $name) {
   require Data::Dumper;
   my $dumper = Data::Dumper->new( [ $ref ], [ $name ] );
   $dumper->Sortkeys( 1 );
@@ -291,8 +280,7 @@ sub _dump_as {
   return $dumper->Dump;
 }
 
-sub fallback_prereq_pm {
-  my $self = shift;
+sub fallback_prereq_pm ($self) {
   my $fallback
     = $self->_normalize_eumm_versions(
       $self->zilla->prereqs->merged_requires
@@ -303,9 +291,7 @@ sub fallback_prereq_pm {
   return $self->_dump_as( $fallback, '*FallbackPrereqs' );
 }
 
-sub setup_installer {
-  my ($self) = @_;
-
+sub setup_installer ($self) {
   my $write_makefile_args = $self->write_makefile_args;
 
   $self->__write_makefile_args($write_makefile_args); # save for testing

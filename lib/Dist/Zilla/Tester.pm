@@ -27,9 +27,7 @@ use Sub::Exporter -setup => {
   groups  => [ default => [ qw(Builder Minter) ] ],
 };
 
-sub from_config {
-  my ($self, @arg) = @_;
-
+sub from_config ($self, @arg) {
   # The only thing using a local time zone should be NextRelease.  Normally it
   # defaults to "local," but since some users won't have an automatically
   # determinable time zone, we'll switch to not-local times for testing.
@@ -49,6 +47,8 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
 
   use Moose::Role;
 
+  use Dist::Zilla::Dialect;
+
   has tempdir_root => (
     is => 'rw', isa => 'Str|Undef',
     writer => '_set_tempdir_root',
@@ -60,15 +60,12 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
   );
 
   sub DEMOLISH {}
-  around DEMOLISH => sub {
-    my $orig = shift;
-    my $self = shift;
-
+  around DEMOLISH => sub ($orig, $self, @rest) {
     # File::Temp deletes the directory when it goes out of scope
     $self->_clear_tempdir_obj;
 
     rmdir $self->tempdir_root if $self->tempdir_root;
-    return $self->$orig(@_);
+    return $self->$orig(@rest);
   };
 
   has tempdir => (
@@ -77,32 +74,25 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
     init_arg => undef,
   );
 
-  sub clear_log_events {
-    my ($self) = @_;
+  sub clear_log_events ($self) {
     $self->chrome->logger->clear_events;
   }
 
-  sub log_events {
-    my ($self) = @_;
+  sub log_events ($self) {
     $self->chrome->logger->events;
   }
 
-  sub log_messages {
-    my ($self) = @_;
+  sub log_messages ($self) {
     [ map {; $_->{message} } $self->chrome->logger->events->@* ];
   }
 
-  sub slurp_file {
-    my ($self, $filename) = @_;
-
+  sub slurp_file ($self, $filename) {
     Dist::Zilla::Path::path(
       $self->tempdir->child($filename)
     )->slurp_utf8;
   }
 
-  sub slurp_file_raw {
-    my ($self, $filename) = @_;
-
+  sub slurp_file_raw ($self, $filename) {
     Dist::Zilla::Path::path(
       $self->tempdir->child($filename)
     )->slurp_raw;
@@ -120,6 +110,8 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
   extends 'Dist::Zilla::Dist::Builder';
   with 'Dist::Zilla::Tester::_Role';
 
+  use Dist::Zilla::Dialect;
+
   use File::Copy::Recursive 0.41 qw(dircopy);
   use Dist::Zilla::Path;
 
@@ -128,9 +120,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
     return @$Log_Events;
   }
 
-  around from_config => sub {
-    my ($orig, $self, $arg, $tester_arg) = @_;
-
+  around from_config => sub ($orig, $self, $arg = {}, $tester_arg = {}) {
     confess "dist_root required for from_config" unless $arg->{dist_root};
 
     my $source = $arg->{dist_root};
@@ -204,9 +194,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
     return $zilla;
   };
 
-  around build_in => sub {
-    my ($orig, $self, $target) = @_;
-
+  around build_in => sub ($orig, $self, $target = undef) {
     $target ||= do {
       my $target = path($self->tempdir)->child('build');
       $target->mkpath;
@@ -216,9 +204,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
     return $self->$orig($target);
   };
 
-  around ['test', 'release'] => sub {
-    my ($orig, $self) = @_;
-
+  around ['test', 'release'] => sub ($orig, $self) {
     return $self->$orig;
   };
 
@@ -250,6 +236,8 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
   extends 'Dist::Zilla::Dist::Minter';
   with 'Dist::Zilla::Tester::_Role';
 
+  use Dist::Zilla::Dialect;
+
   use File::Copy::Recursive 0.41 qw(dircopy);
   use Dist::Zilla::Path;
 
@@ -258,9 +246,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
     return @$Log_Events;
   }
 
-  sub _mint_target_dir {
-    my ($self) = @_;
-
+  sub _mint_target_dir ($self) {
     my $name = $self->name;
     my $dir  = $self->tempdir->child('mint')->absolute;
 
@@ -269,9 +255,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
     return $dir;
   }
 
-  sub _setup_global_config {
-    my ($self, $dir, $arg) = @_;
-
+  sub _setup_global_config ($self, $dir, $arg) {
     my $config_base = path($dir)->child('config');
 
     my $stash_registry = {};
