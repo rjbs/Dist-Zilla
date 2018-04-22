@@ -25,9 +25,7 @@ C<munge_files> method.
 
 =cut
 
-sub munge_files {
-  my ($self) = @_;
-
+sub munge_files ($self) {
   $self->log_fatal("no munge_file behavior implemented!")
     unless $self->can('munge_file');
 

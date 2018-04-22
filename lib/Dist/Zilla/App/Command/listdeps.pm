@@ -82,9 +82,7 @@ sub opt_spec {
   [ 'omit-core=s', 'Omit dependencies that are shipped with the specified version of perl' ],
 }
 
-sub prereqs {
-  my ($self, $zilla) = @_;
-
+sub prereqs ($self, $zilla) {
   $_->before_build        for $zilla->plugins_with(-BeforeBuild);
   $_->gather_files        for $zilla->plugins_with(-FileGatherer);
   $_->set_file_encodings  for $zilla->plugins_with(-EncodingProvider);
@@ -98,8 +96,7 @@ sub prereqs {
 my @phases = qw/configure build test runtime develop/;
 my @relationships = qw/requires recommends suggests/;
 
-sub filter_core {
-  my ($prereqs, $core_version) = @_;
+my sub filter_core ($prereqs, $core_version) {
   $core_version = sprintf '%7.6f', $core_version if $core_version >= 5.010;
   $prereqs = $prereqs->clone if $prereqs->is_finalized;
   require Module::CoreList;
@@ -115,9 +112,7 @@ sub filter_core {
   return $prereqs;
 }
 
-sub extract_dependencies {
-  my ($self, $zilla, $phases, $opt) = @_;
-
+sub extract_dependencies ($self, $zilla, $phases, $opt) {
   my $prereqs = $self->prereqs($zilla);
   $prereqs = filter_core($prereqs, $opt->omit_core) if $opt->omit_core;
 
@@ -151,9 +146,7 @@ sub extract_dependencies {
   return map { $_ => $versions->{$_} } @required;
 }
 
-sub execute {
-  my ($self, $opt, $arg) = @_;
-
+sub execute ($self, $opt, $arg) {
   $self->app->chrome->logger->mute;
 
   my @phases = qw(build test configure runtime);

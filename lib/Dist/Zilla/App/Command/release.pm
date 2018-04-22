@@ -48,9 +48,7 @@ sub opt_spec {
   [ 'jobs|j=i' => 'number of parallel test jobs to run' ],
 }
 
-sub execute {
-  my ($self, $opt, $arg) = @_;
-
+sub execute ($self, $opt, $arg) {
   my $zilla;
   {
     # isolate changes to RELEASE_STATUS to zilla construction

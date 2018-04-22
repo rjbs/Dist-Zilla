@@ -67,13 +67,11 @@ Equivalent to --release --automated --extended --author
 
 sub abstract { 'test your dist' }
 
-sub execute {
-  my ($self, $opt, $arg) = @_;
-
-  local $ENV{RELEASE_TESTING} = 1 if $opt->release or $opt->all;
-  local $ENV{AUTHOR_TESTING} = 1 if $opt->author or $opt->all;
-  local $ENV{AUTOMATED_TESTING} = 1 if $opt->automated or $opt->all;
-  local $ENV{EXTENDED_TESTING} = 1 if $opt->extended or $opt->all;
+sub execute ($self, $opt, $arg) {
+  local $ENV{RELEASE_TESTING}   = 1 if $opt->all or $opt->release;
+  local $ENV{AUTHOR_TESTING}    = 1 if $opt->all or $opt->author;
+  local $ENV{AUTOMATED_TESTING} = 1 if $opt->all or $opt->automated;
+  local $ENV{EXTENDED_TESTING}  = 1 if $opt->all or $opt->extended;
 
   $self->zilla->test({
     $opt->keep_build_dir
@@ -82,9 +80,9 @@ sub execute {
     $opt->jobs
       ? (jobs => $opt->jobs)
       : (),
-	$opt->test_verbose
-	  ? (test_verbose => $opt->test_verbose)
-	  : (),
+    $opt->test_verbose
+      ? (test_verbose => $opt->test_verbose)
+      : (),
   });
 }
 

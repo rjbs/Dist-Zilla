@@ -3,10 +3,11 @@ package Dist::Zilla::Role::File;
 
 use Moose::Role;
 
+use Moose::Util::TypeConstraints;
+
 use Dist::Zilla::Dialect;
 
 use Dist::Zilla::Types qw(_Filename);
-use Moose::Util::TypeConstraints;
 use Try::Tiny;
 
 use namespace::autoclean;
@@ -51,21 +52,16 @@ has added_by => (
   },
 );
 
-around name => sub {
-  my $orig = shift;
-  my $self = shift;
-  if (@_) {
+around name => sub ($orig, $self, @rest) {
+  if (@rest) {
     my ($pkg, $line) = $self->_caller_of('name');
     $self->_push_added_by(sprintf("filename set by %s (%s line %s)", $self->_caller_plugin_name, $pkg, $line));
   }
-  return $self->$orig(@_);
+  return $self->$orig(@rest);
 };
 
-sub _caller_of {
-  my ($self, $function) = @_;
-
-  for (my $level = 1; $level < 50; ++$level)
-  {
+sub _caller_of ($self, $function) {
+  for (my $level = 1; $level < 50; ++$level) {
     my @frame = caller($level);
     last if not defined $frame[0];
     return ( (caller($level))[0,2] ) if $frame[3] =~ m/::${function}$/;
@@ -73,11 +69,8 @@ sub _caller_of {
   return 'unknown', '0';
 }
 
-sub _caller_plugin_name {
-  my $self = shift;
-
-  for (my $level = 1; $level < 50; ++$level)
-  {
+sub _caller_plugin_name ($self) {
+  for (my $level = 1; $level < 50; ++$level) {
     my @frame = caller($level);
     last if not defined $frame[0];
     return $1 if $frame[0] =~ m/^Dist::Zilla::Plugin::(.+)$/;
@@ -115,28 +108,23 @@ C<content> will be an error.
 
 =cut
 
-sub is_bytes {
-    my ($self) = @_;
-    return $self->encoding eq 'bytes';
+sub is_bytes ($self) {
+  return $self->encoding eq 'bytes';
 }
 
-sub _encode {
-  my ($self, $text) = @_;
+sub _encode ($self, $text) {
   my $enc = $self->encoding;
-  if ( $self->is_bytes ) {
+  if ($self->is_bytes) {
     return $text; # XXX hope you were right that it really was bytes
-  }
-  else {
+  } else {
     require Encode;
-    my $bytes =
-      try { Encode::encode($enc, $text, Encode::FB_CROAK()) }
-      catch { $self->_throw("encode $enc" => $_) };
+    my $bytes = try   { Encode::encode($enc, $text, Encode::FB_CROAK()) }
+                catch { $self->_throw("encode $enc" => $_) };
     return $bytes;
   }
 }
 
-sub _decode {
-  my ($self, $bytes) = @_;
+sub _decode ($self, $bytes) {
   my $enc = $self->encoding;
   if ( $self->is_bytes ) {
     $self->_throw(decode => "Can't decode text from 'bytes' encoding");
@@ -165,8 +153,7 @@ sub _decode {
   }
 }
 
-sub _throw {
-  my ($self, $op, $msg) = @_;
+sub _throw ($self, $op, $msg) {
   my ($name, $added_by) = map {; $self->$_ } qw/name added_by/;
   confess(
     "Could not $op $name; $added_by; error was: $msg; maybe you need the [Encoding] plugin to specify an encoding"

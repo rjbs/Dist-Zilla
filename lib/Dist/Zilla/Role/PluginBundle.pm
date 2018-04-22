@@ -16,8 +16,7 @@ configure the bundle.
 
 =cut
 
-sub register_component {
-  my ($class, $name, $arg, $self) = @_;
+sub register_component ($class, $name, $arg, $self) {
   # ... we should register a placeholder so MetaConfig can tell us about the
   # pluginbundle that was loaded
 }

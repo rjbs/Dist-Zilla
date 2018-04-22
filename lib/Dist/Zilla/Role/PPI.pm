@@ -27,9 +27,7 @@ document for the same file, this avoids reparsing it.
 
 my %CACHE;
 
-sub ppi_document_for_file {
-  my ($self, $file) = @_;
-
+sub ppi_document_for_file ($self, $file) {
   my $encoded_content = $file->encoded_content;
 
   # We cache on the MD5 checksum to detect if the document has been modified
@@ -58,9 +56,7 @@ It also updates the internal PPI document cache with the new document.
 
 =cut
 
-sub save_ppi_document_to_file {
-  my ($self, $document, $file) = @_;
-
+sub save_ppi_document_to_file ($self, $document, $file) {
   my $new_content = $document->serialize;
 
   $file->content($new_content);
@@ -79,9 +75,7 @@ sigil must be included).
 
 =cut
 
-sub document_assigns_to_variable {
-  my ($self, $document, $variable) = @_;
-
+sub document_assigns_to_variable ($self, $document, $variable) {
   my $package_stmts = $document->find('PPI::Statement::Package');
   my @namespaces = map { $_->namespace } $package_stmts->@*;
 

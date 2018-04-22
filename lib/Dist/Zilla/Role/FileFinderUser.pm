@@ -125,17 +125,13 @@ role {
   my ($finder_arg, @finder_arg_aliases) = $p->finder_arg_names->@*;
   confess "no finder arg names given!" unless $finder_arg;
 
-  around mvp_multivalue_args => sub {
-    my ($orig, $self) = @_;
-
+  around mvp_multivalue_args => sub ($orig, $self) {
     my @start = $self->$orig;
     return (@start, $finder_arg);
   };
 
   if (@finder_arg_aliases) {
-    around mvp_aliases => sub {
-      my ($orig, $self) = @_;
-
+    around mvp_aliases => sub ($orig, $self) {
       my $start = $self->$orig;
 
       for my $alias (@finder_arg_aliases) {
@@ -154,9 +150,7 @@ role {
     default => sub { [ $p->default_finders->@* ] },
   );
 
-  method $p->method => sub {
-    my ($self) = @_;
-
+  method $p->method => sub ($self) {
     my @filesets = map {; $self->zilla->find_files($_) }
                    $self->$finder_arg->@*;
 

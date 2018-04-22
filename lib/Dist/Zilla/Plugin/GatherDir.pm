@@ -59,7 +59,7 @@ has root => (
   lazy => 1,
   coerce   => 1,
   required => 1,
-  default  => sub { shift->zilla->root },
+  default  => sub ($self, @) { $self->zilla->root },
 );
 
 =attr prefix
@@ -152,10 +152,7 @@ has prune_directory => (
   default => sub { [] },
 );
 
-around dump_config => sub {
-  my $orig = shift;
-  my $self = shift;
-
+around dump_config => sub ($orig, $self) {
   my $config = $self->$orig;
 
   $config->{+__PACKAGE__} = {
@@ -169,9 +166,7 @@ around dump_config => sub {
   return $config;
 };
 
-sub gather_files {
-  my ($self) = @_;
-
+sub gather_files ($self) {
   my $exclude_regex = qr/\000/;
   $exclude_regex = qr/(?:$exclude_regex)|$_/ for $self->exclude_match->@*;
 
@@ -231,9 +226,7 @@ sub gather_files {
   return;
 }
 
-sub _file_from_filename {
-  my ($self, $filename) = @_;
-
+sub _file_from_filename ($self, $filename) {
   my @stat = stat $filename or $self->log_fatal("$filename does not exist!");
 
   return Dist::Zilla::File::OnDisk->new({

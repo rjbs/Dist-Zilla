@@ -28,11 +28,8 @@ has resources => (
   required => 1,
 );
 
-around BUILDARGS => sub {
-  my $orig = shift;
-  my ($class, @arg) = @_;
-
-  my $args = $class->$orig(@arg);
+around BUILDARGS => sub ($orig, $class, @rest) {
+  my $args = $class->$orig(@rest);
   my %copy = %$args;
 
   my $zilla = delete $copy{zilla};
@@ -66,9 +63,7 @@ around BUILDARGS => sub {
   };
 };
 
-sub metadata {
-  my ($self) = @_;
-
+sub metadata ($self) {
   return { resources => $self->resources };
 }
 

@@ -16,9 +16,7 @@ been constructed, one will be by calling C<< Dist::Zilla->from_config >>.
 
 =cut
 
-sub zilla {
-  return $_[0]->app->zilla;
-}
+sub zilla ($self) { $self->app->zilla }
 
 =method log
 
@@ -26,8 +24,8 @@ This method calls the C<log> method of the application's chrome.
 
 =cut
 
-sub log {
-  $_[0]->app->chrome->logger->log($_[1]);
+sub log ($self, $what) {
+  $self->app->chrome->logger->log($what);
 }
 
 1;

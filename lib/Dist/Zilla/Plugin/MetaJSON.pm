@@ -4,11 +4,11 @@ package Dist::Zilla::Plugin::MetaJSON;
 use Moose;
 with 'Dist::Zilla::Role::FileGatherer';
 
+use Moose::Util::TypeConstraints;
+
 use Dist::Zilla::Dialect;
 
 use namespace::autoclean;
-
-use Moose::Util::TypeConstraints;
 
 =head1 DESCRIPTION
 
@@ -40,11 +40,10 @@ If you want a fixed version, specify it.
 
 =cut
 
-my $version_type = subtype(
-    as 'Num',
-    where { $_ >= 2 },
-    message { "MetaJSON version must be 2 or greater" },
-);
+my $version_type = subtype
+  as 'Num',
+  where { $_ >= 2 },
+  message { "MetaJSON version must be 2 or greater" };
 
 has version => (
   is  => 'ro',
@@ -52,9 +51,7 @@ has version => (
   default => '2',
 );
 
-sub gather_files {
-  my ($self, $arg) = @_;
-
+sub gather_files ($self) {
   my $zilla = $self->zilla;
 
   require JSON::MaybeXS;

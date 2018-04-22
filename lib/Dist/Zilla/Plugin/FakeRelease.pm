@@ -17,9 +17,7 @@ has user => (
 
 sub cpanid { shift->user }
 
-sub release {
-  my $self = shift;
-
+sub release ($self, $) {
   for my $env (
     'DIST_ZILLA_FAKERELEASE_FAIL', # old
     'DZIL_FAKERELEASE_FAIL',       # new

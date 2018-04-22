@@ -8,9 +8,10 @@ with(
   'Dist::Zilla::Role::PPI',
 );
 
+use Moose::Util::TypeConstraints 'enum';
+
 use Dist::Zilla::Dialect;
 
-use Moose::Util::TypeConstraints 'enum';
 use namespace::autoclean;
 
 =head1 SYNOPSIS
@@ -117,9 +118,7 @@ has scanners => (
 has _scanner => (
   is => 'ro',
   lazy => 1,
-  default => sub {
-    my $self = shift;
-
+  default => sub ($self, @) {
     require Perl::PrereqScanner;
     Perl::PrereqScanner->VERSION('1.016'); # don't skip "lib"
 
@@ -137,14 +136,11 @@ has type => (
   default => 'requires',
 );
 
-sub scan_file_reqs {
-  my ($self, $file) = @_;
+sub scan_file_reqs ($self, $file) {
   return $self->_scanner->scan_ppi_document($self->ppi_document_for_file($file))
 }
 
-sub register_prereqs {
-  my $self  = shift;
-
+sub register_prereqs ($self) {
   my $type = $self->type;
 
   my $reqs_by_phase = $self->scan_prereqs;

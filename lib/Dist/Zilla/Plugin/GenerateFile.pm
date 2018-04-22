@@ -105,9 +105,7 @@ has name_is_template => (
   default => 0,
 );
 
-sub gather_files {
-  my ($self, $arg) = @_;
-
+sub gather_files ($self, $arg = {}) {
   my $file = Dist::Zilla::File::InMemory->new({
     name    => $self->_filename,
     content => $self->_content,
@@ -117,9 +115,7 @@ sub gather_files {
   return;
 }
 
-sub _content {
-  my $self = shift;
-
+sub _content ($self) {
   my $content = join "\n", $self->content->@*;
   $content .= qq{\n};
 
@@ -136,9 +132,7 @@ sub _content {
   return $content;
 }
 
-sub _filename {
-  my $self = shift;
-
+sub _filename ($self) {
   my $filename = $self->filename;
 
   if ($self->name_is_template) {

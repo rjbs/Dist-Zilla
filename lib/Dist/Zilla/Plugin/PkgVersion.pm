@@ -101,8 +101,7 @@ L<[FileFinder::Filter]|Dist::Zilla::Plugin::FileFinder::Filter> plugins.
 
 =cut
 
-sub BUILD {
-  my ($self) = @_;
+sub BUILD ($self, @) {
   $self->log("use_our option to PkgVersion is deprecated and will be removed")
     if $self->use_our;
 
@@ -111,15 +110,11 @@ sub BUILD {
   }
 }
 
-sub munge_files {
-  my ($self) = @_;
-
+sub munge_files ($self) {
   $self->munge_file($_) for $self->found_files->@*;
 }
 
-sub munge_file {
-  my ($self, $file) = @_;
-
+sub munge_file ($self, $file) {
   if ($file->is_bytes) {
     $self->log_debug($file->name . " has 'bytes' encoding, skipping...");
     return;
@@ -163,9 +158,7 @@ has use_begin => (
   default => 0,
 );
 
-sub munge_perl {
-  my ($self, $file) = @_;
-
+sub munge_perl ($self, $file) {
   my $version = $self->zilla->version;
 
   require version;

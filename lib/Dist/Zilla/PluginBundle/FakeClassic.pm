@@ -8,10 +8,8 @@ use Dist::Zilla::Dialect;
 
 use namespace::autoclean;
 
-around bundle_config => sub {
-  my ($orig, $self, $arg) = @_;
-
-  my @config = $self->$orig($arg);
+around bundle_config => sub ($orig, $self, $arg, @rest) {
+  my @config = $self->$orig($arg, @rest);
 
   for my $i (0 .. $#config) {
     if ($config[ $i ][1] eq 'Dist::Zilla::Plugin::UploadToCPAN') {

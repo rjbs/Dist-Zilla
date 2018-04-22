@@ -81,10 +81,9 @@ If not given, phase and type default to runtime and requires, respectively.
 
 =cut
 
-sub register_prereqs {
-  my $self = shift;
-  my $arg  = ref($_[0]) ? shift(@_) : {};
-  my %prereq = @_;
+sub register_prereqs ($self, @rest) {
+  my $arg     = ref($rest[0]) ? shift(@rest) : {};
+  my %prereq  = @rest;
 
   my $phase = $arg->{phase} || 'runtime';
   my $type  = $arg->{type}  || 'requires';
@@ -98,18 +97,14 @@ sub register_prereqs {
   return;
 }
 
-before 'finalize' => sub {
-  my ($self) = @_;
+before 'finalize' => sub ($self) {
   $self->sync_runtime_build_test_requires;
 };
-
 
 # this avoids a long-standing CPAN.pm bug that incorrectly merges runtime and
 # "build" (build+test) requirements by ensuring requirements stay unified
 # across all three phases
-sub sync_runtime_build_test_requires {
-  my $self = shift;
-
+sub sync_runtime_build_test_requires ($self) {
   # first pass: generated merged requirements
   for my $phase ( qw/runtime build test/ ) {
     my $req = $self->requirements_for($phase, 'requires');

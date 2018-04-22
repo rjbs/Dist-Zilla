@@ -57,9 +57,7 @@ has matches => (
   default => sub { [] },
 );
 
-sub prune_files {
-  my ($self) = @_;
-
+sub prune_files ($self) {
   # never match (at least the filename characters)
   my $matches_regex = qr/\000/;
 

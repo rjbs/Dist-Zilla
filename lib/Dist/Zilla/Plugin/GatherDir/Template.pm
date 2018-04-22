@@ -50,11 +50,8 @@ has _rename => (
   default => sub { +{} },
 );
 
-around BUILDARGS => sub {
-  my $orig = shift;
-  my ($class, @arg) = @_;
-
-  my $args = $class->$orig(@arg);
+around BUILDARGS => sub ($orig, $class, @rest) {
+  my $args = $class->$orig(@rest);
   my %retargs = %$args;
 
   for my $rename (grep /^rename/, keys %retargs) {
@@ -66,9 +63,7 @@ around BUILDARGS => sub {
   return \%retargs;
 };
 
-sub _file_from_filename {
-  my ($self, $filename) = @_;
-
+sub _file_from_filename ($self, $filename) {
   my $template = path($filename)->slurp_utf8;
 
   my @stat = stat $filename or $self->log_fatal("$filename does not exist!");
@@ -92,7 +87,7 @@ sub _file_from_filename {
   return Dist::Zilla::File::FromCode->new({
     name => $new_filename,
     mode => ($stat[2] & 0755) | 0200, # kill world-writeability, make sure owner-writable.
-    code => sub {
+    code => sub ($file, @) {
       my ($file_obj) = @_;
       $self->fill_in_string(
         $template,

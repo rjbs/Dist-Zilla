@@ -88,9 +88,7 @@ necessary, the directory will be created.  An archive will not be created.
 
 =cut
 
-sub execute {
-  my ($self, $opt, $args) = @_;
-
+sub execute ($self, $opt, $args) {
   if ($opt->in) {
     require Path::Tiny;
     die qq{using "--in ." would destroy your working directory!\n}

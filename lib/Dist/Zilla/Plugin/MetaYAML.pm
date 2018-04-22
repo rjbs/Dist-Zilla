@@ -28,9 +28,7 @@ has filename => (
   default => 'META.yml',
 );
 
-sub gather_files {
-  my ($self, $arg) = @_;
-
+sub gather_files ($self) {
   require Dist::Zilla::File::FromCode;
   require YAML::Tiny;
   require CPAN::Meta::Converter;
@@ -61,8 +59,7 @@ sub gather_files {
 
       my $yaml = try {
         YAML::Tiny->new($output)->write_string; # text!
-      }
-      catch {
+      } catch {
         $self->log_fatal("Could not create YAML string: " . YAML::Tiny->errstr)
       };
       return $yaml;

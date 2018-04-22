@@ -25,8 +25,6 @@ with(
 
 use Dist::Zilla::Dialect;
 
-use MooseX::Types;
-
 =attr finder
 
 This is the name of a L<FileFinder|Dist::Zilla::Role::FileFinder>
@@ -64,23 +62,19 @@ has skips => (
   default => sub {  []  },
 );
 
-around mvp_multivalue_args => sub {
-  my ($orig, $self) = @_;
+around mvp_multivalue_args => sub ($orig, $self) {
   ($self->$orig, 'skips')
 };
 
-around mvp_aliases => sub {
-  my ($orig, $self) = @_;
+around mvp_aliases => sub ($orig, $self) {
   my $aliases = $self->$orig;
-  $aliases->{skip}       = 'skips';
+  $aliases->{skip} = 'skips';
   return $aliases
 };
 
 requires 'scan_file_reqs';
 
-sub scan_prereqs {
-  my $self = shift;
-
+sub scan_prereqs ($self) {
   require CPAN::Meta::Requirements;
   require List::Util;
   List::Util->VERSION(1.45);  # uniq

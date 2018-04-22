@@ -26,10 +26,6 @@ sub description {
   "It is sometimes useful for diagnostic purposes."
 }
 
-sub execute {
-  my ($self, $opt, $arg) = @_;
-
-  $self->zilla;
-}
+sub execute ($self, @) { $self->zilla }
 
 1;

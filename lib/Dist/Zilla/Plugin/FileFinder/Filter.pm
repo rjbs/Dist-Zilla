@@ -9,6 +9,8 @@ with(
   },
 );
 
+use Moose::Util::TypeConstraints;
+
 use Dist::Zilla::Dialect;
 
 use namespace::autoclean;
@@ -28,7 +30,6 @@ This plugin was originally contributed by Christopher J. Madsen.
 
 =cut
 
-use Moose::Util::TypeConstraints;
 use MooseX::Types::Moose qw(ArrayRef RegexpRef Str);
 
 {
@@ -61,9 +62,7 @@ sub mvp_aliases { +{ qw(
 
 sub mvp_multivalue_args { qw(skips) }
 
-sub find_files {
-  my $self = shift;
-
+sub find_files ($self) {
   my $files = $self->found_files;
 
   foreach my $re ($self->skips->@*) {

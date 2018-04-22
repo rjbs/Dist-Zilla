@@ -23,8 +23,7 @@ has _module_map => (
   default => sub { {} },
 );
 
-sub find_files {
-  my ($self) = @_;
+sub find_files ($self) {
   my $modmap = $self->_module_map;
   my @files;
 
@@ -38,19 +37,15 @@ sub find_files {
   return \@files;
 }
 
-sub share_dir_map {
-  my ($self) = @_;
+sub share_dir_map ($self) {
   my $modmap = $self->_module_map;
 
   return unless keys %$modmap;
   return { module => $modmap };
 }
 
-around BUILDARGS => sub {
-  my $orig = shift;
-  my ($class, @arg) = @_;
-
-  my $args = $class->$orig(@arg);
+around BUILDARGS => sub ($orig, $class, @rest) {
+  my $args = $class->$orig(@rest);
   my %copy = %$args;
 
   my $zilla = delete $copy{zilla};

@@ -34,10 +34,7 @@ Valid arguments are:
 
 =cut
 
-sub from_config {
-  my ($class, $arg) = @_;
-  $arg ||= {};
-
+sub from_config ($class, $arg = {}) {
   my $root = path($arg->{dist_root} || '.');
 
   my $sequence = $class->_load_config({
@@ -54,16 +51,14 @@ sub from_config {
   return $self;
 }
 
-sub _setup_default_plugins {
-  my ($self) = @_;
+sub _setup_default_plugins ($self) {
   unless ($self->plugin_named(':InstallModules')) {
     require Dist::Zilla::Plugin::FinderCode;
     my $plugin = Dist::Zilla::Plugin::FinderCode->new({
       plugin_name => ':InstallModules',
       zilla       => $self,
       style       => 'grep',
-      code        => sub {
-        my ($file, $self) = @_;
+      code        => sub ($file, $) {
         local $_ = $file->name;
         return 1 if m{\Alib/} and m{\.(pm|pod)$};
         return;
@@ -79,8 +74,7 @@ sub _setup_default_plugins {
       plugin_name => ':IncModules',
       zilla       => $self,
       style       => 'grep',
-      code        => sub {
-        my ($file, $self) = @_;
+      code        => sub ($file, $) {
         local $_ = $file->name;
         return 1 if m{\Ainc/} and m{\.pm$};
         return;
@@ -96,7 +90,7 @@ sub _setup_default_plugins {
       plugin_name => ':TestFiles',
       zilla       => $self,
       style       => 'grep',
-      code        => sub { local $_ = $_->name; m{\At/} },
+      code        => sub { $_->name =~ m{\At/} },
     });
 
     $self->_add_plugin($plugin);
@@ -120,9 +114,9 @@ sub _setup_default_plugins {
       plugin_name => ':ExecFiles',
       zilla       => $self,
       style       => 'list',
-      code        => sub {
+      code        => sub ($file, @) {
         my @files = uniq map {; $_->find_files->@* }
-                         $_[0]->zilla->plugins_with(-ExecFiles);
+                         $file->zilla->plugins_with(-ExecFiles);
 
         return \@files;
       },
@@ -156,18 +150,18 @@ sub _setup_default_plugins {
       plugin_name => ':ShareFiles',
       zilla       => $self,
       style       => 'list',
-      code        => sub {
-        my $self = shift;
-        my $map = $self->zilla->_share_dir_map;
+      code        => sub ($file, @) {
+        my $zilla = $file->zilla;
+        my $map = $zilla->_share_dir_map;
         my @files;
         if ( $map->{dist} ) {
           push @files, grep {; $_->name =~ m{\A\Q$map->{dist}\E/} }
-                       $self->zilla->files->@*;
+                       $zilla->files->@*;
         }
         if ( my $mod_map = $map->{module} ) {
           for my $mod ( keys %$mod_map ) {
             push @files, grep { $_->name =~ m{\A\Q$mod_map->{$mod}\E/} }
-                         $self->zilla->files->@*;
+                         $zilla->files->@*;
           }
         }
         return \@files;
@@ -183,8 +177,7 @@ sub _setup_default_plugins {
       plugin_name => ':MainModule',
       zilla       => $self,
       style       => 'grep',
-      code        => sub {
-        my ($file, $self) = @_;
+      code        => sub ($file, $self) {
         local $_ = $file->name;
         return 1 if $_ eq $self->zilla->main_module->name;
         return;
@@ -227,9 +220,7 @@ has _share_dir_map => (
   builder   => '_build_share_dir_map',
 );
 
-sub _build_share_dir_map {
-  my ($self) = @_;
-
+sub _build_share_dir_map ($self) {
   my $share_dir_map = {};
 
   for my $plugin ($self->plugins_with(-ShareDir)) {
@@ -254,10 +245,7 @@ sub _build_share_dir_map {
 }
 
 
-sub _load_config {
-  my ($class, $arg) = @_;
-  $arg ||= {};
-
+sub _load_config ($class, $arg = {}) {
   my $config_class =
     $arg->{config_class} ||= 'Dist::Zilla::MVP::Reader::Finder';
 
@@ -335,9 +323,7 @@ for the preposition!
 
 sub build { $_[0]->build_in }
 
-sub build_in {
-  my ($self, $root) = @_;
-
+sub build_in ($self, $root = undef) {
   $self->log_fatal("tried to build with a minter")
     if $self->isa('Dist::Zilla::Dist::Minter');
 
@@ -415,9 +401,7 @@ sub ensure_built {
   $_[0]->ensure_built_in;
 }
 
-sub ensure_built_in {
-  my ($self, $root) = @_;
-
+sub ensure_built_in ($self, $root = undef) {
   # $root ||= $self->name . q{-} . $self->version;
   return $self->built_in if $self->built_in and
     (!$root or ($self->built_in eq $root));
@@ -436,8 +420,7 @@ does not include C<-TRIAL>, even if building a trial dist.
 
 =cut
 
-sub dist_basename {
-  my ($self) = @_;
+sub dist_basename ($self) {
   return join(q{},
     $self->name,
     '-',
@@ -456,8 +439,7 @@ might not exist.
 
 =cut
 
-sub archive_filename {
-  my ($self) = @_;
+sub archive_filename ($self) {
   return join(q{},
     $self->dist_basename,
     ( $self->is_trial && $self->version !~ /_/ ? '-TRIAL' : '' ),
@@ -474,9 +456,7 @@ tarball of the build directory in the current directory.
 
 =cut
 
-sub build_archive {
-  my ($self) = @_;
-
+sub build_archive ($self) {
   my $built_in = $self->ensure_built;
 
   my $basename = $self->dist_basename;
@@ -499,9 +479,7 @@ sub build_archive {
   return $file;
 }
 
-sub _build_archive {
-  my ($self, $built_in, $basename, $basedir) = @_;
-
+sub _build_archive ($self, $built_in, $basename, $basedir) {
   $self->log("building archive with Archive::Tar; install Archive::Tar::Wrapper 0.15 or newer for improved speed");
 
   require Archive::Tar;
@@ -531,9 +509,7 @@ sub _build_archive {
   return $archive;
 }
 
-sub _build_archive_with_wrapper {
-  my ($self, $built_in, $basename, $basedir) = @_;
-
+sub _build_archive_with_wrapper ($self, $built_in, $basename, $basedir) {
   $self->log("building archive with Archive::Tar::Wrapper");
 
   my $archive = Archive::Tar::Wrapper->new;
@@ -554,9 +530,7 @@ sub _build_archive_with_wrapper {
   return $archive;
 }
 
-sub _prep_build_root {
-  my ($self, $build_root) = @_;
-
+sub _prep_build_root ($self, $build_root = undef) {
   $build_root = path($build_root || $self->dist_basename);
 
   $build_root->mkpath unless -d $build_root;
@@ -592,9 +566,7 @@ by the loaded plugins.
 
 =cut
 
-sub release {
-  my $self = shift;
-
+sub release ($self) {
   Carp::croak("you can't release without any Releaser plugins")
     unless my @releasers = $self->plugins_with(-Releaser);
 
@@ -621,9 +593,7 @@ like matching the glob C<Your-Dist-*>.
 
 =cut
 
-sub clean {
-  my ($self, $dry_run) = @_;
-
+sub clean ($self, $dry_run) {
   require File::Path;
   for my $x (grep { -e } '.build', glob($self->name . '-*')) {
     if ($dry_run) {
@@ -644,9 +614,7 @@ subdirectory. It will return the path for the temporary build location.
 
 =cut
 
-sub ensure_built_in_tmpdir {
-  my $self = shift;
-
+sub ensure_built_in_tmpdir ($self) {
   require File::Temp;
 
   my $build_root = path('.build');
@@ -662,9 +630,7 @@ sub ensure_built_in_tmpdir {
   return ($target, $latest, $previous);
 }
 
-sub _create_build_symlinks {
-  my ($self, $symlink_root, $build_target) = @_;
-
+sub _create_build_symlinks ($self, $symlink_root, $build_target) {
   $symlink_root->mkpath unless -d $symlink_root;
 
   my $os_has_symlinks = eval { symlink("",""); 1 };
@@ -710,10 +676,7 @@ Valid arguments are:
 
 =cut
 
-sub install {
-  my ($self, $arg) = @_;
-  $arg ||= {};
-
+sub install ($self, $arg = {}) {
   my ($target, $latest) = $self->ensure_built_in_tmpdir;
 
   my $ok = eval {
@@ -759,9 +722,7 @@ C<\%arg> may be omitted.  Otherwise, valid arguments are:
 
 =cut
 
-sub test {
-  my ($self, $arg) = @_;
-
+sub test ($self, $arg = {}) {
   Carp::croak("you can't test without any TestRunner plugins")
     unless my @testers = $self->plugins_with(-TestRunner);
 
@@ -791,9 +752,7 @@ does it clean up C<$directory> afterwards.
 
 =cut
 
-sub run_tests_in {
-  my ($self, $target, $arg) = @_;
-
+sub run_tests_in ($self, $target, $arg = {}) {
   Carp::croak("you can't test without any TestRunner plugins")
     unless my @testers = $self->plugins_with(-TestRunner);
 
@@ -815,9 +774,7 @@ non-zero, the directory will be left in place.
 
 =cut
 
-sub run_in_build {
-  my ($self, $cmd, $arg) = @_;
-
+sub run_in_build ($self, $cmd, $arg) {
   my @runners = $self->plugins_with(-BuildRunner);
 
   $self->log_fatal("you can't build without any BuildRunner plugins")
@@ -866,9 +823,7 @@ sub run_in_build {
 # C<-BuildRunner> plugins to generate it.  Useful for commands that operate on
 # F<blib>, such as C<test> or C<run>.
 
-sub _ensure_blib {
-  my ($self) = @_;
-
+sub _ensure_blib ($self) {
   unless ( -d 'blib' ) {
     my @builders = $self->plugins_with( -BuildRunner );
     $self->log_fatal("no BuildRunner plugins specified") unless @builders;

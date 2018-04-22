@@ -24,15 +24,12 @@ has dir => (
   default => 'share',
 );
 
-sub find_files {
-  my ($self) = @_;
-
+sub find_files ($self) {
   my $dir = $self->dir;
   return [ grep { index($_->name, "$dir/") == 0 } $self->zilla->files->@* ];
 }
 
-sub share_dir_map {
-  my ($self) = @_;
+sub share_dir_map ($self) {
   my $files = $self->find_files;
   return unless @$files;
 

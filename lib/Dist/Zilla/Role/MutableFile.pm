@@ -3,11 +3,12 @@ package Dist::Zilla::Role::MutableFile;
 
 use Moose::Role;
 
+use Moose::Util::TypeConstraints;
+
 use Dist::Zilla::Dialect;
 
 use namespace::autoclean;
 
-use Moose::Util::TypeConstraints;
 use MooseX::SetOnce;
 
 =head1 DESCRIPTION
@@ -45,24 +46,21 @@ has _content => (
   predicate   => 'has_content',
 );
 
-sub content {
-  my $self = shift;
-  if ( ! @_ ) {
+sub content ($self, @rest) {
+  if ( ! @rest ) {
     # if we have it or we're tasked to provide it, return it (possibly lazily
     # generated from a builder); otherwise, get it from the encoded_content
     if ( $self->has_content || $self->_content_source eq 'content' ) {
       return $self->_content;
-    }
-    else {
+    } else {
       return $self->_content($self->_decode($self->encoded_content));
     }
-  }
-  else {
+  } else {
     my ($pkg, $line) = $self->_caller_of('content');
     $self->_content_source('content');
     $self->_push_added_by(sprintf("content set by %s (%s line %s)", $self->_caller_plugin_name, $pkg, $line));
     $self->clear_encoded_content;
-    return $self->_content(@_);
+    return $self->_content(@rest);
   }
 }
 
@@ -79,9 +77,8 @@ has _encoded_content => (
   predicate   => 'has_encoded_content',
 );
 
-sub encoded_content {
-  my $self = shift;
-  if ( ! @_ ) {
+sub encoded_content ($self, @rest) {
+  if ( ! @rest ) {
     # if we have it or we're tasked to provide it, return it (possibly lazily
     # generated from a builder); otherwise, get it from the content
     if ($self->has_encoded_content || $self->_content_source eq 'encoded_content') {
@@ -95,7 +92,7 @@ sub encoded_content {
   $self->_content_source('encoded_content');
   $self->_push_added_by(sprintf("encoded_content set by %s (%s line %s)", $self->_caller_plugin_name, $pkg, $line));
   $self->clear_content;
-  $self->_encoded_content(@_);
+  $self->_encoded_content(@rest);
 }
 
 has _content_source => (
@@ -105,8 +102,7 @@ has _content_source => (
     builder => '_build_content_source',
 );
 
-sub _set_added_by {
-  my ($self, $value) = @_;
+sub _set_added_by ($self, $value) {
   return $self->_push_added_by(sprintf("%s added by %s", $self->_content_source, $value));
 };
 

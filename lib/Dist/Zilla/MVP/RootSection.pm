@@ -4,6 +4,9 @@ package Dist::Zilla::MVP::RootSection;
 use Moose;
 extends 'Config::MVP::Section';
 
+use Moose::Util::TypeConstraints;
+use MooseX::LazyRequire; # turns warnings on aaauuugh -- rjbs, 2018-04-23
+
 use Dist::Zilla::Dialect;
 
 use namespace::autoclean;
@@ -24,9 +27,7 @@ Those useful defaults are:
 
 =cut
 
-use MooseX::LazyRequire;
 use MooseX::SetOnce;
-use Moose::Util::TypeConstraints;
 
 has '+name'    => (default => '_');
 
@@ -42,9 +43,7 @@ has zilla => (
   lazy_required => 1,
 );
 
-after finalize => sub {
-  my ($self) = @_;
-
+after finalize => sub ($self, @) {
   my $assembler = $self->sequence->assembler;
 
   my %payload = $self->payload->%*;

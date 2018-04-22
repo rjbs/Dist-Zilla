@@ -1,10 +1,10 @@
 package Dist::Zilla::File::FromCode;
 # ABSTRACT: a file whose content is (re-)built on demand
 
-use Dist::Zilla::Dialect;
-
 use Moose;
 use Moose::Util::TypeConstraints;
+
+use Dist::Zilla::Dialect;
 
 use namespace::autoclean;
 
@@ -53,8 +53,7 @@ has encoding => (
   builder => "_build_encoding",
 );
 
-sub _build_encoding {
-  my ($self) = @_;
+sub _build_encoding ($self) {
   return $self->code_return_type eq 'text' ? 'UTF-8' : 'bytes';
 }
 
@@ -62,10 +61,8 @@ sub _build_encoding {
 
 =cut
 
-sub content {
-  my ($self) = @_;
-
-  confess("cannot set content of a FromCode file") if @_ > 1;
+sub content ($self, @rest) {
+  confess("cannot set content of a FromCode file") if @rest;
 
   my $code = $self->code;
   my $result = $self->$code;
@@ -82,10 +79,8 @@ sub content {
 
 =cut
 
-sub encoded_content {
-  my ($self) = @_;
-
-  confess( "cannot set encoded_content of a FromCode file" ) if @_ > 1;
+sub encoded_content ($self, @rest) {
+  confess( "cannot set encoded_content of a FromCode file" ) if @rest;
 
   my $code = $self->code;
   my $result = $self->$code;
@@ -98,8 +93,7 @@ sub encoded_content {
   }
 }
 
-sub _set_added_by {
-  my ($self, $value) = @_;
+sub _set_added_by ($self, $value) {
   return $self->_push_added_by(sprintf("%s from coderef added by %s", $self->code_return_type, $value));
 };
 

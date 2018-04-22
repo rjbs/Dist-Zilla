@@ -25,9 +25,7 @@ as the initial section.
 use MooseX::Types::Perl qw(PackageName);
 use Dist::Zilla::MVP::RootSection;
 
-sub BUILD {
-  my ($self) = @_;
-
+sub BUILD ($self, @) {
   my $root = Dist::Zilla::MVP::RootSection->new;
   $self->sequence->add_section($root);
 }
@@ -46,8 +44,7 @@ exception.
 
 =cut
 
-sub zilla {
-  my ($self) = @_;
+sub zilla ($self) {
   $self->sequence->section_named('_')->zilla;
 }
 
@@ -60,8 +57,7 @@ is already taken, in which case an exception is raised.
 
 =cut
 
-sub register_stash {
-  my ($self, $name, $object) = @_;
+sub register_stash ($self, $name, $object) {
   $self->log_fatal("tried to register $name stash entry twice")
     if $self->zilla->_local_stashes->{ $name };
 

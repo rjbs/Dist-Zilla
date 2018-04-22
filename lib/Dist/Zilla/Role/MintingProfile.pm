@@ -31,9 +31,8 @@ based on your profile with the:
 
 requires 'profile_dir';
 
-around profile_dir => sub {
-  my ($orig, $self, @args) = @_;
-  path($self->$orig(@args));
+around profile_dir => sub ($orig, $self, @rest) {
+  path($self->$orig(@rest));
 };
 
 1;
