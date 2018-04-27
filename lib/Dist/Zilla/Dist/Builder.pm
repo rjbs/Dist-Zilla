@@ -665,6 +665,7 @@ sub ensure_built_in_tmpdir {
 sub _create_build_symlinks {
   my ($self, $symlink_root, $build_target) = @_;
 
+  $symlink_root = $symlink_root->absolute($build_target);
   $symlink_root->mkpath unless -d $symlink_root;
 
   my $os_has_symlinks = eval { symlink("",""); 1 };
@@ -672,8 +673,8 @@ sub _create_build_symlinks {
   my $latest;
 
   if( $os_has_symlinks ) {
-    $previous = path( $symlink_root, 'previous' );
-    $latest   = path( $symlink_root, 'latest'   );
+    $previous = $symlink_root->child( 'previous' );
+    $latest   = $symlink_root->child( 'latest'   );
     if( -l $previous ) {
       $previous->remove
         or $self->log([ 'cannot remove old %s/previous link', "$symlink_root" ]);
