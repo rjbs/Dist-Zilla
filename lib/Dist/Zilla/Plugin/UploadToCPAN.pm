@@ -269,7 +269,8 @@ sub before_release {
 sub release {
   my ($self, $archive) = @_;
 
-  $self->uploader->upload_file("$archive");
+  my $tgz = $self->zilla->root->child($archive);
+  $self->uploader->upload_file("$tgz");
 }
 
 __PACKAGE__->meta->make_immutable;

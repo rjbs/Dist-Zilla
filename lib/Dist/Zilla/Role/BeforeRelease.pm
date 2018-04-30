@@ -13,6 +13,9 @@ use namespace::autoclean;
 Plugins implementing this role have their C<before_release> method
 called before the release is actually done.
 
+The archive filename, if one was built, is passed as the
+sole argument. It is relative to the distribution root.
+
 =cut
 
 requires 'before_release';

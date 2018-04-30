@@ -30,7 +30,7 @@ use Dist::Zilla::Path;
 
 sub before_release {
   my ($self, $tgz) = @_;
-  $tgz = $tgz->absolute;
+  $tgz = $self->zilla->root->child($tgz);
 
   my $build_root = $self->zilla->root->child('.build');
   $build_root->mkpath unless -d $build_root;

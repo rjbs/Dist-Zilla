@@ -11,7 +11,10 @@ use namespace::autoclean;
 =head1 DESCRIPTION
 
 Plugins implementing this role have their C<release> method called when
-releasing.  It's passed the distribution tarball to be released.
+releasing.
+
+The archive filename (the distribution tarball) is passed as the
+sole argument. It is relative to the distribution root.
 
 =cut
 

@@ -21,7 +21,7 @@ use namespace::autoclean;
 
   my $zilla = Dist::Zilla->from_config(\%arg);
 
-This routine returns a new Zilla from the configuration in the current working
+This routine returns a new Zilla from the configuration in the source
 directory.
 
 This method should not be relied upon, yet.  Its semantics are B<certain> to
@@ -470,7 +470,9 @@ sub archive_filename {
   $zilla->build_archive;
 
 This method will ensure that the dist has been built, and will then build a
-tarball of the build directory in the current directory.
+tarball of the build directory in the source directory.
+
+Returns the filename of the archive, relative to the distribution root.
 
 =cut
 
@@ -496,7 +498,7 @@ sub build_archive {
   $self->log("writing archive to $file");
   $archive->write("$file", 9);
 
-  return $file;
+  return path($self->archive_filename);
 }
 
 sub _build_archive {
