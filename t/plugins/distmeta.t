@@ -9,6 +9,8 @@ use Test::DZil;
 use JSON::MaybeXS;
 use YAML::Tiny;
 
+local $ENV{TZ} = 'America/New_York';
+
 {
   # 2.0
   my $tzil = Builder->from_config(

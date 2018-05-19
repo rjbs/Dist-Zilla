@@ -6,6 +6,8 @@ use utf8;
 use autodie;
 use Test::DZil;
 
+local $ENV{TZ} = 'America/New_York';
+
 my $tzil = Builder->from_config(
   { dist_root => 'corpus/dist/DZT' },
   {
