@@ -208,7 +208,7 @@ the file to which to write an updated changelog to; defaults to the C<filename>
 
 = format
 sprintf-like string used to compute the next value of C<{{$NEXT}}>;
-defaults to C<%-9v %{yyyy-MM-dd HH:mm:ss VVVV}d>
+defaults to C<%-9v %{yyyy-MM-dd HH:mm:ssZZZZZ VVVV}d%{ (TRIAL RELEASE)}T>
 
 = time_zone
 the timezone to use when generating the date;  defaults to I<local>
