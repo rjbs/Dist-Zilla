@@ -151,4 +151,37 @@ use Test::DZil;
     if not Test::Builder->new->is_passing;
 }
 
+{
+  my $tzil = Builder->from_config(
+    { dist_root => 'does-not-exist' },
+    {
+      add_files => {
+        'source/dist.ini' => simple_ini(
+          'GatherDir',
+          [ 'MakeMaker' => { eumm_version => '6.55_02' } ],
+        ),
+        'source/lib/Foo.pm' => "package Foo;\n1\n",
+      },
+    },
+  );
+
+  $tzil->chrome->logger->set_debug(1);
+  is(
+    exception { $tzil->build },
+    undef,
+    'build proceeds normally',
+  );
+
+  my $content = $tzil->slurp_file('build/Makefile.PL');
+
+  like(
+    $content,
+    qr/^use ExtUtils::MakeMaker '6.55_02';$/m,
+    'EUMM version uses quotes to prevent losing information from numification',
+  );
+
+  diag 'got log messages: ', explain $tzil->log_messages
+    if not Test::Builder->new->is_passing;
+}
+
 done_testing;
