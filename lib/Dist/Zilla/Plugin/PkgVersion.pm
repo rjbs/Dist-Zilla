@@ -222,13 +222,14 @@ sub munge_perl {
     # the \x20 hack is here so that when we scan *this* document we don't find
     # an assignment to version; it shouldn't be needed, but it's been annoying
     # enough in the past that I'm keeping it here until tests are better
-    my $trial = $self->zilla->is_trial ? ' # TRIAL' : '';
     my $perl = $self->use_our
-        ? "{ our \$VERSION\x20=\x20'$version'; }$trial"
-        : "\$$package\::VERSION\x20=\x20'$version';$trial";
+        ? "{ our \$VERSION\x20=\x20'$version'; }"
+        : "\$$package\::VERSION\x20=\x20'$version';";
 
     $self->use_begin
       and $perl = "BEGIN { $perl }";
+    $self->zilla->is_trial
+      and $perl .= ' # TRIAL';
 
     $self->log_debug([
       'adding $VERSION assignment to %s in %s',
