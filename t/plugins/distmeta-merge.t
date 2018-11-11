@@ -57,6 +57,7 @@ use Test::Deep;
       version => '0.001',
       keywords => [ qw(foo bar dog cat) ],
       x_generated_by_perl => "$^V",
+      x_spdx_expression => 'Artistic-1.0-Perl OR GPL-1.0-or-later',
     },
     'metadata is correctly merged together',
   );

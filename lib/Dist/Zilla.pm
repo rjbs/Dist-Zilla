@@ -15,7 +15,7 @@ use Dist::Zilla::Types qw(Path License ReleaseStatus);
 use Log::Dispatchouli 1.100712; # proxy_loggers, quiet_fatal
 use Dist::Zilla::Path;
 use List::Util 1.33 qw(first none);
-use Software::License 0.101370; # meta2_name
+use Software::License 0.103014; # spdx_expression()
 use String::RewritePrefix;
 use Try::Tiny;
 
@@ -595,7 +595,7 @@ sub _build_distmeta {
     $meta = $meta_merge->merge($meta, $_->metadata);
   }
 
-  $meta = $meta_merge->merge($meta, {
+  my %meta_main = (
     'meta-spec' => {
       version => 2,
       url     => 'https://metacpan.org/pod/CPAN::Meta::Spec',
@@ -613,7 +613,12 @@ sub _build_distmeta {
                     . ' version '
                     . ($self->VERSION // '(undef)'),
     x_generated_by_perl => "$^V", # v5.24.0
-  });
+  );
+  if (my $spdx = $self->license->spdx_expression) {
+    $meta_main{x_spdx_expression} = $spdx;
+  }
+
+  $meta = $meta_merge->merge($meta, \%meta_main);
 
   return $meta;
 }
