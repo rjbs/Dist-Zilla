@@ -802,6 +802,13 @@ non-zero, the directory will be left in place.
 sub run_in_build {
   my ($self, $cmd, $arg) = @_;
 
+
+  # eliminate the no-options parameter, since indicating this as a first
+  # parameter does not work
+  if ($cmd->[0] eq '--') {
+    shift @{$cmd};
+  }
+
   $self->log_fatal("you can't build without any BuildRunner plugins")
     unless ($arg and exists $arg->{build} and ! $arg->{build})
         or @{ $self->plugins_with(-BuildRunner) };
