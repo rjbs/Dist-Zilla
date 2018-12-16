@@ -8,6 +8,7 @@ use Moose::Util::TypeConstraints;
 
 use Dist::Zilla::Dialect;
 
+use List::Util 'first';
 use namespace::autoclean;
 
 =head1 DESCRIPTION
@@ -53,6 +54,13 @@ has version => (
 
 sub gather_files ($self) {
   my $zilla = $self->zilla;
+
+  # gracefully handle there being more than one of us (e.g. one via [@Basic])
+  if ((first { $_->isa(__PACKAGE__) } $self->zilla->plugins->@*) != $self) {
+    $self->log('doing nothing: another [MetaJSON] already ran');
+    $self->log('To remove this warning, remove [MetaJSON] from your dist.ini, **and** add ":version = 7.000" underneath [@Basic]');
+    return;
+  }
 
   require JSON::MaybeXS;
   require Dist::Zilla::File::FromCode;
