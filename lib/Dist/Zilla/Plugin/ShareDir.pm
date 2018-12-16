@@ -37,5 +37,17 @@ sub share_dir_map ($self) {
 }
 
 with 'Dist::Zilla::Role::ShareDir';
+
+around dump_config => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  my $config = $self->$orig;
+
+  $config->{+__PACKAGE__} = { dir => $self->dir };
+
+  return $config;
+};
+
 __PACKAGE__->meta->make_immutable;
 1;

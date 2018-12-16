@@ -63,6 +63,17 @@ around BUILDARGS => sub ($orig, $class, @rest) {
   };
 };
 
+around dump_config => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  my $config = $self->$orig;
+
+  $config->{+__PACKAGE__} = { resources => $self->resources };
+
+  return $config;
+};
+
 sub metadata ($self) {
   return { resources => $self->resources };
 }

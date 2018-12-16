@@ -63,6 +63,7 @@ $tzil = Builder->from_config(
         qw(GatherDir ExecDir),
         [ AutoPrereqs => { skip             => '^DZPA::Skip',
                            configure_finder => ':IncModules' } ],
+        [ MetaConfig => ],
       ),
       'source/inc/DZPA.pm' => "use DZPA::NotInDist;\n use DZPA::Configure;\n",
     },
@@ -178,6 +179,7 @@ $tzil = Builder->from_config(
       'source/dist.ini' => simple_ini(
         qw(GatherDir ExecDir),
         [ AutoPrereqs => { scanner => 'Perl5', extra_scanner => 'Aliased' } ],
+        [ MetaConfig => ],
       ),
       'source/lib/DZPA/Aliased.pm' => "use aliased 'Long::Class::Name';\n",
     },

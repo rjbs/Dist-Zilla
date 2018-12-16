@@ -172,6 +172,20 @@ sub scan_prereqs ($self) {
   return \%reqs_by_phase
 }
 
+requires 'dump_config'; # via Dist::Zilla::Role::Plugin
+around dump_config => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  my $config = $self->$orig;
+
+  $config->{+__PACKAGE__} = {
+    (map { $_ => [ sort @{ $self->$_ // [] } ] } qw(finder test_finder configure_finder skips)),
+  };
+
+  return $config;
+};
+
 1;
 __END__
 

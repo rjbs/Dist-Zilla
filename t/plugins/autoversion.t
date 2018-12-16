@@ -16,6 +16,7 @@ delete $ENV{V};
           { version => undef },
           'GatherDir',
           [ AutoVersion => { major => 6, format => '{{$major}}.{{$^T}}' } ],
+          [ MetaConfig => ],
         ),
       },
     },

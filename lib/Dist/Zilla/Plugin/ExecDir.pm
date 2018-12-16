@@ -25,5 +25,17 @@ has dir => (
 );
 
 with 'Dist::Zilla::Role::ExecFiles';
+
+around dump_config => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  my $config = $self->$orig;
+
+  $config->{+__PACKAGE__} = { dir => $self->dir };
+
+  return $config;
+};
+
 __PACKAGE__->meta->make_immutable;
 1;

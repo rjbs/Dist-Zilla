@@ -66,6 +66,19 @@ has format => (
             . q<{{$ENV{DEV} ? (sprintf '_%03u', $ENV{DEV}) : ''}}>
 );
 
+around dump_config => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  my $config = $self->$orig;
+
+  $config->{+__PACKAGE__} = {
+    map { $_ => $self->$_ } qw(major format time_zone),
+  };
+
+  return $config;
+};
+
 sub provide_version ($self) {
   if (exists $ENV{V}) {
     $self->log_debug([ 'providing version %s', $ENV{V} ]);

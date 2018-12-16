@@ -107,6 +107,19 @@ sub section_header {
   return _format_version($self->format, $self);
 }
 
+around dump_config => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  my $config = $self->$orig;
+
+  $config->{+__PACKAGE__} = {
+    map { $_ => $self->$_ } qw(time_zone format filename update_filename user_stash),
+  };
+
+  return $config;
+};
+
 has _original_changes_content => (
   is  => 'rw',
   isa => 'Str',

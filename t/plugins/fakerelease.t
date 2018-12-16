@@ -10,7 +10,7 @@ use Test::Fatal qw(exception);
     { dist_root => 'corpus/dist/DZT' },
     {
       add_files => {
-        'source/dist.ini' => simple_ini(qw(GatherDir FakeRelease)),
+        'source/dist.ini' => simple_ini(qw(GatherDir FakeRelease MetaConfig)),
       },
     },
   );
@@ -32,7 +32,8 @@ use Test::Fatal qw(exception);
           [ '@Filter' => {
             bundle => '@FakeClassic',
             remove => 'ConfirmRelease',
-          } ]
+          } ],
+         'MetaConfig',
         ),
       },
     },
@@ -52,7 +53,7 @@ use Test::Fatal qw(exception);
       { dist_root => 'corpus/dist/DZT' },
       {
         add_files => {
-          'source/dist.ini' => simple_ini(qw(GatherDir FakeRelease)),
+          'source/dist.ini' => simple_ini(qw(GatherDir FakeRelease MetaConfig)),
         },
       },
     );

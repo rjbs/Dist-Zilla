@@ -27,6 +27,19 @@ section).
 
 =cut
 
+around dump_config => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  my $config = $self->$orig;
+
+  $config->{+__PACKAGE__} = {
+      finder => [ sort @{ $self->finder } ],
+  };
+
+  return $config;
+};
+
 sub munge_files ($self) {
   $self->munge_file($_) for $self->found_files->@*;
 }

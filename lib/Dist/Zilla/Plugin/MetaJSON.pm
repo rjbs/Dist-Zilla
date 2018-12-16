@@ -51,6 +51,19 @@ has version => (
   default => '2',
 );
 
+around dump_config => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  my $config = $self->$orig;
+
+  $config->{+__PACKAGE__} = {
+    map { $_ => $self->$_ } qw(filename version),
+  };
+
+  return $config;
+};
+
 sub gather_files ($self) {
   my $zilla = $self->zilla;
 

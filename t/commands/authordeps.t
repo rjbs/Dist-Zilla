@@ -21,7 +21,7 @@ cmp_deeply(
       +{ 'Foo::Bar' => '1.23' },
       +{ 'Dist::Zilla' => '5.001' },
       ( map { +{"Dist::Zilla::Plugin::$_" => '5.0'} } qw<AutoPrereqs Encoding ExecDir> ),
-      ( map { +{"Dist::Zilla::Plugin::$_" => 0} } qw<GatherDir MetaYAML> ),
+      ( map { +{"Dist::Zilla::Plugin::$_" => 0} } qw<GatherDir MetaConfig MetaYAML> ),
       +{ 'Software::License::Perl_5' => '0' },
     ],
     "authordeps in corpus/dist/AuthorDeps"

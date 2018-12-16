@@ -59,5 +59,17 @@ around BUILDARGS => sub ($orig, $class, @rest) {
 };
 
 with 'Dist::Zilla::Role::ShareDir';
+
+around dump_config => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  my $config = $self->$orig;
+
+  $config->{+__PACKAGE__} = { module_map => $self->_module_map };
+
+  return $config;
+};
+
 __PACKAGE__->meta->make_immutable;
 1;
