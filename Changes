@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - Respect jobs number in HARNESS_OPTIONS
 
 6.013     2019-04-30 07:35:49-04:00 America/New_York (TRIAL RELEASE)
         - when SPDX metadata is available for the chosen license,
