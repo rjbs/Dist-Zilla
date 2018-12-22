@@ -2,7 +2,8 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
         - some doc improvements by Shlomi Fish
-        - cope with E<...> in abstracts (thanks, Dave Lambley)
+        - cope with E<...> in abstracts (thanks, Dave Lambley!)
+        - Respect jobs number in HARNESS_OPTIONS (thanks, Leon Timmermans!)
 
 6.013     2019-04-30 07:35:49-04:00 America/New_York (TRIAL RELEASE)
         - when SPDX metadata is available for the chosen license,
