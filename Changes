@@ -1,6 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - when SPDX metadata is available for the chosen license,
+          x_spdx_expression is added to the dist metadata by default
+          (thanks, Leon Timmermans!)
 
 6.012     2018-04-21 10:20:21+02:00 Europe/Oslo
         - revert addition of Archive::Tar::Wrapper as a mandatory prereq (in
