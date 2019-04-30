@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+6.013     2019-04-30 07:35:49-04:00 America/New_York (TRIAL RELEASE)
         - when SPDX metadata is available for the chosen license,
           x_spdx_expression is added to the dist metadata by default
           (thanks, Leon Timmermans!)
