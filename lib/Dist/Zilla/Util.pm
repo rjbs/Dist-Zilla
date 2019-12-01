@@ -10,6 +10,8 @@ use Encode ();
   package
     Dist::Zilla::Util::PEA;
   @Dist::Zilla::Util::PEA::ISA = ('Pod::Eventual');
+  use HTML::Entities qw/ decode_entities /;
+
   sub _new  {
     # Load Pod::Eventual only when used (and not yet loaded)
     unless (exists $INC{'Pod/Eventual.pm'}) {
@@ -46,8 +48,26 @@ use Encode ();
       and $event->{content} =~ /^(?:\S+\s+)+?-+\s+(.+)\n$/s
     ) {
       $self->{abstract} = $1;
+
+      # Decode escaped characters. perlpod says we can have either a character
+      # number or a named entity.
+      $self->{abstract} =~ s/E<([0-9a-zA-Z]+)>/_decode_escape($1)/eg;
       $self->{abstract} =~ s/\s+/\x20/g;
     }
+  }
+
+  sub _decode_escape {
+    my ($str) = @_;
+    if ($str eq 'verbar') {
+      return "|";
+    }
+    elsif ($str eq 'sol') {
+      return "/";
+    }
+    elsif ($str =~ /^[0-9]+$/) {
+      return chr($str);
+    }
+    return decode_entities("&$str;");
   }
 }
 

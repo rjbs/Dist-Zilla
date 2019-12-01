@@ -37,4 +37,18 @@ EOP
     is abstract_from_string($pod), 'search for key in dictionary file';
 }
 
+{
+    my $pod = <<'EOP';
+=head1 NAME
+
+retropan - Makes a historic minicpan E<9203> E<#9203> E<yuml> E<gt> E<lt> E<verbar> E<sol>
+
+=head1 SYNOPSIS
+EOP
+
+    is abstract_from_string($pod), "Makes a historic minicpan \x{23f3} E<#9203> \x{ff} > < | /";
+}
+
+# TODO assert the right thing happens if you set "=encoding" in your pod?
+
 done_testing;
