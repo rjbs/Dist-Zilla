@@ -20,6 +20,11 @@ If no real package is found, substitutes stubs instead of basic functions.
 
 
 =head1 SYNOPSIS
+
+=cut
+
+# ABSTRACT: Decoy
+
 EOP
 
     is abstract_from_string($pod), 'Perl interface to various C<readline> packages. If no real package is found, substitutes stubs instead of basic functions.';
@@ -36,6 +41,8 @@ EOP
 
     is abstract_from_string($pod), 'search for key in dictionary file';
 }
+
+is abstract_from_string("\n# ABSTRACT: Do stuff\n\n"), "Do stuff";
 
 {
     my $pod = <<'EOP';
