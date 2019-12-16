@@ -56,6 +56,31 @@ EOP
     is abstract_from_string($pod), "Makes a historic minicpan \x{23f3} E<#9203> \x{ff} > < | /";
 }
 
-# TODO assert the right thing happens if you set "=encoding" in your pod?
+{
+    my $pod = qq{
+=head1 NAME
+
+pound - latin1 \xa3
+
+=head1 SYNOPSIS
+};
+
+    is abstract_from_string($pod), "latin1 \xa3";
+}
+
+{
+    my $pod = qq{
+=encoding utf8
+
+=head1 NAME
+
+pound - utf8 \xc2\xa3
+
+=head1 SYNOPSIS
+};
+
+    is abstract_from_string($pod), "utf8 \xa3";
+}
+
 
 done_testing;
