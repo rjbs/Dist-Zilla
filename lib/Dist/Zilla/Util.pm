@@ -9,65 +9,73 @@ use Encode ();
 {
   package
     Dist::Zilla::Util::PEA;
-  @Dist::Zilla::Util::PEA::ISA = ('Pod::Eventual');
-  use HTML::Entities qw/ decode_entities /;
+  @Dist::Zilla::Util::PEA::ISA = ('Pod::Simple');
 
   sub _new  {
-    # Load Pod::Eventual only when used (and not yet loaded)
-    unless (exists $INC{'Pod/Eventual.pm'}) {
-      require Pod::Eventual;
-      Pod::Eventual->VERSION(0.091480); # better nonpod/blank events
+    my ($class, @args) = @_;
+    # Load Pod::Simple only when used (and not yet loaded)
+    unless (exists $INC{'Pod/Simple.pm'}) {
+      require Pod::Simple;
+    }
+    my $parser = $class->new(@args);
+    $parser->code_handler(sub {
+      my ($line, $line_number, $parser) = @_;
+      return if $parser->{abstract};
+
+
+      return $parser->{abstract} = $1
+        if $line =~ /^\s*#+\s*ABSTRACT:[ \t]*(\S.*)$/m;
+      return;
+    });
+    return $parser;
+  }
+
+  sub _handle_element_start {
+    my ($parser, $ele_name, $attr) = @_;
+
+    if ($ele_name eq 'head1') {
+      $parser->{buffer} = "";
+    }
+    elsif ($ele_name eq 'Para') {
+      $parser->{buffer} = "";
+    }
+    elsif ($ele_name eq 'C') {
+      $parser->{in_C} = 1;
     }
 
-    bless {} => shift;
-  }
-  sub handle_nonpod {
-    my ($self, $event) = @_;
-    return if $self->{abstract};
-    return $self->{abstract} = $1
-      if $event->{content}=~ /^\s*#+\s*ABSTRACT:[ \t]*(\S.*)$/m;
     return;
   }
-  sub handle_event {
-    my ($self, $event) = @_;
-    return if $self->{abstract};
-    if (
-      ! $self->{in_name}
-      and $event->{type} eq 'command'
-      and $event->{command} eq 'head1'
-      and $event->{content} =~ /^NAME\b/
-    ) {
-      $self->{in_name} = 1;
-      return;
+
+  sub _handle_element_end {
+    my ($parser, $ele_name, $attr) = @_;
+
+    return if $parser->{abstract};
+    if ($ele_name eq 'head1') {
+      $parser->{in_section} = $parser->{buffer};
+    }
+    elsif ($ele_name eq 'Para' && $parser->{in_section} eq 'NAME' ) {
+      if ($parser->{buffer} =~ /^(?:\S+\s+)+?-+\s+(.+)$/s) {
+        $parser->{abstract} = $1;
+      }
+    }
+    elsif ($ele_name eq 'C') {
+      delete $parser->{in_C};
     }
 
-    return unless $self->{in_name};
-
-    if (
-      $event->{type} eq 'text'
-      and $event->{content} =~ /^(?:\S+\s+)+?-+\s+(.+)\n$/s
-    ) {
-      $self->{abstract} = $1;
-
-      # Decode escaped characters. perlpod says we can have either a character
-      # number or a named entity.
-      $self->{abstract} =~ s/E<([0-9a-zA-Z]+)>/_decode_escape($1)/eg;
-      $self->{abstract} =~ s/\s+/\x20/g;
-    }
+    return;
   }
 
-  sub _decode_escape {
-    my ($str) = @_;
-    if ($str eq 'verbar') {
-      return "|";
+  sub _handle_text {
+    my ($parser, $text) = @_;
+
+    # The C<...> tags are expected to be preserved. MetaCPAN renders them.
+    if ($parser->{in_C}) {
+      $parser->{buffer} .= "C<$text>";
     }
-    elsif ($str eq 'sol') {
-      return "/";
+    else {
+      $parser->{buffer} .= $text;
     }
-    elsif ($str =~ /^[0-9]+$/) {
-      return chr($str);
-    }
-    return decode_entities("&$str;");
+    return;
   }
 }
 
@@ -83,10 +91,7 @@ sub abstract_from_file {
   my ($self, $file) = @_;
   my $e = Dist::Zilla::Util::PEA->_new;
 
-  my $chars = $file->content;
-  my $bytes = Encode::encode('UTF-8', $chars, Encode::FB_CROAK);
-
-  $e->read_string($bytes);
+  $e->parse_string_document($file->content);
 
   return $e->{abstract};
 }
