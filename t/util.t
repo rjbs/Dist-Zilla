@@ -7,7 +7,7 @@ use Dist::Zilla::Util;
 sub abstract_from_string {
     my ($str) = @_;
     my $e = Dist::Zilla::Util::PEA->_new;
-    $e->read_string($str);
+    $e->parse_string_document($str);
     return $e->{abstract};
 }
 
