@@ -42,7 +42,20 @@ EOP
     is abstract_from_string($pod), 'search for key in dictionary file';
 }
 
-is abstract_from_string("\n# ABSTRACT: Do stuff\n\n"), "Do stuff";
+{
+    my $pod = <<'EOP';
+# ABSTRACT: Do stuff
+
+=head1 NAME
+
+Search::Dict - decoy
+
+=head1 SYNOPSIS
+EOP
+
+    is abstract_from_string($pod), 'Do stuff';
+}
+
 
 {
     my $pod = <<'EOP';
