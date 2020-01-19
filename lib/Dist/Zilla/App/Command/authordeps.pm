@@ -16,6 +16,10 @@ results by using special comments in the form:
 
   ; authordep Some::Package
 
+In order to add authordeps to all distributions that use a certain plugin bundle
+(or plugin), just list them as prereqs of that bundle (e.g.: using
+L<Dist::Zilla::Plugin::Prereqs> ).
+
 =cut
 
 sub abstract { "list your distribution's author dependencies" }
