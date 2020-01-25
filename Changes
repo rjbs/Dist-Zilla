@@ -11,7 +11,7 @@ Revision history for {{$dist->name}}
           (thanks, Michael Conrad)
         - fix documentation for default NextRelease format (thanks, Dan Book!)
         - the build directory is also added to @INC when evaluating 'dzil
-          authordeps --missing'.
+          authordeps --missing' (thanks, Karen Etheridge!)
 
 6.012     2018-04-21 10:20:21+02:00 Europe/Oslo
         - revert addition of Archive::Tar::Wrapper as a mandatory prereq (in
