@@ -33,7 +33,10 @@ to the C<test> method.
 has default_jobs => (
   is      => 'ro',
   isa     => 'Int', # non-negative
-  default => 1,
+  lazy    => 1,
+  default => sub {
+    return ($ENV{HARNESS_OPTIONS} // '') =~ / \b j(\d+) \b /x ? $1 : 1;
+  },
 );
 
 around dump_config => sub {
