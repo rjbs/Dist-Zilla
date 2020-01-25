@@ -5,7 +5,8 @@ Revision history for {{$dist->name}}
         - cope with E<...> in abstracts (thanks, Dave Lambley!)
         - Respect jobs number in HARNESS_OPTIONS (thanks, Leon Timmermans!)
         - Add --jobs argument to dzil release (thanks, Leon Timmermans!)
-        - replace uses of File::HomeDir with a simple glob()
+        - replace uses of File::HomeDir with a simple glob (thanks, Karen
+          Etheridge!)
 
 6.012     2018-04-21 10:20:21+02:00 Europe/Oslo
         - revert addition of Archive::Tar::Wrapper as a mandatory prereq (in
