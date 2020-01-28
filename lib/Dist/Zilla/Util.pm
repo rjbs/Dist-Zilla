@@ -13,10 +13,7 @@ use Encode ();
 
   sub _new  {
     my ($class, @args) = @_;
-    # Load Pod::Simple only when used (and not yet loaded)
-    unless (exists $INC{'Pod/Simple.pm'}) {
-      require Pod::Simple;
-    }
+    require Pod::Simple;
     my $parser = $class->new(@args);
     $parser->code_handler(sub {
       my ($line, $line_number, $parser) = @_;
