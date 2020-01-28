@@ -1,11 +1,20 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
-
-6.013     2019-04-30 07:35:49-04:00 America/New_York (TRIAL RELEASE)
-        - when SPDX metadata is available for the chosen license,
-          x_spdx_expression is added to the dist metadata by default
-          (thanks, Leon Timmermans!)
+        - some doc improvements by Shlomi Fish
+        - cope with E<...> in abstracts (thanks, Dave Lambley!)
+        - Respect jobs number in HARNESS_OPTIONS (thanks, Leon Timmermans!)
+        - Add --jobs argument to dzil release (thanks, Leon Timmermans!)
+        - replace uses of File::HomeDir with a simple glob (thanks, Karen
+          Etheridge!)
+        - fix interaction of TRIAL comment and BEGIN block in PkgVersion
+          (thanks, Michael Conrad)
+        - fix documentation for default NextRelease format (thanks, Dan Book!)
+        - the build directory is also added to @INC when evaluating 'dzil
+          authordeps --missing' (thanks, Karen Etheridge!)
+        - add comments to generated CPANfile saying "don't edit me!"
+          (thanks Doug Bell)
+        - tests for [CPANFile] (thanks, Daniel Böhmer)
 
 6.012     2018-04-21 10:20:21+02:00 Europe/Oslo
         - revert addition of Archive::Tar::Wrapper as a mandatory prereq (in

@@ -7,6 +7,14 @@ with 'Dist::Zilla::Role::PrereqSource';
 
 use namespace::autoclean;
 
+=head1 SYNOPSIS
+
+    # Add this line to dist.ini
+    [PodCoverageTests]
+
+    # Run this in the command line to test for POD coverage:
+    $ dzil test --release
+
 =head1 DESCRIPTION
 
 This is an extension of L<Dist::Zilla::Plugin::InlineFiles>, providing the
@@ -22,6 +30,8 @@ documentation can be found, you can add:
 
 L<Test::Pod::Coverage> C<1.08> and L<Pod::Coverage::TrustPod> will be added as
 C<develop requires> dependencies.
+
+One can run the release tests by invoking C<dzil test --release>.
 
 =cut
 

@@ -22,6 +22,7 @@ sub abstract { 'release your dist' }
 
 sub opt_spec {
   [ 'trial' => 'build a trial release that PAUSE will not index' ],
+  [ 'jobs|j=i' => 'number of parallel test jobs to run' ],
 }
 
 sub execute {
@@ -35,6 +36,7 @@ sub execute {
     $zilla = $self->zilla;
   }
 
+  local $ENV{HARNESS_OPTIONS} = join ':', split(':', $ENV{HARNESS_OPTIONS} // ''), 'j'.$opt->jobs if $opt->jobs;
   $self->zilla->release;
 }
 
