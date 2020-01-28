@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - remove unnecessary check for Pod::Simple being loaded (Dave Lambley)
         - some doc improvements by Shlomi Fish
         - cope with E<...> in abstracts (thanks, Dave Lambley!)
         - Respect jobs number in HARNESS_OPTIONS (thanks, Leon Timmermans!)
