@@ -123,6 +123,13 @@ my $script_pkg = '
 package DZT::Script;
 ';
 
+my $pod_with_pkg_trial = 'package DZT::PodWithPackageTrial;
+
+=pod
+
+=cut
+';
+
 my $pod_with_pkg = '
 package DZT::PodWithPackage;
 =pod
@@ -358,6 +365,35 @@ my $pod_no_pkg = '
     $dzt_sample_trial,
     qr{^\s*\$\QDZT::Sample::VERSION = '0.001'; # TRIAL\E\s*$}m,
     "added version with 'TRIAL' comment when \$ENV{TRIAL}=1",
+  );
+}
+
+{
+  local $ENV{TRIAL} = 1;
+
+  my $tzil_trial = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/lib/DZT/PodWithPackageTrial.pm' => $pod_with_pkg_trial,
+        'source/dist.ini' => simple_ini(
+          { # merge into root section
+            version => '0.004_002',
+          },
+          [ GatherDir => ],
+          [ PkgVersion => ],
+        ),
+      },
+    },
+  );
+
+  $tzil_trial->build;
+
+  my $dzt_podwithpackagetrial = $tzil_trial->slurp_file('build/lib/DZT/PodWithPackageTrial.pm');
+  like(
+    $dzt_podwithpackagetrial,
+    qr{^\s*\$\QDZT::PodWithPackageTrial::VERSION = '0.004_002'; # TRIAL\E\s*.+^=pod}ms,
+    "added version to DZT::PodWithPackageTrial",
   );
 }
 
