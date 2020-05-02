@@ -11,10 +11,31 @@ use Dist::Zilla::App -command;
 
   dzil release --trial
 
+  # long form, jobs takes an integer
+  dzil release --jobs 9
+
+  # short form, same as above
+  dzil release --jobs 9
+
 This command is a very, very thin wrapper around the
 C<L<release|Dist::Zilla/release>> method on the Dist::Zilla object.  It will
-build, archive, and release your distribution using your Releaser plugins.  The
-only option, C<--trial>, will cause it to build a trial build.
+build, archive, and release your distribution using your Releaser plugins.
+
+Available options are:
+
+=over
+
+=item C<--trial>, will cause it to build a trial build.
+
+=item C<--jobs|-j=i>, number of test jobs run in parallel using L<Test::Harness|Test::Harness>.
+
+=back
+
+The default for L<Test::Harness|Test::Harness> is C<9>. The number of parallel jobs can also be specified setting C<HARNESS_OPTIONS>.
+
+    HARNESS_OPTIONS=j9
+
+See L<Test::Harness|Test::Harness> for more details.
 
 =cut
 
