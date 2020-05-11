@@ -15,7 +15,7 @@ use Dist::Zilla::App -command;
   dzil release --jobs 9
 
   # short form, same as above
-  dzil release --jobs 9
+  dzil release -j 9
 
 This command is a very, very thin wrapper around the
 C<L<release|Dist::Zilla/release>> method on the Dist::Zilla object.  It will
