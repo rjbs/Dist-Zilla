@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+6.015     2020-05-29 14:30:51-04:00 America/New_York
         - add docs for "dzil release -j" (thanks, Jonas B. Nielsen)
         - fix support for dist.pl (why??? 🙂) (thanks, Kent Frederic)
         - remove unnecessary check for Pod::Simple being loaded (Dave Lambley)
