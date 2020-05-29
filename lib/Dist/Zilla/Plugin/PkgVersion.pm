@@ -269,9 +269,16 @@ sub munge_perl {
 
     my $clean_version = $version =~ tr/_//dr;
     $perl .= (
-      $self->use_our
-        ? "\n\$VERSION\x20=\x20'$clean_version';"
-        : "\n\$$package\::VERSION\x20=\x20'$clean_version';"
+        (
+          $self->use_our
+            ? "\n\$VERSION\x20=\x20'$clean_version';"
+            : "\n\$$package\::VERSION\x20=\x20'$clean_version';"
+        ).
+        (
+          $blank
+            ? "\n"
+            : ""
+        )
       ) if $version ne $clean_version;
 
     # Why can't I use PPI::Token::Unknown? -- rjbs, 2014-01-11
