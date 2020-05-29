@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - add docs for "dzil release -j" (thanks, Jonas B. Nielsen)
+        - fix support for dist.pl (why??? 🙂) (thanks, Kent Frederic)
 
 6.014     2020-03-01 04:26:38-05:00 America/New_York
         - some doc improvements by Shlomi Fish
