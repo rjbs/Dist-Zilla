@@ -342,26 +342,26 @@ sub build_in {
   $self->log_fatal("attempted to build " . $self->name . " a second time")
     if $self->built_in;
 
-  $_->before_build for @{ $self->plugins_with(-BeforeBuild) };
+  $self->_call_plugin_method('BeforeBuild', 'before_build');
 
   $self->log("beginning to build " . $self->name);
 
-  $_->gather_files       for @{ $self->plugins_with(-FileGatherer) };
-  $_->set_file_encodings for @{ $self->plugins_with(-EncodingProvider) };
-  $_->prune_files        for @{ $self->plugins_with(-FilePruner) };
+  $self->_call_plugin_method('FileGatherer', 'gather_files');
+  $self->_call_plugin_method('EncodingProvider', 'set_file_encodings');
+  $self->_call_plugin_method('FilePruner', 'prune_files' );
 
   $self->version; # instantiate this lazy attribute now that files are gathered
 
-  $_->munge_files        for @{ $self->plugins_with(-FileMunger) };
+  $self->_call_plugin_method('FileMunger', 'munge_files');
 
-  $_->register_prereqs   for @{ $self->plugins_with(-PrereqSource) };
+  $self->_call_plugin_method('PrereqSource', 'register_prereqs');
 
   $self->prereqs->finalize;
 
   # Barf if someone has already set up a prereqs entry? -- rjbs, 2010-04-13
   $self->distmeta->{prereqs} = $self->prereqs->as_string_hash;
 
-  $_->setup_installer for @{ $self->plugins_with(-InstallTool) };
+  $self->_call_plugin_method('InstallTool', 'setup_installer' );
 
   $self->_check_dupe_files;
 
@@ -373,8 +373,7 @@ sub build_in {
     $self->_write_out_file($file, $build_root);
   }
 
-  $_->after_build({ build_root => $build_root })
-    for @{ $self->plugins_with(-AfterBuild) };
+  $self->_call_plugin_method('AfterBuild', 'after_build', { build_root => $build_root });
 
   $self->built_in($build_root);
 }
@@ -478,7 +477,7 @@ sub build_archive {
   my $basename = $self->dist_basename;
   my $basedir = path($basename);
 
-  $_->before_archive for @{ $self->plugins_with(-BeforeArchive) };
+  $self->_call_plugin_method('BeforeArchive', 'before_archive');
 
   my $method = eval { +require Archive::Tar::Wrapper;
                       Archive::Tar::Wrapper->VERSION('0.15'); 1 }
@@ -591,21 +590,23 @@ by the loaded plugins.
 sub release {
   my $self = shift;
 
-  Carp::croak("you can't release without any Releaser plugins")
-    unless my @releasers = @{ $self->plugins_with(-Releaser) };
+  $self->log_fatal("you can't release without any Releaser plugins")
+    unless @{ $self->plugins_with(-Releaser) };
+    # VDB: Is it important to abort before 'before_ewlease'?
+    # Could it be moved after 'before_release'?
 
   $ENV{DZIL_RELEASING} = 1;
 
   my $tgz = $self->build_archive;
 
   # call all plugins implementing BeforeRelease role
-  $_->before_release($tgz) for @{ $self->plugins_with(-BeforeRelease) };
+  $self->_call_plugin_method('BeforeRelease', 'before_release', $tgz);
 
   # do the actual release
-  $_->release($tgz) for @releasers;
+  $self->_call_plugin_method('Releaser', 'release', $tgz);
 
   # call all plugins implementing AfterRelease role
-  $_->after_release($tgz) for @{ $self->plugins_with(-AfterRelease) };
+  $self->_call_plugin_method('AfterRelease', 'after_release', $tgz);
 }
 
 =method clean
@@ -746,7 +747,7 @@ C<\%arg> may be omitted.  Otherwise, valid arguments are:
 sub test {
   my ($self, $arg) = @_;
 
-  Carp::croak("you can't test without any TestRunner plugins")
+  $self->log_fatal("you can't test without any TestRunner plugins")
     unless my @testers = @{ $self->plugins_with(-TestRunner) };
 
   my ($target, $latest) = $self->ensure_built_in_tmpdir;
@@ -778,13 +779,8 @@ does it clean up C<$directory> afterwards.
 sub run_tests_in {
   my ($self, $target, $arg) = @_;
 
-  Carp::croak("you can't test without any TestRunner plugins")
-    unless my @testers = @{ $self->plugins_with(-TestRunner) };
-
-  for my $tester (@testers) {
-    my $wd = File::pushd::pushd($target);
-    $tester->test( $target, $arg );
-  }
+  $self->_call_plugin_method('TestRunner', 'test_in', $target, $arg )
+    or $self->log_fatal("you can't test without any TestRunner plugins");
 }
 
 =method run_in_build
@@ -853,9 +849,8 @@ sub _ensure_blib {
   my ($self) = @_;
 
   unless ( -d 'blib' ) {
-    my @builders = @{ $self->plugins_with( -BuildRunner ) };
-    $self->log_fatal("no BuildRunner plugins specified") unless @builders;
-    $_->build for @builders;
+    $self->_call_plugin_method('BuildRunner', 'build')
+      or $self->log_fatal("no BuildRunner plugins specified");
     $self->log_fatal("no blib; failed to build properly?") unless -d 'blib';
   }
 }

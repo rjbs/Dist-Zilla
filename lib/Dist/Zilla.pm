@@ -810,6 +810,29 @@ sub stash_named {
   return $self->_global_stashes->{ $name };
 }
 
+=method _call_plugin_method
+
+  $self->_call_plugin_method( $role, $method, @args );
+
+This method calls C<$method> (in scalar context) with C<@args> on all the
+plugins with C<$role>.
+Before calling plugins it prints debug level message "calling $method on all $role plugins...",
+and "calling $method on all $role plugins... done" message is printed at the end.
+The method returns list of values returned by made calls.
+
+=cut
+
+sub _call_plugin_method {
+  my ($self, $role, $method, @args) = @_;
+  my @res;
+  $self->log_debug(['calling method %s on all %s plugins...', $method, $role]);
+  for (@{ $self->plugins_with("-$role")}) {
+    push(@res, scalar($_->$method(@args)));
+  };
+  $self->log_debug(['calling method %s on all %s plugins... done', $method, $role]);
+  return @res;
+}
+
 __PACKAGE__->meta->make_immutable;
 1;
 
