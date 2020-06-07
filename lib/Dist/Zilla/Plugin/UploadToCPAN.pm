@@ -232,7 +232,7 @@ is set to 3 by this plugin. This option will be passed to L<CPAN::Uploader>.
 has retries => (
   is => 'ro',
   isa => 'Int',
-  default => sub { 3 },
+  default => 3,
 );
 
 =attr retry_delay
@@ -245,7 +245,7 @@ by this plugin. This option will be passed to L<CPAN::Uploader>.
 has retry_delay => (
   is => 'ro',
   isa => 'Int',
-  default => sub { 5 },
+  default => 5,
 );
 
 has uploader => (
