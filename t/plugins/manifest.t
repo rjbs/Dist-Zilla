@@ -17,7 +17,7 @@ my $tzil = Builder->from_config(
         'GatherDir',
         'Manifest',
       ),
-      $^O =~ /^(MSWin32|cygwin)$/ ? () : (
+      $^O =~ /^(MSWin32|cygwin|msys)$/ ? () : (
         q{source/file\\with some\\whacks.txt} => "bar\n",
         q{source/file'with'quotes\\or\\backslash.txt} => "quux\n",
         q{source/dir\\with some\\/whacks.txt} => "mar\n",
@@ -39,7 +39,7 @@ cmp_deeply(
     'dist.ini',
     'lib/DZT/Sample.pm',
     't/basic.t',
-    $^O =~ /^(MSWin32|cygwin)$/ ? () : (
+    $^O =~ /^(MSWin32|cygwin|msys)$/ ? () : (
       q{file\\with some\\whacks.txt},
       q{file'with'quotes\\or\\backslash.txt},
       q{dir\\with some\\/whacks.txt},
@@ -60,7 +60,7 @@ cmp_deeply(
     'dist.ini',
     'lib/DZT/Sample.pm',
     't/basic.t',
-    $^O =~ /^(MSWin32|cygwin)$/ ? () : (
+    $^O =~ /^(MSWin32|cygwin|msys)$/ ? () : (
       q{'file\\\\with some\\\\whacks.txt'},
       q{'file\\'with\\'quotes\\\\or\\\\backslash.txt'},
       q{'dir\\\\with some\\\\/whacks.txt'},
