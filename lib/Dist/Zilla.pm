@@ -750,7 +750,7 @@ sub _write_out_file {
 =attr logger
 
 This attribute stores a L<Log::Dispatchouli::Proxy> object, used to log
-messages.  By default, a proxy to the dist's L<Chrome|Dist::Zilla::Chrome> is
+messages.  By default, a proxy to the dist's L<Chrome|Dist::Zilla::Role::Chrome> is
 taken.
 
 The following methods are delegated from the Dist::Zilla object to the logger:
