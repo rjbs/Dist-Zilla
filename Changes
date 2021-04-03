@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - add Test::CleanNamespaces
+        - add the same boilerplate of version/pragma/features to every module
 
 6.017     2020-11-02 19:30:21-05:00 America/New_York
         - replace broken 6.016, released from a confused git repo
