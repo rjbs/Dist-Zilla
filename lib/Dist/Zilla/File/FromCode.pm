@@ -2,6 +2,15 @@ package Dist::Zilla::File::FromCode;
 # ABSTRACT: a file whose content is (re-)built on demand
 
 use Moose;
+
+# BEGIN BOILERPLATE
+use v5.20.0;
+use warnings;
+use utf8;
+no feature 'switch';
+use experimental qw(postderef postderef_qq); # This experiment gets mainlined.
+# END BOILERPLATE
+
 use Moose::Util::TypeConstraints;
 
 use namespace::autoclean;

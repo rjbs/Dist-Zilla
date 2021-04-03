@@ -2,6 +2,15 @@ package Dist::Zilla::Prereqs;
 # ABSTRACT: the prerequisites of a Dist::Zilla distribution
 
 use Moose;
+
+# BEGIN BOILERPLATE
+use v5.20.0;
+use warnings;
+use utf8;
+no feature 'switch';
+use experimental qw(postderef postderef_qq); # This experiment gets mainlined.
+# END BOILERPLATE
+
 use MooseX::Types::Moose qw(Bool HashRef);
 
 use CPAN::Meta::Prereqs 2.120630; # add_string_requirement

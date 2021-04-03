@@ -2,11 +2,20 @@ package Dist::Zilla::Plugin::GatherDir;
 # ABSTRACT: gather all the files in a directory
 
 use Moose;
-use Dist::Zilla::Types qw(Path);
-use Dist::Zilla::Util;
 with 'Dist::Zilla::Role::FileGatherer';
 
+# BEGIN BOILERPLATE
+use v5.20.0;
+use warnings;
+use utf8;
+no feature 'switch';
+use experimental qw(postderef postderef_qq); # This experiment gets mainlined.
+# END BOILERPLATE
+
 use namespace::autoclean;
+
+use Dist::Zilla::Types qw(Path);
+use Dist::Zilla::Util;
 
 =head1 DESCRIPTION
 

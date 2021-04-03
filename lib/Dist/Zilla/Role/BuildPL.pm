@@ -2,12 +2,17 @@ package Dist::Zilla::Role::BuildPL;
 # ABSTRACT: Common ground for Build.PL based builders
 
 use Moose::Role;
+with 'Dist::Zilla::Role::InstallTool',
+     'Dist::Zilla::Role::BuildRunner',
+     'Dist::Zilla::Role::TestRunner';
 
-with qw(
-  Dist::Zilla::Role::InstallTool
-  Dist::Zilla::Role::BuildRunner
-  Dist::Zilla::Role::TestRunner
-);
+# BEGIN BOILERPLATE
+use v5.20.0;
+use warnings;
+use utf8;
+no feature 'switch';
+use experimental qw(postderef postderef_qq); # This experiment gets mainlined.
+# END BOILERPLATE
 
 use namespace::autoclean;
 
