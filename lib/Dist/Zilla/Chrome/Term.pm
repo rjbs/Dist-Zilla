@@ -11,6 +11,7 @@ no feature 'switch';
 use experimental qw(postderef postderef_qq); # This experiment gets mainlined.
 # END BOILERPLATE
 
+use Digest::MD5 qw(md5);
 use Dist::Zilla::Types qw(OneZero);
 use Encode ();
 use Log::Dispatchouli 1.102220;
@@ -23,6 +24,34 @@ This class provides a L<Dist::Zilla::Chrome> implementation for use in a
 terminal environment.  It's the default chrome used by L<Dist::Zilla::App>.
 
 =cut
+
+sub str_color {
+  my ($str) = @_;
+
+  state %color_for;
+
+  # I know, I know, this is ludicrous, but guess what?  It's my Sunday and I
+  # can spend it how I want.
+  state $max = ($ENV{COLORTERM}//'') eq 'truecolor' ? 255 : 5;
+  state $min = $max == 255 ? 384 : 5;
+  state $inc = $max == 255 ?  16 : 1;
+  state $fmt = $max == 255 ? 'r%ug%ub%u' : 'rgb%u%u%u';
+
+  return $color_for{$str} //= do {
+    my @rgb = map { $_ % $max } unpack 'CCC', md5($str);
+
+    my $i = ($rgb[0] + $rgb[1] + $rgb[2]) % 3;
+    while (1) {
+      last if $rgb[0] + $rgb[1] + $rgb[2] >= $min;
+
+      my $next = $i++ % 3;
+
+      $rgb[$next] = abs($max - $rgb[$next]);
+    }
+
+    sprintf $fmt, @rgb;
+  }
+}
 
 has logger => (
   is  => 'ro',
@@ -43,13 +72,27 @@ sub _build_logger {
     binmode( STDERR, $layer );
   }
 
-  return Log::Dispatchouli->new({
+  my $logger = Log::Dispatchouli->new({
     ident     => 'Dist::Zilla',
     to_stdout => 1,
     log_pid   => 0,
     to_self   => ($ENV{DZIL_TESTING} ? 1 : 0),
     quiet_fatal => 'stdout',
   });
+
+  my $stdout = $logger->{dispatcher}->output('stdout');
+
+  $stdout->add_callback(sub {
+    require Term::ANSIColor;
+    my $message = {@_}->{message};
+    return $message unless $message =~ s/\A\[([^\]]+)] //;
+    my $prefix = $1;
+    return sprintf "[%s] %s",
+      Term::ANSIColor::colored([ str_color($prefix) ], $prefix),
+      $message;
+  });
+
+  return $logger;
 }
 
 has term_ui => (
