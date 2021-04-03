@@ -25,7 +25,7 @@ terminal environment.  It's the default chrome used by L<Dist::Zilla::App>.
 
 =cut
 
-sub str_color {
+sub _str_color {
   my ($str) = @_;
 
   state %color_for;
@@ -80,17 +80,19 @@ sub _build_logger {
     quiet_fatal => 'stdout',
   });
 
-  my $stdout = $logger->{dispatcher}->output('stdout');
+  if (-t *STDOUT || $ENV{DZIL_COLOR}) {
+    my $stdout = $logger->{dispatcher}->output('stdout');
 
-  $stdout->add_callback(sub {
-    require Term::ANSIColor;
-    my $message = {@_}->{message};
-    return $message unless $message =~ s/\A\[([^\]]+)] //;
-    my $prefix = $1;
-    return sprintf "[%s] %s",
-      Term::ANSIColor::colored([ str_color($prefix) ], $prefix),
-      $message;
-  });
+    $stdout->add_callback(sub {
+      require Term::ANSIColor;
+      my $message = {@_}->{message};
+      return $message unless $message =~ s/\A\[([^\]]+)] //;
+      my $prefix = $1;
+      return sprintf "[%s] %s",
+        Term::ANSIColor::colored([ _str_color($prefix) ], $prefix),
+        $message;
+    });
+  }
 
   return $logger;
 }
