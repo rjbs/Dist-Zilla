@@ -3,6 +3,7 @@ Revision history for {{$dist->name}}
 {{$NEXT}}
         - add Test::CleanNamespaces, clean all namespaces
         - add the same boilerplate of version/pragma/features to every module
+        - colorize logger prefix when running in a terminal
 
 6.017     2020-11-02 19:30:21-05:00 America/New_York
         - replace broken 6.016, released from a confused git repo
