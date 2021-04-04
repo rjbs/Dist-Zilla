@@ -28,6 +28,8 @@ use Sub::Exporter -setup => {
   groups  => [ default => [ qw(-all) ] ],
 };
 
+use namespace::autoclean -except => 'import';
+
 =head1 DESCRIPTION
 
 Test::DZil provides routines for writing tests for Dist::Zilla plugins.

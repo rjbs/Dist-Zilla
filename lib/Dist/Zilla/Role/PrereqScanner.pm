@@ -31,6 +31,8 @@ no feature 'switch';
 use experimental qw(postderef postderef_qq); # This experiment gets mainlined.
 # END BOILERPLATE
 
+use namespace::autoclean;
+
 use MooseX::Types;
 
 =attr finder

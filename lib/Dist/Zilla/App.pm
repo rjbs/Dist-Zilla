@@ -14,6 +14,8 @@ use App::Cmd::Setup 0.330 -app; # better compilation error detection
 use Carp ();
 use Try::Tiny;
 
+use namespace::autoclean;
+
 $Carp::Internal{'Module::Runtime'} = 1;
 
 sub global_opt_spec {

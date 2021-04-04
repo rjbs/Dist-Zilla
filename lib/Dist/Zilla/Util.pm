@@ -12,6 +12,8 @@ use experimental qw(postderef postderef_qq); # This experiment gets mainlined.
 use Carp ();
 use Encode ();
 
+use namespace::autoclean;
+
 {
   package
     Dist::Zilla::Util::PEA;

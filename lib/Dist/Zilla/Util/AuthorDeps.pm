@@ -13,6 +13,8 @@ use Dist::Zilla::Util;
 use Path::Tiny;
 use List::Util 1.45 ();
 
+use namespace::autoclean;
+
 sub format_author_deps {
   my ($reqs, $versions) = @_;
 

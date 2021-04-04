@@ -11,6 +11,8 @@ use experimental qw(postderef postderef_qq); # This experiment gets mainlined.
 
 use Dist::Zilla::App -command;
 
+use namespace::autoclean;
+
 =head1 SYNOPSIS
 
   $ dzil setup

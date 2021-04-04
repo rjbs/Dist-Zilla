@@ -15,6 +15,8 @@ use MooseX::Types::Moose qw(ArrayRef HashRef Str);
 use Dist::Zilla::Types qw(OneZero);
 use Log::Dispatchouli 1.102220;
 
+use namespace::autoclean;
+
 has logger => (
   is => 'ro',
   default => sub {

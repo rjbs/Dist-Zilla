@@ -12,10 +12,6 @@ no feature 'switch';
 use experimental qw(postderef postderef_qq); # This experiment gets mainlined.
 # END BOILERPLATE
 
-# XXX: Adding this autoclean causes problem.  "Builder" and "Minter" do not
-# show in tests.  I'm really not sure why. -- rjbs, 2011-08-19
-# use namespace::autoclean;
-
 use autodie;
 use Dist::Zilla::Chrome::Test;
 use File::pushd ();
@@ -32,6 +28,8 @@ use Sub::Exporter -setup => {
 
   groups  => [ default => [ qw(Builder Minter) ] ],
 };
+
+use namespace::autoclean -except => 'import';
 
 sub from_config {
   my ($self, @arg) = @_;

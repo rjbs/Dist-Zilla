@@ -18,6 +18,8 @@ use Sub::Exporter -setup => {
   groups  => { default => [ qw( path ) ] },
 };
 
+use namespace::autoclean -except => 'import';
+
 sub path {
   my ($thing, @rest) = @_;
 

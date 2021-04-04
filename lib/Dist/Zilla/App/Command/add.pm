@@ -12,6 +12,8 @@ use experimental qw(postderef postderef_qq); # This experiment gets mainlined.
 use Dist::Zilla::App -command;
 use Dist::Zilla::Path;
 
+use namespace::autoclean;
+
 =head1 SYNOPSIS
 
 Adds a new module to a Dist::Zilla-based distribution

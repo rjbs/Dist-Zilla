@@ -25,6 +25,8 @@ use Sub::Exporter -setup => {
   groups  => [ default   => [ qw(test_dzil) ] ],
 };
 
+use namespace::autoclean -except => 'import';
+
 sub result_class { 'Dist::Zilla::App::Tester::Result' }
 
 sub test_dzil {
