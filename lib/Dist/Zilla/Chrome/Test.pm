@@ -3,9 +3,19 @@ package Dist::Zilla::Chrome::Test;
 
 use Moose;
 
+# BEGIN BOILERPLATE
+use v5.20.0;
+use warnings;
+use utf8;
+no feature 'switch';
+use experimental qw(postderef postderef_qq); # This experiment gets mainlined.
+# END BOILERPLATE
+
 use MooseX::Types::Moose qw(ArrayRef HashRef Str);
 use Dist::Zilla::Types qw(OneZero);
 use Log::Dispatchouli 1.102220;
+
+use namespace::autoclean;
 
 has logger => (
   is => 'ro',

@@ -4,6 +4,14 @@ package Dist::Zilla::Dist::Builder;
 use Moose 0.92; # role composition fixes
 extends 'Dist::Zilla';
 
+# BEGIN BOILERPLATE
+use v5.20.0;
+use warnings;
+use utf8;
+no feature 'switch';
+use experimental qw(postderef postderef_qq); # This experiment gets mainlined.
+# END BOILERPLATE
+
 use MooseX::Types::Moose qw(HashRef);
 use Dist::Zilla::Types qw(Path);
 

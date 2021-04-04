@@ -1,12 +1,20 @@
-use strict;
-use warnings;
 package Dist::Zilla::App;
 # ABSTRACT: Dist::Zilla's App::Cmd
+
+# BEGIN BOILERPLATE
+use v5.20.0;
+use warnings;
+use utf8;
+no feature 'switch';
+use experimental qw(postderef postderef_qq); # This experiment gets mainlined.
+# END BOILERPLATE
 
 use App::Cmd::Setup 0.330 -app; # better compilation error detection
 
 use Carp ();
 use Try::Tiny;
+
+use namespace::autoclean;
 
 $Carp::Internal{'Module::Runtime'} = 1;
 

@@ -8,6 +8,14 @@ with(
   'Dist::Zilla::Role::PPI',
 );
 
+# BEGIN BOILERPLATE
+use v5.20.0;
+use warnings;
+use utf8;
+no feature 'switch';
+use experimental qw(postderef postderef_qq); # This experiment gets mainlined.
+# END BOILERPLATE
+
 use Moose::Util::TypeConstraints 'enum';
 use namespace::autoclean;
 

@@ -4,6 +4,14 @@ package Dist::Zilla::MVP::RootSection;
 use Moose;
 extends 'Config::MVP::Section';
 
+# BEGIN BOILERPLATE
+use v5.20.0;
+use warnings;
+use utf8;
+no feature 'switch';
+use experimental qw(postderef postderef_qq); # This experiment gets mainlined.
+# END BOILERPLATE
+
 use namespace::autoclean;
 
 =head1 DESCRIPTION

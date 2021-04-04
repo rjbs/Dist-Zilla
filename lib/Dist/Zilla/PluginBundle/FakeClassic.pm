@@ -4,6 +4,14 @@ package Dist::Zilla::PluginBundle::FakeClassic;
 use Moose;
 extends 'Dist::Zilla::PluginBundle::Classic';
 
+# BEGIN BOILERPLATE
+use v5.20.0;
+use warnings;
+use utf8;
+no feature 'switch';
+use experimental qw(postderef postderef_qq); # This experiment gets mainlined.
+# END BOILERPLATE
+
 use namespace::autoclean;
 
 around bundle_config => sub {

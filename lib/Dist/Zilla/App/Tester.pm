@@ -1,7 +1,13 @@
-use strict;
-use warnings;
 package Dist::Zilla::App::Tester;
 # ABSTRACT: testing library for Dist::Zilla::App
+
+# BEGIN BOILERPLATE
+use v5.20.0;
+use warnings;
+use utf8;
+no feature 'switch';
+use experimental qw(postderef postderef_qq); # This experiment gets mainlined.
+# END BOILERPLATE
 
 use parent 'App::Cmd::Tester::CaptureExternal';
 use App::Cmd::Tester 0.306 (); # result_class, ->app
@@ -18,6 +24,8 @@ use Sub::Exporter -setup => {
   exports => [ test_dzil => Sub::Exporter::Util::curry_method() ],
   groups  => [ default   => [ qw(test_dzil) ] ],
 };
+
+use namespace::autoclean -except => 'import';
 
 sub result_class { 'Dist::Zilla::App::Tester::Result' }
 

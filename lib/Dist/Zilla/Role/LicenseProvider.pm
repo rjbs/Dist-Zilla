@@ -4,6 +4,14 @@ package Dist::Zilla::Role::LicenseProvider;
 use Moose::Role;
 with 'Dist::Zilla::Role::Plugin';
 
+# BEGIN BOILERPLATE
+use v5.20.0;
+use warnings;
+use utf8;
+no feature 'switch';
+use experimental qw(postderef postderef_qq); # This experiment gets mainlined.
+# END BOILERPLATE
+
 =head1 DESCRIPTION
 
 Plugins implementing this role must provide a C<provide_license> method that

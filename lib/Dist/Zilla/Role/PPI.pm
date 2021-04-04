@@ -2,7 +2,17 @@ package Dist::Zilla::Role::PPI;
 # ABSTRACT: a role for plugins which use PPI
 
 use Moose::Role;
+
+# BEGIN BOILERPLATE
+use v5.20.0;
+use warnings;
+use utf8;
+no feature 'switch';
+use experimental qw(postderef postderef_qq); # This experiment gets mainlined.
+# END BOILERPLATE
+
 use Digest::MD5 qw(md5);
+
 use namespace::autoclean;
 
 =head1 DESCRIPTION

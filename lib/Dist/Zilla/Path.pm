@@ -1,9 +1,13 @@
-use strict;
-use warnings;
-use utf8;
-
 package Dist::Zilla::Path;
 # ABSTRACT: a helper to get Path::Tiny objects
+
+# BEGIN BOILERPLATE
+use v5.20.0;
+use warnings;
+use utf8;
+no feature 'switch';
+use experimental qw(postderef postderef_qq); # This experiment gets mainlined.
+# END BOILERPLATE
 
 use parent 'Path::Tiny';
 
@@ -13,6 +17,8 @@ use Sub::Exporter -setup => {
   exports => [ qw( path ) ],
   groups  => { default => [ qw( path ) ] },
 };
+
+use namespace::autoclean -except => 'import';
 
 sub path {
   my ($thing, @rest) = @_;

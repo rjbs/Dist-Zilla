@@ -1,7 +1,13 @@
-use strict;
-use warnings;
 package Test::DZil;
 # ABSTRACT: tools for testing Dist::Zilla plugins
+
+# BEGIN BOILERPLATE
+use v5.20.0;
+use warnings;
+use utf8;
+no feature 'switch';
+use experimental qw(postderef postderef_qq); # This experiment gets mainlined.
+# END BOILERPLATE
 
 use Params::Util qw(_HASH0);
 use JSON::MaybeXS;
@@ -21,6 +27,8 @@ use Sub::Exporter -setup => {
   ],
   groups  => [ default => [ qw(-all) ] ],
 };
+
+use namespace::autoclean -except => 'import';
 
 =head1 DESCRIPTION
 

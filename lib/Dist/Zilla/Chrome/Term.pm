@@ -3,18 +3,26 @@ package Dist::Zilla::Chrome::Term;
 
 use Moose;
 
-=head1 OVERVIEW
-
-This class provides a L<Dist::Zilla::Chrome> implementation for use in a
-terminal environment.  It's the default chrome used by L<Dist::Zilla::App>.
-
-=cut
+# BEGIN BOILERPLATE
+use v5.20.0;
+use warnings;
+use utf8;
+no feature 'switch';
+use experimental qw(postderef postderef_qq); # This experiment gets mainlined.
+# END BOILERPLATE
 
 use Dist::Zilla::Types qw(OneZero);
 use Encode ();
 use Log::Dispatchouli 1.102220;
 
 use namespace::autoclean;
+
+=head1 OVERVIEW
+
+This class provides a L<Dist::Zilla::Chrome> implementation for use in a
+terminal environment.  It's the default chrome used by L<Dist::Zilla::App>.
+
+=cut
 
 has logger => (
   is  => 'ro',
