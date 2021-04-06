@@ -169,6 +169,22 @@ has use_begin => (
   default => 0,
 );
 
+sub _version_assignment {
+  my ($self, $package, $version) = @_;
+
+  # the \x20 hack is here so that when we scan *this* document we don't find
+  # an assignment to version; it shouldn't be needed, but it's been annoying
+  # enough in the past that I'm keeping it here until tests are better
+  my $perl = $self->use_our
+      ? "our \$VERSION\x20=\x20'$version';"
+      : "\$$package\::VERSION\x20=\x20'$version';";
+
+  return
+      $self->use_begin  ? "BEGIN { $perl }"
+    : $self->use_our    ? "{ $perl }"
+                        : $perl;
+}
+
 sub munge_perl {
   my ($self, $file) = @_;
 
@@ -230,14 +246,14 @@ sub munge_perl {
     # the \x20 hack is here so that when we scan *this* document we don't find
     # an assignment to version; it shouldn't be needed, but it's been annoying
     # enough in the past that I'm keeping it here until tests are better
-    my $perl = $self->use_our
-        ? "{ our \$VERSION\x20=\x20'$version'; }"
-        : "\$$package\::VERSION\x20=\x20'$version';";
-
-    $self->use_begin
-      and $perl = "BEGIN { $perl }";
+    my $perl = $self->_version_assignment($package, $version);
     $self->zilla->is_trial
       and $perl .= ' # TRIAL';
+
+    my $clean_version = $version =~ tr/_//dr;
+    if ($version ne $clean_version) {
+      $perl .= "\n" . $self->_version_assignment($package, $clean_version);
+    }
 
     $self->log_debug([
       'adding $VERSION assignment to %s in %s',
@@ -274,20 +290,6 @@ sub munge_perl {
     }
 
     $perl = $blank ? "$perl\n" : "\n$perl";
-
-    my $clean_version = $version =~ tr/_//dr;
-    $perl .= (
-        (
-          $self->use_our
-            ? "\n\$VERSION\x20=\x20'$clean_version';"
-            : "\n\$$package\::VERSION\x20=\x20'$clean_version';"
-        ).
-        (
-          $blank
-            ? "\n"
-            : ""
-        )
-      ) if $version ne $clean_version;
 
     # Why can't I use PPI::Token::Unknown? -- rjbs, 2014-01-11
     my $bogus_token = PPI::Token::Comment->new($perl);

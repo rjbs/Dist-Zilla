@@ -514,44 +514,57 @@ subtest "use_package" => sub {
 };
 
 foreach my $use_our (0, 1) {
-  my $tzil_trial = Builder->from_config(
-    { dist_root => 'does-not-exist' },
-    {
-      add_files => {
-        'source/dist.ini' => simple_ini(
-          { # merge into root section
-            version => '0.004_002',
-          },
-          [ GatherDir => ],
-          [ PkgVersion => { use_our => $use_our } ],
-        ),
-        'source/lib/DZT/Sample.pm' => "package DZT::Sample;\n1;\n",
+  foreach my $use_begin (0, 1) {
+    my $tzil_trial = Builder->from_config(
+      { dist_root => 'does-not-exist' },
+      {
+        add_files => {
+          'source/dist.ini' => simple_ini(
+            { # merge into root section
+              version => '0.004_002',
+            },
+            [ GatherDir => ],
+            [ PkgVersion => {
+              use_our => $use_our,
+              use_begin => $use_begin,
+            } ],
+          ),
+          'source/lib/DZT/Sample.pm' => "package DZT::Sample;\n1;\n",
+        },
       },
-    },
-  );
+    );
 
-  $tzil_trial->build;
+    $tzil_trial->build;
 
-  my $dzt_sample_trial = $tzil_trial->slurp_file('build/lib/DZT/Sample.pm');
+    my $dzt_sample_trial = $tzil_trial->slurp_file('build/lib/DZT/Sample.pm');
 
-  is(
-    $dzt_sample_trial,
-    $use_our
-      ? <<'MODULE'
-package DZT::Sample;
-{ our $VERSION = '0.004_002'; } # TRIAL
-$VERSION = '0.004002';
-1;
+    my $want = $use_our ? (
+      $use_begin ? <<'MODULE'
+BEGIN { our $VERSION = '0.004_002'; } # TRIAL
+BEGIN { our $VERSION = '0.004002'; }
 MODULE
-      : <<'MODULE'
-package DZT::Sample;
+        : <<'MODULE'
+{ our $VERSION = '0.004_002'; } # TRIAL
+{ our $VERSION = '0.004002'; }
+MODULE
+    )
+    : (
+      $use_begin ? <<'MODULE'
+BEGIN { $DZT::Sample::VERSION = '0.004_002'; } # TRIAL
+BEGIN { $DZT::Sample::VERSION = '0.004002'; }
+MODULE
+        : <<'MODULE'
 $DZT::Sample::VERSION = '0.004_002'; # TRIAL
 $DZT::Sample::VERSION = '0.004002';
-1;
 MODULE
-    ,
-    "use_our = $use_our: added version with 'TRIAL' comment and eval line when using an underscore trial version",
-  );
+    );
+
+    is(
+      $dzt_sample_trial,
+      "package DZT::Sample;\n${want}1;\n",
+      "use_our = $use_our, use_begin = $use_begin: added version with 'TRIAL' comment and eval line when using an underscore trial version",
+    );
+  }
 }
 
 done_testing;
