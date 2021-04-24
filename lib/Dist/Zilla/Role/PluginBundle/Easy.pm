@@ -108,7 +108,7 @@ sub bundle_config {
 
   $self->configure;
 
-  return @{ $self->plugins };
+  return $self->plugins->@*;
 }
 
 =method add_plugins
@@ -179,7 +179,7 @@ sub add_bundle {
 
   $bundle = "\@$bundle" unless $bundle =~ /^@/;
 
-  push @{ $self->plugins },
+  push $self->plugins->@*,
     $package->bundle_config({
       name    => $self->name . '/' . $bundle,
       package => $package,
