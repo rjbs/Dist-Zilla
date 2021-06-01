@@ -462,11 +462,28 @@ might not exist.
 
 sub archive_filename {
   my ($self) = @_;
-  return join(q{},
+
+  my $name = join(q{},
     $self->dist_basename,
     ( $self->is_trial && $self->version !~ /_/ ? '-TRIAL' : '' ),
-    '.tar.gz'
   );
+
+  my $provided_filename;
+
+  for my $namer ($self->plugins_with(-ArchiveNamer)->@*) {
+    my $this_filename = $namer->archive_filename($name);
+
+    next unless defined $this_filename;
+
+    $self->log_fatal('attempted to set archive_filename twice')
+      if defined $provided_filename;
+
+    $provided_filename = $this_filename;
+  }
+
+  return $provided_filename if defined $provided_filename;
+
+  return join(q{},$name,'.tar.gz');
 }
 
 =method build_archive
@@ -486,7 +503,12 @@ sub build_archive {
   my $basename = $self->dist_basename;
   my $basedir = path($basename);
 
-  $_->before_archive for @{ $self->plugins_with(-BeforeArchive) };
+  $_->before_archive for $self->plugins_with(-BeforeArchive)->@*;
+
+  for my $builder ($self->plugins_with(-ArchiveBuilder)->@*) {
+    my $file = $builder->build_archive($self->archive_filename, $built_in, $basename, $basedir);
+    return $file if defined $file;
+  }
 
   my $method = eval { +require Archive::Tar::Wrapper;
                       Archive::Tar::Wrapper->VERSION('0.15'); 1 }
