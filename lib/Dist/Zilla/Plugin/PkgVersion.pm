@@ -233,6 +233,48 @@ sub munge_perl {
       if $version =~ /\P{ASCII}/;
 
     if ($self->use_package) {
+      if (my ($block) = grep {; $_->isa('PPI::Structure::Block') } $stmt->schildren) {
+        # Okay, we've encountered `package NAME BLOCK` and want to turn it into
+        # `package NAME VERSION BLOCK` but, to quote the PPI documentation,
+        # "we're on our own here".
+        #
+        # This will also preclude us from adding "# TRIAL" because where would
+        # it go?  Look, a block package should (in my opinion) not be the only
+        # or top-level package in a file, so the TRIAL comment can be
+        # elsewhere. -- rjbs, 2021-06-12
+        #
+        # First off, let's make sure we do not already have a version.  If the
+        # "version" has a "{" in it, it's just the block, and we're good.
+        # Otherwise, it's going to be a real version and we need to skip.
+        if ($stmt->version !~ /\{/) {
+          $self->log([
+            "skipping package %s with version %s declared",
+            $stmt->namespace,
+            $stmt->version,
+          ]);
+          next STATEMENT;
+        }
+
+        # Okay, there's a block (which we have in $block) but no version.  So,
+        # we stick a Number in front of the block, then a space between them.
+        $block->insert_before( PPI::Token::Number->new($version) );
+        $block->insert_before( PPI::Token::Whitespace->new(q{ }) );
+        $munged = 1;
+        next STATEMENT;
+      }
+
+      # Now, it's not got a block, but does it already have a version?
+      if (length $stmt->version) {
+        $self->log([
+          "skipping package %s with version %s declared",
+          $stmt->namespace,
+          $stmt->version,
+        ]);
+        next STATEMENT;
+      }
+
+      # Oh, good!  It's just a normal `package NAME` and we are going to add
+      # VERSION to it.  This is stupid, but gets the job done.
       my $perl = sprintf 'package %s %s;', $package, $version;
       $perl .= ' # TRIAL' if $self->zilla->is_trial;
 
