@@ -153,6 +153,24 @@ my $pod_no_pkg = '
 =cut
 ';
 
+my $pkg_version = '
+package DZT::HasVersion 1.234;
+
+my $x = 1;
+';
+
+my $pkg_block = '
+package DZT::HasBlock {
+  my $x = 1;
+}
+';
+
+my $pkg_version_block = '
+package DZT::HasVersionAndBlock 1.234 {
+  my $x = 1;
+}
+';
+
 {
   my $tzil = Builder->from_config(
     { dist_root => 'corpus/dist/DZT' },
@@ -484,6 +502,11 @@ subtest "use_package" => sub {
     {
       add_files => {
         'source/lib/DZT/TPW.pm'    => $two_packages_weird,
+
+        'source/lib/DZT/HasVersion.pm'          => $pkg_version,
+        'source/lib/DZT/HasBlock.pm'            => $pkg_block,
+        'source/lib/DZT/HasVersionAndBlock.pm'  => $pkg_version_block,
+
         'source/dist.ini' => simple_ini(
           'GatherDir',
           [ 'PkgVersion' => { use_package => 1 } ],
@@ -511,6 +534,39 @@ subtest "use_package" => sub {
     qr{^package DZT::TPW1;$}m,
     "...but it's gone",
   );
+
+  {
+    my $output = $tzil->slurp_file('build/lib/DZT/HasVersion.pm');
+    like(
+      $output,
+      qr{^package DZT::HasVersion 1\.234;$}m,
+      "package NAME VERSION: left untouched",
+    );
+  }
+
+  {
+    my $output = $tzil->slurp_file('build/lib/DZT/HasBlock.pm');
+    like(
+      $output,
+      qr/^package DZT::HasBlock 0\.001 \{$/m,
+      "package NAME BLOCK: version added",
+    );
+    like(
+      $output,
+      qr/my \$x = 1;/m,
+      "package NAME BLOCK: block intact",
+    );
+  }
+
+  {
+    my $output = $tzil->slurp_file('build/lib/DZT/HasVersionAndBlock.pm');
+    like(
+      $output,
+      qr/^package DZT::HasVersionAndBlock 1\.234 \{$/m,
+      "package NAME VERSION BLOCK: left untouched",
+    );
+  }
+
 };
 
 foreach my $use_our (0, 1) {
