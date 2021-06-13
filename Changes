@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - When using "use_package" in PkgVersion, do not eradicate the entire
+          block of "package NAME BLOCK" syntax!  Wow, what a bug...
 
 6.018     2021-04-03 21:07:54-04:00 America/New_York (TRIAL RELEASE)
         - add Test::CleanNamespaces, clean all namespaces
