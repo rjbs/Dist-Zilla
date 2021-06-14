@@ -32,9 +32,7 @@ sub _str_color {
 
   # I know, I know, this is ludicrous, but guess what?  It's my Sunday and I
   # can spend it how I want.
-  state $tru = ($ENV{COLORTERM}//'') eq 'truecolor'
-            && Term::ANSIColor::colorvalid('r1g1b1');
-  state $max = $tru        ? 255 : 5;
+  state $max = ($ENV{COLORTERM}//'') eq 'truecolor' ? 255 : 5;
   state $min = $max == 255 ? 384 : 5;
   state $inc = $max == 255 ?  16 : 1;
   state $fmt = $max == 255 ? 'r%ug%ub%u' : 'rgb%u%u%u';
