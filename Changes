@@ -1,6 +1,10 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - The log colorization code was trying to use 24-bit color even when
+          the installed Term::ANSIColor couldn't support it.  This has been
+          fixed by requiring Term::ANSIColor v5.  Thanks, Robert Rothenberg,
+          Michael McClimon, and Matthew Horsfall.
 
 6.019     2021-06-13 08:39:14-04:00 America/New_York
         - When using "use_package" in PkgVersion, do not eradicate the entire
