@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+6.020     2021-06-14 12:16:09-04:00 America/New_York
         - The log colorization code was trying to use 24-bit color even when
           the installed Term::ANSIColor couldn't support it.  This has been
           fixed by requiring Term::ANSIColor v5.  Thanks, Robert Rothenberg,
