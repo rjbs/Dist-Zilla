@@ -13,6 +13,7 @@ Revision history for {{$dist->name}}
           block of "package NAME BLOCK" syntax!  Wow, what a bug...
 
 6.018     2021-04-03 21:07:54-04:00 America/New_York (TRIAL RELEASE)
+        - require perl v5.20.0, now seven years old
         - add Test::CleanNamespaces, clean all namespaces
         - add the same boilerplate of version/pragma/features to every module
         - colorize logger prefix when running in a terminal
