@@ -35,7 +35,7 @@ This plugin bundle actually wraps and modifies another plugin bundle.  It
 includes all the configuration for the bundle named in the C<-bundle> attribute,
 but removes all the entries whose package is given in the C<-remove> attributes.
 
-A minimum required version of the bundle can be specified with the C<-version> 
+A minimum required version of the bundle can be specified with the C<-version>
 attribute.
 
 Options not prefixed with C<-> will be passed to the bundle to be filtered.
