@@ -1,0 +1,26 @@
+skip_tags: true
+
+cache:
+  - C:\strawberry -> appveyor.yml
+
+install:
+  - if not exist "C:\strawberry" cinst strawberryperl -y
+  - set PATH=C:\strawberry\perl\bin;C:\strawberry\perl\site\bin;C:\strawberry\c\bin;%PATH%
+  - cd C:\projects\%APPVEYOR_PROJECT_NAME%
+  - cpanm JSON::PP Dist::Zilla
+  - dzil authordeps --missing | cpanm
+  - dzil listdeps --author --missing | cpanm
+
+build_script:
+  - perl -e 2
+
+test_script:
+  - dzil test --author --release --keep
+
+# notifications:
+# To get Github PR notifications from AppVeyor, get an auth token from Github,
+# encrypt it at https://ci.appveyor.com/tools/encrypt and put it into the
+# secure field
+#  - provider: GitHubPullRequest
+#    auth_token:
+#      secure: ...
