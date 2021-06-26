@@ -496,13 +496,12 @@ sub build_archive {
 
   my $built_in = $self->ensure_built;
 
-  my $basename = $self->dist_basename;
-  my $basedir = path($basename);
+  my $basedir = path($self->dist_basename);
 
   $_->before_archive for $self->plugins_with(-BeforeArchive)->@*;
 
   for my $builder ($self->plugins_with(-ArchiveBuilder)->@*) {
-    my $file = $builder->build_archive($self->archive_basename, $built_in, $basename, $basedir);
+    my $file = $builder->build_archive($self->archive_basename, $built_in, $basedir);
     return $file if defined $file;
   }
 
@@ -511,7 +510,7 @@ sub build_archive {
              ? '_build_archive_with_wrapper'
              : '_build_archive';
 
-  my $archive = $self->$method($built_in, $basename, $basedir);
+  my $archive = $self->$method($built_in, $basedir);
 
   my $file = path($self->archive_filename);
 
@@ -522,7 +521,7 @@ sub build_archive {
 }
 
 sub _build_archive {
-  my ($self, $built_in, $basename, $basedir) = @_;
+  my ($self, $built_in, $basedir) = @_;
 
   $self->log("building archive with Archive::Tar; install Archive::Tar::Wrapper 0.15 or newer for improved speed");
 
@@ -554,7 +553,7 @@ sub _build_archive {
 }
 
 sub _build_archive_with_wrapper {
-  my ($self, $built_in, $basename, $basedir) = @_;
+  my ($self, $built_in, $basedir) = @_;
 
   $self->log("building archive with Archive::Tar::Wrapper");
 
