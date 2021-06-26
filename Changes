@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - remove dependency on Class::Load, which is not used
 
 6.020     2021-06-14 12:16:09-04:00 America/New_York
         - The log colorization code was trying to use 24-bit color even when
