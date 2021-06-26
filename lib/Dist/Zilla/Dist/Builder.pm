@@ -449,6 +449,23 @@ sub dist_basename {
   );
 }
 
+=method archive_basename
+
+  my $basename = $zilla->archive_basename;
+
+This method will return the filename, without the format extension
+(e.g. C<Dist-Name-1.01> or C<Dist-Name-1.01-TRIAL>).
+
+=cut
+
+sub archive_basename {
+  my ($self) = @_;
+  return join q{},
+    $self->dist_basename,
+    ( $self->is_trial && $self->version !~ /_/ ? '-TRIAL' : '' ),
+  ;
+}
+
 =method archive_filename
 
   my $tarball = $zilla->archive_filename;
@@ -462,28 +479,7 @@ might not exist.
 
 sub archive_filename {
   my ($self) = @_;
-
-  my $name = join(q{},
-    $self->dist_basename,
-    ( $self->is_trial && $self->version !~ /_/ ? '-TRIAL' : '' ),
-  );
-
-  my $provided_filename;
-
-  for my $namer ($self->plugins_with(-ArchiveNamer)->@*) {
-    my $this_filename = $namer->archive_filename($name);
-
-    next unless defined $this_filename;
-
-    $self->log_fatal('attempted to set archive_filename twice')
-      if defined $provided_filename;
-
-    $provided_filename = $this_filename;
-  }
-
-  return $provided_filename if defined $provided_filename;
-
-  return join(q{},$name,'.tar.gz');
+  return join q{}, $self->archive_basename, '.tar.gz';
 }
 
 =method build_archive
@@ -506,7 +502,7 @@ sub build_archive {
   $_->before_archive for $self->plugins_with(-BeforeArchive)->@*;
 
   for my $builder ($self->plugins_with(-ArchiveBuilder)->@*) {
-    my $file = $builder->build_archive($self->archive_filename, $built_in, $basename, $basedir);
+    my $file = $builder->build_archive($self->archive_basename, $built_in, $basename, $basedir);
     return $file if defined $file;
   }
 
