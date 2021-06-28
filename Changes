@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+6.021     2021-06-27 21:31:21-04:00 America/New_York
         - remove dependency on Class::Load, which is not used
         - bump prereq on PPI to 1.222, which is now used in PkgVersion
           (thanks, Dan Book and Sven Kirmess)
