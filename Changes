@@ -2,6 +2,8 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
         - remove dependency on Class::Load, which is not used
+        - bump prereq on PPI to 1.222, which is now used in PkgVersion
+          (thanks, Dan Book and Sven Kirmess)
 
 6.020     2021-06-14 12:16:09-04:00 America/New_York
         - The log colorization code was trying to use 24-bit color even when
