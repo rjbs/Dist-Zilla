@@ -16,7 +16,7 @@ cmp_deeply(
   $authordeps,
   [
     +{ perl => '5.005' },
-    +{ 'List::MoreUtils' => '0.407' },
+    +{ 'List::Util' => '1.45' },
     +{ 'Foo::Bar' => '1.23' },
     +{ 'Dist::Zilla' => '5.001' },
     ( map { +{"Dist::Zilla::Plugin::$_" => '5.0'} } qw<AutoPrereqs Encoding ExecDir> ),
