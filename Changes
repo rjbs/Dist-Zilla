@@ -1,6 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - if the copyright_year in the dist.ini is not this year, the
+          copyright statement and license are formatted as "$year -
+          $current_year" (Dave Rolsky, github #578)
 
 6.023     2021-07-06 21:37:37-04:00 America/New_York
         - tweak the autoprereqs tests to avoid failing when List::MoreUtils
