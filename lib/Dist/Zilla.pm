@@ -23,7 +23,7 @@ use Dist::Zilla::Types qw(Path License ReleaseStatus);
 use Log::Dispatchouli 1.100712; # proxy_loggers, quiet_fatal
 use Dist::Zilla::Path;
 use List::Util 1.33 qw(first none);
-use Software::License 0.103014; # spdx_expression()
+use Software::License 0.104001; # ->program
 use String::RewritePrefix;
 use Try::Tiny;
 
