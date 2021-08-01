@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+6.024     2021-08-01 15:38:44-04:00 America/New_York
         - pass the dist name to Software::License as the program name
           (thanks, Van de Bugger!)
         - create the ArchiveBuilder role for building the archive file
