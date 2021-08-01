@@ -2,6 +2,7 @@ Dist-Zilla-*
 .build
 tmp
 *.patch
+.DS_Store
 
 .gitnxtver_cache
 
