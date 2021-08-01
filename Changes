@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - pass the dist name to Software::License as the program name
+          (thanks, Van de Bugger!)
         - create the ArchiveBuilder role for building the archive file
           (thanks, Graham Ollis!)
 
