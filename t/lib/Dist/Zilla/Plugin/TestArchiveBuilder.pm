@@ -8,7 +8,7 @@ with(
 );
 
 sub build_archive {
-  my($self, $archive_basename, $built_in, $basedir) = @_;
+  my ($self, $archive_basename, $built_in, $basedir) = @_;
 
   # instead of archiving in gzip compressed tarball
   # we are writing a fooball archive.
