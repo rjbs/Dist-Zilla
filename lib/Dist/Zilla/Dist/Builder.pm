@@ -20,6 +20,7 @@ use Dist::Zilla::Path; # because more Path::* is better, eh?
 use Try::Tiny;
 use List::Util 1.45 'uniq';
 use Module::Runtime 'require_module';
+use IPC::System::Simple ();
 
 use namespace::autoclean;
 
@@ -841,7 +842,7 @@ sub run_in_build {
     my $wd = File::pushd::pushd($target);
 
     if ($arg and exists $arg->{build} and ! $arg->{build}) {
-      system(@$cmd) and die "error while running: @$cmd";
+      IPC::System::Simple::run(@$cmd);
       return 1;
     }
 
@@ -855,7 +856,7 @@ sub run_in_build {
       (map { $abstarget->child('blib', $_) } qw(bin script)),
       (defined $ENV{PATH} ? $ENV{PATH} : ());
 
-    system(@$cmd) and die "error while running: @$cmd";
+    IPC::System::Simple::run(@$cmd);
     1;
   };
 
