@@ -114,7 +114,7 @@ sub extract_author_deps {
         : do {
             my $m = $_;
             ! eval {
-              local @INC = @INC; push @INC, $root;
+              local @INC = @INC; push @INC, "$root";
               # This will die if module is missing
               Module::Runtime::require_module($m);
               my $v = $vermap->{$m};
