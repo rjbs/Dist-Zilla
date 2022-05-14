@@ -72,6 +72,45 @@ use Test::DZil;
       add_files => {
         'source/dist.ini' => simple_ini(
           'GatherDir',
+          [ 'MakeMaker', { main_module => "DZT::Main" } ],
+        ),
+      },
+    },
+  );
+
+  $tzil->build;
+
+  my $makemaker = $tzil->plugin_named('MakeMaker');
+
+  my %want = (
+    DISTNAME => 'DZT-Sample',
+    NAME     => 'DZT::Main',
+    ABSTRACT => 'Sample DZ Dist',
+    VERSION  => '0.001',
+    AUTHOR   => 'E. Xavier Ample <example@example.org>',
+    LICENSE  => 'perl',
+    test => { TESTS => 't/*.t' },
+    PREREQ_PM => { },
+    CONFIGURE_REQUIRES => {
+      'ExtUtils::MakeMaker' => '0'
+    },
+    test => { TESTS => 't/*.t' },
+  );
+
+  cmp_deeply(
+    $makemaker->__write_makefile_args,
+    \%want,
+    'correct makemaker args generated',
+  );
+}
+
+{
+  my $tzil = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/dist.ini' => simple_ini(
+          'GatherDir',
           'MakeMaker',
           [ Prereqs => { perl => '5.8.1' } ],
           [ Prereqs => BuildRequires => { 'Builder::Bob' => 0 } ],
