@@ -39,7 +39,9 @@ sub file {
   my ($self, @file) = @_;
 
   my ($package, $pmfile, $line) = caller;
-  unless ($warned{ $pmfile, $line }++) {
+
+  my $key = join qq{\0}, $pmfile, $line;
+  unless ($warned{ $key }++) {
     Carp::carp("->file called on a Dist::Zilla::Path object; this will cease to work in Dist::Zilla v7; downstream code should be updated to use Path::Tiny API, not Path::Class");
   }
 
