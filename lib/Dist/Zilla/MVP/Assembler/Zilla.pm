@@ -4,13 +4,7 @@ package Dist::Zilla::MVP::Assembler::Zilla;
 use Moose;
 extends 'Dist::Zilla::MVP::Assembler';
 
-# BEGIN BOILERPLATE
-use v5.20.0;
-use warnings;
-use utf8;
-no feature 'switch';
-use experimental qw(postderef postderef_qq); # This experiment gets mainlined.
-# END BOILERPLATE
+use Dist::Zilla::Pragmas;
 
 use namespace::autoclean;
 

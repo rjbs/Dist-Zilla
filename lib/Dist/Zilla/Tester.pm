@@ -4,13 +4,7 @@ package Dist::Zilla::Tester;
 use Moose;
 extends 'Dist::Zilla::Dist::Builder';
 
-# BEGIN BOILERPLATE
-use v5.20.0;
-use warnings;
-use utf8;
-no feature 'switch';
-use experimental qw(postderef postderef_qq); # This experiment gets mainlined.
-# END BOILERPLATE
+use Dist::Zilla::Pragmas;
 
 use autodie;
 use Dist::Zilla::Chrome::Test;

@@ -1,13 +1,7 @@
 package Dist::Zilla::App::Command::add;
 # ABSTRACT: add a module to a dist
 
-# BEGIN BOILERPLATE
-use v5.20.0;
-use warnings;
-use utf8;
-no feature 'switch';
-use experimental qw(postderef postderef_qq); # This experiment gets mainlined.
-# END BOILERPLATE
+use Dist::Zilla::Pragmas;
 
 use Dist::Zilla::App -command;
 use Dist::Zilla::Path;
