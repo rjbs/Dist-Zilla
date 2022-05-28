@@ -46,9 +46,7 @@ C<new> routine.
 
 =cut
 
-sub fill_in_string {
-  my ($self, $string, $stash, $arg) = @_;
-
+sub fill_in_string ($self, $string, $stash = {}, $arg = {}) {
   $self->log_fatal("Cannot use undef as a template string")
     unless defined $string;
 

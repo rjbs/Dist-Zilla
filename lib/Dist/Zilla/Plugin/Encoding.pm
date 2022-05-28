@@ -80,9 +80,7 @@ has ignore => (
   default => sub { [] },
 );
 
-sub set_file_encodings {
-  my ($self) = @_;
-
+sub set_file_encodings ($self) {
   # never match (at least the filename characters)
   my $matches_regex = qr/\000/;
 

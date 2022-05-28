@@ -14,9 +14,7 @@ use Sub::Exporter -setup => {
 
 use namespace::autoclean -except => 'import';
 
-sub path {
-  my ($thing, @rest) = @_;
-
+sub path ($thing, @rest) {
   if (@rest == 0 && blessed $thing) {
     return $thing if $thing->isa(__PACKAGE__);
 
@@ -29,9 +27,7 @@ sub path {
 
 my %warned;
 
-sub file {
-  my ($self, @file) = @_;
-
+sub file ($self, @file) {
   my ($package, $pmfile, $line) = caller;
 
   my $key = join qq{\0}, $pmfile, $line;
@@ -43,8 +39,7 @@ sub file {
   Path::Class::dir($self)->file(@file);
 }
 
-sub subdir {
-  my ($self, @subdir) = @_;
+sub subdir ($self, @subdir) {
   Carp::carp("->subdir called on a Dist::Zilla::Path object; this will cease to work in Dist::Zilla v7; downstream code should be updated to use Path::Tiny API, not Path::Class");
   require Path::Class;
   Path::Class::dir($self)->subdir(@subdir);

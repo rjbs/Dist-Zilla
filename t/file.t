@@ -175,12 +175,12 @@ subtest "FromCode" => sub {
     new_file(\$obj, $class, code => sub { $sample });
     like(
       exception { $obj->content($sample) },
-      qr/cannot set content/,
+      qr/Too many arguments/,
       "changing content should throw error"
     );
     like(
       exception { $obj->encoded_content($encoded_sample) },
-      qr/cannot set encoded_content/,
+      qr/Too many arguments/,
       "changing encoded_content should throw error"
     );
   };

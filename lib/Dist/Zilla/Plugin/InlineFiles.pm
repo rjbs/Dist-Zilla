@@ -22,9 +22,7 @@ use Data::Section 0.200002 # encoding and bytes
   '-setup' => { encoding => 'bytes' };
 use Dist::Zilla::File::InMemory;
 
-sub gather_files {
-  my ($self) = @_;
-
+sub gather_files ($self, $arg = {}) {
   my $data = $self->merged_section_data;
   return unless $data and %$data;
 

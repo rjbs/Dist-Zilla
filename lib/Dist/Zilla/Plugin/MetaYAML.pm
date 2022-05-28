@@ -28,9 +28,7 @@ has filename => (
   default => 'META.yml',
 );
 
-sub gather_files {
-  my ($self, $arg) = @_;
-
+sub gather_files ($self, $arg = {}) {
   require Dist::Zilla::File::FromCode;
   require YAML::Tiny;
   require CPAN::Meta::Converter;

@@ -61,9 +61,7 @@ around name => sub {
   return $self->$orig(@_);
 };
 
-sub _caller_of {
-  my ($self, $function) = @_;
-
+sub _caller_of ($self, $function) {
   for (my $level = 1; $level < 50; ++$level)
   {
     my @frame = caller($level);
@@ -115,13 +113,11 @@ C<content> will be an error.
 
 =cut
 
-sub is_bytes {
-    my ($self) = @_;
+sub is_bytes ($self) {
     return $self->encoding eq 'bytes';
 }
 
-sub _encode {
-  my ($self, $text) = @_;
+sub _encode ($self, $text) {
   my $enc = $self->encoding;
   if ( $self->is_bytes ) {
     return $text; # XXX hope you were right that it really was bytes
@@ -135,8 +131,7 @@ sub _encode {
   }
 }
 
-sub _decode {
-  my ($self, $bytes) = @_;
+sub _decode ($self, $bytes) {
   my $enc = $self->encoding;
   if ( $self->is_bytes ) {
     $self->_throw(decode => "Can't decode text from 'bytes' encoding");
@@ -165,8 +160,7 @@ sub _decode {
   }
 }
 
-sub _throw {
-  my ($self, $op, $msg) = @_;
+sub _throw ($self, $op, $msg) {
   my ($name, $added_by) = map {; $self->$_ } qw/name added_by/;
   confess(
     "Could not $op $name; $added_by; error was: $msg; maybe you need the [Encoding] plugin to specify an encoding"

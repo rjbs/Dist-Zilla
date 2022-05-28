@@ -105,8 +105,7 @@ has _content_source => (
     builder => '_build_content_source',
 );
 
-sub _set_added_by {
-  my ($self, $value) = @_;
+sub _set_added_by ($self, $value) {
   return $self->_push_added_by(sprintf("%s added by %s", $self->_content_source, $value));
 };
 

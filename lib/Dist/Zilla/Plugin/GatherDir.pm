@@ -170,9 +170,7 @@ around dump_config => sub {
   return $config;
 };
 
-sub gather_files {
-  my ($self) = @_;
-
+sub gather_files ($self, $arg = {}) {
   my $exclude_regex = qr/\000/;
   $exclude_regex = qr/(?:$exclude_regex)|$_/
     for @{ $self->exclude_match };
@@ -233,9 +231,7 @@ sub gather_files {
   return;
 }
 
-sub _file_from_filename {
-  my ($self, $filename) = @_;
-
+sub _file_from_filename ($self, $filename) {
   my @stat = stat $filename or $self->log_fatal("$filename does not exist!");
 
   return Dist::Zilla::File::OnDisk->new({

@@ -29,17 +29,14 @@ Other modules: L<ExtUtils::Manifest>.
 
 =cut
 
-sub __fix_filename {
-  my ($name) = @_;
+sub __fix_filename ($name) {
   return $name unless $name =~ /[ '\\]/;
   $name =~ s/\\/\\\\/g;
   $name =~ s/'/\\'/g;
   return qq{'$name'};
 }
 
-sub gather_files {
-  my ($self, $arg) = @_;
-
+sub gather_files ($self, $arg = {}) {
   my $zilla = $self->zilla;
 
   my $file = Dist::Zilla::File::FromCode->new({

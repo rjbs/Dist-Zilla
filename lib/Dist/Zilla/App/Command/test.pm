@@ -65,9 +65,7 @@ Equivalent to --release --automated --extended --author
 
 sub abstract { 'test your dist' }
 
-sub execute {
-  my ($self, $opt, $arg) = @_;
-
+sub execute ($self, $opt, $arg) {
   local $ENV{RELEASE_TESTING} = 1 if $opt->release or $opt->all;
   local $ENV{AUTHOR_TESTING} = 1 if $opt->author or $opt->all;
   local $ENV{AUTOMATED_TESTING} = 1 if $opt->automated or $opt->all;

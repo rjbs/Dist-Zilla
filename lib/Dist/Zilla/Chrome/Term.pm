@@ -19,9 +19,7 @@ terminal environment.  It's the default chrome used by L<Dist::Zilla::App>.
 
 =cut
 
-sub _str_color {
-  my ($str) = @_;
-
+sub _str_color ($str) {
   state %color_for;
 
   # I know, I know, this is ludicrous, but guess what?  It's my Sunday and I
@@ -111,8 +109,7 @@ has term_enc => (
   },
 );
 
-sub prompt_str {
-  my ($self, $prompt, $arg) = @_;
+sub prompt_str ($self, $prompt, $arg) {
   $arg ||= {};
   my $default = $arg->{default};
   my $check   = $arg->{check};
@@ -152,8 +149,7 @@ sub prompt_str {
   return $input;
 }
 
-sub prompt_yn {
-  my ($self, $prompt, $arg) = @_;
+sub prompt_yn ($self, $prompt, $arg) {
   $arg ||= {};
   my $default = $arg->{default};
 
@@ -180,8 +176,7 @@ sub _isa_tty {
   return $isa_tty;
 }
 
-sub prompt_any_key {
-  my ($self, $prompt) = @_;
+sub prompt_any_key ($self, $prompt) {
   $prompt ||= 'press any key to continue';
 
   my $isa_tty = $self->_isa_tty;

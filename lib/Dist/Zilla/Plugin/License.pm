@@ -28,9 +28,7 @@ has filename => (
   default => 'LICENSE',
 );
 
-sub gather_files {
-  my ($self, $arg) = @_;
-
+sub gather_files ($self, $arg = {}) {
   my $file = Dist::Zilla::File::InMemory->new({
     name    => $self->filename,
     content => $self->zilla->license->fulltext,

@@ -53,8 +53,7 @@ sub expand_package {
   return scalar Dist::Zilla::Util->expand_config_package_name($_[1]);
 }
 
-sub package_bundle_method {
-  my ($self, $pkg) = @_;
+sub package_bundle_method ($self, $pkg) {
   return unless $pkg->isa('Moose::Object')
          and    $pkg->does('Dist::Zilla::Role::PluginBundle');
   return 'bundle_config';

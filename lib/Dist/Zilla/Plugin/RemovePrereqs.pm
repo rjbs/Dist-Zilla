@@ -58,9 +58,7 @@ around dump_config => sub {
 my @phases = qw(configure build test runtime develop);
 my @types  = qw(requires recommends suggests conflicts);
 
-sub register_prereqs {
-  my ($self) = @_;
-
+sub register_prereqs ($self) {
   my $prereqs = $self->zilla->prereqs;
 
   for my $p (@phases) {

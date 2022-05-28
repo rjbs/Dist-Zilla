@@ -22,9 +22,7 @@ not set.
 
 =cut
 
-sub munge_file {
-  my ($self, $file) = @_;
-
+sub munge_file ($self, $file) {
   return unless $file->name =~ m{\Axt/(smoke|author|release)/.+\.t\z};
   my $method = "_rewrite_$1\_test";
 
@@ -33,24 +31,19 @@ sub munge_file {
   $self->$method($file);
 }
 
-sub _rewrite_smoke_test {
-  my ($self, $file) = @_;
+sub _rewrite_smoke_test ($self, $file) {
   $self->_rewrite($file, 'AUTOMATED_TESTING', '"smoke bot" testing');
 }
 
-sub _rewrite_author_test {
-  my ($self, $file) = @_;
+sub _rewrite_author_test ($self, $file) {
   $self->_rewrite($file, 'AUTHOR_TESTING', 'testing by the author');
 }
 
-sub _rewrite_release_test {
-  my ($self, $file) = @_;
+sub _rewrite_release_test ($self, $file) {
   $self->_rewrite($file, 'RELEASE_TESTING', 'release candidate testing');
 }
 
-sub _rewrite {
-  my ($self, $file, $env, $msg) = @_;
-
+sub _rewrite ($self, $file, $env, $msg) {
   my $name = $file->name =~ s{^xt/([^/]+)/}{t/$1-}r;
 
   $file->name($name);

@@ -35,8 +35,7 @@ Other modules: L<ExtUtils::Manifest>.
 
 has skipfile => (is => 'ro', required => 1, default => 'MANIFEST.SKIP');
 
-sub prune_files {
-  my ($self) = @_;
+sub prune_files ($self) {
   my $files = $self->zilla->files;
 
   my $skipfile_name = $self->skipfile;

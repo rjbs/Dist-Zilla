@@ -94,9 +94,7 @@ around dump_config => sub {
   return $config;
 };
 
-sub gather_files {
-  my ($self) = @_;
-
+sub gather_files ($self, $arg = {}) {
   my $repo_root = $self->zilla->root;
   my $root = "" . $self->root;
   $root =~ s{^~([\\/])}{ Dist::Zilla::Util->homedir . $1 }e;
@@ -122,9 +120,7 @@ sub gather_files {
 }
 
 # as in GatherDir
-sub _file_from_filename {
-  my ($self, $filename) = @_;
-
+sub _file_from_filename ($self, $filename) {
   my @stat = stat $filename or $self->log_fatal("$filename does not exist!");
 
   return Dist::Zilla::File::OnDisk->new({

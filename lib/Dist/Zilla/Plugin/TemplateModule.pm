@@ -68,9 +68,7 @@ has template => (
   predicate => 'has_template',
 );
 
-sub make_module {
-  my ($self, $arg) = @_;
-
+sub make_module ($self, $arg) {
   my $template;
 
   if ($self->has_template) {

@@ -66,9 +66,7 @@ around BUILDARGS => sub {
   };
 };
 
-sub metadata {
-  my ($self) = @_;
-
+sub metadata ($self) {
   return { resources => $self->resources };
 }
 

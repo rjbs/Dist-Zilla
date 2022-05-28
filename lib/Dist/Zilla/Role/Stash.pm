@@ -7,9 +7,7 @@ use Dist::Zilla::Pragmas;
 
 use namespace::autoclean;
 
-sub register_component {
-  my ($class, $name, $arg, $section) = @_;
-
+sub register_component ($class, $name, $arg, $section) {
   # $self->log_debug([ 'online, %s v%s', $self->meta->name, $version ]);
   my $entry = $class->stash_from_config($name, $arg, $section);
 
@@ -18,9 +16,7 @@ sub register_component {
   return;
 }
 
-sub stash_from_config {
-  my ($class, $name, $arg, $section) = @_;
-
+sub stash_from_config ($class, $name, $arg, $section) {
   my $self = $class->new($arg);
   return $self;
 }

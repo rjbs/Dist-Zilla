@@ -27,21 +27,15 @@ section).
 
 =cut
 
-sub munge_files {
-  my ($self) = @_;
-
+sub munge_files ($self) {
   $self->munge_file($_) for @{ $self->found_files };
 }
 
-sub munge_file {
-  my ($self, $file) = @_;
-
+sub munge_file ($self, $file) {
   return $self->munge_pod($file);
 }
 
-sub munge_pod {
-  my ($self, $file) = @_;
-
+sub munge_pod ($self, $file) {
   my @content = split /\n/, $file->content;
 
   require List::Util;

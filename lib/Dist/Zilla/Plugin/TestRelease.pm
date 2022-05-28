@@ -28,8 +28,7 @@ This plugin was originally contributed by Christopher J. Madsen.
 use File::pushd ();
 use Dist::Zilla::Path;
 
-sub before_release {
-  my ($self, $tgz) = @_;
+sub before_release ($self, $tgz) {
   $tgz = $tgz->absolute;
 
   my $build_root = $self->zilla->root->child('.build');

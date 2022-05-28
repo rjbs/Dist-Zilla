@@ -65,9 +65,7 @@ has logger => (
 sub mvp_multivalue_args {};
 sub mvp_aliases         { return {} };
 
-sub plugin_from_config {
-  my ($class, $name, $arg, $section) = @_;
-
+sub plugin_from_config ($class, $name, $arg, $section) {
   my $self = $class->new({
     %$arg,
     plugin_name => $name,
@@ -75,9 +73,7 @@ sub plugin_from_config {
   });
 }
 
-sub register_component {
-  my ($class, $name, $arg, $section) = @_;
-
+sub register_component ($class, $name, $arg, $section) {
   my $self = $class->plugin_from_config($name, $arg, $section);
 
   my $version = $self->VERSION || 0;

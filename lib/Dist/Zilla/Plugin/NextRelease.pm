@@ -86,9 +86,7 @@ has _user_stash_obj => (
   default  => sub { $_[0]->zilla->stash_named( $_[0]->user_stash ) },
 );
 
-sub _user_info {
-  my ($self, $field) = @_;
-
+sub _user_info ($self, $field) {
   my $stash = $self->_user_stash_obj;
 
   $self->log_fatal([
@@ -99,9 +97,7 @@ sub _user_info {
   return $value;
 }
 
-sub section_header {
-  my ($self) = @_;
-
+sub section_header ($self) {
   return _format_version($self->format, $self);
 }
 
@@ -111,9 +107,7 @@ has _original_changes_content => (
   init_arg => undef,
 );
 
-sub munge_files {
-  my ($self) = @_;
-
+sub munge_files ($self) {
   my ($file) = grep { $_->name eq $self->filename } @{ $self->zilla->files };
   $self->log_fatal([ 'failed to find %s in the distribution', $self->filename ]) if not $file;
 
@@ -134,8 +128,7 @@ sub munge_files {
 }
 
 # new release is part of distribution history, let's record that.
-sub after_release {
-  my ($self) = @_;
+sub after_release ($self, $arg = {}) {
   my $filename = $self->filename;
   my ($gathered_file) = grep { $_->name eq $filename } @{ $self->zilla->files };
   $self->log_fatal("failed to find $filename in the distribution") if not $gathered_file;

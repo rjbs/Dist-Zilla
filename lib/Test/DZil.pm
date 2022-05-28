@@ -62,9 +62,7 @@ do L<Dist::Zilla::Role::File>.
 
 =cut
 
-sub is_filelist {
-  my ($have, $want, $comment) = @_;
-
+sub is_filelist ($have, $want, $comment) {
   my @want = @$want;
   my @have = map { my $str = (blessed $_ and
                               $_->DOES('Dist::Zilla::Role::File'))
@@ -85,9 +83,7 @@ C<L<cmp_deeply|Test::Deep/cmp_deeply>>.
 
 =cut
 
-sub is_yaml {
-  my ($yaml, $want, $comment) = @_;
-
+sub is_yaml ($yaml, $want, $comment) {
   my $have = YAML::Tiny->read_string($yaml)
     or die "Cannot decode YAML";
 
@@ -104,9 +100,7 @@ C<L<cmp_deeply|Test::Deep/cmp_deeply>>.
 
 =cut
 
-sub is_json {
-  my ($json, $want, $comment) = @_;
-
+sub is_json ($json, $want, $comment) {
   my $have = JSON::MaybeXS->new(ascii => 1)->decode($json)
     or die "Cannot decode JSON";
 
@@ -114,10 +108,7 @@ sub is_json {
   Test::Deep::cmp_deeply($have, $want, $comment);
 }
 
-sub _build_ini_builder {
-  my ($starting_core) = @_;
-  $starting_core ||= {};
-
+sub _build_ini_builder ($starting_core = {}) {
   sub {
     my (@arg) = @_;
     my $new_core = _HASH0($arg[0]) ? shift(@arg) : {};

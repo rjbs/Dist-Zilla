@@ -19,8 +19,7 @@ has email => (
   required => 1,
 );
 
-sub authors {
-  my ($self) = @_;
+sub authors ($self) {
   return [ sprintf "%s <%s>", $self->name, $self->email ];
 }
 

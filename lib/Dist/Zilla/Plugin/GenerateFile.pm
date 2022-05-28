@@ -105,9 +105,7 @@ has name_is_template => (
   default => 0,
 );
 
-sub gather_files {
-  my ($self, $arg) = @_;
-
+sub gather_files ($self, $arg = {}) {
   my $file = Dist::Zilla::File::InMemory->new({
     name    => $self->_filename,
     content => $self->_content,

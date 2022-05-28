@@ -23,10 +23,7 @@ use namespace::autoclean -except => 'import';
 
 sub result_class { 'Dist::Zilla::App::Tester::Result' }
 
-sub test_dzil {
-  my ($self, $source, $argv, $arg) = @_;
-  $arg ||= {};
-
+sub test_dzil ($self, $source, $argv, $arg = {}) {
   local @INC = map {; ref($_) ? $_ : File::Spec->rel2abs($_) } @INC;
 
   my $tmpdir = $arg->{tempdir} || File::Temp::tempdir(CLEANUP => 1);

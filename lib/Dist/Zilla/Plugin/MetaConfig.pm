@@ -22,9 +22,7 @@ on.
 
 =cut
 
-sub metadata {
-  my ($self) = @_;
-
+sub metadata ($self) {
   my $dump = { };
 
   my @plugins;

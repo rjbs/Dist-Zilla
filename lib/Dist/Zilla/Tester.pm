@@ -25,9 +25,7 @@ use Sub::Exporter -setup => {
 
 use namespace::autoclean -except => 'import';
 
-sub from_config {
-  my ($self, @arg) = @_;
-
+sub from_config ($self, @arg) {
   # The only thing using a local time zone should be NextRelease.  Normally it
   # defaults to "local," but since some users won't have an automatically
   # determinable time zone, we'll switch to not-local times for testing.
@@ -226,13 +224,13 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
   };
 
   around ['test', 'release'] => sub {
-    my ($orig, $self) = @_;
+    my ($orig, $self, @rest) = @_;
 
     # XXX: We *must eliminate* the need for this!  It's only here because right
     # now building a dist with (root <> cwd) doesn't work. -- rjbs, 2010-03-08
     my $wd = File::pushd::pushd($self->root);
 
-    return $self->$orig;
+    return $self->$orig(@rest);
   };
 
   no Moose;

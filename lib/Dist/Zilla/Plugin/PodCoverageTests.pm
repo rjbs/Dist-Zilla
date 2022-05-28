@@ -39,9 +39,7 @@ One can run the release tests by invoking C<dzil test --release>.
 
 # Register the author test prereq as a "develop requires"
 # so it will be listed in "dzil listdeps --author"
-sub register_prereqs {
-  my ($self) = @_;
-
+sub register_prereqs ($self) {
   $self->zilla->register_prereqs(
     {
       type  => 'requires',

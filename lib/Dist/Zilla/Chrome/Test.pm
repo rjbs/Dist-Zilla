@@ -51,10 +51,7 @@ has response_for => (
   },
 );
 
-sub prompt_str {
-  my ($self, $prompt, $arg) = @_;
-  $arg ||= {};
-
+sub prompt_str ($self, $prompt, $arg = {}) {
   my $response = $self->response_for($prompt);
 
   $response = shift @$response if ref $response;
