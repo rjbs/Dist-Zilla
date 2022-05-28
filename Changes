@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+6.025     2022-05-28 11:55:35-04:00 America/New_York
         - eliminate use of multidimensional array emulation
 
 6.024     2021-08-01 15:38:44-04:00 America/New_York
