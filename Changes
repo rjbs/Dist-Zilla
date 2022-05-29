@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+6.026     2022-05-29 15:06:05-04:00 America/New_York (TRIAL RELEASE)
         - use subroutine signatures throughout
 
 6.025     2022-05-28 11:55:35-04:00 America/New_York
