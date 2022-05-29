@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - use subroutine signatures throughout
 
 6.025     2022-05-28 11:55:35-04:00 America/New_York
         - eliminate use of multidimensional array emulation
