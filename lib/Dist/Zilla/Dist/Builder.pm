@@ -34,8 +34,7 @@ Valid arguments are:
 
 =cut
 
-sub from_config {
-  my ($class, $arg) = @_;
+sub from_config ($class, $arg) {
   $arg ||= {};
 
   my $root = path($arg->{dist_root} || '.');
@@ -54,8 +53,7 @@ sub from_config {
   return $self;
 }
 
-sub _setup_default_plugins {
-  my ($self) = @_;
+sub _setup_default_plugins ($self) {
   unless ($self->plugin_named(':InstallModules')) {
     require Dist::Zilla::Plugin::FinderCode;
     my $plugin = Dist::Zilla::Plugin::FinderCode->new({
@@ -227,9 +225,7 @@ has _share_dir_map => (
   builder   => '_build_share_dir_map',
 );
 
-sub _build_share_dir_map {
-  my ($self) = @_;
-
+sub _build_share_dir_map ($self) {
   my $share_dir_map = {};
 
   for my $plugin (@{ $self->plugins_with(-ShareDir) }) {
@@ -254,8 +250,7 @@ sub _build_share_dir_map {
 }
 
 
-sub _load_config {
-  my ($class, $arg) = @_;
+sub _load_config ($class, $arg) {
   $arg ||= {};
 
   my $config_class =
@@ -335,9 +330,7 @@ for the preposition!
 
 sub build { $_[0]->build_in }
 
-sub build_in {
-  my ($self, $root) = @_;
-
+sub build_in ($self, $root) {
   $self->log_fatal("tried to build with a minter")
     if $self->isa('Dist::Zilla::Dist::Minter');
 
@@ -413,9 +406,7 @@ sub ensure_built {
   $_[0]->ensure_built_in;
 }
 
-sub ensure_built_in {
-  my ($self, $root) = @_;
-
+sub ensure_built_in ($self, $root = undef) {
   # $root ||= $self->name . q{-} . $self->version;
   return $self->built_in if $self->built_in and
     (!$root or ($self->built_in eq $root));
@@ -434,8 +425,7 @@ does not include C<-TRIAL>, even if building a trial dist.
 
 =cut
 
-sub dist_basename {
-  my ($self) = @_;
+sub dist_basename ($self) {
   return join(q{},
     $self->name,
     '-',
@@ -452,8 +442,7 @@ This method will return the filename, without the format extension
 
 =cut
 
-sub archive_basename {
-  my ($self) = @_;
+sub archive_basename ($self) {
   return join q{},
     $self->dist_basename,
     ( $self->is_trial && $self->version !~ /_/ ? '-TRIAL' : '' ),
@@ -471,8 +460,7 @@ might not exist.
 
 =cut
 
-sub archive_filename {
-  my ($self) = @_;
+sub archive_filename ($self) {
   return join q{}, $self->archive_basename, '.tar.gz';
 }
 
@@ -485,9 +473,7 @@ tarball of the build directory in the current directory.
 
 =cut
 
-sub build_archive {
-  my ($self) = @_;
-
+sub build_archive ($self) {
   my $built_in = $self->ensure_built;
 
   my $basedir = path($self->dist_basename);
@@ -514,9 +500,7 @@ sub build_archive {
   return $file;
 }
 
-sub _build_archive {
-  my ($self, $built_in, $basedir) = @_;
-
+sub _build_archive ($self, $built_in, $basedir) {
   $self->log("building archive with Archive::Tar; install Archive::Tar::Wrapper 0.15 or newer for improved speed");
 
   require Archive::Tar;
@@ -546,9 +530,7 @@ sub _build_archive {
   return $archive;
 }
 
-sub _build_archive_with_wrapper {
-  my ($self, $built_in, $basedir) = @_;
-
+sub _build_archive_with_wrapper ($self, $built_in, $basedir) {
   $self->log("building archive with Archive::Tar::Wrapper");
 
   my $archive = Archive::Tar::Wrapper->new;
@@ -569,9 +551,7 @@ sub _build_archive_with_wrapper {
   return $archive;
 }
 
-sub _prep_build_root {
-  my ($self, $build_root) = @_;
-
+sub _prep_build_root ($self, $build_root) {
   $build_root = path($build_root || $self->dist_basename);
 
   $build_root->mkpath unless -d $build_root;
@@ -636,9 +616,7 @@ like matching the glob C<Your-Dist-*>.
 
 =cut
 
-sub clean {
-  my ($self, $dry_run) = @_;
-
+sub clean ($self, $dry_run) {
   require File::Path;
   for my $x (grep { -e } '.build', glob($self->name . '-*')) {
     if ($dry_run) {
@@ -713,8 +691,7 @@ Valid arguments are:
 
 =cut
 
-sub install {
-  my ($self, $arg) = @_;
+sub install ($self, $arg) {
   $arg ||= {};
 
   my ($target, $latest) = $self->ensure_built_in_tmpdir;
@@ -762,9 +739,7 @@ C<\%arg> may be omitted.  Otherwise, valid arguments are:
 
 =cut
 
-sub test {
-  my ($self, $arg) = @_;
-
+sub test ($self, $arg = {}) {
   Carp::croak("you can't test without any TestRunner plugins")
     unless my @testers = @{ $self->plugins_with(-TestRunner) };
 
@@ -794,9 +769,7 @@ does it clean up C<$directory> afterwards.
 
 =cut
 
-sub run_tests_in {
-  my ($self, $target, $arg) = @_;
-
+sub run_tests_in ($self, $target, $arg = {}) {
   Carp::croak("you can't test without any TestRunner plugins")
     unless my @testers = @{ $self->plugins_with(-TestRunner) };
 
@@ -818,9 +791,7 @@ non-zero, the directory will be left in place.
 
 =cut
 
-sub run_in_build {
-  my ($self, $cmd, $arg) = @_;
-
+sub run_in_build ($self, $cmd, $arg) {
   $self->log_fatal("you can't build without any BuildRunner plugins")
     unless ($arg and exists $arg->{build} and ! $arg->{build})
         or @{ $self->plugins_with(-BuildRunner) };
@@ -868,9 +839,7 @@ sub run_in_build {
 # C<-BuildRunner> plugins to generate it.  Useful for commands that operate on
 # F<blib>, such as C<test> or C<run>.
 
-sub _ensure_blib {
-  my ($self) = @_;
-
+sub _ensure_blib ($self) {
   unless ( -d 'blib' ) {
     my @builders = @{ $self->plugins_with( -BuildRunner ) };
     $self->log_fatal("no BuildRunner plugins specified") unless @builders;

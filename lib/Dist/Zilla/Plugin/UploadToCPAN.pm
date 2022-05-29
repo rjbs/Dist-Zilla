@@ -78,9 +78,7 @@ has _credentials_stash_obj => (
   default  => sub { $_[0]->zilla->stash_named( $_[0]->credentials_stash ) },
 );
 
-sub _credential {
-  my ($self, $name) = @_;
-
+sub _credential ($self, $name) {
   return unless my $stash = $self->_credentials_stash_obj;
   return $stash->$name;
 }
@@ -297,9 +295,7 @@ sub before_release {
   $self->log_fatal(['You need to supply a %s', $problem]) if $problem;
 }
 
-sub release {
-  my ($self, $archive) = @_;
-
+sub release ($self, $archive) {
   $self->uploader->upload_file("$archive");
 }
 

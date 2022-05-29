@@ -38,9 +38,7 @@ sub build {
   return;
 }
 
-sub test {
-  my ($self, $target, $arg) = @_;
-
+sub test ($self, $target, $arg) {
   my $make = $self->make_path;
   $self->build;
 

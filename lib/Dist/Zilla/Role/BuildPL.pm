@@ -34,9 +34,7 @@ sub build {
   return;
 }
 
-sub test {
-  my ($self, $target, $arg) = @_;
-
+sub test ($self, $target, $arg) {
   $self->build;
 
   my $job_count = $arg && exists $arg->{jobs}

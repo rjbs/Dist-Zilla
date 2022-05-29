@@ -18,9 +18,7 @@ C<profile_dir> method that looks in the I<module>'s L<ShareDir|File::ShareDir>.
 
 =cut
 
-sub profile_dir {
-  my ($self, $profile_name) = @_;
-
+sub profile_dir ($self, $profile_name) {
   my $profile_dir = path( File::ShareDir::module_dir($self->meta->name) )
                   ->child( $profile_name );
 

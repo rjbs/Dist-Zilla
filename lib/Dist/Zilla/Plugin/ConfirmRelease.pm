@@ -8,9 +8,7 @@ use Dist::Zilla::Pragmas;
 
 use namespace::autoclean;
 
-sub before_release {
-  my ($self, $tgz) = @_;
-
+sub before_release ($self, $tgz) {
   my $releasers = join q{, },
                   map {; $_->plugin_name }
                   @{ $self->zilla->plugins_with(-Releaser) };

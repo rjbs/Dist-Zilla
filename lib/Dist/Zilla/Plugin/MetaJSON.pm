@@ -51,9 +51,7 @@ has version => (
   default => '2',
 );
 
-sub gather_files {
-  my ($self, $arg) = @_;
-
+sub gather_files ($self, $arg = {}) {
   my $zilla = $self->zilla;
 
   require JSON::MaybeXS;

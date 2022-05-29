@@ -22,24 +22,18 @@ has style => (
   required => 1,
 );
 
-sub find_files {
-  my ($self) = @_;
-
+sub find_files ($self) {
   my $method = '_find_via_' . $self->style;
 
   $self->$method;
 }
 
-sub _find_via_grep {
-  my ($self) = @_;
-
+sub _find_via_grep ($self) {
   my @files = grep { $self->code->($_, $self) } @{ $self->zilla->files };
   return \@files;
 }
 
-sub _find_via_list {
-  my ($self) = @_;
-
+sub _find_via_list ($self) {
   my $code = $self->code;
   $self->$code;
 }

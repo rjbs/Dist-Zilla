@@ -12,9 +12,7 @@ use Module::Runtime 'require_module';
 
 use namespace::autoclean;
 
-sub _setup_default_plugins {
-  my ($self) = @_;
-
+sub _setup_default_plugins ($self) {
   unless ($self->plugin_named(':DefaultModuleMaker')) {
     require Dist::Zilla::Plugin::TemplateModule;
     my $plugin = Dist::Zilla::Plugin::TemplateModule->new({
@@ -26,8 +24,7 @@ sub _setup_default_plugins {
   }
 }
 
-sub _new_from_profile {
-  my ($class, $profile_data, $arg) = @_;
+sub _new_from_profile ($class, $profile_data, $arg) {
   $arg ||= {};
 
   my $config_class =
@@ -83,9 +80,7 @@ sub _new_from_profile {
   return $self;
 }
 
-sub _mint_target_dir {
-  my ($self) = @_;
-
+sub _mint_target_dir ($self) {
   my $name = $self->name;
   my $dir  = path($name);
   $self->log_fatal("./$name already exists") if -e $dir;
@@ -93,9 +88,7 @@ sub _mint_target_dir {
   return $dir = $dir->absolute;
 }
 
-sub mint_dist {
-  my ($self, $arg) = @_;
-
+sub mint_dist ($self, $arg = {}) {
   my $name = $self->name;
   my $dir  = $self->_mint_target_dir;
 

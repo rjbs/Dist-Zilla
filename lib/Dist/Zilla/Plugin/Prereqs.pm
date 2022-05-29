@@ -173,9 +173,7 @@ around BUILDARGS => sub {
   }
 };
 
-sub register_prereqs {
-  my ($self) = @_;
-
+sub register_prereqs ($self) {
   $self->zilla->register_prereqs(
     {
       type  => $self->prereq_type,

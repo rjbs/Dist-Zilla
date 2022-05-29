@@ -61,9 +61,7 @@ has append_file => (
   default => sub { [] },
 );
 
-sub gather_files {
-  my ($self, $arg) = @_;
-
+sub gather_files ($self, $arg = {}) {
   my $zilla = $self->zilla;
 
   my $postlude = '';

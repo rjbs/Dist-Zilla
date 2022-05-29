@@ -30,8 +30,7 @@ after 'BUILD' => sub {
   $self->_set_original_name( $self->name );
 };
 
-sub _build_encoded_content {
-  my ($self) = @_;
+sub _build_encoded_content ($self) {
   return path($self->_original_name)->slurp_raw;
 }
 

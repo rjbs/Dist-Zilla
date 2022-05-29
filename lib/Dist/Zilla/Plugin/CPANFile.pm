@@ -68,9 +68,7 @@ has comment => (
   }
 );
 
-sub _hunkify_hunky_hunk_hunks {
-  my ($self, $indent, $type, $req) = @_;
-
+sub _hunkify_hunky_hunk_hunks ($self, $indent, $type, $req) {
   my $str = '';
   for my $module (sort $req->required_modules) {
     my $vstr = $req->requirements_for_module($module);
@@ -80,9 +78,7 @@ sub _hunkify_hunky_hunk_hunks {
   return $str;
 }
 
-sub gather_files {
-  my ($self, $arg) = @_;
-
+sub gather_files ($self, $arg = {}) {
   my $zilla = $self->zilla;
 
   my $file  = Dist::Zilla::File::FromCode->new({

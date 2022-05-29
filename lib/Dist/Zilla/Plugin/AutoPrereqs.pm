@@ -137,8 +137,7 @@ has type => (
   default => 'requires',
 );
 
-sub scan_file_reqs {
-  my ($self, $file) = @_;
+sub scan_file_reqs ($self, $file) {
   return $self->_scanner->scan_ppi_document($self->ppi_document_for_file($file))
 }
 

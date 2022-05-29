@@ -30,15 +30,11 @@ sub description {
   "a basic Dist::Zilla configuration in ~/.dzil/config.ini"
 }
 
-sub validate_args {
-  my ($self, $opt, $args) = @_;
-
+sub validate_args ($self, $opt, $args) {
   $self->usage_error('too many arguments') if @$args != 0;
 }
 
-sub execute {
-  my ($self, $opt, $arg) = @_;
-
+sub execute ($self, $opt, $arg) {
   my $chrome = $self->app->chrome;
 
   require Dist::Zilla::Util;

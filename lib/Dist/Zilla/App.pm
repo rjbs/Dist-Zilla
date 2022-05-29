@@ -12,9 +12,7 @@ use namespace::autoclean;
 
 $Carp::Internal{'Module::Runtime'} = 1;
 
-sub global_opt_spec {
-  my ($self) = @_;
-
+sub global_opt_spec ($self) {
   return (
     [ "verbose|v",           "log additional output" ],
     [ "verbose-plugin|V=s@", "log additional output from some plugins only" ],
@@ -25,9 +23,7 @@ sub global_opt_spec {
   );
 }
 
-sub _build_global_stashes {
-  my ($self) = @_;
-
+sub _build_global_stashes ($self) {
   return $self->{__global_stashes__} if $self->{__global_stashes__};
 
   # tests shouldn't depend on the user's configuration
@@ -100,8 +96,7 @@ been constructed, one will be by calling C<< Dist::Zilla->from_config >>.
 
 =cut
 
-sub chrome {
-  my ($self) = @_;
+sub chrome ($self) {
   require Dist::Zilla::Chrome::Term;
 
   return $self->{__chrome__} if $self->{__chrome__};
@@ -119,9 +114,7 @@ sub chrome {
   return $self->{__chrome__};
 }
 
-sub zilla {
-  my ($self) = @_;
-
+sub zilla ($self) {
   require Dist::Zilla::Dist::Builder;
 
   return $self->{'' . __PACKAGE__}{zilla} ||= do {

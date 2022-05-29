@@ -23,9 +23,7 @@ has _file_obj => (
   is => 'rw', isa => role_type('Dist::Zilla::Role::File'),
 );
 
-sub gather_files {
-  my ($self, $arg) = @_;
-
+sub gather_files ($self, $arg = {}) {
   require Dist::Zilla::File::InMemory;
 
   my $template = q|

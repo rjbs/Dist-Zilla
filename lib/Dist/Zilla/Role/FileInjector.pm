@@ -22,8 +22,7 @@ as it does so.
 
 =cut
 
-sub add_file {
-  my ($self, $file) = @_;
+sub add_file ($self, $file) {
   my ($pkg, undef, $line) = caller;
 
   $file->_set_added_by(

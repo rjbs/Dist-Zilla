@@ -66,9 +66,7 @@ around BUILDARGS => sub {
   return \%retargs;
 };
 
-sub _file_from_filename {
-  my ($self, $filename) = @_;
-
+sub _file_from_filename ($self, $filename) {
   my $template = path($filename)->slurp_utf8;
 
   my @stat = stat $filename or $self->log_fatal("$filename does not exist!");

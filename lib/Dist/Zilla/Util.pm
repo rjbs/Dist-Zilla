@@ -86,8 +86,7 @@ C<=head1> section called "NAME" or a comment beginning with C<ABSTRACT:>.
 
 =cut
 
-sub abstract_from_file {
-  my ($self, $file) = @_;
+sub abstract_from_file ($self, $file) {
   my $e = Dist::Zilla::Util::PEA->_new;
 
   $e->parse_string_document($file->content);
@@ -140,9 +139,7 @@ sub _global_config_root {
   return Dist::Zilla::Path::path($homedir)->child('.dzil');
 }
 
-sub _assert_loaded_class_version_ok {
-  my ($self, $pkg, $version) = @_;
-
+sub _assert_loaded_class_version_ok ($self, $pkg, $version) {
   require CPAN::Meta::Requirements;
   my $req = CPAN::Meta::Requirements->from_string_hash({
     $pkg => $version,
