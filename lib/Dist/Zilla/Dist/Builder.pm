@@ -742,6 +742,7 @@ sub install {
   } else {
     $self->log("all's well; removing $target");
     $target->remove_tree({ safe => 0 });
+    $latest->remove_tree({ safe => 0 }) if -d $latest; # error cannot unlink, is a directory
     $latest->remove if $latest;
   }
 
@@ -857,6 +858,7 @@ sub run_in_build {
   if ($ok) {
     $self->log("all's well; removing $target");
     $target->remove_tree({ safe => 0 });
+    $latest->remove_tree({ safe => 0 }) if -d $latest; # error cannot unlink, is a directory
     $latest->remove if $latest;
   } else {
     my $error = $@ || '(unknown error)';
