@@ -55,7 +55,7 @@ my $tzil = Builder->from_config(
 );
 
 my $corpus_dir = path($tzil->tempdir)->child('corpus');
-if ($^O ne 'MSWin32') {
+if ($^O ne 'MSWin32' && $^O ne 'msys') {
   symlink $corpus_dir->child('extra', 'vader.txt'), $corpus_dir->child('extra', 'vader_link.txt')
     or note "could not create link: $!";
 
@@ -81,8 +81,8 @@ is_filelist(
     dist.ini lib/DZT/Sample.pm t/basic.t
     MANIFEST
   ),
-    ($^O ne 'MSWin32' ? ('links/global_link/config.ini') : ()),
-    ($^O ne 'MSWin32' ? (map { $_ . '/vader_link.txt' } qw(bonus dotty some xmatch links pruned)) : ()),
+    ($^O ne 'MSWin32' && $^O ne 'msys' ? ('links/global_link/config.ini') : ()),
+    ($^O ne 'MSWin32' && $^O ne 'msys' ? (map { $_ . '/vader_link.txt' } qw(bonus dotty some xmatch links pruned)) : ()),
   ],
   "GatherDir gathers all files in the source dir",
 );
@@ -99,7 +99,7 @@ diag 'got log messages: ', explain $tzil->log_messages
 my @to_remove;
 
 TODO: {
-  todo_skip('MSWin32 - skipping symlink test', 1) if $^O eq 'MSWin32';
+  todo_skip('MSWin32 - skipping symlink test', 1) if $^O eq 'MSWin32' || $^O eq 'msys';
 
   # tmp/tmp -> tmp/private/tmp
   my $real_tmp = path('tmp', 'private', 'tmp');
