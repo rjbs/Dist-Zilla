@@ -9,7 +9,7 @@ use List::Util 1.45 ();
 
 use namespace::autoclean;
 
-sub format_author_deps ($reqs, $versions) {
+sub format_author_deps ($reqs, $versions = undef) {
   my $formatted = '';
   foreach my $rec (@{ $reqs }) {
     my ($mod, $ver) = each(%{ $rec });
@@ -19,7 +19,7 @@ sub format_author_deps ($reqs, $versions) {
   return $formatted;
 }
 
-sub extract_author_deps ($root, $missing) {
+sub extract_author_deps ($root, $missing = undef) {
   my $ini = path($root, 'dist.ini');
 
   die "dzil authordeps only works on dist.ini files, and you don't have one\n"
