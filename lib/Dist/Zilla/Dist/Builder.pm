@@ -616,7 +616,7 @@ like matching the glob C<Your-Dist-*>.
 
 =cut
 
-sub clean ($self, $dry_run) {
+sub clean ($self, $dry_run = undef) {
   require File::Path;
   for my $x (grep { -e } '.build', glob($self->name . '-*')) {
     if ($dry_run) {
