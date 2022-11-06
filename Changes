@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+6.027     2022-11-06 17:52:20-05:00 America/New_York
         - if DZIL_COLOR is set to 0, override auto-detection
 
 6.025     2022-05-28 11:55:35-04:00 America/New_York
