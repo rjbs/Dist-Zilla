@@ -74,7 +74,9 @@ sub _build_logger {
     quiet_fatal => 'stdout',
   });
 
-  if (-t *STDOUT || $ENV{DZIL_COLOR}) {
+  my $use_color = $ENV{DZIL_COLOR} // -t *STDOUT;
+
+  if ($use_color) {
     my $stdout = $logger->{dispatcher}->output('stdout');
 
     $stdout->add_callback(sub {
