@@ -1,6 +1,5 @@
 #!/usr/bin/perl
-package
-  dzil;
+package dzil;
 use Dist::Zilla::App;
 
 use Dist::Zilla::Pragmas;
@@ -14,7 +13,7 @@ Dist::Zilla::App->run;
 
 =head1 OVERVIEW
 
-For help with L<Dist::Zilla|Dist::Zilla>, start with L<http://dzil.org/> or
+For help with L<Dist::Zilla|Dist::Zilla>, start with L<https://dzil.org/> or
 by running C<dzil commands>.
 
 =cut
