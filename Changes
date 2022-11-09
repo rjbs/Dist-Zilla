@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+6.028     2022-11-09 10:54:14-05:00 America/New_York
         - remove bogus work-in-progress signatures-using commit from 6.027;
           that was a bad release! thanks for the heads-up about it to Gianni
           "dakkar" Ceccarelli!
