@@ -9,6 +9,8 @@ Revision history for {{$dist->name}}
           (thanks, Branislav Zahradník)
         - fixes to operation on msys (thanks, Paulo Custodio)
         - add "main_module" option to MakeMaker (thanks, Tatsuhiko Miyagawa)
+        - fix authordeps behavior; don't add an object to @INC (thanks, Shoichi
+          Kaji)
 
 6.028     2022-11-09 10:54:14-05:00 America/New_York
         - remove bogus work-in-progress signatures-using commit from 6.027;
