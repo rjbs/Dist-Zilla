@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - update some links to use https instead of http (thanks, Elvin
+          Aslanov)
 
 6.028     2022-11-09 10:54:14-05:00 America/New_York
         - remove bogus work-in-progress signatures-using commit from 6.027;
