@@ -5,6 +5,8 @@ Revision history for {{$dist->name}}
           Aslanov)
         - turn on strict and warnings in generated author tests (thanks, Mark
           Flickinger)
+        - use "v1.2.3" for multi-dot versions in "package NAME VERSION" formats
+          (thanks, Branislav Zahradník)
 
 6.028     2022-11-09 10:54:14-05:00 America/New_York
         - remove bogus work-in-progress signatures-using commit from 6.027;
