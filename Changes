@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+6.029     2022-11-25 17:02:33-05:00 America/New_York
         - update some links to use https instead of http (thanks, Elvin
           Aslanov)
         - turn on strict and warnings in generated author tests (thanks, Mark
