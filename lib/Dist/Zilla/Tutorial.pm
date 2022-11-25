@@ -10,7 +10,7 @@ Carp::confess "you're not meant to use the tutorial, just read it!";
 =head1 SYNOPSIS
 
 B<BEFORE YOU GET STARTED>:  Maybe you should be looking at the web-based
-tutorial instead.  It's more complete.  L<http://dzil.org/tutorial/start.html>
+tutorial instead.  It's more complete.  L<https://dzil.org/tutorial/start.html>
 
 Dist::Zilla builds distributions to be uploaded to the CPAN.  That means that
 the first thing you'll need is some code.

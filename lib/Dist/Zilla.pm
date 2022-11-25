@@ -40,7 +40,7 @@ published, released code, it can do much more than those tools, and is free to
 make much more ludicrous demands in terms of prerequisites.
 
 If you have access to the web, you can learn more and find an interactive
-tutorial at B<L<dzil.org|http://dzil.org/>>.  If not, try
+tutorial at B<L<dzil.org|https://dzil.org/>>.  If not, try
 L<Dist::Zilla::Tutorial>.
 
 =cut
@@ -835,12 +835,8 @@ It is nasty, brutish, and large.
 There are usually people on C<irc.perl.org> in C<#distzilla>, even if they're
 idling.
 
-The L<Dist::Zilla website|http://dzil.org/> has several valuable resources for
+The L<Dist::Zilla website|https://dzil.org/> has several valuable resources for
 learning to use Dist::Zilla.
-
-There is a mailing list to discuss Dist::Zilla.  You can L<join the
-list|http://www.listbox.com/subscribe/?list_id=139292> or L<browse the
-archives|http://listbox.com/member/archive/139292>.
 
 =head1 SEE ALSO
 
