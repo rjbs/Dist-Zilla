@@ -15,12 +15,14 @@ sub import {
   feature->import(':5.20');
   feature->unimport('switch');
 
+#begin babble
   experimental->import(qw(
     lexical_subs
     postderef
     postderef_qq
     signatures
   ));
+#end babble
 
   feature->unimport('multidimensional') if $] >= 5.034;
 }
