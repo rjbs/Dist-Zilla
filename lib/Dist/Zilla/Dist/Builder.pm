@@ -11,8 +11,9 @@ use Dist::Zilla::Types qw(Path);
 
 use File::pushd ();
 use Dist::Zilla::Path; # because more Path::* is better, eh?
-use Try::Tiny;
+use Feature::Compat::Try;
 use List::Util 1.45 'uniq';
+use Scalar::Util 'blessed';
 use Module::Runtime 'require_module';
 
 use namespace::autoclean;
@@ -285,22 +286,20 @@ sub _load_config {
       if $arg->{_global_stashes};
   }
 
-  my $seq;
   try {
-    $seq = $config_class->read_config(
+    return $config_class->read_config(
       $root->child('dist'),
       {
         assembler => $assembler
       },
     );
-  } catch {
-    die $_ unless try {
-      $_->isa('Config::MVP::Error')
-      and $_->ident eq 'package not installed'
-    };
+  } catch($e) {
+    die $e unless
+      blessed($e) and $e->isa('Config::MVP::Error')
+      and $e->ident eq 'package not installed';
 
-    my $package = $_->package;
-    my $bundle  = $_->section_name =~ m{^@(?!.*/)} ? ' bundle' : '';
+    my $package = $e->package;
+    my $bundle  = $e->section_name =~ m{^@(?!.*/)} ? ' bundle' : '';
 
     die <<"END_DIE";
 Required plugin$bundle $package isn't installed.
@@ -312,9 +311,7 @@ You can pipe the list to your CPAN client to install or update them:
 
 END_DIE
 
-  };
-
-  return $seq;
+  }
 }
 
 =method build_in

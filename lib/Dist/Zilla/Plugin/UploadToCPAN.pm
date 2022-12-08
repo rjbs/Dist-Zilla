@@ -11,7 +11,7 @@ use File::Spec;
 use Moose::Util::TypeConstraints;
 use Scalar::Util qw(weaken);
 use Dist::Zilla::Util;
-use Try::Tiny;
+use Feature::Compat::Try;
 
 use namespace::autoclean;
 
@@ -188,13 +188,12 @@ has pause_cfg => (
     $file = File::Spec->catfile($self->pause_cfg_dir, $file)
       unless File::Spec->file_name_is_absolute($file);
     return {} unless -e $file && -r _;
-    my $cfg = try {
-      CPAN::Uploader->read_config_file($file)
-    } catch {
-      $self->log("Couldn't load credentials from '$file': $_");
-      {};
-    };
-    return $cfg;
+    try {
+      return CPAN::Uploader->read_config_file($file)
+    } catch($e) {
+      $self->log("Couldn't load credentials from '$file': $e");
+      return {};
+    }
   },
 );
 
@@ -292,9 +291,9 @@ sub before_release {
       die unless length $self->$attr;
     }
     undef $problem;
-  };
-
-  $self->log_fatal(['You need to supply a %s', $problem]) if $problem;
+  } catch($e) {
+    $self->log_fatal(['You need to supply a %s', $problem]) if $problem;
+  }
 }
 
 sub release {
