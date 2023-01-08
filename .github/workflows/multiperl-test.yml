@@ -1,5 +1,5 @@
 name: "multiperl test"
-on: push
+on: [ push, pull_request ]
 
 # FUTURE ENHANCEMENT(s):
 # * install faster (see below)
