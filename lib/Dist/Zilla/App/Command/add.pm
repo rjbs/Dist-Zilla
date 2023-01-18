@@ -24,11 +24,9 @@ sub abstract { 'add modules to an existing dist' }
 sub usage_desc { '%c %o <ModuleName>' }
 
 sub opt_spec {
-  [ 'profile|p=s',  'name of the profile to use',
-    { default => 'default' }  ],
+  [ 'profile|p=s',  'name of the profile to use' ],
 
-  [ 'provider|P=s', 'name of the profile provider to use',
-    { default => 'Default' }  ],
+  [ 'provider|P=s', 'name of the profile provider to use' ],
 
   # [ 'module|m=s@', 'module(s) to create; may be given many times'         ],
 }
@@ -51,12 +49,22 @@ sub execute {
 
   my $zilla = $self->zilla;
   my $dist = $zilla->name;
-  
+
   require File::pushd;
+
+  my $mint_stash = $zilla->stash_named('%Mint');
+
+  my $provider = $opt->provider
+    // ($mint_stash && $mint_stash->provider)
+    // 'Default';
+
+  my $profile = $opt->profile
+    // ($mint_stash && $mint_stash->profile)
+    // 'default';
 
   require Dist::Zilla::Dist::Minter;
   my $minter = Dist::Zilla::Dist::Minter->_new_from_profile(
-    [ $opt->provider, $opt->profile ],
+    [ $provider, $profile ],
     {
       chrome  => $self->app->chrome,
       name    => $dist,
