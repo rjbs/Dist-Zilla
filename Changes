@@ -1,6 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - "dzil new" will use command line options before configuration
+        - "dzil add" now falls back to %Mint stash options before defaults
+          (for both of the above: thanks, Graham Knop!)
 
 6.029     2022-11-25 17:02:33-05:00 America/New_York
         - update some links to use https instead of http (thanks, Elvin
