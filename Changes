@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+6.030     2023-01-18 21:36:40-05:00 America/New_York
         - "dzil new" will use command line options before configuration
         - "dzil add" now falls back to %Mint stash options before defaults
           (for both of the above: thanks, Graham Knop!)
