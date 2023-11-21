@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+6.031     2023-11-20 19:49:23-05:00 America/New_York
         - avoid some warnings on platforms without symlinks; (thanks, reneeb!)
 
 6.030     2023-01-18 21:36:40-05:00 America/New_York
