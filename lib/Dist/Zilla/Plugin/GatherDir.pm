@@ -50,7 +50,9 @@ use List::Util 1.33 'all';
 
 This is the directory in which to look for files.  If not given, it defaults to
 the dist root -- generally, the place where your F<dist.ini> or other
-configuration file is located.
+configuration file is located.  It may begin with C<~> (or C<~user>)
+to mean your (or some other user's) home directory.  If a relative path,
+it is relative to the dist root.
 
 =cut
 
