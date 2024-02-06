@@ -6,7 +6,8 @@ use Dist::Zilla::Pragmas;
 use App::Cmd::Setup 0.330 -app; # better compilation error detection
 
 use Carp ();
-use Try::Tiny;
+use Feature::Compat::Try;
+use Scalar::Util 'blessed';
 
 use namespace::autoclean;
 
@@ -63,8 +64,7 @@ sub _build_global_stashes {
     });
 
     my $seq = $reader->read_config($config_base, { assembler => $assembler });
-  } catch {
-    my $e = $_;
+  } catch($e) {
     if (eval { $e->isa('Config::MVP::Error') and $e->ident eq 'package not installed' }) {
       my $package = $e->package;
 
@@ -88,7 +88,7 @@ and deleting any [!new] stanza.  You can also delete the existing file and run
 "dzil setup"
 END_DIE
     }
-  };
+  }
 
   return $stash_registry;
 }
@@ -141,11 +141,11 @@ sub zilla {
         chrome => $self->chrome,
         _global_stashes => $self->_build_global_stashes,
       });
-    } catch {
-      die $_ unless try { $_->isa('Config::MVP::Error') }
-                 && $_->ident =~ /no viable config/;
+    } catch($e) {
+      die $e unless blessed($e) && $e->isa('Config::MVP::Error')
+                 && $e->ident =~ /no viable config/;
       $self->chrome->logger->log_fatal("no configuration (e.g, dist.ini) found");
-    };
+    }
 
     $zilla->logger->set_debug($verbose ? 1 : 0);
 

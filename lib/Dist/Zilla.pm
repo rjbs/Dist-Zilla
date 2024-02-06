@@ -19,7 +19,7 @@ use Dist::Zilla::Path;
 use List::Util 1.33 qw(first none);
 use Software::License 0.104001; # ->program
 use String::RewritePrefix;
-use Try::Tiny;
+use Feature::Compat::Try;
 
 use Dist::Zilla::Prereqs;
 use Dist::Zilla::File::OnDisk;
@@ -469,8 +469,10 @@ has authors => (
       return $stash->authors;
     }
 
-    my $author = try { $self->copyright_holder };
-    return [ $author ] if length $author;
+    try {
+      my $author = $self->copyright_holder;
+      return [ $author ] if length $author;
+    } catch ($e) { }
 
     $self->log_fatal(
       "No %User stash and no copyright holder;",
