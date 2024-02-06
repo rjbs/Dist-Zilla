@@ -6,7 +6,7 @@ with 'Dist::Zilla::Role::FileGatherer';
 
 use Dist::Zilla::Pragmas;
 
-use Try::Tiny;
+use Feature::Compat::Try;
 use namespace::autoclean;
 
 =head1 DESCRIPTION
@@ -59,13 +59,12 @@ sub gather_files {
       $output->{x_serialization_backend} = sprintf '%s version %s',
             'YAML::Tiny', YAML::Tiny->VERSION;
 
-      my $yaml = try {
-        YAML::Tiny->new($output)->write_string; # text!
+      try {
+        return YAML::Tiny->new($output)->write_string; # text!
       }
-      catch {
+      catch($e) {
         $self->log_fatal("Could not create YAML string: " . YAML::Tiny->errstr)
-      };
-      return $yaml;
+      }
     },
   });
 
