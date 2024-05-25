@@ -1,6 +1,10 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - UploadToCPAN errors will distinguish between "couldn't find password"
+          and "something went wrong trying to get password"
+        - UploadToCPAN can now use any Login-type stash for credentials, not
+          just a PAUSE-class stash
 
 6.031     2023-11-20 19:49:23-05:00 America/New_York
         - avoid some warnings on platforms without symlinks; (thanks, reneeb!)
