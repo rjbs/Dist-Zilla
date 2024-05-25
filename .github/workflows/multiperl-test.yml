@@ -30,9 +30,9 @@ jobs:
         # may do that later, but for now, it's fine! -- rjbs, 2023-01-07
         run: |
           dzil authordeps --missing > /tmp/deps-phase-1.txt
-          /tmp/cpanm --notest -S < /tmp/deps-phase-1.txt
+          /tmp/cpanm --notest -S < /tmp/deps-phase-1.txt || cat ~/.cpanm/build.log
           dzil listdeps --author --missing >> /tmp/deps-phase-2.txt
-          /tmp/cpanm --notest -S < /tmp/deps-phase-2.txt
+          /tmp/cpanm --notest -S < /tmp/deps-phase-2.txt || cat ~/.cpanm/build.log
       - name: Build tarball
         run: |
           dzil build --in Dist-To-Test
