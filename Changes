@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+6.032     2024-05-25 12:30:02-04:00 America/New_York
         - UploadToCPAN errors will distinguish between "couldn't find password"
           and "something went wrong trying to get password"
         - UploadToCPAN can now use any Login-type stash for credentials, not
