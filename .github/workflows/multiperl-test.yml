@@ -30,9 +30,9 @@ jobs:
         # may do that later, but for now, it's fine! -- rjbs, 2023-01-07
         run: |
           dzil authordeps --missing > /tmp/deps-phase-1.txt
-          /tmp/cpanm --notest -S < /tmp/deps-phase-1.txt || cat ~/.cpanm/build.log
+          /tmp/cpanm --notest -S < /tmp/deps-phase-1.txt
           dzil listdeps --author --missing >> /tmp/deps-phase-2.txt
-          /tmp/cpanm --notest -S < /tmp/deps-phase-2.txt || cat ~/.cpanm/build.log
+          /tmp/cpanm --notest -S < /tmp/deps-phase-2.txt
       - name: Build tarball
         run: |
           dzil build --in Dist-To-Test
@@ -56,7 +56,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        perl-version: [ "devel", "5.36", "5.34", "5.32", "5.30", "5.28", "5.26", "5.24", "5.22", "5.20" ]
+        perl-version: [ "devel", "5.38", "5.36", "5.34", "5.32", "5.30", "5.28", "5.26", "5.24", "5.22", "5.20" ]
 
     container:
       image: perldocker/perl-tester:${{ matrix.perl-version }}
