@@ -102,12 +102,12 @@ my %safety_first = (qw(upload_uri http://bogus.example.com/do/not/upload/),
   set_responses($tzil, '', '');
 
   like( exception { $tzil->release },
-        qr/You need to supply a username/,
+        qr/No username was provided/,
         "release without credentials fails");
 
   my $msgs = $tzil->log_messages;
 
-  ok(grep({ /You need to supply a username/} @$msgs), "insist on username");
+  ok(grep({ /No username was provided/} @$msgs), "insist on username");
   ok(!grep({ /Uploading.*DZT-Sample/ } @$msgs), "no upload without credentials");
   ok(
     !grep({ /fake release happen/i } @$msgs),
@@ -127,12 +127,12 @@ my %safety_first = (qw(upload_uri http://bogus.example.com/do/not/upload/),
   set_responses($tzil, 'user', '');
 
   like( exception { $tzil->release },
-        qr/You need to supply a password/,
+        qr/No password was provided/,
         "release without password fails");
 
   my $msgs = $tzil->log_messages;
 
-  ok(grep({ /You need to supply a password/} @$msgs), "insist on password");
+  ok(grep({ /No password was provided/} @$msgs), "insist on password");
   ok(!grep({ /Uploading.*DZT-Sample/ } @$msgs), "no upload without password");
   ok(
     !grep({ /fake release happen/i } @$msgs),
@@ -153,6 +153,6 @@ my %safety_first = (qw(upload_uri http://bogus.example.com/do/not/upload/),
   );
 
   like( exception { $tzil->release },
-        qr/You need to supply a password/,
+        qr/Couldn't figure out password/,
         "password set in dist.ini is ignored");
 }

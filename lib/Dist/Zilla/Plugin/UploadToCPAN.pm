@@ -285,16 +285,22 @@ has uploader => (
 sub before_release {
   my $self = shift;
 
-  my $problem;
-  try {
-    for my $attr (qw(username password)) {
-      $problem = $attr;
-      die unless length $self->$attr;
-    }
-    undef $problem;
-  };
+  my $sentinel = [];
 
-  $self->log_fatal(['You need to supply a %s', $problem]) if $problem;
+  for my $attr (qw(username password)) {
+    my $value;
+    my $ok = eval { $value = $self->$attr; 1 };
+
+    unless ($ok) {
+      $self->log_fatal([ "Couldn't figure out %s: %s", $attr, $@ ]);
+    }
+
+    unless (length $value) {
+      $self->log_fatal([ "No $attr was provided" ]);
+    }
+  }
+
+  return;
 }
 
 sub release {
