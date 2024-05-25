@@ -58,7 +58,7 @@ You can't put your password in your F<dist.ini>.  C'mon now!
 
 =attr credentials_stash
 
-This attribute holds the name of a L<PAUSE stash|Dist::Zilla::Stash::PAUSE>
+This attribute holds the name of a L<PAUSE stash|Dist::Zilla::Stash::Login>
 that will contain the credentials to be used for the upload.  By default,
 UploadToCPAN will look for a C<%PAUSE> stash.
 
@@ -72,7 +72,7 @@ has credentials_stash => (
 
 has _credentials_stash_obj => (
   is   => 'ro',
-  isa  => maybe_type( class_type('Dist::Zilla::Stash::PAUSE') ),
+  isa  => maybe_type( role_type('Dist::Zilla::Role::Stash::Login') ),
   lazy => 1,
   init_arg => undef,
   default  => sub { $_[0]->zilla->stash_named( $_[0]->credentials_stash ) },
