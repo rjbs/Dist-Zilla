@@ -24,15 +24,30 @@ jobs:
           chmod u+x /tmp/cpanm
       - name: Install Dist::Zilla
         run: sudo apt-get install -y libdist-zilla-perl
-      - name: Install prereqs
-        # This could probably be made more efficient by looking at what it's
-        # installing via cpanm that could, instead, be installed from apt.  I
-        # may do that later, but for now, it's fine! -- rjbs, 2023-01-07
+      - name: Install authordeps
         run: |
           dzil authordeps --missing > /tmp/deps-phase-1.txt
+          echo "---BEGIN AUTHORDEPS---"
+          cat /tmp/deps-phase-1.txt
+          echo "---END AUTHORDEPS---"
           /tmp/cpanm --notest -S < /tmp/deps-phase-1.txt
-          dzil listdeps --author --missing >> /tmp/deps-phase-2.txt
+      - name: Upload cpanm logs for authordeps
+        uses: actions/upload-artifact@v4
+        with:
+          name: cpanm-authordeps.log
+          path: ~/.cpanm/build.log
+      - name: Install missing prereqs
+        run: |
+          dzil listdeps --author --missing > /tmp/deps-phase-2.txt
+          echo "---BEGIN PREREQS---"
+          cat /tmp/deps-phase-2.txt
+          echo "---END PREREQS---"
           /tmp/cpanm --notest -S < /tmp/deps-phase-2.txt
+      - name: Upload cpanm logs for prereqs
+        uses: actions/upload-artifact@v4
+        with:
+          name: cpanm-prereqs.log
+          path: ~/.cpanm/build.log
       - name: Build tarball
         run: |
           dzil build --in Dist-To-Test
