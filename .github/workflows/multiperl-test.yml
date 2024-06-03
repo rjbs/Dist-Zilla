@@ -75,14 +75,12 @@ jobs:
         run: tar zxvf Dist-To-Test.tar.gz
       - name: Install dependencies
         working-directory: ./Dist-To-Test
-        run: cpanm --installdeps --notest .
+        run: cpm install -g
       - name: Makefile.PL
         working-directory: ./Dist-To-Test
         run: perl Makefile.PL
       - name: Install yath
-        run: cpanm --notest Test2::Harness
-      - name: Install testing libraries
-        run: cpanm --notest Test2::Harness::Renderer::JUnit
+        run: cpm install -g Test2::Harness Test2::Harness::Renderer::JUnit
       - name: Run the tests
         working-directory: ./Dist-To-Test
         run: |
