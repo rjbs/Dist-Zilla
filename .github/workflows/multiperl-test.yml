@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Build archive
-        uses: rjbs/dzil-build@0
+        uses: rjbs/dzil-build@v0
 
   multiperl-test:
     needs: build-tarball
@@ -26,4 +26,4 @@ jobs:
 
     steps:
       - name: Test distribution
-        uses: rjbs/test-perl-dist@0
+        uses: rjbs/test-perl-dist@v0
