@@ -5,28 +5,15 @@ on:
     tags-ignore: "*"
   pull_request: ~
 
-# FUTURE ENHANCEMENT(s):
-# * install faster (see below)
-# * use github.event.repository.name or ${GITHUB_REPOSITORY#*/} as the
-#   tarball/build name instead of Dist-To-Test
-
 jobs:
   build-tarball:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
     steps:
       - name: Build archive
-        uses: rjbs/dzil-test@main
+        uses: rjbs/dzil-build@main
 
   multiperl-test:
     needs: build-tarball
-    env:
-      # some plugins still needs this to run their tests...
-      PERL_USE_UNSAFE_INC: 0
-      AUTHOR_TESTING: 1
-      AUTOMATED_TESTING: 1
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -38,27 +25,5 @@ jobs:
       image: perldocker/perl-tester:${{ matrix.perl-version }}
 
     steps:
-      - name: Download tarball
-        uses: actions/download-artifact@v4
-        with:
-          name: Dist-To-Test.tar.gz
-      - name: Extract tarball
-        run: tar zxvf Dist-To-Test.tar.gz
-      - name: Install dependencies
-        working-directory: ./Dist-To-Test
-        run: cpm install -g
-      - name: Makefile.PL
-        working-directory: ./Dist-To-Test
-        run: perl Makefile.PL
-      - name: Install yath
-        run: cpm install -g Test2::Harness Test2::Harness::Renderer::JUnit
-      - name: Run the tests
-        working-directory: ./Dist-To-Test
-        run: |
-          JUNIT_TEST_FILE="/tmp/test-output.xml" ALLOW_PASSING_TODOS=1 yath test --renderer=Formatter --renderer=JUnit -D
-      - name: Publish test report
-        uses: mikepenz/action-junit-report@v4
-        if: always() # always run even if the previous step fails
-        with:
-          check_name: JUnit Report (${{ matrix.perl-version }})
-          report_paths: /tmp/test-output.xml
+      - name: Test distribution
+        uses: rjbs/test-perl-dist@main
