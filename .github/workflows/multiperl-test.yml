@@ -16,37 +16,8 @@ jobs:
     strategy:
       fail-fast: false
     steps:
-      - name: Check out repo
-        uses: actions/checkout@v4
-      - name: Install cpm
-        run: |
-          curl https://raw.githubusercontent.com/skaji/cpm/main/cpm > /tmp/cpm
-          chmod u+x /tmp/cpm
-      - name: Install Dist::Zilla
-        run: sudo apt-get install -y libdist-zilla-perl libdist-zilla-plugin-git-perl libpod-weaver-perl
-      - name: Install authordeps
-        run: |
-          dzil authordeps --missing > /tmp/deps-phase-1.txt
-          echo "---BEGIN AUTHORDEPS---"
-          cat /tmp/deps-phase-1.txt
-          echo "---END AUTHORDEPS---"
-          sudo /tmp/cpm install -g - < /tmp/deps-phase-1.txt
-      - name: Install missing prereqs
-        run: |
-          dzil listdeps --author --missing > /tmp/deps-phase-2.txt
-          echo "---BEGIN PREREQS---"
-          cat /tmp/deps-phase-2.txt
-          echo "---END PREREQS---"
-          sudo /tmp/cpm install -g - < /tmp/deps-phase-2.txt
-      - name: Build tarball
-        run: |
-          dzil build --in Dist-To-Test
-          tar zcvf Dist-To-Test.tar.gz Dist-To-Test
-      - name: Upload tarball
-        uses: actions/upload-artifact@v4
-        with:
-          name: Dist-To-Test.tar.gz
-          path: Dist-To-Test.tar.gz
+      - name: Build archive
+        uses: rjbs/dzil-test@main
 
   multiperl-test:
     needs: build-tarball
