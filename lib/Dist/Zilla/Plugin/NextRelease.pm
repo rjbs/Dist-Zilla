@@ -34,10 +34,10 @@ use String::Formatter 0.100680 stringf => {
     E => sub { $_[0]->_user_info('email') },
     U => sub { $_[0]->_user_info('name')  },
     T => sub { $_[0]->zilla->is_trial
-                   ? ($_[1] // '-TRIAL') : '' },
+                   ? ($_[1] // ('-TRIAL' . ($_[0]->zilla->trial_num // '') ) ) : '' },
     V => sub { $_[0]->zilla->version
                 . ($_[0]->zilla->is_trial
-                   ? ($_[1] // '-TRIAL') : '') },
+                   ? ($_[1] // ('-TRIAL' . ($_[0]->zilla->trial_num // '') ) ) : '') },
     P => sub {
       my $releaser = first { $_->can('cpanid') } @{ $_[0]->zilla->plugins_with('-Releaser') };
       $_[0]->log_fatal('releaser doesn\'t provide cpanid, but %P used') unless $releaser;
@@ -231,10 +231,10 @@ The distribution version
 = C<%{-TRIAL}T>
 Expands to -TRIAL (or any other supplied string) if this
 is a trial release, or the empty string if not.  A bare C<%T> means
-C<%{-TRIAL}T>.
+C<%{-TRIAL}T>, with the distribution trial number appended if set.
 
 = C<%{-TRIAL}V>
-Equivalent to C<%v%{-TRIAL}T>, to allow for the application of modifiers such
+Equivalent to C<%v%T>, to allow for the application of modifiers such
 as space padding to the entire version string produced.
 
 = C<%{CLDR format}d>

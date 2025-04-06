@@ -454,9 +454,11 @@ This method will return the filename, without the format extension
 
 sub archive_basename {
   my ($self) = @_;
+  my $trial_slug = '-TRIAL';
+  $trial_slug .= $self->trial_num if defined $self->trial_num;
   return join q{},
     $self->dist_basename,
-    ( $self->is_trial && $self->version !~ /_/ ? '-TRIAL' : '' ),
+    ( $self->is_trial && $self->version !~ /_/ ? $trial_slug : '' ),
   ;
 }
 

@@ -11,6 +11,8 @@ use Dist::Zilla::App -command;
 
   dzil release --trial
 
+  dzil release --trial-num 3
+
   # long form, jobs takes an integer
   dzil release --jobs 9
 
@@ -26,6 +28,8 @@ Available options are:
 =over
 
 =item C<--trial>, will cause it to build a trial build.
+
+=item C<--trial-num=i>, optional trial release number (implies --trial).
 
 =item C<--jobs|-j=i>, number of test jobs run in parallel using L<Test::Harness|Test::Harness>.
 
@@ -43,6 +47,7 @@ sub abstract { 'release your dist' }
 
 sub opt_spec {
   [ 'trial' => 'build a trial release that PAUSE will not index' ],
+  [ 'trial-num=i' => 'optional trial release number (implies --trial)' ],
   [ 'jobs|j=i' => 'number of parallel test jobs to run' ],
 }
 
@@ -53,10 +58,11 @@ sub execute {
   {
     # isolate changes to RELEASE_STATUS to zilla construction
     local $ENV{RELEASE_STATUS} = $ENV{RELEASE_STATUS};
-    $ENV{RELEASE_STATUS} = 'testing' if $opt->trial;
+    $ENV{RELEASE_STATUS} = 'testing' if $opt->trial or defined $opt->trial_num;
     $zilla = $self->zilla;
   }
 
+  $self->zilla->trial_num($opt->trial_num) if defined $opt->trial_num;
   local $ENV{HARNESS_OPTIONS} = join ':', split(':', $ENV{HARNESS_OPTIONS} // ''), 'j'.$opt->jobs if $opt->jobs;
   $self->zilla->release;
 }
