@@ -551,7 +551,9 @@ sub _build_archive_with_wrapper {
 
   $self->log("building archive with Archive::Tar::Wrapper");
 
-  my $archive = Archive::Tar::Wrapper->new;
+  my $archive = Archive::Tar::Wrapper->new(
+    tar_gnu_write_options => ['--format=ustar'],
+  );
 
   for my $distfile (
     sort { length($a->name) <=> length($b->name) } @{ $self->files }
