@@ -2,6 +2,11 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+6.033     2025-05-01 11:45:18-04:00 America/New_York
+        - when creating a tarball with GNU tar, use --format=ustar to avoid
+          xattrs and other problems sometimes related to macOS (thanks, Graham
+          Knop!)
+
 6.032     2024-05-25 12:30:02-04:00 America/New_York
         - UploadToCPAN errors will distinguish between "couldn't find password"
           and "something went wrong trying to get password"
