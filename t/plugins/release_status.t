@@ -169,4 +169,46 @@ subtest "from version (testing)" => sub {
   unlike($tzil->archive_filename, qr/-TRIAL/, "no -TRIAL in archive filename");
 };
 
+subtest "trial number set (stable)" => sub {
+  local $ENV{RELEASE_STATUS} = 'stable';
+  my $tzil = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/dist.ini' => simple_ini(
+          'GatherDir',
+        ),
+      },
+    },
+  );
+
+  $tzil->trial_num(1);
+  $tzil->build;
+
+  is($tzil->release_status, 'stable', "release status set from environment");
+  ok(! $tzil->is_trial, "is_trial is not true");
+  unlike($tzil->archive_filename, qr/-TRIAL/, "-TRIAL not in archive filename");
+};
+
+subtest "trial number set (testing)" => sub {
+  local $ENV{RELEASE_STATUS} = 'testing';
+  my $tzil = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/dist.ini' => simple_ini(
+          'GatherDir',
+        ),
+      },
+    },
+  );
+
+  $tzil->trial_num(1);
+  $tzil->build;
+
+  is($tzil->release_status, 'testing', "release status set from environment");
+  ok($tzil->is_trial, "is_trial is true");
+  like($tzil->archive_filename, qr/-TRIAL1/, "-TRIAL1 in archive filename");
+};
+
 done_testing;

@@ -21,14 +21,16 @@ my $tzil = Builder->from_config(
   },
 );
 
+$tzil->trial_num(42);
 my $fooball = $tzil->build_archive;
 
 note "fooball = $fooball";
 note "is_trial = @{[ $tzil->is_trial ]}";
+note "trial_num = @{[ $tzil->trial_num ]}";
 
 my @payload = JSON::MaybeXS->new->decode( $fooball->slurp_raw )->@*;
 
-is $payload[0], 'DZT-Sample-0.001-TRIAL';
+is $payload[0], 'DZT-Sample-0.001-TRIAL42';
 ok -d $payload[1];
 is $payload[2], 'DZT-Sample-0.001';
 

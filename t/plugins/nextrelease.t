@@ -233,6 +233,32 @@ END_CHANGES
         'source/Changes' => $changes,
         'source/dist.ini' => simple_ini(
                 'GatherDir',
+                [ NextRelease => { format => "%v%T", } ],
+        ),
+      },
+    },
+  );
+
+  $tzil_trial->trial_num(0);
+  $tzil_trial->build;
+
+  like(
+    $tzil_trial->slurp_file('build/Changes'),
+    qr{0.001-TRIAL0},
+    "adding -TRIAL with trial num works",
+  );
+}
+
+{
+  local $ENV{TRIAL} = 1;
+
+  my $tzil_trial = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/Changes' => $changes,
+        'source/dist.ini' => simple_ini(
+                'GatherDir',
                 [ NextRelease => { format => "%-12V ohhai", } ],
         ),
       },
@@ -245,6 +271,32 @@ END_CHANGES
     $tzil_trial->slurp_file('build/Changes'),
     qr{0.001-TRIAL  ohhai},
     "adding -TRIAL with padding works",
+  );
+}
+
+{
+  local $ENV{TRIAL} = 1;
+
+  my $tzil_trial = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/Changes' => $changes,
+        'source/dist.ini' => simple_ini(
+                'GatherDir',
+                [ NextRelease => { format => "%-14V ohhai", } ],
+        ),
+      },
+    },
+  );
+
+  $tzil_trial->trial_num(6);
+  $tzil_trial->build;
+
+  like(
+    $tzil_trial->slurp_file('build/Changes'),
+    qr{0.001-TRIAL6   ohhai},
+    "adding -TRIAL with trial num works",
   );
 }
 
