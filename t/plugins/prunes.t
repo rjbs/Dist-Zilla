@@ -120,6 +120,7 @@ for my $skip_skip (0..1) {
   );
 }
 
+
 {
   my $tzil = Builder->from_config(
     { dist_root => 'corpus/dist/DZT' },
@@ -142,6 +143,56 @@ for my $skip_skip (0..1) {
     [ @files ],
     [ qw(dist.ini lib/DZT/Sample.pm t/basic.t Build) ],
     "...but /Build isn't  pruned by PruneCruft if we exclude it",
+  );
+}
+
+{
+  my $tzil = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/Build'    => "This file is cruft.\n",
+        'source/dist.ini' => simple_ini('GatherDir', 'PruneCruft'),
+        'source/dist.ini~'    => "This backup is cruft.\n",
+        'source/dist.ini~1~'  => "This backup is cruft.\n",
+        'source/%dist.ini%~'  => "This backup is cruft.\n",
+      },
+    },
+  );
+
+  $tzil->build;
+
+  my @files = map {; $_->name } @{ $tzil->files };
+
+  is_filelist(
+    [ @files ],
+    [ qw(dist.ini lib/DZT/Sample.pm t/basic.t) ],
+    "/dist.ini~ is pruned by PruneCruft",
+  );
+}
+
+{
+  my $tzil = Builder->from_config(
+    { dist_root => 'corpus/dist/DZT' },
+    {
+      add_files => {
+        'source/Build'    => "This file is cruft.\n",
+        'source/dist.ini' => simple_ini('GatherDir', 'PruneCruft'),
+        'source/perltidy.ERR' => "This file is cruft.\n",
+        'source/t/perltidy.ERR' => "This file is cruft.\n",
+        'source/lib/DZT/perltidy.ERR' => "This file is cruft.\n",
+      },
+    },
+  );
+
+  $tzil->build;
+
+  my @files = map {; $_->name } @{ $tzil->files };
+
+  is_filelist(
+    [ @files ],
+    [ qw(dist.ini lib/DZT/Sample.pm t/basic.t) ],
+    "perltidy.ERR files are pruned by PruneCruft",
   );
 }
 
@@ -244,4 +295,3 @@ for my $arg (qw(filename filenames)) {
 }
 
 done_testing;
-
