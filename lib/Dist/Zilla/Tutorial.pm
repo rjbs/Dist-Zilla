@@ -25,11 +25,15 @@ F<dist.ini>:
   copyright_holder = Alan Smithee
 
   [@Basic]
+  ; options to @Basic could go here
 
   [Prereqs]
   App::Cmd          = 0.013
   Number::Nary      = 0
   Sub::Exporter     = 0.981
+
+It's a plain old L<INI file|https://en.wikipedia.org/wiki/INI_file>, following
+the L<grammar in Config::INI|https://metacpan.org/pod/Config::INI#GRAMMAR>.
 
 The topmost section configures Dist::Zilla itself.  Here are some of the
 entries it expects:
