@@ -40,6 +40,7 @@ use Test::DZil;
     LICENSE  => 'perl',
     MIN_PERL_VERSION => '5.010',
     test => { TESTS => 't/*.t' },
+    INSTALLDIRS => ($] < 5.011 ? 'perl' : 'site'),
 
     PREREQ_PM          => {
       'Foo::Bar' => '1.20',
@@ -58,8 +59,12 @@ use Test::DZil;
     test => { TESTS => 't/*.t' },
   );
 
+  my $hashref = $makemaker->__write_makefile_args;
+#  print STDERR Dumper($hashref); # $hashref lacks INSTALLDIRS kvp
+#  print STDERR Dumper(\%want); # %want is okay; has INSTALLDIRS kvp
   cmp_deeply(
-    $makemaker->__write_makefile_args,
+      #$makemaker->__write_makefile_args,
+    $hashref,
     \%want,
     'correct makemaker args generated',
   );

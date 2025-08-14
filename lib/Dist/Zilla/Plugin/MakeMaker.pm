@@ -260,6 +260,7 @@ sub write_makefile_args {
     VERSION   => $self->zilla->version,
     LICENSE   => $self->zilla->license->meta_yml_name,
     @exe_files ? ( EXE_FILES => [ sort @exe_files ] ) : (),
+    INSTALLDIRS => ($] < 5.011 ? 'perl' : 'site'),
 
     CONFIGURE_REQUIRES => $require_prereqs{configure},
     keys %{ $require_prereqs{build} } ? ( BUILD_REQUIRES => $require_prereqs{build} ) : (),
