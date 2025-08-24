@@ -45,6 +45,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
   package
     Dist::Zilla::Tester::_Role;
 
+  use autodie;
   use Moose::Role;
 
   has tempdir_root => (
@@ -65,7 +66,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
     # File::Temp deletes the directory when it goes out of scope
     $self->_clear_tempdir_obj;
 
-    rmdir $self->tempdir_root if $self->tempdir_root;
+    Dist::Zilla::Path->new( $self->tempdir_root)->remove_tree if $self->tempdir_root;
     return $self->$orig(@_);
   };
 
@@ -114,6 +115,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
 {
   package Dist::Zilla::Tester::_Builder;
 
+  use autodie;
   use Moose;
   extends 'Dist::Zilla::Dist::Builder';
   with 'Dist::Zilla::Tester::_Role';
@@ -259,6 +261,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
 {
   package Dist::Zilla::Tester::_Minter;
 
+  use autodie;
   use Moose;
   extends 'Dist::Zilla::Dist::Minter';
   with 'Dist::Zilla::Tester::_Role';
