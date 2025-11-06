@@ -172,11 +172,11 @@ sub execute {
 
   my @names = sort { lc $a cmp lc $b } keys %modules;
   if ($opt->versions) {
-      print "$_ = $modules{$_}\n" for @names;
+    print "$_ = $modules{$_}\n" for @names;
   } elsif ($opt->cpanm_versions) {
-      print qq{$_~"$modules{$_}"\n} for @names;
+    print qq{$_~"$modules{$_}"\n} for @names;
   } else {
-      print "$_\n" for @names;
+    print "$_\n" for @names;
   }
 }
 
