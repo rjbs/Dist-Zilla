@@ -174,7 +174,7 @@ sub execute {
   if ($opt->versions) {
     print "$_ = $modules{$_}\n" for @names;
   } elsif ($opt->cpanm_versions) {
-    print qq{$_~"$modules{$_}"\n} for @names;
+    print "$_~$modules{$_}\n" for @names;
   } else {
     print "$_\n" for @names;
   }

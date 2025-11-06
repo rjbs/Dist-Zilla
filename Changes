@@ -2,6 +2,8 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
         - add "dzil authordeps --cpanm-versions"
+        - the --cpanm-versions output no longer includes double quotes;
+          that is: it emits Foo~2 rather than Foo~"2"
         - drop Archive::Tar::Wrapper, which failed when the path contained
           non-ASCII; the speed improvement was quite small
 

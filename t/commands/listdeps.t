@@ -54,7 +54,7 @@ my @default_prereqs = (
 for my $how (
   [ [ ],                    sub {$_} ], # normal
   [ [ '--versions' ],       sub { "$_ = $versions{$_}" }   ],
-  [ [ '--cpanm-versions' ], sub { qq{$_~"$versions{$_}"} } ],
+  [ [ '--cpanm-versions' ], sub { "$_~$versions{$_}" } ],
 ) {
   my @opt  = @{ $how->[0] };
   my $map  = $how->[1];

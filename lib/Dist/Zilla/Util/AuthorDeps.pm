@@ -15,7 +15,7 @@ sub _format_author_deps {
   my $formatted = '';
   for my $rec (@{ $reqs }) {
     my ($mod, $ver) = %$rec;
-    $formatted .= $cpanm_versions ? qq{$mod~"$ver"\n}
+    $formatted .= $cpanm_versions ? "$mod~$ver\n"
                 : $versions       ? "$mod = $ver\n"
                 :                   "$mod\n";
   }
