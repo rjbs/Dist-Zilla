@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - add "dzil authordeps --cpanm-versions"
 
 6.033     2025-05-01 11:45:18-04:00 America/New_York
         - when creating a tarball with GNU tar, use --format=ustar to avoid
