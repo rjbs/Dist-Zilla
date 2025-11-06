@@ -29,6 +29,7 @@ sub opt_spec {
     [ 'root=s' => 'the root of the dist; defaults to .' ],
     [ 'missing' => 'list only the missing dependencies' ],
     [ 'versions' => 'include required version numbers in listing' ],
+    [ 'cpanm-versions' => 'format versions for consumption by cpanm' ],
   );
 }
 
@@ -38,11 +39,13 @@ sub execute {
   require Dist::Zilla::Path;
   require Dist::Zilla::Util::AuthorDeps;
 
-  my $deps = Dist::Zilla::Util::AuthorDeps::format_author_deps(
-    Dist::Zilla::Util::AuthorDeps::extract_author_deps(
+  my $deps = Dist::Zilla::Util::AuthorDeps::_format_author_deps(
+    Dist::Zilla::Util::AuthorDeps::_extract_author_deps(
       Dist::Zilla::Path::path($opt->root // '.'),
       $opt->missing,
-    ), $opt->versions
+    ),
+    $opt->versions,
+    $opt->cpanm_versions
   );
 
   $self->log($deps) if $deps;
