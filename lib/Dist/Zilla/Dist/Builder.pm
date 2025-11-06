@@ -499,12 +499,7 @@ sub build_archive {
     return $file if defined $file;
   }
 
-  my $method = eval { +require Archive::Tar::Wrapper;
-                      Archive::Tar::Wrapper->VERSION('0.15'); 1 }
-             ? '_build_archive_with_wrapper'
-             : '_build_archive';
-
-  my $archive = $self->$method($built_in, $basedir);
+  my $archive = $self->_build_archive($built_in, $basedir);
 
   my $file = path($self->archive_filename);
 
@@ -516,8 +511,6 @@ sub build_archive {
 
 sub _build_archive {
   my ($self, $built_in, $basedir) = @_;
-
-  $self->log("building archive with Archive::Tar; install Archive::Tar::Wrapper 0.15 or newer for improved speed");
 
   require Archive::Tar;
   my $archive = Archive::Tar->new;
@@ -540,31 +533,6 @@ sub _build_archive {
       $basedir->child( $distfile->name ),
       path($filename)->slurp_raw,
       { mode => (stat $filename)[2] & ~022 },
-    );
-  }
-
-  return $archive;
-}
-
-sub _build_archive_with_wrapper {
-  my ($self, $built_in, $basedir) = @_;
-
-  $self->log("building archive with Archive::Tar::Wrapper");
-
-  my $archive = Archive::Tar::Wrapper->new(
-    tar_gnu_write_options => ['--format=ustar'],
-  );
-
-  for my $distfile (
-    sort { length($a->name) <=> length($b->name) } @{ $self->files }
-  ) {
-    my $in = path($distfile->name)->parent;
-
-    my $filename = $built_in->child( $distfile->name );
-    $archive->add(
-      $basedir->child( $distfile->name )->stringify,
-      $filename->stringify,
-      { perm => (stat $filename)[2] & ~022 },
     );
   }
 
