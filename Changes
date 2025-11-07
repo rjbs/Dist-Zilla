@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+6.034     2025-11-07 09:20:18-05:00 America/Toronto
         - add "dzil authordeps --cpanm-versions"
         - the --cpanm-versions output no longer includes double quotes;
           that is: it emits Foo~2 rather than Foo~"2"
