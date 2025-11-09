@@ -9,22 +9,6 @@ use List::Util 1.45 ();
 
 use namespace::autoclean;
 
-sub _format_author_deps {
-  my ($reqs, $versions, $cpanm_versions) = @_;
-
-  my $formatted = '';
-  for my $rec (@$reqs) {
-    my ($mod, $ver) = %$rec;
-    $formatted .= $cpanm_versions ? "$mod~$ver\n"
-                : $versions       ? "$mod = $ver\n"
-                :                   "$mod\n";
-  }
-
-  chomp $formatted;
-
-  return $formatted;
-}
-
 =func extract_author_deps
 
   my $prereqs = extract_author_deps($dist_root, $missing_only);
@@ -32,8 +16,8 @@ sub _format_author_deps {
 This returns a reference to an array in the form:
 
   [
-    { $pkg1 => $ver1 },
-    { $pkg2 => $ver2 },
+    { $module1 => $ver1 },
+    { $module2 => $ver2 },
     ...
   ]
 
@@ -173,5 +157,52 @@ sub extract_author_deps {
   # hashrefs for display.
   [ map { { $_ => $vermap->{$_} } } @packages ]
 }
+
+=func format_author_deps
+
+  my $string = format_author_deps($prereqs, $include_versions);
+
+Given a reference to an array in the format returned by C<extract_author_deps>,
+this returns a string in the form:
+
+  Module::One
+  Module::Two
+  Module::Three
+
+or, if C<$include_versions> is true:
+
+  Module::One = 1.00
+  Module::Two = 1.23
+  Module::Three = 8.910213
+
+I<This function is not really meant to be reliable.>  It was undocumented and
+subject to change at any time, but some downstream libraries chose to use it
+anyway.  I may provide a replacement, at some point, at which point this method
+will be deprecated and begin issuing a warning.  I have documented this method
+only to provide this warning!
+
+=cut
+
+sub format_author_deps {
+  my ($reqs, $versions) = @_;
+  return _format_author_deps($prereqs, $versions);
+}
+
+sub _format_author_deps {
+  my ($prereqs, $versions, $cpanm_versions) = @_;
+
+  my $formatted = '';
+  for my $rec (@$prereqs) {
+    my ($mod, $ver) = %$rec;
+    $formatted .= $cpanm_versions ? "$mod~$ver\n"
+                : $versions       ? "$mod = $ver\n"
+                :                   "$mod\n";
+  }
+
+  chomp $formatted;
+
+  return $formatted;
+}
+
 
 1;
