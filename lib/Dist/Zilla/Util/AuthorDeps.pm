@@ -13,7 +13,7 @@ sub _format_author_deps {
   my ($reqs, $versions, $cpanm_versions) = @_;
 
   my $formatted = '';
-  for my $rec (@{ $reqs }) {
+  for my $rec (@$reqs) {
     my ($mod, $ver) = %$rec;
     $formatted .= $cpanm_versions ? "$mod~$ver\n"
                 : $versions       ? "$mod = $ver\n"
@@ -25,7 +25,31 @@ sub _format_author_deps {
   return $formatted;
 }
 
-sub _extract_author_deps {
+=func extract_author_deps
+
+  my $prereqs = extract_author_deps($dist_root, $missing_only);
+
+This returns a reference to an array in the form:
+
+  [
+    { $pkg1 => $ver1 },
+    { $pkg2 => $ver2 },
+    ...
+  ]
+
+Each entry is one of the likely author dependencies for the distribution at the
+root path C<$dist_root>.  If C<$missing_only> is true, then prereqs that appear
+to be available under the running perl will not be included.
+
+I<This function is not really meant to be reliable.>  It was undocumented and
+subject to change at any time, but some downstream libraries chose to use it
+anyway.  I may provide a replacement, at some point, at which point this method
+will be deprecated and begin issuing a warning.  I have documented this method
+only to provide this warning!
+
+=cut
+
+sub extract_author_deps {
   my ($root, $missing) = @_;
 
   my $ini = path($root, 'dist.ini');
@@ -96,7 +120,7 @@ sub _extract_author_deps {
 
   my $vermap = $reqs->as_string_hash;
   # Add the other requirements
-  push(@packages, sort keys %{ $vermap });
+  push @packages, sort keys %$vermap;
 
   # Move inc:: first in list as they may impact the loading of other
   # plugins (in particular local ones).

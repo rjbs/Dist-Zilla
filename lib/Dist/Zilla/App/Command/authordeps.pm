@@ -40,7 +40,7 @@ sub execute {
   require Dist::Zilla::Util::AuthorDeps;
 
   my $deps = Dist::Zilla::Util::AuthorDeps::_format_author_deps(
-    Dist::Zilla::Util::AuthorDeps::_extract_author_deps(
+    Dist::Zilla::Util::AuthorDeps::extract_author_deps(
       Dist::Zilla::Path::path($opt->root // '.'),
       $opt->missing,
     ),
