@@ -184,7 +184,7 @@ only to provide this warning!
 =cut
 
 sub format_author_deps {
-  my ($reqs, $versions) = @_;
+  my ($prereqs, $versions) = @_;
   return _format_author_deps($prereqs, $versions);
 }
 
