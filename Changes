@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - re-fix the re-exporter format_author_deps (thanks, Graham Knop!)
+        - fix Pragmas so it enables strict (!!!) (thanks, Graham Knop!)
 
 6.035     2025-11-09 11:26:39-05:00 America/Toronto
         - re-rename subroutine in Dist::Zilla::Util::AuthorDeps; these were not
