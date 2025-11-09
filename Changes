@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+6.036     2025-11-09 18:07:15-05:00 America/New_York
         - re-fix the re-exporter format_author_deps (thanks, Graham Knop!)
         - fix Pragmas so it enables strict (!!!) (thanks, Graham Knop!)
 
