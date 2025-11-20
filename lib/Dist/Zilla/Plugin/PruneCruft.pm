@@ -71,7 +71,9 @@ sub exclude_file {
   return 1 if $file->name =~ /\A_Inline/;
   return 1 if $file->name eq 'MYMETA.yml';
   return 1 if $file->name eq 'MYMETA.json';
+  return 1 if substr($file->name, -12) eq 'perltidy.ERR';
   return 1 if $file->name eq 'pm_to_blib';
+  return 1 if substr($file->name, -1) eq '~';
   return 1 if substr($file->name, 0, 6) eq '_eumm/';
   # Avoid bundling fatlib/ dir created by App::FatPacker
   # https://github.com/andk/pause/pull/65
