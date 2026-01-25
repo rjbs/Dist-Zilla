@@ -1,10 +1,11 @@
-Dist-Zilla-*
-.build
-tmp
+/.build
+/.gitnxtver_cache
+/.tags
+/Dist-Zilla-*
+/tmp
+
 *.patch
 .DS_Store
-
-.gitnxtver_cache
 
 # avoid temp and backup files
 *~
