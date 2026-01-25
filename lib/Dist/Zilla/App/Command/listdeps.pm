@@ -104,6 +104,7 @@ sub filter_core {
   for my $phase (@phases) {
     for my $relation (@relationships) {
       my $req = $prereqs->requirements_for($phase, $relation);
+      $req->clear_requirement('perl') if $req->accepts_module('perl', $core_version);
       for my $module ($req->required_modules) {
         next if not exists $Module::CoreList::version{$core_version}{$module};
         $req->clear_requirement($module) if $req->accepts_module($module, $Module::CoreList::version{$core_version}{$module});
