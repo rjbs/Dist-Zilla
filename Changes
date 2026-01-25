@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+6.037     2026-01-25 16:18:09-05:00 America/New_York
         - avoid warning on undef input to prompts
         - when prompting for PAUSE password, suggest that leaving it blank is
           okay
