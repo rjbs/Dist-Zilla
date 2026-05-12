@@ -1,7 +1,7 @@
 package Dist::Zilla::Pragmas;
 # ABSTRACT: the pragmas (boilerplate!) to enable in each Dist::Zilla module
 
-use v5.20.0;
+use v5.22.0;
 use strict ();
 use warnings;
 use utf8;
