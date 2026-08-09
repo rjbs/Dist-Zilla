@@ -65,7 +65,6 @@ sub gather_files {
 
   my $file  = Dist::Zilla::File::FromCode->new({
     name => $self->filename,
-    encoding => 'ascii',
     code_return_type => 'text',
     code => sub {
       my $distmeta  = $zilla->distmeta;
@@ -85,7 +84,7 @@ sub gather_files {
       $output->{x_serialization_backend} = sprintf '%s version %s',
             $backend, $backend->VERSION;
 
-      JSON::MaybeXS->new(canonical => 1, pretty => 1, ascii => 1)->encode($output)
+      JSON::MaybeXS->new(canonical => 1, pretty => 1)->encode($output)
       . "\n";
     },
   });
