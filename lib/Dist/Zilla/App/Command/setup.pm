@@ -87,7 +87,7 @@ sub execute {
           $_[0],
         );
 
-        return Params::Util::_CLASS($str) && eval "require $str; 1";
+        return Params::SomeUtil::_CLASS($str) && eval "require $str; 1";
       },
     },
   );

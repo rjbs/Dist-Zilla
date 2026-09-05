@@ -3,6 +3,7 @@ Revision history for {{$dist->name}}
 {{$NEXT}}
         - now requires v5.22.0 (now ten years old), which was effectively true
           because of some upstream libraries already
+        - switch from Params::Util to Params::SomeUtil
 
 6.037     2026-01-25 16:18:09-05:00 America/New_York
         - avoid warning on undef input to prompts

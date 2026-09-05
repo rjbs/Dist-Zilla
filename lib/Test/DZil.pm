@@ -3,7 +3,7 @@ package Test::DZil;
 
 use Dist::Zilla::Pragmas;
 
-use Params::Util qw(_HASH0);
+use Params::SomeUtil qw(_HASH0);
 use JSON::MaybeXS;
 use Scalar::Util qw(blessed);
 use Test::Deep ();
