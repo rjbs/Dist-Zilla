@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+6.038     2026-09-05 17:05:22+09:30 Australia/Adelaide
         - now requires v5.22.0 (now ten years old), which was effectively true
           because of some upstream libraries already
         - switch from Params::Util to Params::SomeUtil
