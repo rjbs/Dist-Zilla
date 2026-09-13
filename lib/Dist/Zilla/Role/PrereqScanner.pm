@@ -79,6 +79,12 @@ around mvp_aliases => sub {
 
 requires 'scan_file_reqs';
 
+# this is a bunk heuristic and can still capture strings from pod - the
+# proper thing to do is grab all packages from Module::Metadata
+sub _declared_packages ($self, $file) {
+  return $file->content =~ /^[^#]*?(?:^|\s)package\s+([^\s;#]+)/mg;
+}
+
 sub scan_prereqs {
   my $self = shift;
 
@@ -128,9 +134,7 @@ sub scan_prereqs {
       s{\.pm$}{} for @this_thing;
       s{/}{::}g for @this_thing;
 
-      # this is a bunk heuristic and can still capture strings from pod - the
-      # proper thing to do is grab all packages from Module::Metadata
-      push @this_thing, $file->content =~ /^[^#]*?(?:^|\s)package\s+([^\s;#]+)/mg;
+      push @this_thing, $self->_declared_packages($file);
       push @modules, @this_thing;
 
       # parse a file, and merge with existing prereqs
