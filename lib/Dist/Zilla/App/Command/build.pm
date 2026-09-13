@@ -7,7 +7,7 @@ use Dist::Zilla::App -command;
 
 =head1 SYNOPSIS
 
-  dzil build [ --trial ] [ --tgz | --no-tgz ] [ --in /path/to/build/dir ]
+  dzil build [ --trial ] [ --trial-num=# ] [ --tgz | --no-tgz ] [ --in /path/to/build/dir ]
 
 =head1 DESCRIPTION
 
@@ -62,6 +62,7 @@ sub abstract { 'build your dist' }
 
 sub opt_spec {
   [ 'trial'  => 'build a trial release that PAUSE will not index'      ],
+  [ 'trial-num=i' => 'optional trial release number (implies --trial)' ],
   [ 'tgz!'   => 'build a tarball (default behavior)', { default => 1 } ],
   [ 'in=s'   => 'the directory in which to build the distribution'     ]
 }
@@ -72,6 +73,11 @@ sub opt_spec {
 
 This will build a trial distribution.  Among other things, it will generally
 mean that the built tarball's basename ends in F<-TRIAL>.
+
+=head2 --trial-num
+
+Specifies an optional trial release number and implies C<--trial>.  This will
+be appended to the built tarball's trial designation, e.g. F<-TRIAL9>.
 
 =head2 --tgz | --no-tgz
 
@@ -101,9 +107,10 @@ sub execute {
     {
       # isolate changes to RELEASE_STATUS to zilla construction
       local $ENV{RELEASE_STATUS} = $ENV{RELEASE_STATUS};
-      $ENV{RELEASE_STATUS} = 'testing' if $opt->trial;
+      $ENV{RELEASE_STATUS} = 'testing' if $opt->trial or defined $opt->trial_num;
       $zilla  = $self->zilla;
     }
+    $zilla->trial_num($opt->trial_num) if defined $opt->trial_num;
     $zilla->$method;
   }
 

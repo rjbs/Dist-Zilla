@@ -554,6 +554,21 @@ sub _build_is_trial {
     return $self->release_status =~ /\A(?:testing|unstable)\z/ ? 1 : 0;
 }
 
+=attr trial_num
+
+This attribute designates an optional trial number if the dist will be a
+trial release.
+
+=cut
+
+has trial_num => (
+  is => 'rw',
+  isa => 'Maybe[Int]',
+  init_arg => undef,
+  lazy => 1,
+  default => undef,
+);
+
 =attr plugins
 
 This is an arrayref of plugins that have been plugged into this Dist::Zilla
