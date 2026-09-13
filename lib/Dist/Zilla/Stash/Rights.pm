@@ -22,7 +22,7 @@ has copyright_holder => (
 
 has copyright_year => (
   is  => 'ro',
-  isa => 'Int',
+  isa => 'Str',
 );
 
 __PACKAGE__->meta->make_immutable;
