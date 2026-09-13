@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+6.039     2026-09-13 21:39:01+10:00 Australia/Melbourne
         - PkgVersion warns when a file declares a perl v5.38 class, which it
           cannot version because PPI cannot parse class syntax (github #742)
         - AutoPrereqs no longer lists the dist's own main module as a prereq
