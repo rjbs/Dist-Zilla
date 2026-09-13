@@ -313,6 +313,12 @@ try to guess the license from the POD of the dist's main module.
 A better option is to set the C<license> name in the dist's config to something
 understandable, like C<Perl_5>.
 
+If C<copyright_year> is not given, the current year is used.  If it is given,
+it is used as a string, so a range like C<2008 - 2012> is fine.  The string
+C<$this_year>, wherever it appears in C<copyright_year>, is replaced with the
+current year when the license is built, so C<2008 - $this_year> would become
+C<2008 - 2026> when built in 2026.
+
 =cut
 
 has license => (
