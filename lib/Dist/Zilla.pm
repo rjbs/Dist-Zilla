@@ -313,6 +313,12 @@ try to guess the license from the POD of the dist's main module.
 A better option is to set the C<license> name in the dist's config to something
 understandable, like C<Perl_5>.
 
+If C<copyright_year> is not given, the current year is used.  If it is given,
+it is used as a string, so a range like C<2008 - 2012> is fine.  The string
+C<$this_year>, wherever it appears in C<copyright_year>, is replaced with the
+current year when the license is built, so C<2008 - $this_year> would become
+C<2008 - 2026> when built in 2026.
+
 =cut
 
 has license => (
@@ -334,6 +340,8 @@ sub _build_license {
   my $license_class    = $self->_license_class;
   my $copyright_holder = $self->_copyright_holder;
   my $copyright_year   = $self->_copyright_year;
+
+  $copyright_year =~ s{\$this_year\b}{ (localtime)[5] + 1900 }ge;
 
   my $provided_license;
 
@@ -388,7 +396,7 @@ sub _build_license {
 
   my $license = $license_class->new({
     holder  => $self->_copyright_holder,
-    year    => $self->_copyright_year,
+    year    => $copyright_year,
     program => $self->name,
   });
 
@@ -432,13 +440,6 @@ has _copyright_year => (
   init_arg  => 'copyright_year',
   clearer   => '_clear_copyright_year',
   default   => sub {
-    # Oh man.  This is a terrible idea!  I mean, what if by the code gets run
-    # around like Dec 31, 23:59:59.9 and by the time the default gets called
-    # it's the next year but the default was already set up?  Oh man.  That
-    # could ruin lives!  I guess we could make this a sub to defer the guess,
-    # but think of the performance hit!  I guess we'll have to suffer through
-    # this until we can optimize the code to not take .1s to run, right? --
-    # rjbs, 2008-06-13
     my $stash = $_[0]->stash_named('%Rights');
     my $year  = $stash && $stash->copyright_year;
     return( $year // (localtime)[5] + 1900 );

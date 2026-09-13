@@ -1,6 +1,10 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - copyright_year may now be any string, not just an integer, and
+          the string $this_year in it is replaced with the current year, so
+          "2008 - $this_year" works (thanks, Dave Rolsky; github #578)
+        - the copyright_year in the %Rights stash is now a Str, not an Int
 
 6.038     2026-09-05 17:05:22+09:30 Australia/Adelaide
         - now requires v5.22.0 (now ten years old), which was effectively true

@@ -25,6 +25,10 @@ L<Software::License>.
 Plugins are responsible for injecting C<$copyright_holder> and
 C<$copyright_year> arguments into the license if these arguments are defined.
 
+Note that C<$copyright_year> may not be a single integer.  The user might have
+configured a range like C<2008 - 2012>, and any C<$this_year> token in the
+configured year has already been replaced with the current year.
+
 =cut
 
 requires 'provide_license';
