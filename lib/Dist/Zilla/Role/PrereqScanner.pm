@@ -69,6 +69,7 @@ around mvp_multivalue_args => sub {
   my ($orig, $self) = @_;
   ($self->$orig, 'skips')
 };
+
 around mvp_aliases => sub {
   my ($orig, $self) = @_;
   my $aliases = $self->$orig;
@@ -76,12 +77,12 @@ around mvp_aliases => sub {
   return $aliases
 };
 
-
 requires 'scan_file_reqs';
 
 # this is a bunk heuristic and can still capture strings from pod - the
 # proper thing to do is grab all packages from Module::Metadata
-sub _declared_packages ($self, $file) {
+sub _declared_packages {
+  my ($self, $file) = @_;
   return $file->content =~ /^[^#]*?(?:^|\s)package\s+([^\s;#]+)/mg;
 }
 
