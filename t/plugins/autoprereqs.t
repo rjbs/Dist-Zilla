@@ -236,4 +236,26 @@ cmp_deeply(
   'all prereqs were added with the "suggests" relationship',
 );
 
+# A main_module outside of lib/ (RT#55680, github #672)
+$tzil = Builder->from_config(
+  { dist_root => 'corpus/dist/DZT' },
+  {
+    add_files => {
+      'source/dist.ini' => simple_ini(
+        { name => 'Taint-Util', main_module => 'Util.pm' },
+        qw(GatherDir AutoPrereqs),
+      ),
+      'source/Util.pm'   => "package Taint::Util;\nour \$VERSION = 1;\n1;\n",
+      'source/t/taint.t' => "use Test::More;\nuse Taint::Util;\nok(1);\ndone_testing;\n",
+    },
+  },
+);
+
+$meta = build_meta($tzil);
+
+ok(
+  ! exists $meta->{prereqs}{test}{requires}{'Taint::Util'},
+  'main_module outside lib/ is not listed as a prereq of its own tests',
+);
+
 done_testing;
