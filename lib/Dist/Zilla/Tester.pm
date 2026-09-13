@@ -47,6 +47,11 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
 
   use Moose::Role;
 
+  # The rmdir in DEMOLISH is expected to fail while other testers still have
+  # tempdirs under the shared root; only the last one out succeeds.
+  use autodie;
+  no autodie qw(rmdir);
+
   has tempdir_root => (
     is => 'rw', isa => 'Str|Undef',
     writer => '_set_tempdir_root',
@@ -115,6 +120,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
   package Dist::Zilla::Tester::_Builder;
 
   use Moose;
+  use autodie;
   extends 'Dist::Zilla::Dist::Builder';
   with 'Dist::Zilla::Tester::_Role';
 
@@ -260,6 +266,7 @@ sub minter { 'Dist::Zilla::Tester::_Minter' }
   package Dist::Zilla::Tester::_Minter;
 
   use Moose;
+  use autodie;
   extends 'Dist::Zilla::Dist::Minter';
   with 'Dist::Zilla::Tester::_Role';
 

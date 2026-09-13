@@ -1,6 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - Dist::Zilla::Tester now really uses autodie in its inner packages;
+          previously only the outer, do-nothing package did
+        - the test suite no longer leaves a tmp directory behind
         - copyright_year may now be any string, not just an integer, and
           the string $this_year in it is replaced with the current year, so
           "2008 - $this_year" works (thanks, Dave Rolsky; github #578)
