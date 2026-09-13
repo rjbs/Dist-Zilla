@@ -697,4 +697,41 @@ MODULE
   }
 }
 
+subtest "perl class syntax, which PPI cannot parse" => sub {
+  my $tzil = Builder->from_config(
+    { dist_root => 'does-not-exist' },
+    {
+      add_files => {
+        'source/dist.ini' => simple_ini('GatherDir', 'PkgVersion'),
+        'source/lib/DZT/Klass.pm' => <<'MODULE',
+use v5.38;
+use experimental 'class';
+class DZT::Klass {
+  field $x;
+}
+1;
+MODULE
+        'source/lib/DZT/Sample.pm' => "package DZT::Sample;\nmy \$k = class->new;\n1;\n",
+      },
+    },
+  );
+
+  $tzil->build;
+
+  my @class_msgs = grep {; /declares class/ } @{ $tzil->log_messages };
+
+  is(@class_msgs, 1, "exactly one warning about a class declaration");
+  like(
+    $class_msgs[0],
+    qr{lib/DZT/Klass\.pm declares class DZT::Klass},
+    "the warning names the file and the class",
+  );
+
+  like(
+    $tzil->slurp_file('build/lib/DZT/Sample.pm'),
+    qr{\$DZT::Sample::VERSION = },
+    "a class->method call does not trip the warning, and the file is versioned",
+  );
+};
+
 done_testing;
