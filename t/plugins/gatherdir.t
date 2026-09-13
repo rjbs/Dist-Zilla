@@ -102,12 +102,13 @@ TODO: {
   todo_skip('MSWin32 - skipping symlink test', 1) if $^O eq 'MSWin32' || $^O eq 'msys';
 
   # tmp/tmp -> tmp/private/tmp
-  my $real_tmp = path('tmp', 'private', 'tmp');
+  my $private  = path('tmp', 'private');
+  my $real_tmp = $private->child('tmp');
   mkpath $real_tmp;
   my $link_tmp = path('tmp', 'tmp');
   symlink 'private/tmp', 'tmp/tmp';
 
-  push @to_remove, [ $real_tmp, $link_tmp ];
+  push @to_remove, [ $private, $link_tmp ];
 
   my $tzil = Builder->from_config(
     { dist_root => 'corpus/dist' },
