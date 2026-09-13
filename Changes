@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - add a security policy in SECURITY.md (github #736)
         - Dist::Zilla::Tester now uses autodie correctly, so in rare cases you
           might get an exception where previously something failed silently
         - the test suite no longer leaves a tmp directory behind
