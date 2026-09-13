@@ -105,6 +105,13 @@ sub scan_prereqs {
   my %runtime_final;
   my @modules;
 
+  # The file finders normally cover the main module, but a main_module outside
+  # of lib/ (like a top-level .pm file) is invisible to them, so its packages
+  # get left in prereqs.
+  if ($self->zilla->_has_main_module_override) {
+    push @modules, $self->_declared_packages($self->zilla->main_module);
+  }
+
   for my $fileset (@sets) {
     my ($phase, $method) = @$fileset;
 

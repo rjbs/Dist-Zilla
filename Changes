@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - AutoPrereqs no longer lists the dist's own main module as a prereq
+          when main_module lives outside lib/ (github #672, rt.cpan.org #55680)
         - add a security policy in SECURITY.md (github #736)
         - Dist::Zilla::Tester now uses autodie correctly, so in rare cases you
           might get an exception where previously something failed silently
